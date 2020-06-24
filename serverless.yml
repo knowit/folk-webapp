@@ -3,6 +3,7 @@ service: folk-webapp
 custom:
   stage: ${opt:stage, self:provider.stage}
   bucketName: ${self:custom.stage}-folk-static-web
+  distDomainId: ${self:custom.stage}-folk-static-web-dist
 
 provider:
   name: aws
@@ -40,12 +41,11 @@ resources:
         DistributionConfig:
           Origins:
             - DomainName: ${self:custom.bucketName}.s3.amazonaws.com
-              Id: FolkStaticWeb
+              Id: ${self:custom.distDomainId}
               CustomOriginConfig:
                 HTTPPort: 80
                 HTTPSPort: 443
                 OriginProtocolPolicy: https-only
-             
           Enabled: 'true'
           DefaultRootObject: index.html
           CustomErrorResponses:
@@ -54,14 +54,10 @@ resources:
               ResponsePagePath: /index.html
           DefaultCacheBehavior:
             AllowedMethods:
-              - DELETE
-              - GET
               - HEAD
+              - GET
               - OPTIONS
-              - PATCH
-              - POST
-              - PUT
-            TargetOriginId: FolkStaticWeb
+            TargetOriginId: ${self:custom.distDomainId}
             ForwardedValues:
               QueryString: 'false'
               Cookies:
