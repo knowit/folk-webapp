@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
             paddingTop: theme.spacing(2)
         },
         logo: {
-            maxHeight: '32px'
+            height: '32px'
         }
     })
 )

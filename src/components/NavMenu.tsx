@@ -10,12 +10,13 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             marginLeft: theme.spacing(2),
-            marginRight: theme.spacing(2),            
+            marginRight: theme.spacing(2),
+            height: '64px'
         },
         menuItem: {
             paddingLeft: theme.spacing(1),
             paddingRight: theme.spacing(1),
-            minHeight: '64px',
+            height: 'inherit',
         },
         menuItemSelected: selected => ({
             borderBottom: selected ? 'solid' : 'none'
