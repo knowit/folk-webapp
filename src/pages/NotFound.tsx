@@ -1,8 +1,10 @@
 import React from 'react'
-import { Typography } from '@material-ui/core';
+import { Typography, Box } from '@material-ui/core';
 
 export default function NotFound() {
     return (
-        <Typography variant="h3">Not Found</Typography>
+        <Box justifyContent="center">
+            <Typography align="center" variant="h6">Not Found</Typography>
+        </Box>
     )
 }

@@ -9,9 +9,6 @@ import knowitLogo from'../logo.png';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        root: {
-            paddingTop: theme.spacing(2)
-        },
         logo: {
             height: '32px'
         }
@@ -23,21 +20,19 @@ export default function Header() {
     
 
     return (
-        <div className={classes.root}>
-            <AppBar position="static">
-                <Toolbar >
-                    <img className={classes.logo} src={knowitLogo} alt="logo"/>
+        <AppBar position="sticky">
+            <Toolbar >
+                <img className={classes.logo} src={knowitLogo} alt="logo"/>
 
-                    <NavMenu>
-                        <NavMenuItem label="Ansatte" to="/ansatte" />
-                        <NavMenuItem label="Kunder" to="/kunder" />
-                        <NavMenuItem label="Kompetanse" to="/kompetanse" />
-                        <NavMenuItem label="Arbeidsmiljø" to="/arbeidsmiljo" />
-                        <NavMenuItem label="Rekruttering" to="/rekruttering" />
-                    </NavMenu>
+                <NavMenu>
+                    <NavMenuItem label="Ansatte" to="/ansatte" />
+                    <NavMenuItem label="Kunder" to="/kunder" />
+                    <NavMenuItem label="Kompetanse" to="/kompetanse" />
+                    <NavMenuItem label="Arbeidsmiljø" to="/arbeidsmiljo" />
+                    <NavMenuItem label="Rekruttering" to="/rekruttering" />
+                </NavMenu>
 
-                </Toolbar>
-            </AppBar>
-        </div>
+            </Toolbar>
+        </AppBar>
     )
 }

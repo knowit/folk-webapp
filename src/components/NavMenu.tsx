@@ -11,7 +11,8 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             marginLeft: theme.spacing(2),
             marginRight: theme.spacing(2),
-            height: '64px'
+            height: '64px',
+            overflow: 'hidden'
         },
         menuItem: {
             paddingLeft: theme.spacing(1),
