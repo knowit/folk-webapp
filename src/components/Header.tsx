@@ -3,9 +3,9 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import {
     AppBar,
     Toolbar
-} from '@material-ui/core';
+} from '@material-ui/core'
 import { NavMenu, NavMenuItem } from './NavMenu'
-import knowitLogo from'../logo.png';
+import knowitLogo from'../logo.png'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export default function Header() {
-    const classes = useStyles();
+    const classes = useStyles()
     
 
     return (

@@ -2,7 +2,7 @@ import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import {
     ButtonBase
-} from '@material-ui/core';
+} from '@material-ui/core'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 
 
@@ -38,7 +38,7 @@ export function NavMenuItem({ label, to } : { label: string, to: string }) {
         >
             {label}
         </ButtonBase>
-    );
+    )
 }
 
 export function NavMenu({ children } : { children: React.ReactNode }) {
