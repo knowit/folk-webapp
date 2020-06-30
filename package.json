@@ -28,7 +28,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy:infra": "sls deploy",
+    "deploy:backend": "sls deploy",
     "deploy:upload:dev": "aws s3 sync build s3://dev-folk-static-web",
     "deploy:web:dev": "yarn build && yarn deploy:upload:dev"
   },

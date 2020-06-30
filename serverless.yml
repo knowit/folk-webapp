@@ -4,11 +4,66 @@ custom:
   stage: ${opt:stage, self:provider.stage}
   bucketName: ${self:custom.stage}-folk-static-web
   distDomainId: ${self:custom.stage}-folk-static-web-dist
+  domainName: ${self:custom.bucketName}.s3.amazonaws.com
+  service: ${self:custom.stage}-${self:service}
+  cloudFrontOrigin:
+    DomainName: ${self:custom.domainName}
+    Id: ${self:custom.distDomainId}
+    CustomOriginConfig:
+      HTTPPort: 80
+      HTTPSPort: 443
+      OriginProtocolPolicy: https-only
+  authEnv:
+    API_URL: 'https://g4usaty3db.execute-api.us-east-1.amazonaws.com/auth' # TODO: get ref
+    HOST_URL: 'https://d2dj8dyuy8bibe.cloudfront.net' # TODO: ref
+    OAUTH_URL: ${ssm:/${self:custom.stage}/fold-webapp/AUTH_ENDPOINT}
+    CLIENT_ID: ${ssm:/${self:custom.stage}/fold-webapp/CLIENT_ID~true}
+    CLIENT_SECRET: ${ssm:/${self:custom.stage}/fold-webapp/CLIENT_SECRET~true}
 
 provider:
   name: aws
   stage: dev
+  region: us-east-1
   runtime: nodejs12.x
+  stackName: ${self:custom.service}
+  httpApi:
+    name: ${self:custom.service}-api
+    payload: '2.0'
+    cors: true 
+
+package:
+  include: 
+    - backend/**
+  exclude: 
+    - '*/**'
+  individually: true
+
+functions:
+  edgeAuth:
+    handler: backend/edge.authCheck
+    name: ${self:custom.stage}-${self:service}-edge-auth
+    events:
+      - cloudFront:
+          eventType: origin-request
+          origin: ${self:custom.cloudFrontOrigin}    
+  
+  authLogin:
+    handler: backend/auth.login
+    name: ${self:custom.service}-auth-login
+    environment: ${self:custom.authEnv}
+    events:
+      - httpApi: # HTTP API endpoint
+          method: GET
+          path: /auth/login
+  
+  authCallback:
+    handler: backend/auth.callback
+    name: ${self:custom.service}-auth-callback
+    environment: ${self:custom.authEnv}
+    events:
+      - httpApi: # HTTP API endpoint
+          method: GET
+          path: /auth/callback
 
 resources:
   Resources:
@@ -34,42 +89,23 @@ resources:
               Action:
               - s3:GetObject
               Resource: arn:aws:s3:::${self:custom.bucketName}/*
-
-    FolkStaticCloudFrontDistribution:
+    
+    CloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
         DistributionConfig:
-          Origins:
-            - DomainName: ${self:custom.bucketName}.s3.amazonaws.com
-              Id: ${self:custom.distDomainId}
-              CustomOriginConfig:
-                HTTPPort: 80
-                HTTPSPort: 443
-                OriginProtocolPolicy: https-only
-          Enabled: 'true'
           DefaultRootObject: index.html
           CustomErrorResponses:
             - ErrorCode: 404
               ResponseCode: 200
               ResponsePagePath: /index.html
           DefaultCacheBehavior:
-            AllowedMethods:
-              - HEAD
-              - GET
-              - OPTIONS
-            TargetOriginId: ${self:custom.distDomainId}
-            ForwardedValues:
-              QueryString: 'false'
-              Cookies:
-                Forward: none
             ViewerProtocolPolicy: redirect-to-https
-          ViewerCertificate:
-            CloudFrontDefaultCertificate: 'true'
 
   Outputs:
     FolkStaticBucketOutput:
       Value:
         'Ref': FolkStaticS3Bucket
-    FolkStaticCloudFrontDistributionOutput:
+    CloudFrontDistributionOutput:
       Value:
-        'Fn::GetAtt': [ FolkStaticCloudFrontDistribution, DomainName ]
+        'Fn::GetAtt': [ CloudFrontDistribution, DomainName ]
