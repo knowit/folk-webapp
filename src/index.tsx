@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
+import LoginProvider from './LoginProvider'
 import { BrowserRouter } from "react-router-dom"
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles"
@@ -15,7 +16,9 @@ ReactDOM.render(
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <BrowserRouter>
-                <App />
+                <LoginProvider>
+                    <App />
+                </LoginProvider>
             </BrowserRouter>
         </ThemeProvider>
     </React.StrictMode>,

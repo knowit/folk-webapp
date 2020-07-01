@@ -35,12 +35,12 @@ exports.login = async () => {
 
 exports.callback = async (event) => {
     const tokens = await dpClient.oauthCallback(`${apiUrl}/callback`, event.queryStringParameters)
+    const redirectUrl = applicationUrl // TODO: development url?
 
     return {
         statusCode: '302',
         headers: {
-            Location: applicationUrl,
-            'Set-Cookie': `accessToken=${tokens.access_token}; Lax`
+            Location: `${redirectUrl}?accessToken=${tokens.access_token}&expires_in=${tokens.expires_in}`,
         }
     }
 }
