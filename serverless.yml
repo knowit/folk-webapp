@@ -3,19 +3,18 @@ service: folk-webapp
 custom:
   stage: ${opt:stage, self:provider.stage}
   bucketName: ${self:custom.stage}-folk-static-web
-  distDomainId: ${self:custom.stage}-folk-static-web-dist
+  distApiDomainId: ${self:custom.stage}-folk-api-web-dist
   domainName: ${self:custom.bucketName}.s3.amazonaws.com
+  domainId: custom/${self:custom.domainName}
   service: ${self:custom.stage}-${self:service}
   cloudFrontOrigin:
     DomainName: ${self:custom.domainName}
-    Id: ${self:custom.distDomainId}
+    Id: ${self:custom.domainId}
     CustomOriginConfig:
       HTTPPort: 80
       HTTPSPort: 443
       OriginProtocolPolicy: https-only
   authEnv:
-    API_URL: 'https://g4usaty3db.execute-api.us-east-1.amazonaws.com/auth' # TODO: get ref
-    HOST_URL: 'https://d2dj8dyuy8bibe.cloudfront.net' # TODO: ref
     OAUTH_URL: ${ssm:/${self:custom.stage}/fold-webapp/AUTH_ENDPOINT}
     CLIENT_ID: ${ssm:/${self:custom.stage}/fold-webapp/CLIENT_ID~true}
     CLIENT_SECRET: ${ssm:/${self:custom.stage}/fold-webapp/CLIENT_SECRET~true}
@@ -39,20 +38,20 @@ package:
   individually: true
 
 functions:
-  edgeAuth:
-    handler: backend/edge.authCheck
-    name: ${self:custom.stage}-${self:service}-edge-auth
+  edgeAdaptiveContent:
+    handler: backend/edge.adaptiveContent
+    name: ${self:custom.stage}-${self:service}-edge-adaptive-content-select
     events:
       - cloudFront:
           eventType: origin-request
-          origin: ${self:custom.cloudFrontOrigin}    
+          origin: ${self:custom.cloudFrontOrigin} 
   
   authLogin:
     handler: backend/auth.login
     name: ${self:custom.service}-auth-login
     environment: ${self:custom.authEnv}
     events:
-      - httpApi: # HTTP API endpoint
+      - httpApi:
           method: GET
           path: /auth/login
   
@@ -61,7 +60,7 @@ functions:
     name: ${self:custom.service}-auth-callback
     environment: ${self:custom.authEnv}
     events:
-      - httpApi: # HTTP API endpoint
+      - httpApi:
           method: GET
           path: /auth/callback
 
@@ -94,6 +93,38 @@ resources:
       Type: AWS::CloudFront::Distribution
       Properties:
         DistributionConfig:
+          Origins:
+            - ${self:custom.cloudFrontOrigin}
+            - DomainName: g4usaty3db.execute-api.us-east-1.amazonaws.com # TODO: ref
+              Id: ${self:custom.distApiDomainId}
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: https-only
+                OriginSSLProtocols:
+                  - TLSv1.2
+          CacheBehaviors:
+            - TargetOriginId: ${self:custom.distApiDomainId}
+              ForwardedValues: 
+                Cookies: 
+                  Forward: all
+                QueryString: true
+                Headers:
+                  - Accept
+                  - Content-Type
+                  - Authorization
+                  - Origin
+                  - Referer
+              PathPattern: /auth/*
+              ViewerProtocolPolicy: redirect-to-https
+              AllowedMethods:
+                - GET
+                - HEAD
+                - OPTIONS
+                - PUT
+                - PATCH
+                - POST
+                - DELETE
           DefaultRootObject: index.html
           CustomErrorResponses:
             - ErrorCode: 404
@@ -101,6 +132,7 @@ resources:
               ResponsePagePath: /index.html
           DefaultCacheBehavior:
             ViewerProtocolPolicy: redirect-to-https
+          PriceClass: PriceClass_100
 
   Outputs:
     FolkStaticBucketOutput:

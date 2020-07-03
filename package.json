@@ -15,6 +15,8 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-router-dom": "^5.1.5",
     "@types/recharts": "^1.8.13",
+    "cross-env": "^7.0.2",
+    "http-proxy-middleware": "^1.0.4",
     "react": "^16.13.1",
     "react-beautiful-dnd": "^13.0.0",
     "react-cookie": "^4.0.3",
@@ -25,7 +27,7 @@
     "typescript": "~3.7.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cross-env HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -36,6 +38,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "proxy": "https://d2dj8dyuy8bibe.cloudfront.net",
   "browserslist": {
     "production": [
       ">0.2%",
