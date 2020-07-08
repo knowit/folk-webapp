@@ -8,7 +8,10 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles"
 
 const theme = createMuiTheme({
     palette: {
-    }
+        background: {
+            default: '#FFFFFF'
+        }
+    },
 })
 
 ReactDOM.render(

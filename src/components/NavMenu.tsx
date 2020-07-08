@@ -9,18 +9,26 @@ import { Link as RouterLink, useLocation } from 'react-router-dom'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            marginLeft: theme.spacing(2),
-            marginRight: theme.spacing(2),
-            height: '64px',
-            overflow: 'hidden'
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            height: '100%',
+            overflow: 'hidden',
         },
         menuItem: {
-            paddingLeft: theme.spacing(1),
-            paddingRight: theme.spacing(1),
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+            marginLeft: theme.spacing(2),
+            marginRight: theme.spacing(2),
             height: 'inherit',
+            borderBottomColor: '#FAC0B1',
+            borderBottomWidth: '1px',
+            fontSize: '21px',
+            fontFamily: 'Arial'
         },
         menuItemSelected: selected => ({
-            borderBottom: selected ? 'solid' : 'none'
+            fontWeight: selected ? 'bold' : 'normal',
+            borderBottomStyle: selected ? 'solid' : 'none',
+            color: selected ? '#FAC0B1' : '#F1F0ED'
         })
     })
 )
@@ -35,6 +43,7 @@ export function NavMenuItem({ label, to } : { label: string, to: string }) {
             className={`${classes.menuItem} ${classes.menuItemSelected}`}
             to={to}
             component={RouterLink}
+            disableRipple={true}
         >
             {label}
         </ButtonBase>
