@@ -55,7 +55,7 @@ const renderTooltipContent = ({ payload, label } : { payload: any[], label: stri
 
 export default function Line() {
     return (
-        <ResponsiveContainer>
+        <ResponsiveContainer maxHeight={280}>
             <AreaChart
                 data={data}
                 stackOffset="expand"

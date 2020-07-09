@@ -5,8 +5,8 @@ import {
     Toolbar
 } from '@material-ui/core'
 import { NavMenu, NavMenuItem } from './NavMenu'
-import knowitLogo from'../assets/logo.svg'
-import AccountCircleIcon from '@material-ui/icons/AccountCircle'
+import { ReactComponent as KnowitLogo } from'../assets/logo.svg'
+import { ReactComponent as FallbackUserIcon } from'../assets/fallback_user.svg'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
             position: 'sticky',
             zIndex: 1100,
             backgroundColor: 'white',
-            paddingTop: theme.spacing(3),
+            paddingTop: '30px',
 
         },
         appbar: {
@@ -28,10 +28,15 @@ const useStyles = makeStyles((theme: Theme) =>
             backgroundColor: '#333333',
         },
         toolbar: {
-            height: '100%'
+            height: '100%',
+            paddingLeft: '30px',
+            paddingRight: '30px'
         },
         logo: {
-            height: '29px'
+            height: '27px',
+        },
+        loginIcon: {
+            height: '40px',
         }
     })
 )
@@ -44,7 +49,7 @@ export default function Header() {
         <div className={classes.root}>
             <AppBar className={classes.appbar} position={"relative"}>
                 <Toolbar className={classes.toolbar}>
-                    <img className={classes.logo} src={knowitLogo} alt="logo"/>
+                    <KnowitLogo className={classes.logo} />
 
                     <NavMenu>
                         <NavMenuItem label="Ansatte" to="/ansatte" />
@@ -54,7 +59,7 @@ export default function Header() {
                         <NavMenuItem label="Rekruttering" to="/rekruttering" />
                     </NavMenu>
 
-                    <AccountCircleIcon fontSize={'large'}/>
+                    <FallbackUserIcon className={classes.loginIcon} />
                 </Toolbar>
             </AppBar>
         </div>

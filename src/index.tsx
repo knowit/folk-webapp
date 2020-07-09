@@ -12,6 +12,7 @@ const theme = createMuiTheme({
             default: '#FFFFFF'
         }
     },
+    spacing: 22.5
 })
 
 ReactDOM.render(
