@@ -37,7 +37,7 @@ const data = [
 
 export default function Line() {
     return (
-        <ResponsiveContainer maxHeight={280}>
+        <ResponsiveContainer height={280}>
             <BarChart
                 data={data}
                 margin={{

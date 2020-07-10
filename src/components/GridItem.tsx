@@ -28,7 +28,7 @@ interface GridItemProps {
 export default function GridItem(
 { 
     children,
-    height = 355,
+    height = 'inherit',
     fullSize = false,
 }: GridItemProps) {
     const classes = useStyles({ height })

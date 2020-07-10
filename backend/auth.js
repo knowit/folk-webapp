@@ -15,7 +15,7 @@ const dpIssuer = new Issuer({
 })
 
 
-const getClient = (applicationUrl) => new dpIssuer.Client({
+const getClient = (applicationUrl = '') => new dpIssuer.Client({
     client_id: clientId,
     client_secret: clientSecret,
     redirect_uris: [`${applicationUrl}/auth/callback`],
@@ -29,6 +29,7 @@ const getOrigin = (url) => {
 }
 const getPath = (url) => URL.parse(url).path
 
+
 exports.login = async (event) => {    
     const { headers } = event
     const referer = headers['referer']
@@ -37,9 +38,8 @@ exports.login = async (event) => {
         statusCode: '302',
         headers: {
             Location: getClient(getOrigin(referer)).authorizationUrl({
-                scope: 'email openid'
-            }),
-            'Cache-Control': 'no-cache="Set-Cookie"'
+                scope: 'email openid profile'
+            })
         },
         multiValueHeaders: {
             'Set-Cookie': [
@@ -61,6 +61,12 @@ exports.callback = async (event) => {
     const origin = getOrigin(referer)
 
     const tokens = await getClient(origin).oauthCallback(`${origin}/auth/callback`, event.queryStringParameters)
+    const cookieSettings = {
+        maxAge: tokens.expires_in,
+        sameSite: true,
+        secure: true,
+        path: '/'
+    }
 
     return {
         statusCode: '302',
@@ -70,22 +76,25 @@ exports.callback = async (event) => {
         },
         multiValueHeaders: {
             'Set-Cookie': [
-                cookie.serialize('accessToken', tokens.access_token, {
-                    maxAge: tokens.expires_in,
-                    httpOnly: false, 
-                    sameSite: true,
-                    secure: true,
-                    path: '/'
-                }),
-                // cookie.serialize('refreshToken', tokens.refresh_token, {
-                //     maxAge: tokens.expires_in,
-                //     httpOnly: false, 
-                //     sameSite: true,
-                //     secure: true,
-                //     path: '/'
-                // })
+                cookie.serialize('accessToken', tokens.access_token, {httpOnly: false, ...cookieSettings}),
+                cookie.serialize('refreshToken', tokens.refresh_token, {httpOnly: false, ...cookieSettings}),
+                // cookie.serialize('idToken', tokens.id_token, {httpOnly: true, ...cookieSettings})
             ]
         }
     }
 }
 
+
+exports.userInfo = async (event) => {
+    const { headers } = event
+    const accessToken = (headers['Authorization'] || headers['authorization']).split(/bearer/i).pop().trim()
+    const userInfo = await getClient().userinfo(accessToken)
+    return {
+        statusCode: '200',
+        body: JSON.stringify({
+            name: [userInfo.given_name || '', userInfo.family_name || ''].join(' '),
+            email: userInfo.email,
+            picture: userInfo.picture
+        })
+    }
+}

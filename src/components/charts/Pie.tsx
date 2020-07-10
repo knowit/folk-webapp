@@ -73,7 +73,7 @@ export default function Pie() {
     const [activeIndex, setActiveIndex] = useState(0)
 
     return (
-        <ResponsiveContainer maxHeight={280}>
+        <ResponsiveContainer height={280}>
             <PieChart>
                 <ChartPie
                     activeIndex={activeIndex}

@@ -64,6 +64,15 @@ functions:
           method: GET
           path: /auth/callback
 
+  authUserInfo:
+    handler: backend/auth.userInfo
+    name: ${self:custom.service}-auth-userInfo
+    environment: ${self:custom.authEnv}
+    events:
+      - httpApi:
+          method: GET
+          path: /auth/userInfo
+
 resources:
   Resources:
     FolkStaticS3Bucket:

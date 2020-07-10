@@ -2,9 +2,11 @@ import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import {
     AppBar,
-    Toolbar
+    Toolbar,
+    Avatar
 } from '@material-ui/core'
 import { NavMenu, NavMenuItem } from './NavMenu'
+import { useUserInfo } from '../LoginProvider';
 import { ReactComponent as KnowitLogo } from'../assets/logo.svg'
 import { ReactComponent as FallbackUserIcon } from'../assets/fallback_user.svg'
 
@@ -35,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
         logo: {
             height: '27px',
         },
-        loginIcon: {
+        userAvatar: {
             height: '40px',
         }
     })
@@ -43,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Header() {
     const classes = useStyles()
-    
+    const userInfo = useUserInfo()
 
     return (
         <div className={classes.root}>
@@ -59,7 +61,9 @@ export default function Header() {
                         <NavMenuItem label="Rekruttering" to="/rekruttering" />
                     </NavMenu>
 
-                    <FallbackUserIcon className={classes.loginIcon} />
+                    <Avatar alt={userInfo.name} src={userInfo.picture} className={classes.userAvatar}>
+                        <FallbackUserIcon />
+                    </Avatar>
                 </Toolbar>
             </AppBar>
         </div>

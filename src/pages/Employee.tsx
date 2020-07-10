@@ -38,7 +38,7 @@ export default function Employee() {
                 <Pie />
             </GridItem>
 
-            <GridItem fullSize height={'inherit'}>
+            <GridItem fullSize >
                 <Typography variant="h6">Table</Typography>
                 <DataTable />
             </GridItem>
