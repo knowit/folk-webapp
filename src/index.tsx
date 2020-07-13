@@ -10,9 +10,16 @@ const theme = createMuiTheme({
     palette: {
         background: {
             default: '#FFFFFF'
+        },
+        text: {
+            primary: "#333333"
         }
     },
-    spacing: 22.5
+    spacing: 22.5,
+    typography: {
+        fontFamily: "Arial,Helvetica Neue,Helvetica,sans-serif",
+        fontWeightRegular: 'normal',
+    }
 })
 
 ReactDOM.render(

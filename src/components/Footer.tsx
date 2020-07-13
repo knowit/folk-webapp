@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme: Theme) =>
             paddingBottom: '70px',
             textAlign: 'center',
             fontSize: '12px',
-            fontFamily: 'Arial'
         }
     })
 )

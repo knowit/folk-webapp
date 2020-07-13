@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme: Theme) =>
             borderBottomColor: '#FAC0B1',
             borderBottomWidth: '1px',
             fontSize: '21px',
-            fontFamily: 'Arial'
         },
         menuItemSelected: selected => ({
             fontWeight: selected ? 'bold' : 'normal',
