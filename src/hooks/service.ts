@@ -57,7 +57,7 @@ export function useServiceCall<T>({
 } : FetchData) : ServiceCall<T> {
     const token = useAPIToken()
 
-    const fetcher = useCallback(() => {
+    const fetcher = useCallback(async () => {
         if (!token) return Promise.reject('Unauthorized')
         return fetch(url, {
             method,
@@ -81,9 +81,7 @@ export function useServiceCall<T>({
 export function useFetchedData<T>(props : FetchData) : FetchedCall<T> {
     const [value, pending, error, handler ] = useServiceCall<T>(props)
 
-    useEffect(
-        () => handler(),
-        [handler])
+    useEffect(() => {handler()}, [handler])
 
     return [
         value, 

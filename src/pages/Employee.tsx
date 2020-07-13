@@ -1,7 +1,6 @@
 import React from 'react'
 import {
     Grid,
-    Typography
 } from '@material-ui/core'
 import {
     Line,
@@ -10,7 +9,11 @@ import {
     Pie
 } from '../components/charts'
 import DataTable from '../components/DataTable'
-import GridItem from '../components/GridItem';
+import { 
+    GridItem,
+    GridItemHeader,
+    GridItemContent
+} from '../components/GridItem';
 
 
 
@@ -19,28 +22,38 @@ export default function Employee() {
         <Grid container spacing={2}>
 
             <GridItem>
-                <Typography variant="h6">Line chart</Typography>
-                <Line />
+                <GridItemHeader title={"På vei inn"} />
+                <GridItemContent>
+                    <Line />
+                </GridItemContent>
             </GridItem>
 
             <GridItem>
-                <Typography variant="h6">Bar chart</Typography>
-                <Bar />
+                <GridItemHeader title={"På vei ut"} />
+                <GridItemContent>
+                    <Bar />
+                </GridItemContent>
             </GridItem>
 
             <GridItem>
-                <Typography variant="h6">Area chart</Typography>
-                <PercentArea />
+                <GridItemHeader title={"Erfaringsnivå"} />
+                <GridItemContent>
+                    <PercentArea />
+                </GridItemContent>
             </GridItem>
 
             <GridItem>
-                <Typography variant="h6">Bar chart</Typography>
-                <Pie />
+                <GridItemHeader title={"Ressurstype"} />
+                <GridItemContent>
+                    <Pie />
+                </GridItemContent>
             </GridItem>
 
             <GridItem fullSize >
-                <Typography variant="h6">Table</Typography>
-                <DataTable />
+                <GridItemHeader title={"Prosjektstatus"} />
+                <GridItemContent>
+                    <DataTable />
+                </GridItemContent>
             </GridItem>
         </Grid>
 

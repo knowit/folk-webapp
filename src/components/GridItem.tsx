@@ -1,8 +1,6 @@
 import React from 'react'
 import {
-    Card,
-    CardContent,
-    Grid,
+    Grid
 } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
@@ -10,35 +8,91 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         gridRoot: {
+            boxShadow: '0px 4px 10px #00000012',
+            borderRadius: '0px 0px 6px 6px',
+            fontFamily: 'Arial'
         },
-        gridContent: (props : { height: number|string }) => ({
+        gridHeaderRoot: {
+            height: '65px',
+            backgroundColor: '#E0DED7',
+            paddingLeft: '15px',
+            paddingRight: '15px',
+            display: 'flex',
+            position: 'relative',
+            alignItems: 'center'
+        },
+        gridHeaderTitle: {
+            fontSize: '18px',
+            fontWeight: 'normal'
+        },
+        gridContentRoot: {
             width: '100%',
-            height: props.height,
-            overflowY: 'auto'
-        })
+            padding: '20px 15px 15px 15px',
+            backgroundColor: 'white',
+            borderLeft: '1px solid #E0DED7',
+            borderBottom: '1px solid #E0DED7',
+            borderRight: '1px solid #E0DED7',
+            borderRadius: '0px 0px 6px 6px'
+        }
     })
 )
 
-interface GridItemProps {
-    fullSize?: boolean
-    height?: number|string
+
+interface GridItemHeaderProps {
+    title: string,
+    children?: React.ReactNode | React.ReactNode[]
+}
+
+export function GridItemHeader(
+{ 
+    title,
+    children = null,
+}: GridItemHeaderProps) {
+    const classes = useStyles()
+    
+    return (
+        <div className={classes.gridHeaderRoot}>
+            <h3 className={classes.gridHeaderTitle}>{title}</h3>
+            {children}
+        </div>
+    )
+}
+
+interface GridItemContentProps {
     children: React.ReactNode | React.ReactNode[]
 }
 
-export default function GridItem(
+export function GridItemContent(
 { 
     children,
-    height = 'inherit',
+}: GridItemContentProps) {
+    const classes = useStyles()
+
+    return (
+        <div className={classes.gridContentRoot}>
+            {children}
+        </div>
+    )
+}
+
+
+interface GridItemProps {
+    fullSize?: boolean
+    children: React.ReactNode | React.ReactNode[]
+}
+
+export function GridItem(
+{ 
+    children,
     fullSize = false,
 }: GridItemProps) {
-    const classes = useStyles({ height })
+    const classes = useStyles()
+
     return (
-        <Grid item xs={fullSize ? 12 : 6}>
-            <Card className={classes.gridRoot}>
-                <CardContent className={classes.gridContent}>
-                    {children}
-                </CardContent>
-            </Card>
+        <Grid  item xs={fullSize ? 12 : 6}>
+            <div className={classes.gridRoot}>
+                {children}
+            </div>
         </Grid>
     )
 }
