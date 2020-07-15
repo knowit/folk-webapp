@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         gridHeaderRoot: {
             height: '65px',
-            backgroundColor: '#E0DED7',
+            backgroundColor: '#E4E1DB',
             paddingLeft: '15px',
             paddingRight: '15px',
             display: 'flex',
@@ -28,14 +28,13 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%',
             padding: '20px 15px 15px 15px',
             backgroundColor: 'white',
-            borderLeft: '1px solid #E0DED7',
-            borderBottom: '1px solid #E0DED7',
-            borderRight: '1px solid #E0DED7',
+            borderLeft: '1px solid #E4E1DB',
+            borderBottom: '1px solid #E4E1DB',
+            borderRight: '1px solid #E4E1DB',
             borderRadius: '0px 0px 6px 6px'
         }
     })
 )
-
 
 interface GridItemHeaderProps {
     title: string,

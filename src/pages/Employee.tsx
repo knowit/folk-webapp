@@ -52,7 +52,16 @@ export default function Employee() {
             <GridItem fullSize >
                 <GridItemHeader title={"Prosjektstatus"} />
                 <GridItemContent>
-                    <DataTable />
+                    <DataTable 
+                        columns={[
+                            { title: 'Konsulent', expandable: true },
+                            { title: 'Tittel' },
+                            { title: 'Prosjektstatus' },
+                            { title: 'Kunde' }
+                        ]}
+                        rows={[
+                            { rowData: ['Trude', 'Utvikler', '100%', 'Ruter'] }
+                        ]}/>
                 </GridItemContent>
             </GridItem>
         </Grid>
