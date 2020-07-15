@@ -10,11 +10,15 @@ import {
 } from '../components/charts'
 import DataTable from '../components/DataTable'
 import { 
+    ConsultantCell, 
+    ProjectStatusCell,
+    CustomerStatusCell
+} from '../components/DataTableCells';
+import { 
     GridItem,
     GridItemHeader,
     GridItemContent
 } from '../components/GridItem';
-
 
 
 export default function Employee() {
@@ -54,13 +58,18 @@ export default function Employee() {
                 <GridItemContent>
                     <DataTable 
                         columns={[
-                            { title: 'Konsulent', expandable: true },
+                            { title: 'Konsulent', expandable: true, renderCell: ConsultantCell },
                             { title: 'Tittel' },
-                            { title: 'Prosjektstatus' },
-                            { title: 'Kunde' }
+                            { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
+                            { title: 'Kunde', renderCell: CustomerStatusCell }
                         ]}
                         rows={[
-                            { rowData: ['Trude', 'Utvikler', '100%', 'Ruter'] }
+                            { rowData: ['Trude Vennesla', 'Utvikler', 100, {value: 'Ruter', status: 'red'}] },
+                            { rowData: ['Tore Bjørn Amundsen', 'Utvikler', 100, {value: 'Entur', status: 'red'}] },
+                            { rowData: ['Trond Ragde', 'Senior Interaksjonsdesigner', 75, {value: 'Nasjonalbiblioteket', status: 'red'}] },
+                            { rowData: ['Terje Vigeland', 'UX designer', 0, {value: null, status: 'green'}] },
+                            { rowData: ['Tine Hansen', 'Senior utvikler', 50, {value: 'Oslo Kommune Bymiljøetaten',status: 'red'}] },
+                            { rowData: ['Trine Greiger Ovesens Dottir', 'Android utvikler', 0, {value: null,status: 'green'}] }
                         ]}/>
                 </GridItemContent>
             </GridItem>

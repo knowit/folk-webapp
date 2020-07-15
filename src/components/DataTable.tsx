@@ -11,15 +11,14 @@ import {
     TableRow,
 } from '@material-ui/core'
 
-
-interface DataTableCell {
-    data: any
+interface DataTableColumn  {
+    title: string,
     expandable?: boolean
-    renderCell?: (props: any) => React.ReactNode
+    renderCell?: (props: {data: any, rowData: any[]}) => JSX.Element
 }
 
-interface DataTableColumn extends Omit<DataTableCell, 'data'> {
-    title: string   
+interface DataTableCell extends DataTableColumn{
+    data: any
 }
 
 interface DataTableRow {
@@ -33,13 +32,36 @@ interface DataTableProps {
 }
 
 type DataTableRowProps = DataTableRow
+type DataTableCellProps = DataTableCell
+
 
 const useRowStyles = makeStyles({
     root: {
         '& > *': {
             borderBottom: 'unset',
-        },
+        }
     },
+    row: {
+        height: '70px',
+        '& > :first-child': {
+            borderLeft: 'unset'
+        }
+    },
+    cell: {
+        padding: '10px 15px 10px 15px',
+        borderLeft: '1px solid',
+        borderColor: '#EEEEEE',
+        fontWeight: 'inherit',
+        fontSize: 'inherit'
+    },
+    cellExpandable: {
+        cursor: 'pointer'
+    },
+    expansionCell: {
+        borderColor: '#EEEEEE',
+        paddingBottom: 0, 
+        paddingTop: 0
+    }
 })
 
 function Row({
@@ -48,23 +70,30 @@ function Row({
 } : DataTableRowProps) {
     const [open, setOpen] = useState(false)
     const classes = useRowStyles()
+    
+    const DefaultCellComponent = ({ data } : DataTableCellProps) => <>{data}</>
 
     const cells = columns.map((column, i) => ({
         data: rowData[i],
+        CellComponent: column.renderCell ? column.renderCell : DefaultCellComponent,
         ...column
     }))
 
     return (
         <React.Fragment>
-            <TableRow className={classes.root}>
-                {cells.map((x, i) => (
-                    <TableCell key={i} onClick={() => x.expandable ? setOpen(!open) : null}>
-                        {x.renderCell ? x.renderCell({data: x, rowData}) : x.data}
+            <TableRow className={`${classes.root} ${classes.row}`}>
+                {cells.map((cell, i) => (
+                    <TableCell 
+                        key={i}
+                        className={`${classes.cell} ${cell.expandable ? classes.cellExpandable : ''}`} 
+                        onClick={() => cell.expandable ? setOpen(!open) : null}>
+                        
+                        <cell.CellComponent rowData={rowData} {...cell} />
                     </TableCell>
                 ))}
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                <TableCell className={classes.expansionCell} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
                             <p>Mer innhold</p>
@@ -76,20 +105,37 @@ function Row({
     )
 }
 
+const useTableStyles = makeStyles({
+    root: {},
+    tableHead: {
+        fontWeight: 'bold',
+        fontSize: '16px'
+    },
+    tableBody: {
+        '& > :last-child > *': {
+            borderBottom: 'unset',
+        },
+        fontWeight: 'normal',
+        fontSize: '14px'
+    }
+})
+
 export default function DataTable({
     columns, 
     rows
 } : DataTableProps) {
+    const tableClasses = useTableStyles()
+    const rowClasses = useRowStyles()
 
     return (
-        <TableContainer>
+        <TableContainer className={tableClasses.root}>
             <Table>
-                <TableHead>
-                    <TableRow>
-                        {columns.map(x => <TableCell key={x.title}>{x.title}</TableCell>)}
+                <TableHead className={tableClasses.tableHead}>
+                    <TableRow className={rowClasses.row}>
+                        {columns.map(x => <TableCell className={rowClasses.cell} key={x.title}>{x.title}</TableCell>)}
                     </TableRow>
                 </TableHead>
-                <TableBody>
+                <TableBody className={tableClasses.tableBody}>
                     {rows.map((row, i) => (
                         <Row key={i} {...row} columns={columns} />
                     ))}
