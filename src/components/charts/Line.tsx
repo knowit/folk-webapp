@@ -49,8 +49,8 @@ export default function Line() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <ChartLine type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} isAnimationActive={false} />
-                <ChartLine type="monotone" dataKey="uv" stroke="#82ca9d" isAnimationActive={false} />
+                <ChartLine type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
+                <ChartLine type="monotone" dataKey="uv" stroke="#82ca9d" />
             </LineChart>
         </ResponsiveContainer>
     )

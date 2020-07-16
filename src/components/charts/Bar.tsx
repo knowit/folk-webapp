@@ -49,8 +49,8 @@ export default function Line() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="pv" stackId="a" fill="#8884d8" isAnimationActive={false} />
-                <Bar dataKey="uv" stackId="a" fill="#82ca9d" isAnimationActive={false} />
+                <Bar dataKey="pv" stackId="a" fill="#8884d8" />
+                <Bar dataKey="uv" stackId="a" fill="#82ca9d" />
             </BarChart>
         </ResponsiveContainer>
     )

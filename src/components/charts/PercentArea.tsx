@@ -67,9 +67,9 @@ export default function Line() {
                 <XAxis dataKey="month" />
                 <YAxis tickFormatter={toPercent} />
                 <Tooltip content={renderTooltipContent} />
-                <Area type="monotone" dataKey="a" stackId="1" stroke="#8884d8" fill="#8884d8" isAnimationActive={false} />
-                <Area type="monotone" dataKey="b" stackId="1" stroke="#82ca9d" fill="#82ca9d" isAnimationActive={false} />
-                <Area type="monotone" dataKey="c" stackId="1" stroke="#ffc658" fill="#ffc658" isAnimationActive={false} />
+                <Area type="monotone" dataKey="a" stackId="1" stroke="#8884d8" fill="#8884d8" />
+                <Area type="monotone" dataKey="b" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
+                <Area type="monotone" dataKey="c" stackId="1" stroke="#ffc658" fill="#ffc658" />
             </AreaChart>
         </ResponsiveContainer>
     )

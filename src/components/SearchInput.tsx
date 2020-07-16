@@ -1,13 +1,37 @@
 import React from 'react'
 import { 
-    Input,
+    InputBase,
     InputAdornment
- } from '@material-ui/core';
- import SearchIcon from '@material-ui/icons/Search';
+} from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
+import { makeStyles } from '@material-ui/core/styles'
 
-export default function SearchInput() {
+
+interface SearchInputProps {
+    onChange?: (newValue: string) => void 
+}
+
+const useStyles = makeStyles({
+    root: {
+        backgroundColor: 'white',
+        height: 43,
+        minWidth: 303,
+        paddingLeft: 15,
+        paddingRight: 15,
+        fontSize: 16
+    }
+})
+
+
+export default function SearchInput({
+    onChange = () => null 
+} : SearchInputProps) {
+    const classes = useStyles()
+
     return (
-        <Input 
+        <InputBase
+            className={classes.root}
+            onChange={({ target: { value }}) => onChange(value)}
             endAdornment={(
                 <InputAdornment position="end">
                     <SearchIcon />
