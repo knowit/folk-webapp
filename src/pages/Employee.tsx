@@ -19,6 +19,8 @@ import {
     GridItemHeader,
     GridItemContent
 } from '../components/GridItem';
+import DropdownPicker from '../components/DropdownPicker';
+import SearchInput from '../components/SearchInput';
 
 
 export default function Employee() {
@@ -26,35 +28,70 @@ export default function Employee() {
         <Grid container spacing={2}>
 
             <GridItem>
-                <GridItemHeader title={"På vei inn"} />
+                <GridItemHeader title={"På vei inn"}>
+                    <DropdownPicker 
+                        values={[
+                            'Uke 10',
+                            'Uke 11',
+                            'Uke 12',
+                            'Uke 13',
+                        ]}/>
+                </GridItemHeader>
                 <GridItemContent>
                     <Line />
                 </GridItemContent>
             </GridItem>
 
             <GridItem>
-                <GridItemHeader title={"På vei ut"} />
+                <GridItemHeader title={"På vei ut"}>
+                    <DropdownPicker 
+                        values={[
+                            'Uke 10',
+                            'Uke 11',
+                            'Uke 12',
+                            'Uke 13',
+                        ]}/>
+                </GridItemHeader>
                 <GridItemContent>
                     <Bar />
                 </GridItemContent>
             </GridItem>
 
             <GridItem>
-                <GridItemHeader title={"Erfaringsnivå"} />
+                <GridItemHeader title={"Erfaringsnivå"}>
+                    <DropdownPicker 
+                        values={[
+                            'Gjennomsnitt',
+                            'Median',
+                            'Maksimum',
+                            'Minimum'
+                        ]}/>
+                </GridItemHeader>
                 <GridItemContent>
                     <PercentArea />
                 </GridItemContent>
             </GridItem>
 
             <GridItem>
-                <GridItemHeader title={"Ressurstype"} />
+                <GridItemHeader title={"Ressurstype"}>
+                    <DropdownPicker 
+                        values={[
+                            'Mobilutvikler',
+                            'Systemutvikler',
+                            'Webutvikler',
+                            'Designer',
+                            'Prosjektleder'
+                        ]}/>
+                </GridItemHeader>
                 <GridItemContent>
                     <Pie />
                 </GridItemContent>
             </GridItem>
 
             <GridItem fullSize >
-                <GridItemHeader title={"Prosjektstatus"} />
+                <GridItemHeader title={"Prosjektstatus"}>
+                    <SearchInput />
+                </GridItemHeader>
                 <GridItemContent>
                     <DataTable 
                         columns={[

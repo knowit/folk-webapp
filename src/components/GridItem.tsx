@@ -17,8 +17,8 @@ const useStyles = makeStyles((theme: Theme) =>
             paddingLeft: '15px',
             paddingRight: '15px',
             display: 'flex',
-            position: 'relative',
-            alignItems: 'center'
+            alignItems: 'center',
+            justifyContent: 'space-between'
         },
         gridHeaderTitle: {
             fontSize: '18px',
