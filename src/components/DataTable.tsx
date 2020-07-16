@@ -10,6 +10,8 @@ import {
     TableHead,
     TableRow,
 } from '@material-ui/core'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 
 interface DataTableColumn  {
     title: string,
@@ -55,7 +57,10 @@ const useRowStyles = makeStyles({
         fontSize: 'inherit'
     },
     cellExpandable: {
-        cursor: 'pointer'
+        cursor: 'pointer',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     expansionCell: {
         borderColor: '#EEEEEE',
@@ -83,13 +88,22 @@ function Row({
         <React.Fragment>
             <TableRow className={`${classes.root} ${classes.row}`}>
                 {cells.map((cell, i) => (
-                    <TableCell 
-                        key={i}
-                        className={`${classes.cell} ${cell.expandable ? classes.cellExpandable : ''}`} 
-                        onClick={() => cell.expandable ? setOpen(!open) : null}>
-                        
-                        <cell.CellComponent rowData={rowData} {...cell} />
-                    </TableCell>
+                    cell.expandable 
+                        ? (
+                            <TableCell 
+                                key={i}
+                                className={`${classes.cell} ${classes.cellExpandable}`} 
+                                onClick={() => setOpen(!open)}>
+                                
+                                <cell.CellComponent rowData={rowData} {...cell} />
+                                {open ? <ExpandLessIcon/> : <ExpandMoreIcon/>}
+                            </TableCell>
+                        )
+                        : (
+                            <TableCell key={i} className={classes.cell} >
+                                <cell.CellComponent rowData={rowData} {...cell} />
+                            </TableCell>
+                        ) 
                 ))}
             </TableRow>
             <TableRow>

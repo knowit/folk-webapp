@@ -16,7 +16,8 @@ const useStyles = makeStyles((theme: Theme) =>
             paddingLeft: '30px',
             paddingRight: '30px',
             backgroundColor: '#F1F0ED',
-            minHeight: 'calc(100vh - 103px)'
+            minHeight: 'calc(100vh - 139px)',
+            borderRadius: '0px 0px 10px 10px'
         }
     })
 )
