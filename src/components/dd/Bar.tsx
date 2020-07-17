@@ -37,7 +37,7 @@ export default function Bar({
                 <Tooltip />
                 <Legend />
 
-                {yLabels.map((key, i) => <BarColumn dataKey={key} stackId={'a'} stroke={colors[i]} fill={colors[i]} />)}
+                {yLabels.map((key, i) => <BarColumn key={i} dataKey={key} stackId={'a'} stroke={colors[i]} fill={colors[i]} />)}
 
             </BarChart>
         </ResponsiveContainer>

@@ -60,7 +60,7 @@ export default function PercentArea({
                 <YAxis tickFormatter={toPercent} />
                 <Tooltip content={renderTooltipContent} />
 
-                {yLabels.map((key, i) => <Area dataKey={key} stackId="1" stroke={colors[i]} fill={colors[i]}/>)}
+                {yLabels.map((key, i) => <Area key={i} dataKey={key} stackId="1" stroke={colors[i]} fill={colors[i]}/>)}
             </AreaChart>
         </ResponsiveContainer>
     )

@@ -39,7 +39,7 @@ export default function Line({
                 <Tooltip />
                 <Legend />
 
-                {yLabels.map((key, i) => <ChartLine dataKey={key} stroke={strokeColors[i]} />)}
+                {yLabels.map((key, i) => <ChartLine key={i} dataKey={key} stroke={strokeColors[i]} />)}
                 
             </LineChart>
         </ResponsiveContainer>

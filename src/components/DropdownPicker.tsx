@@ -11,7 +11,7 @@ type ValueType = {displayValue: string, value: any} | string
 
 interface DropdownPickerProps {
     values: ValueType[],
-    onChange?: (newValue: ValueType | undefined) => void 
+    onChange?: (newValue: any) => void 
 }
 
 const useStyles = makeStyles({
@@ -89,8 +89,7 @@ export default function DropdownPicker({
             variant='standard'
             inputRef={selectRef}
             autoWidth={true}
-            // eslint-disable-next-line
-            onChange={({ target: { value } }) => onChange( values.find(x => (value as any) == getValue(x)) )}
+            onChange={({ target: { value } }) => onChange(value)}
             input={<InputBase/>}
             defaultValue={getDisplayValue(values[0])}
             inputProps={{
@@ -118,8 +117,8 @@ export default function DropdownPicker({
                 elevation: 0
             }}>
             
-            {values.map((x : ValueType) => (
-                <MenuItem className={classes.menuItem} value={getValue(x)}>{getDisplayValue(x)}</MenuItem>
+            {values.map((x : ValueType, i: number) => (
+                <MenuItem key={i} className={classes.menuItem} value={getValue(x)}>{getDisplayValue(x)}</MenuItem>
             ))}
         </Select>
     )

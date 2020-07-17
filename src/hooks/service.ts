@@ -65,7 +65,7 @@ export function useServiceCall<T>({
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
-        }).then(res => res.json())
+        }).then(res => res.ok ? res.json() : Promise.reject(res.statusText))
     }, [token, url, method])
 
     const [handler, pending, value, error] = useAsync<T>(fetcher)
