@@ -20,7 +20,7 @@ export default function Employee() {
 
             <DDItem 
                 url={'/api/data/inbound'}
-                title={'På vei inn"'}
+                title={'På vei inn'}
                 Component={DDChart}
                 SkeletonComponent={ChartSkeleton}
                 dataComponentProps={{
@@ -30,7 +30,7 @@ export default function Employee() {
 
             <DDItem 
                 url={'/api/data/outbound'}
-                title={'På vei ut"'}
+                title={'På vei ut'}
                 Component={DDChart}
                 SkeletonComponent={ChartSkeleton}
                 dataComponentProps={{
