@@ -73,6 +73,14 @@ functions:
           method: GET
           path: /auth/userInfo
 
+  apiData:
+    handler: backend/api.data
+    name: ${self:custom.service}-api-data
+    events:
+      - httpApi:
+          method: GET
+          path: /api/data/{name}
+
 resources:
   Resources:
     FolkStaticS3Bucket:
@@ -125,6 +133,23 @@ resources:
                   - Origin
                   - Referer
               PathPattern: /auth/*
+              ViewerProtocolPolicy: redirect-to-https
+              AllowedMethods:
+                - GET
+                - HEAD
+                - OPTIONS
+                - PUT
+                - PATCH
+                - POST
+                - DELETE
+            - TargetOriginId: ${self:custom.distApiDomainId}
+              ForwardedValues: 
+                QueryString: true
+                Headers:
+                  - Accept
+                  - Content-Type
+                  - Authorization
+              PathPattern: /api/*
               ViewerProtocolPolicy: redirect-to-https
               AllowedMethods:
                 - GET

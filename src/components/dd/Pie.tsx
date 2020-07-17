@@ -5,12 +5,11 @@ import {
     PieLabelRenderProps
 } from 'recharts'
 
-const data = [
-    { name: 'Group A', value: 400 },
-    { name: 'Group B', value: 300 },
-    { name: 'Group C', value: 300 },
-    { name: 'Group D', value: 200 }
-]
+type PieChartsData = { group: string, value: number }
+
+interface PieChartsProps {
+    data: PieChartsData[]
+}
 
 
 const renderActiveShape = ({
@@ -39,7 +38,7 @@ const renderActiveShape = ({
 
     return (
         <g>
-            <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>{payload.name}</text>
+            <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>{payload.group}</text>
             <Sector
                 cx={cx}
                 cy={cy}
@@ -69,7 +68,9 @@ const renderActiveShape = ({
 }
 
 
-export default function Pie() {
+export default function Pie({
+    data
+} : PieChartsProps) {
     const [activeIndex, setActiveIndex] = useState(0)
 
     return (
@@ -86,7 +87,6 @@ export default function Pie() {
                     fill="#8884d8"
                     dataKey="value"
                     onMouseEnter={(_, index) => setActiveIndex(index)}
-                    isAnimationActive={false}
                 />
             </PieChart>
         </ResponsiveContainer>
