@@ -12,6 +12,9 @@ Runs the app in the development mode.
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
+When you run locally in Chrome/Firefix you might see that it needs to be on https.
+If that happens click on "Advanced" and then use untrusted connection option.
+
 The page will reload if you make edits.
 
 You will also see any lint errors in the console.
