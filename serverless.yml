@@ -28,12 +28,12 @@ provider:
   httpApi:
     name: ${self:custom.service}-api
     payload: '2.0'
-    cors: true 
+    cors: true
 
 package:
-  include: 
+  include:
     - backend/**
-  exclude: 
+  exclude:
     - '*/**'
   individually: true
 
@@ -44,8 +44,8 @@ functions:
     events:
       - cloudFront:
           eventType: origin-request
-          origin: ${self:custom.cloudFrontOrigin} 
-  
+          origin: ${self:custom.cloudFrontOrigin}
+
   authLogin:
     handler: backend/auth.login
     name: ${self:custom.service}-auth-login
@@ -54,7 +54,7 @@ functions:
       - httpApi:
           method: GET
           path: /auth/login
-  
+
   authCallback:
     handler: backend/auth.callback
     name: ${self:custom.service}-auth-callback
@@ -101,11 +101,11 @@ resources:
           Statement:
             - Sid: PublicReadGetObject
               Effect: Allow
-              Principal: "*"
+              Principal: '*'
               Action:
-              - s3:GetObject
+                - s3:GetObject
               Resource: arn:aws:s3:::${self:custom.bucketName}/*
-    
+
     CloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
@@ -122,8 +122,8 @@ resources:
                   - TLSv1.2
           CacheBehaviors:
             - TargetOriginId: ${self:custom.distApiDomainId}
-              ForwardedValues: 
-                Cookies: 
+              ForwardedValues:
+                Cookies:
                   Forward: all
                 QueryString: true
                 Headers:
@@ -143,7 +143,7 @@ resources:
                 - POST
                 - DELETE
             - TargetOriginId: ${self:custom.distApiDomainId}
-              ForwardedValues: 
+              ForwardedValues:
                 QueryString: true
                 Headers:
                   - Accept
@@ -174,4 +174,4 @@ resources:
         'Ref': FolkStaticS3Bucket
     CloudFrontDistributionOutput:
       Value:
-        'Fn::GetAtt': [ CloudFrontDistribution, DomainName ]
+        'Fn::GetAtt': [CloudFrontDistribution, DomainName]
