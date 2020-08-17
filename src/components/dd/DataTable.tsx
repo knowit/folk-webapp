@@ -126,7 +126,7 @@ const BlackCheckBox = withStyles({
     },
   },
   checked: {},
-})((props: CheckboxProps) => <Checkbox color="default" {...props} />);
+})((props: CheckboxProps) => <Checkbox color="default" disableRipple {...props} />);
 
 const useCheckBoxStyles = makeStyles({
   label: {
