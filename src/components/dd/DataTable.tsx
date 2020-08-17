@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import {
   Box,
   Collapse,
@@ -9,7 +9,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  FormControlLabel,
 } from '@material-ui/core';
+import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
@@ -113,6 +115,48 @@ function Row({ rowData, columns }: DataTableRowProps) {
   );
 }
 
+const BlackCheckBox = withStyles({
+  root: {
+    color: '#333333',
+    '&$checked': {
+      color: '#333333',
+    },
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
+  checked: {},
+})((props: CheckboxProps) => <Checkbox color="default" {...props} />);
+
+const useCheckBoxStyles = makeStyles({
+  label: {
+    marginRight: 0,
+  },
+  position: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+});
+
+interface ConsultantHeaderCellProps {
+  column: DataTableColumn
+}
+
+function ConsultantHeaderCell({ column }: ConsultantHeaderCellProps) {
+  const classes = useCheckBoxStyles();
+
+  return (
+    <div className={classes.position}>
+      {column.title} 
+      <FormControlLabel className={classes.label}
+        control={<BlackCheckBox/>}
+        label="Vis kun ledige"
+      />
+    </div>
+  );
+}
+
 const useTableStyles = makeStyles({
   root: {},
   tableHead: {
@@ -137,11 +181,21 @@ export default function DataTable({ columns, rows }: DataTableProps) {
       <Table>
         <TableHead className={tableClasses.tableHead}>
           <TableRow className={rowClasses.row}>
-            {columns.map((x) => (
+            {columns.map((x) => {
+            if (x.title==="Konsulent"){
+              return (
+                <TableCell className={rowClasses.cell} key={x.title}>
+                  <ConsultantHeaderCell column={x}/>
+                </TableCell>
+              )
+            }
+            else{ 
+              return (
               <TableCell className={rowClasses.cell} key={x.title}>
                 {x.title}
               </TableCell>
-            ))}
+              )
+            }})}
           </TableRow>
         </TableHead>
         <TableBody className={tableClasses.tableBody}>
