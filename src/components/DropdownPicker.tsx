@@ -14,7 +14,6 @@ const useStyles = makeStyles({
     backgroundColor: '#F1F0ED',
     fontSize: 16,
     border: '1px solid white',
-    height: 43,
     width: width,
   }),
   input: {
@@ -29,6 +28,7 @@ const useStyles = makeStyles({
     borderRadius: 0,
     width: width,
     backgroundColor: '#F1F0ED',
+    marginLeft: -1,
   }),
   menuList: {
     borderLeft: '1px solid white',
@@ -76,7 +76,6 @@ export default function DropdownPicker({
         .reduce((prev, next) => (prev.length > next.length ? prev : next)),
       '16pt arial'
     ) + 46;
-
   const classes = useStyles({ width });
   const overrideClasses = useMuiOverrideStyles();
   const selectRef = useRef<HTMLElement | null>();
