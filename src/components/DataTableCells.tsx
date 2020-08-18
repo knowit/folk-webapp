@@ -1,6 +1,7 @@
 import React from 'react';
-import { Avatar } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Avatar, FormControlLabel } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
 
 const useConsultantCellStyles = makeStyles({
@@ -80,6 +81,57 @@ export function CustomerStatusCell({
     <div className={classes.root}>
       <div>{value || '-'}</div>
       <div className={classes.statusLabel} />
+    </div>
+  );
+}
+
+const BlackCheckBox = withStyles({
+  root: {
+    color: '#333333',
+    '&$checked': {
+      color: '#333333',
+    },
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
+  checked: {},
+})((props: CheckboxProps) => (
+  <Checkbox color="default" disableRipple {...props} />
+));
+
+const useCheckBoxStyles = makeStyles({
+  label: {
+    marginRight: 0,
+  },
+  position: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+});
+
+interface ConsultantHeaderCellProps {
+  columnTitle: string;
+  label: string;
+  changeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export function HeaderCellWithCheckBox({
+  columnTitle,
+  label,
+  changeHandler,
+}: ConsultantHeaderCellProps) {
+  const classes = useCheckBoxStyles();
+
+  return (
+    <div className={classes.position}>
+      {columnTitle}
+      <FormControlLabel
+        className={classes.label}
+        control={<BlackCheckBox onChange={changeHandler} />}
+        label={label}
+      />
     </div>
   );
 }

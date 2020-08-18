@@ -13,7 +13,7 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
-interface DataTableColumn {
+export interface DataTableColumn {
   title: string;
   expandable?: boolean;
   renderCell?: (props: { data: any; rowData: any[] }) => JSX.Element;
@@ -23,7 +23,7 @@ interface DataTableCell extends DataTableColumn {
   data: any;
 }
 
-interface DataTableRow {
+export interface DataTableRow {
   rowData: any[];
   columns: DataTableColumn[];
 }
@@ -36,7 +36,7 @@ interface DataTableProps {
 type DataTableRowProps = DataTableRow;
 type DataTableCellProps = DataTableCell;
 
-const useRowStyles = makeStyles({
+export const useRowStyles = makeStyles({
   root: {
     '& > *': {
       borderBottom: 'unset',
@@ -68,7 +68,7 @@ const useRowStyles = makeStyles({
   },
 });
 
-function Row({ rowData, columns }: DataTableRowProps) {
+export function Row({ rowData, columns }: DataTableRowProps) {
   const [open, setOpen] = useState(false);
   const classes = useRowStyles();
 
@@ -113,7 +113,7 @@ function Row({ rowData, columns }: DataTableRowProps) {
   );
 }
 
-const useTableStyles = makeStyles({
+export const useTableStyles = makeStyles({
   root: {},
   tableHead: {
     fontWeight: 'bold',
