@@ -12,9 +12,8 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import { HeaderCellWithCheckBox } from '../DataTableCells';
 
-interface DataTableColumn {
+export interface DataTableColumn {
   title: string;
   expandable?: boolean;
   renderCell?: (props: { data: any; rowData: any[] }) => JSX.Element;
@@ -24,7 +23,7 @@ interface DataTableCell extends DataTableColumn {
   data: any;
 }
 
-interface DataTableRow {
+export interface DataTableRow {
   rowData: any[];
   columns: DataTableColumn[];
 }
@@ -37,7 +36,7 @@ interface DataTableProps {
 type DataTableRowProps = DataTableRow;
 type DataTableCellProps = DataTableCell;
 
-const useRowStyles = makeStyles({
+export const useRowStyles = makeStyles({
   root: {
     '& > *': {
       borderBottom: 'unset',
@@ -69,7 +68,7 @@ const useRowStyles = makeStyles({
   },
 });
 
-function Row({ rowData, columns }: DataTableRowProps) {
+export function Row({ rowData, columns }: DataTableRowProps) {
   const [open, setOpen] = useState(false);
   const classes = useRowStyles();
 
@@ -114,7 +113,7 @@ function Row({ rowData, columns }: DataTableRowProps) {
   );
 }
 
-const useTableStyles = makeStyles({
+export const useTableStyles = makeStyles({
   root: {},
   tableHead: {
     fontWeight: 'bold',
@@ -133,41 +132,20 @@ export default function DataTable({ columns, rows }: DataTableProps) {
   const tableClasses = useTableStyles();
   const rowClasses = useRowStyles();
 
-  const [filterFreeResources, setFilterFreeResources] = useState(false);
-
-  const handleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterFreeResources(event.target.checked);
-  };
-
-  let showRows = rows
-  if (filterFreeResources){
-    showRows = showRows.filter(row => row.rowData[3].status === 'green') // TODO: Update filter to reflect structure of actual data from backend
-  }
-
   return (
     <TableContainer className={tableClasses.root}>
       <Table>
         <TableHead className={tableClasses.tableHead}>
           <TableRow className={rowClasses.row}>
-            {columns.map((x) => {
-            if (x.title==="Konsulent"){
-              return (
-                <TableCell className={rowClasses.cell} key={x.title}>
-                  <HeaderCellWithCheckBox columnTitle={x.title} label={"Vis kun ledige"} changeHandler={handleCheckBoxChange}/>
-                </TableCell>
-              )
-            }
-            else{ 
-              return (
+            {columns.map((x) => (
               <TableCell className={rowClasses.cell} key={x.title}>
                 {x.title}
               </TableCell>
-              )
-            }})}
+            ))}
           </TableRow>
         </TableHead>
         <TableBody className={tableClasses.tableBody}>
-          {showRows.map((row, i) => (
+          {rows.map((row, i) => (
             <Row key={i} {...row} columns={columns} />
           ))}
         </TableBody>

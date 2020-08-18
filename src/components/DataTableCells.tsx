@@ -110,9 +110,9 @@ const useCheckBoxStyles = makeStyles({
 });
 
 interface ConsultantHeaderCellProps {
-  columnTitle: string,
-  label: string
-  changeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
+  columnTitle: string;
+  label: string;
+  changeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function HeaderCellWithCheckBox({ columnTitle, label, changeHandler }: ConsultantHeaderCellProps) {
