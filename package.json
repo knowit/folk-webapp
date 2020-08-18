@@ -32,8 +32,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy:backend": "sls deploy",
-    "deploy:upload:dev": "aws s3 sync build s3://dev-folk-static-web",
-    "deploy:web:dev": "yarn build && yarn deploy:upload:dev"
+    "deploy:upload:dev": "aws s3 sync build s3://dev-folk-static-web && yarn invalidate-cache:dev",
+    "deploy:web:dev": "yarn build && yarn deploy:upload:dev",
+    "invalidate-cache:dev": "aws cloudfront create-invalidation --distribution-id E3R63UW43K05MR --paths /"
   },
   "eslintConfig": {
     "extends": "react-app"
