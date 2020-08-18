@@ -3,7 +3,7 @@ import { useFetchedData } from '../hooks/service';
 import { GridItem, GridItemHeader, GridItemContent } from './GridItem';
 import { Skeleton } from '@material-ui/lab';
 import DataTable from '../components/dd/DataTable';
-import DataTableWithFilter from '../components/dd/DataTableWithFilter'
+import DataTableWithFilter from '../components/dd/DataTableWithFilter';
 import SearchInput from '../components/SearchInput';
 import DropdownPicker from '../components/DropdownPicker';
 
@@ -137,7 +137,12 @@ export function DDTable({ payload, title, props }: DDComponentProps) {
 }
 
 export function DDTableWithFilter({ payload, title, props }: DDComponentProps) {
-  if (props && props['filterFunction'] && props['checkBoxColumnTitle'] && props['checkBoxLabel'])
+  if (
+    props &&
+    props['filterFunction'] &&
+    props['checkBoxColumnTitle'] &&
+    props['checkBoxLabel']
+  )
     return (
       <>
         <GridItemHeader title={title}>
@@ -158,11 +163,7 @@ export function DDTableWithFilter({ payload, title, props }: DDComponentProps) {
     );
   else {
     return (
-      <DDTable 
-        payload={payload as DDPayload}
-        title={title}
-        props={props}
-      />
-    )
+      <DDTable payload={payload as DDPayload} title={title} props={props} />
+    );
   }
 }

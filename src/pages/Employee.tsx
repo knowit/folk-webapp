@@ -72,7 +72,8 @@ export default function Employee() {
             { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
             { title: 'Kunde', renderCell: CustomerStatusCell },
           ],
-          filterFunction: (row: Pick<DataTableRow, "rowData">) => row.rowData[3].status === 'green', // TODO: Update filter to reflect structure of actual data from backend
+          filterFunction: (row: Pick<DataTableRow, 'rowData'>) =>
+            row.rowData[3].status === 'green', // TODO: Update filter to reflect structure of actual backend data
           checkBoxColumnTitle: 'Konsulent',
           checkBoxLabel: 'Vis kun ledige',
         }}

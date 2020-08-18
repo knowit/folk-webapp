@@ -96,7 +96,9 @@ const BlackCheckBox = withStyles({
     },
   },
   checked: {},
-})((props: CheckboxProps) => <Checkbox color="default" disableRipple {...props} />);
+})((props: CheckboxProps) => (
+  <Checkbox color="default" disableRipple {...props} />
+));
 
 const useCheckBoxStyles = makeStyles({
   label: {
@@ -115,14 +117,19 @@ interface ConsultantHeaderCellProps {
   changeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export function HeaderCellWithCheckBox({ columnTitle, label, changeHandler }: ConsultantHeaderCellProps) {
+export function HeaderCellWithCheckBox({
+  columnTitle,
+  label,
+  changeHandler,
+}: ConsultantHeaderCellProps) {
   const classes = useCheckBoxStyles();
 
   return (
     <div className={classes.position}>
-      {columnTitle} 
-      <FormControlLabel className={classes.label}
-        control={<BlackCheckBox onChange={changeHandler}/>}
+      {columnTitle}
+      <FormControlLabel
+        className={classes.label}
+        control={<BlackCheckBox onChange={changeHandler} />}
         label={label}
       />
     </div>
