@@ -140,18 +140,20 @@ const useCheckBoxStyles = makeStyles({
 });
 
 interface ConsultantHeaderCellProps {
-  column: DataTableColumn
+  column: DataTableColumn,
+  label: string
+  changeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-function ConsultantHeaderCell({ column }: ConsultantHeaderCellProps) {
+function HeaderCellWithCheckBox({ column, label, changeHandler }: ConsultantHeaderCellProps) {
   const classes = useCheckBoxStyles();
 
   return (
     <div className={classes.position}>
       {column.title} 
       <FormControlLabel className={classes.label}
-        control={<BlackCheckBox/>}
-        label="Vis kun ledige"
+        control={<BlackCheckBox onChange={changeHandler}/>}
+        label={label}
       />
     </div>
   );
@@ -176,6 +178,17 @@ export default function DataTable({ columns, rows }: DataTableProps) {
   const tableClasses = useTableStyles();
   const rowClasses = useRowStyles();
 
+  const [filterFreeResources, setFilterFreeResources] = useState(false);
+
+  const handleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterFreeResources(event.target.checked);
+  };
+
+  let showRows = rows
+  if (filterFreeResources){
+    showRows = showRows.filter(row => row.rowData[3].status === 'green') // TODO: Update filter to reflect structure of actual data from backend
+  }
+
   return (
     <TableContainer className={tableClasses.root}>
       <Table>
@@ -185,7 +198,7 @@ export default function DataTable({ columns, rows }: DataTableProps) {
             if (x.title==="Konsulent"){
               return (
                 <TableCell className={rowClasses.cell} key={x.title}>
-                  <ConsultantHeaderCell column={x}/>
+                  <HeaderCellWithCheckBox column={x} label={"Vis kun ledige"} changeHandler={handleCheckBoxChange}/>
                 </TableCell>
               )
             }
@@ -199,7 +212,7 @@ export default function DataTable({ columns, rows }: DataTableProps) {
           </TableRow>
         </TableHead>
         <TableBody className={tableClasses.tableBody}>
-          {rows.map((row, i) => (
+          {showRows.map((row, i) => (
             <Row key={i} {...row} columns={columns} />
           ))}
         </TableBody>
