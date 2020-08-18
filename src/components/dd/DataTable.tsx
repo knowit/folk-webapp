@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Box,
   Collapse,
@@ -9,11 +9,10 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  FormControlLabel,
 } from '@material-ui/core';
-import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { HeaderCellWithCheckBox } from '../DataTableCells';
 
 interface DataTableColumn {
   title: string;
@@ -115,50 +114,6 @@ function Row({ rowData, columns }: DataTableRowProps) {
   );
 }
 
-const BlackCheckBox = withStyles({
-  root: {
-    color: '#333333',
-    '&$checked': {
-      color: '#333333',
-    },
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
-  },
-  checked: {},
-})((props: CheckboxProps) => <Checkbox color="default" disableRipple {...props} />);
-
-const useCheckBoxStyles = makeStyles({
-  label: {
-    marginRight: 0,
-  },
-  position: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-});
-
-interface ConsultantHeaderCellProps {
-  column: DataTableColumn,
-  label: string
-  changeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
-}
-
-function HeaderCellWithCheckBox({ column, label, changeHandler }: ConsultantHeaderCellProps) {
-  const classes = useCheckBoxStyles();
-
-  return (
-    <div className={classes.position}>
-      {column.title} 
-      <FormControlLabel className={classes.label}
-        control={<BlackCheckBox onChange={changeHandler}/>}
-        label={label}
-      />
-    </div>
-  );
-}
-
 const useTableStyles = makeStyles({
   root: {},
   tableHead: {
@@ -198,7 +153,7 @@ export default function DataTable({ columns, rows }: DataTableProps) {
             if (x.title==="Konsulent"){
               return (
                 <TableCell className={rowClasses.cell} key={x.title}>
-                  <HeaderCellWithCheckBox column={x} label={"Vis kun ledige"} changeHandler={handleCheckBoxChange}/>
+                  <HeaderCellWithCheckBox columnTitle={x.title} label={"Vis kun ledige"} changeHandler={handleCheckBoxChange}/>
                 </TableCell>
               )
             }
