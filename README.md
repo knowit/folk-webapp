@@ -52,3 +52,15 @@ You don´t have to ever use `eject`. The curated feature set is suitable for sma
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## Deploy
+
+To deploy you have to install aws cli tools and serverless.
+
+[AWS cli 2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
+
+[serverless](https://www.serverless.com/framework/docs/getting-started#via-npm)
+
+Then run `aws configure` and fill inn the _Access key ID_ and _Secret access key_
+
+And then run `yarn deploy:web:dev` to deploy.
