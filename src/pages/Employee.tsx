@@ -5,7 +5,7 @@ import {
   ProjectStatusCell,
   CustomerStatusCell,
 } from '../components/DataTableCells';
-import DDItem, { DDTable, DDChart, DDTableWithFilter } from '../components/DDItem';
+import DDItem, { DDChart, DDTableWithFilter } from '../components/DDItem';
 import { DataTableRow } from '../components/dd/DataTable';
 import { Skeleton } from '@material-ui/lab';
 
