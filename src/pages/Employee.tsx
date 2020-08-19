@@ -5,7 +5,7 @@ import {
   ProjectStatusCell,
   CustomerStatusCell,
 } from '../components/DataTableCells';
-import DDItem, { DDChart, DDTableWithFilter } from '../components/DDItem';
+import DDItem, { DDTable, DDChart } from '../components/DDItem';
 import { DataTableRow } from '../components/dd/DataTable';
 import { Skeleton } from '@material-ui/lab';
 
@@ -60,7 +60,7 @@ export default function Employee() {
         url={'/api/data/projectStatus'}
         title={'Prosjektstatus'}
         fullSize={true}
-        Component={DDTableWithFilter}
+        Component={DDTable}
         dataComponentProps={{
           columns: [
             {
