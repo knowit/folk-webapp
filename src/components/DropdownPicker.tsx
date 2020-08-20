@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Select, InputBase, MenuItem, Grow } from '@material-ui/core';
+import { Select, InputBase, MenuItem, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 type ValueType = { displayValue: string; value: any } | string;
@@ -94,7 +94,7 @@ export default function DropdownPicker({
         className: classes.input,
       }}
       MenuProps={{
-        TransitionComponent: Grow,
+        TransitionComponent: Fade,
         className: classes.menu,
         MenuListProps: {
           disablePadding: true,
