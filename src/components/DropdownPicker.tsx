@@ -33,6 +33,7 @@ const useStyles = makeStyles({
   menuList: {
     borderLeft: '1px solid white',
     borderRight: '1px solid white',
+    borderTop: '1px solid white',
   },
   menuItem: {
     fontSize: 14,
