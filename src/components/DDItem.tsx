@@ -119,7 +119,8 @@ export function DDChart({ payload, title, props }: DDComponentProps) {
 }
 
 export function DDTable({ payload, title, props }: DDComponentProps) {
-  const [rows, setRows] = useState(payload as { rowData: any[] }[]);
+  const rows = payload as { rowData: any[] }[];
+  const [showRows, setshowRows] = useState(payload as { rowData: any[] }[]);
 
   const filterFunction =
     props && props['filterFunction']
@@ -128,10 +129,10 @@ export function DDTable({ payload, title, props }: DDComponentProps) {
 
   const handleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.target.checked
-      ? setRows(
+      ? setshowRows(
           rows.filter((row: FilterFunctionArgument) => filterFunction(row))
         )
-      : setRows(rows);
+      : setshowRows(rows);
   };
 
   if (props && props['columns']) {
@@ -153,7 +154,7 @@ export function DDTable({ payload, title, props }: DDComponentProps) {
       </GridItemHeader>
 
       <GridItemContent>
-        <DataTable rows={rows} columns={[]} {...props} />
+        <DataTable rows={showRows} columns={[]} {...props} />
       </GridItemContent>
     </>
   );
