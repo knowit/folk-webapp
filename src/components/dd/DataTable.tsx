@@ -27,10 +27,12 @@ interface DataTableCell extends DataTableColumn {
   data: any;
 }
 
-export interface DataTableRow {
+interface DataTableRow {
   rowData: any[];
   columns: DataTableColumn[];
 }
+
+export type FilterFunctionArgument = Pick<DataTableRow, 'rowData'>;
 
 interface DataTableProps {
   columns: DataTableColumn[];
@@ -123,7 +125,6 @@ function Row({ rowData, columns }: DataTableRowProps) {
 
 function HeaderRow({ columns }: DataTableHeaderRowProps) {
   const rowClasses = useRowStyles();
-  // const [filter, setFilter] = useState(false);
 
   const DefaultCellComponent = (column: DataTableColumn) => <>{column.title}</>;
 

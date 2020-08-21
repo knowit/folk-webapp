@@ -7,7 +7,7 @@ import {
   CheckBoxHeaderCell,
 } from '../components/DataTableCells';
 import DDItem, { DDTable, DDChart } from '../components/DDItem';
-import { DataTableRow } from '../components/dd/DataTable';
+import { FilterFunctionArgument } from '../components/dd/DataTable';
 import { Skeleton } from '@material-ui/lab';
 
 export default function Employee() {
@@ -70,12 +70,13 @@ export default function Employee() {
               renderCell: ConsultantCell,
               headerRenderCell: CheckBoxHeaderCell,
               checkBoxLabel: 'Vis kun ledige',
-              // checkBoxChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => {console.log(event.target.checked);},
             },
             { title: 'Tittel' },
             { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
             { title: 'Kunde', renderCell: CustomerStatusCell },
           ],
+          filterFunction: (row: FilterFunctionArgument) =>
+            row.rowData[3].status === 'green', // TODO: Update filter to reflect structure of actual backend data
         }}
         SkeletonComponent={TableSkeleton}
       />
