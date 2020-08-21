@@ -64,3 +64,7 @@ To deploy you have to install aws cli tools and serverless.
 Then run `aws configure` and fill inn the _Access key ID_ and _Secret access key_
 
 And then run `yarn deploy:web:dev` to deploy.
+
+## Deploy test data
+
+By running `sls deploy function -f apiData`, you can deploy the test data to dev-server.
