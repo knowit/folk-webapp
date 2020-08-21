@@ -4,6 +4,7 @@ import {
   ConsultantCell,
   ProjectStatusCell,
   CustomerStatusCell,
+  CheckBoxHeaderCell,
 } from '../components/DataTableCells';
 import DDItem, { DDTable, DDChart } from '../components/DDItem';
 import { DataTableRow } from '../components/dd/DataTable';
@@ -67,15 +68,14 @@ export default function Employee() {
               title: 'Konsulent',
               expandable: true,
               renderCell: ConsultantCell,
+              headerRenderCell: CheckBoxHeaderCell,
+              checkBoxLabel: 'Vis kun ledige',
+              // checkBoxChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => {console.log(event.target.checked);},
             },
             { title: 'Tittel' },
             { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
             { title: 'Kunde', renderCell: CustomerStatusCell },
           ],
-          filterFunction: (row: Pick<DataTableRow, 'rowData'>) =>
-            row.rowData[3].status === 'green', // TODO: Update filter to reflect structure of actual backend data
-          checkBoxColumnTitle: 'Konsulent',
-          checkBoxLabel: 'Vis kun ledige',
         }}
         SkeletonComponent={TableSkeleton}
       />

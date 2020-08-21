@@ -5,11 +5,12 @@ import { Skeleton } from '@material-ui/lab';
 import DataTable from '../components/dd/DataTable';
 import SearchInput from '../components/SearchInput';
 import DropdownPicker from '../components/DropdownPicker';
-
+import { DataTableRow } from './dd/DataTable';
 import Line from '../components/dd/Line';
 import Bar from '../components/dd/Bar';
 import PercentArea from '../components/dd/PercentArea';
 import Pie from '../components/dd/Pie';
+import { CheckBoxHeaderCell } from './DataTableCells';
 
 type DDPayload = { [key: string]: any };
 type DDPassProps = { [key: string]: any };
@@ -118,31 +119,40 @@ export function DDChart({ payload, title, props }: DDComponentProps) {
 }
 
 export function DDTable({ payload, title, props }: DDComponentProps) {
-  if (
-    props &&
-    props['filterFunction'] &&
-    props['checkBoxColumnTitle'] &&
-    props['checkBoxLabel']
-  ) {
-    return (
-      <>
-        <GridItemHeader title={title}>
-          <SearchInput />
-        </GridItemHeader>
+  const [rows, setRows] = useState(payload as { rowData: any[] }[]);
 
-        <GridItemContent>
-          <DataTable
-            rows={payload as { rowData: any[] }[]}
-            columns={[]}
-            filterFunction={props['filterFunction']}
-            checkBoxColumnTitle={props['checkBoxColumnTitle']}
-            checkBoxLabel={props['checkBoxLabel']}
-            {...props}
-          />
-        </GridItemContent>
-      </>
-    );
-  } else {
-    return <div>Hei</div>;
+  const handleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.target.checked
+      ? setRows(
+          rows.filter(
+            (row: Pick<DataTableRow, 'rowData'>) =>
+              row.rowData[3].status === 'green' // TODO: Update filter to reflect structure of actual backend data
+          )
+        )
+      : setRows(rows);
+  };
+
+  if (props && props['columns']) {
+    props['columns'] = props['columns'].map((column: any) => {
+      if (column['headerRenderCell'] === CheckBoxHeaderCell) {
+        return {
+          checkBoxChangeHandler: handleCheckBoxChange,
+          ...column,
+        };
+      } else {
+        return { ...column };
+      }
+    });
   }
+  return (
+    <>
+      <GridItemHeader title={title}>
+        <SearchInput />
+      </GridItemHeader>
+
+      <GridItemContent>
+        <DataTable rows={rows} columns={[]} {...props} />
+      </GridItemContent>
+    </>
+  );
 }

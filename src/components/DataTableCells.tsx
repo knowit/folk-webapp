@@ -111,26 +111,28 @@ const useCheckBoxStyles = makeStyles({
   },
 });
 
-interface ConsultantHeaderCellProps {
-  columnTitle: string;
-  label: string;
-  changeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
+export interface CheckBoxChangeHandlerProps {
+  event: React.ChangeEvent<HTMLInputElement>;
 }
 
-export function HeaderCellWithCheckBox({
-  columnTitle,
-  label,
-  changeHandler,
-}: ConsultantHeaderCellProps) {
+export function CheckBoxHeaderCell({
+  title,
+  checkBoxLabel,
+  checkBoxChangeHandler,
+}: {
+  title: string;
+  checkBoxLabel: string;
+  checkBoxChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
   const classes = useCheckBoxStyles();
 
   return (
     <div className={classes.position}>
-      {columnTitle}
+      {title}
       <FormControlLabel
         className={classes.label}
-        control={<BlackCheckBox onChange={changeHandler} />}
-        label={label}
+        control={<BlackCheckBox onChange={checkBoxChangeHandler} />}
+        label={checkBoxLabel}
       />
     </div>
   );

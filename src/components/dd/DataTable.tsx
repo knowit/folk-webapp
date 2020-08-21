@@ -12,12 +12,15 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import { HeaderCellWithCheckBox } from '../DataTableCells';
+import { CheckBoxChangeHandlerProps } from '../DataTableCells';
 
 interface DataTableColumn {
   title: string;
   expandable?: boolean;
   renderCell?: (props: { data: any; rowData: any[] }) => JSX.Element;
+  headerRenderCell?: () => JSX.Element;
+  checkBoxLabel?: string;
+  checkBoxChangeHandler?: ({ event }: CheckBoxChangeHandlerProps) => void;
 }
 
 interface DataTableCell extends DataTableColumn {
@@ -32,11 +35,10 @@ export interface DataTableRow {
 interface DataTableProps {
   columns: DataTableColumn[];
   rows: Omit<DataTableRow, 'columns'>[];
-  filterFunction: (
-    rows: Pick<DataTableRow, 'rowData'>
-  ) => Pick<DataTableRow, 'rowData'>;
-  checkBoxColumnTitle: string;
-  checkBoxLabel: string;
+}
+
+interface DataTableHeaderRowProps {
+  columns: DataTableColumn[];
 }
 
 type DataTableRowProps = DataTableRow;
@@ -119,6 +121,32 @@ function Row({ rowData, columns }: DataTableRowProps) {
   );
 }
 
+function HeaderRow({ columns }: DataTableHeaderRowProps) {
+  const rowClasses = useRowStyles();
+  // const [filter, setFilter] = useState(false);
+
+  const DefaultCellComponent = (column: DataTableColumn) => <>{column.title}</>;
+
+  const cells = columns.map((column) => ({
+    CellComponent: column.headerRenderCell
+      ? column.headerRenderCell
+      : DefaultCellComponent,
+    ...column,
+  }));
+
+  return (
+    <React.Fragment>
+      <TableRow className={rowClasses.row}>
+        {cells.map((cell, i) => (
+          <TableCell className={rowClasses.cell} key={cell.title}>
+            <cell.CellComponent {...cell} />
+          </TableCell>
+        ))}
+      </TableRow>
+    </React.Fragment>
+  );
+}
+
 export const useTableStyles = makeStyles({
   root: {},
   tableHead: {
@@ -134,55 +162,17 @@ export const useTableStyles = makeStyles({
   },
 });
 
-export default function DataTable({
-  columns,
-  rows,
-  filterFunction,
-  checkBoxColumnTitle,
-  checkBoxLabel,
-}: DataTableProps) {
+export default function DataTable({ columns, rows }: DataTableProps) {
   const tableClasses = useTableStyles();
-  const rowClasses = useRowStyles();
-
-  const [filterFreeResources, setFilterFreeResources] = useState(false);
-
-  const handleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterFreeResources(event.target.checked);
-  };
-
-  let showRows = rows;
-  if (filterFreeResources) {
-    showRows = showRows.filter((row) => filterFunction(row));
-  }
 
   return (
     <TableContainer className={tableClasses.root}>
       <Table>
         <TableHead className={tableClasses.tableHead}>
-          <TableRow className={rowClasses.row}>
-            {columns.map((x) => {
-              if (x.title === checkBoxColumnTitle) {
-                return (
-                  <TableCell className={rowClasses.cell} key={x.title}>
-                    <HeaderCellWithCheckBox
-                      columnTitle={x.title}
-                      label={checkBoxLabel}
-                      changeHandler={handleCheckBoxChange}
-                    />
-                  </TableCell>
-                );
-              } else {
-                return (
-                  <TableCell className={rowClasses.cell} key={x.title}>
-                    {x.title}
-                  </TableCell>
-                );
-              }
-            })}
-          </TableRow>
+          <HeaderRow columns={columns} />
         </TableHead>
         <TableBody className={tableClasses.tableBody}>
-          {showRows.map((row, i) => (
+          {rows.map((row, i) => (
             <Row key={i} {...row} columns={columns} />
           ))}
         </TableBody>
