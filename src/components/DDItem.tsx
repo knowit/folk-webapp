@@ -120,7 +120,7 @@ export function DDChart({ payload, title, props }: DDComponentProps) {
 
 export function DDTable({ payload, title, props }: DDComponentProps) {
   const rows = payload as { rowData: any[] }[];
-  const [showRows, setshowRows] = useState(payload as { rowData: any[] }[]);
+  const [showRows, setshowRows] = useState(rows);
 
   const filterFunction =
     props && props['filterFunction']
@@ -131,6 +131,16 @@ export function DDTable({ payload, title, props }: DDComponentProps) {
     event.target.checked
       ? setshowRows(
           rows.filter((row: FilterFunctionArgument) => filterFunction(row))
+        )
+      : setshowRows(rows);
+  };
+
+  const handleSearchInputChange = (newValue: string) => {
+    newValue
+      ? setshowRows(
+          rows.filter((row: FilterFunctionArgument) =>
+            row.rowData[0].toLowerCase().includes(newValue.toLowerCase())
+          ) // TODO: Update filter to reflect structure of actual backend data
         )
       : setshowRows(rows);
   };
@@ -150,7 +160,7 @@ export function DDTable({ payload, title, props }: DDComponentProps) {
   return (
     <>
       <GridItemHeader title={title}>
-        <SearchInput />
+        <SearchInput onChange={handleSearchInputChange} />
       </GridItemHeader>
 
       <GridItemContent>
