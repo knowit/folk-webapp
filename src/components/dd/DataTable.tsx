@@ -12,31 +12,41 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { CheckBoxChangeHandlerProps } from '../DataTableCells';
 
-export interface DataTableColumn {
+interface DataTableColumn {
   title: string;
   expandable?: boolean;
   renderCell?: (props: { data: any; rowData: any[] }) => JSX.Element;
+  headerRenderCell?: () => JSX.Element;
+  checkBoxLabel?: string;
+  checkBoxChangeHandler?: ({ event }: CheckBoxChangeHandlerProps) => void;
 }
 
 interface DataTableCell extends DataTableColumn {
   data: any;
 }
 
-export interface DataTableRow {
+interface DataTableRow {
   rowData: any[];
   columns: DataTableColumn[];
 }
+
+export type FilterFunctionArgument = Pick<DataTableRow, 'rowData'>;
 
 interface DataTableProps {
   columns: DataTableColumn[];
   rows: Omit<DataTableRow, 'columns'>[];
 }
 
+interface DataTableHeaderRowProps {
+  columns: DataTableColumn[];
+}
+
 type DataTableRowProps = DataTableRow;
 type DataTableCellProps = DataTableCell;
 
-export const useRowStyles = makeStyles({
+const useRowStyles = makeStyles({
   root: {
     '& > *': {
       borderBottom: 'unset',
@@ -68,7 +78,7 @@ export const useRowStyles = makeStyles({
   },
 });
 
-export function Row({ rowData, columns }: DataTableRowProps) {
+function Row({ rowData, columns }: DataTableRowProps) {
   const [open, setOpen] = useState(false);
   const classes = useRowStyles();
 
@@ -113,6 +123,31 @@ export function Row({ rowData, columns }: DataTableRowProps) {
   );
 }
 
+function HeaderRow({ columns }: DataTableHeaderRowProps) {
+  const rowClasses = useRowStyles();
+
+  const DefaultCellComponent = (column: DataTableColumn) => <>{column.title}</>;
+
+  const cells = columns.map((column) => ({
+    CellComponent: column.headerRenderCell
+      ? column.headerRenderCell
+      : DefaultCellComponent,
+    ...column,
+  }));
+
+  return (
+    <React.Fragment>
+      <TableRow className={rowClasses.row}>
+        {cells.map((cell, i) => (
+          <TableCell className={rowClasses.cell} key={cell.title}>
+            <cell.CellComponent {...cell} />
+          </TableCell>
+        ))}
+      </TableRow>
+    </React.Fragment>
+  );
+}
+
 export const useTableStyles = makeStyles({
   root: {},
   tableHead: {
@@ -139,19 +174,12 @@ export const useTableStyles = makeStyles({
 
 export default function DataTable({ columns, rows }: DataTableProps) {
   const tableClasses = useTableStyles();
-  const rowClasses = useRowStyles();
 
   return (
     <TableContainer className={tableClasses.root}>
       <Table>
         <TableHead className={tableClasses.tableHead}>
-          <TableRow className={rowClasses.row}>
-            {columns.map((x) => (
-              <TableCell className={rowClasses.cell} key={x.title}>
-                {x.title}
-              </TableCell>
-            ))}
-          </TableRow>
+          <HeaderRow columns={columns} />
         </TableHead>
         <TableBody className={tableClasses.tableBody}>
           {rows.map((row, i) => (

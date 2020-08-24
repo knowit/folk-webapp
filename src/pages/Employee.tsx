@@ -4,9 +4,10 @@ import {
   ConsultantCell,
   ProjectStatusCell,
   CustomerStatusCell,
+  CheckBoxHeaderCell,
 } from '../components/DataTableCells';
-import DDItem, { DDChart, DDTableWithFilter } from '../components/DDItem';
-import { DataTableRow } from '../components/dd/DataTable';
+import DDItem, { DDTable, DDChart } from '../components/DDItem';
+import { FilterFunctionArgument } from '../components/dd/DataTable';
 import { Skeleton } from '@material-ui/lab';
 
 export default function Employee() {
@@ -60,22 +61,22 @@ export default function Employee() {
         url={'/api/data/projectStatus'}
         title={'Prosjektstatus'}
         fullSize={true}
-        Component={DDTableWithFilter}
+        Component={DDTable}
         dataComponentProps={{
           columns: [
             {
               title: 'Konsulent',
               expandable: true,
               renderCell: ConsultantCell,
+              headerRenderCell: CheckBoxHeaderCell,
+              checkBoxLabel: 'Vis kun ledige',
             },
             { title: 'Tittel' },
             { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
             { title: 'Kunde', renderCell: CustomerStatusCell },
           ],
-          filterFunction: (row: Pick<DataTableRow, 'rowData'>) =>
+          filterFunction: (row: FilterFunctionArgument) =>
             row.rowData[3].status === 'green', // TODO: Update filter to reflect structure of actual backend data
-          checkBoxColumnTitle: 'Konsulent',
-          checkBoxLabel: 'Vis kun ledige',
         }}
         SkeletonComponent={TableSkeleton}
       />
