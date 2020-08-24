@@ -118,6 +118,15 @@ export const useTableStyles = makeStyles({
   tableHead: {
     fontWeight: 'bold',
     fontSize: '16px',
+    '& th:first-child': {
+      width: '380px',
+    },
+    '& th:last-child': {
+      width: '280px',
+    },
+    '& th:nth-child(3)': {
+      width: '190px',
+    },
   },
   tableBody: {
     '& > :last-child > *': {

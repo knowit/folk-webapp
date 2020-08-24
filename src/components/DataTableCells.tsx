@@ -35,7 +35,7 @@ const useProjectStatusStyles = makeStyles({
   root: ({ percentData }: { percentData: string }) => ({
     backgroundColor: '#EFEFEF',
     borderRadius: 12,
-    padding: '4px 10px 4px 10px',
+    padding: '4px 10px',
     lineHeight: 1,
     width: percentData,
   }),
