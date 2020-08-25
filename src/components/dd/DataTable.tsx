@@ -91,7 +91,7 @@ function Row({ rowData, columns }: DataTableRowProps) {
   }));
 
   return (
-    <React.Fragment>
+    <>
       <TableRow className={`${classes.root} ${classes.row}`}>
         {cells.map((cell, i) =>
           cell.expandable ? (
@@ -119,7 +119,7 @@ function Row({ rowData, columns }: DataTableRowProps) {
           </Collapse>
         </TableCell>
       </TableRow>
-    </React.Fragment>
+    </>
   );
 }
 
@@ -136,15 +136,13 @@ function HeaderRow({ columns }: DataTableHeaderRowProps) {
   }));
 
   return (
-    <React.Fragment>
-      <TableRow className={rowClasses.row}>
-        {cells.map((cell, i) => (
-          <TableCell className={rowClasses.cell} key={cell.title}>
-            <cell.CellComponent {...cell} />
-          </TableCell>
-        ))}
-      </TableRow>
-    </React.Fragment>
+    <TableRow className={rowClasses.row}>
+      {cells.map((cell, i) => (
+        <TableCell className={rowClasses.cell} key={cell.title}>
+          <cell.CellComponent {...cell} />
+        </TableCell>
+      ))}
+    </TableRow>
   );
 }
 
