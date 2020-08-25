@@ -147,7 +147,12 @@ function HeaderRow({ columns }: DataTableHeaderRowProps) {
 }
 
 export const useTableStyles = makeStyles({
-  root: {},
+  root: {
+    height: '500px',
+  },
+  table: {
+    position: 'relative',
+  },
   tableHead: {
     fontWeight: 'bold',
     fontSize: '16px',
@@ -159,6 +164,12 @@ export const useTableStyles = makeStyles({
     },
     '& th:nth-child(3)': {
       width: '190px',
+    },
+    '& th': {
+      top: 0,
+      position: 'sticky',
+      backgroundColor: '#fff',
+      zIndex: 1,
     },
   },
   tableBody: {
@@ -175,7 +186,7 @@ export default function DataTable({ columns, rows }: DataTableProps) {
 
   return (
     <TableContainer className={tableClasses.root}>
-      <Table>
+      <Table className={tableClasses.table}>
         <TableHead className={tableClasses.tableHead}>
           <HeaderRow columns={columns} />
         </TableHead>
