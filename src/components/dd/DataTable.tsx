@@ -59,7 +59,7 @@ const useRowStyles = makeStyles({
     },
   },
   cell: {
-    padding: '10px 15px 10px 15px',
+    padding: '10px 15px',
     borderLeft: '1px solid',
     borderColor: '#EEEEEE',
     fontWeight: 'inherit',
