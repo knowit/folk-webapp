@@ -122,25 +122,32 @@ export function DDTable({ payload, title, props }: DDComponentProps) {
   const rows = payload as { rowData: any[] }[];
   const [showRows, setshowRows] = useState(rows);
 
-  const filterFunction =
-    props && props['filterFunction']
-      ? props['filterFunction']
+  const checkBoxFilterFunction =
+    props && props['checkBoxFilterFunction']
+      ? props['checkBoxFilterFunction']
+      : (row: FilterFunctionArgument) => row;
+
+  const searchFilterFunction =
+    props && props['searchFilterFunction']
+      ? props['searchFilterFunction']
       : (row: FilterFunctionArgument) => row;
 
   const handleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.target.checked
       ? setshowRows(
-          rows.filter((row: FilterFunctionArgument) => filterFunction(row))
+          rows.filter((row: FilterFunctionArgument) =>
+            checkBoxFilterFunction(row)
+          )
         )
       : setshowRows(rows);
   };
 
-  const handleSearchInputChange = (newValue: string) => {
-    newValue
+  const handleSearchInputChange = (searchTerm: string) => {
+    searchTerm
       ? setshowRows(
           rows.filter((row: FilterFunctionArgument) =>
-            row.rowData[0].toLowerCase().includes(newValue.toLowerCase())
-          ) // TODO: Update filter to reflect structure of actual backend data
+            searchFilterFunction(row, searchTerm)
+          )
         )
       : setshowRows(rows);
   };

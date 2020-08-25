@@ -75,8 +75,12 @@ export default function Employee() {
             { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
             { title: 'Kunde', renderCell: CustomerStatusCell },
           ],
-          filterFunction: (row: FilterFunctionArgument) =>
+          checkBoxFilterFunction: (row: FilterFunctionArgument) =>
             row.rowData[3].status === 'green', // TODO: Update filter to reflect structure of actual backend data
+          searchFilterFunction: (
+            row: FilterFunctionArgument,
+            searchTerm: string
+          ) => row.rowData[0].toLowerCase().includes(searchTerm.toLowerCase()), // TODO: Update filter to reflect structure of actual backend data
         }}
         SkeletonComponent={TableSkeleton}
       />
