@@ -59,7 +59,7 @@ const useRowStyles = makeStyles({
     },
   },
   cell: {
-    padding: '10px 15px 10px 15px',
+    padding: '10px 15px',
     borderLeft: '1px solid',
     borderColor: '#EEEEEE',
     fontWeight: 'inherit',
@@ -91,7 +91,7 @@ function Row({ rowData, columns }: DataTableRowProps) {
   }));
 
   return (
-    <React.Fragment>
+    <>
       <TableRow className={`${classes.root} ${classes.row}`}>
         {cells.map((cell, i) =>
           cell.expandable ? (
@@ -119,7 +119,7 @@ function Row({ rowData, columns }: DataTableRowProps) {
           </Collapse>
         </TableCell>
       </TableRow>
-    </React.Fragment>
+    </>
   );
 }
 
@@ -136,20 +136,23 @@ function HeaderRow({ columns }: DataTableHeaderRowProps) {
   }));
 
   return (
-    <React.Fragment>
-      <TableRow className={rowClasses.row}>
-        {cells.map((cell, i) => (
-          <TableCell className={rowClasses.cell} key={cell.title}>
-            <cell.CellComponent {...cell} />
-          </TableCell>
-        ))}
-      </TableRow>
-    </React.Fragment>
+    <TableRow className={rowClasses.row}>
+      {cells.map((cell, i) => (
+        <TableCell className={rowClasses.cell} key={cell.title}>
+          <cell.CellComponent {...cell} />
+        </TableCell>
+      ))}
+    </TableRow>
   );
 }
 
 export const useTableStyles = makeStyles({
-  root: {},
+  root: {
+    height: '500px',
+  },
+  table: {
+    position: 'relative',
+  },
   tableHead: {
     fontWeight: 'bold',
     fontSize: '16px',
@@ -161,6 +164,12 @@ export const useTableStyles = makeStyles({
     },
     '& th:nth-child(3)': {
       width: '190px',
+    },
+    '& th': {
+      top: 0,
+      position: 'sticky',
+      backgroundColor: '#fff',
+      zIndex: 1,
     },
   },
   tableBody: {
@@ -177,7 +186,7 @@ export default function DataTable({ columns, rows }: DataTableProps) {
 
   return (
     <TableContainer className={tableClasses.root}>
-      <Table>
+      <Table className={tableClasses.table}>
         <TableHead className={tableClasses.tableHead}>
           <HeaderRow columns={columns} />
         </TableHead>
