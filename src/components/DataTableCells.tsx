@@ -1,8 +1,11 @@
 import React from 'react';
-import { Avatar, FormControlLabel } from '@material-ui/core';
+import { Avatar, FormControlLabel, Link } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
+import CloseIcon from '@material-ui/icons/Close';
+
+import Fade from '@material-ui/core/Fade';
 
 const useConsultantCellStyles = makeStyles({
   root: {
@@ -40,6 +43,100 @@ const useProjectStatusStyles = makeStyles({
     width: percentData,
   }),
 });
+
+const useExperienceStyles = makeStyles({
+  root: {
+    backgroundColor: '#f1f0ec',
+    width: '450px',
+    minHeight: '50px',
+    maxHeight: '450px',
+    padding: '20px',
+    position: 'absolute',
+    marginTop: '10px',
+    border: ' 1px solid #d8d7d4',
+    overflow: 'auto',
+    zIndex: 1,
+  },
+  content: {},
+  closeIcon: {
+    position: 'sticky',
+    marginLeft: '380px',
+    color: '#333',
+    top: '12px',
+  },
+  triggerLink: {
+    color: '#333',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+  },
+});
+
+export function ExperienceCell() {
+  const [showExperienceData, setExperienceData] = React.useState(false);
+  const classes = useExperienceStyles();
+
+  return (
+    <>
+      <Link
+        onClick={() => setExperienceData(!showExperienceData)}
+        className={classes.triggerLink}
+      >
+        Se prosjekter
+      </Link>
+      <Fade in={showExperienceData}>
+        <div className={classes.root}>
+          <Link
+            onClick={() => setExperienceData(!showExperienceData)}
+            className={classes.closeIcon}
+          >
+            <CloseIcon />
+          </Link>
+          <div className={classes.content}>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div> <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+            <div>Mer info her</div>
+          </div>
+        </div>
+      </Fade>
+    </>
+  );
+}
 
 export function ProjectStatusCell({ data }: { data: number }) {
   const percentData = `${data}%`;
