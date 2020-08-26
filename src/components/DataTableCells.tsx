@@ -5,7 +5,7 @@ import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
 import CloseIcon from '@material-ui/icons/Close';
 
-// import Fade from '@material-ui/core/Fade';
+import Fade from '@material-ui/core/Fade';
 import Modal from '@material-ui/core/Modal';
 
 const useConsultantCellStyles = makeStyles({
@@ -93,57 +93,59 @@ export function ExperienceCell() {
         onClose={() => setExperienceData(!showExperienceData)}
         hideBackdrop={true}
       >
-        <div className={classes.modal}>
-          <div className={classes.root}>
-            <Link
-              onClick={() => setExperienceData(!showExperienceData)}
-              className={classes.closeIcon}
-            >
-              <CloseIcon />
-            </Link>
-            <div className={classes.content}>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div> <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
-              <div>Mer info her</div>
+        <Fade in={showExperienceData}>
+          <div className={classes.modal}>
+            <div className={classes.root}>
+              <Link
+                onClick={() => setExperienceData(!showExperienceData)}
+                className={classes.closeIcon}
+              >
+                <CloseIcon />
+              </Link>
+              <div className={classes.content}>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div> <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+                <div>Mer info her</div>
+              </div>
             </div>
           </div>
-        </div>
+        </Fade>
       </Modal>
     </>
   );
