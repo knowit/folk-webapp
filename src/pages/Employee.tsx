@@ -2,9 +2,9 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 import {
   ConsultantCell,
-  ProjectStatusCell,
   CustomerStatusCell,
   CheckBoxHeaderCell,
+  ExperienceCell,
 } from '../components/DataTableCells';
 import DDItem, { DDTable, DDChart } from '../components/DDItem';
 import { FilterFunctionArgument } from '../components/dd/DataTable';
@@ -72,7 +72,7 @@ export default function Employee() {
               checkBoxLabel: 'Vis kun ledige',
             },
             { title: 'Tittel' },
-            { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
+            { title: 'Erfaring', renderCell: ExperienceCell },
             { title: 'Kunde', renderCell: CustomerStatusCell },
           ],
           checkBoxFilterFunction: (row: FilterFunctionArgument) =>
