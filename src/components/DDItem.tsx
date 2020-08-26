@@ -14,6 +14,16 @@ import { CheckBoxHeaderCell } from './DataTableCells';
 
 type DDPayload = { [key: string]: any };
 type DDPassProps = { [key: string]: any };
+type DDTableProps = {
+  columns: { [key: string]: any };
+  checkBoxFilterFunction?: (
+    row: FilterFunctionArgument
+  ) => FilterFunctionArgument;
+  searchFilterFunction?: (
+    row: FilterFunctionArgument,
+    searchTerm: string
+  ) => FilterFunctionArgument;
+};
 
 interface DDComponentProps {
   payload: DDPayload;
@@ -122,15 +132,11 @@ export function DDTable({ payload, title, props }: DDComponentProps) {
   const rows = payload as { rowData: any[] }[];
   const [showRows, setshowRows] = useState(rows);
 
-  const checkBoxFilterFunction =
-    props && props['checkBoxFilterFunction']
-      ? props['checkBoxFilterFunction']
-      : (row: FilterFunctionArgument) => row;
-
-  const searchFilterFunction =
-    props && props['searchFilterFunction']
-      ? props['searchFilterFunction']
-      : (row: FilterFunctionArgument) => row;
+  const {
+    checkBoxFilterFunction = (row: FilterFunctionArgument) => row,
+    searchFilterFunction = (row: FilterFunctionArgument, searchTerm: string) =>
+      row,
+  } = props as DDTableProps;
 
   const handleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.target.checked
