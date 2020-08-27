@@ -148,7 +148,7 @@ function HeaderRow({ columns }: DataTableHeaderRowProps) {
 
 export const useTableStyles = makeStyles({
   root: {
-    height: '780px',
+    maxHeight: '780px',
   },
   table: {
     position: 'relative',
@@ -157,13 +157,13 @@ export const useTableStyles = makeStyles({
     fontWeight: 'bold',
     fontSize: '16px',
     '& th:first-child': {
-      width: '380px',
+      width: '370px',
     },
     '& th:last-child': {
       width: '280px',
     },
     '& th:nth-child(3)': {
-      width: '190px',
+      width: '114px',
     },
     '& th': {
       top: 0,
