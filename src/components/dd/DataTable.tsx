@@ -157,13 +157,13 @@ export const useTableStyles = makeStyles({
     fontWeight: 'bold',
     fontSize: '16px',
     '& th:first-child': {
-      width: '370px',
-    },
-    '& th:last-child': {
-      width: '280px',
+      width: '340px',
     },
     '& th:nth-child(3)': {
       width: '114px',
+    },
+    '& th:nth-child(2)': {
+      width: '210px',
     },
     '& th': {
       top: 0,
