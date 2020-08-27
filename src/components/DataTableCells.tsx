@@ -4,6 +4,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
 import CloseIcon from '@material-ui/icons/Close';
+import GetApp from '@material-ui/icons/GetApp';
 
 import Fade from '@material-ui/core/Fade';
 import Modal from '@material-ui/core/Modal';
@@ -150,6 +151,22 @@ export function ExperienceCell() {
           </div>
         </Fade>
       </Modal>
+    </>
+  );
+}
+
+export function EducationCell() {
+  // TODO: get data for education
+  return <>Master - Software engineering</>;
+}
+
+export function CvCell() {
+  // TODO: get url for CV-partner
+  return (
+    <>
+      <Link>
+        <GetApp />
+      </Link>
     </>
   );
 }

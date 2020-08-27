@@ -2,9 +2,10 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 import {
   ConsultantCell,
-  CustomerStatusCell,
+  EducationCell,
   CheckBoxHeaderCell,
   ExperienceCell,
+  CvCell,
 } from '../components/DataTableCells';
 import DDItem, { DDTable, DDChart } from '../components/DDItem';
 import { FilterFunctionArgument } from '../components/dd/DataTable';
@@ -73,7 +74,8 @@ export default function Employee() {
             },
             { title: 'Tittel' },
             { title: 'Erfaring', renderCell: ExperienceCell },
-            { title: 'Kunde', renderCell: CustomerStatusCell },
+            { title: 'Utdanning', renderCell: EducationCell },
+            { title: 'CV', renderCell: CvCell },
           ],
           checkBoxFilterFunction: (row: FilterFunctionArgument) =>
             row.rowData[3].status === 'green', // TODO: Update filter to reflect structure of actual backend data
