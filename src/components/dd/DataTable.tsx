@@ -165,6 +165,9 @@ export const useTableStyles = makeStyles({
     '& th:nth-child(2)': {
       width: '210px',
     },
+    '& th:nth-child(5)': {
+      width: '55px',
+    },
   },
   tableBody: {
     '& > :last-child > *': {
