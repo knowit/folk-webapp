@@ -165,12 +165,6 @@ export const useTableStyles = makeStyles({
     '& th:nth-child(2)': {
       width: '210px',
     },
-    '& th': {
-      top: 0,
-      position: 'sticky',
-      backgroundColor: '#fff',
-      zIndex: 1,
-    },
   },
   tableBody: {
     '& > :last-child > *': {
@@ -186,7 +180,7 @@ export default function DataTable({ columns, rows }: DataTableProps) {
 
   return (
     <TableContainer className={tableClasses.root}>
-      <Table className={tableClasses.table}>
+      <Table className={tableClasses.table} stickyHeader>
         <TableHead className={tableClasses.tableHead}>
           <HeaderRow columns={columns} />
         </TableHead>
