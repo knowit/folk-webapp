@@ -61,6 +61,7 @@ const useExperienceStyles = makeStyles({
     marginLeft: '380px',
     color: '#333',
     top: '12px',
+    cursor: 'pointer',
   },
   triggerLink: {
     color: '#333',
