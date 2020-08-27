@@ -160,7 +160,7 @@ export const useTableStyles = makeStyles({
       width: '340px',
     },
     '& th:nth-child(3)': {
-      width: '114px',
+      width: '115px',
     },
     '& th:nth-child(2)': {
       width: '210px',
@@ -172,6 +172,11 @@ export const useTableStyles = makeStyles({
   tableBody: {
     '& > :last-child > *': {
       borderBottom: 'unset',
+    },
+    '& td': {
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
     },
     fontWeight: 'normal',
     fontSize: '14px',
