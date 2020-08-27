@@ -161,7 +161,14 @@ export function EducationCell() {
 }
 
 const useCvCellStyles = makeStyles({
-  linkStyle: { color: '#333', cursor: 'pointer', textDecoration: 'underline' },
+  linkStyle: {
+    color: '#707070',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+    '& :hover': {
+      color: '#333',
+    },
+  },
 });
 
 export function CvCell() {
