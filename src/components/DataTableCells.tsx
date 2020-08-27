@@ -54,6 +54,7 @@ const useExperienceStyles = makeStyles({
     padding: '20px',
     border: ' 1px solid #d8d7d4',
     overflow: 'auto',
+    pointerEvents: 'all',
   },
   content: {},
   closeIcon: {
@@ -74,6 +75,7 @@ const useExperienceStyles = makeStyles({
     alignItems: 'center',
     width: '100%',
     height: '100%',
+    pointerEvents: 'none',
   },
 });
 
@@ -92,7 +94,7 @@ export function ExperienceCell() {
       <Modal
         open={showExperienceData}
         onClose={() => setExperienceData(!showExperienceData)}
-        hideBackdrop={true}
+        BackdropProps={{ invisible: true }}
       >
         <Fade in={showExperienceData}>
           <div className={classes.modal}>
