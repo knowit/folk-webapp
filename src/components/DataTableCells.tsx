@@ -160,14 +160,17 @@ export function EducationCell() {
   return <>Master - Software engineering</>;
 }
 
+const useCvCellStyles = makeStyles({
+  linkStyle: { color: '#333', cursor: 'pointer', textDecoration: 'underline' },
+});
+
 export function CvCell() {
   // TODO: get url for CV-partner
+  const classes = useCvCellStyles();
   return (
-    <>
-      <Link>
-        <GetApp />
-      </Link>
-    </>
+    <Link className={classes.linkStyle}>
+      <GetApp />
+    </Link>
   );
 }
 
