@@ -103,6 +103,7 @@ export function ExperienceCell() {
               <Link
                 onClick={() => setExperienceData(!showExperienceData)}
                 className={classes.closeIcon}
+                title="Lukk"
               >
                 <CloseIcon />
               </Link>
