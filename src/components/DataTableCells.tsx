@@ -57,13 +57,20 @@ const useExperienceStyles = makeStyles({
     overflow: 'auto',
     pointerEvents: 'all',
   },
-  content: {},
-  closeIcon: {
+  content: {
+    marginTop: '-49px',
+    '& h4': {
+      marginBottom: 0,
+    },
+  },
+  closeIconContainer: {
     position: 'sticky',
     marginLeft: '380px',
-    color: '#333',
     top: '12px',
-    cursor: 'pointer',
+    '& a': {
+      cursor: 'pointer',
+      color: '#333',
+    },
   },
   triggerLink: {
     color: '#333',
@@ -100,53 +107,57 @@ export function ExperienceCell() {
         <Fade in={showExperienceData}>
           <div className={classes.modal}>
             <div className={classes.root}>
-              <Link
-                onClick={() => setExperienceData(!showExperienceData)}
-                className={classes.closeIcon}
-                title="Lukk"
-              >
-                <CloseIcon />
-              </Link>
+              <span className={classes.closeIconContainer}>
+                <Link
+                  onClick={() => setExperienceData(!showExperienceData)}
+                  title="Lukk"
+                >
+                  <CloseIcon />
+                </Link>
+              </span>
+
               <div className={classes.content}>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div> <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
-                <div>Mer info her</div>
+                <h2>Navn på konsulenten</h2>
+                <div>
+                  <h4>Des 2019</h4>
+                  <div>Knowit Objectnet</div>
+                  <div>Dataplatform</div>
+                </div>
+                <div>
+                  <h4>Aug 2019 - Nov 2019</h4>
+                  <div>Knowit Objectnet</div>
+                  <div>Miljøteam</div>
+                </div>
+                <div>
+                  <h4>2018</h4>
+                  <div>Tryggchat As</div>
+                  <div>SmartChat</div>
+                </div>
+                <div>
+                  <h4>2018</h4>
+                  <div>Tryggchat As</div>
+                  <div>SmartChat</div>
+                </div>
+                <div>
+                  <h4>2018</h4>
+                  <div>Tryggchat As</div>
+                  <div>SmartChat</div>
+                </div>
+                <div>
+                  <h4>2018</h4>
+                  <div>Tryggchat As</div>
+                  <div>SmartChat</div>
+                </div>
+                <div>
+                  <h4>2018</h4>
+                  <div>Tryggchat As</div>
+                  <div>SmartChat</div>
+                </div>
+                <div>
+                  <h4>2018</h4>
+                  <div>Tryggchat As</div>
+                  <div>SmartChat</div>
+                </div>
               </div>
             </div>
           </div>
