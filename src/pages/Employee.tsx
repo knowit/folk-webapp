@@ -6,6 +6,8 @@ import {
   CheckBoxHeaderCell,
   ExperienceCell,
   CvCell,
+  ProjectStatusCell,
+  CustomerStatusCell,
 } from '../components/DataTableCells';
 import DDItem, { DDTable, DDChart } from '../components/DDItem';
 import { FilterFunctionArgument } from '../components/dd/DataTable';
@@ -61,6 +63,34 @@ export default function Employee() {
       <DDItem
         url={'/api/data/projectStatus'}
         title={'Prosjektstatus'}
+        fullSize={true}
+        Component={DDTable}
+        dataComponentProps={{
+          columns: [
+            {
+              title: 'Konsulent',
+              expandable: true,
+              renderCell: ConsultantCell,
+              headerRenderCell: CheckBoxHeaderCell,
+              checkBoxLabel: 'Vis kun ledige',
+            },
+            { title: 'Tittel' },
+            { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
+            { title: 'Kunde', renderCell: CustomerStatusCell },
+          ],
+          checkBoxFilterFunction: (row: FilterFunctionArgument) =>
+            row.rowData[3].status === 'green', // TODO: Update filter to reflect structure of actual backend data
+          searchFilterFunction: (
+            row: FilterFunctionArgument,
+            searchTerm: string
+          ) => row.rowData[0].toLowerCase().includes(searchTerm.toLowerCase()), // TODO: Update filter to reflect structure of actual backend data
+        }}
+        SkeletonComponent={TableSkeleton}
+      />
+
+      <DDItem
+        url={'/api/data/projectStatus'}
+        title={'Konsulentkompetanse'}
         fullSize={true}
         Component={DDTable}
         dataComponentProps={{
