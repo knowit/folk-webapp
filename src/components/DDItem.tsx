@@ -14,6 +14,16 @@ import { CheckBoxHeaderCell } from './DataTableCells';
 
 type DDPayload = { [key: string]: any };
 type DDPassProps = { [key: string]: any };
+type DDTableProps = {
+  columns: { [key: string]: any };
+  checkBoxFilterFunction?: (
+    row: FilterFunctionArgument
+  ) => FilterFunctionArgument;
+  searchFilterFunction?: (
+    row: FilterFunctionArgument,
+    searchTerm: string
+  ) => FilterFunctionArgument;
+};
 
 interface DDComponentProps {
   payload: DDPayload;
@@ -120,17 +130,30 @@ export function DDChart({ payload, title, props }: DDComponentProps) {
 
 export function DDTable({ payload, title, props }: DDComponentProps) {
   const rows = payload as { rowData: any[] }[];
-  const [showRows, setshowRows] = useState(payload as { rowData: any[] }[]);
+  const [showRows, setshowRows] = useState(rows);
 
-  const filterFunction =
-    props && props['filterFunction']
-      ? props['filterFunction']
-      : (row: FilterFunctionArgument) => row;
+  const {
+    checkBoxFilterFunction = (row: FilterFunctionArgument) => row,
+    searchFilterFunction = (row: FilterFunctionArgument, searchTerm: string) =>
+      row,
+  } = props as DDTableProps;
 
   const handleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.target.checked
       ? setshowRows(
-          rows.filter((row: FilterFunctionArgument) => filterFunction(row))
+          rows.filter((row: FilterFunctionArgument) =>
+            checkBoxFilterFunction(row)
+          )
+        )
+      : setshowRows(rows);
+  };
+
+  const handleSearchInputChange = (searchTerm: string) => {
+    searchTerm
+      ? setshowRows(
+          rows.filter((row: FilterFunctionArgument) =>
+            searchFilterFunction(row, searchTerm)
+          )
         )
       : setshowRows(rows);
   };
@@ -150,7 +173,7 @@ export function DDTable({ payload, title, props }: DDComponentProps) {
   return (
     <>
       <GridItemHeader title={title}>
-        <SearchInput />
+        <SearchInput onChange={handleSearchInputChange} />
       </GridItemHeader>
 
       <GridItemContent>
