@@ -176,7 +176,7 @@ export function CvCell() {
   // TODO: get url for CV-partner
   const classes = useCvCellStyles();
   return (
-    <Link className={classes.linkStyle}>
+    <Link className={classes.linkStyle} title="Last ned CV">
       <GetApp />
     </Link>
   );
