@@ -71,6 +71,9 @@ const useExperienceStyles = makeStyles({
     justifyContent: 'space-between',
     alignItems: 'center',
     top: '0',
+    '& > div': {
+      marginRight: '5px',
+    },
     '& >h2': {
       margin: '0 0 8px 0',
       padding: 0,
@@ -162,12 +165,14 @@ export function ExperienceCell() {
             <div className={classes.root}>
               <div className={classes.cvBoxHeader}>
                 <h2>Navn på konsulenten</h2>
-                <Link
-                  onClick={() => setExperienceData(!showExperienceData)}
-                  title="Lukk"
-                >
-                  <CloseIcon />
-                </Link>
+                <div>
+                  <Link
+                    onClick={() => setExperienceData(!showExperienceData)}
+                    title="Lukk"
+                  >
+                    <CloseIcon />
+                  </Link>
+                </div>
               </div>
 
               <div className={classes.content}>{DummyCVData()}</div>
