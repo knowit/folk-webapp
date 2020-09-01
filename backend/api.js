@@ -167,3 +167,77 @@ exports.data = async (event) => {
     body: JSON.stringify(dummyData[name]),
   };
 };
+
+
+exports.pages = async (event) => {
+  const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1)
+
+  const pages = ['ansatte', 'kunder', 'kompetanse', 'arbeidsmiljø', 'rekruttering'].map((page, i) => ({
+    title: capitalize(page),
+    path: `/${page}`,
+    layout: 'normalLayout',
+    dataPath: `/api/pages/${page}`,
+    sortIndex: i
+  }));
+
+  return {
+    statusCode: '200',
+    body: JSON.stringify({ pages }),
+  };
+};
+
+
+const pageLayout = {
+  ansatte: {
+    content: [
+      {
+        dataUrl: '/api/data/inbound',
+        title: 'På vei inn',
+        component: 'DDChart',
+        componentProps: {
+          yLabels: ['y1', 'y2']
+        }
+      },
+      {
+        dataUrl: '/api/data/outbound',
+        title: 'På vei ut',
+        component: 'DDChart',
+        componentProps: {
+          yLabels: ['y1', 'y2']
+        }
+      },
+      {
+        dataUrl: '/api/data/experience',
+        title: 'Erfaringsnivå',
+        component: 'DDChart',
+        componentProps: {
+          yLabels: ['a', 'a', 'c']
+        }
+      },
+      {
+        dataUrl: '/api/data/resourceType',
+        title: 'Ressurstype',
+        component: 'DDChart'
+      },
+      {
+        dataUrl: '/api/data/projectStatus',
+        title: 'Prosjektstatus',
+        component: 'DDTable',
+        fullSize: true,
+        dataComponentProps: {
+          // ...
+        }
+      }
+    ]
+  }
+};
+
+exports.pageData = async (event) => {
+  const { page } = event.pathParameters;
+  const pageLayoutData = pageLayout[page] || {}
+
+  return {
+    statusCode: '200',
+    body: JSON.stringify(pageLayoutData),
+  };
+};
