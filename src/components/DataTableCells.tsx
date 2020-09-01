@@ -49,24 +49,32 @@ const useProjectStatusStyles = makeStyles({
 const useExperienceStyles = makeStyles({
   root: {
     backgroundColor: '#f1f0ec',
-    width: '433x',
+    width: '433px',
     minHeight: '50px',
     maxHeight: '400px',
-    padding: '20px',
     border: ' 1px solid #d8d7d4',
     overflow: 'auto',
     pointerEvents: 'all',
   },
   content: {
-    marginTop: '-49px',
+    padding: '0 20px 20px',
     '& h4': {
       marginBottom: 0,
     },
   },
-  closeIconContainer: {
+  cvBoxHeader: {
+    backgroundColor: '#f1f0ec',
+    padding: '20px 20px 5px',
     position: 'sticky',
-    marginLeft: '380px',
-    top: '12px',
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    top: '0',
+    '& >h2': {
+      margin: '0 0 8px 0',
+      padding: 0,
+    },
     '& a': {
       cursor: 'pointer',
       color: '#333',
@@ -86,6 +94,51 @@ const useExperienceStyles = makeStyles({
     pointerEvents: 'none',
   },
 });
+
+const DummyCVData = () => (
+  <div>
+    <div>
+      <h4>Des 2019</h4>
+      <div>Knowit Objectnet</div>
+      <div>Dataplatform</div>
+    </div>
+    <div>
+      <h4>Aug 2019 - Nov 2019</h4>
+      <div>Knowit Objectnet</div>
+      <div>Miljøteam</div>
+    </div>
+    <div>
+      <h4>2018</h4>
+      <div>Tryggchat As</div>
+      <div>SmartChat</div>
+    </div>
+    <div>
+      <h4>2018</h4>
+      <div>Tryggchat As</div>
+      <div>SmartChat</div>
+    </div>
+    <div>
+      <h4>2018</h4>
+      <div>Tryggchat As</div>
+      <div>SmartChat</div>
+    </div>
+    <div>
+      <h4>2018</h4>
+      <div>Tryggchat As</div>
+      <div>SmartChat</div>
+    </div>
+    <div>
+      <h4>2018</h4>
+      <div>Tryggchat As</div>
+      <div>SmartChat</div>
+    </div>
+    <div>
+      <h4>2018</h4>
+      <div>Tryggchat As</div>
+      <div>SmartChat</div>
+    </div>
+  </div>
+);
 
 export function ExperienceCell() {
   const [showExperienceData, setExperienceData] = React.useState(false);
@@ -107,58 +160,17 @@ export function ExperienceCell() {
         <Fade in={showExperienceData}>
           <div className={classes.modal}>
             <div className={classes.root}>
-              <span className={classes.closeIconContainer}>
+              <div className={classes.cvBoxHeader}>
+                <h2>Navn på konsulenten</h2>
                 <Link
                   onClick={() => setExperienceData(!showExperienceData)}
                   title="Lukk"
                 >
                   <CloseIcon />
                 </Link>
-              </span>
-
-              <div className={classes.content}>
-                <h2>Navn på konsulenten</h2>
-                <div>
-                  <h4>Des 2019</h4>
-                  <div>Knowit Objectnet</div>
-                  <div>Dataplatform</div>
-                </div>
-                <div>
-                  <h4>Aug 2019 - Nov 2019</h4>
-                  <div>Knowit Objectnet</div>
-                  <div>Miljøteam</div>
-                </div>
-                <div>
-                  <h4>2018</h4>
-                  <div>Tryggchat As</div>
-                  <div>SmartChat</div>
-                </div>
-                <div>
-                  <h4>2018</h4>
-                  <div>Tryggchat As</div>
-                  <div>SmartChat</div>
-                </div>
-                <div>
-                  <h4>2018</h4>
-                  <div>Tryggchat As</div>
-                  <div>SmartChat</div>
-                </div>
-                <div>
-                  <h4>2018</h4>
-                  <div>Tryggchat As</div>
-                  <div>SmartChat</div>
-                </div>
-                <div>
-                  <h4>2018</h4>
-                  <div>Tryggchat As</div>
-                  <div>SmartChat</div>
-                </div>
-                <div>
-                  <h4>2018</h4>
-                  <div>Tryggchat As</div>
-                  <div>SmartChat</div>
-                </div>
               </div>
+
+              <div className={classes.content}>{DummyCVData()}</div>
             </div>
           </div>
         </Fade>
