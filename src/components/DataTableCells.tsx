@@ -71,6 +71,7 @@ const useExperienceStyles = makeStyles({
     justifyContent: 'space-between',
     alignItems: 'center',
     top: '0',
+    boxShadow: '10px 10px 10px #f1f0ec',
     '& > div': {
       marginRight: '5px',
     },
