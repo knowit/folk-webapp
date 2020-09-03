@@ -82,6 +82,7 @@ const useRowStyles = makeStyles({
       'transparent linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%) 0% 0%',
     '& div.expandable-box-cell': {
       marginTop: '12px',
+      lineHeight: '1.2em',
     },
   },
 });
