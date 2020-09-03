@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Box,
   Collapse,
   Table,
   TableBody,
@@ -64,17 +63,23 @@ const useRowStyles = makeStyles({
     borderColor: '#EEEEEE',
     fontWeight: 'inherit',
     fontSize: 'inherit',
+    borderBottom: '1px solid #eee',
   },
   cellExpandable: {
     cursor: 'pointer',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    padding: '10px',
   },
   expansionCell: {
     borderColor: '#EEEEEE',
-    paddingBottom: 0,
-    paddingTop: 0,
+    padding: 0,
+  },
+  expandedBox: {
+    padding: '10px 15px',
+    background:
+      'transparent linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%) 0% 0%',
   },
 });
 
@@ -97,11 +102,40 @@ function Row({ rowData, columns }: DataTableRowProps) {
           cell.expandable ? (
             <TableCell
               key={i}
-              className={`${classes.cell} ${classes.cellExpandable}`}
+              className={[classes.cell, classes.expansionCell].join(' ')}
               onClick={() => setOpen(!open)}
             >
-              <cell.CellComponent rowData={rowData} {...cell} />
-              {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              <div>
+                <div className={classes.cellExpandable}>
+                  <cell.CellComponent rowData={rowData} {...cell} />
+                  {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                </div>
+                <Collapse
+                  in={open}
+                  timeout="auto"
+                  unmountOnExit
+                  className={classes.expandedBox}
+                >
+                  <div>
+                    <b>Hovedkompetanse:</b> UX, GUI, UU, mobil, web,
+                    prototyping.
+                  </div>
+                  <div>
+                    <b>Roller:</b> Interaksjonsdesigner, grafisk designer, team
+                    lead, kokk, trommeslager, tryllekunstner.
+                  </div>
+                  <div>
+                    <b>Startet i Knowit:</b> 01.02 - 2018
+                  </div>
+                  <div>
+                    <b>Total arbeidserfaring:</b> 7 år
+                  </div>
+                  <div>
+                    <b>Språk:</b> Norsk (morsmål), engelsk, tysk, russisk,
+                    flamsk.
+                  </div>
+                </Collapse>
+              </div>
             </TableCell>
           ) : (
             <TableCell key={i} className={classes.cell}>
@@ -109,15 +143,6 @@ function Row({ rowData, columns }: DataTableRowProps) {
             </TableCell>
           )
         )}
-      </TableRow>
-      <TableRow>
-        <TableCell className={classes.expansionCell} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box margin={1}>
-              <p>Mer innhold</p>
-            </Box>
-          </Collapse>
-        </TableCell>
       </TableRow>
     </>
   );
