@@ -80,6 +80,9 @@ const useRowStyles = makeStyles({
     padding: '10px 15px',
     background:
       'transparent linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%) 0% 0%',
+    '& div.expandable-box-cell': {
+      marginTop: '12px',
+    },
   },
 });
 
@@ -116,21 +119,21 @@ function Row({ rowData, columns }: DataTableRowProps) {
                   unmountOnExit
                   className={classes.expandedBox}
                 >
-                  <div>
+                  <div className="expandable-box-cell">
                     <b>Hovedkompetanse:</b> UX, GUI, UU, mobil, web,
                     prototyping.
                   </div>
-                  <div>
+                  <div className="expandable-box-cell">
                     <b>Roller:</b> Interaksjonsdesigner, grafisk designer, team
                     lead, kokk, trommeslager, tryllekunstner.
                   </div>
-                  <div>
+                  <div className="expandable-box-cell">
                     <b>Startet i Knowit:</b> 01.02 - 2018
                   </div>
-                  <div>
+                  <div className="expandable-box-cell">
                     <b>Total arbeidserfaring:</b> 7 år
                   </div>
-                  <div>
+                  <div className="expandable-box-cell">
                     <b>Språk:</b> Norsk (morsmål), engelsk, tysk, russisk,
                     flamsk.
                   </div>
