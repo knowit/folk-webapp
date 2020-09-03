@@ -56,14 +56,19 @@ const useRowStyles = makeStyles({
     '& > :first-child': {
       borderLeft: 'unset',
     },
+    '& th': {
+      padding: '10px 15px',
+      verticalAlign: 'middle',
+    },
   },
   cell: {
-    padding: '10px 15px',
+    padding: '24px 15px 0',
     borderLeft: '1px solid',
     borderColor: '#EEEEEE',
     fontWeight: 'inherit',
     fontSize: 'inherit',
     borderBottom: '1px solid #eee',
+    verticalAlign: 'top',
   },
   cellExpandable: {
     cursor: 'pointer',
