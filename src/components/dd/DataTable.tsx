@@ -81,13 +81,16 @@ const useRowStyles = makeStyles({
     borderColor: '#EEEEEE',
     padding: 0,
   },
+  bolderText: {
+    fontWeight: 'bold',
+  },
   expandedBox: {
     padding: '5px 15px',
+    lineHeight: '1.2em',
     background:
       'transparent linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%) 0% 0%',
     '& div.expandable-box-cell': {
       marginBottom: '12px',
-      lineHeight: '1.2em',
     },
   },
 });
@@ -104,6 +107,8 @@ function Row({ rowData, columns }: DataTableRowProps) {
     ...column,
   }));
 
+  const openStyle = open ? classes.bolderText : null;
+
   return (
     <>
       <TableRow className={`${classes.root} ${classes.row}`}>
@@ -115,7 +120,7 @@ function Row({ rowData, columns }: DataTableRowProps) {
               onClick={() => setOpen(!open)}
             >
               <div>
-                <div className={classes.cellExpandable}>
+                <div className={[classes.cellExpandable, openStyle].join(' ')}>
                   <cell.CellComponent rowData={rowData} {...cell} />
                   {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                 </div>
@@ -186,7 +191,7 @@ export const useTableStyles = makeStyles({
   },
   table: {
     position: 'relative',
-    width: '95%',
+    width: '94%',
     margin: '0 15px',
   },
   tableHead: {
@@ -194,6 +199,9 @@ export const useTableStyles = makeStyles({
     fontSize: '16px',
     '& th:first-child': {
       width: '340px',
+    },
+    '& th:last-child': {
+      maxWidth: '280px',
     },
     '& th:nth-child(3)': {
       width: '115px',
