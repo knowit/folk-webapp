@@ -176,9 +176,9 @@ export function DDTable({ payload, title, props }: DDComponentProps) {
         <SearchInput onChange={handleSearchInputChange} />
       </GridItemHeader>
 
-      <GridItemContent>
+      <div style={{ backgroundColor: '#fff', padding: '20px 0' }}>
         <DataTable rows={showRows} columns={[]} {...props} />
-      </GridItemContent>
+      </div>
     </>
   );
 }
