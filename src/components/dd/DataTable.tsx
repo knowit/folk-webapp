@@ -199,7 +199,7 @@ export const useTableStyles = makeStyles({
     fontWeight: 'bold',
     fontSize: '16px',
     '& th:first-child': {
-      width: '340px',
+      width: '380px',
     },
     '& th:last-child': {
       maxWidth: '280px',
