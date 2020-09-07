@@ -48,6 +48,54 @@ const dummyData = {
         { value: null, status: 'green' },
       ],
     },
+    {
+      rowData: [
+        'Trine Greiger Ovesens Dottir',
+        'Android utvikler',
+        0,
+        { value: null, status: 'green' },
+      ],
+    },
+    {
+      rowData: [
+        'Trine Greiger Ovesens Dottir',
+        'Android utvikler',
+        0,
+        { value: null, status: 'green' },
+      ],
+    },
+    {
+      rowData: [
+        'Trine Greiger Ovesens Dottir',
+        'Android utvikler',
+        0,
+        { value: null, status: 'green' },
+      ],
+    },
+    {
+      rowData: [
+        'Trine Greiger Ovesens Dottir',
+        'Android utvikler',
+        0,
+        { value: null, status: 'green' },
+      ],
+    },
+    {
+      rowData: [
+        'Trine Greiger Ovesens Dottir',
+        'Android utvikler',
+        0,
+        { value: null, status: 'green' },
+      ],
+    },
+    {
+      rowData: [
+        'Trine Greiger Ovesens Dottir',
+        'Android utvikler',
+        0,
+        { value: null, status: 'red' },
+      ],
+    },
   ],
   resourceType: {
     componentType: 'Pie',
