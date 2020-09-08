@@ -307,3 +307,63 @@ export function CheckBoxHeaderCell({
     </div>
   );
 }
+
+const useCompetanceMappingStyles = makeStyles({
+  root: {
+    backgroundColor: '#f2f2f2',
+    padding: '10px',
+    '& > div': {
+      display: 'flex',
+      justifyContent: 'space-between',
+      marginBottom: '5px',
+      '& > div': {
+        width: '33%',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+      },
+      '& :nth-child(2)': {
+        textAlign: 'center',
+      },
+      '& :nth-child(3)': {
+        textAlign: 'right',
+      },
+    },
+  },
+  gradient: {
+    backgroundImage: 'linear-gradient(to right, #0040d5, #ff0707)',
+    borderRadius: '5px',
+    '& >div': {
+      fontSize: '10px',
+      fontWeight: 'bold',
+      color: 'white',
+      padding: '2px 5px',
+    },
+  },
+});
+
+export function CompetanceMapping() {
+  const classes = useCompetanceMappingStyles();
+  const competances = [
+    'Veldig lang tekst for å se hvordan det blir',
+    'Prosjektledelse',
+    'Prototyping',
+  ];
+  const levels = ['Uintressert', 'Tja', 'Intressert'];
+  return (
+    <div className={classes.root}>
+      <div>
+        {competances.map((competance, i) => (
+          <div key={i} title={competance}>
+            {competance}
+          </div>
+        ))}
+      </div>
+      <div className={classes.gradient}>
+        {levels.map((level, i) => (
+          <div key={i}>{level}</div>
+        ))}
+      </div>
+    </div>
+  );
+}

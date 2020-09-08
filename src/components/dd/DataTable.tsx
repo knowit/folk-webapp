@@ -11,7 +11,10 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import { CheckBoxChangeHandlerProps } from '../DataTableCells';
+import {
+  CheckBoxChangeHandlerProps,
+  CompetanceMapping,
+} from '../DataTableCells';
 
 interface DataTableColumn {
   title: string;
@@ -149,6 +152,7 @@ function Row({ rowData, columns }: DataTableRowProps) {
                     <b>Språk:</b> Norsk (morsmål), engelsk, tysk, russisk,
                     flamsk.
                   </div>
+                  <div>{CompetanceMapping()}</div>
                 </Collapse>
               </div>
             </TableCell>
