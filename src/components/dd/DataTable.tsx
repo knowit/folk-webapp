@@ -152,7 +152,7 @@ function Row({ rowData, columns }: DataTableRowProps) {
                     <b>Språk:</b> Norsk (morsmål), engelsk, tysk, russisk,
                     flamsk.
                   </div>
-                  <div>{CompetanceMapping()}</div>
+                  <div>{CompetenceMapping()}</div>
                 </Collapse>
               </div>
             </TableCell>
