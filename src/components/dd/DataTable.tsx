@@ -13,7 +13,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import {
   CheckBoxChangeHandlerProps,
-  CompetanceMapping,
+  CompetenceMapping,
 } from '../DataTableCells';
 
 interface DataTableColumn {
@@ -163,6 +163,19 @@ function Row({ rowData, columns }: DataTableRowProps) {
           )
         )}
       </TableRow>
+<<<<<<< HEAD
+=======
+      <TableRow>
+        <TableCell className={classes.expansionCell} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box margin={1}>
+              <p>Mer innhold</p>
+              <div>{CompetenceMapping()}</div>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+>>>>>>> 104de92... correcting namings
     </>
   );
 }

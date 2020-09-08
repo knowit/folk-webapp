@@ -308,7 +308,7 @@ export function CheckBoxHeaderCell({
   );
 }
 
-const useCompetanceMappingStyles = makeStyles({
+const useCompetenceMappingStyles = makeStyles({
   root: {
     backgroundColor: '#f2f2f2',
     padding: '10px',
@@ -342,25 +342,25 @@ const useCompetanceMappingStyles = makeStyles({
   },
 });
 
-export function CompetanceMapping() {
-  const classes = useCompetanceMappingStyles();
-  const competances = [
+export function CompetenceMapping() {
+  const classes = useCompetenceMappingStyles();
+  const competences = [
     'Veldig lang tekst for å se hvordan det blir',
     'Prosjektledelse',
     'Prototyping',
   ];
-  const levels = ['Uintressert', 'Tja', 'Intressert'];
+  const interestLevels = ['Uintressert', 'Tja', 'Intressert'];
   return (
     <div className={classes.root}>
       <div>
-        {competances.map((competance, i) => (
-          <div key={i} title={competance}>
-            {competance}
+        {competences.map((competence, i) => (
+          <div key={i} title={competence}>
+            {competence}
           </div>
         ))}
       </div>
       <div className={classes.gradient}>
-        {levels.map((level, i) => (
+        {interestLevels.map((level, i) => (
           <div key={i}>{level}</div>
         ))}
       </div>
