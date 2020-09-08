@@ -88,13 +88,14 @@ const useRowStyles = makeStyles({
     fontWeight: 'bold',
   },
   expandedBox: {
-    padding: '5px 15px',
     lineHeight: '1.2em',
     whiteSpace: 'normal',
+    marginTop: '10px',
     background:
       'transparent linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%) 0% 0%',
     '& div.expandable-box-cell': {
       marginBottom: '12px',
+      padding: '0 15px',
     },
   },
 });
