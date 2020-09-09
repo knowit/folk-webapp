@@ -349,7 +349,7 @@ export function CompetenceMapping() {
     'Prosjektledelse',
     'Prototyping',
   ];
-  const interestLevels = ['Uintressert', 'Tja', 'Intressert'];
+  const interestLevels = ['Uinteressert', 'Tja', 'Interessert'];
   return (
     <div className={classes.root}>
       <div>
