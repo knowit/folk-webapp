@@ -91,6 +91,7 @@ const useRowStyles = makeStyles({
     lineHeight: '1.2em',
     whiteSpace: 'normal',
     marginTop: '10px',
+    width: '380px',
     background:
       'transparent linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%) 0% 0%',
     '& div.expandable-box-cell': {
