@@ -14,10 +14,12 @@ custom:
       HTTPPort: 80
       HTTPSPort: 443
       OriginProtocolPolicy: https-only
+  apiEnv:
+    API_URL: ${ssm:/${self:custom.stage}/folk-webapp/DATAPLATTFORM_API_URL}
   authEnv:
-    OAUTH_URL: ${ssm:/${self:custom.stage}/fold-webapp/AUTH_ENDPOINT}
-    CLIENT_ID: ${ssm:/${self:custom.stage}/fold-webapp/CLIENT_ID~true}
-    CLIENT_SECRET: ${ssm:/${self:custom.stage}/fold-webapp/CLIENT_SECRET~true}
+    OAUTH_URL: ${ssm:/${self:custom.stage}/folk-webapp/DATAPLATTFORM_API_URL}
+    CLIENT_ID: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_ID~true}
+    CLIENT_SECRET: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_SECRET~true}
 
 provider:
   name: aws
@@ -76,6 +78,7 @@ functions:
   apiData:
     handler: backend/api.data
     name: ${self:custom.service}-api-data
+    environment: ${self:custom.apiEnv}
     events:
       - httpApi:
           method: GET
@@ -84,6 +87,7 @@ functions:
   apiPages:
     handler: backend/api.pages
     name: ${self:custom.service}-api-pages
+    environment: ${self:custom.apiEnv}
     events:
       - httpApi:
           method: GET
@@ -92,6 +96,7 @@ functions:
   apiPageData:
     handler: backend/api.pageData
     name: ${self:custom.service}-api-page-data
+    environment: ${self:custom.apiEnv}
     events:
       - httpApi:
           method: GET
@@ -186,7 +191,12 @@ resources:
             ViewerProtocolPolicy: redirect-to-https
           PriceClass: PriceClass_100
           ViewerCertificate:
-            AcmCertificateArn: !Sub 'arn:aws:acm:us-east-1:#{AWS::AccountId}:certificate/8c11e6a7-f8a2-4b06-a08d-890509e11473'
+            AcmCertificateArn:
+              Fn::Join: 
+                - ':'
+                - - 'arn:aws:acm:us-east-1'
+                  - !Ref 'AWS::AccountId'
+                  - certificate/8c11e6a7-f8a2-4b06-a08d-890509e11473
             MinimumProtocolVersion: TLSv1.2_2019
             SslSupportMethod: sni-only
 
