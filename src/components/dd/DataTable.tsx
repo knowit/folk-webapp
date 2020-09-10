@@ -199,7 +199,7 @@ export const useTableStyles = makeStyles({
   table: {
     position: 'relative',
     width: '94.5%',
-    margin: '0 auto',
+    margin: '0 0 0 30px',
   },
   tableHead: {
     fontWeight: 'bold',
