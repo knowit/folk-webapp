@@ -11,7 +11,10 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import { CheckBoxChangeHandlerProps } from '../DataTableCells';
+import {
+  CheckBoxChangeHandlerProps,
+  CompetenceMapping,
+} from '../DataTableCells';
 
 interface DataTableColumn {
   title: string;
@@ -85,13 +88,15 @@ const useRowStyles = makeStyles({
     fontWeight: 'bold',
   },
   expandedBox: {
-    padding: '5px 15px',
     lineHeight: '1.2em',
     whiteSpace: 'normal',
+    marginTop: '10px',
+    width: '380px',
     background:
       'transparent linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%) 0% 0%',
     '& div.expandable-box-cell': {
       marginBottom: '12px',
+      padding: '0 15px',
     },
   },
 });
@@ -149,6 +154,7 @@ function Row({ rowData, columns }: DataTableRowProps) {
                     <b>Språk:</b> Norsk (morsmål), engelsk, tysk, russisk,
                     flamsk.
                   </div>
+                  <div>{CompetenceMapping()}</div>
                 </Collapse>
               </div>
             </TableCell>
@@ -192,8 +198,8 @@ export const useTableStyles = makeStyles({
   },
   table: {
     position: 'relative',
-    width: '95%',
-    margin: '0 auto',
+    width: '94.5%',
+    margin: '0 0 0 30px',
   },
   tableHead: {
     fontWeight: 'bold',
