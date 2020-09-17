@@ -46,8 +46,7 @@ export default function Header() {
     <div className={classes.root}>
       <AppBar className={classes.appbar} position={'relative'}>
         <Toolbar className={classes.toolbar}>
-          <KnowitLogo className={classes.logo} />
-
+          <a href="/"><KnowitLogo className={classes.logo} /></a>
           <NavMenu>
             <NavMenuItem label="Ansatte" to="/ansatte" />
             <NavMenuItem label="Kunder" to="/kunder" />
