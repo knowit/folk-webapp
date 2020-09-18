@@ -5,7 +5,7 @@ import { NavMenu, NavMenuItem } from './NavMenu';
 import { useUserInfo } from '../LoginProvider';
 import { ReactComponent as KnowitLogo } from '../assets/logo.svg';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
-
+import { Link } from 'react-router-dom';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -46,8 +46,7 @@ export default function Header() {
     <div className={classes.root}>
       <AppBar className={classes.appbar} position={'relative'}>
         <Toolbar className={classes.toolbar}>
-          <KnowitLogo className={classes.logo} />
-
+          <Link to="/"><KnowitLogo className={classes.logo} /></Link>
           <NavMenu>
             <NavMenuItem label="Ansatte" to="/ansatte" />
             <NavMenuItem label="Kunder" to="/kunder" />
