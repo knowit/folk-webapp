@@ -332,7 +332,6 @@ const useCompetenceMappingStyles = makeStyles({
   },
   gradient: {
     backgroundImage: 'linear-gradient(to right, #0040d5, #ff0707)',
-    borderRadius: '5px',
     '& >div': {
       fontSize: '10px',
       fontWeight: 'bold',
