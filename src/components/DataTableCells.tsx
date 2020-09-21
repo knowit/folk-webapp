@@ -5,6 +5,7 @@ import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import GetApp from '@material-ui/icons/GetApp';
+import CharacterLimitBox from '../components/CharacterLimitBox';
 
 import Fade from '@material-ui/core/Fade';
 import Modal from '@material-ui/core/Modal';
@@ -184,7 +185,13 @@ export function ExperienceCell() {
     </>
   );
 }
-
+export function EducationCell() {
+  // TODO: get data for education
+  return <CharacterLimitBox
+          lim={36}
+          text = "Master - Software engineering at the University of a Very Long Name in a Very Long Named City"
+        />;
+}
 
 const useCvCellStyles = makeStyles({
   linkStyle: {
