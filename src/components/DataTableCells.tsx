@@ -24,14 +24,14 @@ const useConsultantCellStyles = makeStyles({
   },
 });
 
-export function ConsultantCell({ data }: { data: string }) {
+export function ConsultantCell({ data }: { data: { value: string, image: string | undefined } }) {
   const classes = useConsultantCellStyles();
   return (
     <div className={classes.root}>
-      <Avatar alt={data} className={classes.image}>
+      <Avatar alt={data.value} className={classes.image} /*src={data.image}*/ >
         <FallbackUserIcon className={classes.image} />
       </Avatar>
-      <span className={classes.text}>{data}</span>
+      <span className={classes.text}>{data.value}</span>
     </div>
   );
 }
@@ -185,10 +185,6 @@ export function ExperienceCell() {
   );
 }
 
-export function EducationCell() {
-  // TODO: get data for education
-  return <>Master - Software engineering</>;
-}
 
 const useCvCellStyles = makeStyles({
   linkStyle: {
