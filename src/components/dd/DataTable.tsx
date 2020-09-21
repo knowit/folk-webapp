@@ -123,10 +123,10 @@ function Row({ rowData, columns }: DataTableRowProps) {
             <TableCell
               key={i}
               className={[classes.cell, classes.expansionCell].join(' ')}
-              onClick={() => setOpen(!open)}
+             
             >
               <div>
-                <div className={[classes.cellExpandable, openStyle].join(' ')}>
+                <div className={[classes.cellExpandable, openStyle].join(' ')} onClick={() => setOpen(!open)}>
                   <cell.CellComponent rowData={rowData} {...cell} />
                   {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                 </div>
