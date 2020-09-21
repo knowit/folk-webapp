@@ -20,9 +20,9 @@ export default function CharacterLimitBox({ text, lim }: { text: string; lim: nu
     text.length > lim ? 
       <HtmlTooltip title = {text} arrow placement="top">
         <div>
-          {text.substr(0,lim-3)}
+          {text.substr(0,lim-2)}
            ...
-          </div>
+        </div>
       </HtmlTooltip>
     : 
       <>{text}</>

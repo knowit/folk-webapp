@@ -188,9 +188,10 @@ export function ExperienceCell() {
 export function EducationCell() {
   // TODO: get data for education
   return <CharacterLimitBox
-          lim={36}
+          lim={53}
           text = "Master - Software engineering at the University of a Very Long Name in a Very Long Named City"
-        />;
+          />
+          
 }
 
 const useCvCellStyles = makeStyles({
@@ -347,17 +348,17 @@ const useCompetenceMappingStyles = makeStyles({
 export function CompetenceMapping() {
   const classes = useCompetenceMappingStyles();
   const competences = [
-    'Veldig lang tekst for å se hvordan det blir',
+    'Continious Integration',
     'Prosjektledelse',
-    'Prototyping',
+    'Team Foundation Server (TFS)',
   ];
   const interestLevels = ['Uinteressert', 'Tja', 'Interessert'];
   return (
     <div className={classes.root}>
       <div>
         {competences.map((competence, i) => (
-          <div key={i} title={competence}>
-            {competence}
+          <div key={i}>
+            <CharacterLimitBox text={competence} lim = {15}/>
           </div>
         ))}
       </div>
