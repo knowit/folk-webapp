@@ -17,7 +17,7 @@ custom:
   apiEnv:
     API_URL: ${ssm:/${self:custom.stage}/folk-webapp/DATAPLATTFORM_API_URL}
   authEnv:
-    OAUTH_URL: ${ssm:/${self:custom.stage}/folk-webapp/DATAPLATTFORM_API_URL}
+    OAUTH_URL: ${ssm:/${self:custom.stage}/folk-webapp/DATAPLATTFORM_AUTH_URL}
     CLIENT_ID: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_ID~true}
     CLIENT_SECRET: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_SECRET~true}
 

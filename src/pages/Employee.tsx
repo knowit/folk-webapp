@@ -2,10 +2,7 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 import {
   ConsultantCell,
-  EducationCell,
   CheckBoxHeaderCell,
-  ExperienceCell,
-  CvCell,
   ProjectStatusCell,
   CustomerStatusCell,
 } from '../components/DataTableCells';
@@ -15,7 +12,7 @@ import { Skeleton } from '@material-ui/lab';
 
 export default function Employee() {
   const TableSkeleton = () => (
-    <Skeleton variant="rect" height={530} animation="wave" />
+    <Skeleton variant="rect" height={780} animation="wave" />
   );
   const ChartSkeleton = () => (
     <Skeleton variant="rect" height={280} animation="wave" />
@@ -83,39 +80,11 @@ export default function Employee() {
           searchFilterFunction: (
             row: FilterFunctionArgument,
             searchTerm: string
-          ) => row.rowData[0].toLowerCase().includes(searchTerm.toLowerCase()), // TODO: Update filter to reflect structure of actual backend data
+          ) => row.rowData[0].value.toLowerCase().includes(searchTerm.toLowerCase()), // TODO: Update filter to reflect structure of actual backend data
         }}
         SkeletonComponent={TableSkeleton}
       />
 
-      <DDItem
-        url={'/api/data/projectStatus'}
-        title={'Konsulentkompetanse'}
-        fullSize={true}
-        Component={DDTable}
-        dataComponentProps={{
-          columns: [
-            {
-              title: 'Konsulent',
-              expandable: true,
-              renderCell: ConsultantCell,
-              headerRenderCell: CheckBoxHeaderCell,
-              checkBoxLabel: 'Vis kun ledige',
-            },
-            { title: 'Tittel' },
-            { title: 'Erfaring', renderCell: ExperienceCell },
-            { title: 'Utdanning', renderCell: EducationCell },
-            { title: 'CV', renderCell: CvCell },
-          ],
-          checkBoxFilterFunction: (row: FilterFunctionArgument) =>
-            row.rowData[3].status === 'green', // TODO: Update filter to reflect structure of actual backend data
-          searchFilterFunction: (
-            row: FilterFunctionArgument,
-            searchTerm: string
-          ) => row.rowData[0].toLowerCase().includes(searchTerm.toLowerCase()), // TODO: Update filter to reflect structure of actual backend data
-        }}
-        SkeletonComponent={TableSkeleton}
-      />
     </Grid>
   );
 }

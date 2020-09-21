@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router';
-import { NotFound, UnderConstruction, Employee } from '../pages';
+import { NotFound, UnderConstruction, Employee, Competence } from '../pages';
 
 export default function Content() {
   return (
@@ -12,7 +12,7 @@ export default function Content() {
         <UnderConstruction />
       </Route>
       <Route path="/kompetanse">
-        <UnderConstruction />
+        <Competence />
       </Route>
       <Route path="/arbeidsmiljo">
         <UnderConstruction />
