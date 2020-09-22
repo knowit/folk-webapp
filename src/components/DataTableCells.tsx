@@ -5,6 +5,7 @@ import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import GetApp from '@material-ui/icons/GetApp';
+import CharacterLimitBox from '../components/CharacterLimitBox';
 
 import Fade from '@material-ui/core/Fade';
 import Modal from '@material-ui/core/Modal';
@@ -184,7 +185,14 @@ export function ExperienceCell() {
     </>
   );
 }
-
+export function EducationCell() {
+  // TODO: get data for education
+  return <CharacterLimitBox
+          lim={53}
+          text = "Master - Software engineering at the University of a Very Long Name in a Very Long Named City"
+          />
+          
+}
 
 const useCvCellStyles = makeStyles({
   linkStyle: {
@@ -340,17 +348,17 @@ const useCompetenceMappingStyles = makeStyles({
 export function CompetenceMapping() {
   const classes = useCompetenceMappingStyles();
   const competences = [
-    'Veldig lang tekst for å se hvordan det blir',
+    'Continious Integration',
     'Prosjektledelse',
-    'Prototyping',
+    'Team Foundation Server (TFS)',
   ];
   const interestLevels = ['Uinteressert', 'Tja', 'Interessert'];
   return (
     <div className={classes.root}>
       <div>
         {competences.map((competence, i) => (
-          <div key={i} title={competence}>
-            {competence}
+          <div key={i}>
+            <CharacterLimitBox text={competence} lim = {15}/>
           </div>
         ))}
       </div>
