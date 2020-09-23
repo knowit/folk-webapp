@@ -114,11 +114,8 @@ function Row({ rowData, columns }: DataTableRowProps) {
                   <cell.CellComponent rowData={rowData} {...cell} />
                   {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                 </div>
-                <Collapse
-                  in={open}
-                  timeout="auto"
-                  unmountOnExit >
-                  <cell.ExpandedComponent rowData={rowData} {...cell} />
+                <Collapse in={open} timeout="auto" >
+                  {open ? <cell.ExpandedComponent rowData={rowData} {...cell} /> : null} 
                 </Collapse>
               </div>
             </TableCell>
