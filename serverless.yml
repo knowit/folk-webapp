@@ -53,6 +53,7 @@ functions:
     handler: backend/auth.login
     name: ${self:custom.service}-auth-login
     environment: ${self:custom.authEnv}
+    role: LambdaRole
     events:
       - httpApi:
           method: GET
@@ -62,6 +63,7 @@ functions:
     handler: backend/auth.callback
     name: ${self:custom.service}-auth-callback
     environment: ${self:custom.authEnv}
+    role: LambdaRole
     events:
       - httpApi:
           method: GET
@@ -71,6 +73,7 @@ functions:
     handler: backend/auth.userInfo
     name: ${self:custom.service}-auth-userInfo
     environment: ${self:custom.authEnv}
+    role: LambdaRole
     events:
       - httpApi:
           method: GET
@@ -80,6 +83,7 @@ functions:
     handler: backend/api.data
     name: ${self:custom.service}-api-data
     environment: ${self:custom.apiEnv}
+    role: LambdaRole
     events:
       - httpApi:
           method: GET
@@ -89,6 +93,7 @@ functions:
     handler: backend/api.pages
     name: ${self:custom.service}-api-pages
     environment: ${self:custom.apiEnv}
+    role: LambdaRole
     events:
       - httpApi:
           method: GET
@@ -98,6 +103,7 @@ functions:
     handler: backend/api.pageData
     name: ${self:custom.service}-api-page-data
     environment: ${self:custom.apiEnv}
+    role: LambdaRole
     events:
       - httpApi:
           method: GET
@@ -105,6 +111,50 @@ functions:
 
 resources:
   Resources:
+    LambdaRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: ${self:custom.service}-lambda-role
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        ManagedPolicyArns:
+          - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        Policies:
+          - PolicyName: ${self:custom.stage}-ParameterStore-${self:service}
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - ssm:GetParameter
+                    - ssm:GetParameters
+                  Resource: #!Sub 'arn:aws:ssm:#{AWS::Region}:#{AWS::AccountId}:parameter/${self:custom.stage}/${self:service}/*'
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:ssm'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'parameter/${self:custom.stage}/${self:service}/*'
+                - Effect: Allow
+                  Action:
+                    - ssm:GetParameter
+                    - ssm:GetParameters
+                  Resource: # !Sub 'arn:aws:ssm:#{AWS::Region}:#{AWS::AccountId}:parameter/${self:service}/*'
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:ssm'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'parameter/${self:service}/*'
+
     FolkStaticS3Bucket:
       Type: AWS::S3::Bucket
       Properties:

@@ -1,3 +1,22 @@
+const crypto = require('crypto');
+const AWS = require('aws-sdk');
+const ssm = new AWS.SSM();
+
+const getSecret = (name, { encrypted = false } = {}) => {
+  return new Promise((resolve, reject) => {
+    ssm.getParameter(
+      {
+        Name: name,
+        WithDecryption: encrypted,
+      },
+      (err, data) => {
+        if (err) reject(err);
+        else resolve(data && data.Parameter ? data.Parameter.Value : null);
+      }
+    );
+  });
+};
+
 const pageable = (sql, page = 1, steps = 20) => {
   const start = steps * (page - 1);
   const end = steps * page;
@@ -11,6 +30,20 @@ const pageable = (sql, page = 1, steps = 20) => {
   `;
 };
 
+const makeEmailUuid = (email, salt) => {
+  const hmac = crypto.createHmac('sha256', salt);
+  hmac.update(email);
+  const sig = hmac.digest('hex');
+
+  return [
+    sig.substring(0, 8),
+    sig.substring(8, 12),
+    sig.substring(12, 16),
+    sig.substring(16, 20),
+    sig.substring(20, 32),
+  ].join('-');
+};
+
 exports.projectStatus = async ({
   dataplattformClient,
   queryStringParameters: { page = 1, nameSearch = null } = {},
@@ -18,7 +51,7 @@ exports.projectStatus = async ({
   const req = await dataplattformClient.query({
     querySql: pageable(
       `
-        select user_id, navn, title from cv_partner_employees 
+        select user_id, navn, title, email from cv_partner_employees 
         ${nameSearch ? `where lower(navn) like '%${nameSearch}%'` : ''}
       `,
       page
@@ -28,7 +61,13 @@ exports.projectStatus = async ({
 
   return allEmployees.map((employee) => ({
     rowData: [
-      { value: employee.navn, image: null },
+      {
+        value: employee.navn,
+        image: null,
+        competanceUrl: `/api/data/employeeCompetanse?email=${encodeURIComponent(
+          employee.email
+        )}`,
+      },
       employee.title,
       0,
       { value: null, status: 'green' },
@@ -52,7 +91,8 @@ exports.competence = async ({
               navn,
               title,
               link,
-              degree
+              degree,
+              email
       FROM cv_partner_employees AS employee
       LEFT JOIN cv_partner_education AS education
           ON employee.user_id = education.user_id
@@ -74,7 +114,13 @@ exports.competence = async ({
   ];
   return allEmployees.map((employee) => ({
     rowData: [
-      { value: employee.navn, image: null },
+      {
+        value: employee.navn,
+        image: null,
+        competanceUrl: `/api/data/employeeCompetanse?email=${encodeURIComponent(
+          employee.email
+        )}`,
+      },
       employee.title,
       `/api/data/employeeExperience?user_id=${employee.user_id}`,
       employee.degree,
@@ -122,6 +168,98 @@ exports.employeeExperience = async ({
       time_from: formatTime(exp.year_from, exp.month_from),
       time_to: formatTime(exp.year_to, exp.month_to),
     })),
+  };
+};
+
+exports.employeeCompetanse = async ({
+  dataplattformClient,
+  queryStringParameters: { email } = {},
+}) => {
+  const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
+    encrypted: true,
+  });
+  const uuid = makeEmailUuid(email, salt);
+
+  const [reqComp, reqSkills, reqEmp] = await Promise.all([
+    dataplattformClient.query({
+      querySql: `select * from kompetansekartlegging where uuid = '${uuid}'`,
+    }),
+    dataplattformClient.query({
+      querySql: `
+        SELECT array_join(language, ';', '') AS language, 
+              array_join(skill, ';', '') AS skill, 
+              array_join(role, ';', '') AS role
+        FROM 
+          (SELECT DISTINCT user_id
+          FROM cv_partner_employees
+          WHERE email = '${email}') AS employee
+        INNER JOIN 
+          (SELECT user_id,
+                array_agg(name) AS language
+          FROM cv_partner_languages
+          GROUP BY  user_id) AS langs
+          ON langs.user_id = employee.user_id
+        INNER JOIN 
+          (SELECT DISTINCT user_id,
+                array_agg(category) AS skill
+          FROM cv_partner_technology_skills
+          WHERE technology_skills != '' and category != ''
+          GROUP BY  user_id ) AS skills
+          ON skills.user_id = employee.user_id
+        INNER JOIN 
+          (SELECT DISTINCT user_id,
+                array_agg(roles) AS role
+          FROM cv_partner_project_experience
+          GROUP BY  user_id ) AS roles
+          ON roles.user_id = employee.user_id
+      `,
+    }),
+    dataplattformClient.query({
+      querySql: `
+        SELECT DISTINCT employer,
+              month_from,
+              year_from
+        FROM cv_partner_work_experience
+        WHERE user_id = 
+          (SELECT DISTINCT user_id
+          FROM cv_partner_employees
+          WHERE email = '${email}')
+      `,
+    }),
+  ]);
+  const [resComp, resSkills, resEmp] = await Promise.all([
+    reqComp.json(),
+    reqSkills.json(),
+    reqEmp.json(),
+  ]);
+
+  const mapCompetance = (comp) => {
+    const compEntires = comp && comp.length > 0 ? Object.entries(comp[0]) : [];
+    const compMap = {};
+    for (var i = 1; i < compEntires.length; i += 2) {
+      const [k, competance] = compEntires[i];
+      const [, motivation] = compEntires[i + 1];
+      compMap[k] = {
+        competance,
+        motivation,
+      };
+    }
+    return compMap;
+  };
+
+  const mapTags = (skills) => {
+    const mappedSkills = skills && skills.length > 0 ? skills[0] : {};
+    return {
+      languages: mappedSkills.language ? mappedSkills.language.split(';') : [],
+      skills: mappedSkills.skill ? mappedSkills.skill.split(';') : [],
+      roles: mappedSkills.role ? mappedSkills.role.split(';') : [],
+    };
+  };
+
+  return {
+    competanse: mapCompetance(resComp),
+    workExperience: resEmp,
+    tags: mapTags(resSkills),
   };
 };
 
