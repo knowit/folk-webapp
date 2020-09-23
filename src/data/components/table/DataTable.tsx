@@ -171,18 +171,18 @@ export const useTableStyles = makeStyles({
     '& th:first-child': {
       width: '380px',
     },
-    '& th:last-child': {
-      maxWidth: '280px',
-    },
-    '& th:nth-child(3)': {
-      width: '115px',
-    },
-    '& th:nth-child(2)': {
-      width: '210px',
-    },
-    '& th:nth-child(5)': {
-      width: '55px',
-    },
+    // '& th:last-child': {
+    //   maxWidth: '280px',
+    // },
+    // '& th:nth-child(3)': {
+    //   width: '115px',
+    // },
+    // '& th:nth-child(2)': {
+    //   width: '210px',
+    // },
+    // '& th:nth-child(5)': {
+    //   width: '55px',
+    // },
   },
   tableBody: {
     '& > :last-child > *': {
@@ -192,6 +192,7 @@ export const useTableStyles = makeStyles({
       textOverflow: 'ellipsis',
       overflow: 'hidden',
       whiteSpace: 'nowrap',
+      maxWidth: '280px'
     },
     fontWeight: 'normal',
     fontSize: '14px',
