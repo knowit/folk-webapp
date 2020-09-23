@@ -9,7 +9,7 @@ import CustomerStatusCell from './cells/CustomerStatusCell'
 import CheckBoxHeaderCell from './cells/CheckBoxHeaderCell'
 
 
-const EducationCell = ({ data }: { data: string | null }) => <CharacterLimitBox lim={53} text={data || ''} />
+const EducationCell = ({ data }: { data: string | null }) => <CharacterLimitBox text={data || ''} />
 
 export { 
   ConsultantCell,

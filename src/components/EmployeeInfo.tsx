@@ -81,7 +81,7 @@ function CompetenceMapping({
       <div>
         {competencesList.map((competence, i) => (
           <div key={i}>
-            <CharacterLimitBox text={competence} lim={15} />
+            <CharacterLimitBox text={competence}/>
           </div>
         ))}
       </div>

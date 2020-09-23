@@ -24,18 +24,15 @@ const useBoxStyle = makeStyles({
   },
 });
 
+ 
 
-export default function CharacterLimitBox({ text, lim }: { text: string; lim: number }) {
+export default function CharacterLimitBox({ text }: { text: string;}) {
   const classes = useBoxStyle();
   return (
-    text.length > lim ? 
-      <HtmlTooltip title = {text} arrow placement="top">
-        <div className = {classes.box}>
-          {text}
-        </div>
-
-      </HtmlTooltip>
-    : 
-      <>{text}</>
+    <HtmlTooltip title = {text} arrow placement="top">
+      <div className = {classes.box}>
+        {text}
+      </div>
+    </HtmlTooltip>
   );
 }
