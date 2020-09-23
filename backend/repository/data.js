@@ -1,6 +1,6 @@
-const pageable = (sql, page=1, steps=15) => {
-  const start = steps*(page-1);
-  const end = steps*page;
+const pageable = (sql, page = 1, steps = 20) => {
+  const start = steps * (page - 1);
+  const end = steps * page;
 
   return `
     SELECT * FROM (
@@ -8,15 +8,12 @@ const pageable = (sql, page=1, steps=15) => {
       FROM (${sql})
     )
     WHERE rn BETWEEN ${start} AND ${end};
-  `
-}
+  `;
+};
 
-exports.projectStatus = async ({ 
-  dataplattformClient, 
-  queryStringParameters: {
-    page = 1,
-    nameSearch=null,
-  } = {}
+exports.projectStatus = async ({
+  dataplattformClient,
+  queryStringParameters: { page = 1, nameSearch = null } = {},
 }) => {
   const req = await dataplattformClient.query({
     querySql: pageable(
@@ -24,7 +21,8 @@ exports.projectStatus = async ({
         select user_id, navn, title from cv_partner_employees 
         ${nameSearch ? `where lower(navn) like '%${nameSearch}%'` : ''}
       `,
-      page),
+      page
+    ),
   });
   const allEmployees = await req.json();
 
@@ -38,15 +36,13 @@ exports.projectStatus = async ({
   }));
 };
 
-exports.competence = async ({ 
+exports.competence = async ({
   dataplattformClient,
-  queryStringParameters: {
-    page = 1,
-    nameSearch=null,
-  } = {}
+  queryStringParameters: { page = 1, nameSearch = null } = {},
 }) => {
   const req = await dataplattformClient.query({
-    querySql: pageable(`
+    querySql: pageable(
+      `
       with latest_grad_year AS 
           (SELECT user_id,
               max(year_to) AS max_year_to
@@ -64,7 +60,9 @@ exports.competence = async ({
           ON employee.user_id = latest_grad_year.user_id
       WHERE education.year_to = latest_grad_year.max_year_to
       ${nameSearch ? `and lower(navn) like '%${nameSearch}%'` : ''}
-    `, page),
+    `,
+      page
+    ),
   });
   const allEmployees = await req.json();
 
@@ -78,7 +76,7 @@ exports.competence = async ({
     rowData: [
       { value: employee.navn, image: null },
       employee.title,
-      {},
+      `/api/data/employeeExperience?user_id=${employee.user_id}`,
       employee.degree,
       Object.fromEntries(
         cvs.map(([lang, format]) => [
@@ -88,6 +86,43 @@ exports.competence = async ({
       ),
     ],
   }));
+};
+
+exports.employeeExperience = async ({
+  dataplattformClient,
+  queryStringParameters: { user_id } = {},
+}) => {
+  const req = await dataplattformClient.query({
+    querySql: `
+      SELECT navn,
+        customer,
+        description,
+        year_from,
+        year_to,
+        month_from,
+        month_to
+      FROM cv_partner_project_experience AS exp
+      JOIN (SELECT user_id, navn FROM cv_partner_employees) emp
+      ON exp.user_id = emp.user_id
+      WHERE exp.user_id = '${user_id}'
+    `,
+  });
+  const empExperience = await req.json();
+  const formatTime = (year, month) =>
+    [
+      year && year > 0 ? year : '',
+      year && year > 0 && month && month > 0 ? `/${month}` : '',
+    ].join('');
+
+  return {
+    name: empExperience.length > 0 ? empExperience[0].navn : '',
+    experience: empExperience.reverse().map((exp) => ({
+      customer: exp.customer,
+      project: exp.description,
+      time_from: formatTime(exp.year_from, exp.month_from),
+      time_to: formatTime(exp.year_to, exp.month_to),
+    })),
+  };
 };
 
 exports.resourceType = async () => {
