@@ -58,7 +58,7 @@ export default function Employee() {
       />
 
       <DDItem
-        url={'/api/data/projectStatus'}
+        url={'/api/data/projectStatus?page=1'}
         title={'Prosjektstatus'}
         fullSize={true}
         Component={DDTable}
