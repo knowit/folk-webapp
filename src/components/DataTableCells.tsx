@@ -185,14 +185,8 @@ export function ExperienceCell() {
     </>
   );
 }
-export function EducationCell() {
-  // TODO: get data for education
-  return <CharacterLimitBox
-          lim={53}
-          text = "Master - Software engineering at the University of a Very Long Name in a Very Long Named City"
-          />
-          
-}
+
+export const EducationCell = ({ data }: { data: string | null }) => <CharacterLimitBox lim={53} text={data || ''} />
 
 const useCvCellStyles = makeStyles({
   linkStyle: {

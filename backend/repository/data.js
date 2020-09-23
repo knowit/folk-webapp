@@ -1,6 +1,30 @@
-exports.projectStatus = async ({ dataplattformClient }) => {
+const pageable = (sql, page=1, steps=15) => {
+  const start = steps*(page-1);
+  const end = steps*page;
+
+  return `
+    SELECT * FROM (
+      SELECT row_number() over() AS rn, *
+      FROM (${sql})
+    )
+    WHERE rn BETWEEN ${start} AND ${end};
+  `
+}
+
+exports.projectStatus = async ({ 
+  dataplattformClient, 
+  queryStringParameters: {
+    page = 1,
+    nameSearch=null,
+  } = {}
+}) => {
   const req = await dataplattformClient.query({
-    querySql: 'select user_id, navn, title from cv_partner_employees',
+    querySql: pageable(
+      `
+        select user_id, navn, title from cv_partner_employees 
+        ${nameSearch ? `where lower(navn) like '%${nameSearch}%'` : ''}
+      `,
+      page),
   });
   const allEmployees = await req.json();
 
@@ -14,14 +38,20 @@ exports.projectStatus = async ({ dataplattformClient }) => {
   }));
 };
 
-exports.competence = async ({ dataplattformClient }) => {
+exports.competence = async ({ 
+  dataplattformClient,
+  queryStringParameters: {
+    page = 1,
+    nameSearch=null,
+  } = {}
+}) => {
   const req = await dataplattformClient.query({
-    querySql: `
+    querySql: pageable(`
       with latest_grad_year AS 
           (SELECT user_id,
               max(year_to) AS max_year_to
           FROM cv_partner_education
-          GROUP BY  user_id)
+          GROUP BY user_id)
       SELECT employee.user_id,
               navn,
               title,
@@ -32,8 +62,9 @@ exports.competence = async ({ dataplattformClient }) => {
           ON employee.user_id = education.user_id
       LEFT JOIN latest_grad_year
           ON employee.user_id = latest_grad_year.user_id
-      WHERE education.year_to = latest_grad_year.max_year_to 
-    `,
+      WHERE education.year_to = latest_grad_year.max_year_to
+      ${nameSearch ? `and lower(navn) like '%${nameSearch}%'` : ''}
+    `, page),
   });
   const allEmployees = await req.json();
 

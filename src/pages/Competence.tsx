@@ -3,6 +3,7 @@ import { Grid } from '@material-ui/core';
 import {
   ConsultantCell,
   ExperienceCell,
+  EducationCell,
   CvCell
 } from '../components/DataTableCells';
 import DDItem, { DDTable } from '../components/DDItem';
@@ -19,7 +20,7 @@ export default function Competence() {
     <Grid container spacing={2}>
 
       <DDItem
-        url={'/api/data/competence'}
+        url={'/api/data/competence?page=1'}
         title={'Konsulentkompetanse'}
         fullSize={true}
         Component={DDTable}
@@ -32,7 +33,7 @@ export default function Competence() {
             },
             { title: 'Tittel' },
             { title: 'Erfaring', renderCell: ExperienceCell },
-            { title: 'Utdanning' },
+            { title: 'Utdanning', renderCell: EducationCell},
             { title: 'CV', renderCell: CvCell },
           ],
           searchFilterFunction: (
