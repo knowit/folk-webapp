@@ -5,22 +5,23 @@ import {
   CheckBoxHeaderCell,
   ProjectStatusCell,
   CustomerStatusCell,
-} from '../components/DataTableCells';
-import DDItem, { DDTable, DDChart } from '../components/DDItem';
-import { FilterFunctionArgument } from '../components/dd/DataTable';
+} from '../data/components/table/DataCells';
+import DDItem, { DDTable/*, DDChart*/ } from '../data/DDItem';
 import { Skeleton } from '@material-ui/lab';
+import EmployeeInfo from '../components/EmployeeInfo';
+
 
 export default function Employee() {
   const TableSkeleton = () => (
     <Skeleton variant="rect" height={780} animation="wave" />
   );
-  const ChartSkeleton = () => (
-    <Skeleton variant="rect" height={280} animation="wave" />
-  );
+  // const ChartSkeleton = () => (
+  //   <Skeleton variant="rect" height={280} animation="wave" />
+  // );
 
   return (
     <Grid container spacing={2}>
-      <DDItem
+      {/* <DDItem
         url={'/api/data/inbound'}
         title={'På vei inn'}
         Component={DDChart}
@@ -55,7 +56,7 @@ export default function Employee() {
         title={'Ressurstype'}
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
-      />
+      /> */}
 
       <DDItem
         url={'/api/data/projectStatus?page=1'}
@@ -68,19 +69,14 @@ export default function Employee() {
               title: 'Konsulent',
               expandable: true,
               renderCell: ConsultantCell,
+              renderExpanded: EmployeeInfo,
               headerRenderCell: CheckBoxHeaderCell,
               checkBoxLabel: 'Vis kun ledige',
             },
             { title: 'Tittel' },
             { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
             { title: 'Kunde', renderCell: CustomerStatusCell },
-          ],
-          checkBoxFilterFunction: (row: FilterFunctionArgument) =>
-            row.rowData[3].status === 'green', // TODO: Update filter to reflect structure of actual backend data
-          searchFilterFunction: (
-            row: FilterFunctionArgument,
-            searchTerm: string
-          ) => row.rowData[0].value.toLowerCase().includes(searchTerm.toLowerCase()), // TODO: Update filter to reflect structure of actual backend data
+          ]
         }}
         SkeletonComponent={TableSkeleton}
       />

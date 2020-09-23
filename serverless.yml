@@ -27,6 +27,7 @@ provider:
   region: us-east-1
   runtime: nodejs12.x
   stackName: ${self:custom.service}
+  timeout: 25
   httpApi:
     name: ${self:custom.service}-api
     payload: '2.0'

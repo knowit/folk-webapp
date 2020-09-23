@@ -1,0 +1,77 @@
+import React from 'react';
+import { useFetchedData } from '../hooks/service';
+import { GridItem, GridItemHeader, GridItemContent } from '../components/GridItem';
+import { Skeleton } from '@material-ui/lab';
+import DDTable from './DDTable'
+import DDChart from './DDChart'
+
+
+type DDPayload = { [key: string]: any };
+type DDPassProps = { [key: string]: any };
+
+export interface DDComponentProps {
+  payload: DDPayload;
+  title: string;
+  props?: DDPassProps;
+}
+
+export interface DDItemProps {
+  url: string;
+  fullSize?: boolean;
+  title: string;
+  dataComponentProps?: DDPassProps;
+  Component: (props: DDComponentProps) => JSX.Element;
+  SkeletonComponent: () => JSX.Element;
+  HeaderSkeletonComponent?: () => JSX.Element;
+}
+
+interface DDErrorProps {
+  error: Error;
+}
+
+
+function DDError({ error }: DDErrorProps) {
+  console.log(error);
+  return <p>Det oppstod en feil</p>;
+}
+
+export default function DDItem({
+  url,
+  title,
+  Component,
+  SkeletonComponent,
+  HeaderSkeletonComponent = () => (
+    <Skeleton variant="rect" height={43} width={120} animation="wave" />
+  ),
+  fullSize = false,
+  dataComponentProps = {},
+}: DDItemProps) {
+  const [payload, pending, error] = useFetchedData<DDPayload>({ url });
+
+  return (
+    <GridItem fullSize={fullSize}>
+      {pending || error || !payload ? (
+        <>
+          <GridItemHeader title={title}>
+            {pending && !error ? <HeaderSkeletonComponent /> : null}
+          </GridItemHeader>
+          <GridItemContent>
+            {error ? (
+              <DDError error={error} />
+            ) : pending ? (
+              <SkeletonComponent />
+            ) : null}
+          </GridItemContent>
+        </>
+      ) : (
+        <Component
+          payload={payload as DDPayload}
+          title={title}
+          props={dataComponentProps}
+        />
+      )}
+    </GridItem>
+  );
+}
+
+export { DDTable, DDChart }
