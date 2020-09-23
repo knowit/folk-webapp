@@ -3,12 +3,13 @@ import { Grid } from '@material-ui/core';
 import {
   ConsultantCell,
   ExperienceCell,
+  CheckBoxHeaderCell,
   EducationCell,
   CvCell
-} from '../components/DataTableCells';
-import DDItem, { DDTable } from '../components/DDItem';
-import { FilterFunctionArgument } from '../components/dd/DataTable';
+} from '../data/components/table/DataCells';
+import DDItem, { DDTable } from '../data/DDItem';
 import { Skeleton } from '@material-ui/lab';
+import EmployeeInfo from '../components/EmployeeInfo';
 
 export default function Competence() {
   
@@ -29,17 +30,16 @@ export default function Competence() {
             {
               title: 'Konsulent',
               expandable: true,
-              renderCell: ConsultantCell
+              renderCell: ConsultantCell,
+              renderExpanded: EmployeeInfo,
+              headerRenderCell: CheckBoxHeaderCell,
+              checkBoxLabel: 'Vis kun ledige',
             },
             { title: 'Tittel' },
             { title: 'Erfaring', renderCell: ExperienceCell },
             { title: 'Utdanning', renderCell: EducationCell},
             { title: 'CV', renderCell: CvCell },
-          ],
-          searchFilterFunction: (
-            row: FilterFunctionArgument,
-            searchTerm: string
-          ) => row.rowData[0].value.toLowerCase().includes(searchTerm.toLowerCase()), // TODO: Update filter to reflect structure of actual backend data
+          ]
         }}
         SkeletonComponent={TableSkeleton}
       />

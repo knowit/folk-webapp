@@ -11,18 +11,13 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import {
-  CheckBoxChangeHandlerProps,
-  CompetenceMapping,
-} from '../DataTableCells';
 
 interface DataTableColumn {
   title: string;
   expandable?: boolean;
   renderCell?: (props: { data: any; rowData: any[] }) => JSX.Element;
+  renderExpanded?: (props: { data: any; rowData: any[] }) => JSX.Element;
   headerRenderCell?: () => JSX.Element;
-  checkBoxLabel?: string;
-  checkBoxChangeHandler?: ({ event }: CheckBoxChangeHandlerProps) => void;
 }
 
 interface DataTableCell extends DataTableColumn {
@@ -87,18 +82,6 @@ const useRowStyles = makeStyles({
   bolderText: {
     fontWeight: 'bold',
   },
-  expandedBox: {
-    lineHeight: '1.2em',
-    whiteSpace: 'normal',
-    marginTop: '10px',
-    width: '380px',
-    background:
-      'transparent linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%) 0% 0%',
-    '& div.expandable-box-cell': {
-      marginBottom: '12px',
-      padding: '0 15px',
-    },
-  },
 });
 
 function Row({ rowData, columns }: DataTableRowProps) {
@@ -110,6 +93,7 @@ function Row({ rowData, columns }: DataTableRowProps) {
   const cells = columns.map((column, i) => ({
     data: rowData[i],
     CellComponent: column.renderCell ? column.renderCell : DefaultCellComponent,
+    ExpandedComponent: column.renderExpanded ? column.renderExpanded : () => <></>,
     ...column,
   }));
 
@@ -133,28 +117,8 @@ function Row({ rowData, columns }: DataTableRowProps) {
                 <Collapse
                   in={open}
                   timeout="auto"
-                  unmountOnExit
-                  className={classes.expandedBox}
-                >
-                  <div className="expandable-box-cell">
-                    <b>Hovedkompetanse:</b> UX, GUI, UU, mobil, web,
-                    prototyping.
-                  </div>
-                  <div className="expandable-box-cell">
-                    <b>Roller:</b> Interaksjonsdesigner, grafisk designer, team
-                    lead, kokk, trommeslager, tryllekunstner.
-                  </div>
-                  <div className="expandable-box-cell">
-                    <b>Startet i Knowit:</b> 01.02 - 2018
-                  </div>
-                  <div className="expandable-box-cell">
-                    <b>Total arbeidserfaring:</b> 7 år
-                  </div>
-                  <div className="expandable-box-cell">
-                    <b>Språk:</b> Norsk (morsmål), engelsk, tysk, russisk,
-                    flamsk.
-                  </div>
-                  <div>{CompetenceMapping()}</div>
+                  unmountOnExit >
+                  <cell.ExpandedComponent rowData={rowData} {...cell} />
                 </Collapse>
               </div>
             </TableCell>
