@@ -129,7 +129,9 @@ export default function EmployeeInfo({
 
   const startedInKnowit = (allExperience: Experience[] | undefined) => {
     const knowit = allExperience?.find((x) =>
-      x.employer.toLowerCase().includes('knowit')
+      x.employer.toLowerCase().includes('knowit') ||
+      x.employer.toLowerCase().includes('objectnet') ||
+      x.employer.toLowerCase().includes('know it')
     );
     return [knowit?.year_from, knowit?.month_from].join('/');
   };

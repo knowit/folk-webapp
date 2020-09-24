@@ -186,32 +186,34 @@ exports.employeeCompetanse = async ({
     }),
     dataplattformClient.query({
       querySql: `
-        SELECT array_join(language, ';', '') AS language, 
-              array_join(skill, ';', '') AS skill, 
-              array_join(role, ';', '') AS role
-        FROM 
-          (SELECT DISTINCT user_id
-          FROM cv_partner_employees
-          WHERE email = '${email}') AS employee
-        INNER JOIN 
-          (SELECT user_id,
-                array_agg(name) AS language
-          FROM cv_partner_languages
-          GROUP BY  user_id) AS langs
-          ON langs.user_id = employee.user_id
-        INNER JOIN 
-          (SELECT DISTINCT user_id,
-                array_agg(category) AS skill
-          FROM cv_partner_technology_skills
-          WHERE technology_skills != '' and category != ''
-          GROUP BY  user_id ) AS skills
-          ON skills.user_id = employee.user_id
-        INNER JOIN 
-          (SELECT DISTINCT user_id,
-                array_agg(roles) AS role
-          FROM cv_partner_project_experience
-          GROUP BY  user_id ) AS roles
-          ON roles.user_id = employee.user_id
+      SELECT array_join(language, ';', '') AS language, 
+            array_join(skill, ';', '') AS skill, 
+            array_join(role, ';', '') AS role
+      FROM 
+        (SELECT DISTINCT user_id
+        FROM cv_partner_employees
+        WHERE email = '${email}') AS employee
+      INNER JOIN 
+        (SELECT user_id,
+              array_distinct(array_agg(name)) AS language
+        FROM cv_partner_languages
+        GROUP BY  user_id) AS langs
+        ON langs.user_id = employee.user_id
+      INNER JOIN 
+        (SELECT DISTINCT user_id,
+              array_distinct(array_agg(category)) AS skill
+        FROM cv_partner_technology_skills
+        WHERE technology_skills != ''
+                AND category != ''
+        GROUP BY  user_id ) AS skills
+        ON skills.user_id = employee.user_id
+      INNER JOIN 
+        (SELECT DISTINCT user_id,
+              array_distinct(array_agg(roles)) AS role
+        FROM cv_partner_project_experience
+        WHERE roles != ''
+        GROUP BY  user_id ) AS roles
+        ON roles.user_id = employee.user_id
       `,
     }),
     dataplattformClient.query({
