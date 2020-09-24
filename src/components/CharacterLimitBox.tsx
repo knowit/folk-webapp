@@ -1,5 +1,5 @@
 import * as React  from 'react';
-import { withStyles, makeStyles} from '@material-ui/core/styles';
+import { withStyles} from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 
 
@@ -16,33 +16,9 @@ const HtmlTooltip = withStyles((theme) => ({
 }))(Tooltip);
 
 
-const useBoxStyle = makeStyles({
-  box:{
-    overflow:'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-  },
-});
-
- 
-
- function CharacterLimitBox1({ text }: { text: string;}) {
-  const classes = useBoxStyle();
-  return (
-    <HtmlTooltip title = {text} arrow placement="top">
-      <div className = {classes.box}>
-        {text}
-      </div>
-    </HtmlTooltip>
-  );
-}
-
-
 interface Props {
   text:string;
-  lim?:number;
 }
-
 interface State {
   overflowActive:boolean;
 }
@@ -73,12 +49,11 @@ componentDidMount():void {
             }}
             ref={ref => (this.span = ref)}
             >
-             <HtmlTooltip title = {this.props.text} arrow placement="top">
+             <HtmlTooltip title = {this.props.text} arrow placement="top" disableHoverListener = {!this.state.overflowActive}>
                 <span>
                   {this.props.text}
                 </span>
-              </HtmlTooltip>
-              {console.log(this.state.overflowActive)}
+              </HtmlTooltip> 
           </div>
   }
 }
