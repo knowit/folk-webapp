@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import CharacterLimitBox from '../../../../components/CharacterLimitBox';
 
 const colorLookupTable = {
   red: '#D10000',
@@ -28,7 +29,7 @@ export default function CustomerStatusCell({
 
   return (
     <div className={classes.root}>
-      <div>{value || '-'}</div>
+      <CharacterLimitBox text = {value || '-'}/>
       <div className={classes.statusLabel} />
     </div>
   );
