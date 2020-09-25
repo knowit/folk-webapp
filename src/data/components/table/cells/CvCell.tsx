@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import GetApp from '@material-ui/icons/GetApp';
+import CvDialog from '../../../../components/CvDialog'
 
 interface CvCellData {
   no_pdf: string
@@ -24,8 +23,9 @@ const useCvCellStyles = makeStyles({
 export default function CvCell({ data }: {data: CvCellData}) {
   const classes = useCvCellStyles();
   return (
-    <Link className={classes.linkStyle} title="Last ned CV" href={data.no_pdf}>
-      <GetApp />
-    </Link>
+    <>
+    <CvDialog name = {"Fornavn Etternavn"} data = {data} />  
+    </>
   );
 }
+
