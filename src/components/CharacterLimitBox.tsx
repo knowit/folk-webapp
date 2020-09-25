@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import { withStyles} from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -21,7 +21,7 @@ function isEllipsisActive(e:any):boolean {
 };
 
 export default function CharacterLimitBox({text}: {text: string}){
-  var span: HTMLSpanElement | null | undefined;
+  const span = useRef(null);
   const [overflowActive, setOverflowActive] = useState(false);
     
   useEffect(()=>{
@@ -34,7 +34,7 @@ export default function CharacterLimitBox({text}: {text: string}){
                 whiteSpace: "nowrap",
                 overflow: "hidden"
               }}
-              ref={ref => (span = ref)}
+              ref={span}
             >
                 <HtmlTooltip title = {text} arrow placement="top" disableHoverListener = {!overflowActive}>
                   <span>
