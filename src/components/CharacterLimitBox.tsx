@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react'
+import React, {useState, useCallback, Ref} from 'react'
 import { withStyles} from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -16,7 +16,7 @@ const HtmlTooltip = withStyles((theme) => ({
 }))(Tooltip);
 
   
-function isEllipsisActive(e:any):boolean {
+function isEllipsisActive(e: HTMLSpanElement):boolean {
   return e.offsetHeight < e.scrollHeight || e.offsetWidth < e.scrollWidth;
 }; 
 
@@ -36,9 +36,9 @@ export default function CharacterLimitBox({text}: {text: string}){
           >
             <HtmlTooltip title = {text} arrow placement="top" disableHoverListener = {!overflowActive}>
                 <span>
-                  {text + overflowActive}
+                  {text}
                 </span>
               </HtmlTooltip> 
           </div>
     
-  }
+}
