@@ -1,4 +1,4 @@
-import * as React  from 'react';
+import React, {useState, useEffect} from 'react'
 import { withStyles} from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -15,48 +15,32 @@ const HtmlTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
-
-interface Props {
-  text:string;
-}
-interface State {
-  overflowActive:boolean;
-}
-const initialState: State = {
-  overflowActive: false
+  
+function isEllipsisActive(e:any):boolean {
+    return e.offsetHeight < e.scrollHeight || e.offsetWidth < e.scrollWidth;
 };
 
-export default class CharacterLimitBox extends React.Component<Props, State> {
-  span: HTMLSpanElement | null | undefined;
-  constructor(props:Props) {
-    super(props);
-    this.state = initialState
-  }
-
- isEllipsisActive(e:any):boolean {
-  return e.offsetHeight < e.scrollHeight || e.offsetWidth < e.scrollWidth;
-}
-
-componentDidMount():void {
-  this.setState({ overflowActive: this.isEllipsisActive(this.span) });
-}
-  render(){
+export default function CharacterLimitBox({text}: {text: string}){
+  var span: HTMLSpanElement | null | undefined;
+  const [overflowActive, setOverflowActive] = useState(false);
+    
+  useEffect(()=>{
+      setOverflowActive(isEllipsisActive(span));
+  });
+    
     return  <div
-            style={{
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              overflow: "hidden"
-            }}
-            ref={ref => (this.span = ref)}
+              style={{
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                overflow: "hidden"
+              }}
+              ref={ref => (span = ref)}
             >
-             <HtmlTooltip title = {this.props.text} arrow placement="top" disableHoverListener = {!this.state.overflowActive}>
-                <span>
-                  {this.props.text}
-                </span>
-              </HtmlTooltip> 
-          </div>
+                <HtmlTooltip title = {text} arrow placement="top" disableHoverListener = {!overflowActive}>
+                  <span>
+                    {text}
+                  </span>
+                </HtmlTooltip> 
+            </div>
+    
   }
-}
-
-
-
