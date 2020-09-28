@@ -1,15 +1,15 @@
-import React from 'react';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import React, { useEffect }from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import Typography from '@material-ui/core/Typography';
 import GetApp from '@material-ui/icons/GetApp';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import { Button, makeStyles } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
+import { withStyles, makeStyles} from '@material-ui/core/styles';
+import Card  from '@material-ui/core/Card';
+import Divider from '@material-ui/core/Divider/Divider';
 
 interface CvCellData {
   no_pdf: string
@@ -18,75 +18,182 @@ interface CvCellData {
   int_word: string
 }
 
-const useCvCellStyles = makeStyles({
-  linkStyle: {
-    color: '#707070',
-    cursor: 'pointer',
-    textDecoration: 'underline',
-    '& :hover': {
-      color: '#333',
+const DialogBox= withStyles(() => ({
+  paper: {
+    backgroundColor: '#f1f0ed',
+    width: '600px',
+    height: '360px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    borderRadius: '0px', 
+  }
+}))(Dialog);
+
+
+const GreenButton= withStyles(() => ({
+  root: {
+    backgroundColor: '#4b6455',
+    '&:hover':{
+      backgroundColor: '#435A4C',
+    },
+    width: '106px'
+  },
+  label:{
+    fontFamily: 'Arial',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    textTransform: 'none',
+    color: '#f1f0ed',
+  }
+}))(Button);
+
+const GreyButton= withStyles(() => ({
+  root: {
+    color: '#919191',
+    width: '106px'
+  },
+  label:{
+    fontFamily: 'Arial',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    textTransform: 'none',
+  }
+}))(Button);
+
+
+const DialogCard =  withStyles(() => ({
+  root: {
+    backgroundColor: '#ffffff',
+    width: '323.2px',
+    height: '132px',
+    BorderRadius: '10px',
+    display: 'flex',
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+    boxShadow: '0 4px 10px 0 rgba(0, 0, 0, 0.07)',
+    border: 'solid 1px #e0ded7',
+    padding: '21px',
+  }
+}))(Card);
+
+const BlackRadio = withStyles(() => ({
+  root: {
+    height: '20px',
+    width: '20px',
+    margin: '5px',
+    color: 'black',
+    '&$checked': {
+      color: 'black',
     },
   },
+  checked: {},
+}))(Radio);
+
+const FormControlLabelStyeled= withStyles(() => ({
+  label:{
+    margin:'0px',
+    padding: '0px',
+    fontSize: '14px',
+  },
+}))(FormControlLabel);
+
+const useDialogStyle = makeStyles({
+  closeIcon:{
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    marginRight: '15px',
+    marginTop: '15px',
+    width: '14px',
+    height: '14px'
+  },
+  title:{
+    fontSize: '18px',
+    lineHeight: '23px',
+    color: '#333333',
+    fontFamily: 'Arial',
+    fontWeight: 'bold',
+    marginTop: '44px',
+    marginBottom: '40px',
+  },
+  radioTitle :{
+    fontFamily: 'Arial',
+    fontSize: '16px',
+    lineHeight: '23px',
+    color: '#333333',
+    marginBottom: '11px',
+  },
+  buttonLine:{
+    display:'flex',
+    justifyContent: 'space-around',
+    width: '50%',
+    margin: 'auto'
+  }
 });
 
 
-function SimpleDialog({onClose, data, name, open }: {data: CvCellData, onClose:any, name:string, open:boolean }){
-  const [fileType, setFileType] = React.useState();
-  const [language, setLanguage] = React.useState();
-  const classes = useCvCellStyles();
+
+function SimpleDialog({onClose, data, name, open }: {data: CvCellData, onClose:Function, name:string, open:boolean }){
+  const [fileType, setFileType] = React.useState(".pdf");
+  const [language, setLanguage] = React.useState("Norsk");
+  const [downloadLink, setDownloadLink] = React.useState(data.int_pdf);
+ 
+  useEffect(() => {
+    const handleDownlaodLink = ()=>{
+      if (fileType === ".pdf"){
+        if (language === "Norsk") setDownloadLink(data.no_pdf);
+        else setDownloadLink(data.int_pdf); 
+      }
+      else{
+        if (language === "Norsk") setDownloadLink(data.no_word);
+        else setDownloadLink(data.int_word); 
+      }
+    }
+    handleDownlaodLink(); // This will be executed when `language` or 'fileType' state changes
+  }, [language,fileType])// eslint-disable-line react-hooks/exhaustive-deps
 
   const handleClose = () => {
     onClose();
   };
-  const handleLanguageChange = (event:any) => {
+  const handleLanguageChange = (event:React.ChangeEvent<HTMLInputElement>) => {
     setLanguage(event.target.value);
   };
-  const handleFileTypeChange = (event:any) => {
-    setFileType(event.target.value)
+  const handleFileTypeChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+   setFileType(event.target.value);
   };
-  const handleDownlaodClick = ()=>{
-    var downlaodLink:string;
-    if (fileType === ".pdf"){
-      if (language === "Norsk")
-        downlaodLink = data.no_pdf;
-      else 
-        downlaodLink = data.int_pdf;
-    }
-    else{
-      if (language === "Norsk")
-        downlaodLink = data.no_word;
-      else 
-        downlaodLink = data.int_word;
-    }
-    
-  }
 
+  
+  const classes = useDialogStyle();
   return (
-    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-      <DialogTitle id="simple-dialog-title">Last ned CV for {name}</DialogTitle>
-      <Button onClick = {handleClose}><CloseIcon/></Button>
+    <DialogBox onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+      <p className = {classes.title}>Last ned CV for {name}</p>
+      <CloseIcon className = {classes.closeIcon} onClick = {handleClose}/>
+      <DialogCard>
         <FormControl component="fieldset">
-          <FormLabel component="legend">Velg filtype</FormLabel>
+          <div className = {classes.radioTitle}>Velg filtype</div>
           <RadioGroup aria-label="Velg filtype" name="filtypevalg" value={fileType} onChange={handleFileTypeChange}>
-            <FormControlLabel value=".docx" control={<Radio />} label=".docx" />
-            <FormControlLabel value=".pdf" control={<Radio />} label=".pdf" />
+            <FormControlLabelStyeled value=".docx" control={<BlackRadio />} label=".docx" />
+            <FormControlLabelStyeled value=".pdf" control={<BlackRadio />} label=".pdf" />
           </RadioGroup>
-       </FormControl>
-     
-      <FormControl component="fieldset">
-        <FormLabel component="legend">Velg språk</FormLabel>
-        <RadioGroup aria-label="Velg filtype" name="filtypevalg" value={language} onChange={handleLanguageChange}>
-          <FormControlLabel value="Norsk" control={<Radio />} label="Norsk" />
-          <FormControlLabel value="Engelsk" control={<Radio />} label="Engelsk" />
-        </RadioGroup>
-      </FormControl>
-      <Button onClick = {handleClose}>
-        Avbryt
-      </Button>
-      <Button onClick = {handleDownlaodClick}>
-        Last ned
-      </Button>
-    </Dialog>
+        </FormControl>
+        <Divider orientation = 'vertical'/>
+        <FormControl component="fieldset">
+          <div className = {classes.radioTitle}>Velg språk</div>
+          <RadioGroup aria-label="Velg filtype" name="filtypevalg" value={language} onChange={handleLanguageChange}>
+            <FormControlLabelStyeled value="Norsk" control={<BlackRadio />} label="Norsk" />
+            <FormControlLabelStyeled value="Engelsk" control={<BlackRadio />} label="Engelsk" />
+          </RadioGroup>
+        </FormControl>
+      </DialogCard>
+      <div className = {classes.buttonLine}>
+        <GreyButton variant="outlined" onClick = {handleClose}>
+          Avbryt
+        </GreyButton>
+        <GreenButton variant="contained" href = {downloadLink}>
+          Last ned
+        </GreenButton>
+      </div>
+    </DialogBox>
   );
 }
 
@@ -99,7 +206,7 @@ export default function CvDialog({name,data}:{name:string, data:CvCellData}) {
     setOpen(true);
   };
 
-  const handleClose = (value:any) => {
+  const handleClose = (value:string) => {
     setOpen(false);
   };
 
