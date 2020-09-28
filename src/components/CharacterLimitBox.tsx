@@ -17,6 +17,7 @@ const HtmlTooltip = withStyles((theme) => ({
 
   
 function isEllipsisActive(e: HTMLSpanElement):boolean {
+  if (e === null) return false;
   return e.offsetHeight < e.scrollHeight || e.offsetWidth < e.scrollWidth;
 }; 
 
