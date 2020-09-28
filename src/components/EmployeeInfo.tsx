@@ -102,6 +102,7 @@ const useStyles = makeStyles({
     whiteSpace: 'normal',
     marginTop: '10px',
     width: '380px',
+    fontSize: '12px',
     background:
       'transparent linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%) 0% 0%',
     '& div.expandable-box-cell': {},
