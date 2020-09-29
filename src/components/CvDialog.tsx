@@ -139,7 +139,6 @@ function SimpleDialog({onClose, data, name, open }: {data: CvCellData, onClose:F
   const [downloadLink, setDownloadLink] = React.useState(data.int_pdf);
  
   useEffect(() => {
-    const handleDownlaodLink = ()=>{
       if (fileType === ".pdf"){
         if (language === "Norsk") setDownloadLink(data.no_pdf);
         else setDownloadLink(data.int_pdf); 
@@ -148,8 +147,6 @@ function SimpleDialog({onClose, data, name, open }: {data: CvCellData, onClose:F
         if (language === "Norsk") setDownloadLink(data.no_word);
         else setDownloadLink(data.int_word); 
       }
-    }
-    handleDownlaodLink(); // This will be executed when `language` or 'fileType' state changes
   }, [language,fileType])// eslint-disable-line react-hooks/exhaustive-deps
 
   const handleClose = () => {
