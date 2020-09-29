@@ -1,6 +1,5 @@
-import React, { useEffect }from 'react';
+import React, { useEffect, useState }from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import GetApp from '@material-ui/icons/GetApp';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -29,7 +28,6 @@ const DialogBox= withStyles(() => ({
     borderRadius: '0px', 
   }
 }))(Dialog);
-
 
 const GreenButton= withStyles(() => ({
   root: {
@@ -60,7 +58,6 @@ const GreyButton= withStyles(() => ({
     textTransform: 'none',
   }
 }))(Button);
-
 
 const DialogCard =  withStyles(() => ({
   root: {
@@ -131,13 +128,11 @@ const useDialogStyle = makeStyles({
   }
 });
 
+export default function CvDialog({onClose, data, name, open }: {data: CvCellData, onClose:Function, name:string, open:boolean }){
+  const [fileType, setFileType] = useState(".pdf");
+  const [language, setLanguage] = useState("Norsk");
+  const [downloadLink, setDownloadLink] = useState(data.int_pdf);
 
-
-function SimpleDialog({onClose, data, name, open }: {data: CvCellData, onClose:Function, name:string, open:boolean }){
-  const [fileType, setFileType] = React.useState(".pdf");
-  const [language, setLanguage] = React.useState("Norsk");
-  const [downloadLink, setDownloadLink] = React.useState(data.int_pdf);
- 
   useEffect(() => {
       if (fileType === ".pdf"){
         if (language === "Norsk") setDownloadLink(data.no_pdf);
@@ -147,24 +142,21 @@ function SimpleDialog({onClose, data, name, open }: {data: CvCellData, onClose:F
         if (language === "Norsk") setDownloadLink(data.no_word);
         else setDownloadLink(data.int_word); 
       }
-  }, [language,fileType])// eslint-disable-line react-hooks/exhaustive-deps
+  }, [language,fileType, data])
 
-  const handleClose = () => {
-    onClose();
-  };
   const handleLanguageChange = (event:React.ChangeEvent<HTMLInputElement>) => {
     setLanguage(event.target.value);
   };
   const handleFileTypeChange = (event:React.ChangeEvent<HTMLInputElement>) => {
-   setFileType(event.target.value);
+    setFileType(event.target.value);
   };
 
   
   const classes = useDialogStyle();
   return (
-    <DialogBox onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+    <DialogBox onClose={()=>onClose()} aria-labelledby="simple-dialog-title" open={open}>
       <p className = {classes.title}>Last ned CV for {name}</p>
-      <CloseIcon className = {classes.closeIcon} onClick = {handleClose}/>
+      <CloseIcon className = {classes.closeIcon} onClick = {()=>onClose()}/>
       <DialogCard>
         <FormControl component="fieldset">
           <div className = {classes.radioTitle}>Velg filtype</div>
@@ -183,7 +175,7 @@ function SimpleDialog({onClose, data, name, open }: {data: CvCellData, onClose:F
         </FormControl>
       </DialogCard>
       <div className = {classes.buttonLine}>
-        <GreyButton variant="outlined" onClick = {handleClose}>
+        <GreyButton variant="outlined" onClick = {()=>onClose()}>
           Avbryt
         </GreyButton>
         <GreenButton variant="contained" href = {downloadLink}>
@@ -191,26 +183,5 @@ function SimpleDialog({onClose, data, name, open }: {data: CvCellData, onClose:F
         </GreenButton>
       </div>
     </DialogBox>
-  );
-}
-
-
-
-export default function CvDialog({name,data}:{name:string, data:CvCellData}) {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (value:string) => {
-    setOpen(false);
-  };
-
-  return (
-    <div>
-      <GetApp onClick={handleClickOpen}/>
-      <SimpleDialog open={open} onClose={handleClose} name={name} data={data} />
-    </div>
   );
 }
