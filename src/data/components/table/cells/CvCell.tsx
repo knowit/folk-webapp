@@ -1,6 +1,5 @@
-import React from 'react';
-import { Link } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState } from 'react';
+import CvDialog from '../../../../components/CvDialog'
 import GetApp from '@material-ui/icons/GetApp';
 
 interface CvCellData {
@@ -10,22 +9,18 @@ interface CvCellData {
   int_word: string
 }
 
-const useCvCellStyles = makeStyles({
-  linkStyle: {
-    color: '#707070',
-    cursor: 'pointer',
-    textDecoration: 'underline',
-    '& :hover': {
-      color: '#333',
-    },
-  },
-});
-
 export default function CvCell({ data }: {data: CvCellData}) {
-  const classes = useCvCellStyles();
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = (value:string) => {
+    setOpen(false);
+  };
   return (
-    <Link className={classes.linkStyle} title="Last ned CV" href={data.no_pdf}>
-      <GetApp />
-    </Link>
+    <>
+    <GetApp onClick={handleClickOpen}/>
+    <CvDialog open={open} onClose={handleClose} name={"Fornavn Etternavn"} data={data} />
+    </>
   );
 }

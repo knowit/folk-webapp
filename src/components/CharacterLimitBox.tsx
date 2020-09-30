@@ -1,4 +1,4 @@
-import React, {useState, useCallback, Ref} from 'react'
+import React, {useState, useCallback} from 'react'
 import { withStyles} from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -16,7 +16,8 @@ const HtmlTooltip = withStyles((theme) => ({
 }))(Tooltip);
 
   
-function isEllipsisActive(e: HTMLSpanElement):boolean {
+function isEllipsisActive(e: HTMLSpanElement|null):boolean {
+  if (e === null) return false;
   return e.offsetHeight < e.scrollHeight || e.offsetWidth < e.scrollWidth;
 }; 
 
