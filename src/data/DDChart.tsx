@@ -23,7 +23,6 @@ const getChartComponent = (name: string) => {
   }
 };
 
-
 export default function DDChart({ payload, title, props }: DDComponentProps) {
   const { componentType, setNames, sets } = payload as {
     componentType: string;
@@ -40,7 +39,7 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
 
   function fullscreenOrExitIcon(){
     if (big === true){
-      return  <FullscreenExitIcon onClick={() => setBig(false)}  style={{position:'relative', left:'900px'}}/>
+      return  <FullscreenExitIcon onClick={() => setBig(false)}  style={{position:'relative', left:'890px'}}/>
     } else{
       return <FullscreenIcon onClick = {() => setBig(true)} style={{position:'relative', left:'495px'}}/>
     }
