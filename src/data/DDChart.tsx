@@ -28,24 +28,14 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
     componentType: string;
     setNames: string[];
     sets: { [key: string]: any };
-    setBig:boolean;
-    big:boolean;
   };
   const [set, setSet] = useState(setNames[0]);
-  const [big, setBig] = React.useState(false);
+  const [big, setBig] = useState(false);
   const ChartComponent = getChartComponent(componentType) as (
     props: any
   ) => JSX.Element;
 
-  function fullscreenOrExitIcon(){
-    if (big === true){
-      return  <FullscreenExitIcon onClick={() => setBig(false)}  style={{position:'relative', left:'890px'}}/>
-    } else{
-      return <FullscreenIcon onClick = {() => setBig(true)} style={{position:'relative', left:'495px'}}/>
-    }
-  }
-
-  function gridItem(){
+  const GridItem = () => {
     return (
     <>
       <GridItemHeader title={title}>
@@ -55,7 +45,7 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
         />
       </GridItemHeader>
       <GridItemContent>
-        {fullscreenOrExitIcon()}
+        {big? <FullscreenExitIcon onClick={() => setBig(false)}  style={{position:'relative', left:'890px'}}/> :  <FullscreenIcon onClick = {() => setBig(true)} style={{position:'relative', left:'495px'}}/>}
         <ChartComponent data={sets[set]} {...props} />
       </GridItemContent>
     </>
@@ -64,9 +54,9 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
 
   return (
     <>
-    {gridItem()}
+    <GridItem />
     <BigChart open = {big} onClose={()=>setBig(false)}>
-      {gridItem()}
+      <GridItem />
     </BigChart>
     </>
   );
