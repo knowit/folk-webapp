@@ -59,7 +59,6 @@ interface GridItemContentProps {
 
 export function GridItemContent({ children }: GridItemContentProps) {
   const classes = useStyles();
-
   return <div className={classes.gridContentRoot}>{children}</div>;
 }
 
