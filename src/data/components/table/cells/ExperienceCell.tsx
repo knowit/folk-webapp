@@ -96,7 +96,8 @@ function ExperiencePopoverModel({
               <div>{exp.customer}</div>
               <div>{exp.project}</div>
             </div>
-          )):<ErrorText/>}
+          )):<ErrorText/>
+        }
       </div>
       
     </div>
@@ -123,15 +124,20 @@ const useStyles = makeStyles({
 export default function ExperienceCell({ data } : { data: string }) {
   const [showExperienceData, setExperienceData] = React.useState(false);
   const classes = useStyles();
-
   return (
     <>
+      { data === ""?
+       <div title = "Data finnes ikke">-</div> 
+      :
       <Link
         onClick={() => setExperienceData(!showExperienceData)}
         className={classes.triggerLink}
       >
         Se prosjekter
       </Link>
+
+      }
+      
       <Modal
         open={showExperienceData}
         onClose={() => setExperienceData(!showExperienceData)}
