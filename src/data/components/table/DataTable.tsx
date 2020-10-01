@@ -88,7 +88,7 @@ function Row({ rowData, columns }: DataTableRowProps) {
   const [open, setOpen] = useState(false);
   const classes = useRowStyles();
 
-  const DefaultCellComponent = ({ data }: DataTableCellProps) => <>{data}</>;
+  const DefaultCellComponent = ({ data }: DataTableCellProps) => <>{data == null ? <div title="Data ikke funnet">-</div> : data }</>;
 
   const cells = columns.map((column, i) => ({
     data: rowData[i],
@@ -107,7 +107,6 @@ function Row({ rowData, columns }: DataTableRowProps) {
             <TableCell
               key={i}
               className={[classes.cell, classes.expansionCell].join(' ')}
-             
             >
               <div>
                 <div className={[classes.cellExpandable, openStyle].join(' ')} onClick={() => setOpen(!open)}>
@@ -122,6 +121,7 @@ function Row({ rowData, columns }: DataTableRowProps) {
           ) : (
             <TableCell key={i} className={classes.cell}>
               <cell.CellComponent rowData={rowData} {...cell} />
+              {console.log(cell)}
             </TableCell>
           )
         )}
