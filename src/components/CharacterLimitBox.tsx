@@ -37,7 +37,7 @@ export default function CharacterLimitBox({text}: {text: string}){
           >
             <HtmlTooltip title = {text} arrow placement="top" disableHoverListener = {!overflowActive}>
                 <span>
-                  {text}
+                  {text === '-' ? <div title="Data finnes ikke"> {text} </div> : text}
                 </span>
               </HtmlTooltip> 
           </div>
