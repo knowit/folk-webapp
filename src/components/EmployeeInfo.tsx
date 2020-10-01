@@ -125,7 +125,9 @@ export default function EmployeeInfo({
     const firstJob = allExperience?.sort(
       (a, b) => a.year_from - b.year_from
     )[0];
-    return `${2020 - (firstJob ? firstJob?.year_from : 2020)} år`;
+    const yearFromFirstJob = firstJob ? firstJob?.year_from : 2000
+    
+    return yearFromFirstJob<0? <div title="Data ikke funnet">-</div> :`${2020 - yearFromFirstJob} år`;
   };
 
   const startedInKnowit = (allExperience: Experience[] | undefined) => {
@@ -134,7 +136,7 @@ export default function EmployeeInfo({
       x.employer.toLowerCase().includes('objectnet') ||
       x.employer.toLowerCase().includes('know it')
     );
-    return [knowit?.year_from, knowit?.month_from].join('/');
+    return knowit? knowit.year_from > 0? [knowit?.year_from, knowit?.month_from].join('/'): <div title="Data ikke funnet">-</div>:"";
   };
 
   return (
@@ -145,7 +147,7 @@ export default function EmployeeInfo({
         ) : (
           <>
             <b>Hovedkompetanse:</b>{' '}
-            {data?.tags.skills.filter((x) => x).join(', ')}
+            {data?.tags.skills.filter((x) => x).join(', ')? data?.tags.skills.filter((x) => x).join(', ') : <div title="Data ikke funnet">-</div>}
           </>
         )}
       </div>
@@ -154,7 +156,8 @@ export default function EmployeeInfo({
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Roller:</b> {data?.tags.roles.filter((x) => x).join(', ')}
+            <b>Roller:</b>
+            {data?.tags.roles.filter((x) => x).join(', ')? data?.tags.roles.filter((x) => x).join(', ') : <div title="Data ikke funnet">-</div>}
           </>
         )}
       </div>
@@ -163,7 +166,8 @@ export default function EmployeeInfo({
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Startet i Knowit:</b> {startedInKnowit(data?.workExperience)}
+            <b>Startet i Knowit:</b>
+            {startedInKnowit(data?.workExperience)}
           </>
         )}
       </div>
@@ -182,7 +186,8 @@ export default function EmployeeInfo({
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Språk:</b> {data?.tags.languages.filter((x) => x).join(', ')}
+            <b>Språk:</b> 
+            {data?.tags.languages.filter((x) => x).join(', ')? data?.tags.languages.filter((x) => x).join(', ') : <div title="Data ikke funnet">-</div>}
           </>
         )}
       </div>

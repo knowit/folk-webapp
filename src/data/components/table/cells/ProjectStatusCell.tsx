@@ -18,6 +18,6 @@ export default function ProjectStatusCell({ data }: { data: number }) {
   return data > 0 ? (
     <div className={classes.root}>{percentData}</div>
   ) : (
-    <>Ikke i prosjekt</>
+  <>Ikke i prosjekt</>
   );
 }
