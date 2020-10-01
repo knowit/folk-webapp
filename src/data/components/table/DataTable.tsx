@@ -121,7 +121,6 @@ function Row({ rowData, columns }: DataTableRowProps) {
           ) : (
             <TableCell key={i} className={classes.cell}>
               <cell.CellComponent rowData={rowData} {...cell} />
-              {console.log(cell)}
             </TableCell>
           )
         )}
