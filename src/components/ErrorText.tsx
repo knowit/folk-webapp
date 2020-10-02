@@ -11,7 +11,9 @@ const useErrorStyle = makeStyles({
         paddingBottom: 25,
     },
 })
-
+export const NoData = () => (
+    <div title = "Data ikke tilgjengelig">-</div>
+)
 export const ErrorText = () => {
     const classes = useErrorStyle();
     return(

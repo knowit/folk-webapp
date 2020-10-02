@@ -6,7 +6,7 @@ import Fade from '@material-ui/core/Fade';
 import Modal from '@material-ui/core/Modal';
 import { useFetchedData } from '../../../../hooks/service'
 import { Skeleton } from '@material-ui/lab';
-import { ErrorText } from '../../../../components/ErrorText';
+import { ErrorText, NoData } from '../../../../components/ErrorText';
 
 
 interface Experience {
@@ -127,7 +127,7 @@ export default function ExperienceCell({ data } : { data: string }) {
   return (
     <>
       { data === ""?
-       <div title = "Data finnes ikke">-</div> 
+      <NoData/>
       :
       <Link
         onClick={() => setExperienceData(!showExperienceData)}

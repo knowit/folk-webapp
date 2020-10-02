@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import CvDialog from '../../../../components/CvDialog'
 import GetApp from '@material-ui/icons/GetApp';
+import { NoData } from '../../../../components/ErrorText';
 
 interface CvCellData {
   no_pdf: string
@@ -9,7 +10,13 @@ interface CvCellData {
   int_word: string
 }
 
-export default function CvCell({ data }: {data: CvCellData}) {
+export default function CvCell({
+  rowData: [{value:name}],
+  data,
+}: {
+  rowData:[{value:string}]
+  data: CvCellData
+}) {
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -17,10 +24,12 @@ export default function CvCell({ data }: {data: CvCellData}) {
   const handleClose = (value:string) => {
     setOpen(false);
   };
-  return (
+  return data?(
     <>
     <GetApp onClick={handleClickOpen}/>
-    <CvDialog open={open} onClose={handleClose} name={"Fornavn Etternavn"} data={data} />
+    <CvDialog open={open} onClose={handleClose} name={name} data={data} />
     </>
-  );
+  ):
+  <NoData/>
+  ;
 }

@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CharacterLimitBox from './CharacterLimitBox';
 import { useFetchedData } from '../hooks/service';
 import { Skeleton } from '@material-ui/lab';
+import { NoData } from './ErrorText';
 
 type Experience = {
   employer: string;
@@ -79,18 +80,21 @@ function CompetenceMapping({
   return (
     <div className={classes.root}>
       <div>
-        {competencesList.map((competence, i) => (
+        {competencesList.length > 0
+        ?competencesList.map((competence, i) => (
           <div key={i}>
             <CharacterLimitBox text={competence}/>
           </div>
-        ))}
+        ))
+        : <div key={1}>
+            <NoData/>
+          </div>
+        }
       </div>
       <div className={classes.gradient}>
-        {competencesList.length > 0
-          ? ['Uinteressert', 'Tja', 'Interessert'].map((level, i) => (
+        {['Uinteressert', 'Tja', 'Interessert'].map((level, i) => (
               <div key={i}>{level}</div>
-            ))
-          : null}
+        ))}
       </div>
     </div>
   );
@@ -127,7 +131,7 @@ export default function EmployeeInfo({
     )[0];
     const yearFromFirstJob = firstJob ? firstJob?.year_from : 2000
     
-    return yearFromFirstJob<0? <div title="Data ikke funnet">-</div> :`${2020 - yearFromFirstJob} år`;
+    return yearFromFirstJob<0? <NoData/>:`${2020 - yearFromFirstJob} år`;
   };
 
   const startedInKnowit = (allExperience: Experience[] | undefined) => {
@@ -136,7 +140,7 @@ export default function EmployeeInfo({
       x.employer.toLowerCase().includes('objectnet') ||
       x.employer.toLowerCase().includes('know it')
     );
-    return knowit? knowit.year_from > 0? [knowit?.year_from, knowit?.month_from].join('/'): <div title="Data ikke funnet">-</div>:"";
+    return knowit? knowit.year_from > 0? [knowit?.year_from, knowit?.month_from].join('/'): <NoData/>:"";
   };
 
   return (
@@ -147,7 +151,7 @@ export default function EmployeeInfo({
         ) : (
           <>
             <b>Hovedkompetanse:</b>{' '}
-            {data?.tags.skills.filter((x) => x).join(', ')? data?.tags.skills.filter((x) => x).join(', ') : <div title="Data ikke funnet">-</div>}
+            {data?.tags.skills.filter((x) => x).join(', ')? data?.tags.skills.filter((x) => x).join(', ') :<NoData/>}
           </>
         )}
       </div>
@@ -157,7 +161,7 @@ export default function EmployeeInfo({
         ) : (
           <>
             <b>Roller:</b>
-            {data?.tags.roles.filter((x) => x).join(', ')? data?.tags.roles.filter((x) => x).join(', ') : <div title="Data ikke funnet">-</div>}
+            {data?.tags.roles.filter((x) => x).join(', ')? data?.tags.roles.filter((x) => x).join(', ') : <NoData/>}
           </>
         )}
       </div>
@@ -187,7 +191,7 @@ export default function EmployeeInfo({
         ) : (
           <>
             <b>Språk:</b> 
-            {data?.tags.languages.filter((x) => x).join(', ')? data?.tags.languages.filter((x) => x).join(', ') : <div title="Data ikke funnet">-</div>}
+            {data?.tags.languages.filter((x) => x).join(', ')? data?.tags.languages.filter((x) => x).join(', ') : <NoData/>}
           </>
         )}
       </div>

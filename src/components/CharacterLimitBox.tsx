@@ -1,6 +1,7 @@
 import React, {useState, useCallback} from 'react'
 import { withStyles} from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
+import { NoData } from './ErrorText';
 
 
 const HtmlTooltip = withStyles((theme) => ({
@@ -37,7 +38,7 @@ export default function CharacterLimitBox({text}: {text: string}){
           >
             <HtmlTooltip title = {text} arrow placement="top" disableHoverListener = {!overflowActive}>
                 <span>
-                  {text === '-' ? <div title="Data finnes ikke"> {text} </div> : text}
+                  {text === '-' ? <NoData/> : text}
                 </span>
               </HtmlTooltip> 
           </div>
