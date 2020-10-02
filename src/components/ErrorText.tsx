@@ -6,10 +6,21 @@ const useErrorStyle = makeStyles({
         color: "#802826",
         width: '100%',
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection:'column',
+        justifyContent: 'center',
         alignItems: 'center',
-        paddingBottom: 25,
+        height:280,
+        
     },
+    titleText:{
+        fontSize: '18px',
+        fontWeight: 'bold',
+        lineHeight: 1.28,
+    },
+    text:{
+        fontSize: '16px',
+        lineHeight: 1.5,
+    }
 })
 export const NoData = () => (
     <div title = "Data ikke tilgjengelig">-</div>
@@ -18,8 +29,8 @@ export const ErrorText = () => {
     const classes = useErrorStyle();
     return(
         <div className ={classes.root}>
-            <h2> Oida, en feil har oppstått</h2>
-            <div> Data kan ikke vises for dette valget</div>
+            <div className ={classes.titleText}> Oida, en feil har oppstått</div>
+            <div className ={classes.text}> Data kan ikke vises for dette valget</div>
         </div>
     );
 }
