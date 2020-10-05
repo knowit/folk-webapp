@@ -68,7 +68,6 @@ function ExperiencePopoverModel({
   url: string,
   onClose: () => void
 }) {
-  url = 'feilUrl.org';
   const classes = useModalStyles();
   const [userInfo, pending] = useFetchedData<ExperienceData>({ url });
 
@@ -90,7 +89,7 @@ function ExperiencePopoverModel({
       <div className={classes.content}>
         {pending 
           ? <Skeleton variant="rect" height={320} animation="wave" />  
-          : userInfo? userInfo?.experience.map(exp => (
+          : userInfo?.experience? userInfo?.experience.map(exp => (
             <div>
               <h4>{exp.time_from} - {exp.time_to}</h4>
               <div>{exp.customer}</div>
@@ -126,7 +125,7 @@ export default function ExperienceCell({ data } : { data: string }) {
   const classes = useStyles();
   return (
     <>
-      { data === ""?
+      { data?
       <NoData/>
       :
       <Link

@@ -93,7 +93,7 @@ function CompetenceMapping({
       </div>
       <div className={classes.gradient}>
         {['Uinteressert', 'Tja', 'Interessert'].map((level, i) => (
-              <div key={i}>{level}</div>
+          <div key={i}>{level}</div>
         ))}
       </div>
     </div>
@@ -129,9 +129,8 @@ export default function EmployeeInfo({
     const firstJob = allExperience?.sort(
       (a, b) => a.year_from - b.year_from
     )[0];
-    const yearFromFirstJob = firstJob ? firstJob?.year_from : 2000
     
-    return yearFromFirstJob<0? <NoData/>:`${2020 - yearFromFirstJob} år`;
+    return firstJob?.year_from === undefined || firstJob?.year_from <0 ? <NoData/> :`${new Date().getFullYear() - firstJob?.year_from} år`;
   };
 
   const startedInKnowit = (allExperience: Experience[] | undefined) => {
@@ -140,9 +139,8 @@ export default function EmployeeInfo({
       x.employer.toLowerCase().includes('objectnet') ||
       x.employer.toLowerCase().includes('know it')
     );
-    return knowit? knowit.year_from > 0? [knowit?.year_from, knowit?.month_from].join('/'): <NoData/>:"";
+    return knowit === undefined || knowit.year_from < 0? <NoData/> : [knowit?.year_from, knowit?.month_from].join('/');
   };
-
   return (
     <div className={classes.root}>
       <div className={classes.cell}>
@@ -151,7 +149,7 @@ export default function EmployeeInfo({
         ) : (
           <>
             <b>Hovedkompetanse:</b>{' '}
-            {data?.tags.skills.filter((x) => x).join(', ')? data?.tags.skills.filter((x) => x).join(', ') :<NoData/>}
+            {data?.tags.skills? data?.tags.skills.filter((x) => x).join(', ') :<NoData/>}
           </>
         )}
       </div>
@@ -161,7 +159,7 @@ export default function EmployeeInfo({
         ) : (
           <>
             <b>Roller:</b>
-            {data?.tags.roles.filter((x) => x).join(', ')? data?.tags.roles.filter((x) => x).join(', ') : <NoData/>}
+            {data?.tags.roles? Array.from(new Set(data?.tags.roles)).filter((x) => x).join(', ') : <NoData/>}
           </>
         )}
       </div>
@@ -191,7 +189,7 @@ export default function EmployeeInfo({
         ) : (
           <>
             <b>Språk:</b> 
-            {data?.tags.languages.filter((x) => x).join(', ')? data?.tags.languages.filter((x) => x).join(', ') : <NoData/>}
+            {data?.tags.languages? data?.tags.languages.filter((x) => x).join(', ') : <NoData/>}
           </>
         )}
       </div>
