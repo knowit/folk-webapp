@@ -9,6 +9,7 @@ import { DDComponentProps } from './DDItem'
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import {BigChart} from '../components/BigChart';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
+import { ErrorText } from '../components/ErrorText';
 
 const getChartComponent = (name: string) => {
   switch (name) {
@@ -44,10 +45,13 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
           onChange={(newValue) => setSet(newValue)}
         />
       </GridItemHeader>
-      <GridItemContent>
-        {big? <FullscreenExitIcon onClick={() => setBig(false)}  style={{position:'relative', left:'890px'}}/> :  <FullscreenIcon onClick = {() => setBig(true)} style={{position:'relative', left:'495px'}}/>}
-        <ChartComponent data={sets[set]} {...props} />
-      </GridItemContent>
+      {sets[set]
+      ? <GridItemContent>
+          {big? <FullscreenExitIcon onClick={() => setBig(false)}  style={{position:'relative', left:'890px'}}/> :  <FullscreenIcon onClick = {() => setBig(true)} style={{position:'relative', left:'495px'}}/>}
+          <ChartComponent data={sets[set]} {...props} />
+        </GridItemContent>
+      :<ErrorText/>
+      }
     </>
     );
   }

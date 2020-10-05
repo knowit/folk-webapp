@@ -27,9 +27,13 @@ export default function ConsultantCell({
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Avatar alt={data.value} className={classes.image} /*src={data.image}*/>
-        <FallbackUserIcon className={classes.image} />
-      </Avatar>
+      {data.image? 
+        <Avatar alt={data.value} className={classes.image} src={data.image}></Avatar>
+      :
+        <Avatar alt={data.value} className={classes.image}>
+          <FallbackUserIcon className={classes.image} />
+        </Avatar>
+      }
       <span className={classes.text}>
         <CharacterLimitBox text={data.value} />
       </span>

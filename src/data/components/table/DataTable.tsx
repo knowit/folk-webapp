@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { NoData } from '../../../components/ErrorText';
 
 interface DataTableColumn {
   title: string;
@@ -88,7 +89,7 @@ function Row({ rowData, columns }: DataTableRowProps) {
   const [open, setOpen] = useState(false);
   const classes = useRowStyles();
 
-  const DefaultCellComponent = ({ data }: DataTableCellProps) => <>{data}</>;
+  const DefaultCellComponent = ({ data }: DataTableCellProps) => <>{data == null ? <NoData/> : data }</>;
 
   const cells = columns.map((column, i) => ({
     data: rowData[i],
@@ -107,7 +108,6 @@ function Row({ rowData, columns }: DataTableRowProps) {
             <TableCell
               key={i}
               className={[classes.cell, classes.expansionCell].join(' ')}
-             
             >
               <div>
                 <div className={[classes.cellExpandable, openStyle].join(' ')} onClick={() => setOpen(!open)}>

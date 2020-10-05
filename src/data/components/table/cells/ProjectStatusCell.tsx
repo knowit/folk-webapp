@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { NoData } from '../../../../components/ErrorText';
 
 const useProjectStatusStyles = makeStyles({
   root: ({ percentData }: { percentData: string }) => ({
@@ -18,6 +19,6 @@ export default function ProjectStatusCell({ data }: { data: number }) {
   return data > 0 ? (
     <div className={classes.root}>{percentData}</div>
   ) : (
-    <>Ikke i prosjekt</>
+  <NoData/>
   );
 }

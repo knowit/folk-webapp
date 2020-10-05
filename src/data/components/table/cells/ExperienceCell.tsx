@@ -6,6 +6,7 @@ import Fade from '@material-ui/core/Fade';
 import Modal from '@material-ui/core/Modal';
 import { useFetchedData } from '../../../../hooks/service'
 import { Skeleton } from '@material-ui/lab';
+import { ErrorText, NoData } from '../../../../components/ErrorText';
 
 
 interface Experience {
@@ -88,13 +89,14 @@ function ExperiencePopoverModel({
       <div className={classes.content}>
         {pending 
           ? <Skeleton variant="rect" height={320} animation="wave" />  
-          : userInfo?.experience.map(exp => (
+          : userInfo?.experience? userInfo?.experience.map(exp => (
             <div>
               <h4>{exp.time_from} - {exp.time_to}</h4>
               <div>{exp.customer}</div>
               <div>{exp.project}</div>
             </div>
-          ))}
+          )):<ErrorText/>
+        }
       </div>
       
     </div>
@@ -121,15 +123,20 @@ const useStyles = makeStyles({
 export default function ExperienceCell({ data } : { data: string }) {
   const [showExperienceData, setExperienceData] = React.useState(false);
   const classes = useStyles();
-
   return (
     <>
+      { data?
+      <NoData/>
+      :
       <Link
         onClick={() => setExperienceData(!showExperienceData)}
         className={classes.triggerLink}
       >
         Se prosjekter
       </Link>
+
+      }
+      
       <Modal
         open={showExperienceData}
         onClose={() => setExperienceData(!showExperienceData)}
