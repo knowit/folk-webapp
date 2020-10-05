@@ -49,6 +49,7 @@ const useRowStyles = makeStyles({
     '& > *': {
       borderBottom: 'unset',
     },
+    cursor: 'default',
   },
   row: {
     height: '70px',
