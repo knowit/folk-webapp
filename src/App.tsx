@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Content from './components/Content';
 import Footer from './components/Footer';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { BrowserRouter } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,11 +28,13 @@ export default function App() {
 
   return (
     <div className={classes.container}>
-      <Header />
-      <div className={classes.contentContainer}>
-        <Content />
-        <Footer />
-      </div>
+      <BrowserRouter>
+        <Header />
+        <div className={classes.contentContainer}>
+          <Content />
+          <Footer />
+        </div>
+      </BrowserRouter>
     </div>
   );
 }
