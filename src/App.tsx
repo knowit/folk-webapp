@@ -28,13 +28,13 @@ export default function App() {
 
   return (
     <div className={classes.container}>
-      <BrowserRouter>
-        <Header />
-        <div className={classes.contentContainer}>
+      <Header />
+      <div className={classes.contentContainer}>
+        <BrowserRouter>
           <Content />
-          <Footer />
-        </div>
-      </BrowserRouter>
+        </BrowserRouter>
+        <Footer />
+      </div>
     </div>
   );
 }
