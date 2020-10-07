@@ -2,6 +2,7 @@
 import React from 'react'; 
 import { render, screen } from '@testing-library/react'; 
 import Header from './Header'; // component to test
+import { BrowserRouter } from 'react-router-dom';
 
 const links = [
   { text: 'Ansatte', location: "/ansatte" },
@@ -15,7 +16,7 @@ const links = [
 test.each(links)(
   "Check if Nav Bar have %s link.",
   (link) => {
-    render(<Header />);
+    render(<BrowserRouter><Header /></BrowserRouter>);
     //Ensure the text is in the dom, will throw error it can't find
     const linkDom = screen.getByText(link.text); 
 		
@@ -24,7 +25,7 @@ test.each(links)(
   }
 );
 test('Check if have logo and link to home page', () => {
-    render(<Header />);
+    render(<BrowserRouter><Header /></BrowserRouter>);
     // get by TestId define in the navBar
     const logoDom = screen.getByTestId(/knowit-logo/); 
     // check the link location

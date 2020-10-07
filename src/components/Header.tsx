@@ -46,7 +46,6 @@ export default function Header() {
     <div className={classes.root}>
       <AppBar className={classes.appbar} position={'relative'}>
         <Toolbar className={classes.toolbar}>
-        <BrowserRouter>
           <Link data-testid="knowit-logo" to="/" ><KnowitLogo title= "knowit-logo" className={classes.logo} /></Link>
           <NavMenu>
             <NavMenuItem label="Ansatte" to="/ansatte" />
@@ -63,7 +62,6 @@ export default function Header() {
           >
             <FallbackUserIcon />
           </Avatar>
-          </BrowserRouter>
         </Toolbar>
       </AppBar>
     </div>

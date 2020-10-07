@@ -30,9 +30,7 @@ export default function App() {
     <div className={classes.container}>
       <Header />
       <div className={classes.contentContainer}>
-        <BrowserRouter>
-          <Content />
-        </BrowserRouter>
+        <Content />
         <Footer />
       </div>
     </div>
