@@ -1,16 +1,14 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
+import ReactDOM from 'react-dom';
 
-test('renders Ansatte link', async () => {
-  render(
+
+it("renders without crashing", () =>{
+  const div = document.createElement("div");
+  ReactDOM.render(
     <BrowserRouter>
       <App />
-    </BrowserRouter>
-  );
-  await waitFor(() => {
-    const linkElement = screen.getByText(/Ansatte/i); //Premade test; Changed from "/Hello World/i" to "/Ansatte/i" as there is no text with "Hello World" in the document
-    expect(linkElement).toBeInTheDocument();
-  });
-});
+    </BrowserRouter>,div)
+})
+
