@@ -5,7 +5,7 @@ import { NavMenu, NavMenuItem } from './NavMenu';
 import { useUserInfo } from '../LoginProvider';
 import { ReactComponent as KnowitLogo } from '../assets/logo.svg';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
-import { BrowserRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
