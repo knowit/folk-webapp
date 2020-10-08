@@ -3,6 +3,17 @@ import React from 'react';
 import { render, screen } from '@testing-library/react'; 
 import Header from './Header'; // component to test
 import { BrowserRouter } from 'react-router-dom';
+import ReactDOM from 'react-dom';
+import { useUserInfo } from '../LoginProvider';
+
+const loginProviderMock = require('../LoginProvider');
+const fakeUser = {name: "User Name", image: "fallback_user.svg"}
+loginProviderMock.useUserInfo = jest.fn(()=>{return fakeUser});
+
+it("renders without crashing", () =>{
+  const div = document.createElement("div");
+  ReactDOM.render(<BrowserRouter><Header /></BrowserRouter>,div)
+})
 
 const links = [
   { text: 'Ansatte', location: "/ansatte" },
@@ -24,6 +35,7 @@ test.each(links)(
     expect(linkDom).toHaveAttribute("href", link.location);
   }
 );
+
 test('Check if have logo and link to home page', () => {
     render(<BrowserRouter><Header /></BrowserRouter>);
     // get by TestId define in the navBar
@@ -33,3 +45,13 @@ test('Check if have logo and link to home page', () => {
     //check the logo image
   expect(screen.getByTitle(/knowit-logo/)).toBeInTheDocument(); 
 });
+
+describe("Header gets userInfo", () => {
+  test("uses useUserInfo function", () =>{
+    expect(useUserInfo).toHaveBeenCalled();
+  })
+  test('Check that userinfo is rendered correctly', () => {
+    render(<BrowserRouter><Header /></BrowserRouter>);
+    expect(screen.getByText(fakeUser.image)).toBeInTheDocument()
+  });
+})
