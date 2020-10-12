@@ -131,6 +131,22 @@ function Row({ rowData, columns }: DataTableRowProps) {
   );
 }
 
+
+function EmptyRow({
+  emptyText = 'Ingen resultater',
+  colSpan = 4
+}) {
+  const rowClasses = useRowStyles();
+
+  return (
+    <TableRow className={`${rowClasses.root} ${rowClasses.row}`}>
+      <TableCell className={rowClasses.cell} align="center" colSpan={colSpan}>
+        {emptyText}
+      </TableCell>
+    </TableRow>
+  )
+}
+
 function HeaderRow({ columns }: DataTableHeaderRowProps) {
   const rowClasses = useRowStyles();
 
@@ -207,9 +223,11 @@ export default function DataTable({ columns, rows }: DataTableProps) {
           <HeaderRow columns={columns} />
         </TableHead>
         <TableBody className={tableClasses.tableBody}>
-          {rows.map((row, i) => (
-            <Row key={i} {...row} columns={columns} />
-          ))}
+          {rows.length > 0 ? (
+            rows.map((row, i) => (
+              <Row key={i} {...row} columns={columns} />
+            ))
+          ) : <EmptyRow colSpan={columns.length}/>}
         </TableBody>
       </Table>
     </TableContainer>

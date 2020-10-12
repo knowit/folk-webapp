@@ -68,6 +68,8 @@ export default function Employee() {
             {
               title: 'Konsulent',
               expandable: true,
+              searchable: true,
+              searchKey: 'value',
               renderCell: ConsultantCell,
               renderExpanded: EmployeeInfo,
               headerRenderCell: CheckBoxHeaderCell,
