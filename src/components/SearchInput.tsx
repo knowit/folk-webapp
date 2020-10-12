@@ -2,6 +2,7 @@ import React from 'react';
 import { InputBase, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles } from '@material-ui/core/styles';
+import {theme} from '../index'
 
 interface SearchInputProps {
   onChange?: (newValue: string) => void;
@@ -29,7 +30,7 @@ export default function SearchInput({
       onChange={({ target: { value } }) => onChange(value)}
       endAdornment={
         <InputAdornment position="end">
-          <SearchIcon />
+          <SearchIcon style={{color: theme.palette.primary.main}}/>
         </InputAdornment>
       }
     />
