@@ -47,7 +47,7 @@ export default function CheckBoxHeaderCell({
       {title}
       <FormControlLabel
         className={classes.label}
-        control={<BlackCheckBox onChange={checkBoxChangeHandler} />}
+        control={<BlackCheckBox onChange={checkBoxChangeHandler} disabled />}
         label={checkBoxLabel}
       />
     </div>
