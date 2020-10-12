@@ -17,19 +17,6 @@ const getSecret = (name, { encrypted = false } = {}) => {
   });
 };
 
-const pageable = (sql, page = 1, steps = 20) => {
-  const start = steps * (page - 1);
-  const end = steps * page;
-
-  return `
-    SELECT * FROM (
-      SELECT row_number() over() AS rn, *
-      FROM (${sql})
-    )
-    WHERE rn BETWEEN ${start} AND ${end};
-  `;
-};
-
 const makeEmailUuid = (email, salt) => {
   const hmac = crypto.createHmac('sha256', salt);
   hmac.update(email);
@@ -45,17 +32,10 @@ const makeEmailUuid = (email, salt) => {
 };
 
 exports.projectStatus = async ({
-  dataplattformClient,
-  queryStringParameters: { page = 1, nameSearch = null } = {},
+  dataplattformClient
 }) => {
-  const req = await dataplattformClient.query({
-    querySql: pageable(
-      `
-        select user_id, navn, title, email from cv_partner_employees 
-        ${nameSearch ? `where lower(navn) like '%${nameSearch}%'` : ''}
-      `,
-      page
-    ),
+  const req = await dataplattformClient.report({
+    reportName: 'projectStatus'
   });
   const allEmployees = await req.json();
 
@@ -76,33 +56,10 @@ exports.projectStatus = async ({
 };
 
 exports.competence = async ({
-  dataplattformClient,
-  queryStringParameters: { page = 1, nameSearch = null } = {},
+  dataplattformClient
 }) => {
-  const req = await dataplattformClient.query({
-    querySql: pageable(
-      `
-      with latest_grad_year AS 
-          (SELECT user_id,
-              max(year_to) AS max_year_to
-          FROM cv_partner_education
-          GROUP BY user_id)
-      SELECT employee.user_id,
-              navn,
-              title,
-              link,
-              degree,
-              email
-      FROM cv_partner_employees AS employee
-      LEFT JOIN cv_partner_education AS education
-          ON employee.user_id = education.user_id
-      LEFT JOIN latest_grad_year
-          ON employee.user_id = latest_grad_year.user_id
-      WHERE education.year_to = latest_grad_year.max_year_to
-      ${nameSearch ? `and lower(navn) like '%${nameSearch}%'` : ''}
-    `,
-      page
-    ),
+  const req = await dataplattformClient.report({
+    reportName: 'competence'
   });
   const allEmployees = await req.json();
 
@@ -138,20 +95,11 @@ exports.employeeExperience = async ({
   dataplattformClient,
   queryStringParameters: { user_id } = {},
 }) => {
-  const req = await dataplattformClient.query({
-    querySql: `
-      SELECT navn,
-        customer,
-        description,
-        year_from,
-        year_to,
-        month_from,
-        month_to
-      FROM cv_partner_project_experience AS exp
-      JOIN (SELECT user_id, navn FROM cv_partner_employees) emp
-      ON exp.user_id = emp.user_id
-      WHERE exp.user_id = '${user_id}'
-    `,
+  const req = await dataplattformClient.report({
+    reportName: 'projectExperience',
+    filter: {
+      'user_id': user_id
+    }
   });
   const empExperience = await req.json();
   const formatTime = (year, month) =>
@@ -179,54 +127,30 @@ exports.employeeCompetanse = async ({
     encrypted: true,
   });
   const uuid = makeEmailUuid(email, salt);
+  const emailMapReq = await dataplattformClient.report({
+    reportName: 'cvPartnerMailMap',
+    filter: { email }
+  });
+  const emailMap = await emailMapReq.json();
 
   const [reqComp, reqSkills, reqEmp] = await Promise.all([
-    dataplattformClient.query({
-      querySql: `select * from kompetansekartlegging where uuid = '${uuid}'`,
+    dataplattformClient.report({
+      reportName: 'kompetansekartlegging',
+      filter: {
+        'uuid': uuid
+      }
     }),
-    dataplattformClient.query({
-      querySql: `
-      SELECT array_join(language, ';', '') AS language, 
-            array_join(skill, ';', '') AS skill, 
-            array_join(role, ';', '') AS role
-      FROM 
-        (SELECT DISTINCT user_id
-        FROM cv_partner_employees
-        WHERE email = '${email}') AS employee
-      INNER JOIN 
-        (SELECT user_id,
-              array_distinct(array_agg(name)) AS language
-        FROM cv_partner_languages
-        GROUP BY  user_id) AS langs
-        ON langs.user_id = employee.user_id
-      INNER JOIN 
-        (SELECT DISTINCT user_id,
-              array_distinct(array_agg(category)) AS skill
-        FROM cv_partner_technology_skills
-        WHERE technology_skills != ''
-                AND category != ''
-        GROUP BY  user_id ) AS skills
-        ON skills.user_id = employee.user_id
-      INNER JOIN 
-        (SELECT DISTINCT user_id,
-              array_distinct(array_agg(roles)) AS role
-        FROM cv_partner_project_experience
-        WHERE roles != ''
-        GROUP BY  user_id ) AS roles
-        ON roles.user_id = employee.user_id
-      `,
+    dataplattformClient.report({
+      reportName: 'employeeSkills',
+      filter: {
+        'user_id': emailMap[0].user_id
+      }
     }),
-    dataplattformClient.query({
-      querySql: `
-        SELECT DISTINCT employer,
-              month_from,
-              year_from
-        FROM cv_partner_work_experience
-        WHERE user_id = 
-          (SELECT DISTINCT user_id
-          FROM cv_partner_employees
-          WHERE email = '${email}')
-      `,
+    dataplattformClient.report({
+      reportName: 'workExperience',
+      filter: {
+        'user_id': emailMap[0].user_id
+      }
     }),
   ]);
   const [resComp, resSkills, resEmp] = await Promise.all([
