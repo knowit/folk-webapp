@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'sticky',
       zIndex: 1100,
       backgroundColor: 'white',
-      paddingTop: '30px',
     },
     appbar: {
       height: '79px',
