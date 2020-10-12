@@ -125,7 +125,7 @@ export default function ExperienceCell({ data } : { data: string }) {
   const classes = useStyles();
   return (
     <>
-      { data?
+      { !data ?
       <NoData/>
       :
       <Link
