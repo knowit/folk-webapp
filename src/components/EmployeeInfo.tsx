@@ -124,12 +124,12 @@ export default function EmployeeInfo({
 }) {
   const classes = useStyles();
   const [data, pending] = useFetchedData<EmployeeInfoData>({ url });
-
+  console.log(data);
+  console.log(pending);
   const totalExperience = (allExperience: Experience[] | undefined) => {
     const firstJob = allExperience?.sort(
       (a, b) => a.year_from - b.year_from
     )[0];
-    
     return firstJob?.year_from === undefined || firstJob?.year_from <0 ? <NoData/> :`${new Date().getFullYear() - firstJob?.year_from} år`;
   };
 
