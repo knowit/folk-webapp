@@ -28,4 +28,29 @@ exports.DataplattformClient = class DataplattformClient {
             })
         });
     }
+
+    async report({
+        reportName,
+        filter = {},
+        accessToken = null,
+        apiUrl = null
+    }) {
+
+        const filters = Object.entries(filter).map(([key, value]) => {
+            const val = typeof(value) === 'string' ? `'${value}'` : value
+            return `filter=${key}:${val}`
+        })
+        const filterString = filters.length > 0 
+            ? `?${filters.join('&')}`
+            : ''
+
+        const reportUrl = `${apiUrl || this.apiUrl}/data/query/report/${reportName}${filterString}`
+
+        return await fetch(reportUrl, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${accessToken || this.accessToken}`,
+            }
+        });
+    }
 }
