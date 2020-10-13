@@ -1,0 +1,27 @@
+
+name: Knowit Folk Frontend
+
+on: 
+  push:
+    branches:
+      - master
+  pull_request: 
+    paths: 
+      - '*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up node 12
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+      - name: Install dependencies
+        run: yarn install
+      - name: Run tests
+        run: yarn test --ci --all 
+      - name: Check build
+        run: yarn build
+  
