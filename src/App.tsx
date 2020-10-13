@@ -3,7 +3,6 @@ import Header from './components/Header';
 import Content from './components/Content';
 import Footer from './components/Footer';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import {theme} from './index'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 export default function App() {
-  const classes = useStyles(theme);
+  const classes = useStyles();
   return (
     <div className={classes.container}>
       <Header />

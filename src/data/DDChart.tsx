@@ -9,8 +9,7 @@ import { DDComponentProps } from './DDItem'
 import {Fullscreen, FullscreenExit} from '@material-ui/icons';
 import {BigChart} from '../components/BigChart';
 import { ErrorText } from '../components/ErrorText';
-import { withStyles } from '@material-ui/core';
-import {theme} from '../index';
+import { Theme, withStyles } from '@material-ui/core';
 
 const getChartComponent = (name: string) => {
   switch (name) {
@@ -25,7 +24,7 @@ const getChartComponent = (name: string) => {
   }
 };
 
-const LargerIcon = withStyles(() => ({
+const LargerIcon = withStyles((theme:Theme) => ({
   root: {
     height: '35px',
     width: '35px',
@@ -36,7 +35,7 @@ const LargerIcon = withStyles(() => ({
   },
 }))(Fullscreen)
 
-const SmallerIcon = withStyles(() => ({
+const SmallerIcon = withStyles((theme:Theme) => ({
   root: {
     height: '45px',
     width: '45px',

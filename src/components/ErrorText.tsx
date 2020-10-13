@@ -1,6 +1,5 @@
 import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import {theme} from '../../src/index'
 
 const useErrorStyle = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,7 +29,7 @@ export const NoData = () => (
     <div title = "Data ikke tilgjengelig">-</div>
 )
 export const ErrorText = () => {
-    const classes = useErrorStyle(theme);
+    const classes = useErrorStyle();
 
     return(
         <div className ={classes.root}>
