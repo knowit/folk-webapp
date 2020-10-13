@@ -50,7 +50,7 @@ exports.projectStatus = async ({
       },
       employee.title,
       0,
-      { value: null, status: 'green' },
+      { value: null, status: null },
     ],
   }));
 };
@@ -127,30 +127,19 @@ exports.employeeCompetanse = async ({
     encrypted: true,
   });
   const uuid = makeEmailUuid(email, salt);
-  const emailMapReq = await dataplattformClient.report({
-    reportName: 'cvPartnerMailMap',
-    filter: { email }
-  });
-  const emailMap = await emailMapReq.json();
 
   const [reqComp, reqSkills, reqEmp] = await Promise.all([
     dataplattformClient.report({
       reportName: 'kompetansekartlegging',
-      filter: {
-        'uuid': uuid
-      }
+      filter: { uuid }
     }),
     dataplattformClient.report({
       reportName: 'employeeSkills',
-      filter: {
-        'user_id': emailMap[0].user_id
-      }
+      filter: { email }
     }),
     dataplattformClient.report({
       reportName: 'workExperience',
-      filter: {
-        'user_id': emailMap[0].user_id
-      }
+      filter: { email }
     }),
   ]);
   const [resComp, resSkills, resEmp] = await Promise.all([

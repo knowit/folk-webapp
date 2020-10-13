@@ -38,7 +38,7 @@ exports.DataplattformClient = class DataplattformClient {
 
         const filters = Object.entries(filter).map(([key, value]) => {
             const val = typeof(value) === 'string' ? `'${value}'` : value
-            return `filter=${key}:${val}`
+            return `filter=${encodeURIComponent(key)}:${encodeURIComponent(val)}`
         })
         const filterString = filters.length > 0 
             ? `?${filters.join('&')}`
