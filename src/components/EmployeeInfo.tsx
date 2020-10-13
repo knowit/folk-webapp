@@ -124,8 +124,6 @@ export default function EmployeeInfo({
 }) {
   const classes = useStyles();
   const [data, pending] = useFetchedData<EmployeeInfoData>({ url });
-  console.log(data);
-  console.log(pending);
   const totalExperience = (allExperience: Experience[] | undefined) => {
     const firstJob = allExperience?.sort(
       (a, b) => a.year_from - b.year_from
