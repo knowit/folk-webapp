@@ -16,7 +16,7 @@ export default function Employee() {
     <Skeleton variant="rect" height={780} animation="wave" />
   );
   const ChartSkeleton = () => (
-    <Skeleton variant="rect" height={280} animation="wave" />
+    <Skeleton variant="rect" height={320} animation="wave" />
   );
 
   return (
@@ -26,9 +26,7 @@ export default function Employee() {
         title={'På vei inn'}
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
-        dataComponentProps={{
-          yLabels: ['y1', 'y2'],
-        }}
+        dataComponentProps={{}}
       />
 
       <DDItem
@@ -36,9 +34,7 @@ export default function Employee() {
         title={'På vei ut'}
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
-        dataComponentProps={{
-          yLabels: ['y1', 'y2'],
-        }}
+        dataComponentProps={{}}
       />
 
       <DDItem
@@ -46,9 +42,7 @@ export default function Employee() {
         title={'Erfaringsnivå'}
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
-        dataComponentProps={{
-          yLabels: ['a', 'a', 'c'],
-        }}
+        dataComponentProps={{ }}
       />
 
       <DDItem
@@ -59,7 +53,7 @@ export default function Employee() {
       /> 
 
       <DDItem
-        url={'/api/data/projectStatus?page=1'}
+        url={'/api/data/projectStatus'}
         title={'Prosjektstatus'}
         fullSize={true}
         Component={DDTable}

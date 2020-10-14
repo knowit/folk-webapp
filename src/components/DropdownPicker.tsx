@@ -74,7 +74,7 @@ export default function DropdownPicker({
     measureTextWidth(
       values
         .map((x) => getDisplayValue(x))
-        .reduce((prev, next) => (prev.length > next.length ? prev : next)),
+        .reduce((prev, next) => (prev.length > next.length ? prev : next), ''),
       '16pt arial'
     ) + 46;
   const classes = useStyles({ width });
@@ -90,7 +90,7 @@ export default function DropdownPicker({
       autoWidth={true}
       onChange={({ target: { value } }) => onChange(value)}
       input={<InputBase />}
-      defaultValue={getDisplayValue(values[0])}
+      defaultValue={getDisplayValue(values.length > 0 ? values[0] : '')}
       inputProps={{
         className: classes.input,
       }}

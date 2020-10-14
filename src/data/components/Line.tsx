@@ -16,17 +16,18 @@ type LineChartsData = { [chartLabel: string]: number | string } & {
 
 interface LineChartsProps {
   yLabels: string[];
+  dataKey: string;
   data: LineChartsData[];
 }
 
 const strokeColors = ['#a3a1fb', '#56d9fe', '#74e2b7', '#f2efa0'];
 
-export default function Line({ yLabels, data }: LineChartsProps) {
+export default function Line({ yLabels, data, dataKey = 'x'  }: LineChartsProps) {
   return (
     <ResponsiveContainer height={280}>
       <LineChart data={data} margin={{ right: 30 }}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="x" />
+        <XAxis dataKey={dataKey} />
         <YAxis />
         <Tooltip />
         <Legend />

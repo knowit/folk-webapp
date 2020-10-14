@@ -4,6 +4,7 @@ import { GridItem, GridItemHeader, GridItemContent } from '../components/GridIte
 import { Skeleton } from '@material-ui/lab';
 import DDTable from './DDTable'
 import DDChart from './DDChart'
+import { ErrorText } from '../components/ErrorText';
 
 
 type DDPayload = { [key: string]: any };
@@ -32,7 +33,7 @@ interface DDErrorProps {
 
 function DDError({ error }: DDErrorProps) {
   console.log(error);
-  return <p>Det oppstod en feil</p>;
+  return <ErrorText height={320}/>
 }
 
 export default function DDItem({

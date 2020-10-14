@@ -9,7 +9,7 @@ const useErrorStyle = makeStyles((theme: Theme) =>
             flexDirection:'column',
             justifyContent: 'center',
             alignItems: 'center',
-            height:280,
+            height: ({ height } : {height: number}) => height,
             color: theme.palette.error.main,
             
         },
@@ -28,8 +28,8 @@ const useErrorStyle = makeStyles((theme: Theme) =>
 export const NoData = () => (
     <div title = "Data ikke tilgjengelig">-</div>
 )
-export const ErrorText = () => {
-    const classes = useErrorStyle();
+export const ErrorText = ({ height = 280 }: {height?: number}) => {
+    const classes = useErrorStyle({ height });
 
     return(
         <div className ={classes.root}>
