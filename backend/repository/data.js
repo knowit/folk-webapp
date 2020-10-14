@@ -215,19 +215,47 @@ exports.competenceAreas = async () => {
   };
 };
 
-exports.experienceDistribution = async () => {
+exports.experienceDistribution = async ({
+  dataplattformClient
+}) => {
+  const req = await dataplattformClient.report({
+    reportName: 'yearsSinceSchoolDist'
+  })
+  const experience = await req.json()
+  
   return {
-    componentType: null,
-    setNames: [],
-    sets: {},
+    componentType: 'Bar',
+    setNames: ['Erfaring'],
+    sets: {
+      Erfaring: experience
+    },
   };
 };
 
-exports.ageDistribution = async () => {
+exports.ageDistribution = async ({
+  dataplattformClient
+}) => {
+  const [setAgeDistReq, setAgeDistGroupReq] = await Promise.all([
+    dataplattformClient.report({
+      reportName: 'ageDistribution'
+    }),
+    dataplattformClient.report({
+      reportName: 'ageDistributionGroups'
+    })
+  ])
+
+  const [setAgeDist, setAgeDistGroup] = await Promise.all([
+    setAgeDistReq.json(), setAgeDistGroupReq.json()
+  ])
+
   return {
-    componentType: null,
-    setNames: [],
-    sets: {},
+    componentType: 'Bar',
+    setNames: ['Alders grupper', 'Alder distribusjon'],
+    sets: {
+      'Alders grupper': setAgeDistGroup
+        .map(({ age_group, count }) => ({age: age_group, count})),
+      'Alder distribusjon': setAgeDist
+    },
   };
 };
 
@@ -239,18 +267,50 @@ exports.faggrupper = async () => {
   };
 };
 
-exports.education = async () => {
+exports.education = async ({
+  dataplattformClient
+}) => {
+  const req = await dataplattformClient.report({
+    reportName: 'degreeDist'
+  })
+  const education = await req.json()
+  
   return {
-    componentType: null,
-    setNames: [],
-    sets: {},
+    componentType: 'Pie',
+    setNames: ['Utdanning'],
+    sets: {
+      Utdanning: education
+    },
   };
 };
 
-exports.competenceMapping = async () => {
+exports.competenceMapping  = async ({
+  dataplattformClient
+}) => {
+  const [reqCompetance, reqMotivation] = await Promise.all([
+    dataplattformClient.report({
+      reportName: 'competanceAverage'
+    }),
+    dataplattformClient.report({
+      reportName: 'motivationAverage'
+    })
+  ]) 
+  const [competance, motivation] = await Promise.all([reqCompetance.json(), reqMotivation.json()])
+
+  const transposeMap = (mapList) => {
+    const entires = mapList && mapList.length > 0 ? Object.entries(mapList[0]) : [];
+    return entires.map(([key, value]) => ({
+      section: key,
+      value
+    }))
+  }
+
   return {
-    componentType: null,
-    setNames: [],
-    sets: {},
+    componentType: 'Bar',
+    setNames: ['Kompetanse', 'Motivasjon'],
+    sets: {
+      Kompetanse: transposeMap(competance),
+      Motivasjon: transposeMap(motivation)
+    },
   };
 };

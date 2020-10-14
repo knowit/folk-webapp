@@ -49,7 +49,8 @@ export default function Competence() {
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
-          yLabels: [],
+          dataKey: 'years',
+          yLabels: ['count'],
         }}
       />
 
@@ -59,7 +60,8 @@ export default function Competence() {
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
-          yLabels: [],
+          dataKey: 'age',
+          yLabels: ['count'],
         }}
       />
 
@@ -90,7 +92,8 @@ export default function Competence() {
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
-          yLabels: [],
+          groupKey: 'degree',
+          valueKey: 'count'
         }}
       />
 
@@ -100,7 +103,8 @@ export default function Competence() {
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
-          yLabels: [],
+          dataKey: 'section',
+          yLabels: ['value'],
         }}
       />
 
