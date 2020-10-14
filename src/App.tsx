@@ -15,16 +15,16 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: '78px',
       paddingLeft: '30px',
       paddingRight: '30px',
-      backgroundColor: '#F1F0ED',
+      backgroundColor: theme.palette.background.paper,
       minHeight: 'calc(100vh - 139px)',
       borderRadius: '0px 0px 10px 10px',
     },
   })
 );
 
+
 export default function App() {
   const classes = useStyles();
-
   return (
     <div className={classes.container}>
       <Header />

@@ -6,10 +6,10 @@ import Bar from './components/Bar';
 import PercentArea from './components/PercentArea';
 import Pie from './components/Pie';
 import { DDComponentProps } from './DDItem'
-import FullscreenIcon from '@material-ui/icons/Fullscreen';
+import {Fullscreen, FullscreenExit} from '@material-ui/icons';
 import {BigChart} from '../components/BigChart';
-import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
 import { ErrorText } from '../components/ErrorText';
+import { Theme, withStyles } from '@material-ui/core';
 
 const getChartComponent = (name: string) => {
   switch (name) {
@@ -23,6 +23,28 @@ const getChartComponent = (name: string) => {
       return Pie;
   }
 };
+
+const LargerIcon = withStyles((theme:Theme) => ({
+  root: {
+    height: '35px',
+    width: '35px',
+    position:'relative',
+    left:'495px',
+    bottom: '10px',
+    color: theme.palette.primary.main,
+  },
+}))(Fullscreen)
+
+const SmallerIcon = withStyles((theme:Theme) => ({
+  root: {
+    height: '45px',
+    width: '45px',
+    position:'relative',
+    bottom: '15px',
+    left: '880px',
+    color: theme.palette.primary.main,
+  },
+}))(FullscreenExit)
 
 export default function DDChart({ payload, title, props }: DDComponentProps) {
   const { componentType, setNames, sets } = payload as {
@@ -47,7 +69,10 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
       </GridItemHeader>
       {sets[set]
       ? <GridItemContent>
-          {big? <FullscreenExitIcon onClick={() => setBig(false)}  style={{position:'relative', left:'890px'}}/> :  <FullscreenIcon onClick = {() => setBig(true)} style={{position:'relative', left:'495px'}}/>}
+          {big
+            ? <span title= "Exit stor størrelse."> <SmallerIcon  onClick={() => setBig(false)}/> </span>
+            : <span title = "Utvid til stor størrelse."><LargerIcon onClick = {() => setBig(true)}/></span>
+          }
           <ChartComponent data={sets[set]} {...props} />
         </GridItemContent>
       :<ErrorText/>
