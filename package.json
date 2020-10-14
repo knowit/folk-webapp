@@ -29,7 +29,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
     "deploy:backend": "sls deploy",
     "deploy:upload:dev": "aws s3 sync build s3://dev-folk-static-web && yarn invalidate-cache:dev",
@@ -55,5 +55,8 @@
   "engines": {
     "node": "^14.0.0",
     "npm": "^6.0.0"
+  },
+  "devDependencies": {
+    "jest-environment-jsdom-sixteen": "^1.0.3"
   }
 }
