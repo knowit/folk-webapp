@@ -98,7 +98,7 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
     return (
     <>
       <GridItemHeader title={title}>
-        {setNames.length > 0 
+        {setNames.length > 1
           ? (
             <DropdownPicker
               values={setNames}

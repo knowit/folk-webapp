@@ -7,13 +7,17 @@ import {
   PieLabelRenderProps,
 } from 'recharts';
 
-type PieChartsData = { group: string; value: number };
+type PieChartsData = { 
+  [key: string]: string | number, 
+};
 
 interface PieChartsProps {
   data: PieChartsData[];
+  groupKey?: string;
+  valueKey?: string;
 }
 
-const renderActiveShape = ({
+const shapeRenderer = ({ groupKey }: { groupKey: string }) => ({
   cx,
   cy,
   midAngle = 0,
@@ -45,7 +49,7 @@ const renderActiveShape = ({
   return (
     <g>
       <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
-        {payload.group}
+        {payload[groupKey]}
       </text>
       <Sector
         cx={cx}
@@ -90,7 +94,7 @@ const renderActiveShape = ({
   );
 };
 
-export default function Pie({ data }: PieChartsProps) {
+export default function Pie({ data, groupKey='group', valueKey='value'}: PieChartsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
@@ -98,14 +102,14 @@ export default function Pie({ data }: PieChartsProps) {
       <PieChart>
         <ChartPie
           activeIndex={activeIndex}
-          activeShape={renderActiveShape}
+          activeShape={shapeRenderer({ groupKey })}
           data={data}
           cx={265}
           cy={140}
           innerRadius={60}
           outerRadius={80}
           fill="#8884d8"
-          dataKey="value"
+          dataKey={valueKey}
           onMouseEnter={(_, index) => setActiveIndex(index)}
         />
       </PieChart>
