@@ -7,7 +7,7 @@ import {
   EducationCell,
   CvCell
 } from '../data/components/table/DataCells';
-import DDItem, { DDTable } from '../data/DDItem';
+import DDItem, { DDTable, DDChart } from '../data/DDItem';
 import { Skeleton } from '@material-ui/lab';
 import EmployeeInfo from '../components/EmployeeInfo';
 
@@ -16,12 +16,96 @@ export default function Competence() {
   const TableSkeleton = () => (
     <Skeleton variant="rect" height={780} animation="wave" />
   );
+  const ChartSkeleton = () => (
+    <Skeleton variant="rect" height={320} animation="wave" />
+  );
 
   return (
     <Grid container spacing={2}>
 
       <DDItem
-        url={'/api/data/competence?page=1'}
+        url={'/api/data/competenceSum'}
+        title={'Kompetansemengde'}
+        Component={DDChart}
+        SkeletonComponent={ChartSkeleton}
+        dataComponentProps={{
+          yLabels: [],
+        }}
+      />
+
+      <DDItem
+        url={'/api/data/competenceAreas'}
+        title={'Kompetanseområder'}
+        Component={DDChart}
+        SkeletonComponent={ChartSkeleton}
+        dataComponentProps={{
+          yLabels: [],
+        }}
+      />
+
+      <DDItem
+        url={'/api/data/experienceDistribution'}
+        title={'Erfaring'}
+        Component={DDChart}
+        SkeletonComponent={ChartSkeleton}
+        dataComponentProps={{
+          yLabels: [],
+        }}
+      />
+
+      <DDItem
+        url={'/api/data/ageDistribution'}
+        title={'Alder'}
+        Component={DDChart}
+        SkeletonComponent={ChartSkeleton}
+        dataComponentProps={{
+          yLabels: [],
+        }}
+      />
+
+      <DDItem
+        url={'/api/data/fagtimer'}
+        title={'Aktivitet faggrupper'}
+        Component={DDChart}
+        SkeletonComponent={ChartSkeleton}
+        dataComponentProps={{
+          dataKey: 'week',
+          yLabels: ['used_hrs'],
+        }}
+      />
+
+      <DDItem
+        url={'/api/data/faggrupper'}
+        title={'Faggrupper oversikt'}
+        Component={DDChart}
+        SkeletonComponent={ChartSkeleton}
+        dataComponentProps={{
+          yLabels: [],
+        }}
+      />
+
+      <DDItem
+        url={'/api/data/education'}
+        title={'Utdannelse'}
+        Component={DDChart}
+        SkeletonComponent={ChartSkeleton}
+        dataComponentProps={{
+          yLabels: [],
+        }}
+      />
+
+      <DDItem
+        url={'/api/data/competenceMapping'}
+        title={'Kompetansekartlegging'}
+        Component={DDChart}
+        SkeletonComponent={ChartSkeleton}
+        dataComponentProps={{
+          yLabels: [],
+        }}
+      />
+
+      <DDItem
+        url={'/api/data/competence'}
         title={'Konsulentkompetanse'}
         fullSize={true}
         Component={DDTable}
