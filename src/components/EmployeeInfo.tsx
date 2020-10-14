@@ -105,7 +105,6 @@ const useStyles = makeStyles({
     lineHeight: '1.2em',
     whiteSpace: 'normal',
     marginTop: '10px',
-    width: '380px',
     fontSize: '12px',
     background:
       'transparent linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%) 0% 0%',
@@ -114,6 +113,7 @@ const useStyles = makeStyles({
   cell: {
     marginBottom: '12px',
     padding: '0 15px',
+    lineHeight: '18px',
   },
 });
 
@@ -128,7 +128,7 @@ export default function EmployeeInfo({
     const firstJob = allExperience?.sort(
       (a, b) => a.year_from - b.year_from
     )[0];
-    return firstJob?.year_from === undefined || firstJob?.year_from <0 ? <NoData/> :`${new Date().getFullYear() - firstJob?.year_from} år`;
+    return firstJob?.year_from === undefined || firstJob?.year_from <0 ? <NoData/> :`${new Date().getFullYear() - firstJob?.year_from} år.`;
   };
 
   const startedInKnowit = (allExperience: Experience[] | undefined) => {
@@ -137,8 +137,12 @@ export default function EmployeeInfo({
       x.employer.toLowerCase().includes('objectnet') ||
       x.employer.toLowerCase().includes('know it')
     );
-    return knowit === undefined || knowit.year_from < 0? <NoData/> : [knowit?.year_from, knowit?.month_from].join('/');
+
+    const monthFrom =  knowit && knowit?.month_from < 10? "0"+knowit?.month_from  : knowit?.month_from 
+
+    return knowit === undefined || knowit.year_from < 0? <NoData/> : [monthFrom, knowit?.year_from].join(' - ')+".";
   };
+  
   return (
     <div className={classes.root}>
       <div className={classes.cell}>
@@ -147,7 +151,7 @@ export default function EmployeeInfo({
         ) : (
           <>
             <b>Hovedkompetanse:</b>{' '}
-            {data?.tags.skills? data?.tags.skills.filter((x) => x).join(', ') :<NoData/>}
+            {data?.tags.skills? data?.tags.skills.filter((x) => x).join(', ')+ "." :<NoData/>}
           </>
         )}
       </div>
@@ -156,8 +160,8 @@ export default function EmployeeInfo({
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Roller:</b>
-            {data?.tags.roles? Array.from(new Set(data?.tags.roles)).filter((x) => x).join(', ') : <NoData/>}
+            <b>Roller:</b>{' '}
+            {data?.tags.roles? Array.from(new Set(data?.tags.roles)).filter((x) => x).join(', ')+ ".": <NoData/>}
           </>
         )}
       </div>
@@ -166,7 +170,7 @@ export default function EmployeeInfo({
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Startet i Knowit:</b>
+            <b>Startet i Knowit:</b>{' '}
             {startedInKnowit(data?.workExperience)}
           </>
         )}
@@ -186,8 +190,8 @@ export default function EmployeeInfo({
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Språk:</b> 
-            {data?.tags.languages? data?.tags.languages.filter((x) => x).join(', ') : <NoData/>}
+            <b>Språk:</b>{' '}
+            {data?.tags.languages? data?.tags.languages.filter((x) => x).join(', ') + "." : <NoData/>}
           </>
         )}
       </div>
