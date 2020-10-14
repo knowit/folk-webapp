@@ -25,13 +25,11 @@ const useErrorStyle = makeStyles((theme: Theme) =>
     })
 );
 
-
 export const NoData = () => {
     return(
-        <div style = {{display: "inline"}}title = "Data ikke tilgjengelig">-</div>
+        <div style = {{display: "inline"}} title = "Data ikke tilgjengelig">-</div>
     );
 }
-
 
 export const ErrorText = ({ height = 280 }: {height?: number}) => {
     const classes = useErrorStyle({ height });
