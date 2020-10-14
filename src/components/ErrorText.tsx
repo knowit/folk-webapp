@@ -11,7 +11,6 @@ const useErrorStyle = makeStyles((theme: Theme) =>
             alignItems: 'center',
             height: ({ height } : {height: number}) => height,
             color: theme.palette.error.main,
-            
         },
         titleText:{
             fontSize: '18px',

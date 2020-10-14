@@ -11,7 +11,6 @@ import {BigChart} from '../components/BigChart';
 import { ErrorText } from '../components/ErrorText';
 import { Theme, withStyles, createStyles, makeStyles } from '@material-ui/core';
 
-
 const usePlaceholderStyle = makeStyles(() =>
     createStyles({
         root:{
@@ -36,7 +35,6 @@ const usePlaceholderStyle = makeStyles(() =>
 
 const Placeholder = () => {
     const classes = usePlaceholderStyle();
-
     return(
         <div className ={classes.root}>
             <div className ={classes.titleText}>Oida</div>
