@@ -72,11 +72,11 @@ describe('EmployeeInfo', () =>{
     );
     it("should render correct active years", () =>{
         render(<EmployeeInfo data= {{competanceUrl: "falskUrl.com" }} />);
-        const ActiveYears = String(new Date().getFullYear()-2010)+" år";
+        const ActiveYears = String(new Date().getFullYear()-2010)+" år.";
         expect(screen.getByText(ActiveYears)).toBeInTheDocument;
     });
     it ("Should render correct start date in knowit", () => {
         render(<EmployeeInfo data= {{competanceUrl: "falskUrl.com" }} />);
-        expect(screen.getByText('2017/5')).toBeInTheDocument;
+        expect(screen.getByText('05 - 2017.')).toBeInTheDocument;
     })
 })

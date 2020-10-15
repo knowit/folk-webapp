@@ -21,7 +21,7 @@ export default function Employee() {
 
   return (
     <Grid container spacing={2}>
-      <DDItem
+        <DDItem
         url={'/api/data/inbound'}
         title={'På vei inn'}
         Component={DDChart}
@@ -75,7 +75,7 @@ export default function Employee() {
           ]
         }}
         SkeletonComponent={TableSkeleton}
-      />
+      /> 
 
     </Grid>
   );
