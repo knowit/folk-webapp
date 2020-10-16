@@ -16,22 +16,34 @@ jobs:
         uses: actions/setup-node@v2-beta
         with:
           node-version: '14'
-      - name: Configure AWS/Serverless
-        uses: Teakowa/setup-serverless@main
-        with:
-          serverless_version: 1.66.0
-          provider: aws
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
       - name: Install dependencies
         run: yarn install
       - name: Run tests
         run: yarn test --ci --all 
-      - name: Check build
-        run: yarn build
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up node 14
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: '14'
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+      - name: Install dependencies
+        run: yarn install
+      - name: Deploy frontend
+        run: yarn deploy:web:dev
+      - name: Install serverless
+        run: npm install serverless@1.66.0
+      - name: Install backend dependencies
+        working-directory: backend
+        run: yarn install
       - name: Deploy backend
         run: yarn deploy:backend --stage dev
-      - name: Deploy frontend
-        run: yarn deploy:upload:dev
   
