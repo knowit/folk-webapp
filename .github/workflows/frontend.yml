@@ -2,9 +2,6 @@
 name: Knowit Folk Frontend
 
 on: 
-  push:
-    branches:
-      - master
   pull_request:
     paths:
       - '*/**'
