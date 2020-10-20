@@ -1,8 +1,7 @@
-import React, {useState, useCallback} from 'react'
-import { withStyles} from '@material-ui/core/styles';
+import React, { useState, useCallback } from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import { NoData } from './ErrorText';
-
 
 const HtmlTooltip = withStyles((theme) => ({
   tooltip: {
@@ -12,35 +11,37 @@ const HtmlTooltip = withStyles((theme) => ({
     border: '1px solid #E4E1DB',
   },
   arrow: {
-    color:  '#F2F2F2'
+    color: '#F2F2F2',
   },
 }))(Tooltip);
 
-  
-function isEllipsisActive(e: HTMLSpanElement|null):boolean {
+function isEllipsisActive(e: HTMLSpanElement | null): boolean {
   if (e === null) return false;
   return e.offsetHeight < e.scrollHeight || e.offsetWidth < e.scrollWidth;
-}; 
+}
 
-export default function CharacterLimitBox({text}: {text: string}){
-
+export default function CharacterLimitBox({ text }: { text: string }) {
   const [overflowActive, setOverflowActive] = useState(false);
-  const measuredRef = useCallback(node => {
+  const measuredRef = useCallback((node) => {
     setOverflowActive(isEllipsisActive(node));
   }, []);
-  return  <div
-            style={{
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              overflow: "hidden"
-            }}
-            ref={measuredRef}
-          >
-            <HtmlTooltip title = {text} arrow placement="top" disableHoverListener = {!overflowActive}>
-                <span>
-                  {text === '-' ? <NoData/> : text}
-                </span>
-              </HtmlTooltip> 
-          </div>
-    
+  return (
+    <div
+      style={{
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+      }}
+      ref={measuredRef}
+    >
+      <HtmlTooltip
+        title={text}
+        arrow
+        placement="top"
+        disableHoverListener={!overflowActive}
+      >
+        <span>{text === '-' ? <NoData /> : text}</span>
+      </HtmlTooltip>
+    </div>
+  );
 }
