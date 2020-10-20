@@ -1,6 +1,19 @@
 # Knowit folk
+![Knowit Folk Deploy Dev](https://github.com/knowit/folk-webapp/workflows/Knowit%20Folk%20Deploy%20Dev/badge.svg?branch=master)
+![Knowit Folk Frontend](https://github.com/knowit/folk-webapp/workflows/Knowit%20Folk%20Frontend/badge.svg?branch=master)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Deploy
+
+Automatic deployment of `master` branch to development environment 
+
+### Manual deploy (development environment):
+#### backend: `yarn deploy:backend --stage dev`
+#### frontend: `yarn deploy:web:dev`
+
+## Environments
+`dev` https://dev.folk.knowit.no/
 
 ## Available Scripts
 
@@ -52,19 +65,3 @@ You don´t have to ever use `eject`. The curated feature set is suitable for sma
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-
-## Deploy
-
-To deploy you have to install aws cli tools and serverless.
-
-[AWS cli 2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
-
-[serverless](https://www.serverless.com/framework/docs/getting-started#via-npm)
-
-Then run `aws configure` and fill inn the _Access key ID_ and _Secret access key_
-
-And then run `yarn deploy:web:dev` to deploy.
-
-## Deploy test data
-
-By running `sls deploy function -f apiData`, you can deploy the test data to dev-server.
