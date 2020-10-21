@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { NoData } from '../../../../components/ErrorText';
 
 const useProjectStatusStyles = makeStyles({
-  root: ({ percentData }: { percentData: string }) => ({
+  root: (percentData:number) => ({
     backgroundColor: '#EFEFEF',
     borderRadius: 12,
     padding: '4px 10px',
@@ -14,7 +14,7 @@ const useProjectStatusStyles = makeStyles({
 
 export default function ProjectStatusCell({ data }: { data: number }) {
   const percentData = `${data}%`;
-  const classes = useProjectStatusStyles({ percentData });
+  const classes = useProjectStatusStyles(data);
 
   return data > 0 ? (
     <div className={classes.root}>{percentData}</div>
