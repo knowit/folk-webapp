@@ -24,7 +24,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.4",
     "recharts": "^1.8.5",
-    "typescript": "~3.9.7"
+    "typescript": "~3.9.7",
+    "underscore": "^1.11.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -32,6 +33,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
+    "reinstall": "rm -rf ./node_module && npm i && npm audit fix",
     "deploy:backend": "sls deploy",
     "deploy:upload:dev": "aws s3 sync build s3://dev-folk-webapp-static-web && yarn invalidate-cache:dev",
     "deploy:web:dev": "yarn build && yarn deploy:upload:dev",
@@ -58,7 +60,7 @@
     "npm": "^6.14.8"
   },
   "devDependencies": {
-    "cross-env": "^7.0.2",
+    "@types/underscore": "^1.10.24",
     "jest-environment-jsdom-sixteen": "^1.0.3"
   }
 }
