@@ -1,47 +1,47 @@
 import React, { useState } from 'react';
-import { GridItemHeader, GridItemContent} from '../components/GridItem';
+import { GridItemHeader, GridItemContent } from '../components/GridItem';
 import DropdownPicker from '../components/DropdownPicker';
 import Line from './components/Line';
 import Bar from './components/Bar';
 import PercentArea from './components/PercentArea';
 import Pie from './components/Pie';
-import { DDComponentProps } from './DDItem'
-import {Fullscreen, FullscreenExit} from '@material-ui/icons';
-import {BigChart} from '../components/BigChart';
+import { DDComponentProps } from './DDItem';
+import { Fullscreen, FullscreenExit } from '@material-ui/icons';
+import { BigChart } from '../components/BigChart';
 import { ErrorText } from '../components/ErrorText';
 import { Theme, withStyles, createStyles, makeStyles } from '@material-ui/core';
 
 const usePlaceholderStyle = makeStyles(() =>
-    createStyles({
-        root:{
-            width: '100%',
-            display: 'flex',
-            flexDirection:'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height:280,
-        },
-        titleText:{
-            fontSize: '18px',
-            fontWeight: 'bold',
-            lineHeight: 1.28,
-        },
-        text:{
-            fontSize: '16px',
-            lineHeight: 1.5,
-        }
-    })
+  createStyles({
+    root: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: 280,
+    },
+    titleText: {
+      fontSize: '18px',
+      fontWeight: 'bold',
+      lineHeight: 1.28,
+    },
+    text: {
+      fontSize: '16px',
+      lineHeight: 1.5,
+    },
+  })
 );
 
 const Placeholder = () => {
-    const classes = usePlaceholderStyle();
-    return(
-        <div className ={classes.root}>
-            <div className ={classes.titleText}>Oida</div>
-            <div className ={classes.text}>Data kan ikke vises for dette valget</div>
-        </div>
-    );
-}
+  const classes = usePlaceholderStyle();
+  return (
+    <div className={classes.root}>
+      <div className={classes.titleText}>Oida</div>
+      <div className={classes.text}>Data kan ikke vises for dette valget</div>
+    </div>
+  );
+};
 
 const getChartComponent = (name: string) => {
   switch (name) {
@@ -54,31 +54,31 @@ const getChartComponent = (name: string) => {
     case 'Pie':
       return Pie;
     default:
-      return Placeholder
+      return Placeholder;
   }
 };
 
-const LargerIcon = withStyles((theme:Theme) => ({
+const LargerIcon = withStyles((theme: Theme) => ({
   root: {
     height: '35px',
     width: '35px',
-    position:'relative',
-    left:'495px',
+    position: 'relative',
+    left: '495px',
     bottom: '10px',
     color: theme.palette.primary.main,
   },
-}))(Fullscreen)
+}))(Fullscreen);
 
-const SmallerIcon = withStyles((theme:Theme) => ({
+const SmallerIcon = withStyles((theme: Theme) => ({
   root: {
     height: '45px',
     width: '45px',
-    position:'relative',
+    position: 'relative',
     bottom: '15px',
     left: '880px',
     color: theme.palette.primary.main,
   },
-}))(FullscreenExit)
+}))(FullscreenExit);
 
 export default function DDChart({ payload, title, props }: DDComponentProps) {
   const { componentType, setNames, sets } = payload as {
@@ -92,39 +92,49 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
     props: any
   ) => JSX.Element;
 
+  const onChange = (value: any) => {
+    setSet(value as string);
+  };
+
   const GridItem = () => {
     return (
-    <>
-      <GridItemHeader title={title}>
-        {setNames.length > 1
-          ? (
+      <>
+        <GridItemHeader title={title}>
+          {setNames.length > 1 ? (
             <DropdownPicker
               values={setNames}
-              onChange={(newValue) => setSet(newValue)}
+              onChange={onChange}
+              selected={set}
             />
-          ) 
-          : null}
-      </GridItemHeader>
-      {sets 
-      ? <GridItemContent>
-          {big
-            ? <span title= "Exit stor størrelse."> <SmallerIcon  onClick={() => setBig(false)}/> </span>
-            : <span title = "Utvid til stor størrelse."><LargerIcon onClick = {() => setBig(true)}/></span>
-          }
-          <ChartComponent data={sets[set]} {...props} />
-        </GridItemContent>
-      :<ErrorText/>
-      }
-    </>
+          ) : null}
+        </GridItemHeader>
+        {sets ? (
+          <GridItemContent>
+            {big ? (
+              <span title="Exit stor størrelse.">
+                {' '}
+                <SmallerIcon onClick={() => setBig(false)} />{' '}
+              </span>
+            ) : (
+              <span title="Utvid til stor størrelse.">
+                <LargerIcon onClick={() => setBig(true)} />
+              </span>
+            )}
+            <ChartComponent data={sets[set]} {...props} />
+          </GridItemContent>
+        ) : (
+          <ErrorText />
+        )}
+      </>
     );
-  }
+  };
 
   return (
     <>
-    <GridItem />
-    <BigChart open={big} onClose={()=>setBig(false)}>
       <GridItem />
-    </BigChart>
+      <BigChart open={big} onClose={() => setBig(false)}>
+        <GridItem />
+      </BigChart>
     </>
   );
 }

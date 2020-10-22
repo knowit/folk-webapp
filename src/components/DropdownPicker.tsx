@@ -7,6 +7,7 @@ type ValueType = { displayValue: string; value: any } | string;
 interface DropdownPickerProps {
   values: ValueType[];
   onChange?: (newValue: any) => void;
+  selected?: any;
 }
 
 const useStyles = makeStyles({
@@ -60,7 +61,10 @@ const getValue = (value: ValueType): any =>
 function measureTextWidth(text: string, font: string): number {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
-  if (!context) return 0;
+
+  if (!context) {
+    return 0;
+  }
 
   context.font = font;
   return context.measureText(text).width;
@@ -69,6 +73,7 @@ function measureTextWidth(text: string, font: string): number {
 export default function DropdownPicker({
   values,
   onChange = () => null,
+  selected = '',
 }: DropdownPickerProps) {
   const width =
     measureTextWidth(
@@ -80,6 +85,7 @@ export default function DropdownPicker({
   const classes = useStyles({ width });
   const overrideClasses = useMuiOverrideStyles();
   const selectRef = useRef<HTMLElement | null>();
+  const defaultValue = selected || values.length > 0 ? values[0] : '';
 
   return (
     <Select
@@ -90,10 +96,11 @@ export default function DropdownPicker({
       autoWidth={true}
       onChange={({ target: { value } }) => onChange(value)}
       input={<InputBase />}
-      defaultValue={getDisplayValue(values.length > 0 ? values[0] : '')}
+      defaultValue={defaultValue}
       inputProps={{
         className: classes.input,
       }}
+      value={selected}
       MenuProps={{
         TransitionComponent: Fade,
         className: classes.menu,
@@ -116,9 +123,13 @@ export default function DropdownPicker({
         elevation: 0,
       }}
     >
-      {values.map((x: ValueType, i: number) => (
-        <MenuItem key={i} className={classes.menuItem} value={getValue(x)}>
-          {getDisplayValue(x)}
+      {values.map((value: ValueType, index: number) => (
+        <MenuItem
+          key={`${getValue(value)}-${index}`}
+          className={classes.menuItem}
+          value={getValue(value)}
+        >
+          {getDisplayValue(value)}
         </MenuItem>
       ))}
     </Select>
