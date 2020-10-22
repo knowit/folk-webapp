@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import GetApp from '@material-ui/icons/GetApp';
-import { makeStyles, Theme } from '@material-ui/core';
 import CvDialog from '../../../../components/CvDialog';
+import GetApp from '@material-ui/icons/GetApp';
 import { NoData } from '../../../../components/ErrorText';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 
 interface CvCellData {
   no_pdf: string;
@@ -11,36 +11,53 @@ interface CvCellData {
   int_word: string;
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  icon: {
-    color: theme.palette.primary.main,
-    borderRadius: 0,
-    transition: 'none',
-    padding: 0,
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
+interface ConsultantType {
+  value: string;
+  image: string | null;
+  competenceUrl: string;
+}
+
+type rowDataArray = [ConsultantType, string, string, string, CvCellData];
+
+interface RowData {
+  rowData: rowDataArray;
+}
+
+const useStyles = makeStyles({
+  root: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
   },
-}));
+});
+
 export default function CvCell({
-  rowData: [{ value: name }],
   data,
+  rowData,
 }: {
-  rowData: [{ value: string }];
   data: CvCellData;
+  rowData: RowData;
 }) {
   const [open, setOpen] = useState(false);
-  const classes = useStyles();
+
   const handleClickOpen = () => {
     setOpen(true);
   };
-  const handleClose = (value: string) => {
+  const handleClose = () => {
     setOpen(false);
   };
+  const classes = useStyles();
   return data ? (
     <>
-      <GetApp onClick={handleClickOpen} className={classes.icon} />
-      <CvDialog open={open} onClose={handleClose} name={name} data={data} />
+      <div className={classes.root}>
+        <GetApp onClick={handleClickOpen} />
+      </div>
+      <CvDialog
+        open={open}
+        onClose={handleClose}
+        name={rowData.rowData[0].value}
+        data={data}
+      />
     </>
   ) : (
     <NoData />
