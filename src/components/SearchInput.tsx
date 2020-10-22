@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { InputBase, InputAdornment, Theme } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import { debounce } from 'underscore';
 
 interface SearchInputProps {
   onChange?: (newValue: string) => void;
@@ -33,17 +34,18 @@ export default function SearchInput({
   onChange = () => null,
 }: SearchInputProps) {
   const classes = useStyles();
-  const [val, setVal] = React.useState('');
+  const [val, setVal] = useState('');
 
   const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    setValueAndChange(event.target.value);
+    setVal(event.target.value);
   };
 
-  const setValueAndChange = (value: string) => {
-    setVal(value);
-    onChange(value);
-  };
+  const debouncedOnChange = debounce(() => {
+    onChange(val);
+  }, 200);
+
+  useEffect(debouncedOnChange, [val]);
 
   return (
     <>
@@ -63,7 +65,7 @@ export default function SearchInput({
                 color="inherit"
                 className={classes.icon}
                 aria-label="Tøm"
-                onClick={() => setValueAndChange('')}
+                onClick={() => setVal('')}
               >
                 <CloseIcon />
               </IconButton>
