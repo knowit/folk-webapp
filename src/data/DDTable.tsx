@@ -5,43 +5,48 @@ import SearchInput from '../components/SearchInput';
 import { DDComponentProps } from './DDItem';
 
 interface Column {
-  title: String,
-  expandable?: boolean,
-  searchable?: boolean,
-  searchKey?: string
+  title: string;
+  expandable?: boolean;
+  searchable?: boolean;
+  searchKey?: string;
 }
 
 export default function DDTable({ payload, title, props }: DDComponentProps) {
-  const allRows = payload as { rowData: any[] }[]
+  const allRows = payload as { rowData: any[] }[];
   const [rows, setRows] = useState(allRows);
 
-  const { columns } = props as { columns: Column[] }
+  const { columns } = props as { columns: Column[] };
   const searchableColumn = columns
-      .map((col, i) => ([col.searchable, col.searchKey, i] as [boolean, string, number]))
-      .filter(([searchable]) => searchable)
-      .map(([_, key, i]) => [key, i] as [string, number]) 
+    .map(
+      (col, i) =>
+        [col.searchable, col.searchKey, i] as [boolean, string, number]
+    )
+    .filter(([searchable]) => searchable)
+    .map(([_, key, i]) => [key, i] as [string, number]);
 
   const handleSearchInputChange = (searchTerm: string) => {
     if (!searchTerm || searchTerm.length <= 2) {
-      if (rows.length !== allRows.length){
-        setRows(allRows)
+      if (rows.length !== allRows.length) {
+        setRows(allRows);
       }
-      return
+      return;
     }
 
-    const lowerCaseSearchTerm = searchTerm.toLowerCase()
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
 
-    setRows(allRows.filter(row => {
-      return searchableColumn
-        .map(([key, index]) => {
-          const rowValue = key 
-            ? row.rowData[index][key].toLowerCase()
-            : row.rowData[index].toLowerCase()
+    setRows(
+      allRows.filter((row) => {
+        return searchableColumn
+          .map(([key, index]) => {
+            const rowValue = key
+              ? row.rowData[index][key].toLowerCase()
+              : row.rowData[index].toLowerCase();
 
-          return rowValue.includes(lowerCaseSearchTerm)
-        })
-        .reduce((a, b) => a || b, false)
-    }))
+            return rowValue.includes(lowerCaseSearchTerm);
+          })
+          .reduce((a, b) => a || b, false);
+      })
+    );
   };
 
   return (
