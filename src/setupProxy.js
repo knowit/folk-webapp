@@ -2,7 +2,8 @@ const config = require('../package.json')
 const { createProxyMiddleware } = require('http-proxy-middleware')
 
 module.exports = function(app) {
-    const proxy = createProxyMiddleware({target: config.proxy, changeOrigin: true})
+    const proxy_url = process.env.PROXY_URL || config.proxy
+    const proxy = createProxyMiddleware({target: proxy_url, changeOrigin: true})
     app.use('/auth', proxy)
     app.use('/api', proxy)
 }

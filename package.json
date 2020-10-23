@@ -28,18 +28,19 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:local": "cross-env PROXY_URL=http://localhost:3010 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
     "deploy:backend": "sls deploy",
-    "deploy:upload:dev": "aws s3 sync build s3://dev-folk-static-web && yarn invalidate-cache:dev",
+    "deploy:upload:dev": "aws s3 sync build s3://dev-folk-webapp-static-web && yarn invalidate-cache:dev",
     "deploy:web:dev": "yarn build && yarn deploy:upload:dev",
-    "invalidate-cache:dev": "aws cloudfront create-invalidation --distribution-id E3R63UW43K05MR --paths /"
+    "invalidate-cache:dev": "aws cloudfront create-invalidation --distribution-id EYKLHWDAKRWEW --paths /"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "https://g4usaty3db.execute-api.us-east-1.amazonaws.com/",
+  "proxy": "https://ew7i722sxi.execute-api.eu-central-1.amazonaws.com/",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -57,6 +58,7 @@
     "npm": "^6.0.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.2",
     "jest-environment-jsdom-sixteen": "^1.0.3"
   }
 }
