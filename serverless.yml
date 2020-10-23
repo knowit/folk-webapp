@@ -2,36 +2,32 @@ service: folk-webapp
 
 custom:
   stage: ${opt:stage, self:provider.stage}
-  bucketName: ${self:custom.stage}-folk-static-web
-  distApiDomainId: ${self:custom.stage}-folk-api-web-dist
-  domainName: ${self:custom.bucketName}.s3.amazonaws.com
-  domainId: custom/${self:custom.domainName}
   service: ${self:custom.stage}-${self:service}
-  cloudFrontOrigin:
-    DomainName: ${self:custom.domainName}
-    Id: ${self:custom.domainId}
-    CustomOriginConfig:
-      HTTPPort: 80
-      HTTPSPort: 443
-      OriginProtocolPolicy: https-only
-  apiEnv:
+  bucketName: ${self:custom.service}-static-web
+  env:
     API_URL: ${ssm:/${self:custom.stage}/folk-webapp/DATAPLATTFORM_API_URL}
-  authEnv:
     OAUTH_URL: ${ssm:/${self:custom.stage}/folk-webapp/DATAPLATTFORM_AUTH_URL}
-    CLIENT_ID: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_ID~true}
-    CLIENT_SECRET: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_SECRET~true}
+    CLIENT_ID: ${ssm:/folk-webapp/CLIENT_ID~true}
+    CLIENT_SECRET: ${ssm:/folk-webapp/CLIENT_SECRET~true}
+  allowedMethods:
+    - GET
+    - HEAD
+    - OPTIONS
+    - PUT
+    - PATCH
+    - POST
+    - DELETE
 
 provider:
   name: aws
   stage: dev
-  region: us-east-1
+  region: eu-central-1
   runtime: nodejs12.x
   stackName: ${self:custom.service}
   timeout: 25
   httpApi:
     name: ${self:custom.service}-api
     payload: '2.0'
-    cors: true
 
 package:
   include:
@@ -41,80 +37,21 @@ package:
   individually: true
 
 functions:
-  edgeAdaptiveContent:
-    handler: backend/edge.adaptiveContent
-    name: ${self:custom.stage}-${self:service}-edge-adaptive-content-select
-    events:
-      - cloudFront:
-          eventType: origin-request
-          origin: ${self:custom.cloudFrontOrigin}
-
-  authLogin:
-    handler: backend/auth.login
-    name: ${self:custom.service}-auth-login
-    environment: ${self:custom.authEnv}
+  proxyLambda:
+    handler: backend/lambda.handler
+    name: ${self:custom.service}-express-proxy
+    environment: ${self:custom.env}
     role: LambdaRole
     events:
-      - httpApi:
-          method: GET
-          path: /auth/login
+      - httpApi: '*'
 
-  authCallback:
-    handler: backend/auth.callback
-    name: ${self:custom.service}-auth-callback
-    environment: ${self:custom.authEnv}
-    role: LambdaRole
-    events:
-      - httpApi:
-          method: GET
-          path: /auth/callback
-
-  authUserInfo:
-    handler: backend/auth.userInfo
-    name: ${self:custom.service}-auth-userInfo
-    environment: ${self:custom.authEnv}
-    role: LambdaRole
-    events:
-      - httpApi:
-          method: GET
-          path: /auth/userInfo
-
-  apiData:
-    handler: backend/api.data
-    name: ${self:custom.service}-api-data
-    environment: ${self:custom.apiEnv}
-    role: LambdaRole
-    events:
-      - httpApi:
-          method: GET
-          path: /api/data/{name}
-
-  apiPages:
-    handler: backend/api.pages
-    name: ${self:custom.service}-api-pages
-    environment: ${self:custom.apiEnv}
-    role: LambdaRole
-    events:
-      - httpApi:
-          method: GET
-          path: /api/pages
-
-  apiPageData:
-    handler: backend/api.pageData
-    name: ${self:custom.service}-api-page-data
-    environment: ${self:custom.apiEnv}
-    role: LambdaRole
-    events:
-      - httpApi:
-          method: GET
-          path: /api/pages/{page}
 
 resources:
   Resources:
     LambdaRole:
       Type: AWS::IAM::Role
       Properties:
-        RoleName: ${self:custom.service}-lambda-role
+        RoleName: ${self:custom.service}-proxy-lambda-role
         AssumeRolePolicyDocument:
           Version: "2012-10-17"
           Statement:
@@ -134,7 +71,7 @@ resources:
                   Action:
                     - ssm:GetParameter
                     - ssm:GetParameters
-                  Resource: #!Sub 'arn:aws:ssm:#{AWS::Region}:#{AWS::AccountId}:parameter/${self:custom.stage}/${self:service}/*'
+                  Resource:
                     - 'Fn::Join':
                       - ':'
                       -
@@ -146,7 +83,7 @@ resources:
                   Action:
                     - ssm:GetParameter
                     - ssm:GetParameters
-                  Resource: # !Sub 'arn:aws:ssm:#{AWS::Region}:#{AWS::AccountId}:parameter/${self:service}/*'
+                  Resource:
                     - 'Fn::Join':
                       - ':'
                       -
@@ -178,24 +115,35 @@ resources:
                 - s3:GetObject
               Resource: arn:aws:s3:::${self:custom.bucketName}/*
 
-    CloudFrontDistribution:
+    FolkDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
         DistributionConfig:
+          Enabled: true
           Aliases:
             - ${self:custom.stage}.folk.knowit.no
           Origins:
-            - ${self:custom.cloudFrontOrigin}
-            - DomainName: g4usaty3db.execute-api.us-east-1.amazonaws.com # TODO: ref
-              Id: ${self:custom.distApiDomainId}
+            - DomainName: ${self:custom.bucketName}.s3-website.${self:provider.region}.amazonaws.com
+              Id: ${self:custom.service}-default-origin
               CustomOriginConfig:
                 HTTPPort: 80
+                OriginProtocolPolicy: http-only
+            - DomainName: 
+                Fn::Join: 
+                  - ''
+                  - - !Ref 'HttpApi'
+                    - '.execute-api.'
+                    - !Ref 'AWS::Region'
+                    - '.'
+                    - !Ref 'AWS::URLSuffix'
+              Id: ${self:custom.service}-api-origin
+              CustomOriginConfig:
                 HTTPSPort: 443
                 OriginProtocolPolicy: https-only
                 OriginSSLProtocols:
                   - TLSv1.2
           CacheBehaviors:
-            - TargetOriginId: ${self:custom.distApiDomainId}
+            - TargetOriginId: ${self:custom.service}-api-origin
               ForwardedValues:
                 Cookies:
                   Forward: all
@@ -206,39 +154,28 @@ resources:
                   - Authorization
                   - Origin
                   - Referer
-              PathPattern: /auth/*
+              PathPattern: /auth*
               ViewerProtocolPolicy: redirect-to-https
-              AllowedMethods:
-                - GET
-                - HEAD
-                - OPTIONS
-                - PUT
-                - PATCH
-                - POST
-                - DELETE
-            - TargetOriginId: ${self:custom.distApiDomainId}
+              AllowedMethods: ${self:custom.allowedMethods}
+            - TargetOriginId: ${self:custom.service}-api-origin
               ForwardedValues:
                 QueryString: true
                 Headers:
                   - Accept
                   - Content-Type
                   - Authorization
-              PathPattern: /api/*
+              PathPattern: /api*
               ViewerProtocolPolicy: redirect-to-https
-              AllowedMethods:
-                - GET
-                - HEAD
-                - OPTIONS
-                - PUT
-                - PATCH
-                - POST
-                - DELETE
+              AllowedMethods: ${self:custom.allowedMethods}
           DefaultRootObject: index.html
           CustomErrorResponses:
             - ErrorCode: 404
               ResponseCode: 200
               ResponsePagePath: /index.html
           DefaultCacheBehavior:
+            TargetOriginId: ${self:custom.service}-default-origin
+            ForwardedValues:
+                QueryString: false
             ViewerProtocolPolicy: redirect-to-https
           PriceClass: PriceClass_100
           ViewerCertificate:
@@ -255,6 +192,7 @@ resources:
     FolkStaticBucketOutput:
       Value:
         'Ref': FolkStaticS3Bucket
-    CloudFrontDistributionOutput:
+    FolkDistributionOutput:
       Value:
-        'Fn::GetAtt': [CloudFrontDistribution, DomainName]
+        'Fn::GetAtt': [FolkDistribution, DomainName]
+
