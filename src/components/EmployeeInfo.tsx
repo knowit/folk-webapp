@@ -28,6 +28,7 @@ interface EmployeeInfoData {
 const useCompetenceMappingStyles = makeStyles({
   root: {
     backgroundColor: '#f2f2f2',
+    padding: '10px',
     '& > div': {
       display: 'flex',
       justifyContent: 'space-between',
