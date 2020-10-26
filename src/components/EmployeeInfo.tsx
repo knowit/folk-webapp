@@ -28,7 +28,6 @@ interface EmployeeInfoData {
 const useCompetenceMappingStyles = makeStyles({
   root: {
     backgroundColor: '#f2f2f2',
-    padding: '10px',
     '& > div': {
       display: 'flex',
       justifyContent: 'space-between',
@@ -76,28 +75,31 @@ function CompetenceMapping({
           competenceMap.slice(-1)[0][0],
         ]
       : [];
-      
+
   return (
     <div className={classes.root}>
       <div>
-        {competencesList.length > 0
-        ?competencesList.map((competence, i) => (
-          <div key={i}>
-            <CharacterLimitBox text={competence.charAt(0).toUpperCase() + competence.slice(1)}/>
-          </div>
-        ))
-        : <>
+        {competencesList.length > 0 ? (
+          competencesList.map((competence, i) => (
+            <div key={i}>
+              <CharacterLimitBox
+                text={competence.charAt(0).toUpperCase() + competence.slice(1)}
+              />
+            </div>
+          ))
+        ) : (
+          <>
             <div key={1}>
-              <NoData/>
+              <NoData />
             </div>
             <div key={2}>
-              <NoData/>
+              <NoData />
             </div>
             <div key={3}>
-              <NoData/>
+              <NoData />
             </div>
           </>
-        }
+        )}
       </div>
       <div className={classes.gradient}>
         {['Uinteressert', 'Tja', 'Interessert'].map((level, i) => (
@@ -112,7 +114,7 @@ const useStyles = makeStyles({
   root: {
     lineHeight: '1.2em',
     whiteSpace: 'normal',
-    paddingTop: '10px',
+    marginTop: '10px',
     fontSize: '12px',
     background:
       'transparent linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%) 0% 0%',
@@ -125,36 +127,43 @@ const useStyles = makeStyles({
   },
 });
 
-
-export default function EmployeeInfo(
-  cellData: {
-    competenceUrl:string
-  },
-) {
+export default function EmployeeInfo(cellData: { competenceUrl: string }) {
   const classes = useStyles();
-  const url = cellData.competenceUrl
+  const url = cellData.competenceUrl;
   const [data, pending] = useFetchedData<EmployeeInfoData>({ url });
   const totalExperience = (allExperience: Experience[] | undefined) => {
     const firstJob = allExperience?.sort(
       (a, b) => a.year_from - b.year_from
     )[0];
-    return firstJob?.year_from === undefined || firstJob?.year_from <0 ? <NoData/> :`${new Date().getFullYear() - firstJob?.year_from} år.`;
+    return firstJob?.year_from === undefined || firstJob?.year_from < 0 ? (
+      <NoData />
+    ) : (
+      `${new Date().getFullYear() - firstJob?.year_from} år.`
+    );
   };
 
   const startedInKnowit = (allExperience: Experience[] | undefined) => {
-    const knowit = allExperience?.find((x) =>
-    x.employer ?
-      x.employer.toLowerCase().includes('knowit') ||
-      x.employer.toLowerCase().includes('objectnet') ||
-      x.employer.toLowerCase().includes('know it')
-    : null
+    const knowit = allExperience?.find(
+      (x) =>
+        x.employer ?
+          x.employer.toLowerCase().includes('knowit') ||
+          x.employer.toLowerCase().includes('objectnet') ||
+          x.employer.toLowerCase().includes('know it')
+        : null
     );
 
-    const monthFrom =  knowit && knowit?.month_from < 10? "0"+knowit?.month_from  : knowit?.month_from 
-
-    return knowit === undefined || knowit.year_from < 0? <NoData/> : [monthFrom, knowit?.year_from].join(' - ')+".";
-  };
+    const monthFrom =
+      knowit && knowit?.month_from < 10
+        ? '0' + knowit?.month_from
+        : knowit?.month_from;
   
+    return knowit === undefined || knowit.year_from < 0 ? (
+      <NoData />
+    ) : (
+      [monthFrom, knowit?.year_from].join(' - ') + '.'
+    );
+  };
+
   const getHovedkompetanse = (skills:string[] | null | undefined) => {
     return(
       skills
@@ -202,8 +211,7 @@ export default function EmployeeInfo(
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Startet i Knowit:</b>{' '}
-            {startedInKnowit(data?.workExperience)}
+            <b>Startet i Knowit:</b> {startedInKnowit(data?.workExperience)}
           </>
         )}
       </div>
@@ -223,7 +231,11 @@ export default function EmployeeInfo(
         ) : (
           <>
             <b>Språk:</b>{' '}
-            {data?.tags.languages? data?.tags.languages.filter((x) => x).join(', ') + "." : <NoData/>}
+            {data?.tags.languages ? (
+              data?.tags.languages.filter((x) => x).join(', ') + '.'
+            ) : (
+              <NoData />
+            )}
           </>
         )}
       </div>
