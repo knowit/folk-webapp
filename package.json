@@ -24,6 +24,7 @@
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
+    "@types/react-virtualized": "^9.21.10",
     "http-proxy-middleware": "^1.0.5",
     "react": "^16.14.0",
     "react-beautiful-dnd": "^13.0.0",
