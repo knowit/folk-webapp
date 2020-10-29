@@ -368,6 +368,7 @@ const useStyles = makeStyles({
   },
 });
 
+
 export default function EmployeeInfo(
   cellData: { competenceUrl:string},
 ) {
@@ -403,7 +404,7 @@ export default function EmployeeInfo(
         ) : (
           <>
             <b>Hovedkompetanse:</b>{' '}
-            {data?.tags.skills? data?.tags.skills.filter((x) => x).join(', ')+ "." :<NoData/>}
+            {data?.tags.skills? data?.tags.skills.filter((x) => x).join(', ') +".":<NoData/>}
           </>
         )}
       </div>
