@@ -58,6 +58,8 @@ const useCompetenceMappingStyles = makeStyles({
   },
 });
 
+const makeKeyFromText = (value: string): string => value.replace(' ', '_');
+
 function CompetenceMapping({
   competences,
 }: {
@@ -76,13 +78,12 @@ function CompetenceMapping({
           competenceMap.slice(-1)[0][0],
         ]
       : [];
-
   return (
     <div className={classes.root}>
       <div>
         {competencesList.length > 0 ? (
-          competencesList.map((competence, i) => (
-            <div key={i}>
+          competencesList.map((competence) => (
+            <div key={makeKeyFromText(competence)}>
               <CharacterLimitBox text={competence} />
             </div>
           ))
