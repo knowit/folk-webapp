@@ -123,9 +123,9 @@ export default function DropdownPicker({
         elevation: 0,
       }}
     >
-      {values.map((value: ValueType, index: number) => (
+      {values.map((value: ValueType) => (
         <MenuItem
-          key={`${getValue(value)}-${index}`}
+          key={`${getValue(value)}`}
           className={classes.menuItem}
           value={getValue(value)}
         >
