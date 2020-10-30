@@ -9,6 +9,6 @@ module.exports = {
   rules: {
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/no-explicit-any': 0,
-    "react/jsx-props-no-spreading", 0
+    'react/jsx-props-no-spreading': 0,
   },
 };
