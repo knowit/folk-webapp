@@ -34,6 +34,7 @@ interface DDErrorProps {
 }
 
 function DDError({ error }: DDErrorProps) {
+  // eslint-disable-next-line no-console
   console.log(error);
   return <ErrorText height={320} />;
 }
@@ -59,11 +60,8 @@ export default function DDItem({
             {pending && !error ? <HeaderSkeletonComponent /> : null}
           </GridItemHeader>
           <GridItemContent>
-            {error ? (
-              <DDError error={error} />
-            ) : pending ? (
-              <SkeletonComponent />
-            ) : null}
+            {error && <DDError error={error} />}
+            {pending && !error && <SkeletonComponent />}
           </GridItemContent>
         </>
       ) : (
