@@ -9,6 +9,6 @@
     "express": "^4.17.1",
     "node-fetch": "^2.6.1",
     "openid-client": "^3.15.5",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.1"
   }
 }
