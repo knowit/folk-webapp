@@ -11,6 +11,7 @@
     "react-beautiful-dnd": "^13.0.0",
     "react-cookie": "^4.0.3",
     "react-dom": "^16.13.1",
+    "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.4",
     "recharts": "^1.8.5",
@@ -61,11 +62,11 @@
     "@types/react-beautiful-dnd": "^13.0.0",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
-    "eslint": "^7.12.1",
-    "prettier": "^2.1.2",
-    "eslint-config-airbnb-typescript-prettier": "^3.1.0",
     "@types/recharts": "^1.8.14",
     "@types/underscore": "^1.10.24",
-    "jest-environment-jsdom-sixteen": "^1.0.3"
+    "eslint": "^7.12.1",
+    "eslint-config-airbnb-typescript-prettier": "^3.1.0",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
+    "prettier": "^2.1.2"
   }
 }
