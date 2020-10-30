@@ -13,7 +13,7 @@ exports.projectStatus = async ({
       {
         value: employee.navn,
         image: null,
-        competanceUrl: `/api/data/employeeCompetanse?email=${encodeURIComponent(
+        competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
           employee.email
         )}`,
       },
@@ -43,7 +43,7 @@ exports.competence = async ({
       {
         value: employee.navn,
         image: null,
-        competanceUrl: `/api/data/employeeCompetanse?email=${encodeURIComponent(
+        competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
           employee.email
         )}`,
       },
@@ -88,7 +88,7 @@ exports.employeeExperience = async ({
   };
 };
 
-exports.employeeCompetanse = async ({
+exports.employeeCompetence = async ({
   dataplattformClient,
   queryStringParameters: { email } = {},
 }) => {
@@ -117,14 +117,14 @@ exports.employeeCompetanse = async ({
     reqEmp.json(),
   ]);
 
-  const mapCompetance = (comp) => {
+  const mapCompetence = (comp) => {
     const compEntires = comp && comp.length > 0 ? Object.entries(comp[0]) : [];
     const compMap = {};
     for (var i = 1; i < compEntires.length; i += 2) {
-      const [k, competance] = compEntires[i];
+      const [k, competence] = compEntires[i];
       const [, motivation] = compEntires[i + 1];
       compMap[k] = {
-        competance,
+        competence,
         motivation,
       };
     }
@@ -141,7 +141,7 @@ exports.employeeCompetanse = async ({
   };
 
   return {
-    competanse: mapCompetance(resComp),
+    competence: mapCompetence(resComp),
     workExperience: resEmp,
     tags: mapTags(resSkills),
   };
@@ -287,15 +287,15 @@ exports.education = async ({
 exports.competenceMapping  = async ({
   dataplattformClient
 }) => {
-  const [reqCompetance, reqMotivation] = await Promise.all([
+  const [reqCompetence, reqMotivation] = await Promise.all([
     dataplattformClient.report({
-      reportName: 'competanceAverage'
+      reportName: 'competenceAverage'
     }),
     dataplattformClient.report({
       reportName: 'motivationAverage'
     })
   ]) 
-  const [competance, motivation] = await Promise.all([reqCompetance.json(), reqMotivation.json()])
+  const [competence, motivation] = await Promise.all([reqCompetence.json(), reqMotivation.json()])
 
   const transposeMap = (mapList) => {
     const entires = mapList && mapList.length > 0 ? Object.entries(mapList[0]) : [];
@@ -309,7 +309,7 @@ exports.competenceMapping  = async ({
     componentType: 'Bar',
     setNames: ['Kompetanse', 'Motivasjon'],
     sets: {
-      Kompetanse: transposeMap(competance),
+      Kompetanse: transposeMap(competence),
       Motivasjon: transposeMap(motivation)
     },
   };

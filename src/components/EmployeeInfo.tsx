@@ -12,11 +12,11 @@ type Experience = {
 };
 
 type CompetenceMap = {
-  [key: string]: { competance: number; motivation: number };
+  [key: string]: { competence: number; motivation: number };
 };
 
 interface EmployeeInfoData {
-  competanse: CompetenceMap;
+  competence: CompetenceMap;
   tags: {
     languages: string[];
     skills: string[];
@@ -118,9 +118,9 @@ const useStyles = makeStyles({
 });
 
 export default function EmployeeInfo({
-  data: { competanceUrl: url },
+  data: { competenceUrl: url },
 }: {
-  data: { competanceUrl: string };
+  data: { competenceUrl: string };
 }) {
   const classes = useStyles();
   const [data, pending] = useFetchedData<EmployeeInfoData>({ url });
@@ -198,7 +198,7 @@ export default function EmployeeInfo({
       {pending ? (
         <Skeleton variant="rect" height={67} animation="wave" />
       ) : (
-        <CompetenceMapping competences={data?.competanse} />
+        <CompetenceMapping competences={data?.competence} />
       )}
     </div>
   );
