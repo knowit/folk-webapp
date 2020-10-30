@@ -5,21 +5,21 @@ import { useFetchedData } from '../hooks/service';
 jest.mock('../hooks/service');
 
 const fakeUser = {
-    competanse: {
+    competence: {
         "Sy":{
-            competance: 3,
+            competence: 3,
             motivation: 1 
         },
         "Strikke":{
-            competance: 4,
+            competence: 4,
             motivation: 4, 
         },
         "Sykle":{
-            competance: 2,
+            competence: 2,
             motivation: 2, 
         },
         "Skate":{
-            competance: 0,
+            competence: 0,
             motivation: 5,
         },
     },
@@ -46,37 +46,37 @@ const fakeUser = {
 
 describe('EmployeeInfo', () =>{
     it("should call mockFetch", () => {
-        render(<EmployeeInfo data= {{competanceUrl: "falskUrl.com" }} />); 
+        render(<EmployeeInfo data= {{competenceUrl: "falskUrl.com" }} />); 
         expect(useFetchedData).toHaveBeenCalled;
     });
     it.each(fakeUser.tags.languages)(
         "should render all languages",
         (language) => {
-            render(<EmployeeInfo data= {{competanceUrl: "falskUrl.com" }} />);
+            render(<EmployeeInfo data= {{competenceUrl: "falskUrl.com" }} />);
             expect(screen.getByText(language,{ exact: false })).toBeInTheDocument;
         }
     );
     it.each(fakeUser.tags.skills)(
         "should render all skills",
         (skill) => {
-            render(<EmployeeInfo data= {{competanceUrl: "falskUrl.com" }} />);
+            render(<EmployeeInfo data= {{competenceUrl: "falskUrl.com" }} />);
             expect(screen.getByText(skill,{ exact: false })).toBeInTheDocument;
         }
     );
     it.each(fakeUser.tags.roles)(
         "should render all roles",
         (role) => {
-            render(<EmployeeInfo data= {{competanceUrl: "falskUrl.com" }} />);
+            render(<EmployeeInfo data= {{competenceUrl: "falskUrl.com" }} />);
             expect(screen.getByText(role,{ exact: false })).toBeInTheDocument;
         }
     );
     it("should render correct active years", () =>{
-        render(<EmployeeInfo data= {{competanceUrl: "falskUrl.com" }} />);
+        render(<EmployeeInfo data= {{competenceUrl: "falskUrl.com" }} />);
         const ActiveYears = String(new Date().getFullYear()-2010)+" år.";
         expect(screen.getByText(ActiveYears)).toBeInTheDocument;
     });
     it ("Should render correct start date in knowit", () => {
-        render(<EmployeeInfo data= {{competanceUrl: "falskUrl.com" }} />);
+        render(<EmployeeInfo data= {{competenceUrl: "falskUrl.com" }} />);
         expect(screen.getByText('05 - 2017.')).toBeInTheDocument;
     })
 })
