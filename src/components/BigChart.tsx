@@ -27,4 +27,4 @@ const BigChart: React.FC<{ open: boolean; onClose: () => void }> = ({
   );
 };
 
-export default { BigChart };
+export default BigChart;
