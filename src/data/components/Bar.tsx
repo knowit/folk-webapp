@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   BarChart,
   Bar as BarColumn,
@@ -36,7 +37,7 @@ export default function Bar({ yLabels, data, dataKey = 'x' }: BarChartsProps) {
           <BarColumn
             key={i}
             dataKey={key}
-            stackId={'a'}
+            stackId="a"
             stroke={colors[i]}
             fill={colors[i]}
           />
