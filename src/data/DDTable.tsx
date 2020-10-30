@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { GridItemHeader } from '../components/GridItem';
 import DataTable from './components/table/DataTable';
 import SearchInput from '../components/SearchInput';
-import { DDComponentProps } from './DDItem';
+import { DDComponentProps } from './types';
 
 interface Column {
   title: string;
