@@ -1,6 +1,7 @@
 import React, { useEffect, createContext, useContext } from 'react';
 import { useCookies } from 'react-cookie';
 import { useFetchedData } from './hooks/service';
+import { AuthContext } from './authToken';
 
 interface UserInfo {
   name?: string;
@@ -8,10 +9,8 @@ interface UserInfo {
   picture?: string;
 }
 
-const AuthContext = createContext<null | string>(null);
 const UserContext = createContext<UserInfo>({});
 
-export const useAPIToken = () => useContext(AuthContext);
 export const useUserInfo = () => useContext(UserContext);
 
 const AuthRedirect = () => {
