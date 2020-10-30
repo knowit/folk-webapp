@@ -1,4 +1,5 @@
 const { getSecret, makeEmailUuid, groupBy, range } = require('./util');
+const { v4: uuid } = require('uuid');
 
 exports.projectStatus = async ({
   dataplattformClient
@@ -9,6 +10,7 @@ exports.projectStatus = async ({
   const allEmployees = await req.json();
 
   return allEmployees.map((employee) => ({
+    rowId: uuid(),
     rowData: [
       {
         value: employee.navn,
@@ -39,6 +41,7 @@ exports.competence = async ({
     ['int', 'word'],
   ];
   return allEmployees.map((employee) => ({
+    rowId: uuid(),
     rowData: [
       {
         value: employee.navn,
