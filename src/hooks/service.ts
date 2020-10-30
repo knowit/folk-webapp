@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from 'react';
-import { useAPIToken } from '../LoginProvider';
+import { useAPIToken } from '../authToken';
 
 type AsyncFunction<T> = ((...args: any[]) => Promise<T>) | (() => Promise<T>);
 type AsyncData<T, K> = [(...args: any[]) => void, boolean, T | null, K | null];
