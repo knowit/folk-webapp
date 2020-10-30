@@ -18,7 +18,7 @@ interface PercentAreaChartsProps {
   data: PercentAreaChartsData[];
 }
 
-const toPercent = (decimal: number, fixed: number = 0) =>
+const toPercent = (decimal: number, fixed = 0) =>
   `${(decimal * 100).toFixed(fixed)}%`;
 const getPercent = (value: number, total: number) =>
   toPercent(total > 0 ? value / total : 0, 2);
