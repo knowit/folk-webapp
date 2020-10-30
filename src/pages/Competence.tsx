@@ -1,18 +1,17 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 import {
   ConsultantCell,
   ExperienceCell,
   CheckBoxHeaderCell,
   EducationCell,
-  CvCell
+  CvCell,
 } from '../data/components/table/DataCells';
 import DDItem, { DDTable, DDChart } from '../data/DDItem';
-import { Skeleton } from '@material-ui/lab';
 import EmployeeInfo from '../components/EmployeeInfo';
 
 export default function Competence() {
-  
   const TableSkeleton = () => (
     <Skeleton variant="rect" height={780} animation="wave" />
   );
@@ -22,10 +21,9 @@ export default function Competence() {
 
   return (
     <Grid container spacing={2}>
-
       <DDItem
-        url={'/api/data/competenceSum'}
-        title={'Kompetansemengde'}
+        url="/api/data/competenceSum"
+        title="Kompetansemengde"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
@@ -34,8 +32,8 @@ export default function Competence() {
       />
 
       <DDItem
-        url={'/api/data/competenceAreas'}
-        title={'Kompetanseområder'}
+        url="/api/data/competenceAreas"
+        title="Kompetanseområder"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
@@ -44,8 +42,8 @@ export default function Competence() {
       />
 
       <DDItem
-        url={'/api/data/experienceDistribution'}
-        title={'Erfaring'}
+        url="/api/data/experienceDistribution"
+        title="Erfaring"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
@@ -55,8 +53,8 @@ export default function Competence() {
       />
 
       <DDItem
-        url={'/api/data/ageDistribution'}
-        title={'Alder'}
+        url="/api/data/ageDistribution"
+        title="Alder"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
@@ -66,8 +64,8 @@ export default function Competence() {
       />
 
       <DDItem
-        url={'/api/data/fagtimer'}
-        title={'Aktivitet faggrupper'}
+        url="/api/data/fagtimer"
+        title="Aktivitet faggrupper"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
@@ -77,8 +75,8 @@ export default function Competence() {
       />
 
       <DDItem
-        url={'/api/data/faggrupper'}
-        title={'Faggrupper oversikt'}
+        url="/api/data/faggrupper"
+        title="Faggrupper oversikt"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
@@ -87,19 +85,19 @@ export default function Competence() {
       />
 
       <DDItem
-        url={'/api/data/education'}
-        title={'Utdannelse'}
+        url="/api/data/education"
+        title="Utdannelse"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
           groupKey: 'degree',
-          valueKey: 'count'
+          valueKey: 'count',
         }}
       />
 
       <DDItem
-        url={'/api/data/competenceMapping'}
-        title={'Kompetansekartlegging'}
+        url="/api/data/competenceMapping"
+        title="Kompetansekartlegging"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
@@ -109,9 +107,9 @@ export default function Competence() {
       />
 
       <DDItem
-        url={'/api/data/competence'}
-        title={'Konsulentkompetanse'}
-        fullSize={true}
+        url="/api/data/competence"
+        title="Konsulentkompetanse"
+        fullSize
         Component={DDTable}
         dataComponentProps={{
           columns: [
@@ -127,9 +125,9 @@ export default function Competence() {
             },
             { title: 'Tittel' },
             { title: 'Erfaring', renderCell: ExperienceCell },
-            { title: 'Utdanning', renderCell: EducationCell},
+            { title: 'Utdanning', renderCell: EducationCell },
             { title: 'CV', renderCell: CvCell },
-          ]
+          ],
         }}
         SkeletonComponent={TableSkeleton}
       />

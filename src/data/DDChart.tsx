@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Fullscreen, FullscreenExit } from '@material-ui/icons';
+import { Theme, withStyles, createStyles, makeStyles } from '@material-ui/core';
 import { GridItemHeader, GridItemContent } from '../components/GridItem';
 import DropdownPicker from '../components/DropdownPicker';
 import Line from './components/Line';
@@ -6,10 +8,8 @@ import Bar from './components/Bar';
 import PercentArea from './components/PercentArea';
 import Pie from './components/Pie';
 import { DDComponentProps } from './DDItem';
-import { Fullscreen, FullscreenExit } from '@material-ui/icons';
 import { BigChart } from '../components/BigChart';
 import { ErrorText } from '../components/ErrorText';
-import { Theme, withStyles, createStyles, makeStyles } from '@material-ui/core';
 
 const usePlaceholderStyle = makeStyles(() =>
   createStyles({

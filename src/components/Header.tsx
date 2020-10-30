@@ -1,11 +1,12 @@
 import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { AppBar, Toolbar, Avatar } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import { NavMenu, NavMenuItem } from './NavMenu';
 import { useUserInfo } from '../LoginProvider';
 import { ReactComponent as KnowitLogo } from '../assets/logo.svg';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
-import { Link } from 'react-router-dom';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -44,9 +45,11 @@ export default function Header() {
 
   return (
     <div className={classes.root}>
-      <AppBar className={classes.appbar} position={'relative'}>
+      <AppBar className={classes.appbar} position="relative">
         <Toolbar className={classes.toolbar}>
-          <Link data-testid="knowit-logo" to="/" ><KnowitLogo title= "knowit-logo" className={classes.logo} /></Link>
+          <Link data-testid="knowit-logo" to="/">
+            <KnowitLogo title="knowit-logo" className={classes.logo} />
+          </Link>
           <NavMenu>
             <NavMenuItem label="Ansatte" to="/ansatte" />
             <NavMenuItem label="Kunder" to="/kunder" />

@@ -1,11 +1,14 @@
 import React from 'react';
-import { useFetchedData } from '../hooks/service';
-import { GridItem, GridItemHeader, GridItemContent } from '../components/GridItem';
 import { Skeleton } from '@material-ui/lab';
-import DDTable from './DDTable'
-import DDChart from './DDChart'
+import { useFetchedData } from '../hooks/service';
+import {
+  GridItem,
+  GridItemHeader,
+  GridItemContent,
+} from '../components/GridItem';
+import DDTable from './DDTable';
+import DDChart from './DDChart';
 import { ErrorText } from '../components/ErrorText';
-
 
 type DDPayload = { [key: string]: any };
 type DDPassProps = { [key: string]: any };
@@ -30,10 +33,9 @@ interface DDErrorProps {
   error: Error;
 }
 
-
 function DDError({ error }: DDErrorProps) {
   console.log(error);
-  return <ErrorText height={320}/>
+  return <ErrorText height={320} />;
 }
 
 export default function DDItem({
@@ -75,4 +77,4 @@ export default function DDItem({
   );
 }
 
-export { DDTable, DDChart }
+export { DDTable, DDChart };

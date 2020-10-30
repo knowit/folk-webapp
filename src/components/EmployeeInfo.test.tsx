@@ -1,7 +1,8 @@
-import React from 'react'; 
-import { render, screen } from '@testing-library/react'; 
+import React from 'react';
+import { render, screen } from '@testing-library/react';
 import EmployeeInfo from './EmployeeInfo'; // component to test
 import { useFetchedData } from '../hooks/service';
+
 jest.mock('../hooks/service');
 
 const fakeUser = {
@@ -23,23 +24,36 @@ const fakeUser = {
             motivation: 5,
         },
     },
-    tags:{
-        languages: ["Norsk", "Engelsk", "Japansk"],
-        skills: ["Systemutvikling", "Drift", "Test"],
-        roles: ['Teknisk rådgiver', 'Frontendutvikler'],
+    Strikke: {
+      competance: 4,
+      motivation: 4,
     },
-    workExperience:[
-        {
-            employer: 'knowit',
-            month_from: 5,
-            year_from: 2017,
-        },{
-            employer: 'no it',
-            month_from: 10,
-            year_from: 2010,
-        },
-    ]
-
+    Sykle: {
+      competance: 2,
+      motivation: 2,
+    },
+    Skate: {
+      competance: 0,
+      motivation: 5,
+    },
+  },
+  tags: {
+    languages: ['Norsk', 'Engelsk', 'Japansk'],
+    skills: ['Systemutvikling', 'Drift', 'Test'],
+    roles: ['Teknisk rådgiver', 'Frontendutvikler'],
+  },
+  workExperience: [
+    {
+      employer: 'knowit',
+      month_from: 5,
+      year_from: 2017,
+    },
+    {
+      employer: 'no it',
+      month_from: 10,
+      year_from: 2010,
+    },
+  ],
 };
 
 (useFetchedData as jest.Mock).mockReturnValue([fakeUser, false, null]);

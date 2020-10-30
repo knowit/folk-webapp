@@ -1,15 +1,14 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 import {
   ConsultantCell,
   CheckBoxHeaderCell,
   ProjectStatusCell,
   CustomerStatusCell,
 } from '../data/components/table/DataCells';
-import DDItem, { DDTable, DDChart} from '../data/DDItem';
-import { Skeleton } from '@material-ui/lab';
+import DDItem, { DDTable, DDChart } from '../data/DDItem';
 import EmployeeInfo from '../components/EmployeeInfo';
-
 
 export default function Employee() {
   const TableSkeleton = () => (
@@ -21,41 +20,41 @@ export default function Employee() {
 
   return (
     <Grid container spacing={2}>
-        <DDItem
-        url={'/api/data/inbound'}
-        title={'På vei inn'}
+      <DDItem
+        url="/api/data/inbound"
+        title="På vei inn"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{}}
       />
 
       <DDItem
-        url={'/api/data/outbound'}
-        title={'På vei ut'}
+        url="/api/data/outbound"
+        title="På vei ut"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{}}
       />
 
       <DDItem
-        url={'/api/data/experience'}
-        title={'Erfaringsnivå'}
+        url="/api/data/experience"
+        title="Erfaringsnivå"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
-        dataComponentProps={{ }}
+        dataComponentProps={{}}
       />
 
       <DDItem
-        url={'/api/data/resourceType'}
-        title={'Ressurstype'}
+        url="/api/data/resourceType"
+        title="Ressurstype"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
-      /> 
+      />
 
       <DDItem
-        url={'/api/data/projectStatus'}
-        title={'Prosjektstatus'}
-        fullSize={true}
+        url="/api/data/projectStatus"
+        title="Prosjektstatus"
+        fullSize
         Component={DDTable}
         dataComponentProps={{
           columns: [
@@ -72,11 +71,10 @@ export default function Employee() {
             { title: 'Tittel' },
             { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
             { title: 'Kunde', renderCell: CustomerStatusCell },
-          ]
+          ],
         }}
         SkeletonComponent={TableSkeleton}
-      /> 
-
+      />
     </Grid>
   );
 }
