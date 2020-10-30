@@ -38,7 +38,7 @@ export function NavMenuItem({ label, to }: { label: string; to: string }) {
       className={`${classes.menuItem} ${classes.menuItemSelected}`}
       to={to}
       component={RouterLink}
-      disableRipple={true}
+      disableRipple
     >
       {label}
     </ButtonBase>
