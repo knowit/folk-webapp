@@ -1,2 +1,3 @@
 *.test.js
 *.test.tsx
+node_modules/
