@@ -2,6 +2,24 @@
   "name": "folk-webapp",
   "version": "0.1.0",
   "private": true,
+  "contributors": [
+    {
+      "name": "Jens Kristoffer Retian Markussen",
+      "email": "jens.markussen@knowit.no"
+    },
+    {
+      "name": "Alireza Balouch",
+      "email": "swape@swape.net"
+    },
+    {
+      "name": "Frida Tryggestad Klockmann",
+      "email": "fridaklockmann@gmail.com"
+    },
+    {
+      "name": "Pernille Johnsen",
+      "email": "pernillej11@gmail.com"
+    }
+  ],
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
