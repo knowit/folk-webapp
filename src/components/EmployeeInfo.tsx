@@ -94,8 +94,8 @@ function CompetenceMapping({
         )}
       </div>
       <div className={classes.gradient}>
-        {['Uinteressert', 'Tja', 'Interessert'].map((level, i) => (
-          <div key={i}>{level}</div>
+        {['Uinteressert', 'Tja', 'Interessert'].map((level) => (
+          <div key={makeKeyFromText(level)}>{level}</div>
         ))}
       </div>
     </div>
