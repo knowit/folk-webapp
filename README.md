@@ -1,4 +1,5 @@
 # Knowit folk
+
 ![Knowit Folk Deploy Dev](https://github.com/knowit/folk-webapp/workflows/Knowit%20Folk%20Deploy%20Dev/badge.svg?branch=master)
 ![Knowit Folk Frontend](https://github.com/knowit/folk-webapp/workflows/Knowit%20Folk%20Frontend/badge.svg?branch=master)
 
@@ -6,13 +7,16 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Deploy
 
-Automatic deployment of `master` branch to development environment 
+Automatic deployment of `master` branch to development environment
 
 ### Manual deploy (development environment):
+
 #### backend: `yarn deploy:backend --stage dev`
+
 #### frontend: `yarn deploy:web:dev`
 
 ## Environments
+
 `dev` https://dev.folk.knowit.no/
 
 ## Available Scripts
@@ -59,6 +63,14 @@ If you aren´t satisfied with the build tool and configuration choices, you can 
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you´re on your own.
 
 You don´t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn´t feel obligated to use this feature. However we understand that this tool wouldn´t be useful if you couldn´t customize it when you are ready for it.
+
+### `yarn lint`
+
+To find out errors, you can run this command. It is linting all the scripts in `./src` directory with eslint.
+
+### `yarn format`
+
+It formats all the scripts with prettier to standards specified in `.prettier.json` file.
 
 ## Learn More
 
