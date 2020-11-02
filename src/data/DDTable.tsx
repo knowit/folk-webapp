@@ -22,6 +22,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
         [col.searchable, col.searchKey, i] as [boolean, string, number]
     )
     .filter(([searchable]) => searchable)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .map(([_, key, i]) => [key, i] as [string, number]);
 
   const handleSearchInputChange = (searchTerm: string) => {
