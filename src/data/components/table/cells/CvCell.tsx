@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import CvDialog from '../../../../components/CvDialog'
 import GetApp from '@material-ui/icons/GetApp';
 import { NoData } from '../../../../components/ErrorText';
+import { makeStyles, Theme } from '@material-ui/core';
 
 interface CvCellData {
   no_pdf: string
@@ -10,6 +11,17 @@ interface CvCellData {
   int_word: string
 }
 
+const useStyles = makeStyles((theme: Theme) => ({
+  icon: {
+    color: theme.palette.primary.main,
+    borderRadius: 0,
+    transition: 'none',
+    padding: 0,
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
+}));
 export default function CvCell({
   rowData: [{value:name}],
   data,
@@ -18,6 +30,7 @@ export default function CvCell({
   data: CvCellData
 }) {
   const [open, setOpen] = useState(false);
+  const classes = useStyles();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -26,7 +39,7 @@ export default function CvCell({
   };
   return data?(
     <>
-    <GetApp onClick={handleClickOpen}/>
+    <GetApp onClick={handleClickOpen} className={classes.icon}/>
     <CvDialog open={open} onClose={handleClose} name={name} data={data} />
     </>
   ):

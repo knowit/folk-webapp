@@ -111,12 +111,12 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
         {sets ? (
           <GridItemContent>
             {big ? (
-              <span title="Exit stor størrelse.">
+              <span title="Exit stor størrelse">
                 {' '}
                 <SmallerIcon onClick={() => setBig(false)} />{' '}
               </span>
             ) : (
-              <span title="Utvid til stor størrelse.">
+              <span title="Utvid til stor størrelse">
                 <LargerIcon onClick={() => setBig(true)} />
               </span>
             )}
