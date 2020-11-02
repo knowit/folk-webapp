@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { GridItemHeader } from '../components/GridItem';
 import DataTable from './components/table/DataTable';
 import SearchInput from '../components/SearchInput';
-import { DDComponentProps } from './DDItem';
+import { DDComponentProps } from './types';
 
 interface Column {
   title: string;
@@ -22,6 +22,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
         [col.searchable, col.searchKey, i] as [boolean, string, number]
     )
     .filter(([searchable]) => searchable)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .map(([_, key, i]) => [key, i] as [string, number]);
 
   const handleSearchInputChange = (searchTerm: string) => {

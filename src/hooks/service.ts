@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from 'react';
-import { useAPIToken } from '../LoginProvider';
+import { useAPIToken } from '../authToken';
 
 type AsyncFunction<T> = ((...args: any[]) => Promise<T>) | (() => Promise<T>);
 type AsyncData<T, K> = [(...args: any[]) => void, boolean, T | null, K | null];
@@ -53,14 +53,16 @@ export function useServiceCall<T>({
   const token = useAPIToken();
 
   const fetcher = useCallback(async () => {
-    if (!token) return Promise.reject('Unauthorized');
+    if (!token) return Promise.reject(new Error('Unauthorized'));
     return fetch(url, {
       method,
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-    }).then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)));
+    }).then((res) =>
+      res.ok ? res.json() : Promise.reject(new Error(res.statusText))
+    );
   }, [token, url, method]);
 
   const [handler, pending, value, error] = useAsync<T>(fetcher);

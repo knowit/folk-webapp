@@ -1,9 +1,9 @@
 import React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { ButtonBase } from '@material-ui/core';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
       marginLeft: 'auto',
@@ -38,7 +38,7 @@ export function NavMenuItem({ label, to }: { label: string; to: string }) {
       className={`${classes.menuItem} ${classes.menuItemSelected}`}
       to={to}
       component={RouterLink}
-      disableRipple={true}
+      disableRipple
     >
       {label}
     </ButtonBase>

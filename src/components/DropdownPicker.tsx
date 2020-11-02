@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     backgroundColor: '#F1F0ED',
     fontSize: 16,
     border: '1px solid white',
-    width: width,
+    width,
   }),
   input: {
     paddingLeft: 12,
@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   menu: {},
   menuPaper: ({ width }: { width: number }) => ({
     borderRadius: 0,
-    width: width,
+    width,
     backgroundColor: '#F1F0ED',
     marginLeft: -1,
   }),
@@ -93,7 +93,7 @@ export default function DropdownPicker({
       classes={overrideClasses}
       variant="standard"
       inputRef={selectRef}
-      autoWidth={true}
+      autoWidth
       onChange={({ target: { value } }) => onChange(value)}
       input={<InputBase />}
       defaultValue={defaultValue}
@@ -123,9 +123,9 @@ export default function DropdownPicker({
         elevation: 0,
       }}
     >
-      {values.map((value: ValueType, index: number) => (
+      {values.map((value: ValueType) => (
         <MenuItem
-          key={`${getValue(value)}-${index}`}
+          key={`${getValue(value)}`}
           className={classes.menuItem}
           value={getValue(value)}
         >

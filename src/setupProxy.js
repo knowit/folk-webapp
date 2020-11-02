@@ -1,9 +1,16 @@
-const config = require('../package.json')
-const { createProxyMiddleware } = require('http-proxy-middleware')
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/camelcase */
+const { createProxyMiddleware } = require('http-proxy-middleware');
+const config = require('../package.json');
 
-module.exports = function(app) {
-    const proxy_url = process.env.PROXY_URL || config.proxy
-    const proxy = createProxyMiddleware({target: proxy_url, changeOrigin: true})
-    app.use('/auth', proxy)
-    app.use('/api', proxy)
-}
+// eslint-disable-next-line func-names
+module.exports = function (app) {
+  const proxy_url = process.env.PROXY_URL || config.proxy;
+  const proxy = createProxyMiddleware({
+    target: proxy_url,
+    changeOrigin: true,
+  });
+  app.use('/auth', proxy);
+  app.use('/api', proxy);
+};

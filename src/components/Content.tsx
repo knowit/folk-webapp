@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Redirect } from 'react-router';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { NotFound, UnderConstruction, Employee, Competence } from '../pages';
 
 export default function Content() {

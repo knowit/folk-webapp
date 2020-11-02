@@ -1,8 +1,8 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     gridRoot: {
       boxShadow: '0px 4px 10px #00000012',

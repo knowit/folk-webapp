@@ -10,7 +10,7 @@ const DialogBox = withStyles(() => ({
   },
 }))(Dialog);
 
-export const BigChart: React.FC<{ open: boolean; onClose: () => void }> = ({
+const BigChart: React.FC<{ open: boolean; onClose: () => void }> = ({
   onClose,
   open,
   children,
@@ -26,3 +26,5 @@ export const BigChart: React.FC<{ open: boolean; onClose: () => void }> = ({
     </DialogBox>
   );
 };
+
+export default BigChart;

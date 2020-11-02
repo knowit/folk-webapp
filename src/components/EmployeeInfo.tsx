@@ -1,8 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { Skeleton } from '@material-ui/lab';
 import CharacterLimitBox from './CharacterLimitBox';
 import { useFetchedData } from '../hooks/service';
-import { Skeleton } from '@material-ui/lab';
 import { NoData } from './ErrorText';
 
 type Experience = {
@@ -58,6 +58,8 @@ const useCompetenceMappingStyles = makeStyles({
   },
 });
 
+const makeKeyFromText = (value: string): string => value.replace(' ', '_');
+
 function CompetenceMapping({
   competences,
 }: {
@@ -76,24 +78,24 @@ function CompetenceMapping({
           competenceMap.slice(-1)[0][0],
         ]
       : [];
-
   return (
     <div className={classes.root}>
       <div>
-        {competencesList.length > 0
-        ?competencesList.map((competence, i) => (
-          <div key={i}>
-            <CharacterLimitBox text={competence}/>
+        {competencesList.length > 0 ? (
+          competencesList.map((competence) => (
+            <div key={makeKeyFromText(competence)}>
+              <CharacterLimitBox text={competence} />
+            </div>
+          ))
+        ) : (
+          <div key={1}>
+            <NoData />
           </div>
-        ))
-        : <div key={1}>
-            <NoData/>
-          </div>
-        }
+        )}
       </div>
       <div className={classes.gradient}>
-        {['Uinteressert', 'Tja', 'Interessert'].map((level, i) => (
-          <div key={i}>{level}</div>
+        {['Uinteressert', 'Tja', 'Interessert'].map((level) => (
+          <div key={makeKeyFromText(level)}>{level}</div>
         ))}
       </div>
     </div>
@@ -128,21 +130,33 @@ export default function EmployeeInfo({
     const firstJob = allExperience?.sort(
       (a, b) => a.year_from - b.year_from
     )[0];
-    return firstJob?.year_from === undefined || firstJob?.year_from <0 ? <NoData/> :`${new Date().getFullYear() - firstJob?.year_from} år.`;
+    return firstJob?.year_from === undefined || firstJob?.year_from < 0 ? (
+      <NoData />
+    ) : (
+      `${new Date().getFullYear() - firstJob?.year_from} år.`
+    );
   };
 
   const startedInKnowit = (allExperience: Experience[] | undefined) => {
-    const knowit = allExperience?.find((x) =>
-      x.employer.toLowerCase().includes('knowit') ||
-      x.employer.toLowerCase().includes('objectnet') ||
-      x.employer.toLowerCase().includes('know it')
+    const knowit = allExperience?.find(
+      (x) =>
+        x.employer.toLowerCase().includes('knowit') ||
+        x.employer.toLowerCase().includes('objectnet') ||
+        x.employer.toLowerCase().includes('know it')
     );
 
-    const monthFrom =  knowit && knowit?.month_from < 10? "0"+knowit?.month_from  : knowit?.month_from 
+    const monthFrom =
+      knowit && knowit?.month_from < 10
+        ? `0${knowit?.month_from}`
+        : knowit?.month_from;
 
-    return knowit === undefined || knowit.year_from < 0? <NoData/> : [monthFrom, knowit?.year_from].join(' - ')+".";
+    return knowit === undefined || knowit.year_from < 0 ? (
+      <NoData />
+    ) : (
+      `${[monthFrom, knowit?.year_from].join(' - ')}.`
+    );
   };
-  
+
   return (
     <div className={classes.root}>
       <div className={classes.cell}>
@@ -151,7 +165,11 @@ export default function EmployeeInfo({
         ) : (
           <>
             <b>Hovedkompetanse:</b>{' '}
-            {data?.tags.skills? data?.tags.skills.filter((x) => x).join(', ')+ "." :<NoData/>}
+            {data?.tags.skills ? (
+              `${data?.tags.skills.filter((x) => x).join(', ')}.`
+            ) : (
+              <NoData />
+            )}
           </>
         )}
       </div>
@@ -161,7 +179,13 @@ export default function EmployeeInfo({
         ) : (
           <>
             <b>Roller:</b>{' '}
-            {data?.tags.roles? Array.from(new Set(data?.tags.roles)).filter((x) => x).join(', ')+ ".": <NoData/>}
+            {data?.tags.roles ? (
+              `${Array.from(new Set(data?.tags.roles))
+                .filter((x) => x)
+                .join(', ')}.`
+            ) : (
+              <NoData />
+            )}
           </>
         )}
       </div>
@@ -170,8 +194,7 @@ export default function EmployeeInfo({
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Startet i Knowit:</b>{' '}
-            {startedInKnowit(data?.workExperience)}
+            <b>Startet i Knowit:</b> {startedInKnowit(data?.workExperience)}
           </>
         )}
       </div>
@@ -191,7 +214,11 @@ export default function EmployeeInfo({
         ) : (
           <>
             <b>Språk:</b>{' '}
-            {data?.tags.languages? data?.tags.languages.filter((x) => x).join(', ') + "." : <NoData/>}
+            {data?.tags.languages ? (
+              `${data?.tags.languages.filter((x) => x).join(', ')}.`
+            ) : (
+              <NoData />
+            )}
           </>
         )}
       </div>

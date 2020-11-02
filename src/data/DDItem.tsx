@@ -1,39 +1,25 @@
 import React from 'react';
-import { useFetchedData } from '../hooks/service';
-import { GridItem, GridItemHeader, GridItemContent } from '../components/GridItem';
 import { Skeleton } from '@material-ui/lab';
-import DDTable from './DDTable'
-import DDChart from './DDChart'
+import { useFetchedData } from '../hooks/service';
+import {
+  GridItem,
+  GridItemHeader,
+  GridItemContent,
+} from '../components/GridItem';
+import DDTable from './DDTable';
+import DDChart from './DDChart';
 import { ErrorText } from '../components/ErrorText';
-
-
-type DDPayload = { [key: string]: any };
-type DDPassProps = { [key: string]: any };
-
-export interface DDComponentProps {
-  payload: DDPayload;
-  title: string;
-  props?: DDPassProps;
-}
-
-export interface DDItemProps {
-  url: string;
-  fullSize?: boolean;
-  title: string;
-  dataComponentProps?: DDPassProps;
-  Component: (props: DDComponentProps) => JSX.Element;
-  SkeletonComponent: () => JSX.Element;
-  HeaderSkeletonComponent?: () => JSX.Element;
-}
+import type { DDPayload } from './types';
+import { DDItemProps } from './types';
 
 interface DDErrorProps {
   error: Error;
 }
 
-
 function DDError({ error }: DDErrorProps) {
+  // eslint-disable-next-line no-console
   console.log(error);
-  return <ErrorText height={320}/>
+  return <ErrorText height={320} />;
 }
 
 export default function DDItem({
@@ -57,22 +43,15 @@ export default function DDItem({
             {pending && !error ? <HeaderSkeletonComponent /> : null}
           </GridItemHeader>
           <GridItemContent>
-            {error ? (
-              <DDError error={error} />
-            ) : pending ? (
-              <SkeletonComponent />
-            ) : null}
+            {error && <DDError error={error} />}
+            {pending && !error && <SkeletonComponent />}
           </GridItemContent>
         </>
       ) : (
-        <Component
-          payload={payload as DDPayload}
-          title={title}
-          props={dataComponentProps}
-        />
+        <Component payload={payload} title={title} props={dataComponentProps} />
       )}
     </GridItem>
   );
 }
 
-export { DDTable, DDChart }
+export { DDTable, DDChart };
