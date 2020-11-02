@@ -229,6 +229,7 @@ function MuiVirtualizedTable({
   const [opens, setOpens] = useState<boolean[]>([]);
   const [heights, setHeights] = useState<number[]>([]);
 
+  
   const handleOpenChange = (rowIndex: number, open: boolean) => {
     setOpens({
       ...opens,
