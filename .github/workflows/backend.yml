@@ -1,0 +1,21 @@
+
+name: Knowit Folk - Backend
+
+on: 
+  pull_request:
+    paths:
+      - 'backend/*/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up node 14
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: '14'
+      - name: Install dependencies
+        working-directory: backend
+        run: yarn install
+  

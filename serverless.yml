@@ -17,6 +17,10 @@ custom:
     - PATCH
     - POST
     - DELETE
+  stageDomains:
+    dev: dev.folk.knowit.no
+    prod: folk.knowit.no
+  domain: ${self:custom.stageDomains.${self:custom.stage}}
 
 provider:
   name: aws
@@ -121,7 +125,7 @@ resources:
         DistributionConfig:
           Enabled: true
           Aliases:
-            - ${self:custom.stage}.folk.knowit.no
+            - ${self:custom.domain}
           Origins:
             - DomainName: ${self:custom.bucketName}.s3-website.${self:provider.region}.amazonaws.com
               Id: ${self:custom.service}-default-origin

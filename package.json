@@ -42,12 +42,15 @@
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
     "reinstall": "rm -rf ./node_module && yarn",
-    "deploy:backend": "sls deploy",
-    "deploy:upload:dev": "aws s3 sync build s3://dev-folk-webapp-static-web && yarn invalidate-cache:dev",
-    "deploy:web:dev": "yarn build && yarn deploy:upload:dev",
-    "invalidate-cache:dev": "aws cloudfront create-invalidation --distribution-id EYKLHWDAKRWEW --paths /",
+    "predeploy:dev": "yarn build",
+    "predeploy:prod": "yarn build",
+    "deploy:dev": "aws s3 sync build s3://dev-folk-webapp-static-web",
+    "deploy:prod": "aws s3 sync build s3://prod-folk-webapp-static-web",
+    "postdeploy:dev": "aws cloudfront create-invalidation --distribution-id EYKLHWDAKRWEW --paths /",
+    "postdeploy:prod": "aws cloudfront create-invalidation --distribution-id E16SNX0CEZ21PY --paths /",
     "format": "prettier --write ./src/**/*.{js,ts,tsx}",
-    "lint": "eslint --fix --quiet ./src/**/*.{js,ts,tsx} "
+    "lint": "eslint --quiet ./src/**/*.{js,ts,tsx}",
+    "lint:fix": "eslint --fix --quiet ./src/**/*.{js,ts,tsx}"
   },
   "eslintConfig": {
     "extends": "react-app"
