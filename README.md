@@ -1,7 +1,6 @@
 # Knowit folk
-
-![Knowit Folk Deploy Dev](https://github.com/knowit/folk-webapp/workflows/Knowit%20Folk%20Deploy%20Dev/badge.svg?branch=master)
-![Knowit Folk Frontend](https://github.com/knowit/folk-webapp/workflows/Knowit%20Folk%20Frontend/badge.svg?branch=master)
+![Knowit Folk - Backend](https://github.com/knowit/folk-webapp/workflows/Knowit%20Folk%20-%20Backend/badge.svg)
+![Knowit Folk - Frontend](https://github.com/knowit/folk-webapp/workflows/Knowit%20Folk%20-%20Frontend/badge.svg)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -9,15 +8,19 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 Automatic deployment of `master` branch to development environment
 
-### Manual deploy (development environment):
+### Manual
+```
+# deploy backend and infrastucture
+sls deploy --stage dev 
 
-#### backend: `yarn deploy:backend --stage dev`
-
-#### frontend: `yarn deploy:web:dev`
+# deploy frontend
+yarn deploy:dev
+```
 
 ## Environments
 
-`dev` https://dev.folk.knowit.no/
+- `dev`: https://dev.folk.knowit.no/
+- `prod`: https://folk.knowit.no/
 
 ## Available Scripts
 
