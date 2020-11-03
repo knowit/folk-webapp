@@ -167,27 +167,21 @@ export default function EmployeeInfo(cellData: { competenceUrl: string }) {
   };
 
   const getHovedkompetanse = (skills: string[] | null | undefined) => {
-    if (skills) {
-      return skills.length > 0 ? (
-        `${skills.filter((x) => x).join(', ')}.`
-      ) : (
-        <NoData />
-      );
-    }
-    return <NoData />;
+    return skills && skills.length > 0 ? (
+      `${skills.filter((x) => x).join(', ')}.`
+    ) : (
+      <NoData />
+    );
   };
 
   const getRoles = (roles: string[] | null | undefined) => {
-    if (roles) {
-      return roles.length > 0 ? (
-        `${Array.from(new Set(data?.tags.roles))
-          .filter((x) => x)
-          .join(', ')}.`
-      ) : (
-        <NoData />
-      );
-    }
-    return <NoData />;
+    return roles && roles.length > 0 ? (
+      `${Array.from(new Set(data?.tags.roles))
+        .filter((x) => x)
+        .join(', ')}.`
+    ) : (
+      <NoData />
+    );
   };
 
   return (
