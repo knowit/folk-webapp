@@ -8,7 +8,7 @@ import Bar from './components/Bar';
 import PercentArea from './components/PercentArea';
 import Pie from './components/Pie';
 import { DDComponentProps } from './types';
-import BigChart from '../components/BigChart'
+import BigChart from '../components/BigChart';
 import { ErrorText } from '../components/ErrorText';
 
 const usePlaceholderStyle = makeStyles(() =>

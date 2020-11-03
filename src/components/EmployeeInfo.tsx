@@ -1,8 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { Skeleton } from '@material-ui/lab';
 import CharacterLimitBox from './CharacterLimitBox';
 import { useFetchedData } from '../hooks/service';
-import { Skeleton } from '@material-ui/lab';
 import { NoData } from './ErrorText';
 
 type Experience = {
@@ -58,6 +58,8 @@ const useCompetenceMappingStyles = makeStyles({
   },
 });
 
+const makeKeyFromText = (value: string): string => value.replace(' ', '_');
+
 function CompetenceMapping({
   competences,
 }: {
@@ -81,8 +83,8 @@ function CompetenceMapping({
     <div className={classes.root}>
       <div>
         {competencesList.length > 0 ? (
-          competencesList.map((competence, i) => (
-            <div key={i}>
+          competencesList.map((competence) => (
+            <div key={makeKeyFromText(competence)}>
               <CharacterLimitBox
                 text={competence.charAt(0).toUpperCase() + competence.slice(1)}
               />
@@ -103,8 +105,8 @@ function CompetenceMapping({
         )}
       </div>
       <div className={classes.gradient}>
-        {['Uinteressert', 'Tja', 'Interessert'].map((level, i) => (
-          <div key={i}>{level}</div>
+        {['Uinteressert', 'Tja', 'Interessert'].map((level) => (
+          <div key={makeKeyFromText(level)}>{level}</div>
         ))}
       </div>
     </div>
@@ -144,10 +146,9 @@ export default function EmployeeInfo(cellData: { competenceUrl: string }) {
   };
 
   const startedInKnowit = (allExperience: Experience[] | undefined) => {
-    const knowit = allExperience?.find(
-      (x) =>
-        x.employer ?
-          x.employer.toLowerCase().includes('knowit') ||
+    const knowit = allExperience?.find((x) =>
+      x.employer
+        ? x.employer.toLowerCase().includes('knowit') ||
           x.employer.toLowerCase().includes('objectnet') ||
           x.employer.toLowerCase().includes('know it')
         : null
@@ -155,35 +156,39 @@ export default function EmployeeInfo(cellData: { competenceUrl: string }) {
 
     const monthFrom =
       knowit && knowit?.month_from < 10
-        ? '0' + knowit?.month_from
+        ? `0${knowit?.month_from}`
         : knowit?.month_from;
-  
+
     return knowit === undefined || knowit.year_from < 0 ? (
       <NoData />
     ) : (
-      [monthFrom, knowit?.year_from].join(' - ') + '.'
+      `${[monthFrom, knowit?.year_from].join(' - ')}.`
     );
   };
 
-  const getHovedkompetanse = (skills:string[] | null | undefined) => {
-    return(
-      skills
-        ?skills.length > 0
-          ? skills.filter((x) => x).join(', ') +"."
-          : <NoData/>
-        : <NoData/>
-    );
-  }
+  const getHovedkompetanse = (skills: string[] | null | undefined) => {
+    if (skills) {
+      return skills.length > 0 ? (
+        `${skills.filter((x) => x).join(', ')}.`
+      ) : (
+        <NoData />
+      );
+    }
+    return <NoData />;
+  };
 
-  const getRoles = (roles:string[]|null|undefined) => {
-    return(
-      roles
-        ?roles.length > 0
-          ? Array.from(new Set(data?.tags.roles)).filter((x) => x).join(', ')+ "."
-          : <NoData/>
-        : <NoData/>
-    );
-  }
+  const getRoles = (roles: string[] | null | undefined) => {
+    if (roles) {
+      return roles.length > 0 ? (
+        `${Array.from(new Set(data?.tags.roles))
+          .filter((x) => x)
+          .join(', ')}.`
+      ) : (
+        <NoData />
+      );
+    }
+    return <NoData />;
+  };
 
   return (
     <div className={classes.root}>
@@ -192,8 +197,7 @@ export default function EmployeeInfo(cellData: { competenceUrl: string }) {
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Hovedkompetanse:</b>{' '}
-            {getHovedkompetanse(data?.tags.skills)}
+            <b>Hovedkompetanse:</b> {getHovedkompetanse(data?.tags.skills)}
           </>
         )}
       </div>
@@ -202,8 +206,7 @@ export default function EmployeeInfo(cellData: { competenceUrl: string }) {
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Roller:</b>{' '}
-            {getRoles(data?.tags.roles)}
+            <b>Roller:</b> {getRoles(data?.tags.roles)}
           </>
         )}
       </div>
@@ -233,7 +236,7 @@ export default function EmployeeInfo(cellData: { competenceUrl: string }) {
           <>
             <b>Språk:</b>{' '}
             {data?.tags.languages ? (
-              data?.tags.languages.filter((x) => x).join(', ') + '.'
+              `${data?.tags.languages.filter((x) => x).join(', ')}.`
             ) : (
               <NoData />
             )}

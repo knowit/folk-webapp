@@ -22,7 +22,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
         [col.searchable, col.searchKey, i] as [boolean, string, number]
     )
     .filter(([searchable]) => searchable)
-    .map(([_, key, i]) => [key, i] as [string, number]);
+    .map(([, key, i]) => [key, i] as [string, number]);
 
   const handleSearchInputChange = (searchTerm: string) => {
     if (!searchTerm || searchTerm.length <= 2) {
