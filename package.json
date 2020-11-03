@@ -50,7 +50,8 @@
     "postdeploy:prod": "aws cloudfront create-invalidation --distribution-id E16SNX0CEZ21PY --paths /",
     "format": "prettier --write ./src/**/*.{js,ts,tsx}",
     "lint": "eslint --quiet ./src/**/*.{js,ts,tsx}",
-    "lint:fix": "eslint --fix --quiet ./src/**/*.{js,ts,tsx}"
+    "lint:fix": "eslint --fix --quiet ./src/**/*.{js,ts,tsx}",
+    "sls": "sls"
   },
   "eslintConfig": {
     "extends": "react-app"
