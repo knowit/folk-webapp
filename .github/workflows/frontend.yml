@@ -1,5 +1,5 @@
 
-name: Knowit Folk Frontend
+name: Knowit Folk - Frontend
 
 on: 
   pull_request:
@@ -19,6 +19,29 @@ jobs:
         run: yarn install
       - name: Run tests
         run: yarn test --ci --all 
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up node 14
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: '14'
+      - name: Install dependencies
+        run: yarn install
+      - name: Check lints
+        continue-on-error: true
+        run: yarn lint
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up node 14
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: '14'
+      - name: Install dependencies
+        run: yarn install
       - name: Check build
         run: yarn build
   

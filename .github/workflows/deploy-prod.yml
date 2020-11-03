@@ -1,28 +1,14 @@
 
-name: Knowit Folk - Deploy - Dev
+name: Knowit Folk - Deploy - Prod
 
-on: 
-  push:
-    branches:
-      - master
+on:
+  release:
+    types: [published]
   workflow_dispatch:
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up node 14
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: '14'
-      - name: Install dependencies
-        run: yarn install
-      - name: Run tests
-        run: yarn test --ci --all 
   deploy_backend:
     runs-on: ubuntu-latest
-    needs: test
     steps:
       - uses: actions/checkout@v2
       - name: Set up node 14
@@ -44,7 +30,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy backend
-        run: sls deploy --stage dev
+        run: sls deploy --stage prod
   deploy_frontend:
     runs-on: ubuntu-latest
     needs: deploy_backend
@@ -66,5 +52,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy frontend
-        run: yarn deploy:dev
+        run: yarn deploy:prod
   
