@@ -166,17 +166,12 @@ export default function EmployeeInfo(cellData: { competenceUrl: string }) {
     );
   };
 
-  const getHovedkompetanse = (skills: string[] | null | undefined) => {
-    return skills && skills.length > 0 ? (
-      `${skills.filter((x) => x).join(', ')}.`
-    ) : (
-      <NoData />
-    );
-  };
-
-  const getRoles = (roles: string[] | null | undefined) => {
-    return roles && roles.length > 0 ? (
-      `${Array.from(new Set(data?.tags.roles))
+  const getStringFromList = (
+    list: string[] | null | undefined,
+    listName: 'skills' | 'roles' | 'languages'
+  ) => {
+    return list && list.length > 0 ? (
+      `${Array.from(new Set(data?.tags[listName]))
         .filter((x) => x)
         .join(', ')}.`
     ) : (
@@ -191,7 +186,8 @@ export default function EmployeeInfo(cellData: { competenceUrl: string }) {
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Hovedkompetanse:</b> {getHovedkompetanse(data?.tags.skills)}
+            <b>Hovedkompetanse: </b>
+            {getStringFromList(data?.tags.skills, 'skills')}
           </>
         )}
       </div>
@@ -200,7 +196,8 @@ export default function EmployeeInfo(cellData: { competenceUrl: string }) {
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Roller:</b> {getRoles(data?.tags.roles)}
+            <b>Roller: </b>
+            {getStringFromList(data?.tags.roles, 'roles')}
           </>
         )}
       </div>
@@ -228,12 +225,8 @@ export default function EmployeeInfo(cellData: { competenceUrl: string }) {
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Språk:</b>{' '}
-            {data?.tags.languages ? (
-              `${data?.tags.languages.filter((x) => x).join(', ')}.`
-            ) : (
-              <NoData />
-            )}
+            <b>Språk: </b>
+            {getStringFromList(data?.tags.languages, 'languages')}
           </>
         )}
       </div>
