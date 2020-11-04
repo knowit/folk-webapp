@@ -130,9 +130,9 @@ const useStyles = makeStyles({
   },
 });
 
-export default function EmployeeInfo(cellData: { competenceUrl: string }) {
+export default function EmployeeInfo(cellData:{data:{competenceUrl: string }}) {
   const classes = useStyles();
-  const url = cellData.competenceUrl;
+  const url = cellData.data.competenceUrl;
   const [data, pending] = useFetchedData<EmployeeInfoData>({ url });
   const totalExperience = (allExperience: Experience[] | undefined) => {
     const firstJob = allExperience?.sort(
