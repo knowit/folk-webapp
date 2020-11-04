@@ -4,20 +4,21 @@ import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import Fade from '@material-ui/core/Fade';
 import Modal from '@material-ui/core/Modal';
+import { useFetchedData } from '../../../../hooks/service'
 import { Skeleton } from '@material-ui/lab';
-import { useFetchedData } from '../../../../hooks/service';
 import { ErrorText, NoData } from '../../../../components/ErrorText';
 
+
 interface Experience {
-  customer: string;
-  project: string;
-  time_to: string;
-  time_from: string;
+  customer: string
+  project: string
+  time_to: string
+  time_from: string
 }
 
 interface ExperienceData {
-  name: string;
-  experience: Experience[];
+  name: string
+  experience: Experience[]
 }
 
 const useModalStyles = makeStyles({
@@ -57,15 +58,15 @@ const useModalStyles = makeStyles({
       cursor: 'pointer',
       color: '#333',
     },
-  },
-});
+  }
+})
 
 function ExperiencePopoverModel({
   url,
-  onClose,
-}: {
-  url: string;
-  onClose: () => void;
+  onClose
+} : {
+  url: string,
+  onClose: () => void
 }) {
   const classes = useModalStyles();
   const [userInfo, pending] = useFetchedData<ExperienceData>({ url });
@@ -73,37 +74,35 @@ function ExperiencePopoverModel({
   return (
     <div className={classes.root}>
       <div className={classes.cvBoxHeader}>
-        {pending ? (
-          <Skeleton variant="rect" width={220} height={30} animation="wave" />
-        ) : (
-          <h2>{userInfo?.name}</h2>
-        )}
+        {pending 
+          ? <Skeleton variant="rect" width={220} height={30} animation="wave" /> 
+          : <h2>{userInfo?.name}</h2>}
         <div>
-          <Link onClick={() => onClose()} title="Lukk">
+          <Link
+            onClick={() => onClose()}
+            title="Lukk"
+          >
             <CloseIcon />
           </Link>
         </div>
       </div>
       <div className={classes.content}>
-        {pending ? (
-          <Skeleton variant="rect" height={320} animation="wave" />
-        ) : userInfo?.experience ? (
-          userInfo?.experience.map((exp) => (
-            <div>
-              <h4>
-                {exp.time_from} - {exp.time_to}
-              </h4>
+        {pending 
+          ? <Skeleton variant="rect" height={320} animation="wave" />  
+          : userInfo?.experience? userInfo?.experience.map((exp, index) => (
+            <div key = {index}>
+              <h4>{exp.time_from} - {exp.time_to}</h4>
               <div>{exp.customer}</div>
               <div>{exp.project}</div>
             </div>
-          ))
-        ) : (
-          <ErrorText />
-        )}
+          )):<ErrorText/>
+        }
       </div>
+      
     </div>
-  );
+  )
 }
+
 
 const useStyles = makeStyles({
   triggerLink: {
@@ -121,22 +120,22 @@ const useStyles = makeStyles({
   },
 });
 
-export default function ExperienceCell({ data }: { data: string }) {
+export default function ExperienceCell({ data } : { data: string }) {
   const [showExperienceData, setExperienceData] = React.useState(false);
   const classes = useStyles();
   return (
     <>
-      {!data ? (
-        <NoData />
-      ) : (
-        <Link
-          onClick={() => setExperienceData(!showExperienceData)}
-          className={classes.triggerLink}
-        >
-          Se prosjekter
-        </Link>
-      )}
-
+      { !data ?
+      <NoData/>
+      :
+      <Link
+        onClick={() => setExperienceData(!showExperienceData)}
+        className={classes.triggerLink}
+      >
+        Se prosjekter
+      </Link>
+      }
+      
       <Modal
         open={showExperienceData}
         onClose={() => setExperienceData(!showExperienceData)}
@@ -144,7 +143,7 @@ export default function ExperienceCell({ data }: { data: string }) {
       >
         <Fade in={showExperienceData}>
           <div className={classes.modal}>
-            <ExperiencePopoverModel
+            <ExperiencePopoverModel 
               url={data}
               onClose={() => setExperienceData(!showExperienceData)}
             />

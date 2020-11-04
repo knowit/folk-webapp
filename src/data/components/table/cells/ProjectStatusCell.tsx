@@ -1,9 +1,9 @@
+import { makeStyles } from '@material-ui/core';
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { NoData } from '../../../../components/ErrorText';
 
-const useProjectStatusStyles = makeStyles({
-  root: (percentData:number) => ({
+const useStyles = makeStyles({
+  root: (percentData:number)=>({
     backgroundColor: '#EFEFEF',
     borderRadius: 12,
     padding: '4px 10px',
@@ -12,13 +12,12 @@ const useProjectStatusStyles = makeStyles({
   }),
 });
 
-export default function ProjectStatusCell({ data }: { data: number }) {
+export default function ProjectStatusCell({
+  data,
+}: {
+  data: number;
+}) {
+  const classes = useStyles(data)
   const percentData = `${data}%`;
-  const classes = useProjectStatusStyles(data);
-
-  return data > 0 ? (
-    <div className={classes.root}>{percentData}</div>
-  ) : (
-    <NoData />
-  );
+  return data >= 0 ? <div className={classes.root}>{percentData}</div> : <NoData />;
 }
