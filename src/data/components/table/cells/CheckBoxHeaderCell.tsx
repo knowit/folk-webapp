@@ -3,7 +3,6 @@ import { FormControlLabel } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 
-
 const BlackCheckBox = withStyles({
   root: {
     color: '#333333',
@@ -29,7 +28,6 @@ const useCheckBoxStyles = makeStyles({
     alignItems: 'center',
   },
 });
-
 
 export default function CheckBoxHeaderCell({
   title,

@@ -1,7 +1,7 @@
 import React from 'react';
-import { ReactComponent as FallbackUserIcon } from '../../../../assets/fallback_user.svg';
 import { Avatar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { ReactComponent as FallbackUserIcon } from '../../../../assets/fallback_user.svg';
 import CharacterLimitBox from '../../../../components/CharacterLimitBox';
 
 const useStyles = makeStyles({
@@ -27,13 +27,13 @@ export default function ConsultantCell({
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      {data.image? 
-        <Avatar alt={data.value} className={classes.image} src={data.image}></Avatar>
-      :
+      {data.image ? (
+        <Avatar alt={data.value} className={classes.image} src={data.image} />
+      ) : (
         <Avatar alt={data.value} className={classes.image}>
           <FallbackUserIcon className={classes.image} />
         </Avatar>
-      }
+      )}
       <span className={classes.text}>
         <CharacterLimitBox text={data.value} />
       </span>

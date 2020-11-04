@@ -7,8 +7,8 @@ import {
   PieLabelRenderProps,
 } from 'recharts';
 
-type PieChartsData = { 
-  [key: string]: string | number, 
+type PieChartsData = {
+  [key: string]: string | number;
 };
 
 interface PieChartsProps {
@@ -94,7 +94,11 @@ const shapeRenderer = ({ groupKey }: { groupKey: string }) => ({
   );
 };
 
-export default function Pie({ data, groupKey='group', valueKey='value'}: PieChartsProps) {
+export default function Pie({
+  data,
+  groupKey = 'group',
+  valueKey = 'value',
+}: PieChartsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
