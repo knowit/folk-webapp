@@ -104,7 +104,6 @@ export default function CheckBoxHeaderCell({
   checkBoxChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   const classes = useCheckBoxStyles();
-  console.log(checkBoxChangeHandler)
   return (
     <div className={classes.position}>
       {title}
