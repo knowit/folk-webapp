@@ -130,7 +130,9 @@ const useStyles = makeStyles({
   },
 });
 
-export default function EmployeeInfo(cellData:{data:{competenceUrl: string }}) {
+export default function EmployeeInfo(cellData: {
+  data: { competenceUrl: string };
+}) {
   const classes = useStyles();
   const url = cellData.data.competenceUrl;
   const [data, pending] = useFetchedData<EmployeeInfoData>({ url });
