@@ -1,8 +1,8 @@
 import React from 'react';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Header from './components/Header';
 import Content from './components/Content';
 import Footer from './components/Footer';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
 
 export default function App() {
   const classes = useStyles();

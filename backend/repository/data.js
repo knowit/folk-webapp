@@ -1,11 +1,9 @@
 const { getSecret, makeEmailUuid, groupBy, range } = require('./util');
 const { v4: uuid } = require('uuid');
 
-exports.projectStatus = async ({
-  dataplattformClient
-}) => {
+exports.projectStatus = async ({ dataplattformClient }) => {
   const req = await dataplattformClient.report({
-    reportName: 'projectStatus'
+    reportName: 'projectStatus',
   });
   const allEmployees = await req.json();
 
@@ -26,11 +24,9 @@ exports.projectStatus = async ({
   }));
 };
 
-exports.competence = async ({
-  dataplattformClient
-}) => {
+exports.competence = async ({ dataplattformClient }) => {
   const req = await dataplattformClient.report({
-    reportName: 'competence'
+    reportName: 'competence',
   });
   const allEmployees = await req.json();
 
@@ -70,8 +66,8 @@ exports.employeeExperience = async ({
   const req = await dataplattformClient.report({
     reportName: 'projectExperience',
     filter: {
-      'user_id': user_id
-    }
+      user_id: user_id,
+    },
   });
   const empExperience = await req.json();
   const formatTime = (year, month) =>
@@ -103,15 +99,15 @@ exports.employeeCompetence = async ({
   const [reqComp, reqSkills, reqEmp] = await Promise.all([
     dataplattformClient.report({
       reportName: 'kompetansekartlegging',
-      filter: { uuid }
+      filter: { uuid },
     }),
     dataplattformClient.report({
       reportName: 'employeeSkills',
-      filter: { email }
+      filter: { email },
     }),
     dataplattformClient.report({
       reportName: 'workExperience',
-      filter: { email }
+      filter: { email },
     }),
   ]);
   const [resComp, resSkills, resEmp] = await Promise.all([
@@ -182,24 +178,24 @@ exports.inbound = async () => {
   };
 };
 
-exports.fagtimer = async ({
-  dataplattformClient
-}) => {
+exports.fagtimer = async ({ dataplattformClient }) => {
   const req = await dataplattformClient.report({
-    reportName: 'fagActivity'
+    reportName: 'fagActivity',
   });
 
-  const fagActivity = await req.json()
+  const fagActivity = await req.json();
 
-  const setNames = range(2018, new Date().getFullYear()).map(year => year.toString()).reverse()
-  const sets = groupBy(fagActivity, 'year')
+  const setNames = range(2018, new Date().getFullYear())
+    .map((year) => year.toString())
+    .reverse();
+  const sets = groupBy(fagActivity, 'year');
 
   return {
     componentType: 'Bar',
     setNames,
     sets,
   };
-}
+};
 
 exports.competenceSum = async () => {
   return {
@@ -209,7 +205,6 @@ exports.competenceSum = async () => {
   };
 };
 
-
 exports.competenceAreas = async () => {
   return {
     componentType: null,
@@ -218,46 +213,45 @@ exports.competenceAreas = async () => {
   };
 };
 
-exports.experienceDistribution = async ({
-  dataplattformClient
-}) => {
+exports.experienceDistribution = async ({ dataplattformClient }) => {
   const req = await dataplattformClient.report({
-    reportName: 'yearsSinceSchoolDist'
-  })
-  const experience = await req.json()
-  
+    reportName: 'yearsSinceSchoolDist',
+  });
+  const experience = await req.json();
+
   return {
     componentType: 'Bar',
     setNames: ['Erfaring'],
     sets: {
-      Erfaring: experience
+      Erfaring: experience,
     },
   };
 };
 
-exports.ageDistribution = async ({
-  dataplattformClient
-}) => {
+exports.ageDistribution = async ({ dataplattformClient }) => {
   const [setAgeDistReq, setAgeDistGroupReq] = await Promise.all([
     dataplattformClient.report({
-      reportName: 'ageDistribution'
+      reportName: 'ageDistribution',
     }),
     dataplattformClient.report({
-      reportName: 'ageDistributionGroups'
-    })
-  ])
+      reportName: 'ageDistributionGroups',
+    }),
+  ]);
 
   const [setAgeDist, setAgeDistGroup] = await Promise.all([
-    setAgeDistReq.json(), setAgeDistGroupReq.json()
-  ])
+    setAgeDistReq.json(),
+    setAgeDistGroupReq.json(),
+  ]);
 
   return {
     componentType: 'Bar',
     setNames: ['Alders grupper', 'Alder distribusjon'],
     sets: {
-      'Alders grupper': setAgeDistGroup
-        .map(({ age_group, count }) => ({age: age_group, count})),
-      'Alder distribusjon': setAgeDist
+      'Alders grupper': setAgeDistGroup.map(({ age_group, count }) => ({
+        age: age_group,
+        count,
+      })),
+      'Alder distribusjon': setAgeDist,
     },
   };
 };
@@ -270,50 +264,50 @@ exports.faggrupper = async () => {
   };
 };
 
-exports.education = async ({
-  dataplattformClient
-}) => {
+exports.education = async ({ dataplattformClient }) => {
   const req = await dataplattformClient.report({
-    reportName: 'degreeDist'
-  })
-  const education = await req.json()
-  
+    reportName: 'degreeDist',
+  });
+  const education = await req.json();
+
   return {
     componentType: 'Pie',
     setNames: ['Utdanning'],
     sets: {
-      Utdanning: education
+      Utdanning: education,
     },
   };
 };
 
-exports.competenceMapping  = async ({
-  dataplattformClient
-}) => {
+exports.competenceMapping = async ({ dataplattformClient }) => {
   const [reqCompetence, reqMotivation] = await Promise.all([
     dataplattformClient.report({
-      reportName: 'competenceAverage'
+      reportName: 'competenceAverage',
     }),
     dataplattformClient.report({
-      reportName: 'motivationAverage'
-    })
-  ]) 
-  const [competence, motivation] = await Promise.all([reqCompetence.json(), reqMotivation.json()])
+      reportName: 'motivationAverage',
+    }),
+  ]);
+  const [competence, motivation] = await Promise.all([
+    reqCompetence.json(),
+    reqMotivation.json(),
+  ]);
 
   const transposeMap = (mapList) => {
-    const entires = mapList && mapList.length > 0 ? Object.entries(mapList[0]) : [];
+    const entires =
+      mapList && mapList.length > 0 ? Object.entries(mapList[0]) : [];
     return entires.map(([key, value]) => ({
       section: key,
-      value
-    }))
-  }
+      value,
+    }));
+  };
 
   return {
     componentType: 'Bar',
     setNames: ['Kompetanse', 'Motivasjon'],
     sets: {
       Kompetanse: transposeMap(competence),
-      Motivasjon: transposeMap(motivation)
+      Motivasjon: transposeMap(motivation),
     },
   };
 };

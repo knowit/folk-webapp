@@ -11,7 +11,8 @@ const dpIssuer = new Issuer({
   authorization_endpoint: `${authEndpoint}/oauth2/authorize`,
   token_endpoint: `${authEndpoint}/oauth2/token`,
   userinfo_endpoint: `${authEndpoint}/oauth2/userInfo`,
-  issuer: 'https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_cS2QV4bqa'
+  issuer:
+    'https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_cS2QV4bqa',
 });
 
 const getClient = (applicationUrl = '') =>
@@ -67,8 +68,8 @@ router.get('/callback', async function (req, res) {
     httpOnly: false,
     ...cookieSettings,
   });
-  res.clearCookie('authReferer')
-  res.redirect(302, getPath(referer))
+  res.clearCookie('authReferer');
+  res.redirect(302, getPath(referer));
 });
 
 router.get('/userInfo', async function (req, res) {
@@ -98,8 +99,8 @@ router.post('/refresh', async function (req, res) {
   });
 
   res.send({
-    accessToken: tokens.access_token
-  })
+    accessToken: tokens.access_token,
+  });
 });
 
 module.exports = router;

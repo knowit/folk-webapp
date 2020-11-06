@@ -90,12 +90,16 @@ function Row({ rowData, columns }: DataTableRowProps) {
   const [open, setOpen] = useState(false);
   const classes = useRowStyles();
 
-  const DefaultCellComponent = ({ data }: DataTableCellProps) => <>{data == null ? <NoData/> : data }</>;
+  const DefaultCellComponent = ({ data }: DataTableCellProps) => (
+    <>{data == null ? <NoData /> : data}</>
+  );
 
   const cells = columns.map((column, i) => ({
     data: rowData[i],
     CellComponent: column.renderCell ? column.renderCell : DefaultCellComponent,
-    ExpandedComponent: column.renderExpanded ? column.renderExpanded : () => <></>,
+    ExpandedComponent: column.renderExpanded
+      ? column.renderExpanded
+      : () => <></>,
     ...column,
   }));
 
@@ -111,12 +115,17 @@ function Row({ rowData, columns }: DataTableRowProps) {
               className={[classes.cell, classes.expansionCell].join(' ')}
             >
               <div>
-                <div className={[classes.cellExpandable, openStyle].join(' ')} onClick={() => setOpen(!open)}>
+                <div
+                  className={[classes.cellExpandable, openStyle].join(' ')}
+                  onClick={() => setOpen(!open)}
+                >
                   <cell.CellComponent rowData={rowData} {...cell} />
                   {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                 </div>
-                <Collapse in={open} timeout="auto" >
-                  {open ? <cell.ExpandedComponent rowData={rowData} {...cell} /> : null} 
+                <Collapse in={open} timeout="auto">
+                  {open ? (
+                    <cell.ExpandedComponent rowData={rowData} {...cell} />
+                  ) : null}
                 </Collapse>
               </div>
             </TableCell>
@@ -131,11 +140,7 @@ function Row({ rowData, columns }: DataTableRowProps) {
   );
 }
 
-
-function EmptyRow({
-  emptyText = 'Ingen resultater',
-  colSpan = 4
-}) {
+function EmptyRow({ emptyText = 'Ingen resultater', colSpan = 4 }) {
   const rowClasses = useRowStyles();
 
   return (
@@ -144,7 +149,7 @@ function EmptyRow({
         {emptyText}
       </TableCell>
     </TableRow>
-  )
+  );
 }
 
 function HeaderRow({ columns }: DataTableHeaderRowProps) {
@@ -206,7 +211,7 @@ export const useTableStyles = makeStyles({
       textOverflow: 'ellipsis',
       overflow: 'hidden',
       whiteSpace: 'nowrap',
-      maxWidth: '280px'
+      maxWidth: '280px',
     },
     fontWeight: 'normal',
     fontSize: '14px',
@@ -224,10 +229,10 @@ export default function DataTable({ columns, rows }: DataTableProps) {
         </TableHead>
         <TableBody className={tableClasses.tableBody}>
           {rows.length > 0 ? (
-            rows.map((row, i) => (
-              <Row key={i} {...row} columns={columns} />
-            ))
-          ) : <EmptyRow colSpan={columns.length}/>}
+            rows.map((row, i) => <Row key={i} {...row} columns={columns} />)
+          ) : (
+            <EmptyRow colSpan={columns.length} />
+          )}
         </TableBody>
       </Table>
     </TableContainer>

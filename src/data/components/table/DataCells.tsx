@@ -1,22 +1,23 @@
 import React from 'react';
 import CharacterLimitBox from '../../../components/CharacterLimitBox';
 
-import ConsultantCell from './cells/ConsultantCell'
-import ExperienceCell from './cells/ExperienceCell'
-import CvCell from './cells/CvCell'
-import ProjectStatusCell from './cells/ProjectStatusCell'
-import CustomerStatusCell from './cells/CustomerStatusCell'
-import CheckBoxHeaderCell from './cells/CheckBoxHeaderCell'
+import ConsultantCell from './cells/ConsultantCell';
+import ExperienceCell from './cells/ExperienceCell';
+import CvCell from './cells/CvCell';
+import ProjectStatusCell from './cells/ProjectStatusCell';
+import CustomerStatusCell from './cells/CustomerStatusCell';
+import CheckBoxHeaderCell from './cells/CheckBoxHeaderCell';
 
+const EducationCell = ({ data }: { data: string | null }) => (
+  <CharacterLimitBox text={data || '-'} />
+);
 
-const EducationCell = ({ data }: { data: string | null }) => <CharacterLimitBox text={data || '-'} />
-
-export { 
+export {
   ConsultantCell,
   ExperienceCell,
   EducationCell,
   CvCell,
   ProjectStatusCell,
   CustomerStatusCell,
-  CheckBoxHeaderCell
-}
+  CheckBoxHeaderCell,
+};

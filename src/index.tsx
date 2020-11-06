@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import LoginProvider from './LoginProvider';
 import { BrowserRouter } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import LoginProvider from './LoginProvider';
+import App from './App';
 
 const theme = createMuiTheme({
   palette: {
-    primary:{
+    primary: {
       main: '#707070',
     },
     background: {
@@ -18,12 +18,12 @@ const theme = createMuiTheme({
     text: {
       primary: '#333333',
     },
-    error:{
+    error: {
       main: '#802826',
     },
-    success:{
+    success: {
       main: '#1e561f',
-    }
+    },
   },
   spacing: 22.5,
   typography: {
