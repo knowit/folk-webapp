@@ -1,37 +1,43 @@
 import React from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import {makeStyles, withStyles } from '@material-ui/core/styles';
 import CharacterLimitBox from '../../../../components/CharacterLimitBox';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
-const useCustomerStatusStyles = makeStyles({
-  root: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-});
 
-const StatusCircle = ({ color }: { color: string }) => {
+const StatusCircle = ({ 
+  color 
+}: { 
+  color: string 
+}) => {
   const Circle = withStyles(() => ({
-    colorPrimary: { color },
+    colorPrimary: { color }
   }))(FiberManualRecordIcon);
 
-  return <Circle color="primary" />;
-};
+  return <Circle color="primary"/>
+} 
+interface CustomerStatusData{
+    data: {value: string, status?: "red"|"green"}
+    rowData: any[]
+}
 
-export default function CustomerStatusCell({
-  data: { value, status },
-}: {
-  data: { value: string; status: 'red' | 'green' };
-}) {
-  const classes = useCustomerStatusStyles({ status });
+const useStyles = makeStyles({
+  root:{
+    display: 'flex',
+    justifyContent: 'space-between',
+    width:"100%",
+  }
+})
 
-  const colorCode =
-    status === 'red' ? '#D10000' : status === 'green' ? '#4C8E00' : '#777777';
-
+export default function CustomerStatusCell(customerData:CustomerStatusData){
+  const d = customerData.data
+  const color = d.status?
+    d.status === 'green'? '#4C8E00': '#D10000' 
+  :'#777777'
+  const classes = useStyles();
   return (
     <div className={classes.root}>
-      <CharacterLimitBox text={value || '-'} />
-      <StatusCircle color={colorCode} />
+      <CharacterLimitBox text = {d.value || '-'}/>
+      <StatusCircle color={color} />
     </div>
   );
 }

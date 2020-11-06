@@ -78,19 +78,30 @@ function CompetenceMapping({
           competenceMap.slice(-1)[0][0],
         ]
       : [];
+
   return (
     <div className={classes.root}>
       <div>
         {competencesList.length > 0 ? (
           competencesList.map((competence) => (
             <div key={makeKeyFromText(competence)}>
-              <CharacterLimitBox text={competence} />
+              <CharacterLimitBox
+                text={competence.charAt(0).toUpperCase() + competence.slice(1)}
+              />
             </div>
           ))
         ) : (
-          <div key={1}>
-            <NoData />
-          </div>
+          <>
+            <div key={1}>
+              <NoData />
+            </div>
+            <div key={2}>
+              <NoData />
+            </div>
+            <div key={3}>
+              <NoData />
+            </div>
+          </>
         )}
       </div>
       <div className={classes.gradient}>
@@ -119,12 +130,11 @@ const useStyles = makeStyles({
   },
 });
 
-export default function EmployeeInfo({
-  data: { competenceUrl: url },
-}: {
+export default function EmployeeInfo(cellData: {
   data: { competenceUrl: string };
 }) {
   const classes = useStyles();
+  const url = cellData.data.competenceUrl;
   const [data, pending] = useFetchedData<EmployeeInfoData>({ url });
   const totalExperience = (allExperience: Experience[] | undefined) => {
     const firstJob = allExperience?.sort(
@@ -138,11 +148,12 @@ export default function EmployeeInfo({
   };
 
   const startedInKnowit = (allExperience: Experience[] | undefined) => {
-    const knowit = allExperience?.find(
-      (x) =>
-        x.employer.toLowerCase().includes('knowit') ||
-        x.employer.toLowerCase().includes('objectnet') ||
-        x.employer.toLowerCase().includes('know it')
+    const knowit = allExperience?.find((x) =>
+      x.employer
+        ? x.employer.toLowerCase().includes('knowit') ||
+          x.employer.toLowerCase().includes('objectnet') ||
+          x.employer.toLowerCase().includes('know it')
+        : null
     );
 
     const monthFrom =
@@ -157,6 +168,19 @@ export default function EmployeeInfo({
     );
   };
 
+  const getStringFromList = (
+    list: string[] | null | undefined,
+    listName: 'skills' | 'roles' | 'languages'
+  ) => {
+    return list && list.length > 0 ? (
+      `${Array.from(new Set(data?.tags[listName]))
+        .filter((x) => x)
+        .join(', ')}.`
+    ) : (
+      <NoData />
+    );
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.cell}>
@@ -164,12 +188,8 @@ export default function EmployeeInfo({
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Hovedkompetanse:</b>{' '}
-            {data?.tags.skills ? (
-              `${data?.tags.skills.filter((x) => x).join(', ')}.`
-            ) : (
-              <NoData />
-            )}
+            <b>Hovedkompetanse: </b>
+            {getStringFromList(data?.tags.skills, 'skills')}
           </>
         )}
       </div>
@@ -178,14 +198,8 @@ export default function EmployeeInfo({
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Roller:</b>{' '}
-            {data?.tags.roles ? (
-              `${Array.from(new Set(data?.tags.roles))
-                .filter((x) => x)
-                .join(', ')}.`
-            ) : (
-              <NoData />
-            )}
+            <b>Roller: </b>
+            {getStringFromList(data?.tags.roles, 'roles')}
           </>
         )}
       </div>
@@ -213,12 +227,8 @@ export default function EmployeeInfo({
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Språk:</b>{' '}
-            {data?.tags.languages ? (
-              `${data?.tags.languages.filter((x) => x).join(', ')}.`
-            ) : (
-              <NoData />
-            )}
+            <b>Språk: </b>
+            {getStringFromList(data?.tags.languages, 'languages')}
           </>
         )}
       </div>

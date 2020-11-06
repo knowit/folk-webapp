@@ -22,8 +22,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
         [col.searchable, col.searchKey, i] as [boolean, string, number]
     )
     .filter(([searchable]) => searchable)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    .map(([_, key, i]) => [key, i] as [string, number]);
+    .map(([, key, i]) => [key, i] as [string, number]);
 
   const handleSearchInputChange = (searchTerm: string) => {
     if (!searchTerm || searchTerm.length <= 2) {
@@ -55,10 +54,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
       <GridItemHeader title={title}>
         <SearchInput onChange={handleSearchInputChange} />
       </GridItemHeader>
-
-      <div style={{ backgroundColor: '#fff', padding: '20px 0' }}>
-        <DataTable rows={rows} columns={[]} {...props} />
-      </div>
+      <DataTable rows={rows} columns={[]} {...props} />
     </>
   );
 }

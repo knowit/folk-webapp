@@ -66,6 +66,7 @@ export default function SearchInput({
                 className={classes.icon}
                 aria-label="Tøm"
                 onClick={() => setVal('')}
+                title="Tøm"
               >
                 <CloseIcon />
               </IconButton>
