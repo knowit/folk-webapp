@@ -36,6 +36,7 @@ const GreenButton = withStyles(() => ({
       backgroundColor: '#435A4C',
     },
     width: '106px',
+    borderRadius: '5px',
   },
   label: {
     fontFamily: 'Arial',
@@ -50,6 +51,7 @@ const GreyButton = withStyles(() => ({
   root: {
     color: '#919191',
     width: '106px',
+    borderRadius: '5px',
   },
   label: {
     fontFamily: 'Arial',
@@ -64,7 +66,7 @@ const DialogCard = withStyles(() => ({
     backgroundColor: '#ffffff',
     width: '323.2px',
     height: '132px',
-    BorderRadius: '10px',
+    borderRadius: '10px',
     display: 'flex',
     justifyContent: 'space-around',
     flexDirection: 'row',
@@ -87,7 +89,7 @@ const BlackRadio = withStyles(() => ({
   checked: {},
 }))(Radio);
 
-const FormControlLabelStyeled = withStyles(() => ({
+const FormControlLabelStyled = withStyles(() => ({
   label: {
     margin: '0px',
     padding: '0px',
@@ -101,8 +103,8 @@ const useDialogStyle = makeStyles({
     alignSelf: 'flex-end',
     marginRight: '15px',
     marginTop: '15px',
-    width: '14px',
-    height: '14px',
+    width: '24px',
+    height: '24px',
   },
   title: {
     fontSize: '18px',
@@ -123,7 +125,7 @@ const useDialogStyle = makeStyles({
   buttonLine: {
     display: 'flex',
     justifyContent: 'space-around',
-    width: '50%',
+    width: '42.6%',
     margin: 'auto',
   },
 });
@@ -176,12 +178,12 @@ export default function CvDialog({
             value={fileType}
             onChange={handleFileTypeChange}
           >
-            <FormControlLabelStyeled
+            <FormControlLabelStyled
               value=".docx"
               control={<BlackRadio />}
               label=".docx"
             />
-            <FormControlLabelStyeled
+            <FormControlLabelStyled
               value=".pdf"
               control={<BlackRadio />}
               label=".pdf"
@@ -197,12 +199,12 @@ export default function CvDialog({
             value={language}
             onChange={handleLanguageChange}
           >
-            <FormControlLabelStyeled
+            <FormControlLabelStyled
               value="Norsk"
               control={<BlackRadio />}
               label="Norsk"
             />
-            <FormControlLabelStyeled
+            <FormControlLabelStyled
               value="Engelsk"
               control={<BlackRadio />}
               label="Engelsk"
