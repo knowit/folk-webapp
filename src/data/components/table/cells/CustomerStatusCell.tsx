@@ -10,7 +10,12 @@ const StatusCircle = ({
   color: string 
 }) => {
   const Circle = withStyles(() => ({
-    colorPrimary: { color }
+    colorPrimary: { color },
+    root:{
+      width: '30px',
+      height: '30px',
+    }
+
   }))(FiberManualRecordIcon);
 
   return <Circle color="primary"/>
