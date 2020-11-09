@@ -40,7 +40,6 @@ const DownloadIcon = withStyles({
       color: '#333333',
     },
   },
-  checked: {},
 })(GetApp);
 
 export default function CvCell({
