@@ -129,9 +129,9 @@ function ExtendableCell({
   cellData: any;
   RenderExpanded: renderExpandedCell;
   open: boolean;
-  onChange: (rowIndex: number, open: boolean) => void;
-  id: number;
-  heightChange: (rowIndex: number, height: number) => void;
+  onChange: (rowKey: string, open: boolean) => void;
+  id: string;
+  heightChange: (rowKey: string, height: number) => void;
 }): JSX.Element {
   const classes = useStyles();
   const openStyle = open ? classes.bolderText: '';
@@ -195,10 +195,10 @@ function GetCell({
   cellData: any;
   RenderExpanded: createCellFunction | undefined;
   open: boolean;
-  onChange: (rowIndex: number, open: boolean) => void;
-  id: number;
+  onChange: (rowKey: string, open: boolean) => void;
+  id: string;
   rowData: any[];
-  heightChange: (rowIndex: number, height: number) => void;
+  heightChange: (rowKey: string, height: number) => void;
 }): JSX.Element {
   const classes = useStyles();
   const data = cellData !== null ? cellData : '-';
@@ -244,16 +244,16 @@ function MuiVirtualizedTable({
   const [opens, setOpens] = useState<boolean[]>([]);
   const [heights, setHeights] = useState<number[]>([]);
 
-  const handleOpenChange = (rowIndex: number, open: boolean) => {
+  const handleOpenChange = (rowKey: string, open: boolean) => {
     setOpens({
       ...opens,
-      [rowIndex]: !open,
+      [rowKey]: !open,
     });
   };
-  const heightChange = (rowIndex: number, height: number) => {
+  const heightChange = (rowKey: string, height: number) => {
     setHeights({
       ...heights,
-      [rowIndex]: height,
+      [rowKey]: height,
     });
   };
 
@@ -278,9 +278,9 @@ const cellWidth = (index: number) => (
           expandable={columns[columnIndex].expandable}
           cellData={cellData}
           RenderExpanded={columns[columnIndex].renderExpanded}
-          id={rowIndex}
+          id={rows[rowIndex].rowId}
           onChange={handleOpenChange}
-          open={opens[rowIndex]}
+          open={opens[rows[rowIndex].rowId]}
           rowData={rows[rowIndex]}
           heightChange={heightChange}
         />
@@ -306,8 +306,10 @@ const cellWidth = (index: number) => (
     );
   }
 
-  const getRowHeight = ({ index }: { index: number }) =>
-    opens[index] ? heights[index] : 70;
+  const getRowHeight = ({ index }: { index: number }) =>{
+    return opens[rows[index].rowId] ? heights[rows[index].rowId] : 70;
+  }
+    
 
   function emptyRow() {
     return (
@@ -331,6 +333,7 @@ const cellWidth = (index: number) => (
     ArrayRef.recomputeRowHeights();
     ArrayRef.forceUpdate();
   }, [ArrayRef, heights]);
+
 
   return (
     <AutoSizer>
