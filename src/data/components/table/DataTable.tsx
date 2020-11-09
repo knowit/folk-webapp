@@ -48,6 +48,9 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       borderBottom: 'none',
       borderRight: `1px solid ${theme.palette.background.paper}`,
+      padding: 0,
+      paddingRight: '15px',
+      paddingLeft: '15px',
     },
     cellExpandable: {
       display: 'flex',
@@ -67,8 +70,8 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '70px',
       display: 'flex',
       alignItems: 'center',
-      paddingRight: '10px',
-      paddingLeft: '10px',
+      paddingRight: '15px',
+      paddingLeft: '15px',
     },
     borders:{
       borderRight: `1px solid ${theme.palette.background.paper}`,

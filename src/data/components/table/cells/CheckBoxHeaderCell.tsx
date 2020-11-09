@@ -34,7 +34,9 @@ const useCheckBoxStyles = makeStyles((theme:Theme) =>
       width: '100%',
       borderBottom: 'none',
       borderRight: `1px solid ${theme.palette.background.paper}`,
-      padding:'16px',
+      padding: 0,
+      paddingRight: '15px',
+      paddingLeft: '15px',
     },
   }),
 );
