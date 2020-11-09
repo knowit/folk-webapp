@@ -32,6 +32,25 @@ const TableCellNoBorders = withStyles({
   },
 })(TableCell);
 
+const ExpandMoreIconWithStyles = withStyles({
+  root: {
+    color: '#707070',
+    cursor: 'pointer',
+    '&:hover': {
+      color: '#333333',
+    },
+  },
+})(ExpandMoreIcon);
+
+const ExpandLessIconWithStyles = withStyles({
+  root: {
+    color: '#707070',
+    cursor: 'pointer',
+    '&:hover': {
+      color: '#333333',
+    },
+  },
+})(ExpandLessIcon);
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -144,7 +163,7 @@ function ExtendableCell({
         onClick={() => openClick()}
       >
         <RenderCell data={cellData} rowData={[]} />
-        {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        {open ? <ExpandLessIconWithStyles /> : <ExpandMoreIconWithStyles />}
       </div>
       <div>
         <RenderExpanded data={cellData} />
@@ -213,20 +232,7 @@ function GetCell({
   );
 }
 
-const cellWidth = (index: number) => {
-  switch (index) {
-    case 0:
-      return 380;
-    case 1:
-      return 230;
-    case 2:
-      return 150;
-    case 4:
-      return 60;
-    default:
-      return 360;
-  }
-};
+
 
 function MuiVirtualizedTable({
   columns,
@@ -250,6 +256,15 @@ function MuiVirtualizedTable({
       [rowIndex]: height,
     });
   };
+
+const widthList =[394, 224, 143, 394]
+const consultantTableWidths =[394, 224, 115, 369, 53]
+
+const cellWidth = (index: number) => (
+  columns.length === 5 
+  ? consultantTableWidths[index]
+  : widthList[index]
+);
 
   const cellRenderer: TableCellRenderer = ({
     cellData,
@@ -356,7 +371,6 @@ export default function DataTable({ columns, rows }: DataTableProps) {
       style={{
         height: 780,
         width: '100%',
-        padding: '10px',
         backgroundColor: 'white',
       }}
     >
