@@ -82,6 +82,12 @@ const useStyles = makeStyles((theme: Theme) =>
     cell: {
       width: '100%',
     },
+    noFocus:{
+      outline:0,
+      '&:hover, &:focus, &:active':{
+        outline:0,
+      },
+    }
   })
 );
 
@@ -321,6 +327,7 @@ function MuiVirtualizedTable({
           rowGetter={rowGetter}
           rowClassName={classes.flexContainer}
           noRowsRenderer={emptyRow}
+          gridClassName={classes.noFocus}
         >
           {columns.map(({ title, headerRenderCell, checkBoxChangeHandler}, index) => {
             return (
