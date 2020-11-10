@@ -3,7 +3,7 @@ import React from 'react';
 import { NoData } from '../../../../components/ErrorText';
 
 const useStyles = makeStyles({
-  root: (percentData:number)=>({
+  root: (percentData: number) => ({
     backgroundColor: '#EFEFEF',
     borderRadius: 12,
     padding: '4px 10px',
@@ -12,12 +12,12 @@ const useStyles = makeStyles({
   }),
 });
 
-export default function ProjectStatusCell({
-  data,
-}: {
-  data: number;
-}) {
-  const classes = useStyles(data)
+export default function ProjectStatusCell({ data }: { data: number }) {
+  const classes = useStyles(data);
   const percentData = `${data}%`;
-  return data >= 0 ? <div className={classes.root}>{percentData}</div> : <NoData />;
+  return data >= 0 ? (
+    <div className={classes.root}>{percentData}</div>
+  ) : (
+    <NoData />
+  );
 }

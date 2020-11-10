@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import CvDialog from '../../../../components/CvDialog';
 import GetApp from '@material-ui/icons/GetApp';
-import { NoData } from '../../../../components/ErrorText';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { withStyles } from '@material-ui/core';
+import { NoData } from '../../../../components/ErrorText';
+import CvDialog from '../../../../components/CvDialog';
 
 interface CvCellData {
   no_pdf: string;

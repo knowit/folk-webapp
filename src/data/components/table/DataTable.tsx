@@ -16,9 +16,9 @@ interface DataTableColumn {
   title: string;
   expandable?: boolean;
   renderCell?: (props: { data: any; rowData: any[] }) => JSX.Element;
-  renderExpanded?: ( data: any ) => JSX.Element;
+  renderExpanded?: (data: any) => JSX.Element;
   headerRenderCell?: () => JSX.Element;
-  checkBoxChangeHandler?: (event:React.ChangeEvent<HTMLInputElement>) => void;
+  checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface DataTableRow {
@@ -28,7 +28,7 @@ interface DataTableRow {
 
 const TableCellNoBorders = withStyles({
   root: {
-    borderBottom:'1px solid #F1F0ED'
+    borderBottom: '1px solid #F1F0ED',
   },
 })(TableCell);
 
@@ -76,7 +76,6 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       borderBottom: 'none',
-      
     },
     bolderText: {
       fontWeight: 'bold',
@@ -92,7 +91,7 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingRight: '15px',
       paddingLeft: '15px',
     },
-    borders:{
+    borders: {
       borderRight: `1px solid ${theme.palette.background.paper}`,
       borderTop: `1px solid ${theme.palette.background.paper}`,
     },
@@ -104,17 +103,17 @@ const useStyles = makeStyles((theme: Theme) =>
     cell: {
       width: '100%',
     },
-    noFocus:{
-      outline:0,
-      '&:hover, &:focus, &:active':{
-        outline:0,
+    noFocus: {
+      outline: 0,
+      '&:hover, &:focus, &:active': {
+        outline: 0,
       },
-    }
+    },
   })
 );
 
 type createCellFunction = (props: { data: any; rowData: any[] }) => JSX.Element;
-type renderExpandedCell = ( data: any ) => JSX.Element;
+type renderExpandedCell = (data: any) => JSX.Element;
 
 function ExtendableCell({
   RenderCell,
@@ -134,7 +133,7 @@ function ExtendableCell({
   heightChange: (rowKey: string, height: number) => void;
 }): JSX.Element {
   const classes = useStyles();
-  const openStyle = open ? classes.bolderText: '';
+  const openStyle = open ? classes.bolderText : '';
   const targetRef = useRef();
 
   const getOffsetHeigh = (thisTargetRef: any) => thisTargetRef.offsetHeight;
@@ -148,7 +147,9 @@ function ExtendableCell({
   return (
     <TableCellNoBorders
       component="div"
-      className={[classes.flexContainer, classes.column, classes.borders].join(' ')}
+      className={[classes.flexContainer, classes.column, classes.borders].join(
+        ' '
+      )}
       align="left"
       ref={targetRef}
     >
@@ -223,7 +224,7 @@ function GetCell({
     >
       <div className={[classes.standardSize, classes.borders].join(' ')}>
         {RenderCell !== undefined ? (
-          <RenderCell data={data} rowData={rowData}/>
+          <RenderCell data={data} rowData={rowData} />
         ) : (
           <CharacterLimitBox text={data} />
         )}
@@ -231,8 +232,6 @@ function GetCell({
     </TableCellNoBorders>
   );
 }
-
-
 
 function MuiVirtualizedTable({
   columns,
@@ -257,14 +256,11 @@ function MuiVirtualizedTable({
     });
   };
 
-const widthList =[394, 224, 143, 394]
-const consultantTableWidths =[394, 224, 115, 369, 53]
+  const widthList = [394, 224, 143, 394];
+  const consultantTableWidths = [394, 224, 115, 369, 53];
 
-const cellWidth = (index: number) => (
-  columns.length === 5 
-  ? consultantTableWidths[index]
-  : widthList[index]
-);
+  const cellWidth = (index: number) =>
+    columns.length === 5 ? consultantTableWidths[index] : widthList[index];
 
   const cellRenderer: TableCellRenderer = ({
     cellData,
@@ -288,28 +284,34 @@ const cellWidth = (index: number) => (
     );
   };
 
-  function headerRenderer(title: string, HeaderRenderCell:any | null, checkBoxChangeHandler:((event: React.ChangeEvent<HTMLInputElement>) => void)|undefined) {
-    return (
-      HeaderRenderCell
-      ?(
-        <HeaderRenderCell title={title} checkBoxLabel={"Se kun ledige"} checkBoxChangeHandler={checkBoxChangeHandler}/>
-      ):(
-        <TableCell
-          component="div"
-          className={classes.tableHead}
-          variant="head"
-          align="left"
-        >
-          {title}
-        </TableCell>
-      )
+  function headerRenderer(
+    title: string,
+    HeaderRenderCell: any | null,
+    checkBoxChangeHandler:
+      | ((event: React.ChangeEvent<HTMLInputElement>) => void)
+      | undefined
+  ) {
+    return HeaderRenderCell ? (
+      <HeaderRenderCell
+        title={title}
+        checkBoxLabel="Se kun ledige"
+        checkBoxChangeHandler={checkBoxChangeHandler}
+      />
+    ) : (
+      <TableCell
+        component="div"
+        className={classes.tableHead}
+        variant="head"
+        align="left"
+      >
+        {title}
+      </TableCell>
     );
   }
 
-  const getRowHeight = ({ index }: { index: number }) =>{
+  const getRowHeight = ({ index }: { index: number }) => {
     return opens[rows[index].rowId] ? heights[rows[index].rowId] : 70;
-  }
-    
+  };
 
   function emptyRow() {
     return (
@@ -334,7 +336,6 @@ const cellWidth = (index: number) => (
     ArrayRef.forceUpdate();
   }, [ArrayRef, heights]);
 
-
   return (
     <AutoSizer>
       {({ height, width }) => (
@@ -350,18 +351,26 @@ const cellWidth = (index: number) => (
           noRowsRenderer={emptyRow}
           gridClassName={classes.noFocus}
         >
-          {columns.map(({ title, headerRenderCell, checkBoxChangeHandler}, index) => {
-            return (
-              <Column
-                key={title}
-                headerRenderer={() => headerRenderer(title, headerRenderCell, checkBoxChangeHandler)}
-                className={classes.flexContainer}
-                cellRenderer={cellRenderer}
-                dataKey={String(index)}
-                width={cellWidth(index)}
-              />
-            );
-          })}
+          {columns.map(
+            ({ title, headerRenderCell, checkBoxChangeHandler }, index) => {
+              return (
+                <Column
+                  key={title}
+                  headerRenderer={() =>
+                    headerRenderer(
+                      title,
+                      headerRenderCell,
+                      checkBoxChangeHandler
+                    )
+                  }
+                  className={classes.flexContainer}
+                  cellRenderer={cellRenderer}
+                  dataKey={String(index)}
+                  width={cellWidth(index)}
+                />
+              );
+            }
+          )}
         </Table>
       )}
     </AutoSizer>
