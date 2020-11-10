@@ -87,13 +87,7 @@ function ExperiencePopoverModel({
           <h2>{userInfo?.name}</h2>
         )}
         <div>
-          <Button
-            onClick={(e) => {
-              onClose();
-            }}
-            title="Lukk"
-            className={classes.button}
-          >
+          <Button onClick={onClose} title="Lukk" className={classes.button}>
             <CloseIcon />
           </Button>
         </div>
@@ -101,7 +95,10 @@ function ExperiencePopoverModel({
       <div className={classes.content}>
         {pending ? (
           <Skeleton variant="rect" height={320} animation="wave" />
-        ) : userInfo?.experience ? (
+        ) : (
+          ''
+        )}
+        {!pending && userInfo?.experience ? (
           userInfo?.experience.map((exp, index) => (
             <div key={index}>
               <h4>
