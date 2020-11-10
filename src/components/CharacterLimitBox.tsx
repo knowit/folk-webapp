@@ -30,7 +30,7 @@ export default function CharacterLimitBox({ text }: { text: string }) {
 
   useEffect(()=>{
     setOverflowActive(isEllipsisActive(targetRef))
-  },[text]);
+  },[text, targetRef]);
 
   return (
     <div
