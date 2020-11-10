@@ -29,16 +29,12 @@ const useStyles = makeStyles({
 
 export default function CustomerStatusCell(customerData: CustomerStatusData) {
   const d = customerData.data;
-  const color = d.status
-    ? d.status === 'green'
-      ? '#4C8E00'
-      : '#D10000'
-    : '#777777';
+  const color = d.status && d.status === 'green' ? '#4C8E00' : '#D10000';
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <CharacterLimitBox text={d.value || '-'} />
-      <StatusCircle color={color} />
+      <StatusCircle color={d.status ? color : '#777777'} />
     </div>
   );
 }
