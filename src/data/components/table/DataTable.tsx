@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { AutoSizer, Column, Table, TableCellRenderer } from 'react-virtualized';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import Button from '@material-ui/core/Button';
 import CharacterLimitBox from '../../../components/CharacterLimitBox';
 
 interface DataTableProps {
@@ -153,7 +154,7 @@ function ExtendableCell({
       align="left"
       ref={targetRef}
     >
-      <div
+      <Button
         role="button"
         className={[
           classes.cellExpandable,
@@ -165,7 +166,7 @@ function ExtendableCell({
       >
         <RenderCell data={cellData} rowData={[]} />
         {open ? <ExpandLessIconWithStyles /> : <ExpandMoreIconWithStyles />}
-      </div>
+      </Button>
       <div>
         <RenderExpanded data={cellData} />
       </div>
