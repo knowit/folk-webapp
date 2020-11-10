@@ -1,7 +1,7 @@
 import React from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
@@ -12,6 +12,10 @@ const useStyles = makeStyles(() =>
       paddingBottom: '70px',
       textAlign: 'center',
       fontSize: '12px',
+      color: theme.palette.text.primary,
+    },
+    link: {
+      color: '#333333',
     },
   })
 );
@@ -23,8 +27,17 @@ export default function Footer() {
     <div className={classes.root}>
       <footer className={classes.footer}>
         <p>
-          Her kommer en avsendertekst med enkelt kontaktpunkt via e-post link og
-          annet som eventuelt identifiserer tjenesten.
+          Knowit Folk. Lakkegata 53, 0178 Oslo | Tlf. 02486 |
+          <a className={classes.link} href="mailto:name1@mail.com">
+            Kontakt
+          </a>{' '}
+          |
+          <a
+            className={classes.link}
+            href="mailto:name1@mail.com?subject=Melding%20om%20datafeil&body=Feilen%20ble%20funnet%20her%3A%20%0D%0AOg%20omhandler%20dette%3A%20"
+          >
+            Meld om datafeil
+          </a>
         </p>
       </footer>
     </div>
