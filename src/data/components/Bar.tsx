@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { ResponsiveBar } from '@nivo/bar';
 import {
   BarChart,
   Bar as BarColumn,
@@ -23,7 +23,40 @@ interface BarChartsProps {
 
 const colors = ['#a3a1fb', '#56d9fe', '#74e2b7', '#f2efa0'];
 
+export const MyResponsiveBar = ({ data, yLabels, dataKey }: BarChartsProps) => (
+  <div style={{ height: '300px', width: '100%' }}>
+    <ResponsiveBar
+      data={data}
+      keys={yLabels}
+      indexBy={dataKey}
+      margin={{ top: 0, right: 20, bottom: 20, left: 40 }}
+      padding={0.1}
+      valueScale={{ type: 'linear' }}
+      colors={colors}
+      axisTop={null}
+      axisRight={null}
+      axisBottom={{
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: 0,
+      }}
+      axisLeft={{
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: 0,
+        legendPosition: 'middle',
+        legendOffset: -40,
+      }}
+      enableLabel={false}
+    />
+  </div>
+);
+
 export default function Bar({ yLabels, data, dataKey = 'x' }: BarChartsProps) {
+  if (data.length < 30) {
+    return MyResponsiveBar({ data, yLabels, dataKey });
+  }
+
   return (
     <ResponsiveContainer height={280}>
       <BarChart data={data} margin={{ right: 30 }}>
