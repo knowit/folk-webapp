@@ -77,6 +77,8 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       borderBottom: 'none',
+      textDecoration: 'none',
+      textTransform: 'inherit',
     },
     bolderText: {
       fontWeight: 'bold',
