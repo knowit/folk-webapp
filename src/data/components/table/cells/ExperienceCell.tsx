@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import Fade from '@material-ui/core/Fade';
@@ -29,6 +29,14 @@ const useModalStyles = makeStyles({
     border: ' 1px solid #d8d7d4',
     overflow: 'auto',
     pointerEvents: 'all',
+  },
+  button: {
+    textDecoration: 'none',
+    padding: 0,
+    minWidth: 'auto',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
   },
   content: {
     padding: '0 20px 20px',
@@ -79,9 +87,15 @@ function ExperiencePopoverModel({
           <h2>{userInfo?.name}</h2>
         )}
         <div>
-          <Link onClick={() => onClose()} title="Lukk">
+          <Button
+            onClick={(e) => {
+              onClose();
+            }}
+            title="Lukk"
+            className={classes.button}
+          >
             <CloseIcon />
-          </Link>
+          </Button>
         </div>
       </div>
       <div className={classes.content}>
@@ -129,12 +143,12 @@ export default function ExperienceCell({ data }: { data: string }) {
       {!data ? (
         <NoData />
       ) : (
-        <Link
+        <Button
           onClick={() => setExperienceData(!showExperienceData)}
           className={classes.triggerLink}
         >
           Se prosjekter
-        </Link>
+        </Button>
       )}
 
       <Modal
