@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { AutoSizer, Column, Table, TableCellRenderer } from 'react-virtualized';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import Button from '@material-ui/core/Button';
 import CharacterLimitBox from '../../../components/CharacterLimitBox';
 
 interface DataTableProps {
@@ -16,9 +17,9 @@ interface DataTableColumn {
   title: string;
   expandable?: boolean;
   renderCell?: (props: { data: any; rowData: any[] }) => JSX.Element;
-  renderExpanded?: ( data: any ) => JSX.Element;
+  renderExpanded?: (data: any) => JSX.Element;
   headerRenderCell?: () => JSX.Element;
-  checkBoxChangeHandler?: (event:React.ChangeEvent<HTMLInputElement>) => void;
+  checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface DataTableRow {
@@ -28,10 +29,29 @@ interface DataTableRow {
 
 const TableCellNoBorders = withStyles({
   root: {
-    borderBottom:'1px solid #F1F0ED'
+    borderBottom: '1px solid #F1F0ED',
   },
 })(TableCell);
 
+const ExpandMoreIconWithStyles = withStyles({
+  root: {
+    color: '#707070',
+    cursor: 'pointer',
+    '&:hover': {
+      color: '#333333',
+    },
+  },
+})(ExpandMoreIcon);
+
+const ExpandLessIconWithStyles = withStyles({
+  root: {
+    color: '#707070',
+    cursor: 'pointer',
+    '&:hover': {
+      color: '#333333',
+    },
+  },
+})(ExpandLessIcon);
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,13 +68,17 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       borderBottom: 'none',
       borderRight: `1px solid ${theme.palette.background.paper}`,
+      padding: 0,
+      paddingRight: '15px',
+      paddingLeft: '15px',
     },
     cellExpandable: {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
       borderBottom: 'none',
-      
+      textDecoration: 'none',
+      textTransform: 'inherit',
     },
     bolderText: {
       fontWeight: 'bold',
@@ -67,10 +91,10 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '70px',
       display: 'flex',
       alignItems: 'center',
-      paddingRight: '10px',
-      paddingLeft: '10px',
+      paddingRight: '15px',
+      paddingLeft: '15px',
     },
-    borders:{
+    borders: {
       borderRight: `1px solid ${theme.palette.background.paper}`,
       borderTop: `1px solid ${theme.palette.background.paper}`,
     },
@@ -82,11 +106,17 @@ const useStyles = makeStyles((theme: Theme) =>
     cell: {
       width: '100%',
     },
+    noFocus: {
+      outline: 0,
+      '&:hover, &:focus, &:active': {
+        outline: 0,
+      },
+    },
   })
 );
 
 type createCellFunction = (props: { data: any; rowData: any[] }) => JSX.Element;
-type renderExpandedCell = ( data: any ) => JSX.Element;
+type renderExpandedCell = (data: any) => JSX.Element;
 
 function ExtendableCell({
   RenderCell,
@@ -101,12 +131,12 @@ function ExtendableCell({
   cellData: any;
   RenderExpanded: renderExpandedCell;
   open: boolean;
-  onChange: (rowIndex: number, open: boolean) => void;
-  id: number;
-  heightChange: (rowIndex: number, height: number) => void;
+  onChange: (rowKey: string, open: boolean) => void;
+  id: string;
+  heightChange: (rowKey: string, height: number) => void;
 }): JSX.Element {
   const classes = useStyles();
-  const openStyle = open ? classes.bolderText: '';
+  const openStyle = open ? classes.bolderText : '';
   const targetRef = useRef();
 
   const getOffsetHeigh = (thisTargetRef: any) => thisTargetRef.offsetHeight;
@@ -120,11 +150,13 @@ function ExtendableCell({
   return (
     <TableCellNoBorders
       component="div"
-      className={[classes.flexContainer, classes.column, classes.borders].join(' ')}
+      className={[classes.flexContainer, classes.column, classes.borders].join(
+        ' '
+      )}
       align="left"
       ref={targetRef}
     >
-      <div
+      <Button
         role="button"
         className={[
           classes.cellExpandable,
@@ -135,8 +167,8 @@ function ExtendableCell({
         onClick={() => openClick()}
       >
         <RenderCell data={cellData} rowData={[]} />
-        {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-      </div>
+        {open ? <ExpandLessIconWithStyles /> : <ExpandMoreIconWithStyles />}
+      </Button>
       <div>
         <RenderExpanded data={cellData} />
       </div>
@@ -167,10 +199,10 @@ function GetCell({
   cellData: any;
   RenderExpanded: createCellFunction | undefined;
   open: boolean;
-  onChange: (rowIndex: number, open: boolean) => void;
-  id: number;
+  onChange: (rowKey: string, open: boolean) => void;
+  id: string;
   rowData: any[];
-  heightChange: (rowIndex: number, height: number) => void;
+  heightChange: (rowKey: string, height: number) => void;
 }): JSX.Element {
   const classes = useStyles();
   const data = cellData !== null ? cellData : '-';
@@ -195,7 +227,7 @@ function GetCell({
     >
       <div className={[classes.standardSize, classes.borders].join(' ')}>
         {RenderCell !== undefined ? (
-          <RenderCell data={data} rowData={rowData}/>
+          <RenderCell data={data} rowData={rowData} />
         ) : (
           <CharacterLimitBox text={data} />
         )}
@@ -203,21 +235,6 @@ function GetCell({
     </TableCellNoBorders>
   );
 }
-
-const cellWidth = (index: number) => {
-  switch (index) {
-    case 0:
-      return 380;
-    case 1:
-      return 230;
-    case 2:
-      return 150;
-    case 4:
-      return 60;
-    default:
-      return 360;
-  }
-};
 
 function MuiVirtualizedTable({
   columns,
@@ -229,18 +246,24 @@ function MuiVirtualizedTable({
   const [opens, setOpens] = useState<boolean[]>([]);
   const [heights, setHeights] = useState<number[]>([]);
 
-  const handleOpenChange = (rowIndex: number, open: boolean) => {
+  const handleOpenChange = (rowKey: string, open: boolean) => {
     setOpens({
       ...opens,
-      [rowIndex]: !open,
+      [rowKey]: !open,
     });
   };
-  const heightChange = (rowIndex: number, height: number) => {
+  const heightChange = (rowKey: string, height: number) => {
     setHeights({
       ...heights,
-      [rowIndex]: height,
+      [rowKey]: height,
     });
   };
+
+  const widthList = [394, 224, 143, 394];
+  const consultantTableWidths = [394, 224, 115, 369, 53];
+
+  const cellWidth = (index: number) =>
+    columns.length === 5 ? consultantTableWidths[index] : widthList[index];
 
   const cellRenderer: TableCellRenderer = ({
     cellData,
@@ -254,9 +277,9 @@ function MuiVirtualizedTable({
           expandable={columns[columnIndex].expandable}
           cellData={cellData}
           RenderExpanded={columns[columnIndex].renderExpanded}
-          id={rowIndex}
+          id={rows[rowIndex].rowId}
           onChange={handleOpenChange}
-          open={opens[rowIndex]}
+          open={opens[rows[rowIndex].rowId]}
           rowData={rows[rowIndex]}
           heightChange={heightChange}
         />
@@ -264,26 +287,34 @@ function MuiVirtualizedTable({
     );
   };
 
-  function headerRenderer(title: string, HeaderRenderCell:any | null, checkBoxChangeHandler:((event: React.ChangeEvent<HTMLInputElement>) => void)|undefined) {
-    return (
-      HeaderRenderCell
-      ?(
-        <HeaderRenderCell title={title} checkBoxLabel={"Se kun ledige"} checkBoxChangeHandler={checkBoxChangeHandler}/>
-      ):(
-        <TableCell
-          component="div"
-          className={classes.tableHead}
-          variant="head"
-          align="left"
-        >
-          {title}
-        </TableCell>
-      )
+  function headerRenderer(
+    title: string,
+    HeaderRenderCell: any | null,
+    checkBoxChangeHandler:
+      | ((event: React.ChangeEvent<HTMLInputElement>) => void)
+      | undefined
+  ) {
+    return HeaderRenderCell ? (
+      <HeaderRenderCell
+        title={title}
+        checkBoxLabel="Se kun ledige"
+        checkBoxChangeHandler={checkBoxChangeHandler}
+      />
+    ) : (
+      <TableCell
+        component="div"
+        className={classes.tableHead}
+        variant="head"
+        align="left"
+      >
+        {title}
+      </TableCell>
     );
   }
 
-  const getRowHeight = ({ index }: { index: number }) =>
-    opens[index] ? heights[index] : 70;
+  const getRowHeight = ({ index }: { index: number }) => {
+    return opens[rows[index].rowId] ? heights[rows[index].rowId] : 70;
+  };
 
   function emptyRow() {
     return (
@@ -321,19 +352,28 @@ function MuiVirtualizedTable({
           rowGetter={rowGetter}
           rowClassName={classes.flexContainer}
           noRowsRenderer={emptyRow}
+          gridClassName={classes.noFocus}
         >
-          {columns.map(({ title, headerRenderCell, checkBoxChangeHandler}, index) => {
-            return (
-              <Column
-                key={title}
-                headerRenderer={() => headerRenderer(title, headerRenderCell, checkBoxChangeHandler)}
-                className={classes.flexContainer}
-                cellRenderer={cellRenderer}
-                dataKey={String(index)}
-                width={cellWidth(index)}
-              />
-            );
-          })}
+          {columns.map(
+            ({ title, headerRenderCell, checkBoxChangeHandler }, index) => {
+              return (
+                <Column
+                  key={title}
+                  headerRenderer={() =>
+                    headerRenderer(
+                      title,
+                      headerRenderCell,
+                      checkBoxChangeHandler
+                    )
+                  }
+                  className={classes.flexContainer}
+                  cellRenderer={cellRenderer}
+                  dataKey={String(index)}
+                  width={cellWidth(index)}
+                />
+              );
+            }
+          )}
         </Table>
       )}
     </AutoSizer>
@@ -346,7 +386,6 @@ export default function DataTable({ columns, rows }: DataTableProps) {
       style={{
         height: 780,
         width: '100%',
-        padding: '10px',
         backgroundColor: 'white',
       }}
     >

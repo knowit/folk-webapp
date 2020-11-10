@@ -3,7 +3,6 @@ import { createStyles, FormControlLabel, Theme } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 
-
 const BlackCheckBox = withStyles({
   root: {
     color: '#333333',
@@ -19,7 +18,7 @@ const BlackCheckBox = withStyles({
   <Checkbox color="default" disableRipple {...props} />
 ));
 
-const useCheckBoxStyles = makeStyles((theme:Theme) => 
+const useCheckBoxStyles = makeStyles((theme: Theme) =>
   createStyles({
     label: {
       marginRight: 0,
@@ -34,9 +33,11 @@ const useCheckBoxStyles = makeStyles((theme:Theme) =>
       width: '100%',
       borderBottom: 'none',
       borderRight: `1px solid ${theme.palette.background.paper}`,
-      padding:'16px',
+      padding: 0,
+      paddingRight: '15px',
+      paddingLeft: '15px',
     },
-  }),
+  })
 );
 
 export default function CheckBoxHeaderCell({
@@ -54,7 +55,7 @@ export default function CheckBoxHeaderCell({
       {title}
       <FormControlLabel
         className={classes.label}
-        control={<BlackCheckBox onChange={checkBoxChangeHandler}  />}
+        control={<BlackCheckBox onChange={checkBoxChangeHandler} />}
         label={checkBoxLabel}
         disabled
       />

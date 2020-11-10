@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import { NoData } from './ErrorText';
@@ -15,16 +15,25 @@ const HtmlTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
-function isEllipsisActive(e: HTMLSpanElement | null): boolean {
-  if (e === null) return false;
+function isEllipsisActive(e: HTMLSpanElement | null | undefined): boolean {
+  if (e === null || e === undefined) {
+    return false;
+  }
   return e.offsetHeight < e.scrollHeight || e.offsetWidth < e.scrollWidth;
 }
 
 export default function CharacterLimitBox({ text }: { text: string }) {
   const [overflowActive, setOverflowActive] = useState(false);
-  const measuredRef = useCallback((node) => {
-    setOverflowActive(isEllipsisActive(node));
-  }, []);
+
+  let targetRef: any;
+  function setRef(ref: any) {
+    targetRef = ref;
+  }
+
+  useEffect(() => {
+    setOverflowActive(isEllipsisActive(targetRef));
+  }, [text, targetRef]);
+
   return (
     <div
       style={{
@@ -32,7 +41,7 @@ export default function CharacterLimitBox({ text }: { text: string }) {
         whiteSpace: 'nowrap',
         overflow: 'hidden',
       }}
-      ref={measuredRef}
+      ref={setRef}
     >
       <HtmlTooltip
         title={text}

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import CvDialog from '../../../../components/CvDialog';
 import GetApp from '@material-ui/icons/GetApp';
-import { NoData } from '../../../../components/ErrorText';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import { withStyles } from '@material-ui/core';
+import { NoData } from '../../../../components/ErrorText';
+import CvDialog from '../../../../components/CvDialog';
 
 interface CvCellData {
   no_pdf: string;
@@ -31,6 +32,16 @@ const useStyles = makeStyles({
   },
 });
 
+const DownloadIcon = withStyles({
+  root: {
+    color: '#707070',
+    cursor: 'pointer',
+    '&:hover': {
+      color: '#333333',
+    },
+  },
+})(GetApp);
+
 export default function CvCell({
   data,
   rowData,
@@ -49,8 +60,8 @@ export default function CvCell({
   const classes = useStyles();
   return data ? (
     <>
-      <div className={classes.root}>
-        <GetApp onClick={handleClickOpen} />
+      <div className={classes.root} title="last ned CV">
+        <DownloadIcon onClick={handleClickOpen} />
       </div>
       <CvDialog
         open={open}
