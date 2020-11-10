@@ -121,6 +121,12 @@ const useStyles = makeStyles({
     color: '#333',
     cursor: 'pointer',
     textDecoration: 'underline',
+    fontSize: '14px',
+    textTransform: 'inherit',
+    padding: '0px',
+    '&:hover':{
+      backgroundColor: 'transparent',
+    }
   },
   modal: {
     display: 'flex',
