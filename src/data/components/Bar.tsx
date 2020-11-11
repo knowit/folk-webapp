@@ -68,6 +68,7 @@ export default function Bar({ yLabels, data, dataKey = 'x' }: BarChartsProps) {
 
         {yLabels.map((key, i) => (
           <BarColumn
+            // eslint-disable-next-line react/no-array-index-key
             key={i}
             dataKey={key}
             stackId="a"

@@ -130,6 +130,7 @@ export default function Pie({
 }: PieChartsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // eslint-disable-next-line no-constant-condition
   if (true) {
     return MyResponsivePie({ data, groupKey, valueKey });
   }
