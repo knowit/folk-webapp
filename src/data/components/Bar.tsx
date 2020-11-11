@@ -35,6 +35,7 @@ export const MyResponsiveBar = ({ data, yLabels, dataKey }: BarChartsProps) => (
       colors={colors}
       axisTop={null}
       axisRight={null}
+      borderRadius={3}
       axisBottom={{
         tickSize: 5,
         tickPadding: 5,
@@ -48,12 +49,18 @@ export const MyResponsiveBar = ({ data, yLabels, dataKey }: BarChartsProps) => (
         legendOffset: -40,
       }}
       enableLabel={false}
+      tooltip={({ indexValue, value }) => (
+        <div>
+          {indexValue}: <b>{value}</b>
+        </div>
+      )}
     />
   </div>
 );
 
 export default function Bar({ yLabels, data, dataKey = 'x' }: BarChartsProps) {
-  if (data.length < 30) {
+  // eslint-disable-next-line no-constant-condition
+  if (true || data.length < 30) {
     return MyResponsiveBar({ data, yLabels, dataKey });
   }
 
