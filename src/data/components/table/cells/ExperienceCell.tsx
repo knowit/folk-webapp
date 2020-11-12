@@ -124,9 +124,9 @@ const useStyles = makeStyles({
     fontSize: '14px',
     textTransform: 'inherit',
     padding: '0px',
-    '&:hover':{
+    '&:hover': {
       backgroundColor: 'transparent',
-    }
+    },
   },
   modal: {
     display: 'flex',
