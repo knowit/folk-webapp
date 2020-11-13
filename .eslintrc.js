@@ -10,6 +10,10 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/no-explicit-any': 0,
     'react/jsx-props-no-spreading': 0,
+    '@typescript-eslint/ban-types': 0,
+    'react/require-default-props': 0,
+    '@typescript-eslint/no-unused-vars': 0,
+    '@typescript-eslint/explicit-module-boundary-types': 0,
     camelcase: 0,
     'import/no-extraneous-dependencies': [
       'error',
