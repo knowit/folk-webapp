@@ -8,6 +8,7 @@ interface DropdownPickerProps {
   values: ValueType[];
   onChange?: (newValue: any) => void;
   selected?: any;
+  big?: boolean;
 }
 
 const useStyles = makeStyles({
@@ -23,6 +24,8 @@ const useStyles = makeStyles({
     paddingBottom: 0,
     lineHeight: '43px',
     height: 'inherit',
+    display: 'flex',
+    alignItems: 'center',
   },
   menu: {},
   menuPaper: ({ width }: { width: number }) => ({
@@ -43,10 +46,60 @@ const useStyles = makeStyles({
   },
 });
 
+const useBigStyles = makeStyles({
+  root: ({ width }: { width: number }) => ({
+    backgroundColor: '#F1F0ED',
+    fontSize: 25,
+    border: '1px solid white',
+    width,
+    height: 77,
+    marginRight: 10,
+  }),
+  input: {
+    paddingLeft: 12,
+    paddingTop: 0,
+    paddingBottom: 0,
+    lineHeight: '43px',
+    height: 'inherit',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  menu: {},
+  menuPaper: ({ width }: { width: number }) => ({
+    borderRadius: 0,
+    width,
+    backgroundColor: '#F1F0ED',
+    marginLeft: -1,
+  }),
+  menuList: {
+    borderLeft: '1px solid white',
+    borderRight: '1px solid white',
+    borderTop: '1px solid white',
+  },
+  menuItem: {
+    fontSize: 25,
+    borderBottom: '1px solid white',
+    paddingLeft: 12,
+  },
+});
+
 const useMuiOverrideStyles = makeStyles({
   icon: {
     color: '#333333',
     right: 10,
+  },
+  select: {
+    backgroundColor: '#F1F0ED !important',
+  },
+});
+
+const useMuiOverrideStylesBig = makeStyles({
+  icon: {
+    color: '#333333',
+    right: 10,
+    height: '45.2px',
+    width: '45.2px',
+    top: 15,
   },
   select: {
     backgroundColor: '#F1F0ED !important',
@@ -74,23 +127,40 @@ export default function DropdownPicker({
   values,
   onChange = () => null,
   selected = '',
+  big,
 }: DropdownPickerProps) {
-  const width =
-    measureTextWidth(
-      values
-        .map((x) => getDisplayValue(x))
-        .reduce((prev, next) => (prev.length > next.length ? prev : next), ''),
-      '16pt arial'
-    ) + 46;
-  const classes = useStyles({ width });
+  const width = big
+    ? measureTextWidth(
+        values
+          .map((x) => getDisplayValue(x))
+          .reduce(
+            (prev, next) => (prev.length > next.length ? prev : next),
+            ''
+          ),
+        '25pt arial'
+      ) + 46
+    : measureTextWidth(
+        values
+          .map((x) => getDisplayValue(x))
+          .reduce(
+            (prev, next) => (prev.length > next.length ? prev : next),
+            ''
+          ),
+        '16pt arial'
+      ) + 46;
+  const smallClasses = useStyles({ width });
+  const bigClasses = useBigStyles({ width });
+  const classes = big ? bigClasses : smallClasses;
   const overrideClasses = useMuiOverrideStyles();
+  const overrideClassesBig = useMuiOverrideStylesBig();
+  const sizeOverrideClasses = big ? overrideClassesBig : overrideClasses;
   const selectRef = useRef<HTMLElement | null>();
-  const defaultValue = selected || values.length > 0 ? values[0] : '';
 
+  const defaultValue = selected || values.length > 0 ? values[0] : '';
   return (
     <Select
       className={classes.root}
-      classes={overrideClasses}
+      classes={sizeOverrideClasses}
       variant="standard"
       inputRef={selectRef}
       autoWidth

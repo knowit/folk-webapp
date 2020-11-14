@@ -10,7 +10,7 @@ const useStyles = makeStyles(() =>
       overflow: 'hidden',
     },
     gridHeaderRoot: {
-      height: '65px',
+      height:  '65px',
       backgroundColor: '#E4E1DB',
       paddingLeft: '15px',
       paddingRight: '15px',
@@ -18,9 +18,17 @@ const useStyles = makeStyles(() =>
       alignItems: 'center',
       justifyContent: 'space-between',
     },
+    bigGridHeaderRoot: {
+      height:  '102.7px',
+    },
     gridHeaderTitle: {
       fontSize: '18px',
       fontWeight: 'normal',
+    },
+    BigGridHeaderTitle: {
+      fontSize: '30px',
+      fontWeight: 'normal',
+      paddingLeft: '11px',
     },
     gridContentRoot: {
       width: '100%',
@@ -37,22 +45,25 @@ const useStyles = makeStyles(() =>
 interface GridItemHeaderProps {
   title: string;
   children?: React.ReactNode | React.ReactNode[];
+  big?: boolean
 }
 
 export function GridItemHeader({
   title,
   children = null,
+  big,
 }: GridItemHeaderProps) {
   const classes = useStyles();
+  const headerHeight = big? classes.bigGridHeaderRoot : null;
+  const fontSize = big? classes.BigGridHeaderTitle : null;
 
   return (
-    <div className={classes.gridHeaderRoot}>
-      <h3 className={classes.gridHeaderTitle}>{title}</h3>
+    <div className={[classes.gridHeaderRoot, headerHeight].join(" ")}>
+      <h3 className={[classes.gridHeaderTitle, fontSize].join(" ")}>{title}{big}</h3>
       {children}
     </div>
   );
 }
-
 interface GridItemContentProps {
   children: React.ReactNode | React.ReactNode[];
 }
