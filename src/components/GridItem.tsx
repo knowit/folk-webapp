@@ -55,7 +55,7 @@ export function GridItemHeader({
 }: GridItemHeaderProps) {
   const classes = useStyles();
   const headerHeight = big ? classes.bigGridHeaderRoot : null;
-  const fontSize = big? classes.BigGridHeaderTitle : null;
+  const fontSize = big ? classes.BigGridHeaderTitle : null;
 
   return (
     <div className={[classes.gridHeaderRoot, headerHeight].join(" ")}>
