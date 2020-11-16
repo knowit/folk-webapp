@@ -19,7 +19,7 @@ const useStyles = makeStyles(() =>
       justifyContent: 'space-between',
     },
     bigGridHeaderRoot: {
-      height:  '102.7px',
+      height: '102.7px',
     },
     gridHeaderTitle: {
       fontSize: '18px',
