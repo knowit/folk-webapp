@@ -8,8 +8,8 @@ import CvDialog from '../../../../components/CvDialog';
 interface CvCellData {
   no_pdf: string;
   int_pdf: string;
-  no_word: string;
-  int_word: string;
+  no_docx: string;
+  int_docx: string;
 }
 
 interface ConsultantType {
@@ -71,6 +71,6 @@ export default function CvCell({
       />
     </>
   ) : (
-    <NoData />
-  );
+      <NoData />
+    );
 }

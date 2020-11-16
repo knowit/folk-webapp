@@ -1,4 +1,4 @@
-const { getSecret, makeEmailUuid, range } = require('./util');
+const { getSecret, makeEmailUuid, getStorageUrl, range } = require('./util');
 const { v4: uuid } = require('uuid');
 
 exports.projectStatus = async ({ dataplattformClient }) => {
@@ -26,22 +26,21 @@ exports.projectStatus = async ({ dataplattformClient }) => {
 
 exports.competence = async ({ dataplattformClient }) => {
   const req = await dataplattformClient.report({
-    reportName: 'competence',
+    reportName: 'competence_new',
   });
+
+  const images = await dataplattformClient.report({
+    reportName: 'employeeImages'
+  })
+
   const allEmployees = await req.json();
 
-  const cvs = [
-    ['no', 'pdf'],
-    ['int', 'pdf'],
-    ['no', 'word'],
-    ['int', 'word'],
-  ];
   return allEmployees.map((employee) => ({
     rowId: uuid(),
     rowData: [
       {
         value: employee.navn,
-        image: null,
+        image: getStorageUrl(employee.image_key),
         competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
           employee.email
         )}`,
@@ -49,12 +48,12 @@ exports.competence = async ({ dataplattformClient }) => {
       employee.title,
       `/api/data/employeeExperience?user_id=${employee.user_id}`,
       employee.degree,
-      Object.fromEntries(
-        cvs.map(([lang, format]) => [
-          `${lang}_${format}`,
-          employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
-        ])
-      ),
+      {
+        no_pdf: getStorageUrl(employee.cv_no_pdf),
+        int_pdf: getStorageUrl(employee.cv_int_pdf),
+        no_docx: getStorageUrl(employee.cv_no_docx),
+        int_docx: getStorageUrl(employee.cv_int_docx),
+      },
     ],
   }));
 };

@@ -12,6 +12,11 @@ const AWS = require('aws-sdk');
 
 const ssm = new AWS.SSM();
 
+
+exports.getStorageUrl = (key) => {
+  return process.env.STORAGE_URL + "/" + key
+}
+
 exports.getSecret = (name, { encrypted = false } = {}) => {
   return new Promise((resolve, reject) => {
     ssm.getParameter(

@@ -13,8 +13,8 @@ import Divider from '@material-ui/core/Divider/Divider';
 interface CvCellData {
   no_pdf: string;
   int_pdf: string;
-  no_word: string;
-  int_word: string;
+  no_docx: string;
+  int_docx: string;
 }
 
 const DialogBox = withStyles(() => ({
@@ -150,8 +150,8 @@ export default function CvDialog({
     if (fileType === '.pdf') {
       if (language === 'Norsk') setDownloadLink(data.no_pdf);
       else setDownloadLink(data.int_pdf);
-    } else if (language === 'Norsk') setDownloadLink(data.no_word);
-    else setDownloadLink(data.int_word);
+    } else if (language === 'Norsk') setDownloadLink(data.no_docx);
+    else setDownloadLink(data.int_docx);
   }, [language, fileType, data]);
 
   const handleLanguageChange = (event: React.ChangeEvent<HTMLInputElement>) => {

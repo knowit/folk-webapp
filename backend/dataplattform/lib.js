@@ -4,9 +4,12 @@ exports.DataplattformClient = class DataplattformClient {
   constructor({
     accessToken = null,
     apiUrl = process.env.API_URL || 'https://dev-api.dataplattform.knowit.no',
+    rawStorageUrl = process.env.STORAGE_URL
   }) {
     this.apiUrl = apiUrl;
+    this.rawStorageUrl = rawStorageUrl;
     this.accessToken = accessToken;
+
   }
 
   async query({
@@ -36,9 +39,8 @@ exports.DataplattformClient = class DataplattformClient {
     });
     const filterString = filters.length > 0 ? `?${filters.join('&')}` : '';
 
-    const reportUrl = `${
-      apiUrl || this.apiUrl
-    }/data/query/report/${reportName}${filterString}`;
+    const reportUrl = `${apiUrl || this.apiUrl
+      }/data/query/report/${reportName}${filterString}`;
 
     return await fetch(reportUrl, {
       method: 'GET',
@@ -47,4 +49,15 @@ exports.DataplattformClient = class DataplattformClient {
       },
     });
   }
+
+  async fetchStorageDocument({ documentKey, rawStorageUrl = null }) {
+    const documentUrl = `${rawStorageUrl || this.rawStorageUrl}/${reportName}${documentKey}`;
+    return await fetch(documentUrl, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken || this.accessToken}`,
+      },
+    });
+  }
 };
+
