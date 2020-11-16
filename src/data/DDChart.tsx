@@ -103,7 +103,8 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
   };
 
   const GridItem = () => {
-    const altText = big ? "Exit stor størrelse" : "Utvid til stor størrelse"
+    const altText = big ? 'Exit stor størrelse' : 'Utvid til stor størrelse';
+    
     return (
       <>
         <GridItemHeader title={title} big={big}>
