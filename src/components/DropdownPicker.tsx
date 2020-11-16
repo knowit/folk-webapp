@@ -129,25 +129,13 @@ export default function DropdownPicker({
   selected = '',
   big,
 }: DropdownPickerProps) {
-  const width = big
-    ? measureTextWidth(
-        values
-          .map((x) => getDisplayValue(x))
-          .reduce(
-            (prev, next) => (prev.length > next.length ? prev : next),
-            ''
-          ),
-        '25pt arial'
-      ) + 46
-    : measureTextWidth(
-        values
-          .map((x) => getDisplayValue(x))
-          .reduce(
-            (prev, next) => (prev.length > next.length ? prev : next),
-            ''
-          ),
-        '16pt arial'
-      ) + 46;
+  const width =
+    measureTextWidth(
+      values
+        .map((x) => getDisplayValue(x))
+        .reduce((prev, next) => (prev.length > next.length ? prev : next), ''),
+      big ? '25pt arial' : '16pt arial'
+    ) + 46;
   const smallClasses = useStyles({ width });
   const bigClasses = useBigStyles({ width });
   const classes = big ? bigClasses : smallClasses;
