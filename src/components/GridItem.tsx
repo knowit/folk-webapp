@@ -10,7 +10,7 @@ const useStyles = makeStyles(() =>
       overflow: 'hidden',
     },
     gridHeaderRoot: {
-      height:  '65px',
+      height: '65px',
       backgroundColor: '#E4E1DB',
       paddingLeft: '15px',
       paddingRight: '15px',
