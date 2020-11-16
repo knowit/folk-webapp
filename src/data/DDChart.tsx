@@ -63,7 +63,7 @@ const LargerIcon = withStyles((theme: Theme) => ({
     height: '41.17px',
     width: '41.17px',
     position: 'relative',
-    left: '490px',
+    left: '491px',
     bottom: '10px',
     color: theme.palette.primary.main,
     '&:hover': {
