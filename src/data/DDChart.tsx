@@ -80,7 +80,7 @@ const SmallerIcon = withStyles((theme: Theme) => ({
     bottom: '15px',
     left: '861px',
     color: theme.palette.primary.main,
-    '&:hover':{
+    '&:hover': {
       color: theme.palette.text.primary
     }
   },
