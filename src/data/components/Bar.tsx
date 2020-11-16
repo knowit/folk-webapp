@@ -9,6 +9,7 @@ interface BarChartsProps {
   yLabels: string[];
   dataKey: string;
   data: BarChartsData[];
+  big?: boolean;
 }
 
 const colors = ['#a3a1fb', '#56d9fe', '#74e2b7', '#f2efa0'];

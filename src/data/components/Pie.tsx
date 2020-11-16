@@ -9,6 +9,7 @@ interface PieChartsProps {
   data: PieChartsData[];
   groupKey?: string;
   valueKey?: string;
+  big?: boolean;
 }
 
 const colors = ['#a3a1fb', '#56d9fe', '#74e2b7', '#f2efa0'];
@@ -17,6 +18,7 @@ export default function Pie({
   data,
   groupKey = 'group',
   valueKey = 'value',
+  big,
 }: PieChartsProps) {
   return (
     <div style={{ height: '300px', width: '100%' }}>
