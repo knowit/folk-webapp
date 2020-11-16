@@ -60,23 +60,29 @@ const getChartComponent = (name: string) => {
 
 const LargerIcon = withStyles((theme: Theme) => ({
   root: {
-    height: '35px',
-    width: '35px',
+    height: '41.17px',
+    width: '41.17px',
     position: 'relative',
-    left: '495px',
+    left: '491px',
     bottom: '10px',
     color: theme.palette.primary.main,
+    '&:hover': {
+      color: theme.palette.text.primary,
+    },
   },
 }))(Fullscreen);
 
 const SmallerIcon = withStyles((theme: Theme) => ({
   root: {
-    height: '45px',
-    width: '45px',
+    height: '60px',
+    width: '60px',
     position: 'relative',
     bottom: '15px',
-    left: '880px',
+    left: '861px',
     color: theme.palette.primary.main,
+    '&:hover': {
+      color: theme.palette.text.primary,
+    },
   },
 }))(FullscreenExit);
 
@@ -97,29 +103,28 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
   };
 
   const GridItem = () => {
+    const altText = big ? 'Exit stor størrelse' : 'Utvid til stor størrelse';
     return (
       <>
-        <GridItemHeader title={title}>
+        <GridItemHeader title={title} big={big}>
           {setNames.length > 1 ? (
             <DropdownPicker
               values={setNames}
               onChange={onChange}
               selected={set}
+              big={big}
             />
           ) : null}
         </GridItemHeader>
         {sets ? (
           <GridItemContent>
-            {big ? (
-              <span title="Exit stor størrelse">
-                {' '}
-                <SmallerIcon onClick={() => setBig(false)} />{' '}
-              </span>
-            ) : (
-              <span title="Utvid til stor størrelse">
+            <span title={altText}>
+              {big ? (
+                <SmallerIcon onClick={() => setBig(false)} />
+              ) : (
                 <LargerIcon onClick={() => setBig(true)} />
-              </span>
-            )}
+              )}
+            </span>
             <ChartComponent data={sets[set]} {...props} />
           </GridItemContent>
         ) : (

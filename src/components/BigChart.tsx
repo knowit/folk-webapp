@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 const DialogBox = withStyles(() => ({
   paper: {
     width: '950px',
-    height: '603px',
+    height: '604px',
     borderRadius: '0px',
   },
 }))(Dialog);
