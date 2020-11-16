@@ -45,7 +45,7 @@ const useStyles = makeStyles(() =>
 interface GridItemHeaderProps {
   title: string;
   children?: React.ReactNode | React.ReactNode[];
-  big?: boolean
+  big?: boolean;
 }
 
 export function GridItemHeader({
@@ -58,8 +58,11 @@ export function GridItemHeader({
   const fontSize = big ? classes.BigGridHeaderTitle : null;
 
   return (
-    <div className={[classes.gridHeaderRoot, headerHeight].join(" ")}>
-      <h3 className={[classes.gridHeaderTitle, fontSize].join(" ")}>{title}{big}</h3>
+    <div className={[classes.gridHeaderRoot, headerHeight].join(' ')}>
+      <h3 className={[classes.gridHeaderTitle, fontSize].join(' ')}>
+        {title}
+        {big}
+      </h3>
       {children}
     </div>
   );

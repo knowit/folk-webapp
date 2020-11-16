@@ -67,8 +67,8 @@ const LargerIcon = withStyles((theme: Theme) => ({
     bottom: '10px',
     color: theme.palette.primary.main,
     '&:hover': {
-      color: theme.palette.text.primary
-    }
+      color: theme.palette.text.primary,
+    },
   },
 }))(Fullscreen);
 
@@ -81,8 +81,8 @@ const SmallerIcon = withStyles((theme: Theme) => ({
     left: '861px',
     color: theme.palette.primary.main,
     '&:hover': {
-      color: theme.palette.text.primary
-    }
+      color: theme.palette.text.primary,
+    },
   },
 }))(FullscreenExit);
 
@@ -104,7 +104,6 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
 
   const GridItem = () => {
     const altText = big ? 'Exit stor størrelse' : 'Utvid til stor størrelse';
-    
     return (
       <>
         <GridItemHeader title={title} big={big}>
@@ -120,7 +119,11 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
         {sets ? (
           <GridItemContent>
             <span title={altText}>
-              {big ? <SmallerIcon onClick={() => setBig(false)}/> : <LargerIcon onClick={() => setBig(true)}/> }
+              {big ? (
+                <SmallerIcon onClick={() => setBig(false)} />
+              ) : (
+                <LargerIcon onClick={() => setBig(true)} />
+              )}
             </span>
             <ChartComponent data={sets[set]} {...props} />
           </GridItemContent>
