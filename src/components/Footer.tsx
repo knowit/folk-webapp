@@ -27,11 +27,11 @@ export default function Footer() {
     <div className={classes.root}>
       <footer className={classes.footer}>
         <p>
-          Knowit Folk. Lakkegata 53, 0178 Oslo | Tlf. 02486 |
+          Knowit Folk. Lakkegata 53, 0178 Oslo &ensp;|&ensp; Tlf. 02486 &ensp;| &ensp;
           <a className={classes.link} href="mailto:name1@mail.com">
             Kontakt
-          </a>{' '}
-          |
+          </a>
+          &ensp; | &ensp;
           <a
             className={classes.link}
             href="mailto:name1@mail.com?subject=Melding%20om%20datafeil&body=Feilen%20ble%20funnet%20her%3A%20%0D%0AOg%20omhandler%20dette%3A%20"
