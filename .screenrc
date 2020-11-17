@@ -1,0 +1,8 @@
+screen 0
+stuff "yarn start:local^M"
+split
+focus down
+chdir backend
+screen 1
+stuff "nodemon -r dotenv/config local.js; clear^M"
+focus up
