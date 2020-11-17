@@ -4,5 +4,5 @@ split
 focus down
 chdir backend
 screen 1
-stuff "nodemon -r dotenv/config local.js; clear^M"
+stuff "yarn start:local^M; clear^M"
 focus up
