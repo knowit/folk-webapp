@@ -132,6 +132,7 @@ const useStyles = makeStyles({
 
 export default function EmployeeInfo(cellData: {
   data: { competenceUrl: string };
+  callBack: () => void;
 }) {
   const classes = useStyles();
   const url = cellData.data.competenceUrl;
@@ -183,6 +184,7 @@ export default function EmployeeInfo(cellData: {
 
   return (
     <div className={classes.root}>
+      {!pending && data && cellData.callBack()}
       <div className={classes.cell}>
         {pending ? (
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
