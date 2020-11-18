@@ -5,7 +5,9 @@
 Create your `.env` file with the contents:
 
 > OAUTH_URL=''
+>
 > CLIENT_ID=''
+>
 > CLIENT_SECRET=''
 
 and fill in the neccessary values ([AWS parameters](https://console.aws.amazon.com/systems-manager/parameters/)).
