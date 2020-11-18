@@ -39,6 +39,15 @@ The page will reload if you make edits.
 
 You will also see any lint errors in the console.
 
+### `yarn start:local`
+
+Same as `yarn start` but routes API queries to localhost using a proxy.
+
+###  `yarn start:screen`
+
+Same as `yarn start:local` but starts both the frontend and backend in a screen session.
+Quit using <kbd>ctrl+a</kbd> and type `:quit`.
+
 ### `yarn test`
 
 Launches the test runner in the interactive watch mode.
