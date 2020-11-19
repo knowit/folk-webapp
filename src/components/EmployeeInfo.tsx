@@ -130,7 +130,11 @@ const useStyles = makeStyles({
   },
 });
 
-export default function EmployeeInfo(cellData: {
+export default function EmployeeInfo({
+  data,
+  callBack,
+  id,
+}: {
   data: { competenceUrl: string };
   callBack: (rowKey: string, height: number) => void;
   id: string;
@@ -141,8 +145,8 @@ export default function EmployeeInfo(cellData: {
   }
   const getOffsetHeight = (thisTargetRef: any) => thisTargetRef.offsetHeight;
   const classes = useStyles();
-  const url = cellData.data.competenceUrl;
-  const [data, pending] = useFetchedData<EmployeeInfoData>({ url });
+  const url = data.competenceUrl;
+  const [empData, pending] = useFetchedData<EmployeeInfoData>({ url });
   const totalExperience = (allExperience: Experience[] | undefined) => {
     const firstJob = allExperience?.sort(
       (a, b) => a.year_from - b.year_from
@@ -180,7 +184,7 @@ export default function EmployeeInfo(cellData: {
     listName: 'skills' | 'roles' | 'languages'
   ) => {
     return list && list.length > 0 ? (
-      `${Array.from(new Set(data?.tags[listName]))
+      `${Array.from(new Set(empData?.tags[listName]))
         .filter((x) => x)
         .join(', ')}.`
     ) : (
@@ -202,7 +206,7 @@ export default function EmployeeInfo(cellData: {
         ) : (
           <>
             <b>Hovedkompetanse: </b>
-            {getStringFromList(data?.tags.skills, 'skills')}
+            {getStringFromList(empData?.tags.skills, 'skills')}
           </>
         )}
       </div>
@@ -212,7 +216,7 @@ export default function EmployeeInfo(cellData: {
         ) : (
           <>
             <b>Roller: </b>
-            {getStringFromList(data?.tags.roles, 'roles')}
+            {getStringFromList(empData?.tags.roles, 'roles')}
           </>
         )}
       </div>
@@ -221,7 +225,7 @@ export default function EmployeeInfo(cellData: {
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Startet i Knowit:</b> {startedInKnowit(data?.workExperience)}
+            <b>Startet i Knowit:</b> {startedInKnowit(empData?.workExperience)}
           </>
         )}
       </div>
@@ -231,7 +235,7 @@ export default function EmployeeInfo(cellData: {
         ) : (
           <>
             <b>Total arbeidserfaring:</b>{' '}
-            {totalExperience(data?.workExperience)}
+            {totalExperience(empData?.workExperience)}
           </>
         )}
       </div>
@@ -241,14 +245,14 @@ export default function EmployeeInfo(cellData: {
         ) : (
           <>
             <b>Språk: </b>
-            {getStringFromList(data?.tags.languages, 'languages')}
+            {getStringFromList(empData?.tags.languages, 'languages')}
           </>
         )}
       </div>
       {pending ? (
         <Skeleton variant="rect" height={67} animation="wave" />
       ) : (
-        <CompetenceMapping competences={data?.competence} />
+        <CompetenceMapping competences={empData?.competence} />
       )}
     </div>
   );
