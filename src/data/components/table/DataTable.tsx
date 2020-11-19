@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { TableCell, withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
@@ -137,8 +137,6 @@ function ExtendableCell({
 }): JSX.Element {
   const classes = useStyles();
   const openStyle = open ? classes.bolderText : '';
-  const targetRef = useRef();
-  const getOffsetHeigh = (thisTargetRef: any) => thisTargetRef.offsetHeight;
 
   const openClick = () => {
     if (open) {
@@ -149,13 +147,6 @@ function ExtendableCell({
     onChange(id, open);
   };
 
-  const updateHeight = useCallback(() => {
-    console.log('Kjører callback');
-    if (targetRef.current && open) {
-      heightChange(id, getOffsetHeigh(targetRef.current));
-    }
-  }, [id, open]);
-
   return (
     <TableCellNoBorders
       component="div"
@@ -163,7 +154,6 @@ function ExtendableCell({
         ' '
       )}
       align="left"
-      ref={targetRef}
     >
       <Button
         role="button"
@@ -181,7 +171,7 @@ function ExtendableCell({
       </Button>
       <div>
         {open && (
-          <RenderExpanded data={cellData} callBack={() => updateHeight()} />
+          <RenderExpanded data={cellData} callBack={heightChange} id={id} />
         )}
       </div>
     </TableCellNoBorders>

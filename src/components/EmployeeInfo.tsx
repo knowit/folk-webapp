@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import CharacterLimitBox from './CharacterLimitBox';
@@ -132,8 +132,14 @@ const useStyles = makeStyles({
 
 export default function EmployeeInfo(cellData: {
   data: { competenceUrl: string };
-  callBack: () => void;
+  callBack: (rowKey: string, height: number) => void;
+  id: string;
 }) {
+  let targetRef: any;
+  function setRef(ref: any) {
+    targetRef = ref;
+  }
+  const getOffsetHeight = (thisTargetRef: any) => thisTargetRef.offsetHeight;
   const classes = useStyles();
   const url = cellData.data.competenceUrl;
   const [data, pending] = useFetchedData<EmployeeInfoData>({ url });
@@ -182,9 +188,14 @@ export default function EmployeeInfo(cellData: {
     );
   };
 
+  useEffect(() => {
+    if (!pending && data && targetRef) {
+      const dataHeight = getOffsetHeight(targetRef);
+      callBack(id, dataHeight + 87);
+    }
+  }, [pending, empData, targetRef, id, data]);
   return (
-    <div className={classes.root}>
-      {!pending && data && cellData.callBack()}
+    <div className={classes.root} ref={setRef}>
       <div className={classes.cell}>
         {pending ? (
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
