@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { TableCell, withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
@@ -254,11 +254,17 @@ function MuiVirtualizedTable({
       [rowKey]: !open,
     });
   };
+  let ArrayRef: any;
+  function setRef(ref: any) {
+    ArrayRef = ref;
+  }
   const heightChange = (rowKey: string, height: number) => {
     setHeights({
       ...heights,
       [rowKey]: height,
     });
+    ArrayRef.recomputeRowHeights();
+    ArrayRef.forceUpdate();
   };
 
   const widthList = [394, 224, 143, 394];
@@ -330,16 +336,6 @@ function MuiVirtualizedTable({
       </TableCell>
     );
   }
-
-  let ArrayRef: any;
-  function setRef(ref: any) {
-    ArrayRef = ref;
-  }
-
-  useEffect(() => {
-    ArrayRef.recomputeRowHeights();
-    ArrayRef.forceUpdate();
-  }, [ArrayRef, heights]);
 
   return (
     <AutoSizer>
