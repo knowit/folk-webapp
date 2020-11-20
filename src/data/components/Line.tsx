@@ -37,6 +37,7 @@ export default function Line({
         <Legend />
 
         {yLabels.map((key, i) => (
+          // eslint-disable-next-line react/no-array-index-key
           <ChartLine key={i} dataKey={key} stroke={strokeColors[i]} />
         ))}
       </LineChart>

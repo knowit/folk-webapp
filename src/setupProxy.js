@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/camelcase */
+
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const config = require('../package.json');
 

@@ -37,6 +37,7 @@ const renderTooltipContent = ({
       <p>{`${label} (Total: ${total})`}</p>
       <ul>
         {payload.map((entry, index) => (
+          // eslint-disable-next-line react/no-array-index-key
           <li key={`item-${index}`} style={{ color: entry.color }}>
             {`${entry.name}: ${entry.value}(${getPercent(entry.value, total)})`}
           </li>
@@ -59,6 +60,7 @@ export default function PercentArea({ yLabels, data }: PercentAreaChartsProps) {
 
         {yLabels.map((key, i) => (
           <Area
+            // eslint-disable-next-line react/no-array-index-key
             key={i}
             dataKey={key}
             stackId="1"

@@ -45,7 +45,7 @@ export default function SearchInput({
     onChange(val);
   }, 200);
 
-  useEffect(debouncedOnChange, [val]);
+  useEffect(debouncedOnChange, [val, debouncedOnChange]);
 
   return (
     <>

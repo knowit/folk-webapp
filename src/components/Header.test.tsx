@@ -1,9 +1,8 @@
-// HEADER.test.tsx
+import Header from './Header';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
 import ReactDOM from 'react-dom';
-import Header from './Header'; // component to test
+import { BrowserRouter } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
 import { useUserInfo } from '../LoginProvider';
 
 const loginProviderMock = require('../LoginProvider');
