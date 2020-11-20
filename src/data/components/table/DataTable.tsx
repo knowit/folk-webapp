@@ -122,30 +122,25 @@ function ExtendableCell({
   RenderCell,
   cellData,
   RenderExpanded,
-  open,
   id,
-  onChange,
   heightChange,
 }: {
   RenderCell: createCellFunction;
   cellData: any;
   RenderExpanded: renderExpandedCell;
-  open: boolean;
-  onChange: (rowKey: string, open: boolean) => void;
   id: string;
   heightChange: (rowKey: string, height: number) => void;
 }): JSX.Element {
   const classes = useStyles();
-  const openStyle = open ? classes.bolderText : '';
-
+  const [open, setOpen] = useState(false);
   const openClick = () => {
     if (open) {
-      heightChange(id, 72);
+      heightChange(id, 70);
     } else {
-      heightChange(id, 294);
     }
-    onChange(id, open);
+    setOpen(!open);
   };
+  const openStyle = open ? classes.bolderText : '';
 
   return (
     <TableCellNoBorders
@@ -191,8 +186,6 @@ function GetCell({
   cellData,
   RenderExpanded,
   id,
-  onChange,
-  open,
   rowData,
   heightChange,
 }: {
@@ -200,8 +193,6 @@ function GetCell({
   expandable: boolean | undefined;
   cellData: any;
   RenderExpanded: createCellFunction | undefined;
-  open: boolean;
-  onChange: (rowKey: string, open: boolean) => void;
   id: string;
   rowData: any[];
   heightChange: (rowKey: string, height: number) => void;
@@ -214,8 +205,6 @@ function GetCell({
         RenderCell={RenderCell}
         cellData={cellData}
         RenderExpanded={RenderExpanded}
-        open={open}
-        onChange={onChange}
         id={id}
         heightChange={heightChange}
       />
@@ -245,13 +234,12 @@ function MuiVirtualizedTable({
   rows,
 }: MuiVirtualizedTableProps) {
   const classes = useStyles();
-  const [opens, setOpens] = useState<boolean[]>([]);
   const [heights, setHeights] = useState<number[]>([]);
 
-  const handleOpenChange = (rowKey: string, open: boolean) => {
-    setOpens({
-      ...opens,
-      [rowKey]: !open,
+  const setExpandedData = (cellKey: string, data: any) => {
+    setExpandedeDatas({
+      ...expandedDatas,
+      [cellKey]: data,
     });
   };
   let ArrayRef: any;
@@ -286,8 +274,6 @@ function MuiVirtualizedTable({
           cellData={cellData}
           RenderExpanded={columns[columnIndex].renderExpanded}
           id={rows[rowIndex].rowId}
-          onChange={handleOpenChange}
-          open={opens[rows[rowIndex].rowId]}
           rowData={rows[rowIndex]}
           heightChange={heightChange}
         />
@@ -321,7 +307,7 @@ function MuiVirtualizedTable({
   }
 
   const getRowHeight = ({ index }: { index: number }) => {
-    return opens[rows[index].rowId] ? heights[rows[index].rowId] : 70;
+    return heights[rows[index].rowId] || 70;
   };
 
   function emptyRow() {

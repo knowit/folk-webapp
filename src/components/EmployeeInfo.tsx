@@ -195,7 +195,7 @@ export default function EmployeeInfo({
   useEffect(() => {
     if (!pending && data && targetRef) {
       const dataHeight = getOffsetHeight(targetRef);
-      callBack(id, dataHeight + 87);
+      callBack(id, dataHeight + 77);
     }
   }, [pending, empData, targetRef, id, data]);
   return (
