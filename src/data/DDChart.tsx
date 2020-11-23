@@ -10,6 +10,7 @@ import Pie from './components/Pie';
 import { DDComponentProps } from './types';
 import BigChart from '../components/BigChart';
 import { ErrorText } from '../components/ErrorText';
+import Sunburst from './components/Sunburst';
 
 const usePlaceholderStyle = makeStyles(() =>
   createStyles({
@@ -53,6 +54,8 @@ const getChartComponent = (name: string) => {
       return PercentArea;
     case 'Pie':
       return Pie;
+    case 'Sunburst':
+      return Sunburst;
     default:
       return Placeholder;
   }
