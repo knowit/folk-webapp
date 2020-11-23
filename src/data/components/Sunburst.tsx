@@ -1,4 +1,6 @@
+// @ts-nocheck
 import React from 'react';
+
 import { ResponsiveSunburst } from '@nivo/sunburst';
 
 type SunburstChartsData = {
@@ -11,7 +13,7 @@ interface SunburstChartsProps {
   valueKey?: string;
 }
 
-const colors = ['#a3a1fb', '#56d9fe', '#74e2b7', '#f2efa0']; // TODO: need more colors
+// const colors = ['#a3a1fb', '#56d9fe', '#74e2b7', '#f2efa0']; // TODO: need more colors
 
 export default function Sunburst({
   data,
