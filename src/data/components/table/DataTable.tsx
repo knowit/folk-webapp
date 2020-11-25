@@ -162,7 +162,7 @@ function ExtendableCell({
     if (open) {
       dispatch({ type: 'CHANGE_HEIGHT', id: id, height: 70 });
     } else {
-      dispatch({ type: 'CHANGE_HEIGHT', id: id, height: 300 });
+      dispatch({ type: 'CHANGE_HEIGHT', id: id, height: 280 });
     }
     setOpen(!open);
   };
