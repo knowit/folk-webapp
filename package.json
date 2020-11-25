@@ -57,8 +57,8 @@
     "postdeploy:dev": "aws cloudfront create-invalidation --distribution-id EYKLHWDAKRWEW --paths /",
     "postdeploy:prod": "aws cloudfront create-invalidation --distribution-id E16SNX0CEZ21PY --paths /",
     "format": "prettier --write ./src/**/*.{js,ts,tsx}",
-    "lint": "eslint --quiet ./src/**/*.{js,ts,tsx}",
-    "lint:fix": "eslint --fix ./src/**/*.{js,ts,tsx}",
+    "lint": "eslint --quiet ./src/**/*.{ts,tsx}",
+    "lint:fix": "eslint --fix ./src/**/*.{ts,tsx}",
     "sls": "sls"
   },
   "eslintConfig": {
@@ -93,8 +93,11 @@
     "@types/react-router-dom": "^5.1.6",
     "@types/recharts": "^1.8.16",
     "@types/underscore": "^1.10.24",
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/parser": "^4.8.2",
     "eslint": "^7.13.0",
     "eslint-config-airbnb-typescript-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.21.5",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "prettier": "^2.2.0"
   }
