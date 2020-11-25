@@ -199,9 +199,11 @@ export default function EmployeeInfo({
     if (!pending && empData && targetRef) {
       const dataHeight = getOffsetHeight(targetRef);
       dispatch({ type: 'CHANGE_HEIGHT', id: id, height: dataHeight + 77 });
-      dispatch({ type: 'SET_EXPANDED_DATA', id: id, expandedData: empData });
+      !rowStates[id].expandedData &&
+        dispatch({ type: 'SET_EXPANDED_DATA', id: id, expandedData: empData });
     }
   }, [pending, empData, targetRef, id, dispatch]);
+
   return (
     <div className={classes.root} ref={setRef}>
       <div className={classes.cell}>

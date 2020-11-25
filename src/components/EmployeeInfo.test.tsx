@@ -42,7 +42,7 @@ const fakeUser = {
     },
   ],
 };
-const mockCallbackFunction = (rowKey: string, height: number) => {};
+const mockCallbackFunction = () => {};
 (useFetchedData as jest.Mock).mockReturnValue([fakeUser, false, null]);
 
 describe('EmployeeInfo', () => {
@@ -50,8 +50,9 @@ describe('EmployeeInfo', () => {
     render(
       <EmployeeInfo
         data={{ competenceUrl: 'falskUrl.com' }}
-        callBack={mockCallbackFunction}
         id={'1'}
+        rowStates={{ '1': { expandedData: null, height: 70 } }}
+        dispatch={mockCallbackFunction}
       />
     );
     expect(useFetchedData).toHaveBeenCalled;
@@ -62,8 +63,9 @@ describe('EmployeeInfo', () => {
       render(
         <EmployeeInfo
           data={{ competenceUrl: 'falskUrl.com' }}
-          callBack={mockCallbackFunction}
           id={'1'}
+          rowStates={{ '1': { expandedData: null, height: 70 } }}
+          dispatch={mockCallbackFunction}
         />
       );
       expect(screen.getByText(language, { exact: false })).toBeInTheDocument;
@@ -73,8 +75,9 @@ describe('EmployeeInfo', () => {
     render(
       <EmployeeInfo
         data={{ competenceUrl: 'falskUrl.com' }}
-        callBack={mockCallbackFunction}
         id={'1'}
+        rowStates={{ '1': { expandedData: null, height: 70 } }}
+        dispatch={mockCallbackFunction}
       />
     );
     expect(screen.getByText(skill, { exact: false })).toBeInTheDocument;
@@ -83,8 +86,9 @@ describe('EmployeeInfo', () => {
     render(
       <EmployeeInfo
         data={{ competenceUrl: 'falskUrl.com' }}
-        callBack={mockCallbackFunction}
         id={'1'}
+        rowStates={{ '1': { expandedData: null, height: 70 } }}
+        dispatch={mockCallbackFunction}
       />
     );
     expect(screen.getByText(role, { exact: false })).toBeInTheDocument;
@@ -93,8 +97,9 @@ describe('EmployeeInfo', () => {
     render(
       <EmployeeInfo
         data={{ competenceUrl: 'falskUrl.com' }}
-        callBack={mockCallbackFunction}
         id={'1'}
+        rowStates={{ '1': { expandedData: null, height: 70 } }}
+        dispatch={mockCallbackFunction}
       />
     );
     const ActiveYears = String(new Date().getFullYear() - 2010) + ' år.';
@@ -104,8 +109,9 @@ describe('EmployeeInfo', () => {
     render(
       <EmployeeInfo
         data={{ competenceUrl: 'falskUrl.com' }}
-        callBack={mockCallbackFunction}
         id={'1'}
+        rowStates={{ '1': { expandedData: null, height: 70 } }}
+        dispatch={mockCallbackFunction}
       />
     );
     expect(screen.getByText('05 - 2017.')).toBeInTheDocument;
