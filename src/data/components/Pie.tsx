@@ -21,7 +21,13 @@ export default function Pie({
   big,
 }: PieChartsProps) {
   return (
-    <div style={{ height: '300px', width: '100%' }}>
+    <div
+      style={
+        big
+          ? { height: '400px', width: '100%' }
+          : { height: '300px', width: '100%' }
+      }
+    >
       <ResponsivePie
         data={data}
         value={valueKey}

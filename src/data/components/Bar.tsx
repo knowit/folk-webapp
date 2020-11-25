@@ -14,9 +14,20 @@ interface BarChartsProps {
 
 const colors = ['#a3a1fb', '#56d9fe', '#74e2b7', '#f2efa0'];
 
-export default function Bar({ data, yLabels, dataKey = 'x' }: BarChartsProps) {
+export default function Bar({
+  data,
+  yLabels,
+  dataKey = 'x',
+  big,
+}: BarChartsProps) {
   return (
-    <div style={{ height: '300px', width: '100%' }}>
+    <div
+      style={
+        big
+          ? { height: '400px', width: '100%' }
+          : { height: '300px', width: '100%' }
+      }
+    >
       <ResponsiveBar
         data={data}
         keys={yLabels}
