@@ -137,7 +137,7 @@ export default function CvDialog({
   open,
 }: {
   data: CvCellData;
-  onClose: Function;
+  onClose: () => void;
   name: string;
   open: boolean;
 }) {
