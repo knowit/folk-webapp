@@ -10,11 +10,13 @@ const DialogBox = withStyles(() => ({
   },
 }))(Dialog);
 
-const BigChart: React.FC<{ open: boolean; onClose: () => void }> = ({
-  onClose,
-  open,
-  children,
-}) => {
+interface BigChartInterface {
+  open: boolean;
+  onClose: () => void;
+  children?: JSX.Element | JSX.Element[];
+}
+
+const BigChart = ({ onClose, open, children }: BigChartInterface) => {
   return (
     <DialogBox
       scroll="body"
