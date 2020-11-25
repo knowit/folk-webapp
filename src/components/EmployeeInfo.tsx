@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { Dispatch, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import CharacterLimitBox from './CharacterLimitBox';
 import { useFetchedData } from '../hooks/service';
 import { NoData } from './ErrorText';
+import { RowStates, Action } from '../data/components/table/DataTable';
 
 type Experience = {
   employer: string;
@@ -132,12 +133,14 @@ const useStyles = makeStyles({
 
 export default function EmployeeInfo({
   data,
-  callBack,
   id,
+  rowStates,
+  dispatch,
 }: {
   data: { competenceUrl: string };
-  callBack: (rowKey: string, height: number) => void;
   id: string;
+  rowStates: RowStates;
+  dispatch: Dispatch<Action>;
 }) {
   let targetRef: any;
   function setRef(ref: any) {
@@ -193,11 +196,12 @@ export default function EmployeeInfo({
   };
 
   useEffect(() => {
-    if (!pending && data && targetRef) {
+    if (!pending && empData && targetRef) {
       const dataHeight = getOffsetHeight(targetRef);
-      callBack(id, dataHeight + 77);
+      dispatch({ type: 'CHANGE_HEIGHT', id: id, height: dataHeight + 77 });
+      dispatch({ type: 'SET_EXPANDED_DATA', id: id, expandedData: empData });
     }
-  }, [pending, empData, targetRef, id, data]);
+  }, [pending, empData, targetRef, id, dispatch]);
   return (
     <div className={classes.root} ref={setRef}>
       <div className={classes.cell}>
