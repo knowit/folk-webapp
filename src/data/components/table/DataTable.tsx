@@ -278,6 +278,7 @@ export interface RowStates {
 export type Action =
   | { type: 'CHANGE_HEIGHT'; id: string; height: number }
   | { type: 'SET_EXPANDED_DATA'; id: string; expandedData: any };
+  
 function MuiVirtualizedTable({
   columns,
   rowCount,
