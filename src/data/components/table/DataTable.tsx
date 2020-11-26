@@ -286,7 +286,6 @@ function MuiVirtualizedTable({
 }: MuiVirtualizedTableProps) {
   const classes = useStyles();
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log(state);
 
   let ArrayRef: any;
   function setRef(ref: any) {
