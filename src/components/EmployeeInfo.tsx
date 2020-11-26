@@ -198,7 +198,7 @@ export default function EmployeeInfo({
   useEffect(() => {
     if (!pending && empData && targetRef) {
       const dataHeight = getOffsetHeight(targetRef);
-      dispatch({ type: 'CHANGE_HEIGHT', id: id, height: dataHeight + 77 });
+      dispatch({ type: 'CHANGE_HEIGHT', id, height: dataHeight + 77 });
       dispatch({ type: 'SET_EXPANDED_DATA', id: id, expandedData: empData });
     }
   }, [pending, empData, targetRef, id, dispatch]);
