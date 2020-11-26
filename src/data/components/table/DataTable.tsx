@@ -179,7 +179,7 @@ function ExtendableCell({
     >
       <Button
         role="button"
-        disableRipple={true}
+        disableRipple
         className={[
           classes.cellExpandable,
           openStyle,
