@@ -7,6 +7,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import Button from '@material-ui/core/Button';
 import CharacterLimitBox from '../../../components/CharacterLimitBox';
+
 interface DataTableProps {
   columns: DataTableColumn[];
   rows: Omit<DataTableRow, 'columns'>[];
