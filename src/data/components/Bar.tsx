@@ -20,14 +20,9 @@ export default function Bar({
   dataKey = 'x',
   big,
 }: BarChartsProps) {
+  const height = big ? 400 : 300;
   return (
-    <div
-      style={
-        big
-          ? { height: '400px', width: '100%' }
-          : { height: '300px', width: '100%' }
-      }
-    >
+    <div style={{ height: height, width: '100%' }}>
       <ResponsiveBar
         data={data}
         keys={yLabels}
