@@ -20,7 +20,7 @@ export default function Bar({
   dataKey = 'x',
   big,
 }: BarChartsProps) {
-  const height = big ? 400 : 300;
+  const height = big ? '400px' : '300px';
   return (
     <div style={{ height: height, width: '100%' }}>
       <ResponsiveBar
