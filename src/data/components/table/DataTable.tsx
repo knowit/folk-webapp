@@ -278,7 +278,31 @@ export interface RowStates {
 export type Action =
   | { type: 'CHANGE_HEIGHT'; id: string; height: number }
   | { type: 'SET_EXPANDED_DATA'; id: string; expandedData: any };
-  
+
+function reducer(currentState: RowStates, action: Action) {
+  switch (action.type) {
+    case 'CHANGE_HEIGHT':
+      return {
+        ...currentState,
+        [action.id]: {
+          height: action.height,
+          expandedData: currentState[action.id]
+            ? currentState[action.id].expandedData
+            : null,
+        },
+      };
+    case 'SET_EXPANDED_DATA':
+      return {
+        ...currentState,
+        [action.id]: {
+          height: currentState[action.id] ? currentState[action.id].height : 70,
+          expandedData: action.expandedData,
+        },
+      };
+    default:
+      return currentState;
+  }
+}
 function MuiVirtualizedTable({
   columns,
   rowCount,
@@ -291,33 +315,6 @@ function MuiVirtualizedTable({
   let ArrayRef: any;
   function setRef(ref: any) {
     ArrayRef = ref;
-  }
-
-  function reducer(currentState: RowStates, action: Action) {
-    switch (action.type) {
-      case 'CHANGE_HEIGHT':
-        return {
-          ...currentState,
-          [action.id]: {
-            height: action.height,
-            expandedData: currentState[action.id]
-              ? currentState[action.id].expandedData
-              : null,
-          },
-        };
-      case 'SET_EXPANDED_DATA':
-        return {
-          ...currentState,
-          [action.id]: {
-            height: currentState[action.id]
-              ? currentState[action.id].height
-              : 70,
-            expandedData: action.expandedData,
-          },
-        };
-      default:
-        return currentState;
-    }
   }
   useEffect(() => {
     ArrayRef.recomputeRowHeights();
