@@ -42,6 +42,10 @@ const useModalStyles = makeStyles({
     padding: '0 20px 20px',
     '& h4': {
       marginBottom: 0,
+      fontSize: 16,
+    },
+    '& div': {
+      fontSize: 14,
     },
   },
   cvBoxHeader: {
