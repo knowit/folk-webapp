@@ -10,6 +10,7 @@ import Pie from './components/Pie';
 import { DDComponentProps } from './types';
 import BigChart from '../components/BigChart';
 import { ErrorText } from '../components/ErrorText';
+import Sunburst from './components/Sunburst';
 
 const usePlaceholderStyle = makeStyles(() =>
   createStyles({
@@ -53,6 +54,8 @@ const getChartComponent = (name: string) => {
       return PercentArea;
     case 'Pie':
       return Pie;
+    case 'Sunburst':
+      return Sunburst;
     default:
       return Placeholder;
   }
@@ -102,12 +105,14 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
     setSet(value as string);
   };
 
+  const setNamesLength = payload.setNames.length;
+
   const GridItem = () => {
     const altText = big ? 'Exit stor størrelse' : 'Utvid til stor størrelse';
     return (
       <>
         <GridItemHeader title={title} big={big}>
-          {setNames.length > 1 ? (
+          {setNamesLength > 1 ? (
             <DropdownPicker
               values={setNames}
               onChange={onChange}

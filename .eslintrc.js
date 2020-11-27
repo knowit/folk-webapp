@@ -1,30 +1,30 @@
 module.exports = {
-  extends: ['airbnb-typescript-prettier'],
   env: {
     browser: true,
-    node: true,
-    es6: true,
-    commonjs: true,
+    es2021: true,
   },
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
+  ],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 12,
+    sourceType: 'module',
+  },
+  plugins: ['react', '@typescript-eslint'],
   rules: {
-    '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/no-explicit-any': 0,
-    'react/jsx-props-no-spreading': 0,
-    '@typescript-eslint/ban-types': 0,
-    'react/require-default-props': 0,
-    '@typescript-eslint/no-unused-vars': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
-    camelcase: 0,
-    'import/no-extraneous-dependencies': [
-      'error',
-      {
-        devDependencies: [
-          '**/*.test.js',
-          '**/*.spec.js',
-          '**/*.test.tsx',
-          '**/setupTests.ts',
-        ],
-      },
-    ],
+    '@typescript-eslint/explicit-function-return-type': 0,
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
 };
