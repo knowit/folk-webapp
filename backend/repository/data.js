@@ -245,13 +245,13 @@ exports.ageDistribution = async ({ dataplattformClient }) => {
 
   return {
     componentType: 'Bar',
-    setNames: ['Alders grupper', 'Alder distribusjon'],
+    setNames: ['Aldersgrupper', 'Detaljert oversikt'],
     sets: {
-      'Alders grupper': setAgeDistGroup.map(({ age_group, count }) => ({
+      Aldersgrupper: setAgeDistGroup.map(({ age_group, count }) => ({
         age: age_group,
         count,
       })),
-      'Alder distribusjon': setAgeDist,
+      'Detaljert oversikt': setAgeDist,
     },
   };
 };
