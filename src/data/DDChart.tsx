@@ -105,12 +105,14 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
     setSet(value as string);
   };
 
+  const setNamesLength = payload.setNames.length;
+
   const GridItem = () => {
     const altText = big ? 'Exit stor størrelse' : 'Utvid til stor størrelse';
     return (
       <>
         <GridItemHeader title={title} big={big}>
-          {setNames.length > 1 ? (
+          {setNamesLength > 1 ? (
             <DropdownPicker
               values={setNames}
               onChange={onChange}
