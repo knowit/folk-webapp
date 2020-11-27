@@ -67,7 +67,29 @@ const useModalStyles = makeStyles({
     },
   },
 });
-
+const months = [
+  'januar',
+  'februar',
+  'mars',
+  'april',
+  'mai',
+  'juni',
+  'juli',
+  'august',
+  'september',
+  'oktober',
+  'november',
+  'desember',
+];
+function toNorwegianMonths(date: string) {
+  if (date !== '') {
+    const dateArray = date.split('/');
+    const formattedMont = months[Number(dateArray[1]) - 1];
+    return formattedMont + ' ' + dateArray[0];
+  } else {
+    return '';
+  }
+}
 function ExperiencePopoverModel({
   url,
   onClose,
@@ -102,7 +124,8 @@ function ExperiencePopoverModel({
           userInfo?.experience.map((exp, index) => (
             <div key={index}>
               <h4>
-                {exp.time_from} - {exp.time_to}
+                {toNorwegianMonths(exp.time_from)} -{' '}
+                {toNorwegianMonths(exp.time_to)}
               </h4>
               <div>{exp.customer}</div>
               <div>{exp.project}</div>
