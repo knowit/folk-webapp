@@ -71,18 +71,18 @@ const useModalStyles = makeStyles({
   },
 });
 const months = [
-  'januar',
-  'februar',
-  'mars',
-  'april',
-  'mai',
-  'juni',
-  'juli',
-  'august',
-  'september',
-  'oktober',
-  'november',
-  'desember',
+  'Januar',
+  'Februar',
+  'Mars',
+  'April',
+  'Mai',
+  'Juni',
+  'Juli',
+  'August',
+  'September',
+  'Oktober',
+  'November',
+  'Desember',
 ];
 function toNorwegianMonths(date: string) {
   if (date !== '') {
