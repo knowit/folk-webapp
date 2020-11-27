@@ -58,9 +58,7 @@ const useModalStyles = makeStyles({
     alignItems: 'center',
     top: '0',
     boxShadow: '10px 10px 10px #f1f0ec',
-    '& > div': {
-      marginRight: '5px',
-    },
+
     '& >h2': {
       margin: '0 0 8px 0',
       padding: 0,
