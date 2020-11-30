@@ -24,11 +24,11 @@
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
-    "@nivo/bar": "^0.65.1",
-    "@nivo/core": "^0.65.0",
-    "@nivo/line": "^0.65.1",
-    "@nivo/pie": "^0.65.1",
-    "@nivo/sunburst": "^0.65.1",
+    "@nivo/bar": "^0.66.0",
+    "@nivo/core": "^0.66.0",
+    "@nivo/line": "^0.66.0",
+    "@nivo/pie": "^0.66.0",
+    "@nivo/sunburst": "^0.66.0",
     "@types/react-virtualized": "^9.21.10",
     "http-proxy-middleware": "^1.0.5",
     "react": "^17.0.1",
@@ -40,7 +40,7 @@
     "react-virtualized": "^9.22.2",
     "recharts": "^1.8.5",
     "typescript": "~3.9.7",
-    "underscore": "^1.11.0"
+    "underscore": "^1.12.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -99,6 +99,8 @@
     "eslint-config-airbnb-typescript-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.21.5",
     "jest-environment-jsdom-sixteen": "^1.0.3",
-    "prettier": "^2.2.0"
+    "prettier": "^2.2.1",
+    "nodemon": "^2.0.6",
+    "cross-env": "^7.0.2"
   }
 }
