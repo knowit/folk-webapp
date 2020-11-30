@@ -16,6 +16,7 @@ type PercentAreaChartsData = { [chartLabel: string]: number | string } & {
 interface PercentAreaChartsProps {
   yLabels: string[];
   data: PercentAreaChartsData[];
+  big?: boolean;
 }
 
 const toPercent = (decimal: number, fixed = 0) =>
@@ -49,9 +50,14 @@ const renderTooltipContent = ({
 
 const colors = ['#a3a1fb', '#56d9fe', '#74e2b7', '#f2efa0'];
 
-export default function PercentArea({ yLabels, data }: PercentAreaChartsProps) {
+export default function PercentArea({
+  yLabels,
+  data,
+  big,
+}: PercentAreaChartsProps) {
+  const height = big ? 400 : 280;
   return (
-    <ResponsiveContainer height={280}>
+    <ResponsiveContainer height={height}>
       <AreaChart data={data} stackOffset="expand" margin={{ right: 30 }}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="x" />

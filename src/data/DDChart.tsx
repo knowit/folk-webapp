@@ -130,7 +130,7 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
                 <LargerIcon onClick={() => setBig(true)} />
               )}
             </span>
-            <ChartComponent data={sets[set]} {...props} />
+            <ChartComponent big={big} data={sets[set]} {...props} />
           </GridItemContent>
         ) : (
           <ErrorText />

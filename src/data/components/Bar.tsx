@@ -9,13 +9,20 @@ interface BarChartsProps {
   yLabels: string[];
   dataKey: string;
   data: BarChartsData[];
+  big?: boolean;
 }
 
 const colors = ['#a3a1fb', '#56d9fe', '#74e2b7', '#f2efa0'];
 
-export default function Bar({ data, yLabels, dataKey = 'x' }: BarChartsProps) {
+export default function Bar({
+  data,
+  yLabels,
+  dataKey = 'x',
+  big,
+}: BarChartsProps) {
+  const height = big ? '400px' : '300px';
   return (
-    <div style={{ height: '300px', width: '100%' }}>
+    <div style={{ height: height, width: '100%' }}>
       <ResponsiveBar
         data={data}
         keys={yLabels}
