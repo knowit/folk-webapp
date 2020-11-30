@@ -178,6 +178,20 @@ exports.inbound = async () => {
   };
 };
 
+function makeFagTimerDataForNivo(data) {
+  const setData = range(2018, new Date().getFullYear()).map((year) => ({
+    id: year.toString(),
+    data: range(1, 53).map((i) => {
+      const currentYear = data.filter((dataItem) => dataItem.year === year);
+      return {
+        x: i,
+        y: currentYear.find((dataObj) => dataObj.week === i)?.used_hrs || 0,
+      };
+    }),
+  }));
+  return setData;
+}
+
 exports.fagtimer = async ({ dataplattformClient }) => {
   const req = await dataplattformClient.report({
     reportName: 'fagActivity',
@@ -185,15 +199,12 @@ exports.fagtimer = async ({ dataplattformClient }) => {
 
   const fagActivity = await req.json();
 
-  const setNames = range(2018, new Date().getFullYear())
-    .map((year) => year.toString())
-    .reverse();
-  const sets = groupBy(fagActivity, 'year');
-
   return {
-    componentType: 'Bar',
-    setNames,
-    sets,
+    componentType: 'Line',
+    setNames: ['Fagtimer'],
+    sets: {
+      Fagtimer: makeFagTimerDataForNivo(fagActivity),
+    },
   };
 };
 
