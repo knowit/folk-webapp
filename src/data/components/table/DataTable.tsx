@@ -321,8 +321,8 @@ function MuiVirtualizedTable({
     ArrayRef.forceUpdate();
   }, [state, ArrayRef]);
 
-  const widthList = [394, 224, 143, 394];
-  const consultantTableWidths = [394, 224, 117, 367, 53];
+  const widthList = [385, 222, 143, 390];
+  const consultantTableWidths = [385, 222, 117, 363, 53];
 
   const cellWidth = (index: number) =>
     columns.length === 5 ? consultantTableWidths[index] : widthList[index];
