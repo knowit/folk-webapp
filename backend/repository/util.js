@@ -3,7 +3,7 @@
 const crypto = require('crypto');
 const AWS = require('aws-sdk');
 
-if (process.env?.AWS_ACCESS_KEY_ID) {
+if (process && process.env && process.env.AWS_ACCESS_KEY_ID) {
   AWS.config.update({
     region: 'eu-central-1',
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,

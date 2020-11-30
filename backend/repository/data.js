@@ -183,9 +183,16 @@ function makeFagTimerDataForNivo(data) {
     id: year.toString(),
     data: range(1, 53).map((i) => {
       const currentYear = data.filter((dataItem) => dataItem.year === year);
+      const currentWeekData = currentYear.find(
+        (dataItem) => dataItem.week === i
+      );
+
       return {
         x: i,
-        y: currentYear.find((dataObj) => dataObj.week === i)?.used_hrs || 0,
+        y:
+          currentWeekData && currentWeekData.used_hrs
+            ? currentWeekData.used_hrs
+            : 0,
       };
     }),
   }));
