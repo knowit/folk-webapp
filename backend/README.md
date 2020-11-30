@@ -2,7 +2,7 @@
 
 ## Configuration
 
-Create your `.env` file with the contents:
+Create your `.env` file in the backend folder with the contents:
 
 > OAUTH_URL=''
 >
@@ -10,7 +10,7 @@ Create your `.env` file with the contents:
 >
 > CLIENT_SECRET=''
 
-and fill in the neccessary values ([AWS parameters](https://console.aws.amazon.com/systems-manager/parameters/)).
+and fill in the neccessary values ([AWS parameters](https://console.aws.amazon.com/systems-manager/parameters/) Choose us-east-1 from the region list in the top right corner).
 
 ## Dependencies
 
