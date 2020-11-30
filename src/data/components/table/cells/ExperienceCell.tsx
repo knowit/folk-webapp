@@ -34,6 +34,7 @@ const useModalStyles = makeStyles({
     textDecoration: 'none',
     padding: 0,
     minWidth: 'auto',
+    cursor: 'default',
     '&:hover': {
       backgroundColor: 'transparent',
     },
@@ -42,6 +43,10 @@ const useModalStyles = makeStyles({
     padding: '0 20px 20px',
     '& h4': {
       marginBottom: 0,
+      fontSize: 16,
+    },
+    '& div': {
+      fontSize: 14,
     },
   },
   cvBoxHeader: {
@@ -54,9 +59,7 @@ const useModalStyles = makeStyles({
     alignItems: 'center',
     top: '0',
     boxShadow: '10px 10px 10px #f1f0ec',
-    '& > div': {
-      marginRight: '5px',
-    },
+
     '& >h2': {
       margin: '0 0 8px 0',
       padding: 0,
@@ -67,7 +70,29 @@ const useModalStyles = makeStyles({
     },
   },
 });
-
+const months = [
+  'Januar',
+  'Februar',
+  'Mars',
+  'April',
+  'Mai',
+  'Juni',
+  'Juli',
+  'August',
+  'September',
+  'Oktober',
+  'November',
+  'Desember',
+];
+function toNorwegianMonths(date: string) {
+  if (date !== '') {
+    const dateArray = date.split('/');
+    const formattedMont = months[Number(dateArray[1]) - 1];
+    return formattedMont + ' ' + dateArray[0];
+  } else {
+    return '';
+  }
+}
 function ExperiencePopoverModel({
   url,
   onClose,
@@ -102,7 +127,8 @@ function ExperiencePopoverModel({
           userInfo?.experience.map((exp, index) => (
             <div key={index}>
               <h4>
-                {exp.time_from} - {exp.time_to}
+                {toNorwegianMonths(exp.time_from)} -{' '}
+                {toNorwegianMonths(exp.time_to)}
               </h4>
               <div>{exp.customer}</div>
               <div>{exp.project}</div>

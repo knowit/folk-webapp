@@ -168,7 +168,9 @@ export default function CvDialog({
       open={open}
     >
       <p className={classes.title}>Last ned CV for {name}</p>
-      <CloseIcon className={classes.closeIcon} onClick={() => onClose()} />
+      <div className={classes.closeIcon} onClick={() => onClose()} title="Lukk">
+        <CloseIcon />
+      </div>
       <DialogCard>
         <FormControl component="fieldset">
           <div className={classes.radioTitle}>Velg filtype</div>

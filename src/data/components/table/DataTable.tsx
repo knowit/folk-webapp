@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Dispatch, useEffect, useReducer, useState } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { TableCell, withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
@@ -11,6 +11,26 @@ import CharacterLimitBox from '../../../components/CharacterLimitBox';
 interface DataTableProps {
   columns: DataTableColumn[];
   rows: Omit<DataTableRow, 'columns'>[];
+}
+
+type Experience = {
+  employer: string;
+  month_from: number;
+  year_from: number;
+};
+
+type CompetenceMap = {
+  [key: string]: { competence: number; motivation: number };
+};
+
+interface EmployeeInfoData {
+  competence: CompetenceMap;
+  tags: {
+    languages: string[];
+    skills: string[];
+    roles: string[];
+  };
+  workExperience: Experience[];
 }
 
 interface DataTableColumn {
@@ -116,37 +136,39 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type createCellFunction = (props: { data: any; rowData: any[] }) => JSX.Element;
-type renderExpandedCell = (data: any) => JSX.Element;
+type renderExpandedCell = (data: any, callBack: () => void) => JSX.Element;
 
 function ExtendableCell({
   RenderCell,
   cellData,
   RenderExpanded,
-  open,
   id,
-  onChange,
   heightChange,
+  rowStates,
+  dispatch,
 }: {
   RenderCell: createCellFunction;
   cellData: any;
   RenderExpanded: renderExpandedCell;
-  open: boolean;
-  onChange: (rowKey: string, open: boolean) => void;
   id: string;
   heightChange: (rowKey: string, height: number) => void;
+  rowStates: RowStates;
+  dispatch: Dispatch<Action>;
 }): JSX.Element {
   const classes = useStyles();
-  const openStyle = open ? classes.bolderText : '';
-  const targetRef = useRef();
-
-  const getOffsetHeigh = (thisTargetRef: any) => thisTargetRef.offsetHeight;
-
+  const [open, setOpen] = useState(
+    rowStates[id] ? rowStates[id].height > 70 : false
+  );
   const openClick = () => {
-    onChange(id, open);
-    if (targetRef.current) {
-      heightChange(id, getOffsetHeigh(targetRef.current));
+    if (open) {
+      dispatch({ type: 'CHANGE_HEIGHT', id: id, height: 70 });
+    } else {
+      dispatch({ type: 'CHANGE_HEIGHT', id: id, height: 280 });
     }
+    setOpen(!open);
   };
+  const openStyle = open ? classes.bolderText : '';
+
   return (
     <TableCellNoBorders
       component="div"
@@ -154,10 +176,10 @@ function ExtendableCell({
         ' '
       )}
       align="left"
-      ref={targetRef}
     >
       <Button
         role="button"
+        disableRipple
         className={[
           classes.cellExpandable,
           openStyle,
@@ -170,7 +192,15 @@ function ExtendableCell({
         {open ? <ExpandLessIconWithStyles /> : <ExpandMoreIconWithStyles />}
       </Button>
       <div>
-        <RenderExpanded data={cellData} />
+        {open && (
+          <RenderExpanded
+            data={cellData}
+            callBack={heightChange}
+            id={id}
+            dispatch={dispatch}
+            rowStates={rowStates}
+          />
+        )}
       </div>
     </TableCellNoBorders>
   );
@@ -189,20 +219,20 @@ function GetCell({
   cellData,
   RenderExpanded,
   id,
-  onChange,
-  open,
   rowData,
   heightChange,
+  rowStates,
+  dispatch,
 }: {
   RenderCell: createCellFunction | undefined;
   expandable: boolean | undefined;
   cellData: any;
   RenderExpanded: createCellFunction | undefined;
-  open: boolean;
-  onChange: (rowKey: string, open: boolean) => void;
   id: string;
   rowData: any[];
   heightChange: (rowKey: string, height: number) => void;
+  rowStates: RowStates;
+  dispatch: Dispatch<Action>;
 }): JSX.Element {
   const classes = useStyles();
   const data = cellData !== null ? cellData : '-';
@@ -212,10 +242,10 @@ function GetCell({
         RenderCell={RenderCell}
         cellData={cellData}
         RenderExpanded={RenderExpanded}
-        open={open}
-        onChange={onChange}
         id={id}
         heightChange={heightChange}
+        rowStates={rowStates}
+        dispatch={dispatch}
       />
     );
   }
@@ -236,6 +266,43 @@ function GetCell({
   );
 }
 
+const initialState: RowStates = {};
+
+export interface RowStates {
+  [id: string]: {
+    height: number;
+    expandedData: null | any;
+  };
+}
+
+export type Action =
+  | { type: 'CHANGE_HEIGHT'; id: string; height: number }
+  | { type: 'SET_EXPANDED_DATA'; id: string; expandedData: any };
+
+function reducer(currentState: RowStates, action: Action) {
+  switch (action.type) {
+    case 'CHANGE_HEIGHT':
+      return {
+        ...currentState,
+        [action.id]: {
+          height: action.height,
+          expandedData: currentState[action.id]
+            ? currentState[action.id].expandedData
+            : null,
+        },
+      };
+    case 'SET_EXPANDED_DATA':
+      return {
+        ...currentState,
+        [action.id]: {
+          height: currentState[action.id] ? currentState[action.id].height : 70,
+          expandedData: action.expandedData,
+        },
+      };
+    default:
+      return currentState;
+  }
+}
 function MuiVirtualizedTable({
   columns,
   rowCount,
@@ -243,24 +310,19 @@ function MuiVirtualizedTable({
   rows,
 }: MuiVirtualizedTableProps) {
   const classes = useStyles();
-  const [opens, setOpens] = useState<boolean[]>([]);
-  const [heights, setHeights] = useState<number[]>([]);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-  const handleOpenChange = (rowKey: string, open: boolean) => {
-    setOpens({
-      ...opens,
-      [rowKey]: !open,
-    });
-  };
-  const heightChange = (rowKey: string, height: number) => {
-    setHeights({
-      ...heights,
-      [rowKey]: height,
-    });
-  };
+  let ArrayRef: any;
+  function setRef(ref: any) {
+    ArrayRef = ref;
+  }
+  useEffect(() => {
+    ArrayRef.recomputeRowHeights();
+    ArrayRef.forceUpdate();
+  }, [state, ArrayRef]);
 
-  const widthList = [394, 224, 143, 394];
-  const consultantTableWidths = [394, 224, 115, 369, 53];
+  const widthList = [385, 222, 143, 390];
+  const consultantTableWidths = [385, 222, 117, 363, 53];
 
   const cellWidth = (index: number) =>
     columns.length === 5 ? consultantTableWidths[index] : widthList[index];
@@ -278,10 +340,13 @@ function MuiVirtualizedTable({
           cellData={cellData}
           RenderExpanded={columns[columnIndex].renderExpanded}
           id={rows[rowIndex].rowId}
-          onChange={handleOpenChange}
-          open={opens[rows[rowIndex].rowId]}
           rowData={rows[rowIndex]}
-          heightChange={heightChange}
+          heightChange={() => {
+            ArrayRef.recomputeRowHeights();
+            ArrayRef.forceUpdate();
+          }}
+          rowStates={state}
+          dispatch={dispatch}
         />
       </div>
     );
@@ -313,7 +378,7 @@ function MuiVirtualizedTable({
   }
 
   const getRowHeight = ({ index }: { index: number }) => {
-    return opens[rows[index].rowId] ? heights[rows[index].rowId] : 70;
+    return state[rows[index].rowId] ? state[rows[index].rowId].height : 70;
   };
 
   function emptyRow() {
@@ -328,16 +393,6 @@ function MuiVirtualizedTable({
       </TableCell>
     );
   }
-
-  let ArrayRef: any;
-  function setRef(ref: any) {
-    ArrayRef = ref;
-  }
-
-  useEffect(() => {
-    ArrayRef.recomputeRowHeights();
-    ArrayRef.forceUpdate();
-  }, [ArrayRef, heights]);
 
   return (
     <AutoSizer>

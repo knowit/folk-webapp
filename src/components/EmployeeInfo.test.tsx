@@ -42,36 +42,78 @@ const fakeUser = {
     },
   ],
 };
-
+const mockCallbackFunction = () => {};
 (useFetchedData as jest.Mock).mockReturnValue([fakeUser, false, null]);
 
 describe('EmployeeInfo', () => {
   it('should call mockFetch', () => {
-    render(<EmployeeInfo data={{ competenceUrl: 'falskUrl.com' }} />);
+    render(
+      <EmployeeInfo
+        data={{ competenceUrl: 'falskUrl.com' }}
+        id={'1'}
+        rowStates={{ '1': { expandedData: null, height: 70 } }}
+        dispatch={mockCallbackFunction}
+      />
+    );
     expect(useFetchedData).toHaveBeenCalled;
   });
   it.each(fakeUser.tags.languages)(
     'should render all languages',
     (language) => {
-      render(<EmployeeInfo data={{ competenceUrl: 'falskUrl.com' }} />);
+      render(
+        <EmployeeInfo
+          data={{ competenceUrl: 'falskUrl.com' }}
+          id={'1'}
+          rowStates={{ '1': { expandedData: null, height: 70 } }}
+          dispatch={mockCallbackFunction}
+        />
+      );
       expect(screen.getByText(language, { exact: false })).toBeInTheDocument;
     }
   );
   it.each(fakeUser.tags.skills)('should render all skills', (skill) => {
-    render(<EmployeeInfo data={{ competenceUrl: 'falskUrl.com' }} />);
+    render(
+      <EmployeeInfo
+        data={{ competenceUrl: 'falskUrl.com' }}
+        id={'1'}
+        rowStates={{ '1': { expandedData: null, height: 70 } }}
+        dispatch={mockCallbackFunction}
+      />
+    );
     expect(screen.getByText(skill, { exact: false })).toBeInTheDocument;
   });
   it.each(fakeUser.tags.roles)('should render all roles', (role) => {
-    render(<EmployeeInfo data={{ competenceUrl: 'falskUrl.com' }} />);
+    render(
+      <EmployeeInfo
+        data={{ competenceUrl: 'falskUrl.com' }}
+        id={'1'}
+        rowStates={{ '1': { expandedData: null, height: 70 } }}
+        dispatch={mockCallbackFunction}
+      />
+    );
     expect(screen.getByText(role, { exact: false })).toBeInTheDocument;
   });
   it('should render correct active years', () => {
-    render(<EmployeeInfo data={{ competenceUrl: 'falskUrl.com' }} />);
+    render(
+      <EmployeeInfo
+        data={{ competenceUrl: 'falskUrl.com' }}
+        id={'1'}
+        rowStates={{ '1': { expandedData: null, height: 70 } }}
+        dispatch={mockCallbackFunction}
+      />
+    );
     const ActiveYears = String(new Date().getFullYear() - 2010) + ' år.';
     expect(screen.getByText(ActiveYears)).toBeInTheDocument;
   });
   it('Should render correct start date in knowit', () => {
-    render(<EmployeeInfo data={{ competenceUrl: 'falskUrl.com' }} />);
+    render(
+      <EmployeeInfo
+        data={{ competenceUrl: 'falskUrl.com' }}
+        id={'1'}
+        rowStates={{ '1': { expandedData: null, height: 70 } }}
+        dispatch={mockCallbackFunction}
+      />
+    );
     expect(screen.getByText('05 - 2017.')).toBeInTheDocument;
   });
 });

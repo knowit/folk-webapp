@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Dispatch, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import CharacterLimitBox from './CharacterLimitBox';
 import { useFetchedData } from '../hooks/service';
 import { NoData } from './ErrorText';
+import { RowStates, Action } from '../data/components/table/DataTable';
 
 type Experience = {
   employer: string;
@@ -130,12 +131,25 @@ const useStyles = makeStyles({
   },
 });
 
-export default function EmployeeInfo(cellData: {
+export default function EmployeeInfo({
+  data,
+  id,
+  rowStates,
+  dispatch,
+}: {
   data: { competenceUrl: string };
+  id: string;
+  rowStates: RowStates;
+  dispatch: Dispatch<Action>;
 }) {
+  let targetRef: any;
+  function setRef(ref: any) {
+    targetRef = ref;
+  }
+  const getOffsetHeight = (thisTargetRef: any) => thisTargetRef.offsetHeight;
   const classes = useStyles();
-  const url = cellData.data.competenceUrl;
-  const [data, pending] = useFetchedData<EmployeeInfoData>({ url });
+  const url = data.competenceUrl;
+  const [empData, pending] = useFetchedData<EmployeeInfoData>({ url });
   const totalExperience = (allExperience: Experience[] | undefined) => {
     const firstJob = allExperience?.sort(
       (a, b) => a.year_from - b.year_from
@@ -173,7 +187,7 @@ export default function EmployeeInfo(cellData: {
     listName: 'skills' | 'roles' | 'languages'
   ) => {
     return list && list.length > 0 ? (
-      `${Array.from(new Set(data?.tags[listName]))
+      `${Array.from(new Set(empData?.tags[listName]))
         .filter((x) => x)
         .join(', ')}.`
     ) : (
@@ -181,15 +195,23 @@ export default function EmployeeInfo(cellData: {
     );
   };
 
+  useEffect(() => {
+    if (!pending && empData && targetRef) {
+      const dataHeight = getOffsetHeight(targetRef);
+      dispatch({ type: 'CHANGE_HEIGHT', id, height: dataHeight + 77 });
+      dispatch({ type: 'SET_EXPANDED_DATA', id, expandedData: empData });
+    }
+  }, [pending, empData, targetRef, id, dispatch]);
+
   return (
-    <div className={classes.root}>
+    <div className={classes.root} ref={setRef}>
       <div className={classes.cell}>
         {pending ? (
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
             <b>Hovedkompetanse: </b>
-            {getStringFromList(data?.tags.skills, 'skills')}
+            {getStringFromList(empData?.tags.skills, 'skills')}
           </>
         )}
       </div>
@@ -199,7 +221,7 @@ export default function EmployeeInfo(cellData: {
         ) : (
           <>
             <b>Roller: </b>
-            {getStringFromList(data?.tags.roles, 'roles')}
+            {getStringFromList(empData?.tags.roles, 'roles')}
           </>
         )}
       </div>
@@ -208,7 +230,7 @@ export default function EmployeeInfo(cellData: {
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <>
-            <b>Startet i Knowit:</b> {startedInKnowit(data?.workExperience)}
+            <b>Startet i Knowit:</b> {startedInKnowit(empData?.workExperience)}
           </>
         )}
       </div>
@@ -218,7 +240,7 @@ export default function EmployeeInfo(cellData: {
         ) : (
           <>
             <b>Total arbeidserfaring:</b>{' '}
-            {totalExperience(data?.workExperience)}
+            {totalExperience(empData?.workExperience)}
           </>
         )}
       </div>
@@ -228,14 +250,14 @@ export default function EmployeeInfo(cellData: {
         ) : (
           <>
             <b>Språk: </b>
-            {getStringFromList(data?.tags.languages, 'languages')}
+            {getStringFromList(empData?.tags.languages, 'languages')}
           </>
         )}
       </div>
       {pending ? (
         <Skeleton variant="rect" height={67} animation="wave" />
       ) : (
-        <CompetenceMapping competences={data?.competence} />
+        <CompetenceMapping competences={empData?.competence} />
       )}
     </div>
   );
