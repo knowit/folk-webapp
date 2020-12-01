@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ResponsiveLine } from '@nivo/line';
-
+import { colors } from './common';
 interface LineChartsProps {
   yLabels?: string[];
   dataKey?: string;
@@ -9,24 +9,23 @@ interface LineChartsProps {
   big?: boolean;
 }
 
-const strokeColors = ['#a3a1fb', '#56d9fe', '#74e2b7', '#f2efa0'];
-
 export default function Line({ data, big }: LineChartsProps) {
   const height = big ? '400px' : '280px';
   return (
     <div style={{ height, width: '100%' }}>
       <ResponsiveLine
         data={data}
-        margin={{ top: 10, right: 110, bottom: 50, left: 60 }}
+        margin={{ top: 10, right: 90, bottom: 50, left: 40 }}
         xScale={{ type: 'point' }}
         yScale={{
           type: 'linear',
           min: 'auto',
           max: 'auto',
-          stacked: true,
+          stacked: false,
           reverse: false,
         }}
         axisTop={null}
+        axisBottom={big ? {} : null}
         axisRight={null}
         axisLeft={{
           orient: 'left',
@@ -36,7 +35,8 @@ export default function Line({ data, big }: LineChartsProps) {
           legendOffset: -40,
           legendPosition: 'middle',
         }}
-        colors={strokeColors}
+        colors={colors}
+        curve="monotoneX"
         enableArea={true}
         enableSlices="x"
         pointSize={5}
