@@ -1,5 +1,6 @@
 import React from 'react';
 import { ResponsiveBar } from '@nivo/bar';
+import { colors } from './common';
 
 type BarChartsData = { [chartLabel: string]: number | string } & {
   x: number | string;
@@ -11,8 +12,6 @@ interface BarChartsProps {
   data: BarChartsData[];
   big?: boolean;
 }
-
-const colors = ['#a3a1fb', '#56d9fe', '#74e2b7', '#f2efa0'];
 
 export default function Bar({
   data,
@@ -34,11 +33,15 @@ export default function Bar({
         axisTop={null}
         axisRight={null}
         borderRadius={3}
-        axisBottom={{
-          tickSize: 5,
-          tickPadding: 5,
-          tickRotation: 0,
-        }}
+        axisBottom={
+          big || data.length < 10
+            ? {
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+              }
+            : null
+        }
         axisLeft={{
           tickSize: 5,
           tickPadding: 5,
@@ -49,7 +52,8 @@ export default function Bar({
         enableLabel={false}
         tooltip={({ indexValue, value }) => (
           <div>
-            {indexValue}: <b>{value}</b>
+            <b>{indexValue}:</b>
+            <br /> {value}
           </div>
         )}
       />

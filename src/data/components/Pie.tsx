@@ -1,5 +1,6 @@
 import React from 'react';
 import { ResponsivePie } from '@nivo/pie';
+import { colors } from './common';
 
 type PieChartsData = {
   [key: string]: string | number;
@@ -11,8 +12,6 @@ interface PieChartsProps {
   valueKey?: string;
   big?: boolean;
 }
-
-const colors = ['#a3a1fb', '#56d9fe', '#74e2b7', '#f2efa0'];
 
 export default function Pie({
   data,
