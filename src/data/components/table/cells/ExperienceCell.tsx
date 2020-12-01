@@ -87,7 +87,7 @@ const months = [
 function toNorwegianMonths(date: string) {
   if (date !== '') {
     const dateArray = date.split('/');
-    const formattedMont = months[Number(dateArray[1]) - 1];
+    const formattedMont = months[Number(dateArray[1]) - 1] || '';
     return formattedMont + ' ' + dateArray[0];
   } else {
     return '';
