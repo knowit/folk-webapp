@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '100%',
       width: '100%',
       borderBottom: `1px solid ${theme.palette.background.paper}`,
-      borderRight: `1px solid ${theme.palette.background.paper}`,
+      borderLeft: `1px solid ${theme.palette.background.paper}`,
       padding: 0,
       paddingRight: '15px',
       paddingLeft: '15px',
@@ -115,12 +115,12 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingLeft: '15px',
     },
     borders: {
-      borderRight: `1px solid ${theme.palette.background.paper}`,
+      borderLeft: `1px solid ${theme.palette.background.paper}`,
       borderTop: `1px solid ${theme.palette.background.paper}`,
     },
     emptyTable: {
       borderBottom: `1px solid ${theme.palette.background.paper}`,
-      borderRight: `1px solid ${theme.palette.background.paper}`,
+      borderLeft: `1px solid ${theme.palette.background.paper}`,
       width: '1155px',
     },
     cell: {
