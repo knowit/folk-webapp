@@ -105,6 +105,7 @@ const useDialogStyle = makeStyles({
     marginTop: '15px',
     width: '24px',
     height: '24px',
+    cursor: 'pointer',
   },
   title: {
     fontSize: '18px',

@@ -34,7 +34,7 @@ const useModalStyles = makeStyles({
     textDecoration: 'none',
     padding: 0,
     minWidth: 'auto',
-    cursor: 'default',
+    cursor: 'pointer',
     '&:hover': {
       backgroundColor: 'transparent',
     },

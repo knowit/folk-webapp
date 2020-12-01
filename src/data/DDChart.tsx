@@ -68,6 +68,7 @@ const LargerIcon = withStyles((theme: Theme) => ({
     position: 'relative',
     left: '491px',
     bottom: '10px',
+    cursor: 'pointer',
     color: theme.palette.primary.main,
     '&:hover': {
       color: theme.palette.text.primary,
@@ -82,6 +83,7 @@ const SmallerIcon = withStyles((theme: Theme) => ({
     position: 'relative',
     bottom: '15px',
     left: '861px',
+    cursor: 'pointer',
     color: theme.palette.primary.main,
     '&:hover': {
       color: theme.palette.text.primary,
