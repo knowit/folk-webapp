@@ -30,6 +30,8 @@
     "@nivo/pie": "^0.66.0",
     "@nivo/sunburst": "^0.66.0",
     "@types/react-virtualized": "^9.21.10",
+    "cross-env": "^7.0.2",
+    "dotenv": "^8.2.0",
     "http-proxy-middleware": "^1.0.5",
     "react": "^17.0.1",
     "react-beautiful-dnd": "^13.0.0",
