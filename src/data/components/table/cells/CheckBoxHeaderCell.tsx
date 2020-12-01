@@ -31,7 +31,7 @@ const useCheckBoxStyles = makeStyles((theme: Theme) =>
       fontSize: '16px',
       height: '100%',
       width: '100%',
-      borderBottom: 'none',
+      borderBottom: `1px solid ${theme.palette.background.paper}`,
       borderRight: `1px solid ${theme.palette.background.paper}`,
       padding: 0,
       paddingRight: '15px',
