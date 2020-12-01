@@ -10,7 +10,7 @@ Create your `.env` file with the contents:
 >
 > CLIENT_SECRET=''
 
-and fill in the neccessary values ([AWS parameters](https://console.aws.amazon.com/systems-manager/parameters/)).
+and fill in the necessary values ([AWS parameters](https://console.aws.amazon.com/systems-manager/parameters/)).
 
 ## Dependencies
 
