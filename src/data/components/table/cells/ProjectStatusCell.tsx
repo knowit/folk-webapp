@@ -12,12 +12,20 @@ const useStyles = makeStyles({
   }),
 });
 
-export default function ProjectStatusCell({ data }: { data: number }) {
-  const classes = useStyles(data);
+
+
+export default function ProjectStatusCell({ data }: { data: number|undefined }) {
+  const classes = useStyles(data||0);
   const percentData = `${data}%`;
-  return data >= 0 ? (
-    <div className={classes.root}>{percentData}</div>
-  ) : (
-    <NoData />
-  );
+  switch(data) {
+  case null :
+    return <NoData/>;
+  case undefined :
+    return <NoData/>;
+  case 0:
+    return 'Ikke i prosjekt';
+  default:
+    
+    return <div className={classes.root}>{percentData}</div>;
+}
 }
