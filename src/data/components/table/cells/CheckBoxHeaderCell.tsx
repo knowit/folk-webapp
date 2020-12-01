@@ -57,7 +57,6 @@ export default function CheckBoxHeaderCell({
         className={classes.label}
         control={<BlackCheckBox onChange={checkBoxChangeHandler} />}
         label={checkBoxLabel}
-        disabled
       />
     </div>
   );
