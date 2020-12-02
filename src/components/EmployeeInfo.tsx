@@ -119,9 +119,10 @@ const useStyles = makeStyles({
     lineHeight: '1.2em',
     whiteSpace: 'normal',
     marginTop: '10px',
+    paddingBottom:'10px',
     fontSize: '12px',
     background:
-      'transparent linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%) 0% 0%',
+      'transparent linear-gradient(180deg, #FFFFFF 0%, #f7f7f7 100%) 0% 0%',
     '& div.expandable-box-cell': {},
   },
   cell: {
@@ -196,7 +197,7 @@ export default function EmployeeInfo({
   };
 
   useEffect(() => {
-    if (!pending && empData && targetRef) {
+    if (!pending && targetRef) {
       const dataHeight = getOffsetHeight(targetRef);
       dispatch({ type: 'CHANGE_HEIGHT', id, height: dataHeight + 77 });
       dispatch({ type: 'SET_EXPANDED_DATA', id, expandedData: empData });
@@ -204,55 +205,57 @@ export default function EmployeeInfo({
   }, [pending, empData, targetRef, id, dispatch]);
 
   return (
-    <div className={classes.root} ref={setRef}>
-      <div className={classes.cell}>
-        {pending ? (
-          <Skeleton variant="rect" width={340} height={15} animation="wave" />
-        ) : (
-          <>
-            <b>Hovedkompetanse: </b>
-            {getStringFromList(empData?.tags.skills, 'skills')}
-          </>
-        )}
-      </div>
-      <div className={classes.cell}>
-        {pending ? (
-          <Skeleton variant="rect" width={340} height={15} animation="wave" />
-        ) : (
-          <>
-            <b>Roller: </b>
-            {getStringFromList(empData?.tags.roles, 'roles')}
-          </>
-        )}
-      </div>
-      <div className={classes.cell}>
-        {pending ? (
-          <Skeleton variant="rect" width={340} height={15} animation="wave" />
-        ) : (
-          <>
-            <b>Startet i Knowit:</b> {startedInKnowit(empData?.workExperience)}
-          </>
-        )}
-      </div>
-      <div className={classes.cell}>
-        {pending ? (
-          <Skeleton variant="rect" width={340} height={15} animation="wave" />
-        ) : (
-          <>
-            <b>Total arbeidserfaring:</b>{' '}
-            {totalExperience(empData?.workExperience)}
-          </>
-        )}
-      </div>
-      <div className={classes.cell}>
-        {pending ? (
-          <Skeleton variant="rect" width={340} height={15} animation="wave" />
-        ) : (
-          <>
-            <b>Språk: </b>
-            {getStringFromList(empData?.tags.languages, 'languages')}
-          </>
-        )}
+    <div  ref={setRef}>
+      <div className={classes.root}>
+        <div className={classes.cell}>
+          {pending ? (
+            <Skeleton variant="rect" width={340} height={15} animation="wave" />
+          ) : (
+            <>
+              <b>Hovedkompetanse: </b>
+              {getStringFromList(empData?.tags.skills, 'skills')}
+            </>
+          )}
+        </div>
+        <div className={classes.cell}>
+          {pending ? (
+            <Skeleton variant="rect" width={340} height={15} animation="wave" />
+          ) : (
+            <>
+              <b>Roller: </b>
+              {getStringFromList(empData?.tags.roles, 'roles')}
+            </>
+          )}
+        </div>
+        <div className={classes.cell}>
+          {pending ? (
+            <Skeleton variant="rect" width={340} height={15} animation="wave" />
+          ) : (
+            <>
+              <b>Startet i Knowit:</b> {startedInKnowit(empData?.workExperience)}
+            </>
+          )}
+        </div>
+        <div className={classes.cell}>
+          {pending ? (
+            <Skeleton variant="rect" width={340} height={15} animation="wave" />
+          ) : (
+            <>
+              <b>Total arbeidserfaring:</b>{' '}
+              {totalExperience(empData?.workExperience)}
+            </>
+          )}
+        </div>
+        <div className={classes.cell}>
+          {pending ? (
+            <Skeleton variant="rect" width={340} height={15} animation="wave" />
+          ) : (
+            <>
+              <b>Språk: </b>
+              {getStringFromList(empData?.tags.languages, 'languages')}
+            </>
+          )}
+        </div>
       </div>
       {pending ? (
         <Skeleton variant="rect" height={67} animation="wave" />

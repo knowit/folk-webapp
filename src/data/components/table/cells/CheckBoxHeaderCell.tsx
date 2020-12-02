@@ -31,8 +31,7 @@ const useCheckBoxStyles = makeStyles((theme: Theme) =>
       fontSize: '16px',
       height: '100%',
       width: '100%',
-      borderBottom: 'none',
-      borderRight: `1px solid ${theme.palette.background.paper}`,
+      borderBottom: `1px solid ${theme.palette.background.paper}`,
       padding: 0,
       paddingRight: '15px',
       paddingLeft: '15px',
@@ -57,7 +56,6 @@ export default function CheckBoxHeaderCell({
         className={classes.label}
         control={<BlackCheckBox onChange={checkBoxChangeHandler} />}
         label={checkBoxLabel}
-        disabled
       />
     </div>
   );
