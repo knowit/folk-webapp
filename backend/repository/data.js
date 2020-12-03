@@ -273,7 +273,6 @@ exports.experienceDistribution = async ({ dataplattformClient }) => {
     reportName: 'yearsSinceSchoolDist',
   });
   const experience = await req.json();
-  experience.sort((a, b) => parseFloat(a.years) - parseFloat(b.years));
   const experienceGroups = setInGroups(experience)
   return {
     componentType: 'Pie',
@@ -325,7 +324,7 @@ exports.education = async ({ dataplattformClient }) => {
     reportName: 'degreeDist',
   });
   const education = await req.json();
-
+  
   return {
     componentType: 'Pie',
     setNames: ['Utdanning'],
