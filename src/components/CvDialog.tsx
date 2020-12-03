@@ -148,10 +148,16 @@ export default function CvDialog({
 
   useEffect(() => {
     if (fileType === '.pdf') {
-      if (language === 'Norsk') setDownloadLink(data.no_pdf);
-      else setDownloadLink(data.int_pdf);
-    } else if (language === 'Norsk') setDownloadLink(data.no_docx);
-    else setDownloadLink(data.int_docx);
+      if (language === 'Norsk') {
+        setDownloadLink(data.no_pdf);
+      } else {
+        setDownloadLink(data.int_pdf);
+      }
+    } else if (language === 'Norsk') {
+      setDownloadLink(data.no_docx);
+    } else {
+      setDownloadLink(data.int_docx);
+    }
   }, [language, fileType, data]);
 
   const handleLanguageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
