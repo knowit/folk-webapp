@@ -47,8 +47,8 @@ export default function Competence() {
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
-          dataKey: 'years',
-          yLabels: ['count'],
+          groupKey: 'years',
+          valueKey: ['count'],
         }}
       />
 

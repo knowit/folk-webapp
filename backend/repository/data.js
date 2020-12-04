@@ -231,17 +231,53 @@ exports.competenceAreas = async () => {
   };
 };
 
+function setInGroups(list) {
+  const groupedList = [
+    { years: 'Under 2 år', count: 0 },
+    { years: '2 til 5 år', count: 0 },
+    { years: '6 til 10 år', count: 0 },
+    { years: '11 til 15 år', count: 0 },
+    { years: '16 til 20 år', count: 0 },
+    { years: '21 til 25 år', count: 0 },
+    { years: '26 til 30 år', count: 0 },
+    { years: 'over 31 år', count: 0 },
+  ];
+  list.forEach((item) => {
+    const years = Number(item.years);
+    const count = Number(item.count);
+    if (years < 2) {
+      groupedList[0].count += count;
+    } else if (years > 2 && years < 6) {
+      groupedList[1].count += count;
+    } else if (years > 5 && years < 11) {
+      groupedList[2].count += count;
+    } else if (years > 10 && years < 16) {
+      groupedList[3].count += count;
+    } else if (years > 15 && years < 21) {
+      groupedList[4].count += count;
+    } else if (years > 20 && years < 26) {
+      groupedList[5].count += count;
+    } else if (years > 25 && years < 31) {
+      groupedList[6].count += count;
+    } else if (years > 30) {
+      groupedList[7].count += count;
+    }
+  });
+
+  return groupedList;
+}
+
 exports.experienceDistribution = async ({ dataplattformClient }) => {
   const req = await dataplattformClient.report({
     reportName: 'yearsSinceSchoolDist',
   });
   const experience = await req.json();
-
+  const experienceGroups = setInGroups(experience);
   return {
-    componentType: 'Bar',
+    componentType: 'Pie',
     setNames: ['Erfaring'],
     sets: {
-      Erfaring: experience,
+      Erfaring: experienceGroups,
     },
   };
 };
