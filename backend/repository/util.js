@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable no-undef */
 const crypto = require('crypto');
 const AWS = require('aws-sdk');
 
