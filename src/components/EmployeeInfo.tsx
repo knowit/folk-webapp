@@ -119,7 +119,7 @@ const useStyles = makeStyles({
     lineHeight: '1.2em',
     whiteSpace: 'normal',
     marginTop: '10px',
-    paddingBottom:'10px',
+    paddingBottom: '10px',
     fontSize: '12px',
     background:
       'transparent linear-gradient(180deg, #FFFFFF 0%, #f7f7f7 100%) 0% 0%',
@@ -205,7 +205,7 @@ export default function EmployeeInfo({
   }, [pending, empData, targetRef, id, dispatch]);
 
   return (
-    <div  ref={setRef}>
+    <div ref={setRef}>
       <div className={classes.root}>
         <div className={classes.cell}>
           {pending ? (
@@ -232,7 +232,8 @@ export default function EmployeeInfo({
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
           ) : (
             <>
-              <b>Startet i Knowit:</b> {startedInKnowit(empData?.workExperience)}
+              <b>Startet i Knowit:</b>{' '}
+              {startedInKnowit(empData?.workExperience)}
             </>
           )}
         </div>

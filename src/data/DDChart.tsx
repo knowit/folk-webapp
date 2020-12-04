@@ -33,12 +33,11 @@ const usePlaceholderStyle = makeStyles(() =>
   })
 );
 
-const Placeholder = (props:{big:boolean}) => {
-  
+const Placeholder = (props: { big: boolean }) => {
   const classes = usePlaceholderStyle();
-  const height = props.big? '400px': '280px';
+  const height = props.big ? '400px' : '280px';
   return (
-    <div className={classes.root} style={{height}}>
+    <div className={classes.root} style={{ height }}>
       <div className={classes.titleText}>Oida</div>
       <div className={classes.text}>Data kan ikke vises for dette valget</div>
     </div>
