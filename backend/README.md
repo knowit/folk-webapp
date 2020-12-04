@@ -14,11 +14,11 @@ and fill in the necessary values ([AWS parameters](https://console.aws.amazon.co
 
 ## Dependencies
 
-| Package |
-|:-|
+| Package                                              |
+| :--------------------------------------------------- |
 | [cross-env](https://www.npmjs.com/package/cross-env) |
-| [dotenv](https://www.npmjs.com/package/dotenv) |
-| [nodemon](https://www.npmjs.com/package/nodemon) |
+| [dotenv](https://www.npmjs.com/package/dotenv)       |
+| [nodemon](https://www.npmjs.com/package/nodemon)     |
 
 ## Available Scripts
 
