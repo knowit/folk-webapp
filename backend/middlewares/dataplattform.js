@@ -11,6 +11,7 @@ module.exports = function () {
       .pop()
       .trim();
 
-    (req.dataplattform = new DataplattformClient({ accessToken })), next();
+    req.dataplattform = new DataplattformClient({ accessToken });
+    next();
   };
 };
