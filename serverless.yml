@@ -9,6 +9,8 @@ custom:
     OAUTH_URL: ${ssm:/${self:custom.stage}/folk-webapp/DATAPLATTFORM_AUTH_URL}
     CLIENT_ID: ${ssm:/folk-webapp/CLIENT_ID~true}
     CLIENT_SECRET: ${ssm:/folk-webapp/CLIENT_SECRET~true}
+    IMPROVEMENTS_EMAIL: ${ssm:/${self:custom.stage}/folk-webapp/IMPROVEMENTS_EMAIL
+    DATACORRECTION_EMAIL: ${ssm:/${self:custom.stage}/folk-webapp/DATACORRECTION_EMAIL
   allowedMethods:
     - GET
     - HEAD
@@ -31,13 +33,13 @@ provider:
   timeout: 25
   httpApi:
     name: ${self:custom.service}-api
-    payload: '2.0'
+    payload: "2.0"
 
 package:
   include:
     - backend/**
   exclude:
-    - '*/**'
+    - "*/**"
   individually: true
 
 functions:
@@ -47,8 +49,7 @@ functions:
     environment: ${self:custom.env}
     role: LambdaRole
     events:
-      - httpApi: '*'
-
+      - httpApi: "*"
 
 resources:
   Resources:
@@ -69,32 +70,30 @@ resources:
         Policies:
           - PolicyName: ${self:custom.stage}-ParameterStore-${self:service}
             PolicyDocument:
-              Version: '2012-10-17'
+              Version: "2012-10-17"
               Statement:
                 - Effect: Allow
                   Action:
                     - ssm:GetParameter
                     - ssm:GetParameters
                   Resource:
-                    - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:ssm'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'parameter/${self:custom.stage}/${self:service}/*'
+                    - "Fn::Join":
+                        - ":"
+                        - - "arn:aws:ssm"
+                          - Ref: "AWS::Region"
+                          - Ref: "AWS::AccountId"
+                          - "parameter/${self:custom.stage}/${self:service}/*"
                 - Effect: Allow
                   Action:
                     - ssm:GetParameter
                     - ssm:GetParameters
                   Resource:
-                    - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:ssm'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'parameter/${self:service}/*'
+                    - "Fn::Join":
+                        - ":"
+                        - - "arn:aws:ssm"
+                          - Ref: "AWS::Region"
+                          - Ref: "AWS::AccountId"
+                          - "parameter/${self:service}/*"
 
     FolkStaticS3Bucket:
       Type: AWS::S3::Bucket
@@ -114,7 +113,7 @@ resources:
           Statement:
             - Sid: PublicReadGetObject
               Effect: Allow
-              Principal: '*'
+              Principal: "*"
               Action:
                 - s3:GetObject
               Resource: arn:aws:s3:::${self:custom.bucketName}/*
@@ -132,14 +131,14 @@ resources:
               CustomOriginConfig:
                 HTTPPort: 80
                 OriginProtocolPolicy: http-only
-            - DomainName: 
-                Fn::Join: 
-                  - ''
-                  - - !Ref 'HttpApi'
-                    - '.execute-api.'
-                    - !Ref 'AWS::Region'
-                    - '.'
-                    - !Ref 'AWS::URLSuffix'
+            - DomainName:
+                Fn::Join:
+                  - ""
+                  - - !Ref "HttpApi"
+                    - ".execute-api."
+                    - !Ref "AWS::Region"
+                    - "."
+                    - !Ref "AWS::URLSuffix"
               Id: ${self:custom.service}-api-origin
               CustomOriginConfig:
                 HTTPSPort: 443
@@ -179,15 +178,15 @@ resources:
           DefaultCacheBehavior:
             TargetOriginId: ${self:custom.service}-default-origin
             ForwardedValues:
-                QueryString: false
+              QueryString: false
             ViewerProtocolPolicy: redirect-to-https
           PriceClass: PriceClass_100
           ViewerCertificate:
             AcmCertificateArn:
-              Fn::Join: 
-                - ':'
-                - - 'arn:aws:acm:us-east-1'
-                  - !Ref 'AWS::AccountId'
+              Fn::Join:
+                - ":"
+                - - "arn:aws:acm:us-east-1"
+                  - !Ref "AWS::AccountId"
                   - certificate/8c11e6a7-f8a2-4b06-a08d-890509e11473
             MinimumProtocolVersion: TLSv1.2_2019
             SslSupportMethod: sni-only
@@ -195,8 +194,7 @@ resources:
   Outputs:
     FolkStaticBucketOutput:
       Value:
-        'Ref': FolkStaticS3Bucket
+        "Ref": FolkStaticS3Bucket
     FolkDistributionOutput:
       Value:
-        'Fn::GetAtt': [FolkDistribution, DomainName]
-
+        "Fn::GetAtt": [FolkDistribution, DomainName]
