@@ -392,14 +392,14 @@ exports.competenceCategories = async ({ dataplattformClient }) => {
     dataplattformClient.report({
       reportName: 'competenceAverage',
     })
-  ])
+  ]);
   const [categoriesData, competenceData] = await Promise.all([
     reqCategories.json(),
     reqCompetence.json(),
   ])
 
   // Categories structure
-  const categories = {
+  let categories = {
     "kategori" : "kompetansekartlegging",
     "children" : []
   }
@@ -412,7 +412,7 @@ exports.competenceCategories = async ({ dataplattformClient }) => {
   )
 
   mainCategories.forEach(name => {
-    const categoryObject = {
+    var categoryObject = {
       "kategori": name,
       "children": []
     }
@@ -423,10 +423,10 @@ exports.competenceCategories = async ({ dataplattformClient }) => {
         const childName = item[name]
         if (childName) {
           // Create child category and merge competence data
-          const competence = competenceData[0][childName.toLowerCase()] || null
+          const competance = competenceData[0][childName.toLowerCase()] || null
           const childCategoryObject = {
             "kategori": childName,
-            "verdi": competence
+            "verdi": competance
           }
           categoryObject.children.push(childCategoryObject)
         }
@@ -436,5 +436,5 @@ exports.competenceCategories = async ({ dataplattformClient }) => {
     categories.children.push(categoryObject)
   })
 
-  return categories
+  return categories;
 };
