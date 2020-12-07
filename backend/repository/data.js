@@ -224,17 +224,77 @@ exports.competenceAreas = async () => {
   };
 };
 
+function setInGroups(list) {
+  const detailedGroupedList = [
+    { years: 'Under 2 år', count: 0 },
+    { years: '2 til 5 år', count: 0 },
+    { years: '6 til 10 år', count: 0 },
+    { years: '11 til 15 år', count: 0 },
+    { years: '16 til 20 år', count: 0 },
+    { years: '21 til 25 år', count: 0 },
+    { years: '26 til 30 år', count: 0 },
+    { years: 'over 31 år', count: 0 },
+  ];
+
+  const groupedList = [
+    { years: 'Under 1 år', count: 0 },
+    { years: '1 til 2 år', count: 0 },
+    { years: '3 til 5 år', count: 0 },
+    { years: '6 til 10 år', count: 0 },
+    { years: 'over 10 år', count: 0 },
+  ]
+
+  list.forEach((item) => {
+    const years = Number(item.years);
+    const count = Number(item.count);
+    if (years === 0){
+      detailedGroupedList[0].count += count;
+      groupedList[0].count += count;
+    }else if (years === 1) {
+      detailedGroupedList[0].count += count;
+      groupedList[1].count += count;
+    }else if (years === 2) {
+      detailedGroupedList[1].count += count;
+      groupedList[1].count += count;
+    } else if (years > 2 && years < 6) {
+      detailedGroupedList[1].count += count;
+      groupedList[2].count += count;
+    } else if (years > 5 && years < 11) {
+      detailedGroupedList[2].count += count;
+      groupedList[3].count += count;
+    } else if (years > 10 && years < 16) {
+      detailedGroupedList[3].count += count;
+      groupedList[4].count += count;
+    } else if (years > 15 && years < 21) {
+      detailedGroupedList[4].count += count;
+      groupedList[4].count += count;
+    } else if (years > 20 && years < 26) {
+      detailedGroupedList[5].count += count;
+      groupedList[4].count += count;
+    } else if (years > 25 && years < 31) {
+      detailedGroupedList[6].count += count;
+      groupedList[4].count += count;
+    } else if (years > 30) {
+      detailedGroupedList[7].count += count;
+      groupedList[4].count += count;
+    }
+  });
+
+  return [groupedList, detailedGroupedList];
+}
+
 exports.experienceDistribution = async ({ dataplattformClient }) => {
   const req = await dataplattformClient.report({
     reportName: 'yearsSinceSchoolDist',
   });
   const experience = await req.json();
-
+  const [groups, detailedGroups] = setInGroups(experience);
   return {
-    componentType: 'Bar',
-    setNames: ['Erfaring'],
+    componentType: 'Pie',
+    setNames: ['Erfaring', 'Detaljert oversikt'],
     sets: {
-      Erfaring: experience,
+      Erfaring: groups,
+      'Detaljert oversikt': detailedGroups
     },
   };
 };
