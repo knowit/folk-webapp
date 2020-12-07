@@ -22,6 +22,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Footer() {
   const classes = useStyles();
+  const DATACORRECTION_EMAIL = process.env.DATACORRECTION_EMAIL
+  const IMPROVEMENTS_EMAIL = process.env.IMPROVEMENTS_EMAIL
+
+  const improvementsHref = `mailto:${IMPROVEMENTS_EMAIL}`
+  const correctionHref = `mailto:${DATACORRECTION_EMAIL}?subject=Melding%20om%20datafeil&body=Feilen%20ble%20funnet%20her%3A%20%0D%0AOg%20omhandler%20dette%3A%20`
 
   return (
     <div className={classes.root}>
@@ -29,13 +34,13 @@ export default function Footer() {
         <p>
           Knowit Folk. Lakkegata 53, 0178 Oslo &ensp;|&ensp; Tlf. 02486 &ensp;|
           &ensp;
-          <a className={classes.link} href="mailto:name1@mail.com">
-            Kontakt
+          <a className={classes.link} href={improvementsHref}>
+            Kontakt og tilbakemeldinger
           </a>
           &ensp; | &ensp;
           <a
             className={classes.link}
-            href="mailto:name1@mail.com?subject=Melding%20om%20datafeil&body=Feilen%20ble%20funnet%20her%3A%20%0D%0AOg%20omhandler%20dette%3A%20"
+            href={correctionHref}
           >
             Meld om datafeil
           </a>
