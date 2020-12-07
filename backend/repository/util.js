@@ -4,13 +4,13 @@ const crypto = require('crypto');
 const AWS = require('aws-sdk');
 
 // PS: this code is only for local dev. Do not ship to dev/prod
-// if (process && process.env && process.env.AWS_ACCESS_KEY_ID) {
-//   AWS.config.update({
-//     region: 'eu-central-1',
-//     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-//   });
-// }
+if (process && process.env && process.env.AWS_ACCESS_KEY_ID) {
+  AWS.config.update({
+    region: 'eu-central-1',
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  });
+}
 
 const ssm = new AWS.SSM();
 
