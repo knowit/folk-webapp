@@ -183,9 +183,16 @@ function makeFagTimerDataForNivo(data) {
     id: year.toString(),
     data: range(1, 53).map((i) => {
       const currentYear = data.filter((dataItem) => dataItem.year === year);
+      const currentWeekData = currentYear.find(
+        (dataItem) => dataItem.week === i
+      );
+
       return {
         x: i,
-        y: currentYear.find((dataObj) => dataObj.week === i)?.used_hrs || 0,
+        y:
+          currentWeekData && currentWeekData.used_hrs
+            ? currentWeekData.used_hrs
+            : 0,
       };
     }),
   }));
@@ -351,10 +358,7 @@ exports.education = async ({ dataplattformClient }) => {
 };
 
 exports.competenceMapping = async ({ dataplattformClient }) => {
-  const [reqCategories, reqCompetence, reqMotivation] = await Promise.all([
-    dataplattformClient.report({
-      reportName: 'categories',
-    }),
+  const [reqCompetence, reqMotivation] = await Promise.all([
     dataplattformClient.report({
       reportName: 'competenceAverage',
     }),
@@ -362,61 +366,26 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
       reportName: 'motivationAverage',
     }),
   ]);
-  const [categories, competence, motivation] = await Promise.all([
-    reqCategories.json(),
+  const [competence, motivation] = await Promise.all([
     reqCompetence.json(),
     reqMotivation.json(),
   ]);
 
-  const competenceCategories = (data) => {
-      // Categories structure
-    const output = {
-      "kategori" : "kompetansekartlegging",
-      "children" : []
-    }
-
-    // Get the main categories
-    const mainCategories = new Set(
-      categories.flatMap(
-        item => Object.keys(item)
-      )
-    )
-
-    mainCategories.forEach(name => {
-      const categoryObject = {
-        "kategori": name,
-        "children": []
-      }
-      
-      // Get child categories
-      categories.forEach(
-        item => {
-          const childName = item[name]
-          if (childName) {
-            // Create child category and merge competence data
-            const value = data[0][childName.toLowerCase()] || null
-            const childCategoryObject = {
-              "kategori": childName,
-              "verdi": value
-            }
-
-            categoryObject.children.push(childCategoryObject)
-          }
-        }
-      )
-      
-      output.children.push(categoryObject)
-    })
-
-    return output
+  const transposeMap = (mapList) => {
+    const entires =
+      mapList && mapList.length > 0 ? Object.entries(mapList[0]) : [];
+    return entires.map(([key, value]) => ({
+      section: key,
+      value,
+    }));
   };
 
   return {
-    componentType: 'Sunburst',
+    componentType: 'Bar',
     setNames: ['Kompetanse', 'Motivasjon'],
     sets: {
-      Kompetanse: competenceCategories(competence),
-      Motivasjon: competenceCategories(motivation),
+      Kompetanse: transposeMap(competence),
+      Motivasjon: transposeMap(motivation),
     },
   };
 };
