@@ -183,9 +183,16 @@ function makeFagTimerDataForNivo(data) {
     id: year.toString(),
     data: range(1, 53).map((i) => {
       const currentYear = data.filter((dataItem) => dataItem.year === year);
+      const currentWeekData = currentYear.find(
+        (dataItem) => dataItem.week === i
+      );
+
       return {
         x: i,
-        y: currentYear.find((dataObj) => dataObj.week === i)?.used_hrs || 0,
+        y:
+          currentWeekData && currentWeekData.used_hrs
+            ? currentWeekData.used_hrs
+            : 0,
       };
     }),
   }));
@@ -381,60 +388,4 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
       Motivasjon: transposeMap(motivation),
     },
   };
-};
-
-exports.competenceCategories = async ({ dataplattformClient }) => {
-  // Request categories and competence values
-  const [reqCategories, reqCompetence] = await Promise.all([
-    dataplattformClient.report({
-      reportName: 'categories',
-    }),
-    dataplattformClient.report({
-      reportName: 'competenceAverage',
-    })
-  ]);
-  const [categoriesData, competenceData] = await Promise.all([
-    reqCategories.json(),
-    reqCompetence.json(),
-  ])
-
-  // Categories structure
-  let categories = {
-    "kategori" : "kompetansekartlegging",
-    "children" : []
-  }
-
-  // Get the main categories
-  const mainCategories = new Set(
-    categoriesData.flatMap(
-      item => Object.keys(item)
-    )
-  )
-
-  mainCategories.forEach(name => {
-    var categoryObject = {
-      "kategori": name,
-      "children": []
-    }
-    
-    // Get child categories
-    categoriesData.forEach(
-      item => {
-        const childName = item[name]
-        if (childName) {
-          // Create child category and merge competence data
-          const competance = competenceData[0][childName.toLowerCase()] || null
-          const childCategoryObject = {
-            "kategori": childName,
-            "verdi": competance
-          }
-          categoryObject.children.push(childCategoryObject)
-        }
-      }
-    )
-    
-    categories.children.push(categoryObject)
-  })
-
-  return categories;
 };
