@@ -358,7 +358,10 @@ exports.education = async ({ dataplattformClient }) => {
 };
 
 exports.competenceMapping = async ({ dataplattformClient }) => {
-  const [reqCompetence, reqMotivation] = await Promise.all([
+  const [reqCategories, reqCompetence, reqMotivation] = await Promise.all([
+    dataplattformClient.report({
+      reportName: 'categories',
+    }),
     dataplattformClient.report({
       reportName: 'competenceAverage',
     }),
@@ -366,26 +369,61 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
       reportName: 'motivationAverage',
     }),
   ]);
-  const [competence, motivation] = await Promise.all([
+  const [categories, competence, motivation] = await Promise.all([
+    reqCategories.json(),
     reqCompetence.json(),
     reqMotivation.json(),
   ]);
 
-  const transposeMap = (mapList) => {
-    const entires =
-      mapList && mapList.length > 0 ? Object.entries(mapList[0]) : [];
-    return entires.map(([key, value]) => ({
-      section: key,
-      value,
-    }));
+  const competenceCategories = (data) => {
+      // Categories structure
+    const output = {
+      "kategori" : "kompetansekartlegging",
+      "children" : []
+    }
+
+    // Get the main categories
+    const mainCategories = new Set(
+      categories.flatMap(
+        item => Object.keys(item)
+      )
+    )
+
+    mainCategories.forEach(name => {
+      const categoryObject = {
+        "kategori": name,
+        "children": []
+      }
+      
+      // Get child categories
+      categories.forEach(
+        item => {
+          const childName = item[name]
+          if (childName) {
+            // Create child category and merge competence data
+            const value = data[0][childName.toLowerCase()] || null
+            const childCategoryObject = {
+              "kategori": childName,
+              "verdi": value
+            }
+
+            categoryObject.children.push(childCategoryObject)
+          }
+        }
+      )
+      
+      output.children.push(categoryObject)
+    })
+
+    return output
   };
 
   return {
-    componentType: 'Bar',
+    componentType: 'Sunburst',
     setNames: ['Kompetanse', 'Motivasjon'],
     sets: {
-      Kompetanse: transposeMap(competence),
-      Motivasjon: transposeMap(motivation),
+      Kompetanse: competenceCategories(competence),
+      Motivasjon: competenceCategories(motivation),
     },
   };
 };
