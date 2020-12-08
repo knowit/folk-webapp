@@ -9,13 +9,16 @@ interface LineChartsProps {
   big?: boolean;
 }
 
+const lineChartColors = colors.filter((_, k) => k !== 1);
+
 export default function Line({ data, big }: LineChartsProps) {
   const height = big ? '400px' : '280px';
+  const legendTranslateY = big ? 50 : 30;
   return (
     <div style={{ height, width: '100%' }}>
       <ResponsiveLine
         data={data}
-        margin={{ top: 10, right: 90, bottom: 50, left: 40 }}
+        margin={{ top: 10, right: 20, bottom: 70, left: 40 }}
         xScale={{ type: 'point' }}
         yScale={{
           type: 'linear',
@@ -35,7 +38,7 @@ export default function Line({ data, big }: LineChartsProps) {
           legendOffset: -40,
           legendPosition: 'middle',
         }}
-        colors={colors}
+        colors={lineChartColors}
         curve="monotoneX"
         enableArea={true}
         enableSlices="x"
@@ -46,11 +49,11 @@ export default function Line({ data, big }: LineChartsProps) {
         useMesh={true}
         legends={[
           {
-            anchor: 'bottom-right',
-            direction: 'column',
+            anchor: 'bottom',
+            direction: 'row',
             justify: false,
-            translateX: 100,
-            translateY: 0,
+            translateX: 20,
+            translateY: legendTranslateY,
             itemsSpacing: 0,
             itemDirection: 'left-to-right',
             itemWidth: 80,
