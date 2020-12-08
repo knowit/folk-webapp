@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useReducer, useState } from 'react';
+import React, { Dispatch, useEffect, useReducer} from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { TableCell, withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
@@ -156,18 +156,16 @@ function ExtendableCell({
   dispatch: Dispatch<Action>;
 }): JSX.Element {
   const classes = useStyles();
-  const [open, setOpen] = useState(
-    rowStates[id] ? rowStates[id].height > 70 : false
-  );
   const openClick = () => {
-    if (open) {
-      dispatch({ type: 'CHANGE_HEIGHT', id: id, height: 70 });
+    if (rowStates[id] && rowStates[id].open) {
+      dispatch({ type: 'CHANGE_OPEN', id, open: false });
+      dispatch({ type: 'CHANGE_HEIGHT', id, height: 70 });
     } else {
-      dispatch({ type: 'CHANGE_HEIGHT', id: id, height: 280 });
+      dispatch({ type: 'CHANGE_HEIGHT',id, height: 280 });
+      dispatch({ type: 'CHANGE_OPEN', id, open: true });
     }
-    setOpen(!open);
   };
-  const openStyle = open ? classes.bolderText : '';
+  const openStyle = (rowStates[id] && rowStates[id].open) ? classes.bolderText : '';
 
   return (
     <TableCellNoBorders
@@ -189,10 +187,10 @@ function ExtendableCell({
         onClick={() => openClick()}
       >
         <RenderCell data={cellData} rowData={[]} />
-        {open ? <ExpandLessIconWithStyles /> : <ExpandMoreIconWithStyles />}
+        {(rowStates[id] && rowStates[id].open) ? <ExpandLessIconWithStyles /> : <ExpandMoreIconWithStyles />}
       </Button>
       <div>
-        {open && (
+        {(rowStates[id] && rowStates[id].open) && (
           <RenderExpanded
             data={cellData}
             callBack={heightChange}
@@ -270,6 +268,7 @@ const initialState: RowStates = {};
 
 export interface RowStates {
   [id: string]: {
+    open:boolean;
     height: number;
     expandedData: null | any;
   };
@@ -277,6 +276,7 @@ export interface RowStates {
 
 export type Action =
   | { type: 'CHANGE_HEIGHT'; id: string; height: number }
+  | { type: 'CHANGE_OPEN'; id: string; open:boolean}
   | { type: 'SET_EXPANDED_DATA'; id: string; expandedData: any };
 
 function reducer(currentState: RowStates, action: Action) {
@@ -289,6 +289,20 @@ function reducer(currentState: RowStates, action: Action) {
           expandedData: currentState[action.id]
             ? currentState[action.id].expandedData
             : null,
+          open: currentState[action.id]
+            ? currentState[action.id].open
+            : false,
+        },
+      };
+    case 'CHANGE_OPEN':
+      return {
+        ...currentState,
+        [action.id]: {
+          height: currentState[action.id] ? currentState[action.id].height : 70,
+          expandedData: currentState[action.id]
+            ? currentState[action.id].expandedData
+            : null,
+          open: action.open
         },
       };
     case 'SET_EXPANDED_DATA':
@@ -297,6 +311,9 @@ function reducer(currentState: RowStates, action: Action) {
         [action.id]: {
           height: currentState[action.id] ? currentState[action.id].height : 70,
           expandedData: action.expandedData,
+          open: currentState[action.id]
+          ? currentState[action.id].open
+          : false,
         },
       };
     default:
