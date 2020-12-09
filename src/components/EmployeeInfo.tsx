@@ -13,7 +13,7 @@ type Experience = {
 };
 
 type CompetenceMap = {
-  [key: string]: { competence: number; motivation: number };
+  [category: string]: number;
 };
 
 interface EmployeeInfoData {
@@ -69,9 +69,8 @@ function CompetenceMapping({
 }) {
   const classes = useCompetenceMappingStyles();
 
-  const competenceMap = Object.entries(competences || {}).sort(
-    ([, { motivation: a }], [, { motivation: b }]) => a - b
-  );
+  const competenceMap = Object.entries(competences || {})
+    .sort(([, a ], [,  b ]) => a - b);
   const competencesList =
     competenceMap.length > 2
       ? [
