@@ -155,15 +155,16 @@ function ExtendableCell({
   rowStates: RowStates;
   dispatch: Dispatch<Action>;
 }): JSX.Element {
+  const isOpen = () => (rowStates[id] && rowStates[id].height !== 70)
   const classes = useStyles();
   const openClick = () => {
-    if (rowStates[id] && rowStates[id].height !== 70) {
+    if (isOpen()) {
       dispatch({ type: 'CHANGE_HEIGHT', id, height: 70 });
     } else {
       dispatch({ type: 'CHANGE_HEIGHT',id, height: 280 });
     }
   };
-  const openStyle = (rowStates[id] && rowStates[id].height !== 70) ? classes.bolderText : '';
+  const openStyle = isOpen() ? classes.bolderText : '';
 
   return (
     <TableCellNoBorders
@@ -185,10 +186,10 @@ function ExtendableCell({
         onClick={() => openClick()}
       >
         <RenderCell data={cellData} rowData={[]} />
-        {(rowStates[id] && rowStates[id].height !== 70) ? <ExpandLessIconWithStyles /> : <ExpandMoreIconWithStyles />}
+        {isOpen() ? <ExpandLessIconWithStyles /> : <ExpandMoreIconWithStyles />}
       </Button>
       <div>
-        {(rowStates[id] && rowStates[id].height !== 70) && (
+        {isOpen() && (
           <RenderExpanded
             data={cellData}
             callBack={heightChange}
