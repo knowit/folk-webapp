@@ -2,6 +2,8 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    node: true,
+    commonjs: true,
   },
   extends: [
     'eslint:recommended',
@@ -21,6 +23,7 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
+    '@typescript-eslint/no-var-requires': 0,
   },
   settings: {
     react: {

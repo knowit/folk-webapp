@@ -14,7 +14,9 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
+    "checkJs": false,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src", "tsconfig.json"],
+  "exclude": ["node_modules","backend","backend/**/*.js",]
 }

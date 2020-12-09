@@ -1,4 +1,4 @@
-const { getSecret, makeEmailUuid, groupBy, range } = require('./util');
+const { getSecret, makeEmailUuid, range } = require('./util');
 const { v4: uuid } = require('uuid');
 
 exports.projectStatus = async ({ dataplattformClient }) => {

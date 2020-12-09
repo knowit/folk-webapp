@@ -1,5 +1,5 @@
 *.test.js
 *.test.tsx
-node_modules/
+node_modules
 .*.js
 src/setupProxy.js
