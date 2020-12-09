@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useReducer, useState } from 'react';
+import React, { Dispatch, useEffect, useReducer} from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { TableCell, withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
@@ -155,19 +155,13 @@ function ExtendableCell({
   rowStates: RowStates;
   dispatch: Dispatch<Action>;
 }): JSX.Element {
+  const isOpen = () => (rowStates[id] && rowStates[id].height !== 70)
   const classes = useStyles();
-  const [open, setOpen] = useState(
-    rowStates[id] ? rowStates[id].height > 70 : false
-  );
   const openClick = () => {
-    if (open) {
-      dispatch({ type: 'CHANGE_HEIGHT', id: id, height: 70 });
-    } else {
-      dispatch({ type: 'CHANGE_HEIGHT', id: id, height: 280 });
-    }
-    setOpen(!open);
+      dispatch({ type: 'CHANGE_HEIGHT', id, height: isOpen() ? 70: 280 });
+    
   };
-  const openStyle = open ? classes.bolderText : '';
+  const openStyle = isOpen() ? classes.bolderText : '';
 
   return (
     <TableCellNoBorders
@@ -189,10 +183,10 @@ function ExtendableCell({
         onClick={() => openClick()}
       >
         <RenderCell data={cellData} rowData={[]} />
-        {open ? <ExpandLessIconWithStyles /> : <ExpandMoreIconWithStyles />}
+        {isOpen() ? <ExpandLessIconWithStyles /> : <ExpandMoreIconWithStyles />}
       </Button>
       <div>
-        {open && (
+        {isOpen() && (
           <RenderExpanded
             data={cellData}
             callBack={heightChange}
