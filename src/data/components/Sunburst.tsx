@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React from 'react';
-
+import { colors } from './common';
 import { ResponsiveSunburst } from '@nivo/sunburst';
 
 type SunburstChartsData = {
@@ -11,26 +11,27 @@ interface SunburstChartsProps {
   data: SunburstChartsData[];
   groupKey?: string;
   valueKey?: string;
+  big?: boolean;
 }
-
-// const colors = ['#a3a1fb', '#56d9fe', '#74e2b7', '#f2efa0']; // TODO: need more colors
 
 export default function Sunburst({
   data,
   groupKey = 'kategori',
   valueKey = 'verdi',
+  big,
 }: SunburstChartsProps) {
+  const height = big ? '400px' : '300px';
   return (
-    <div style={{ height: '300px', width: '100%' }}>
+    <div style={{ height, width: '100%' }}>
       <ResponsiveSunburst
         data={data}
-        margin={{ top: 40, right: 20, bottom: 20, left: 20 }}
+        margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
         identity={groupKey}
         value={valueKey}
         cornerRadius={2}
         borderWidth={1}
         borderColor="white"
-        colors={{ scheme: 'paired' }}
+        colors={colors}
         animate
         motionStiffness={90}
         motionDamping={15}
