@@ -9,8 +9,6 @@ custom:
     OAUTH_URL: ${ssm:/${self:custom.stage}/folk-webapp/DATAPLATTFORM_AUTH_URL}
     CLIENT_ID: ${ssm:/folk-webapp/CLIENT_ID~true}
     CLIENT_SECRET: ${ssm:/folk-webapp/CLIENT_SECRET~true}
-    IMPROVEMENTS_EMAIL: ${ssm:/${self:custom.stage}/folk-webapp/IMPROVEMENTS_EMAIL}
-    DATACORRECTION_EMAIL: ${ssm:/${self:custom.stage}/folk-webapp/DATACORRECTION_EMAIL}
   allowedMethods:
     - GET
     - HEAD
