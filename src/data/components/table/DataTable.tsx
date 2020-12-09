@@ -159,7 +159,6 @@ function ExtendableCell({
   const classes = useStyles();
   const openClick = () => {
       dispatch({ type: 'CHANGE_HEIGHT', id, height: isOpen() ? 70: 280 });
-    } else {
       dispatch({ type: 'CHANGE_HEIGHT',id, height: 280 });
     }
   };
