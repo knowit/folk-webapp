@@ -96,7 +96,10 @@ exports.employeeCompetence = async ({
   });
   const uuid = makeEmailUuid(email, salt);
 
-  const [reqComp, reqSkills, reqEmp] = await Promise.all([
+  const [reqCompCat, reqComp, reqSkills, reqEmp] = await Promise.all([
+    dataplattformClient.report({
+      reportName: 'competenceCategories_new',
+    }),
     dataplattformClient.report({
       reportName: 'kompetansekartlegging',
       filter: { uuid },
