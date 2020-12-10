@@ -100,12 +100,11 @@ exports.employeeCompetence = async ({
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   });
-  const uuid = makeEmailUuid(email, salt);
 
   const [reqComp, reqSkills, reqEmp] = await Promise.all([
     dataplattformClient.report({
       reportName: 'kompetansekartlegging',
-      filter: { uuid },
+      filter: { uuid: makeEmailUuid(email, salt) },
     }),
     dataplattformClient.report({
       reportName: 'employeeSkills',
