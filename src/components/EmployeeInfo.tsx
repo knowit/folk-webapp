@@ -69,8 +69,9 @@ function MotivationMapping({
 }) {
   const classes = useMotivationMappingStyles();
 
-  const motivationMap = Object.entries(motivations || {})
-    .sort(([, a ], [,  b ]) => a - b);
+  const motivationMap = Object.entries(motivations || {}).sort(
+    ([, a], [, b]) => a - b
+  );
   const motivationList =
     motivationMap.length > 2
       ? [
