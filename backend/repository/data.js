@@ -26,14 +26,19 @@ exports.projectStatus = async ({ dataplattformClient }) => {
 
 exports.competence = async ({ dataplattformClient }) => {
   const req = await dataplattformClient.report({
-    reportName: 'competence_new',
+    reportName: 'competence',
   });
 
-  const images = await dataplattformClient.report({
-    reportName: 'employeeImages'
-  })
-
+  // const images = await dataplattformClient.report({
+  //   reportName: 'employeeImages'
+  // })
   const allEmployees = await req.json();
+
+
+  if (!allEmployees || allEmployees.length === 0 || allEmployees.message) { 
+    console.error('Error getting all employees [exports.competence] ', allEmployees);
+    return null; // throw error when we have error handling in place
+  }
 
   return allEmployees.map((employee) => ({
     rowId: uuid(),
