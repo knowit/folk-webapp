@@ -12,10 +12,7 @@ const AWS = require('aws-sdk');
 
 const ssm = new AWS.SSM();
 
-
-exports.getStorageUrl = (key) => {
-  return process.env.STORAGE_URL + "/" + key
-}
+exports.getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`;
 
 exports.getSecret = (name, { encrypted = false } = {}) => {
   return new Promise((resolve, reject) => {
@@ -25,8 +22,11 @@ exports.getSecret = (name, { encrypted = false } = {}) => {
         WithDecryption: encrypted,
       },
       (err, data) => {
-        if (err) reject(err);
-        else resolve(data && data.Parameter ? data.Parameter.Value : null);
+        if (err) {
+          return reject(err);
+        }
+
+        resolve(data && data.Parameter ? data.Parameter.Value : null);
       }
     );
   });
