@@ -34,9 +34,11 @@ exports.competence = async ({ dataplattformClient }) => {
   // })
   const allEmployees = await req.json();
 
-
-  if (!allEmployees || allEmployees.length === 0 || allEmployees.message) { 
-    console.error('Error getting all employees [exports.competence] ', allEmployees);
+  if (!allEmployees || allEmployees.length === 0 || allEmployees.message) {
+    console.error(
+      'Error getting all employees [exports.competence] ',
+      allEmployees
+    );
     return null; // throw error when we have error handling in place
   }
 
@@ -253,18 +255,18 @@ function setInGroups(list) {
     { years: '3 til 5 år', count: 0 },
     { years: '6 til 10 år', count: 0 },
     { years: 'over 10 år', count: 0 },
-  ]
+  ];
 
   list.forEach((item) => {
     const years = Number(item.years);
     const count = Number(item.count);
-    if (years === 0){
+    if (years === 0) {
       detailedGroupedList[0].count += count;
       groupedList[0].count += count;
-    }else if (years === 1) {
+    } else if (years === 1) {
       detailedGroupedList[0].count += count;
       groupedList[1].count += count;
-    }else if (years === 2) {
+    } else if (years === 2) {
       detailedGroupedList[1].count += count;
       groupedList[1].count += count;
     } else if (years > 2 && years < 6) {
@@ -305,7 +307,7 @@ exports.experienceDistribution = async ({ dataplattformClient }) => {
     setNames: ['Erfaring', 'Detaljert oversikt'],
     sets: {
       Erfaring: groups,
-      'Detaljert oversikt': detailedGroups
+      'Detaljert oversikt': detailedGroups,
     },
   };
 };
@@ -380,46 +382,42 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
   ]);
 
   const competenceCategories = (data) => {
-      // Categories structure
+    // Categories structure
     const output = {
-      "kategori" : "kompetansekartlegging",
-      "children" : []
-    }
+      kategori: 'kompetansekartlegging',
+      children: [],
+    };
 
     // Get the main categories
     const mainCategories = new Set(
-      categories.flatMap(
-        item => Object.keys(item)
-      )
-    )
+      categories.flatMap((item) => Object.keys(item))
+    );
 
-    mainCategories.forEach(name => {
+    mainCategories.forEach((name) => {
       const categoryObject = {
-        "kategori": name,
-        "children": []
-      }
-      
+        kategori: name,
+        children: [],
+      };
+
       // Get child categories
-      categories.forEach(
-        item => {
-          const childName = item[name]
-          if (childName) {
-            // Create child category and merge competence data
-            const value = data[0][childName.toLowerCase()] || null
-            const childCategoryObject = {
-              "kategori": childName,
-              "verdi": value
-            }
+      categories.forEach((item) => {
+        const childName = item[name];
+        if (childName) {
+          // Create child category and merge competence data
+          const value = data[0][childName.toLowerCase()] || null;
+          const childCategoryObject = {
+            kategori: childName,
+            verdi: value,
+          };
 
-            categoryObject.children.push(childCategoryObject)
-          }
+          categoryObject.children.push(childCategoryObject);
         }
-      )
-      
-      output.children.push(categoryObject)
-    })
+      });
 
-    return output
+      output.children.push(categoryObject);
+    });
+
+    return output;
   };
 
   return {
