@@ -96,9 +96,9 @@ exports.employeeCompetence = async ({
   });
   const uuid = makeEmailUuid(email, salt);
 
-  const [reqComp, reqSkills, reqEmp] = await Promise.all([
+  const [reqMotivation, reqSkills, reqEmp] = await Promise.all([
     dataplattformClient.report({
-      reportName: 'competenceCategories_new',
+      reportName: 'categorizedMotivation',
     }),
     dataplattformClient.report({
       reportName: 'employeeSkills',
@@ -109,18 +109,16 @@ exports.employeeCompetence = async ({
       filter: { email },
     }),
   ]);
-  const [resComp, resSkills, resEmp] = await Promise.all([
-    reqComp.json(),
+  const [resMotivation, resSkills, resEmp] = await Promise.all([
+    reqMotivation.json(),
     reqSkills.json(),
     reqEmp.json(),
   ]);
-  const catCompetence = {};
+  const catMotivation = {};
 
-  resComp.map((category) => {
-    catCompetence[category.category] = category[uuid];
+  resMotivation.map((category) => {
+    catMotivation[category.category] = category[uuid.slice(0,8)];
   })
-
-  console.log(catCompetence)
 
   const mapTags = (skills) => {
     const mappedSkills = skills && skills.length > 0 ? skills[0] : {};
@@ -132,7 +130,7 @@ exports.employeeCompetence = async ({
   };
 
   return {
-    competence: catCompetence,
+    motivation: catMotivation,
     workExperience: resEmp,
     tags: mapTags(resSkills),
   };
