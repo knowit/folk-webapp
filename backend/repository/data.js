@@ -347,8 +347,12 @@ exports.education = async ({ dataplattformClient }) => {
   };
 };
 
+
 exports.competenceMapping = async ({ dataplattformClient }) => {
-  const [reqCompetence, reqMotivation] = await Promise.all([
+  const [reqCategories, reqCompetence, reqMotivation] = await Promise.all([
+    dataplattformClient.report({
+      reportName: 'categories',
+    }),
     dataplattformClient.report({
       reportName: 'competenceAverage',
     }),
