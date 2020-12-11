@@ -12,12 +12,12 @@ type Experience = {
   year_from: number;
 };
 
-type CompetenceMap = {
-  [key: string]: { competence: number; motivation: number };
+type MotivationMap = {
+  [category: string]: number;
 };
 
 interface EmployeeInfoData {
-  competence: CompetenceMap;
+  motivation: MotivationMap;
   tags: {
     languages: string[];
     skills: string[];
@@ -26,7 +26,7 @@ interface EmployeeInfoData {
   workExperience: Experience[];
 }
 
-const useCompetenceMappingStyles = makeStyles({
+const useMotivationMappingStyles = makeStyles({
   root: {
     backgroundColor: '#f2f2f2',
     fontSize: '12px',
@@ -62,30 +62,30 @@ const useCompetenceMappingStyles = makeStyles({
 
 const makeKeyFromText = (value: string): string => value.replace(' ', '_');
 
-function CompetenceMapping({
-  competences,
+function MotivationMapping({
+  motivations,
 }: {
-  competences: CompetenceMap | undefined;
+  motivations: MotivationMap | undefined;
 }) {
-  const classes = useCompetenceMappingStyles();
+  const classes = useMotivationMappingStyles();
 
-  const competenceMap = Object.entries(competences || {}).sort(
-    ([, { motivation: a }], [, { motivation: b }]) => a - b
+  const motivationMap = Object.entries(motivations || {}).sort(
+    ([, a], [, b]) => a - b
   );
-  const competencesList =
-    competenceMap.length > 2
+  const motivationList =
+    motivationMap.length > 2
       ? [
-          competenceMap[0][0],
-          competenceMap[Math.floor(competenceMap.length / 2)][0],
-          competenceMap.slice(-1)[0][0],
+          motivationMap[0][0],
+          motivationMap[Math.floor(motivationMap.length / 2)][0],
+          motivationMap.slice(-1)[0][0],
         ]
       : [];
 
   return (
     <div className={classes.root}>
       <div>
-        {competencesList.length > 0 ? (
-          competencesList.map((competence) => (
+        {motivationList.length > 0 ? (
+          motivationList.map((competence) => (
             <div key={makeKeyFromText(competence)}>
               <CharacterLimitBox
                 text={competence.charAt(0).toUpperCase() + competence.slice(1)}
@@ -262,7 +262,7 @@ export default function EmployeeInfo({
       {pending ? (
         <Skeleton variant="rect" height={67} animation="wave" />
       ) : (
-        <CompetenceMapping competences={empData?.competence} />
+        <MotivationMapping motivations={empData?.motivation} />
       )}
     </div>
   );
