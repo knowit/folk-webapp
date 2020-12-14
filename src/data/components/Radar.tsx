@@ -4,7 +4,7 @@ import { colors } from './common';
 import { ResponsiveRadar } from '@nivo/radar';
 
 type RadarChartsData = {
-  [key: string]: string | number | Array<RadarChartsData>;
+  [key: string]: string | number;
 };
 
 interface RadarChartsProps {
