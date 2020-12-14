@@ -1,6 +1,6 @@
+// @ts-nocheck
 import React from 'react';
 import { colors } from './common';
-
 import { ResponsiveRadar } from '@nivo/radar';
 
 type RadarChartsData = {
@@ -14,7 +14,7 @@ interface RadarChartsProps {
   big?: boolean;
 }
 
-export default function Radar ({
+export default function Radar({
   data,
   groupKey = 'kategori',
   valueKey = [],
@@ -28,7 +28,7 @@ export default function Radar ({
         keys={valueKey}
         indexBy={groupKey}
         maxValue="auto"
-        margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
+        margin={{ top: 50, right: 10, bottom: 50, left: 10 }}
         curve="linearClosed"
         borderWidth={2}
         borderColor={colors}
@@ -49,27 +49,6 @@ export default function Radar ({
         animate={true}
         motionConfig="wobbly"
         isInteractive={true}
-        legends={[
-          {
-            anchor: 'top-left',
-            direction: 'column',
-            translateX: -50,
-            translateY: -40,
-            itemWidth: 80,
-            itemHeight: 20,
-            itemTextColor: '#999',
-            symbolSize: 12,
-            symbolShape: 'circle',
-            effects: [
-              {
-                on: 'hover',
-                style: {
-                  itemTextColor: '#000',
-                },
-              },
-            ],
-          },
-        ]}
       />
     </div>
   );
