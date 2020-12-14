@@ -190,7 +190,7 @@ export default function EmployeeInfo({
     return knowit === undefined || knowit.year_from < 0 ? (
       <NoData />
     ) : (
-      `${[monthFrom, knowit?.year_from].join(' - ')}.`
+      `${[monthFrom, knowit?.year_from].join('/')}.`
     );
   };
 
