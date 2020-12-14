@@ -11,6 +11,7 @@ import { DDComponentProps } from './types';
 import BigChart from '../components/BigChart';
 import { ErrorText } from '../components/ErrorText';
 import Sunburst from './components/Sunburst';
+import Radar from './components/Radar';
 
 const usePlaceholderStyle = makeStyles(() =>
   createStyles({
@@ -56,6 +57,8 @@ const getChartComponent = (name: string) => {
       return Pie;
     case 'Sunburst':
       return Sunburst;
+    case 'Radar':
+      return Radar;
     default:
       return Placeholder;
   }
