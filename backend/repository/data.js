@@ -347,6 +347,16 @@ exports.education = async ({ dataplattformClient }) => {
   };
 };
 
+exports.competenceFilter = async ({dataplattformClient}) => {
+  const req = await dataplattformClient.report({
+    reportName: 'categories',
+  });
+
+  const categories = await req.json();
+  return {
+    categories: categories
+  };
+}
 
 exports.competenceMapping = async ({ dataplattformClient }) => {
   const [reqCategories, reqCompetence, reqMotivation] = await Promise.all([
