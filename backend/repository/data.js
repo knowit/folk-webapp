@@ -353,9 +353,34 @@ exports.competenceFilter = async ({dataplattformClient}) => {
   });
 
   const categories = await req.json();
-  return {
-    categories: categories
-  };
+    // Categories structure
+  const output = []
+
+  // Get the main categories
+  const mainCategories = new Set(
+    categories.flatMap(
+      item => Object.keys(item)
+    )
+  )
+  mainCategories.forEach(name => {
+    const categoryObject = {
+      "category": name,
+      "subCategories": []
+    }
+    
+    // Get child categories
+    categories.forEach(
+      item => {
+        const childName = item[name]
+        if (childName) {
+          categoryObject.subCategories.push(childName)
+        }
+      }
+    )
+    output.push(categoryObject)
+  })
+
+  return output;
 }
 
 exports.competenceMapping = async ({ dataplattformClient }) => {
