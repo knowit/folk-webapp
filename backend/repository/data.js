@@ -105,7 +105,7 @@ exports.employeeCompetence = async ({
       filter: { email },
     }),
     dataplattformClient.report({
-      reportName: 'workExperience_fixes',
+      reportName: 'workExperience',
       filter: { email },
     }),
   ]);
