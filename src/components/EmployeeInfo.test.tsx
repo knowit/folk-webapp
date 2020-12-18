@@ -34,11 +34,15 @@ const fakeUser = {
       employer: 'knowit',
       month_from: 5,
       year_from: 2017,
+      month_to: -1,
+      year_to: -1,
     },
     {
       employer: 'no it',
       month_from: 10,
       year_from: 2010,
+      month_to: -1,
+      year_to: -1,
     },
   ],
 };
@@ -114,6 +118,6 @@ describe('EmployeeInfo', () => {
         dispatch={mockCallbackFunction}
       />
     );
-    expect(screen.getByText('05 - 2017.')).toBeInTheDocument;
+    expect(screen.getByText('05/2017.')).toBeInTheDocument;
   });
 });

@@ -10,6 +10,8 @@ type Experience = {
   employer: string;
   month_from: number;
   year_from: number;
+  month_to: number;
+  year_to: number;
 };
 
 type MotivationMap = {
@@ -152,14 +154,22 @@ export default function EmployeeInfo({
   const classes = useStyles();
   const url = data.competenceUrl;
   const [empData, pending] = useFetchedData<EmployeeInfoData>({ url });
+  
+  type Date = {year:number, month:number} | {year:number}
   const totalExperience = (allExperience: Experience[] | undefined) => {
-    const firstJob = allExperience?.sort(
-      (a, b) => a.year_from - b.year_from
+    const dates:Date[] = [];
+    allExperience?.map(job =>{
+      job.year_from !== -1 && dates.push({year:job.year_from})
+      job.year_to !== -1 && dates.push({year:job.year_to})
+    })
+    const firstJob = dates?.sort(
+      (a, b) => a.year - b.year
     )[0];
-    return firstJob?.year_from === undefined || firstJob?.year_from < 0 ? (
+
+    return firstJob?.year === undefined || firstJob?.year < 0 ? (
       <NoData />
     ) : (
-      `${new Date().getFullYear() - firstJob?.year_from} år.`
+      `${new Date().getFullYear() - firstJob?.year} år.`
     );
   };
 
@@ -180,7 +190,7 @@ export default function EmployeeInfo({
     return knowit === undefined || knowit.year_from < 0 ? (
       <NoData />
     ) : (
-      `${[monthFrom, knowit?.year_from].join(' - ')}.`
+      `${[monthFrom, knowit?.year_from].join('/')}.`
     );
   };
 
