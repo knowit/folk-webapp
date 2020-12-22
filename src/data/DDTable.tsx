@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { GridItemHeader } from '../components/GridItem';
+import { FilterHeader } from '../components/FilterHeader';
 import DataTable from './components/table/DataTable';
 import SearchInput from '../components/SearchInput';
 import CompetenceFilterInput from  '../components/competenceFilterInput'
 import { DDComponentProps } from './types';
+import { makeStyles } from '@material-ui/core/styles';
 
 interface Column {
   title: string;
@@ -12,9 +14,19 @@ interface Column {
   searchKey?: string;
 }
 
+const useStyles = makeStyles({
+  searchBars: {
+    flexDirection: 'row',
+    display: 'flex',
+    justifyContent: 'space-around',
+    width: '600px',
+  }
+});
+
 export default function DDTable({ payload, title, props }: DDComponentProps) {
   const allRows = payload as { rowData: any[] }[];
   const [rows, setRows] = useState(allRows);
+  const [filterList, setFilterList] = useState<string[]>([]);
 
   const { columns } = props as { columns: Column[] };
   const searchableColumn = columns
@@ -42,7 +54,6 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
             const rowValue = key
               ? row.rowData[index][key].toLowerCase()
               : row.rowData[index].toLowerCase();
-
             return rowValue.includes(lowerCaseSearchTerm);
           })
           .reduce((a, b) => a || b, false);
@@ -50,12 +61,17 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
     );
   };
 
+  const classes = useStyles();
+
   return (
     <>
       <GridItemHeader title={title}>
-        <CompetenceFilterInput />
-        <SearchInput onChange={handleSearchInputChange} />
+        <div className={classes.searchBars}>
+          <CompetenceFilterInput filterList={filterList} setFilterList={setFilterList}/>
+          <SearchInput onChange={handleSearchInputChange} />
+        </div>
       </GridItemHeader>
+      {filterList.length > 0 && <FilterHeader  filterList={filterList} setFilterList={setFilterList} />}
       <DataTable rows={rows} columns={[]} {...props} />
     </>
   );
