@@ -149,7 +149,7 @@ exports.employeeCompetence = async ({
     reqSkills.json(),
     reqEmp.json(),
   ]);
-
+  const catMotivation = {};
   resMotivation.map((category) => {
     catMotivation[category.category] = category[uuidComp.slice(0,8)];
   })
