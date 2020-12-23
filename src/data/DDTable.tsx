@@ -79,7 +79,6 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
   }
 
   useEffect(()=>{
-    console.log("useEffect")
     searchAndFilter();
   },[filterList.length, searchBarInput])
 
