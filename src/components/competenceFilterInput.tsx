@@ -87,21 +87,19 @@ export default function CheckboxesTags(filters:{filterList:string[], setFilterLi
   const alterFilterList = (skill:string) => {
     const index = filterList.indexOf(skill, 0);
     index > -1 ? setFilterList(filterList.filter(filter => filter !== skill)) : setFilterList([...filterList, skill])
-    console.log(filterList)
   }
   const classes = useStyles();
   return (
     <Autocomplete
       disableClearable
-      forcePopupIcon={false}
       multiple
       autoComplete
-      autoSelect
       id="kompetansefilter"
       options={categoriesWithGroup}
       disableCloseOnSelect
       groupBy={(option) => option.category}
       getOptionLabel={(options) => options.skill}
+      getOptionSelected={(option, value) => option.skill === value.skill}
       noOptionsText={'No options'}
       renderOption={(options) => (
         <div className={classes.option} onClick = {() => alterFilterList(options.skill)}>
@@ -114,7 +112,7 @@ export default function CheckboxesTags(filters:{filterList:string[], setFilterLi
       )}
       renderInput={(params) => (
         <div ref={params.InputProps.ref}>
-          <InputBase type="text" {...params.inputProps} className={classes.input} placeholder="Filtrer på kompetanse..."  endAdornment={<FilterListIcon/>}/>
+          <InputBase type="text" {...params.inputProps} className={classes.input} placeholder="Filtrer på motivasjon..."  endAdornment={<FilterListIcon/>}/>
         </div>
       )}
     />
