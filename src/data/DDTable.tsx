@@ -40,8 +40,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
   const searchAndFilter = () => {
     const filterLength = filterList.length
     if ((!searchBarInput || searchBarInput.length <= 2) && filterLength === 0) {
-      if (rows.length !== allRows.length) return
-      setRows(allRows);
+      if (rows.length !== allRows.length) setRows(allRows);
       return;
     }
     const lowerCaseSearchTerm = searchBarInput?.toLowerCase();
