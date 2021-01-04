@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+import Info from './Info';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -59,10 +60,13 @@ export function GridItemHeader({
 
   return (
     <div className={[classes.gridHeaderRoot, headerHeight].join(' ')}>
-      <h3 className={[classes.gridHeaderTitle, fontSize].join(' ')}>
-        {title}
-        {big}
-      </h3>
+      <Grid container direction='row' alignItems='center'>
+        <h3 className={[classes.gridHeaderTitle, fontSize].join(' ')}>
+          {title}
+          {big}
+        </h3>
+        <Info/>
+      </Grid>
       {children}
     </div>
   );
