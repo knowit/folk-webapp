@@ -39,26 +39,25 @@ const useStyles = makeStyles({
     fontSize: '16px',
     lineHeight: '18px',
     backgroundColor: 'white',
-    border:'none',
-    padding:'0px 15px 0px 15px',
+    border: 'none',
+    padding: '0px 15px 0px 15px',
     '&:hover, &:focus, &:active': {
       outline: 0,
     },
   },
-  option:{
-    fontSize:'14px',
+  option: {
+    fontSize: '14px',
     width: '100%',
     margin: 0,
-    color:'#000000',
+    color: '#000000',
   },
-  checkbox:{
-    color:'black',
-    '&:checked':{
-      color:'black',
+  checkbox: {
+    color: 'black',
+    '&:checked': {
+      color: 'black',
     },
   },
 });
-
 
 function useCategories() {
   const [categories] = useFetchedData<CategoryList[]>({
@@ -123,17 +122,26 @@ export default function CheckboxesTags({
       getOptionSelected={(option, value) => option.skill === value.skill}
       noOptionsText={'No options'}
       renderOption={(options) => (
-        <div className={classes.option} onClick = {() => alterFilterList(options.skill)}>
+        <div
+          className={classes.option}
+          onClick={() => alterFilterList(options.skill)}
+        >
           <StyledCheckBox
             className={classes.checkbox}
-            checked={filterList.indexOf(options.skill, 0)> -1}
+            checked={filterList.indexOf(options.skill, 0) > -1}
           />
           {options.skill}
         </div>
       )}
       renderInput={(params) => (
         <div ref={params.InputProps.ref}>
-          <InputBase type="text" {...params.inputProps} className={classes.input} placeholder="Filtrer på motivasjon..."  endAdornment={<FilterListIcon/>}/>
+          <InputBase
+            type="text"
+            {...params.inputProps}
+            className={classes.input}
+            placeholder="Filtrer på motivasjon..."
+            endAdornment={<FilterListIcon />}
+          />
         </div>
       )}
     />
