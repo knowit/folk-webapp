@@ -1,7 +1,7 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { Dispatch, SetStateAction } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
-
+import { Action } from '../data/DDTable';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -69,18 +69,34 @@ const RemoveAllTag = (onDelete:{onDelete:()=>void})=> {
       <span>Fjern alle</span>
     </div>
   );
-}
-  
-export function FilterHeader(filters:{filterList:string[], setFilterList:Dispatch<SetStateAction<string[]>>}) {
+};
+
+export function FilterHeader({
+  filterList,
+  dispatch,
+  allRows,
+  searchableColumns,
+}: {
+  filterList: string[];
+  dispatch: Dispatch<Action>;
+  allRows: any[];
+  searchableColumns: [string, number][];
+}) {
   const classes = useStyles();
-  const filterList = filters.filterList
-  const setFilterList = filters.setFilterList
-  
+
   return (
     <div className={classes.gridHeaderRoot}>
-      {filterList.length >1 && <RemoveAllTag onDelete={()=> setFilterList([])}/>}
-      {filterList.map(skill =>(
-        <Tag key={skill} label = {skill} onDelete={()=> setFilterList(filterList.filter(filter => filter !== skill))}/>
+      {filterList.length > 1 && (
+        <RemoveAllTag onDelete={() => dispatch({type:'CLEAR_MOTIVATION_FILTER', allRows, searchableColumns})} />
+      )}
+      {filterList.map((skill) => (
+        <Tag
+          key={skill}
+          label={skill}
+          onDelete={() =>
+            dispatch({type:'REMOVE_FROM_MOTIVATION_FILTER', filter:skill, allRows, searchableColumns})
+          }
+        />
       ))}
     </div>
     );
