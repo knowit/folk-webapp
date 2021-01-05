@@ -7,7 +7,7 @@ import { useFetchedData } from '../hooks/service';
 import { makeStyles } from '@material-ui/core/styles';
 import { InputBase, withStyles } from '@material-ui/core';
 import FilterListIcon from '@material-ui/icons/FilterList';
-
+import { Action } from '../data/DDTable';
 
 const StyledCheckBox = withStyles(() => ({
   root: {
@@ -26,6 +26,7 @@ interface CategoryList {
   category: string;
   subCategories: string[];
 }
+
 type CategoriesWithGroup = {
   skill: string;
   category: string;
@@ -79,15 +80,35 @@ function useCategories() {
   }
 }
 
-export default function CheckboxesTags(filters:{filterList:string[], setFilterList:Dispatch<SetStateAction<string[]>>}) {
-  const filterList = filters.filterList
-  const setFilterList = filters.setFilterList
+export default function CheckboxesTags({
+  filterList,
+  dispatch,
+  allRows,
+  searchableColumns,
+}: {
+  filterList: string[];
+  dispatch: Dispatch<Action>;
+  allRows: any[];
+  searchableColumns: [string, number][];
+}) {
   const categoriesWithGroup = useCategories();
 
-  const alterFilterList = (skill:string) => {
+  const alterFilterList = (skill: string) => {
     const index = filterList.indexOf(skill, 0);
-    index > -1 ? setFilterList(filterList.filter(filter => filter !== skill)) : setFilterList([...filterList, skill])
-  }
+    index > -1
+      ? dispatch({
+          type: 'REMOVE_FROM_MOTIVATION_FILTER',
+          filter: skill,
+          allRows,
+          searchableColumns,
+        })
+      : dispatch({
+          type: 'ADD_TO_MOTIVATION_FILTER',
+          filter: skill,
+          allRows,
+          searchableColumns,
+        });
+  };
   const classes = useStyles();
   return (
     <Autocomplete
