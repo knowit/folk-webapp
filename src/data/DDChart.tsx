@@ -94,7 +94,7 @@ const SmallerIcon = withStyles((theme: Theme) => ({
   },
 }))(FullscreenExit);
 
-export default function DDChart({ payload, title, props }: DDComponentProps) {
+export default function DDChart({ payload, title, description, props }: DDComponentProps) {
   const { componentType, setNames, sets } = payload as {
     componentType: string;
     setNames: string[];
@@ -116,7 +116,7 @@ export default function DDChart({ payload, title, props }: DDComponentProps) {
     const altText = big ? 'Exit stor størrelse' : 'Utvid til stor størrelse';
     return (
       <>
-        <GridItemHeader title={title} big={big}>
+        <GridItemHeader title={title} description={description} big={big}>
           {setNamesLength > 1 ? (
             <DropdownPicker
               values={setNames}
