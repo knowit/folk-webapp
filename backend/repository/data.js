@@ -1,7 +1,15 @@
 const { getSecret, makeEmailUuid, range } = require('./util');
 const { v4: uuid } = require('uuid');
+const MOTIVATION_THRESHOLD = 4;
 
-
+/**
+ *  
+ * @param {string} uuidComp      A string of the uuid of the person.
+ * @param {number} threshold     The threshold (number between 0-5) for deciding whether a category should be put in the list or not.
+ * @param {object} resMotivation List of categories. In each category there is a list of uuids, and their motivation on a scale from 0-5.
+ * 
+ * @return {object} List of all categories where the motivation is higher than the threshold 
+ */
 const getThisEmployeeMotivationList = ( uuidComp, threshold, resMotivation) => { 
   const motivationList = [];
   resMotivation.forEach( category => {
@@ -16,6 +24,7 @@ exports.projectStatus = async ({ dataplattformClient }) => {
       reportName: 'projectStatus',
     }),
     dataplattformClient.report({
+      //Henter ut rapport med alles data fra motivasjon 
       reportName: 'employeeMotivation',
     })
   ]);
@@ -41,7 +50,7 @@ exports.projectStatus = async ({ dataplattformClient }) => {
       employee.title,
       0,
       { value: null, status: null },
-      getThisEmployeeMotivationList(makeEmailUuid(employee.email, salt), 3, resMotivation)
+      getThisEmployeeMotivationList(makeEmailUuid(employee.email, salt), MOTIVATION_THRESHOLD, resMotivation)
     ],
   }));
 };
@@ -89,7 +98,7 @@ exports.competence = async ({ dataplattformClient }) => {
           employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
         ])
       ),
-      getThisEmployeeMotivationList(makeEmailUuid(employee.email, salt), 3, resMotivation)
+      getThisEmployeeMotivationList(makeEmailUuid(employee.email, salt), MOTIVATION_THRESHOLD, resMotivation)
     ],
   }));
 };
