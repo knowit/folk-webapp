@@ -87,7 +87,6 @@ export default function Competence() {
       <DDItem
         url="/api/data/education"
         title="Utdannelse"
-        description="this is a sample text"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
