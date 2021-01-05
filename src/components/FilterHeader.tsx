@@ -15,11 +15,11 @@ const useStyles = makeStyles(() =>
       justifyContent: 'left',
       flexWrap: 'wrap',
     },
-    removeAllTag:{
+    removeAllTag: {
       padding: '1px 15px 1px 1px',
     },
-    skillTag:{
-      padding:'1px 1px 1px 15px',
+    skillTag: {
+      padding: '1px 1px 1px 15px',
     },
     tag: {
       display: 'flex',
@@ -32,11 +32,11 @@ const useStyles = makeStyles(() =>
       boxSizing: 'content-box',
       outline: 0,
       overflow: 'hidden',
-      '&:hover':{
+      '&:hover': {
         borderColor: 'rgb(250, 192, 177)',
         backgroundColor: '#fac0b11f',
       },
-      '&:span':{
+      '&:span': {
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
@@ -45,27 +45,40 @@ const useStyles = makeStyles(() =>
         fontSize: '12px',
         cursor: 'pointer',
         padding: '4px',
-      }
-    }
+      },
+    },
   })
 );
 
-
-const Tag =({ label, onDelete}:{label:string, onDelete:()=>void}) => {
+const Tag = ({ label, onDelete }: { label: string; onDelete: () => void }) => {
   const classes = useStyles();
-  return(
-    <div className = {[classes.tag,classes.skillTag].join(" ")}  onClick={onDelete} >
+  return (
+    <div
+      className={[classes.tag, classes.skillTag].join(' ')}
+      onClick={onDelete}
+    >
       <span>{label}</span>
-      <CloseIcon style={{height:'10px', width:'10px', marginLeft:'10px', marginBottom:'10px',  backgroundColor: '#e4e1db'}}/>
+      <CloseIcon
+        style={{
+          height: '10px',
+          width: '10px',
+          marginLeft: '10px',
+          marginBottom: '10px',
+          backgroundColor: '#e4e1db',
+        }}
+      />
     </div>
   );
-}
+};
 
-const RemoveAllTag = (onDelete:{onDelete:()=>void})=> {
+const RemoveAllTag = (onDelete: { onDelete: () => void }) => {
   const classes = useStyles();
-  return(
-    <div className = {[classes.tag,classes.removeAllTag].join(" ")}  onClick={onDelete.onDelete} >
-      <CloseIcon/> 
+  return (
+    <div
+      className={[classes.tag, classes.removeAllTag].join(' ')}
+      onClick={onDelete.onDelete}
+    >
+      <CloseIcon />
       <span>Fjern alle</span>
     </div>
   );
@@ -99,5 +112,5 @@ export function FilterHeader({
         />
       ))}
     </div>
-    );
-  }
+  );
+}
