@@ -1,5 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import { Action } from '../data/DDTable';
 
@@ -89,25 +89,45 @@ export function FilterHeader({
   dispatch,
   allRows,
   searchableColumns,
+  type,
 }: {
   filterList: string[];
   dispatch: Dispatch<Action>;
   allRows: any[];
   searchableColumns: [string, number][];
+  type: 'COMPETENCE' | 'MOTIVATION';
 }) {
   const classes = useStyles();
+  const dispatchRemove =
+    type === 'COMPETENCE'
+      ? 'REMOVE_FROM_COMPETENCE_FILTER'
+      : 'REMOVE_FROM_MOTIVATION_FILTER';
+  const dispatchClear =
+    type === 'COMPETENCE'
+      ? 'CLEAR_COMPETENCE_FILTER'
+      : 'CLEAR_MOTIVATION_FILTER';
 
   return (
     <div className={classes.gridHeaderRoot}>
+      <b>{type === 'COMPETENCE' ? 'Kompetansefilter' : 'Motivasjonsfilter'}:  </b>
       {filterList.length > 1 && (
-        <RemoveAllTag onDelete={() => dispatch({type:'CLEAR_MOTIVATION_FILTER', allRows, searchableColumns})} />
+        <RemoveAllTag
+          onDelete={() =>
+            dispatch({ type: dispatchClear, allRows, searchableColumns })
+          }
+        />
       )}
       {filterList.map((skill) => (
         <Tag
           key={skill}
           label={skill}
           onDelete={() =>
-            dispatch({type:'REMOVE_FROM_MOTIVATION_FILTER', filter:skill, allRows, searchableColumns})
+            dispatch({
+              type: dispatchRemove,
+              filter: skill,
+              allRows,
+              searchableColumns,
+            })
           }
         />
       ))}

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useReducer } from 'react';
 import { GridItemHeader } from '../components/GridItem';
 import { FilterHeader } from '../components/FilterHeader';
 import DataTable from './components/table/DataTable';
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
     flexDirection: 'row',
     display: 'flex',
     justifyContent: 'space-around',
-    width: '600px',
+    width: '900px',
   },
 });
 
@@ -257,10 +257,18 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
       <GridItemHeader title={title}>
         <div className={classes.searchBars}>
           <CompetenceFilterInput
+            filterList={state.competenceFilter}
+            dispatch={dispatch}
+            allRows={allRows}
+            searchableColumns={searchableColumn}
+            type = 'COMPETENCE'
+          />
+          <CompetenceFilterInput
             filterList={state.motivationFilter}
             dispatch={dispatch}
             allRows={allRows}
             searchableColumns={searchableColumn}
+            type = 'MOTIVATION'
           />
           <SearchInput
             dispatch={dispatch}
@@ -269,12 +277,22 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
           />
         </div>
       </GridItemHeader>
+      {state.competenceFilter.length > 0 && (
+        <FilterHeader
+          filterList={state.competenceFilter}
+          dispatch={dispatch}
+          allRows={allRows}
+          searchableColumns={searchableColumn}
+          type = 'COMPETENCE'
+        />
+      )}
       {state.motivationFilter.length > 0 && (
         <FilterHeader
           filterList={state.motivationFilter}
           dispatch={dispatch}
           allRows={allRows}
           searchableColumns={searchableColumn}
+          type = 'MOTIVATION'
         />
       )}
       <DataTable rows={state.rows} columns={[]} {...props} />

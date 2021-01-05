@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch } from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useFetchedData } from '../hooks/service';
@@ -84,25 +84,28 @@ export default function CheckboxesTags({
   dispatch,
   allRows,
   searchableColumns,
+  type
 }: {
   filterList: string[];
   dispatch: Dispatch<Action>;
   allRows: any[];
   searchableColumns: [string, number][];
+  type: 'COMPETENCE' | 'MOTIVATION'
 }) {
   const categoriesWithGroup = useCategories();
-
+  const dispatchRemove = type === 'COMPETENCE' ? 'REMOVE_FROM_COMPETENCE_FILTER' : 'REMOVE_FROM_MOTIVATION_FILTER'
+  const dispatchAdd = type === 'COMPETENCE' ? 'ADD_TO_COMPETENCE_FILTER' : 'ADD_TO_MOTIVATION_FILTER'
   const alterFilterList = (skill: string) => {
     const index = filterList.indexOf(skill, 0);
     index > -1
       ? dispatch({
-          type: 'REMOVE_FROM_MOTIVATION_FILTER',
+          type: dispatchRemove,
           filter: skill,
           allRows,
           searchableColumns,
         })
       : dispatch({
-          type: 'ADD_TO_MOTIVATION_FILTER',
+          type: dispatchAdd,
           filter: skill,
           allRows,
           searchableColumns,
@@ -114,7 +117,7 @@ export default function CheckboxesTags({
       disableClearable
       multiple
       autoComplete
-      id="kompetansefilter"
+      id={type}
       options={categoriesWithGroup}
       disableCloseOnSelect
       groupBy={(option) => option.category}
@@ -139,7 +142,7 @@ export default function CheckboxesTags({
             type="text"
             {...params.inputProps}
             className={classes.input}
-            placeholder="Filtrer på motivasjon..."
+            placeholder={type === 'COMPETENCE'? "Filtrer på kompetanse..":"Filtrer på motivasjon..."}
             endAdornment={<FilterListIcon />}
           />
         </div>
