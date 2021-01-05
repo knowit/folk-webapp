@@ -168,7 +168,14 @@ function reducer(currentState: RowStates, action: Action) {
       };
     case 'CHANGE_SEARCH_TERM':
       return {
-        rows: currentState.rows,
+        rows: searchAndFilter(
+          currentState.rows,
+          currentState.motivationFilter,
+          currentState.competenceFilter,
+          action.searchTerm,
+          action.allRows,
+          action.searchableColumns
+        ),
         motivationFilter: currentState.motivationFilter,
         competenceFilter: currentState.competenceFilter,
         searchTerm: action.searchTerm,
