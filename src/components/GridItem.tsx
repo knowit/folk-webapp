@@ -45,12 +45,14 @@ const useStyles = makeStyles(() =>
 
 interface GridItemHeaderProps {
   title: string;
+  description?: string;
   children?: React.ReactNode | React.ReactNode[];
   big?: boolean;
 }
 
 export function GridItemHeader({
   title,
+  description,
   children = null,
   big,
 }: GridItemHeaderProps) {
@@ -65,7 +67,7 @@ export function GridItemHeader({
           {title}
           {big}
         </h3>
-        <Info/>
+        <Info description={description}/>
       </Grid>
       {children}
     </div>

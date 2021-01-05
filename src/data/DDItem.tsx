@@ -25,6 +25,7 @@ function DDError({ error }: DDErrorProps) {
 export default function DDItem({
   url,
   title,
+  description,
   Component,
   SkeletonComponent,
   HeaderSkeletonComponent = () => (
@@ -48,7 +49,7 @@ export default function DDItem({
           </GridItemContent>
         </>
       ) : (
-        <Component payload={payload} title={title} props={dataComponentProps} />
+        <Component payload={payload} title={title} description={description} props={dataComponentProps} />
       )}
     </GridItem>
   );
