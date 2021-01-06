@@ -1,6 +1,7 @@
 const { getSecret, makeEmailUuid, range } = require('./util');
 const { v4: uuid } = require('uuid');
 const MOTIVATION_THRESHOLD = 4;
+const COMPETENCE_THRESHOLD = 3;
 
 /**
  *  
@@ -19,18 +20,23 @@ const getThisEmployeeMotivationList = ( uuidComp, threshold, resMotivation) => {
 }
 
 exports.projectStatus = async ({ dataplattformClient }) => {
-  const [reqProjectStatus, reqMotivation] = await Promise.all([
+  const [reqProjectStatus, reqMotivation, reqCompetence] = await Promise.all([
     dataplattformClient.report({
       reportName: 'projectStatus',
     }),
     dataplattformClient.report({
       //Henter ut rapport med alles data fra motivasjon 
       reportName: 'employeeMotivation',
+    }),
+    dataplattformClient.report({
+      //Henter ut rapport med alles data fra motivasjon 
+      reportName: 'employee_competence',
     })
   ]);
-  const [allEmployees, resMotivation] = await Promise.all([
+  const [allEmployees, resMotivation, resCompetence] = await Promise.all([
     reqProjectStatus.json(),
     reqMotivation.json(),
+    reqCompetence.json(),
   ]);
 
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
@@ -50,23 +56,29 @@ exports.projectStatus = async ({ dataplattformClient }) => {
       employee.title,
       0,
       { value: null, status: null },
-      getThisEmployeeMotivationList(makeEmailUuid(employee.email, salt), MOTIVATION_THRESHOLD, resMotivation)
+      getThisEmployeeMotivationList(makeEmailUuid(employee.email, salt), MOTIVATION_THRESHOLD, resMotivation),
+      getThisEmployeeMotivationList(makeEmailUuid(employee.email, salt), COMPETENCE_THRESHOLD, resCompetence),
     ],
   }));
 };
 
 exports.competence = async ({ dataplattformClient }) => {
-  const [reqCompetenceTable, reqMotivation] = await Promise.all([
+  const [reqCompetenceTable, reqMotivation, reqCompetence] = await Promise.all([
     dataplattformClient.report({
       reportName: 'competence',
     }),
     dataplattformClient.report({
       reportName: 'employeeMotivation',
+    }),
+    dataplattformClient.report({
+      //Henter ut rapport med alles data fra motivasjon 
+      reportName: 'employee_competence',
     })
   ]);
-  const [allEmployees, resMotivation] = await Promise.all([
+  const [allEmployees, resMotivation, resCompetence] = await Promise.all([
     reqCompetenceTable.json(),
     reqMotivation.json(),
+    reqCompetence.json(),
   ]);
 
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
@@ -98,7 +110,8 @@ exports.competence = async ({ dataplattformClient }) => {
           employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
         ])
       ),
-      getThisEmployeeMotivationList(makeEmailUuid(employee.email, salt), MOTIVATION_THRESHOLD, resMotivation)
+      getThisEmployeeMotivationList(makeEmailUuid(employee.email, salt), MOTIVATION_THRESHOLD, resMotivation),
+      getThisEmployeeMotivationList(makeEmailUuid(employee.email, salt), COMPETENCE_THRESHOLD, resCompetence),
     ],
   }));
 };

@@ -114,9 +114,8 @@ export default function CheckboxesTags({
   const classes = useStyles();
   return (
     <Autocomplete
-      disableClearable
+     // disableClearable
       multiple
-      autoComplete
       id={type}
       options={categoriesWithGroup}
       disableCloseOnSelect
