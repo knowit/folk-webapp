@@ -193,8 +193,9 @@ const searchAndFilter = (
   allRows: any[],
   searchableColumn: any[]
 ) => {
-  const filterLength = motivationFilter.length;
-  if ((!searchTerm || searchTerm.length <= 2) && filterLength === 0) {
+  const motFilterLength = motivationFilter.length;
+  const comFilterLength = competenceFilter.length;
+  if ((!searchTerm || searchTerm.length <= 2) && motFilterLength === 0 && comFilterLength === 0) {
     if (rows.length !== allRows.length) return allRows;
     return rows;
   }
@@ -213,21 +214,26 @@ const searchAndFilter = (
   });
 
   //if no filter, then skip filtering
-  if (filterLength === 0) {
+  if (motFilterLength === 0 && comFilterLength === 0) {
     return searchedRows;
   }
-
   const newRows: any[] = [];
 
   searchedRows.forEach((row) => {
     var passedFilters = 0;
     motivationFilter.forEach((skill) => {
+      const rowSkills = row.rowData[row.rowData.length - 2];
+      if (rowSkills?.indexOf(skill) !== -1 && rowSkills !== undefined) {
+        passedFilters++;
+      }
+    });
+    competenceFilter.forEach((skill) => {
       const rowSkills = row.rowData[row.rowData.length - 1];
       if (rowSkills?.indexOf(skill) !== -1 && rowSkills !== undefined) {
         passedFilters++;
       }
     });
-    passedFilters === filterLength && newRows.push(row);
+    passedFilters === (motFilterLength + comFilterLength) && newRows.push(row);
   });
   return newRows;
 };
