@@ -57,6 +57,9 @@ const useStyles = makeStyles({
       color: 'black',
     },
   },
+  auto:{
+    paddingRight:'10px',
+  }
 });
 
 function useCategories() {
@@ -112,9 +115,11 @@ export default function CheckboxesTags({
         });
   };
   const classes = useStyles();
+
   return (
     <Autocomplete
       multiple
+      className={classes.auto}
       id={type}
       options={categoriesWithGroup}
       disableCloseOnSelect
