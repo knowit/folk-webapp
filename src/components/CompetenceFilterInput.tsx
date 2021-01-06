@@ -114,7 +114,6 @@ export default function CheckboxesTags({
   const classes = useStyles();
   return (
     <Autocomplete
-     // disableClearable
       multiple
       id={type}
       options={categoriesWithGroup}
