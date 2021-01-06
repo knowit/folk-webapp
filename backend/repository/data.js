@@ -1,11 +1,49 @@
 const { getSecret, makeEmailUuid, range } = require('./util');
 const { v4: uuid } = require('uuid');
+const MOTIVATION_THRESHOLD = 4;
+const COMPETENCE_THRESHOLD = 3;
+
+/**
+ *
+ * @param {string} uuidComp      A string of the uuid of the person.
+ * @param {number} threshold     The threshold (number between 0-5) for deciding whether a category should be put in the list or not.
+ * @param {object} categoryList List of categories. In each category there is a list of uuids, and their motivation on a scale from 0-5.
+ *
+ * @return {object} List of all categories where the motivation is higher than the threshold
+ */
+const getThisEmployeeMotivationList = (uuidComp, threshold, categoryList) => {
+  const skillList = [];
+  categoryList.forEach((category) => {
+    const cat = category.category || category.categories; //name of categories is category for motivation and categories for competence
+    category[uuidComp] >= threshold && skillList.push(cat);
+  });
+
+  return skillList;
+};
 
 exports.projectStatus = async ({ dataplattformClient }) => {
-  const req = await dataplattformClient.report({
-    reportName: 'projectStatus',
+  const [reqProjectStatus, reqMotivation, reqCompetence] = await Promise.all([
+    dataplattformClient.report({
+      reportName: 'projectStatus',
+    }),
+    dataplattformClient.report({
+      //Henter ut rapport med alles data fra motivasjon
+      reportName: 'employeeMotivation',
+    }),
+    dataplattformClient.report({
+      //Henter ut rapport med alles data fra motivasjon
+      reportName: 'employee_competence',
+    }),
+  ]);
+  const [allEmployees, resMotivation, resCompetence] = await Promise.all([
+    reqProjectStatus.json(),
+    reqMotivation.json(),
+    reqCompetence.json(),
+  ]);
+
+  const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
+    encrypted: true,
   });
-  const allEmployees = await req.json();
 
   return allEmployees.map((employee) => ({
     rowId: uuid(),
@@ -20,15 +58,42 @@ exports.projectStatus = async ({ dataplattformClient }) => {
       employee.title,
       0,
       { value: null, status: null },
+      getThisEmployeeMotivationList(
+        makeEmailUuid(employee.email, salt).slice(0, 8),
+        MOTIVATION_THRESHOLD,
+        resMotivation
+      ),
+      getThisEmployeeMotivationList(
+        makeEmailUuid(employee.email, salt),
+        COMPETENCE_THRESHOLD,
+        resCompetence
+      ),
     ],
   }));
 };
 
 exports.competence = async ({ dataplattformClient }) => {
-  const req = await dataplattformClient.report({
-    reportName: 'competence',
+  const [reqCompetenceTable, reqMotivation, reqCompetence] = await Promise.all([
+    dataplattformClient.report({
+      reportName: 'competence',
+    }),
+    dataplattformClient.report({
+      reportName: 'employeeMotivation',
+    }),
+    dataplattformClient.report({
+      //Henter ut rapport med alles data fra motivasjon
+      reportName: 'employee_competence',
+    }),
+  ]);
+  const [allEmployees, resMotivation, resCompetence] = await Promise.all([
+    reqCompetenceTable.json(),
+    reqMotivation.json(),
+    reqCompetence.json(),
+  ]);
+
+  const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
+    encrypted: true,
   });
-  const allEmployees = await req.json();
 
   const cvs = [
     ['no', 'pdf'],
@@ -54,6 +119,16 @@ exports.competence = async ({ dataplattformClient }) => {
           `${lang}_${format}`,
           employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
         ])
+      ),
+      getThisEmployeeMotivationList(
+        makeEmailUuid(employee.email, salt).slice(0, 8),
+        MOTIVATION_THRESHOLD,
+        resMotivation
+      ),
+      getThisEmployeeMotivationList(
+        makeEmailUuid(employee.email, salt),
+        COMPETENCE_THRESHOLD,
+        resCompetence
       ),
     ],
   }));
@@ -94,7 +169,7 @@ exports.employeeCompetence = async ({
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   });
-  const uuid = makeEmailUuid(email, salt);
+  const uuidComp = makeEmailUuid(email, salt);
 
   const [reqMotivation, reqSkills, reqEmp] = await Promise.all([
     dataplattformClient.report({
@@ -115,10 +190,9 @@ exports.employeeCompetence = async ({
     reqEmp.json(),
   ]);
   const catMotivation = {};
-
   resMotivation.map((category) => {
-    catMotivation[category.category] = category[uuid.slice(0,8)];
-  })
+    catMotivation[category.category] = category[uuidComp.slice(0, 8)];
+  });
 
   const mapTags = (skills) => {
     const mappedSkills = skills && skills.length > 0 ? skills[0] : {};
@@ -239,18 +313,18 @@ function setInGroups(list) {
     { years: '3 til 5 år', count: 0 },
     { years: '6 til 10 år', count: 0 },
     { years: 'over 10 år', count: 0 },
-  ]
+  ];
 
   list.forEach((item) => {
     const years = Number(item.years);
     const count = Number(item.count);
-    if (years === 0){
+    if (years === 0) {
       detailedGroupedList[0].count += count;
       groupedList[0].count += count;
-    }else if (years === 1) {
+    } else if (years === 1) {
       detailedGroupedList[0].count += count;
       groupedList[1].count += count;
-    }else if (years === 2) {
+    } else if (years === 2) {
       detailedGroupedList[1].count += count;
       groupedList[1].count += count;
     } else if (years > 2 && years < 6) {
@@ -347,6 +421,43 @@ exports.education = async ({ dataplattformClient }) => {
   };
 };
 
+/** This exports a lits of all categories and subcategories for the 
+ * competence mapping. Its used to define the options in the 
+ * filter dropdown menu. 
+ */
+exports.competenceFilter = async ({dataplattformClient}) => {
+  const req = await dataplattformClient.report({
+    reportName: 'categories',
+  });
+  const categories = await req.json();
+    // Categories structure
+  const output = []
+  // Get the main categories
+  const mainCategories = new Set(
+    categories.flatMap(
+      item => Object.keys(item)
+    )
+  )
+  mainCategories.forEach(name => {
+    const categoryObject = {
+      "category": name,
+      "subCategories": []
+    }
+    
+    // Get child categories
+    categories.forEach(
+      item => {
+        const childName = item[name]
+        if (childName) {
+          categoryObject.subCategories.push(childName)
+        }
+      }
+    )
+    output.push(categoryObject)
+  })
+
+  return output;
+}
 
 exports.competenceMapping = async ({ dataplattformClient }) => {
   const [reqCategories, reqCompetence, reqMotivation] = await Promise.all([

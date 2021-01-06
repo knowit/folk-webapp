@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, useState } from 'react';
 import { InputBase, InputAdornment, Theme } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import { debounce } from 'underscore';
+import { Action } from '../data/DDTable';
 
-interface SearchInputProps {
-  onChange?: (newValue: string) => void;
-}
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -31,21 +28,23 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function SearchInput({
-  onChange = () => null,
-}: SearchInputProps) {
+  dispatch,
+  allRows,
+  searchableColumns,
+}: {
+  dispatch: Dispatch<Action>;
+  allRows: any[];
+  searchableColumns: [string, number][];
+}) {
   const classes = useStyles();
   const [val, setVal] = useState('');
 
   const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     setVal(event.target.value);
+    dispatch({type:'CHANGE_SEARCH_TERM', searchTerm:event.target.value, allRows, searchableColumns })
+    
   };
-
-  const debouncedOnChange = debounce(() => {
-    onChange(val);
-  }, 200);
-
-  useEffect(debouncedOnChange, [val, debouncedOnChange]);
 
   return (
     <>
