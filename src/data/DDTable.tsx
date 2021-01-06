@@ -195,7 +195,7 @@ const searchAndFilter = (
 ) => {
   const motFilterLength = motivationFilter.length;
   const comFilterLength = competenceFilter.length;
-  if ((!searchTerm || searchTerm.length <= 2) && motFilterLength === 0 && comFilterLength === 0) {
+  if (!searchTerm && motFilterLength === 0 && comFilterLength === 0) {
     if (rows.length !== allRows.length) return allRows;
     return rows;
   }

@@ -7,9 +7,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import { debounce } from 'underscore';
 import { Action } from '../data/DDTable';
 
-interface SearchInputProps {
-  onChange?: (newValue: string) => void;
-}
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -46,13 +43,9 @@ export default function SearchInput({
   const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     setVal(event.target.value);
+    dispatch({type:'CHANGE_SEARCH_TERM', searchTerm:event.target.value, allRows, searchableColumns })
     
   };
-  const debouncedOnChange = debounce(() => {
-    dispatch({type:'CHANGE_SEARCH_TERM', searchTerm:val, allRows, searchableColumns })
-  }, 200);
-
-  useEffect(debouncedOnChange, [val, debouncedOnChange]);
 
   return (
     <>
