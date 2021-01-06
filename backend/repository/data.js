@@ -4,20 +4,22 @@ const MOTIVATION_THRESHOLD = 4;
 const COMPETENCE_THRESHOLD = 3;
 
 /**
- *  
+ *
  * @param {string} uuidComp      A string of the uuid of the person.
  * @param {number} threshold     The threshold (number between 0-5) for deciding whether a category should be put in the list or not.
- * @param {object} resMotivation List of categories. In each category there is a list of uuids, and their motivation on a scale from 0-5.
- * 
- * @return {object} List of all categories where the motivation is higher than the threshold 
+ * @param {object} categoryList List of categories. In each category there is a list of uuids, and their motivation on a scale from 0-5.
+ *
+ * @return {object} List of all categories where the motivation is higher than the threshold
  */
-const getThisEmployeeMotivationList = ( uuidComp, threshold, resMotivation) => { 
-  const motivationList = [];
-  resMotivation.forEach( category => {
-    category[uuidComp.slice(0,8)] >= threshold && motivationList.push(category.category);
-  })
-  return motivationList
-}
+const getThisEmployeeMotivationList = (uuidComp, threshold, categoryList) => {
+  const skillList = [];
+  categoryList.forEach((category) => {
+    const cat = category.category || category.categories; //name of categories is category for motivation and categories for competence
+    category[uuidComp] >= threshold && skillList.push(cat);
+  });
+
+  return skillList;
+};
 
 exports.projectStatus = async ({ dataplattformClient }) => {
   const [reqProjectStatus, reqMotivation, reqCompetence] = await Promise.all([
@@ -25,13 +27,13 @@ exports.projectStatus = async ({ dataplattformClient }) => {
       reportName: 'projectStatus',
     }),
     dataplattformClient.report({
-      //Henter ut rapport med alles data fra motivasjon 
+      //Henter ut rapport med alles data fra motivasjon
       reportName: 'employeeMotivation',
     }),
     dataplattformClient.report({
-      //Henter ut rapport med alles data fra motivasjon 
+      //Henter ut rapport med alles data fra motivasjon
       reportName: 'employee_competence',
-    })
+    }),
   ]);
   const [allEmployees, resMotivation, resCompetence] = await Promise.all([
     reqProjectStatus.json(),
@@ -56,8 +58,16 @@ exports.projectStatus = async ({ dataplattformClient }) => {
       employee.title,
       0,
       { value: null, status: null },
-      getThisEmployeeMotivationList(makeEmailUuid(employee.email, salt), MOTIVATION_THRESHOLD, resMotivation),
-      getThisEmployeeMotivationList(makeEmailUuid(employee.email, salt), COMPETENCE_THRESHOLD, resCompetence),
+      getThisEmployeeMotivationList(
+        makeEmailUuid(employee.email, salt).slice(0, 8),
+        MOTIVATION_THRESHOLD,
+        resMotivation
+      ),
+      getThisEmployeeMotivationList(
+        makeEmailUuid(employee.email, salt),
+        COMPETENCE_THRESHOLD,
+        resCompetence
+      ),
     ],
   }));
 };
@@ -71,9 +81,9 @@ exports.competence = async ({ dataplattformClient }) => {
       reportName: 'employeeMotivation',
     }),
     dataplattformClient.report({
-      //Henter ut rapport med alles data fra motivasjon 
+      //Henter ut rapport med alles data fra motivasjon
       reportName: 'employee_competence',
-    })
+    }),
   ]);
   const [allEmployees, resMotivation, resCompetence] = await Promise.all([
     reqCompetenceTable.json(),
@@ -110,8 +120,16 @@ exports.competence = async ({ dataplattformClient }) => {
           employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
         ])
       ),
-      getThisEmployeeMotivationList(makeEmailUuid(employee.email, salt), MOTIVATION_THRESHOLD, resMotivation),
-      getThisEmployeeMotivationList(makeEmailUuid(employee.email, salt), COMPETENCE_THRESHOLD, resCompetence),
+      getThisEmployeeMotivationList(
+        makeEmailUuid(employee.email, salt).slice(0, 8),
+        MOTIVATION_THRESHOLD,
+        resMotivation
+      ),
+      getThisEmployeeMotivationList(
+        makeEmailUuid(employee.email, salt),
+        COMPETENCE_THRESHOLD,
+        resCompetence
+      ),
     ],
   }));
 };
@@ -173,8 +191,8 @@ exports.employeeCompetence = async ({
   ]);
   const catMotivation = {};
   resMotivation.map((category) => {
-    catMotivation[category.category] = category[uuidComp.slice(0,8)];
-  })
+    catMotivation[category.category] = category[uuidComp.slice(0, 8)];
+  });
 
   const mapTags = (skills) => {
     const mappedSkills = skills && skills.length > 0 ? skills[0] : {};
@@ -295,18 +313,18 @@ function setInGroups(list) {
     { years: '3 til 5 år', count: 0 },
     { years: '6 til 10 år', count: 0 },
     { years: 'over 10 år', count: 0 },
-  ]
+  ];
 
   list.forEach((item) => {
     const years = Number(item.years);
     const count = Number(item.count);
-    if (years === 0){
+    if (years === 0) {
       detailedGroupedList[0].count += count;
       groupedList[0].count += count;
-    }else if (years === 1) {
+    } else if (years === 1) {
       detailedGroupedList[0].count += count;
       groupedList[1].count += count;
-    }else if (years === 2) {
+    } else if (years === 2) {
       detailedGroupedList[1].count += count;
       groupedList[1].count += count;
     } else if (years > 2 && years < 6) {
