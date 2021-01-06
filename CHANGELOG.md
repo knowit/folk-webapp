@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 ## [1.0.2] - 2021-01-06
 ### Added
 - Filtering on competence from the competence mapping
-- Filtering on motivation from the motivation mapping
+- Filtering on motivation from the competence mapping
 
 ## [1.0.1] - 2020-12-11
 ### Added
