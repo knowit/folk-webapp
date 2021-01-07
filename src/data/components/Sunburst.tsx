@@ -15,10 +15,14 @@ interface SunburstChartsProps {
 }
 
 const CustomTooltip = ({ id, value }: NormalizedDatum<unknown>) => (
-  <strong>
-    {id}: {value.toFixed(2)}
-  </strong>
+  <p>
+    {id}: <b>{value.toFixed(2)}</b>
+  </p>
 );
+
+const averageValue = (value:number) => {
+  
+}
 
 export default function Sunburst({
   data,
