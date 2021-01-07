@@ -14,6 +14,12 @@ interface SunburstChartsProps {
   big?: boolean;
 }
 
+const CustomTooltip = ({ id, value }: NormalizedDatum<unknown>) => (
+  <strong>
+    {id}: {value.toFixed(2)}
+  </strong>
+);
+
 export default function Sunburst({
   data,
   groupKey = 'kategori',
@@ -36,6 +42,7 @@ export default function Sunburst({
         motionStiffness={90}
         motionDamping={15}
         isInteractive
+        tooltip={CustomTooltip}
       />
     </div>
   );
