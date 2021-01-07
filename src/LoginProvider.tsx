@@ -1,7 +1,7 @@
 import React, { useEffect, createContext, useContext } from 'react';
 import { useCookies } from 'react-cookie';
 import { useFetchedData } from './hooks/service';
-import { AuthContext } from './authToken';
+import { AuthContext, renewToken } from './authToken';
 
 interface UserInfo {
   name?: string;
@@ -32,7 +32,14 @@ const UserInfoProvider = ({
 export default function LoginProvider({
   children,
 }: React.PropsWithChildren<React.ReactNode>) {
-  const [cookies] = useCookies();
+  const [cookies, setCookie] = useCookies([]);
+
+  if(cookies.accessToken && cookies.refreshToken) {
+    setInterval(async () => {
+      const renewedAccessToken = await renewToken(cookies.accessToken, cookies.refreshToken);
+      if(renewedAccessToken) setCookie('accessToken', renewedAccessToken);
+    }, 600000);
+  }
 
   return cookies.accessToken ? (
     <AuthContext.Provider value={cookies.accessToken}>
