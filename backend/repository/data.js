@@ -494,10 +494,13 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
     mainCategories.forEach(name => {
       const categoryObject = {
         "kategori": name,
+        "verdi": 0,
         "children": []
       }
       
       // Get child categories
+      var sumOfCategories = 0;
+      var numOfCategories = 0
       categories.forEach(
         item => {
           const childName = item[name]
@@ -508,12 +511,14 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
               "kategori": childName,
               "verdi": value
             }
-
+            sumOfCategories += value;
+            numOfCategories += 1;
             categoryObject.children.push(childCategoryObject)
           }
         }
       )
       
+      categoryObject.verdi = sumOfCategories / numOfCategories
       output.children.push(categoryObject)
     })
 

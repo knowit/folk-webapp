@@ -20,8 +20,17 @@ const CustomTooltip = ({ id, value }: NormalizedDatum<unknown>) => (
   </p>
 );
 
-const averageValue = (value:number) => {
-  
+const GetCorrectValue=(node:NormalizedDatum<unknown>)=>{
+  if(node.children && node["kategori"] !== "kompetansekartlegging"){
+    var sumValue = 0
+    node.children.forEach((child) => {
+      sumValue += child["verdi"]
+    })
+    return node["verdi"] - sumValue
+  }else{
+    console.log(node)
+  }
+  return node["verdi"]
 }
 
 export default function Sunburst({
@@ -37,7 +46,6 @@ export default function Sunburst({
         data={data}
         margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
         identity={groupKey}
-        value={valueKey}
         cornerRadius={2}
         borderWidth={1}
         borderColor="white"
@@ -46,6 +54,7 @@ export default function Sunburst({
         motionStiffness={90}
         motionDamping={15}
         isInteractive
+        value={GetCorrectValue}
         tooltip={CustomTooltip}
       />
     </div>
