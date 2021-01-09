@@ -554,6 +554,7 @@ exports.competenceAndMotivationMapping = async ({ dataplattformClient }) => {
 
     const output = [];
 
+    // Get the main categories
     const mainCategories = new Set(
       categories.flatMap(
         item => Object.keys(item)
@@ -566,6 +567,7 @@ exports.competenceAndMotivationMapping = async ({ dataplattformClient }) => {
         [valueKey]: 0
       }
 
+      // The sum of the subcategories to represent the entire category
       let categorySum = 0;
 
       categories.forEach(
@@ -588,6 +590,7 @@ exports.competenceAndMotivationMapping = async ({ dataplattformClient }) => {
   const comArr = setCategories(competence, 'kompetanse');
   const motArr = setCategories(motivation, 'motivasjon');
 
+  // Merges the two arrays on the same category
   const mergedArrs = comArr.map(i => {
     const found = motArr.find(j => j.kategori === i.kategori);
     found['kompetanse'] = i.kompetanse;
@@ -596,9 +599,9 @@ exports.competenceAndMotivationMapping = async ({ dataplattformClient }) => {
 
   return {
     componentType: 'Radar',
-    setNames: ['Kategori'],
+    setNames: ['Kompetanse og motivasjon'],
     sets: {
-      Kategori: mergedArrs
+      'Kompetanse og motivasjon': mergedArrs
     },
   };
 };
