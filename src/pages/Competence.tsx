@@ -107,7 +107,7 @@ export default function Competence() {
       />
 
       <DDItem
-        url="/api/data/competenceMappingRadar"
+        url="/api/data/competenceAndMotivationMapping"
         title="Radar Chart"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}

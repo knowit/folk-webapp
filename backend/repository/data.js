@@ -530,7 +530,7 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
   };
 };
 
-exports.competenceMappingRadar = async ({ dataplattformClient }) => {
+exports.competenceAndMotivationMapping = async ({ dataplattformClient }) => {
 
   const [reqCategories, reqCompetence, reqMotivation] = await Promise.all([
     dataplattformClient.report({
@@ -550,7 +550,7 @@ exports.competenceMappingRadar = async ({ dataplattformClient }) => {
     reqMotivation.json(),
   ]);
 
-  const competenceCategories = (data, valueKey) => {
+  const setCategories = (data, valueKey) => {
 
     const output = [];
 
@@ -585,8 +585,8 @@ exports.competenceMappingRadar = async ({ dataplattformClient }) => {
     return output;
   };
 
-  const comArr = competenceCategories(competence, 'kompetanse');
-  const motArr = competenceCategories(motivation, 'motivasjon');
+  const comArr = setCategories(competence, 'kompetanse');
+  const motArr = setCategories(motivation, 'motivasjon');
 
   const mergedArrs = comArr.map(i => {
     const found = motArr.find(j => j.kategori === i.kategori);

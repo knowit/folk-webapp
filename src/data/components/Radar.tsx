@@ -35,7 +35,7 @@ export default function Radar({
         borderWidth={2}
         gridLevels={5}
         gridShape="circular"
-        gridLabelOffset={20}
+        gridLabelOffset={30}
         enableDots={true}
         dotSize={10}
         dotColor={{ theme: 'background' }}
@@ -59,7 +59,7 @@ export default function Radar({
           {
               anchor: 'bottom',
               direction: 'row',
-              translateY: -50,
+              translateY: -48,
               itemWidth: 80,
               itemHeight: 20,
               itemTextColor: '#999',
