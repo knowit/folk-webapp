@@ -107,6 +107,13 @@ export default function Competence() {
       />
 
       <DDItem
+        url="/api/data/competenceMappingRadar"
+        title="Radar Chart"
+        Component={DDChart}
+        SkeletonComponent={ChartSkeleton}
+      />
+
+      <DDItem
         url="/api/data/competence"
         title="Konsulentkompetanse"
         fullSize

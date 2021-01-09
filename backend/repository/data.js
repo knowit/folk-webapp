@@ -529,3 +529,76 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
     },
   };
 };
+
+exports.competenceMappingRadar = async ({ dataplattformClient }) => {
+
+  const [reqCategories, reqCompetence, reqMotivation] = await Promise.all([
+    dataplattformClient.report({
+      reportName: 'categories',
+    }),
+    dataplattformClient.report({
+      reportName: 'competenceAverage',
+    }),
+    dataplattformClient.report({
+      reportName: 'motivationAverage',
+    }),
+  ]);
+
+  const [categories, competence, motivation] = await Promise.all([
+    reqCategories.json(),
+    reqCompetence.json(),
+    reqMotivation.json(),
+  ]);
+
+  const competenceCategories = (data, valueKey) => {
+
+    const output = [];
+
+    const mainCategories = new Set(
+      categories.flatMap(
+        item => Object.keys(item)
+      )
+    );
+
+    mainCategories.forEach(name => {
+      const categoryObject = {
+        kategori: name,
+        [valueKey]: 0
+      }
+
+      let categorySum = 0;
+
+      categories.forEach(
+        item => {
+          const childName = item[name]
+          if (childName) {
+            const value = data[0][childName.toLowerCase()] || null
+            categorySum += value;
+          }
+        }
+      );
+
+      categoryObject[valueKey] = categorySum;
+      output.push(categoryObject);
+    });
+
+    return output;
+  };
+
+  const comArr = competenceCategories(competence, 'kompetanse');
+  const motArr = competenceCategories(motivation, 'motivasjon');
+
+  const mergedArrs = comArr.map(i => {
+    const found = motArr.find(j => j.kategori === i.kategori);
+    found['kompetanse'] = i.kompetanse;
+    return found;
+  });
+
+  return {
+    componentType: 'Radar',
+    setNames: ['Kategori'],
+    sets: {
+      Kategori: mergedArrs
+    },
+  };
+};
