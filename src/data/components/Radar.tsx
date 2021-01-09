@@ -41,7 +41,7 @@ export default function Radar({
         dotColor={{ theme: 'background' }}
         dotBorderWidth={2}
         enableDotLabel={true}
-        dotLabel="value"
+        dotLabel = { props => props.value.toFixed(1) }
         dotLabelYOffset={-12}
         colors={RadarChartColors}
         fillOpacity={0.25}
@@ -49,6 +49,24 @@ export default function Radar({
         animate={true}
         motionConfig="wobbly"
         isInteractive={true}
+        tooltipFormat = {
+          value => 
+          `${Number(value).toLocaleString('no-NO', {
+            maximumFractionDigits: 2
+          })}`
+        }
+        legends={[
+          {
+              anchor: 'bottom',
+              direction: 'row',
+              translateY: -50,
+              itemWidth: 80,
+              itemHeight: 20,
+              itemTextColor: '#999',
+              symbolSize: 12,
+              symbolShape: 'circle'
+          }
+      ]}
       />
     </div>
   );
