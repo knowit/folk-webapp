@@ -500,7 +500,6 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
       
       // Get child categories
       var sumOfCategories = 0;
-      var numOfCategories = 0
       categories.forEach(
         item => {
           const childName = item[name]
@@ -512,12 +511,13 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
               "verdi": value
             }
             sumOfCategories += value;
-            numOfCategories += 1;
             categoryObject.children.push(childCategoryObject)
           }
         }
       )
-      const avgValue = sumOfCategories / numOfCategories
+
+      
+      const avgValue = sumOfCategories / categoryObject.children.length
       categoryObject.children.forEach(child => {
         child.size = (child.verdi/sumOfCategories) * avgValue
       })
