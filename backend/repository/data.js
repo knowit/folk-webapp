@@ -530,7 +530,7 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
   };
 };
 
-exports.competenceAndMotivationMapping = async ({ dataplattformClient }) => {
+exports.competenceAmount = async ({ dataplattformClient }) => {
 
   const [reqCategories, reqCompetence, reqMotivation] = await Promise.all([
     dataplattformClient.report({
@@ -562,25 +562,31 @@ exports.competenceAndMotivationMapping = async ({ dataplattformClient }) => {
     );
 
     mainCategories.forEach(name => {
+
       const categoryObject = {
         kategori: name,
         [valueKey]: 0
       }
 
-      // The sum of the subcategories to represent the entire category
+      // Sum of subcategories values
       let categorySum = 0;
+      // Number of subcategories
+      let numberOfSubCategories = 0;
 
       categories.forEach(
         item => {
           const childName = item[name]
           if (childName) {
+            console.log(' -' + childName);
             const value = data[0][childName.toLowerCase()] || null
             categorySum += value;
+            numberOfSubCategories++;
           }
         }
       );
 
-      categoryObject[valueKey] = categorySum;
+      // Sets category value as the average
+      categoryObject[valueKey] = categorySum / numberOfSubCategories;
       output.push(categoryObject);
     });
 
@@ -599,9 +605,9 @@ exports.competenceAndMotivationMapping = async ({ dataplattformClient }) => {
 
   return {
     componentType: 'Radar',
-    setNames: ['Kompetanse og motivasjon'],
+    setNames: ['Kompetansemengde'],
     sets: {
-      'Kompetanse og motivasjon': mergedArrs
+      'Kompetansemengde': mergedArrs
     },
   };
 };

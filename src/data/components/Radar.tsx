@@ -29,7 +29,7 @@ export default function Radar({
         data={data}
         keys={valueKey}
         indexBy={groupKey}
-        maxValue="auto"
+        maxValue='5'
         margin={{ top: 50, right: 10, bottom: 50, left: 10 }}
         curve="linearClosed"
         borderWidth={2}
@@ -40,7 +40,7 @@ export default function Radar({
         dotSize={10}
         dotColor={{ theme: 'background' }}
         dotBorderWidth={2}
-        enableDotLabel={true}
+        enableDotLabel={false}
         dotLabel = { props => props.value.toFixed(1) }
         dotLabelYOffset={-12}
         colors={RadarChartColors}
@@ -66,7 +66,7 @@ export default function Radar({
               symbolSize: 12,
               symbolShape: 'circle'
           }
-      ]}
+        ]}
       />
     </div>
   );
