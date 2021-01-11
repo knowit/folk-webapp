@@ -14,10 +14,26 @@ interface SunburstChartsProps {
   big?: boolean;
 }
 
+const CustomTooltip = ({ id, value }: NormalizedDatum<unknown>) => (
+  <p>
+    {id}: <b>{value.toFixed(2)}</b>
+  </p>
+);
+
+const GetCorrectValue=(node:NormalizedDatum<unknown>)=>{
+  if(node.children){
+    const sumValue = node.children.reduce(getParentSize,0)
+    return node["verdi"] - sumValue
+  }
+  return node["size"]
+}
+function getParentSize(total, child) {
+  return total + child['size'];
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
 export default function Sunburst({
   data,
   groupKey = 'kategori',
-  valueKey = 'verdi',
   big,
 }: SunburstChartsProps) {
   const height = big ? '400px' : '300px';
@@ -27,7 +43,6 @@ export default function Sunburst({
         data={data}
         margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
         identity={groupKey}
-        value={valueKey}
         cornerRadius={2}
         borderWidth={1}
         borderColor="white"
@@ -36,6 +51,8 @@ export default function Sunburst({
         motionStiffness={90}
         motionDamping={15}
         isInteractive
+        value={GetCorrectValue}
+        tooltip={CustomTooltip}
       />
     </div>
   );
