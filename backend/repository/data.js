@@ -577,7 +577,6 @@ exports.competenceAmount = async ({ dataplattformClient }) => {
         item => {
           const childName = item[name]
           if (childName) {
-            console.log(' -' + childName);
             const value = data[0][childName.toLowerCase()] || null
             categorySum += value;
             numberOfSubCategories++;
