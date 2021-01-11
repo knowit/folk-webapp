@@ -21,14 +21,12 @@ export default function Competence() {
 
   return (
     <Grid container spacing={2}>
+
       <DDItem
-        url="/api/data/competenceSum"
+        url="/api/data/competenceAmount"
         title="Kompetansemengde"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
-        dataComponentProps={{
-          yLabels: [],
-        }}
       />
 
       <DDItem
@@ -104,13 +102,6 @@ export default function Competence() {
           dataKey: 'section',
           yLabels: ['value'],
         }}
-      />
-
-      <DDItem
-        url="/api/data/competenceAmount"
-        title="Kompetansemengde"
-        Component={DDChart}
-        SkeletonComponent={ChartSkeleton}
       />
 
       <DDItem
