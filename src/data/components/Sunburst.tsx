@@ -22,14 +22,14 @@ const CustomTooltip = ({ id, value }: NormalizedDatum<unknown>) => (
 
 const GetCorrectValue=(node:NormalizedDatum<unknown>)=>{
   if(node.children){
-    var sumValue = 0
-    node.children.forEach((child) => {
-      sumValue += child["size"]
-    })
+    const sumValue = node.children.reduce(getParentSize,0)
     return node["verdi"] - sumValue
   }
   return node["size"]
 }
+function getParentSize(total, child) {
+  return total + child['size'];
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 
 export default function Sunburst({
   data,
