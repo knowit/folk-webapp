@@ -21,22 +21,19 @@ const CustomTooltip = ({ id, value }: NormalizedDatum<unknown>) => (
 );
 
 const GetCorrectValue=(node:NormalizedDatum<unknown>)=>{
-  if(node.children && node["kategori"] !== "kompetansekartlegging"){
+  if(node.children){
     var sumValue = 0
     node.children.forEach((child) => {
-      sumValue += child["verdi"]
+      sumValue += child["size"]
     })
     return node["verdi"] - sumValue
-  }else{
-    console.log(node)
   }
-  return node["verdi"]
+  return node["size"]
 }
 
 export default function Sunburst({
   data,
   groupKey = 'kategori',
-  valueKey = 'verdi',
   big,
 }: SunburstChartsProps) {
   const height = big ? '400px' : '300px';

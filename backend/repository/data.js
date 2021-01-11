@@ -517,10 +517,15 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
           }
         }
       )
+      const avgValue = sumOfCategories / numOfCategories
+      categoryObject.children.forEach(child => {
+        child.size = (child.verdi/sumOfCategories) * avgValue
+      })
       
-      categoryObject.verdi = sumOfCategories / numOfCategories
+      categoryObject.verdi = avgValue
       output.children.push(categoryObject)
     })
+
 
     return output
   };
