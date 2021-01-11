@@ -99,8 +99,7 @@ export default function Competence() {
         url="/api/data/competenceMapping"
         title="Kompetansekartlegging"
         description="Grafen viser gjennomsnittlig score på
-        kompetanse/motivasjon innenfor hver av hovedkategoriene. I tillegg viser
-        gjennomsnittligs score for hver underkategori og forholdet mellom underkategoriene i samme hovedkategori"
+        kompetanse/motivasjon innenfor hver av hovedkategoriene. I tillegg vises gjennomsnittlig score for hver underkategori og forholdet mellom underkategoriene i samme hovedkategori."
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
