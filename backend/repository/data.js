@@ -539,3 +539,84 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
     },
   };
 };
+
+exports.competenceAmount = async ({ dataplattformClient }) => {
+
+  const [reqCategories, reqCompetence, reqMotivation] = await Promise.all([
+    dataplattformClient.report({
+      reportName: 'categories',
+    }),
+    dataplattformClient.report({
+      reportName: 'competenceAverage',
+    }),
+    dataplattformClient.report({
+      reportName: 'motivationAverage',
+    }),
+  ]);
+
+  const [categories, competence, motivation] = await Promise.all([
+    reqCategories.json(),
+    reqCompetence.json(),
+    reqMotivation.json(),
+  ]);
+
+  const setCategories = (data, valueKey) => {
+
+    const output = [];
+
+    // Get the main categories
+    const mainCategories = new Set(
+      categories.flatMap(
+        item => Object.keys(item)
+      )
+    );
+
+    mainCategories.forEach(name => {
+
+      const categoryObject = {
+        kategori: name,
+        [valueKey]: 0
+      }
+
+      // Sum of subcategories values
+      let categorySum = 0;
+      // Number of subcategories
+      let numberOfSubCategories = 0;
+
+      categories.forEach(
+        item => {
+          const childName = item[name]
+          if (childName) {
+            const value = data[0][childName.toLowerCase()] || null
+            categorySum += value;
+            numberOfSubCategories++;
+          }
+        }
+      );
+
+      // Sets category value as the average
+      categoryObject[valueKey] = categorySum / numberOfSubCategories;
+      output.push(categoryObject);
+    });
+
+    return output;
+  };
+
+  const comArr = setCategories(competence, 'kompetanse');
+  const motArr = setCategories(motivation, 'motivasjon');
+
+  // Merges the two arrays on the same category
+  const mergedArrs = comArr.map(i => {
+    const found = motArr.find(j => j.kategori === i.kategori);
+    found['kompetanse'] = i.kompetanse;
+    return found;
+  });
+
+  return {
+    componentType: 'Radar',
+    setNames: ['Kompetansemengde'],
+    sets: {
+      'Kompetansemengde': mergedArrs
+    },
+  };
+};

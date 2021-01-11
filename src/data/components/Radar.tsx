@@ -29,19 +29,19 @@ export default function Radar({
         data={data}
         keys={valueKey}
         indexBy={groupKey}
-        maxValue="auto"
+        maxValue='5'
         margin={{ top: 50, right: 10, bottom: 50, left: 10 }}
         curve="linearClosed"
         borderWidth={2}
         gridLevels={5}
         gridShape="circular"
-        gridLabelOffset={20}
+        gridLabelOffset={30}
         enableDots={true}
         dotSize={10}
         dotColor={{ theme: 'background' }}
         dotBorderWidth={2}
-        enableDotLabel={true}
-        dotLabel="value"
+        enableDotLabel={false}
+        dotLabel = { props => props.value.toFixed(1) }
         dotLabelYOffset={-12}
         colors={RadarChartColors}
         fillOpacity={0.25}
@@ -49,6 +49,24 @@ export default function Radar({
         animate={true}
         motionConfig="wobbly"
         isInteractive={true}
+        tooltipFormat = {
+          value => 
+          `${Number(value).toLocaleString('no-NO', {
+            maximumFractionDigits: 2
+          })}`
+        }
+        legends={[
+          {
+              anchor: 'bottom',
+              direction: 'row',
+              translateY: -48,
+              itemWidth: 80,
+              itemHeight: 20,
+              itemTextColor: '#999',
+              symbolSize: 12,
+              symbolShape: 'circle'
+          }
+        ]}
       />
     </div>
   );
