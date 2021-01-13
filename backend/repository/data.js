@@ -406,6 +406,145 @@ exports.faggrupper = async () => {
   };
 };
 
+const getEventSet = (earlyYear, lateYear, events) => {
+
+  const years = [];
+  for(let year = parseInt(earlyYear); year <= parseInt(lateYear); year++) years.push(year);
+  
+  const set = [];
+  years.map(year => set.push(
+    {
+      id: year,
+      data: [
+        {
+          x: 'Jan',
+          y: 0
+        },
+        {
+          x: 'Feb',
+          y: 0
+        },
+        {
+          x: 'Mar',
+          y: 0
+        },
+        {
+          x: 'Apr',
+          y: 0
+        },
+        {
+          x: 'Mai',
+          y: 0
+        },
+        {
+          x: 'Jun',
+          y: 0
+        },
+        {
+          x: 'Jul',
+          y: 0
+        },
+        {
+          x: 'Aug',
+          y: 0
+        },
+        {
+          x: 'Sep',
+          y: 0
+        },
+        {
+          x: 'Okt',
+          y: 0
+        },
+        {
+          x: 'Nov',
+          y: 0
+        },
+        {
+          x: 'Des',
+          y: 0
+        }
+      ]
+    }
+    ));
+
+  events.map(event => {
+
+    const [fromDate] = event.time_from.split(' ');
+    const [toDate] = event.time_to.split(' ');
+
+    const dates = dateRange(fromDate, toDate);
+    const converted = convertToNum(dates);
+
+    set.map(i => {
+      if(i.id === converted.year) {
+        converted.months.map(j => {
+          i.data[j - 1].y++;
+        });
+      }
+    });
+
+  });
+  
+  return set;
+}
+
+const convertToNum = (dates) => {
+
+  const year = dates[0].substring(0, 4);
+  const numericMonth = dates.map(date => parseInt(date.substring(5, 7)));
+
+  const data = {
+    year: parseInt(year),
+    months: numericMonth
+  }
+
+  return data;
+}
+
+//Needs refactoring
+const dateRange = (startDate, endDate) => {
+  var start      = startDate.split('-');
+  var end        = endDate.split('-');
+  var startYear  = parseInt(start[0]);
+  var endYear    = parseInt(end[0]);
+  var dates      = [];
+
+  for(var i = startYear; i <= endYear; i++) {
+    var endMonth = i != endYear ? 11 : parseInt(end[1]) - 1;
+    var startMon = i === startYear ? parseInt(start[1])-1 : 0;
+    for(var j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j+1) {
+      var month = j+1;
+      var displayMonth = month < 10 ? '0'+month : month;
+      dates.push([i, displayMonth, '01'].join('-'));
+    }
+  }
+  return dates;
+}
+
+exports.fagEvents = async ({ dataplattformClient }) => {
+
+  const reqEvents = await dataplattformClient.report({
+    reportName: 'fagEvents'
+  });  
+
+  const events = await reqEvents.json();
+
+
+  const earliestDate = new Date(Math.min(...events.map(event => new Date(event.time_from)))).toLocaleString('no-NO');
+  const latestDate = new Date(Math.max(...events.map(event => new Date(event.time_to)))).toLocaleString('no-NO');
+
+  const [earlyDate, earlyTime] = earliestDate.split(',');
+  const [earlyDay, earlyMonth, earlyYear] = earlyDate.split('.');
+
+  const [lastDate, lastTime] = latestDate.split(',');
+  const [lastDay, lastMonth, lastYear] = lastDate.split('.');
+
+  const set = getEventSet(earlyYear, lastYear, events);
+
+  return set;
+}
+
 exports.education = async ({ dataplattformClient }) => {
   const req = await dataplattformClient.report({
     reportName: 'degreeDist',
