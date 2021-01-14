@@ -107,6 +107,13 @@ export default function Competence() {
       />
 
       <DDItem
+        url="/api/data/fagEvents"
+        title="Fag og hendelser"
+        Component={DDChart}
+        SkeletonComponent={ChartSkeleton}
+      />
+
+      <DDItem
         url="/api/data/competence"
         title="Konsulentkompetanse"
         fullSize

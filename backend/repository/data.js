@@ -421,25 +421,25 @@ const getEventSet = (events) => {
   for(let year = parseInt(firstYear); year <= parseInt(lastYear); year++) years.push(year);
   
   const set = [];
-  years.map(year => set.push(
-    {
-      id: year,
-      data: [
-        { x: 'Jan', y: 0 },
-        { x: 'Feb', y: 0 },
-        { x: 'Mar', y: 0 },
-        { x: 'Apr', y: 0 },
-        { x: 'Mai', y: 0 },
-        { x: 'Jun', y: 0 },
-        { x: 'Jul', y: 0 },
-        { x: 'Aug', y: 0 },
-        { x: 'Sep', y: 0 },
-        { x: 'Okt', y: 0 },
-        { x: 'Nov', y: 0 },
-        { x: 'Des', y: 0 }
-      ]
-    }
-    ));
+  years.map(year => set.push({
+        id: year,
+        data: [
+          { x: 'Jan', y: 0 },
+          { x: 'Feb', y: 0 },
+          { x: 'Mar', y: 0 },
+          { x: 'Apr', y: 0 },
+          { x: 'Mai', y: 0 },
+          { x: 'Jun', y: 0 },
+          { x: 'Jul', y: 0 },
+          { x: 'Aug', y: 0 },
+          { x: 'Sep', y: 0 },
+          { x: 'Okt', y: 0 },
+          { x: 'Nov', y: 0 },
+          { x: 'Des', y: 0 }
+        ]
+      }
+    )
+  );
 
   events.map(event => {
 
