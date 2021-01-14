@@ -474,7 +474,14 @@ const getEventSet = (earlyYear, lateYear, events) => {
     const [toDate] = event.time_to.split(' ');
 
     const dates = dateRange(fromDate, toDate);
-    const converted = convertToNum(dates);
+
+    const year = parseInt(dates[0].substring(0, 4));
+    const numMonths = dates.map(date => parseInt(date.substring(5, 7)));
+
+    const converted = {
+      year: year,
+      months: numMonths
+    }
 
     set.map(i => {
       if(i.id === converted.year) {
@@ -487,19 +494,6 @@ const getEventSet = (earlyYear, lateYear, events) => {
   });
   
   return set;
-}
-
-const convertToNum = (dates) => {
-
-  const year = dates[0].substring(0, 4);
-  const numericMonth = dates.map(date => parseInt(date.substring(5, 7)));
-
-  const data = {
-    year: parseInt(year),
-    months: numericMonth
-  }
-
-  return data;
 }
 
 const dateRange = (startDate, endDate) => {
