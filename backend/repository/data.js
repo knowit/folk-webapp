@@ -365,7 +365,7 @@ exports.experienceDistribution = async ({ dataplattformClient }) => {
     setNames: ['Erfaring', 'Detaljert oversikt'],
     sets: {
       Erfaring: groups,
-      'Detaljert oversikt': detailedGroups
+      'Detaljert oversikt': detailedGroups,
     },
   };
 };
@@ -421,43 +421,39 @@ exports.education = async ({ dataplattformClient }) => {
   };
 };
 
-/** This exports a lits of all categories and subcategories for the 
- * competence mapping. Its used to define the options in the 
- * filter dropdown menu. 
+/** This exports a lits of all categories and subcategories for the
+ * competence mapping. Its used to define the options in the
+ * filter dropdown menu.
  */
-exports.competenceFilter = async ({dataplattformClient}) => {
+exports.competenceFilter = async ({ dataplattformClient }) => {
   const req = await dataplattformClient.report({
     reportName: 'categories',
   });
   const categories = await req.json();
-    // Categories structure
-  const output = []
+  // Categories structure
+  const output = [];
   // Get the main categories
   const mainCategories = new Set(
-    categories.flatMap(
-      item => Object.keys(item)
-    )
-  )
-  mainCategories.forEach(name => {
+    categories.flatMap((item) => Object.keys(item))
+  );
+  mainCategories.forEach((name) => {
     const categoryObject = {
-      "category": name,
-      "subCategories": []
-    }
-    
+      category: name,
+      subCategories: [],
+    };
+
     // Get child categories
-    categories.forEach(
-      item => {
-        const childName = item[name]
-        if (childName) {
-          categoryObject.subCategories.push(childName)
-        }
+    categories.forEach((item) => {
+      const childName = item[name];
+      if (childName) {
+        categoryObject.subCategories.push(childName);
       }
-    )
-    output.push(categoryObject)
-  })
+    });
+    output.push(categoryObject);
+  });
 
   return output;
-}
+};
 
 exports.competenceMapping = async ({ dataplattformClient }) => {
   const [reqCategories, reqCompetence, reqMotivation] = await Promise.all([
@@ -478,56 +474,50 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
   ]);
 
   const competenceCategories = (data) => {
-      // Categories structure
+    // Categories structure
     const output = {
-      "kategori" : "kompetansekartlegging",
-      "children" : []
-    }
+      kategori: 'kompetansekartlegging',
+      children: [],
+    };
 
     // Get the main categories
     const mainCategories = new Set(
-      categories.flatMap(
-        item => Object.keys(item)
-      )
-    )
+      categories.flatMap((item) => Object.keys(item))
+    );
 
-    mainCategories.forEach(name => {
+    mainCategories.forEach((name) => {
       const categoryObject = {
-        "kategori": name,
-        "verdi": 0,
-        "children": []
-      }
-      
+        kategori: name,
+        verdi: 0,
+        children: [],
+      };
+
       // Get child categories
       var sumOfCategories = 0;
-      categories.forEach(
-        item => {
-          const childName = item[name]
-          if (childName) {
-            // Create child category and merge competence data
-            const value = data[0][childName.toLowerCase()] || null
-            const childCategoryObject = {
-              "kategori": childName,
-              "verdi": value
-            }
-            sumOfCategories += value;
-            categoryObject.children.push(childCategoryObject)
-          }
+      categories.forEach((item) => {
+        const childName = item[name];
+        if (childName) {
+          // Create child category and merge competence data
+          const value = data[0][childName.toLowerCase()] || null;
+          const childCategoryObject = {
+            kategori: childName,
+            verdi: value,
+          };
+          sumOfCategories += value;
+          categoryObject.children.push(childCategoryObject);
         }
-      )
+      });
 
-      
-      const avgValue = sumOfCategories / categoryObject.children.length
-      categoryObject.children.forEach(child => {
-        child.size = (child.verdi/sumOfCategories) * avgValue
-      })
-      
-      categoryObject.verdi = avgValue
-      output.children.push(categoryObject)
-    })
+      const avgValue = sumOfCategories / categoryObject.children.length;
+      categoryObject.children.forEach((child) => {
+        child.size = (child.verdi / sumOfCategories) * avgValue;
+      });
 
+      categoryObject.verdi = avgValue;
+      output.children.push(categoryObject);
+    });
 
-    return output
+    return output;
   };
 
   return {
@@ -541,7 +531,6 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
 };
 
 exports.competenceAmount = async ({ dataplattformClient }) => {
-
   const [reqCategories, reqCompetence, reqMotivation] = await Promise.all([
     dataplattformClient.report({
       reportName: 'categories',
@@ -561,38 +550,32 @@ exports.competenceAmount = async ({ dataplattformClient }) => {
   ]);
 
   const setCategories = (data, valueKey) => {
-
     const output = [];
 
     // Get the main categories
     const mainCategories = new Set(
-      categories.flatMap(
-        item => Object.keys(item)
-      )
+      categories.flatMap((item) => Object.keys(item))
     );
 
-    mainCategories.forEach(name => {
-
+    mainCategories.forEach((name) => {
       const categoryObject = {
         kategori: name,
-        [valueKey]: 0
-      }
+        [valueKey]: 0,
+      };
 
       // Sum of subcategories values
       let categorySum = 0;
       // Number of subcategories
       let numberOfSubCategories = 0;
 
-      categories.forEach(
-        item => {
-          const childName = item[name]
-          if (childName) {
-            const value = data[0][childName.toLowerCase()] || null
-            categorySum += value;
-            numberOfSubCategories++;
-          }
+      categories.forEach((item) => {
+        const childName = item[name];
+        if (childName) {
+          const value = data[0][childName.toLowerCase()] || null;
+          categorySum += value;
+          numberOfSubCategories++;
         }
-      );
+      });
 
       // Sets category value as the average
       categoryObject[valueKey] = categorySum / numberOfSubCategories;
@@ -606,8 +589,8 @@ exports.competenceAmount = async ({ dataplattformClient }) => {
   const motArr = setCategories(motivation, 'motivasjon');
 
   // Merges the two arrays on the same category
-  const mergedArrs = comArr.map(i => {
-    const found = motArr.find(j => j.kategori === i.kategori);
+  const mergedArrs = comArr.map((i) => {
+    const found = motArr.find((j) => j.kategori === i.kategori);
     found['kompetanse'] = i.kompetanse;
     return found;
   });
@@ -616,11 +599,10 @@ exports.competenceAmount = async ({ dataplattformClient }) => {
     componentType: 'Radar',
     setNames: ['Kompetansemengde'],
     sets: {
-      'Kompetansemengde': mergedArrs
+      Kompetansemengde: mergedArrs,
     },
   };
 };
-
 
 exports.empData = async ({
   dataplattformClient,
@@ -629,8 +611,8 @@ exports.empData = async ({
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   });
-  const emailUuid = makeEmailUuid(email, salt)
-  
+  const emailUuid = makeEmailUuid(email, salt);
+
   const [reqSkills, reqWork, reqEmp] = await Promise.all([
     dataplattformClient.report({
       reportName: 'employeeSkills',
@@ -654,9 +636,9 @@ exports.empData = async ({
   ]);
 
   return {
-    id:emailUuid,
+    id: emailUuid,
     employee: resEmp[0],
     workExperience: resWork,
     tags: resSkills[0],
-  }
-}
+  };
+};
