@@ -62,6 +62,44 @@ const useMotivationMappingStyles = makeStyles({
   },
 });
 
+export const startedInKnowit = (allExperience: Experience[] | undefined) => {
+  const knowit = allExperience?.find((x) =>
+    x.employer
+      ? x.employer.toLowerCase().includes('knowit') ||
+        x.employer.toLowerCase().includes('objectnet') ||
+        x.employer.toLowerCase().includes('know it')
+      : null
+  );
+
+  const monthFrom =
+    knowit && knowit?.month_from < 10
+      ? `0${knowit?.month_from}`
+      : knowit?.month_from;
+
+  return knowit === undefined || knowit.year_from < 0 ? (
+    <NoData />
+  ) : (
+    `${[monthFrom, knowit?.year_from].join('/')}.`
+  );
+};
+
+export const totalExperience = (allExperience: Experience[] | undefined) => {
+  const dates:Date[] = [];
+  allExperience?.map(job =>{
+    job.year_from !== -1 && dates.push({year:job.year_from})
+    job.year_to !== -1 && dates.push({year:job.year_to})
+  })
+  const firstJob = dates?.sort(
+    (a, b) => a.year - b.year
+  )[0];
+
+  return firstJob?.year === undefined || firstJob?.year < 0 ? (
+    <NoData />
+  ) : (
+    `${new Date().getFullYear() - firstJob?.year} år.`
+  );
+};
+
 const makeKeyFromText = (value: string): string => value.replace(' ', '_');
 
 function MotivationMapping({
@@ -156,43 +194,7 @@ export default function EmployeeInfo({
   const [empData, pending] = useFetchedData<EmployeeInfoData>({ url });
   
   type Date = {year:number, month:number} | {year:number}
-  const totalExperience = (allExperience: Experience[] | undefined) => {
-    const dates:Date[] = [];
-    allExperience?.map(job =>{
-      job.year_from !== -1 && dates.push({year:job.year_from})
-      job.year_to !== -1 && dates.push({year:job.year_to})
-    })
-    const firstJob = dates?.sort(
-      (a, b) => a.year - b.year
-    )[0];
 
-    return firstJob?.year === undefined || firstJob?.year < 0 ? (
-      <NoData />
-    ) : (
-      `${new Date().getFullYear() - firstJob?.year} år.`
-    );
-  };
-
-  const startedInKnowit = (allExperience: Experience[] | undefined) => {
-    const knowit = allExperience?.find((x) =>
-      x.employer
-        ? x.employer.toLowerCase().includes('knowit') ||
-          x.employer.toLowerCase().includes('objectnet') ||
-          x.employer.toLowerCase().includes('know it')
-        : null
-    );
-
-    const monthFrom =
-      knowit && knowit?.month_from < 10
-        ? `0${knowit?.month_from}`
-        : knowit?.month_from;
-
-    return knowit === undefined || knowit.year_from < 0 ? (
-      <NoData />
-    ) : (
-      `${[monthFrom, knowit?.year_from].join('/')}.`
-    );
-  };
 
   const getStringFromList = (
     list: string[] | null | undefined,
