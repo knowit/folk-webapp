@@ -620,3 +620,43 @@ exports.competenceAmount = async ({ dataplattformClient }) => {
     },
   };
 };
+
+
+exports.empData = async ({
+  dataplattformClient,
+  queryStringParameters: { email } = {},
+}) => {
+  const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
+    encrypted: true,
+  });
+  const emailUuid = makeEmailUuid(email, salt)
+  
+  const [reqSkills, reqWork, reqEmp] = await Promise.all([
+    dataplattformClient.report({
+      reportName: 'employeeSkills',
+      filter: { email },
+    }),
+    dataplattformClient.report({
+      reportName: 'workExperience',
+      filter: { email },
+    }),
+
+    dataplattformClient.report({
+      reportName: 'projectStatus',
+      filter: { email },
+    }),
+  ]);
+
+  const [resSkills, resWork, resEmp] = await Promise.all([
+    reqSkills.json(),
+    reqWork.json(),
+    reqEmp.json(),
+  ]);
+
+  return {
+    id:emailUuid,
+    employee: resEmp[0],
+    workExperience: resWork,
+    tags: resSkills[0],
+  }
+}
