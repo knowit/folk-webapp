@@ -416,54 +416,18 @@ const getEventSet = (earlyYear, lateYear, events) => {
     {
       id: year,
       data: [
-        {
-          x: 'Jan',
-          y: 0
-        },
-        {
-          x: 'Feb',
-          y: 0
-        },
-        {
-          x: 'Mar',
-          y: 0
-        },
-        {
-          x: 'Apr',
-          y: 0
-        },
-        {
-          x: 'Mai',
-          y: 0
-        },
-        {
-          x: 'Jun',
-          y: 0
-        },
-        {
-          x: 'Jul',
-          y: 0
-        },
-        {
-          x: 'Aug',
-          y: 0
-        },
-        {
-          x: 'Sep',
-          y: 0
-        },
-        {
-          x: 'Okt',
-          y: 0
-        },
-        {
-          x: 'Nov',
-          y: 0
-        },
-        {
-          x: 'Des',
-          y: 0
-        }
+        { x: 'Jan', y: 0 },
+        { x: 'Feb', y: 0 },
+        { x: 'Mar', y: 0 },
+        { x: 'Apr', y: 0 },
+        { x: 'Mai', y: 0 },
+        { x: 'Jun', y: 0 },
+        { x: 'Jul', y: 0 },
+        { x: 'Aug', y: 0 },
+        { x: 'Sep', y: 0 },
+        { x: 'Okt', y: 0 },
+        { x: 'Nov', y: 0 },
+        { x: 'Des', y: 0 }
       ]
     }
     ));
@@ -478,14 +442,14 @@ const getEventSet = (earlyYear, lateYear, events) => {
     const year = parseInt(dates[0].substring(0, 4));
     const numMonths = dates.map(date => parseInt(date.substring(5, 7)));
 
-    const converted = {
+    const dataObject = {
       year: year,
       months: numMonths
     }
 
     set.map(i => {
-      if(i.id === converted.year) {
-        converted.months.map(j => {
+      if(i.id === dataObject.year) {
+        dataObject.months.map(j => {
           i.data[j - 1].y++;
         });
       }
