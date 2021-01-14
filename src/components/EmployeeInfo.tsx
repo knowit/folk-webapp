@@ -89,7 +89,7 @@ export const totalExperience = (allExperience: Experience[] | undefined) => {
     job.year_from !== -1 && dates.push({ year: job.year_from });
     job.year_to !== -1 && dates.push({ year: job.year_to });
   });
-  const firstJob = dates?.sort((a, b) => a.year - b.year)[0];
+  const firstJob = dates?.sort((dateA, dateB) => dateA.year - dateB.year)[0];
 
   return firstJob?.year === undefined || firstJob?.year < 0 ? (
     <NoData />
