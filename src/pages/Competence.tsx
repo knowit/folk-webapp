@@ -73,13 +73,10 @@ export default function Competence() {
       />
 
       <DDItem
-        url="/api/data/faggrupper"
-        title="Faggrupper oversikt"
+        url="/api/data/fagEvents"
+        title="Fag og hendelser"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
-        dataComponentProps={{
-          yLabels: [],
-        }}
       />
 
       <DDItem
@@ -104,13 +101,6 @@ export default function Competence() {
           dataKey: 'section',
           yLabels: ['value'],
         }}
-      />
-
-      <DDItem
-        url="/api/data/fagEvents"
-        title="Fag og hendelser"
-        Component={DDChart}
-        SkeletonComponent={ChartSkeleton}
       />
 
       <DDItem

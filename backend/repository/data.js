@@ -398,14 +398,6 @@ exports.ageDistribution = async ({ dataplattformClient }) => {
   };
 };
 
-exports.faggrupper = async () => {
-  return {
-    componentType: null,
-    setNames: [],
-    sets: {},
-  };
-};
-
 const getEventSet = (events) => {
 
   const earliestDate = new Date(Math.min(...events.map(event => new Date(event.time_from)))).toLocaleString('no-NO');
