@@ -406,10 +406,19 @@ exports.faggrupper = async () => {
   };
 };
 
-const getEventSet = (earlyYear, lateYear, events) => {
+const getEventSet = (events) => {
+
+  const earliestDate = new Date(Math.min(...events.map(event => new Date(event.time_from)))).toLocaleString('no-NO');
+  const latestDate = new Date(Math.max(...events.map(event => new Date(event.time_to)))).toLocaleString('no-NO');
+
+  const [earlyDate] = earliestDate.split(',');
+  const [lastDate] = latestDate.split(',');
+
+  const firstYear = earlyDate.split('.')[2];
+  const lastYear = lastDate.split('.')[2];
 
   const years = [];
-  for(let year = parseInt(earlyYear); year <= parseInt(lateYear); year++) years.push(year);
+  for(let year = parseInt(firstYear); year <= parseInt(lastYear); year++) years.push(year);
   
   const set = [];
   years.map(year => set.push(
@@ -488,20 +497,15 @@ exports.fagEvents = async ({ dataplattformClient }) => {
   });  
 
   const events = await reqEvents.json();
+  const eventSet = getEventSet(events);
 
-
-  const earliestDate = new Date(Math.min(...events.map(event => new Date(event.time_from)))).toLocaleString('no-NO');
-  const latestDate = new Date(Math.max(...events.map(event => new Date(event.time_to)))).toLocaleString('no-NO');
-
-  const [earlyDate, earlyTime] = earliestDate.split(',');
-  const [earlyDay, earlyMonth, earlyYear] = earlyDate.split('.');
-
-  const [lastDate, lastTime] = latestDate.split(',');
-  const [lastDay, lastMonth, lastYear] = lastDate.split('.');
-
-  const set = getEventSet(earlyYear, lastYear, events);
-
-  return set;
+  return {
+    componentType: 'Line',
+    setNames: ['Fag og hendelser'],
+    sets: {
+      'Fag og hendelser': eventSet
+    }
+  };
 }
 
 exports.education = async ({ dataplattformClient }) => {
