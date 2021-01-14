@@ -76,7 +76,7 @@ export const startedInKnowit = (allExperience: Experience[] | undefined) => {
       ? `0${knowit?.month_from}`
       : knowit?.month_from;
 
-  return knowit === undefined || knowit.year_from < 0 ? (
+  return knowit === undefined || knowit === null || knowit.year_from < 0 ? (
     <NoData />
   ) : (
     `${[monthFrom, knowit?.year_from].join('/')}.`
