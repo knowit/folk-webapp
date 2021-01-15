@@ -400,6 +400,7 @@ exports.ageDistribution = async ({ dataplattformClient }) => {
 
 const getEventSet = (events) => {
 
+  // Finds earliest and latest dates for creating a range of years
   const earliestDate = new Date(Math.min(...events.map(event => new Date(event.time_from)))).toLocaleString('no-NO');
   const latestDate = new Date(Math.max(...events.map(event => new Date(event.time_to)))).toLocaleString('no-NO');
 
@@ -409,7 +410,7 @@ const getEventSet = (events) => {
   const firstYear = earlyDate.split('.')[2];
   const lastYear = lastDate.split('.')[2];
 
-  const years = [];
+  const years = []; // Range of years in dataset, [2015, 2016, 2017, etc...]
   for(let year = parseInt(firstYear); year <= parseInt(lastYear); year++) years.push(year);
   
   const set = [];
@@ -435,19 +436,23 @@ const getEventSet = (events) => {
 
   events.map(event => {
 
+    // Gets the start and end times for an event, 2020-01-01 - 2020-02-03
     const [fromDate] = event.time_from.split(' ');
     const [toDate] = event.time_to.split(' ');
 
+    // Returns each month the event spans across. 2020-01-01 - 2020-02-03 would return [1, 2]
     const dates = dateRange(fromDate, toDate);
 
     const year = parseInt(dates[0].substring(0, 4));
     const numMonths = dates.map(date => parseInt(date.substring(5, 7)));
 
+    // Stores the year of the event and the spanning months
     const dataObject = {
       year: year,
       months: numMonths
     }
 
+    // Maps each event to a specific year and increases the event counter for the relevant months
     set.map(i => {
       if(i.id === dataObject.year) {
         dataObject.months.map(j => {
