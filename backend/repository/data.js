@@ -740,4 +740,128 @@ exports.empData = async ({
     workExperience: resWork,
     tags: resSkills[0],
   };
+}
+
+exports.employeeMotivationRadar = async ({
+  dataplattformClient,
+  queryStringParameters: { user_id } = {},
+}) => {
+  const [reqCategories, reqMotivation] = await Promise.all([
+    dataplattformClient.report({
+      reportName: 'categories',
+    }),
+    dataplattformClient.report({
+      reportName: 'employeeMotivation',
+    }),
+  ]);
+
+  const [categories, empMotivation] = await Promise.all([
+    reqCategories.json(),
+    reqMotivation.json(),
+  ]);
+  const thisMotivation = [];
+  empMotivation.forEach((item) => {
+    thisMotivation.push({
+      kategori: item['category'],
+      motivasjon: item[user_id.slice(0, 8)],
+    });
+  });
+  const [structuredCats, setNames] = reStructCategories(
+    categories,
+    thisMotivation,
+    'motivasjon'
+  );
+
+  return {
+    componentType: 'Radar',
+    setNames: setNames,
+    sets: structuredCats,
+  };
+};
+
+exports.employeeCompetenceRadar = async ({
+  dataplattformClient,
+  queryStringParameters: { user_id } = {},
+}) => {
+  const [reqCategories, reqCompetence] = await Promise.all([
+    dataplattformClient.report({
+      reportName: 'categories',
+    }),
+    dataplattformClient.report({
+      reportName: 'employee_competence',
+    }),
+  ]);
+
+  const [categories, empCompetence] = await Promise.all([
+    reqCategories.json(),
+    reqCompetence.json(),
+  ]);
+
+  const thisCompetence = [];
+  empCompetence.forEach((item) => {
+    thisCompetence.push({
+      kategori: item['categories'],
+      kompetanse: item[user_id],
+    });
+  });
+  const [structuredCats, setNames] = reStructCategories(
+    categories,
+    thisCompetence,
+    'kompetanse'
+  );
+
+  return {
+    componentType: 'Radar',
+    setNames: setNames,
+    sets: structuredCats,
+  };
+};
+
+const reStructCategories = (categories, scores, kompMot) => {
+  const mainCategories = new Set(
+    categories.flatMap((item) => Object.keys(item))
+  );
+
+  const score = (name) => {
+    const tempScore = scores.find((obj) => {
+      return obj['kategori'] === name;
+    });
+    return tempScore ? tempScore[kompMot] : 0;
+  };
+
+  let catSet = [];
+
+  const mainCats = [];
+
+  mainCategories.forEach((name) => {
+    const upperCaseName = name.charAt(0).toUpperCase()+ name.slice(1)
+    mainCats.push({
+      kategori: upperCaseName,
+      [kompMot]: score(upperCaseName),
+    });
+    const categoryObject = {
+      [name]: [],
+    };
+    categories.forEach((item) => {
+      const childName = item[name];
+      if (childName) {
+        // Create child category
+        const childCategoryObject = {
+          kategori: childName,
+          [kompMot]: score(childName),
+        };
+        categoryObject[name].push(childCategoryObject);
+      }
+    });
+    catSet.push(categoryObject);
+  });
+  catSet.unshift({ Hovedkategorier: mainCats });
+  catSet = catSet.reduce(function (cat, x) {
+    for (var key in x) cat[key] = x[key];
+    return cat;
+  }, {});
+
+  const setNames = Object.keys(catSet)
+
+  return [catSet, setNames];
 };

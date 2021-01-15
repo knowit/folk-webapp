@@ -1,7 +1,8 @@
 import React from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
+import DDItem, { DDChart } from '../data/DDItem';
 import { useFetchedData } from '../hooks/service';
 import { startedInKnowit, totalExperience } from '../components/EmployeeInfo';
 
@@ -45,10 +46,14 @@ const useStyles = makeStyles({
   },
 });
 
+const ChartSkeleton = () => (
+  <Skeleton variant="rect" height={320} animation="wave" />
+);
+
 export default function EmployeeSite() {
   const location = useLocation();
   const email = location.pathname.split('/')[2];
-  const idRegex = /(\w+\.?)*@knowit.no/;
+  const idRegex = /(\w+\.?)*@knowit.no/
   const url = '/api/data/empData?email=' + email;
   const [data, pending] = useFetchedData<EmpSiteData>({ url });
   const classes = useStyles();
@@ -57,8 +62,9 @@ export default function EmployeeSite() {
     return <Redirect to={{ pathname: '/404' }} />;
   }
 
+  const id = data ? data.id : 'not found';
   const emp = data ? data.employee : null;
-  const tags = data ? data.tags : null;
+  const tags = data? data.tags: null; 
   return (
     <>
       {pending ? (
@@ -96,7 +102,7 @@ export default function EmployeeSite() {
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
           ) : (
             <>
-              <b>Startet i Knowit:</b> {startedInKnowit(data?.workExperience)}
+              <b>Startet i Knowit: </b> {startedInKnowit(data?.workExperience)}
             </>
           )}
         </div>
@@ -105,7 +111,7 @@ export default function EmployeeSite() {
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
           ) : (
             <>
-              <b>Total arbeidserfaring:</b>{' '}
+              <b>Total arbeidserfaring: </b>
               {totalExperience(data?.workExperience)}
             </>
           )}
@@ -120,6 +126,37 @@ export default function EmployeeSite() {
             </>
           )}
         </div>
+        <div className={classes.cell}>
+          {pending ? (
+            <Skeleton variant="rect" width={340} height={15} animation="wave" />
+          ) : (
+            <>
+              <b>Nærmeste leder: </b>
+              *DATA FRA AD HER*
+            </>
+          )}
+        </div>
+        <Grid container spacing={2}>
+          <DDItem
+            url={'/api/data/employeeMotivationRadar?user_id=' + id}
+            title="Motivasjon"
+            Component={DDChart}
+            SkeletonComponent={ChartSkeleton}
+            dataComponentProps={{
+              valueKey: ['motivasjon'],
+            }}
+          />
+
+          <DDItem
+            url={'/api/data/employeeCompetenceRadar?user_id=' + id}
+            title="Kompetanse"
+            Component={DDChart}
+            SkeletonComponent={ChartSkeleton}
+            dataComponentProps={{
+              valueKey: ['kompetanse'],
+            }}
+          />
+        </Grid>
       </div>
     </>
   );
