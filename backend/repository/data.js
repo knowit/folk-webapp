@@ -54,6 +54,7 @@ exports.projectStatus = async ({ dataplattformClient }) => {
         competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
           employee.email
         )}`,
+        email: employee.email
       },
       employee.title,
       0,
@@ -110,6 +111,7 @@ exports.competence = async ({ dataplattformClient }) => {
         competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
           employee.email
         )}`,
+        email: employee.email,
       },
       employee.title,
       `/api/data/employeeExperience?user_id=${employee.user_id}`,

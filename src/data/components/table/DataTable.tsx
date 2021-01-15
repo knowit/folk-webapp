@@ -7,6 +7,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import Button from '@material-ui/core/Button';
 import CharacterLimitBox from '../../../components/CharacterLimitBox';
+import { OpenInNew } from '@material-ui/icons';
+import { Link } from 'react-router-dom';
 
 interface DataTableProps {
   columns: DataTableColumn[];
@@ -72,6 +74,17 @@ const ExpandLessIconWithStyles = withStyles({
     },
   },
 })(ExpandLessIcon);
+const OpenInNewStyled = withStyles({
+  root: {
+    color: '#707070',
+    cursor: 'pointer',
+    '&:hover': {
+      color: '#333333',
+    },
+  },
+})(OpenInNew);
+
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -184,6 +197,9 @@ function ExtendableCell({
       >
         <RenderCell data={cellData} rowData={[]} />
         {isOpen() ? <ExpandLessIconWithStyles /> : <ExpandMoreIconWithStyles />}
+        <Link to={"/ansatt/"+cellData.email}>
+          <OpenInNewStyled/>
+        </Link>
       </Button>
       <div>
         {isOpen() && (
