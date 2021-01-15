@@ -98,7 +98,7 @@ export default function EmployeeSite() {
           )}
         </div>
         <div className={classes.cell}>
-          {pending && data? (
+          {pending ? (
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
           ) : (
             <>
@@ -107,7 +107,7 @@ export default function EmployeeSite() {
           )}
         </div>
         <div className={classes.cell}>
-          {pending && data? (
+          {pending ? (
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
           ) : (
             <>

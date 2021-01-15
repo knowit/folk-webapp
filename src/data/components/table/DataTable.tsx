@@ -197,7 +197,7 @@ function ExtendableCell({
       >
         <RenderCell data={cellData} rowData={[]} />
         {isOpen() ? <ExpandLessIconWithStyles /> : <ExpandMoreIconWithStyles />}
-        <Link to={"/ansatt/"+cellData.email}>
+        <Link to={"/ansatt/"+cellData.email} target="_blank">
           <OpenInNewStyled/>
         </Link>
       </Button>
