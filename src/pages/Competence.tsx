@@ -73,13 +73,11 @@ export default function Competence() {
       />
 
       <DDItem
-        url="/api/data/faggrupper"
-        title="Faggrupper oversikt"
+        url="/api/data/fagEvents"
+        title="Fag og hendelser"
+        description="Hver vertikal akse viser antall unike hendelser per måned fra Google kalenderne Knowit Events og Knowit Fagkalender."
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
-        dataComponentProps={{
-          yLabels: [],
-        }}
       />
 
       <DDItem

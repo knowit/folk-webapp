@@ -398,13 +398,112 @@ exports.ageDistribution = async ({ dataplattformClient }) => {
   };
 };
 
-exports.faggrupper = async () => {
+const getEventSet = (events) => {
+
+  // Finds earliest and latest dates for creating a range of years
+  const earliestDate = new Date(Math.min(...events.map(event => new Date(event.time_from)))).toLocaleString('no-NO');
+  const latestDate = new Date(Math.max(...events.map(event => new Date(event.time_to)))).toLocaleString('no-NO');
+
+  const [earlyDate] = earliestDate.split(',');
+  const [lastDate] = latestDate.split(',');
+
+  const firstYear = earlyDate.split('.')[2];
+  const lastYear = lastDate.split('.')[2];
+
+  const years = []; // Range of years in dataset, [2015, 2016, 2017, etc...]
+  for(let year = parseInt(firstYear); year <= parseInt(lastYear); year++) years.push(year);
+  
+  const set = [];
+  years.map(year => set.push({
+        id: year,
+        data: [
+          { x: 'Jan', y: 0 },
+          { x: 'Feb', y: 0 },
+          { x: 'Mar', y: 0 },
+          { x: 'Apr', y: 0 },
+          { x: 'Mai', y: 0 },
+          { x: 'Jun', y: 0 },
+          { x: 'Jul', y: 0 },
+          { x: 'Aug', y: 0 },
+          { x: 'Sep', y: 0 },
+          { x: 'Okt', y: 0 },
+          { x: 'Nov', y: 0 },
+          { x: 'Des', y: 0 }
+        ]
+      }
+    )
+  );
+
+  events.map(event => {
+
+    // Gets the start and end times for an event, 2020-01-01 - 2020-02-03
+    const [fromDate] = event.time_from.split(' ');
+    const [toDate] = event.time_to.split(' ');
+
+    // Returns each month the event spans across. 2020-01-01 - 2020-02-03 would return [1, 2]
+    const dates = dateRange(fromDate, toDate);
+
+    const year = parseInt(dates[0].substring(0, 4));
+    const numMonths = dates.map(date => parseInt(date.substring(5, 7)));
+
+    // Stores the year of the event and the spanning months
+    const dataObject = {
+      year: year,
+      months: numMonths
+    }
+
+    // Maps each event to a specific year and increases the event counter for the relevant months
+    set.map(i => {
+      if(i.id === dataObject.year) {
+        dataObject.months.map(j => {
+          i.data[j - 1].y++;
+        });
+      }
+    });
+
+  });
+  
+  return set;
+}
+
+const dateRange = (startDate, endDate) => {
+
+  const start = startDate.split('-');
+  const end = endDate.split('-');
+  const startYear = parseInt(start[0]);
+  const endYear = parseInt(end[0]);
+  const dates = [];
+
+  for(let i = startYear; i <= endYear; i++) {
+    const endMonth = i != endYear ? 11 : parseInt(end[1]) - 1;
+    const startMon = i === startYear ? parseInt(start[1]) - 1 : 0;
+    for(let j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j + 1) {
+      const month = j + 1;
+      const displayMonth = month < 10 ? '0' + month : month;
+      dates.push([i, displayMonth, '01'].join('-'));
+    }
+  }
+
+  return dates;
+}
+
+exports.fagEvents = async ({ dataplattformClient }) => {
+
+  const reqEvents = await dataplattformClient.report({
+    reportName: 'fagEvents'
+  });  
+
+  const events = await reqEvents.json();
+  const eventSet = getEventSet(events);
+
   return {
-    componentType: null,
-    setNames: [],
-    sets: {},
+    componentType: 'Line',
+    setNames: ['Fag og hendelser'],
+    sets: {
+      'Fag og hendelser': eventSet
+    }
   };
-};
+}
 
 exports.education = async ({ dataplattformClient }) => {
   const req = await dataplattformClient.report({
