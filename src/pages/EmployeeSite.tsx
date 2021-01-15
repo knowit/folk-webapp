@@ -53,7 +53,7 @@ const ChartSkeleton = () => (
 export default function EmployeeSite() {
   const location = useLocation();
   const email = location.pathname.split('/')[2];
-  const idRegex = /(\w+\.?)*@knowit.no/
+  const idRegex = /(\w+\.?)*@knowit.no/;
   const url = '/api/data/empData?email=' + email;
   const [data, pending] = useFetchedData<EmpSiteData>({ url });
   const classes = useStyles();
@@ -139,8 +139,8 @@ export default function EmployeeSite() {
         <Grid container spacing={2}>
           {pending ? (
             <>
-            <ChartSkeleton/>
-            <ChartSkeleton/>
+              <ChartSkeleton />
+              <ChartSkeleton />
             </>
           ) : (
             <>
