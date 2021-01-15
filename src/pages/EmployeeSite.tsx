@@ -53,7 +53,7 @@ const ChartSkeleton = () => (
 export default function EmployeeSite() {
   const location = useLocation();
   const email = location.pathname.split('/')[2];
-  const idRegex = /(\w+\.?)*@knowit.no/
+  const idRegex = /(\w+\.?)*@knowit.no/;
   const url = '/api/data/empData?email=' + email;
   const [data, pending] = useFetchedData<EmpSiteData>({ url });
   const classes = useStyles();
@@ -64,7 +64,7 @@ export default function EmployeeSite() {
 
   const id = data ? data.id : 'not found';
   const emp = data ? data.employee : null;
-  const tags = data? data.tags: null; 
+  const tags = data ? data.tags : null;
   return (
     <>
       {pending ? (
@@ -137,25 +137,34 @@ export default function EmployeeSite() {
           )}
         </div>
         <Grid container spacing={2}>
-          <DDItem
-            url={'/api/data/employeeMotivationRadar?user_id=' + id}
-            title="Motivasjon"
-            Component={DDChart}
-            SkeletonComponent={ChartSkeleton}
-            dataComponentProps={{
-              valueKey: ['motivasjon'],
-            }}
-          />
+          {pending ? (
+            <>
+              <ChartSkeleton />
+              <ChartSkeleton />
+            </>
+          ) : (
+            <>
+              <DDItem
+                url={'/api/data/employeeMotivationRadar?user_id=' + id}
+                title="Motivasjon"
+                Component={DDChart}
+                SkeletonComponent={ChartSkeleton}
+                dataComponentProps={{
+                  valueKey: ['motivasjon'],
+                }}
+              />
 
-          <DDItem
-            url={'/api/data/employeeCompetenceRadar?user_id=' + id}
-            title="Kompetanse"
-            Component={DDChart}
-            SkeletonComponent={ChartSkeleton}
-            dataComponentProps={{
-              valueKey: ['kompetanse'],
-            }}
-          />
+              <DDItem
+                url={'/api/data/employeeCompetenceRadar?user_id=' + id}
+                title="Kompetanse"
+                Component={DDChart}
+                SkeletonComponent={ChartSkeleton}
+                dataComponentProps={{
+                  valueKey: ['kompetanse'],
+                }}
+              />
+            </>
+          )}
         </Grid>
       </div>
     </>

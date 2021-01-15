@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useReducer} from 'react';
+import React, { Dispatch, useEffect, useReducer } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { TableCell, withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
@@ -7,6 +7,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import Button from '@material-ui/core/Button';
 import CharacterLimitBox from '../../../components/CharacterLimitBox';
+import { OpenInNew } from '@material-ui/icons';
+import { Link } from 'react-router-dom';
 
 interface DataTableProps {
   columns: DataTableColumn[];
@@ -72,6 +74,15 @@ const ExpandLessIconWithStyles = withStyles({
     },
   },
 })(ExpandLessIcon);
+const OpenInNewStyled = withStyles({
+  root: {
+    color: '#707070',
+    cursor: 'pointer',
+    '&:hover': {
+      color: '#333333',
+    },
+  },
+})(OpenInNew);
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -155,11 +166,10 @@ function ExtendableCell({
   rowStates: RowStates;
   dispatch: Dispatch<Action>;
 }): JSX.Element {
-  const isOpen = () => (rowStates[id] && rowStates[id].height !== 70)
+  const isOpen = () => rowStates[id] && rowStates[id].height !== 70;
   const classes = useStyles();
   const openClick = () => {
-      dispatch({ type: 'CHANGE_HEIGHT', id, height: isOpen() ? 70: 280 });
-    
+    dispatch({ type: 'CHANGE_HEIGHT', id, height: isOpen() ? 70 : 280 });
   };
   const openStyle = isOpen() ? classes.bolderText : '';
 
@@ -184,6 +194,9 @@ function ExtendableCell({
       >
         <RenderCell data={cellData} rowData={[]} />
         {isOpen() ? <ExpandLessIconWithStyles /> : <ExpandMoreIconWithStyles />}
+        <Link to={'/ansatt/' + cellData.email} target="_blank">
+          <OpenInNewStyled />
+        </Link>
       </Button>
       <div>
         {isOpen() && (
