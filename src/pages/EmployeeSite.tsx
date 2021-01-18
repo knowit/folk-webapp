@@ -75,7 +75,6 @@ export default function EmployeeSite() {
           <h2>{emp?.title}</h2>
         </>
       )}
-
       <div className={classes.root}>
         <div className={classes.cell}>
           {pending ? (
@@ -138,32 +137,17 @@ export default function EmployeeSite() {
         </div>
         <Grid container spacing={2}>
           {pending ? (
-            <>
-              <ChartSkeleton />
-              <ChartSkeleton />
-            </>
+            <ChartSkeleton />
           ) : (
-            <>
-              <DDItem
-                url={'/api/data/employeeMotivationRadar?user_id=' + id}
-                title="Motivasjon"
-                Component={DDChart}
-                SkeletonComponent={ChartSkeleton}
-                dataComponentProps={{
-                  valueKey: ['motivasjon'],
-                }}
-              />
-
-              <DDItem
-                url={'/api/data/employeeCompetenceRadar?user_id=' + id}
-                title="Kompetanse"
-                Component={DDChart}
-                SkeletonComponent={ChartSkeleton}
-                dataComponentProps={{
-                  valueKey: ['kompetanse'],
-                }}
-              />
-            </>
+            <DDItem
+              url={'/api/data/employeeRadar?user_id=' + id}
+              title="Motivasjon"
+              Component={DDChart}
+              SkeletonComponent={ChartSkeleton}
+              dataComponentProps={{
+                valueKey: ['motivasjon', 'kompetanse'],
+              }}
+            />
           )}
         </Grid>
       </div>
