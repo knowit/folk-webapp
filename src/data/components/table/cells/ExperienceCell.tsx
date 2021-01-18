@@ -70,7 +70,7 @@ const useModalStyles = makeStyles({
     },
   },
 });
-const months = [
+export const months = [
   'Januar',
   'Februar',
   'Mars',
