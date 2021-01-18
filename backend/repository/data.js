@@ -400,7 +400,7 @@ exports.ageDistribution = async ({ dataplattformClient }) => {
   };
 };
 
-const getEventSet = (events) => {
+function getEventSet(events) {
   // Finds earliest and latest dates for creating a range of years
   const earliestDate = new Date(
     Math.min(...events.map((event) => new Date(event.time_from)))
@@ -468,9 +468,9 @@ const getEventSet = (events) => {
   });
 
   return set;
-};
+}
 
-const dateRange = (startDate, endDate) => {
+function dateRange(startDate, endDate) {
   const start = startDate.split('-');
   const end = endDate.split('-');
   const startYear = parseInt(start[0]);
@@ -488,7 +488,7 @@ const dateRange = (startDate, endDate) => {
   }
 
   return dates;
-};
+}
 
 exports.fagEvents = async ({ dataplattformClient }) => {
   const reqEvents = await dataplattformClient.report({
