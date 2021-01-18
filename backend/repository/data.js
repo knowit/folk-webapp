@@ -788,8 +788,6 @@ exports.employeeRadar = async ({
     thisCompetence,
   );
 
-  console.log(structuredCats)
-
   return {
     componentType: 'Radar',
     setNames: setNames,
@@ -804,12 +802,17 @@ const reStructCategories = (categories, motScores, compScores) => {
     categories.flatMap((item) => Object.keys(item))
   );
 
+  /**
+   * returns the score of the category with name = name from 
+   * the array scores. kompOrMot is either "kompetanse" or
+   * "motivasjon", depending on the score to find 
+   */
   const score = (name,scores,komOrMot) => {
     const thisCat = scores.find((obj) => {
       return obj['kategori'] === name;
     });
-    return thisCat ? thisCat[komOrMot] : 0;
- 
+    const returnValue = thisCat ? thisCat[komOrMot] : 0;
+    return returnValue || 0;
   };
 
   let catSet = [];
