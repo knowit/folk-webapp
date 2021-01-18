@@ -744,23 +744,28 @@ exports.empData = async ({
   };
 };
 
-exports.employeeMotivationRadar = async ({
+exports.employeeRadar = async ({
   dataplattformClient,
   queryStringParameters: { user_id } = {},
 }) => {
-  const [reqCategories, reqMotivation] = await Promise.all([
+  const [reqCategories, reqMotivation, reqCompetence] = await Promise.all([
     dataplattformClient.report({
       reportName: 'categories',
     }),
     dataplattformClient.report({
       reportName: 'employeeMotivation',
     }),
+    dataplattformClient.report({
+      reportName: 'employee_competence',
+    }),
   ]);
 
-  const [categories, empMotivation] = await Promise.all([
+  const [categories, empMotivation, empCompetence] = await Promise.all([
     reqCategories.json(),
     reqMotivation.json(),
+    reqCompetence.json(),
   ]);
+
   const thisMotivation = [];
   empMotivation.forEach((item) => {
     thisMotivation.push({
@@ -768,36 +773,6 @@ exports.employeeMotivationRadar = async ({
       motivasjon: item[user_id.slice(0, 8)],
     });
   });
-  const [structuredCats, setNames] = reStructCategories(
-    categories,
-    thisMotivation,
-    'motivasjon'
-  );
-
-  return {
-    componentType: 'Radar',
-    setNames: setNames,
-    sets: structuredCats,
-  };
-};
-
-exports.employeeCompetenceRadar = async ({
-  dataplattformClient,
-  queryStringParameters: { user_id } = {},
-}) => {
-  const [reqCategories, reqCompetence] = await Promise.all([
-    dataplattformClient.report({
-      reportName: 'categories',
-    }),
-    dataplattformClient.report({
-      reportName: 'employee_competence',
-    }),
-  ]);
-
-  const [categories, empCompetence] = await Promise.all([
-    reqCategories.json(),
-    reqCompetence.json(),
-  ]);
 
   const thisCompetence = [];
   empCompetence.forEach((item) => {
@@ -806,11 +781,14 @@ exports.employeeCompetenceRadar = async ({
       kompetanse: item[user_id],
     });
   });
+
   const [structuredCats, setNames] = reStructCategories(
     categories,
+    thisMotivation,
     thisCompetence,
-    'kompetanse'
   );
+
+  console.log(structuredCats)
 
   return {
     componentType: 'Radar',
@@ -819,16 +797,19 @@ exports.employeeCompetenceRadar = async ({
   };
 };
 
-const reStructCategories = (categories, scores, kompMot) => {
+const reStructCategories = (categories, motScores, compScores) => {
+
+  //find the main categoreis
   const mainCategories = new Set(
     categories.flatMap((item) => Object.keys(item))
   );
 
-  const score = (name) => {
-    const tempScore = scores.find((obj) => {
+  const score = (name,scores,komOrMot) => {
+    const thisCat = scores.find((obj) => {
       return obj['kategori'] === name;
     });
-    return tempScore ? tempScore[kompMot] : 0;
+    return thisCat ? thisCat[komOrMot] : 0;
+ 
   };
 
   let catSet = [];
@@ -839,7 +820,8 @@ const reStructCategories = (categories, scores, kompMot) => {
     const upperCaseName = name.charAt(0).toUpperCase() + name.slice(1);
     mainCats.push({
       kategori: upperCaseName,
-      [kompMot]: score(upperCaseName),
+      "motivasjon": score(upperCaseName, motScores, "motivasjon"),
+      "kompetanse": score(upperCaseName, compScores, "kompetanse")
     });
     const categoryObject = {
       [name]: [],
@@ -850,7 +832,8 @@ const reStructCategories = (categories, scores, kompMot) => {
         // Create child category
         const childCategoryObject = {
           kategori: childName,
-          [kompMot]: score(childName),
+          "motivasjon": score(childName, motScores, "motivasjon"),
+          "kompetanse": score(childName, compScores, "kompetanse")
         };
         categoryObject[name].push(childCategoryObject);
       }
