@@ -63,6 +63,9 @@ const useMotivationMappingStyles = makeStyles({
 });
 
 export const startedInKnowit = (allExperience: Experience[] | undefined) => {
+  if(!allExperience){
+    return <NoData/>
+  }
   const knowit = allExperience?.find((x) =>
     x.employer
       ? x.employer.toLowerCase().includes('knowit') ||
@@ -84,6 +87,9 @@ export const startedInKnowit = (allExperience: Experience[] | undefined) => {
 };
 
 export const totalExperience = (allExperience: Experience[] | undefined) => {
+  if(!allExperience){
+    return <NoData/>
+  }
   const dates: Date[] = [];
   allExperience?.map((job) => {
     job.year_from !== -1 && dates.push({ year: job.year_from });
