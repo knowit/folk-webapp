@@ -73,6 +73,13 @@ exports.projectStatus = async ({ dataplattformClient }) => {
   }));
 };
 
+const cvs = [
+  ['no', 'pdf'],
+  ['int', 'pdf'],
+  ['no', 'word'],
+  ['int', 'word'],
+];
+
 exports.competence = async ({ dataplattformClient }) => {
   const [reqCompetenceTable, reqMotivation, reqCompetence] = await Promise.all([
     dataplattformClient.report({
@@ -96,12 +103,7 @@ exports.competence = async ({ dataplattformClient }) => {
     encrypted: true,
   });
 
-  const cvs = [
-    ['no', 'pdf'],
-    ['int', 'pdf'],
-    ['no', 'word'],
-    ['int', 'word'],
-  ];
+ 
   return allEmployees.map((employee) => ({
     rowId: uuid(),
     rowData: [
@@ -135,6 +137,11 @@ exports.competence = async ({ dataplattformClient }) => {
     ],
   }));
 };
+const formatTime = (year, month) =>
+    [
+      year && year > 0 ? year : '',
+      year && year > 0 && month && month > 0 ? `/${month}` : '',
+    ].join('');
 
 exports.employeeExperience = async ({
   dataplattformClient,
@@ -147,11 +154,7 @@ exports.employeeExperience = async ({
     },
   });
   const empExperience = await req.json();
-  const formatTime = (year, month) =>
-    [
-      year && year > 0 ? year : '',
-      year && year > 0 && month && month > 0 ? `/${month}` : '',
-    ].join('');
+  
 
   return {
     name: empExperience.length > 0 ? empExperience[0].navn : '',
@@ -714,7 +717,9 @@ exports.empData = async ({
   });
   const emailUuid = makeEmailUuid(email, salt);
 
-  const [reqSkills, reqWork, reqEmp] = await Promise.all([
+ 
+
+  const [reqSkills, reqWork, reqEmp, reqComp, reqProjects] = await Promise.all([
     dataplattformClient.report({
       reportName: 'employeeSkills',
       filter: { email },
@@ -728,19 +733,41 @@ exports.empData = async ({
       reportName: 'projectStatus',
       filter: { email },
     }),
+    dataplattformClient.report({
+      reportName: 'competence',
+      filter: { email },
+    }),
+
+    dataplattformClient.report({
+      reportName: 'projectExperience',
+      // filter: {
+      //   user_id: user_id,
+      // }
+    }),
   ]);
 
-  const [resSkills, resWork, resEmp] = await Promise.all([
+  const [resSkills, resWork, resEmp, resComp, resProjects] = await Promise.all([
     reqSkills.json(),
     reqWork.json(),
     reqEmp.json(),
+    reqComp.json(),
+    reqProjects.json(),
   ]);
+  
+  console.log(resProjects)
 
   return {
     id: emailUuid,
     employee: resEmp[0],
     workExperience: resWork,
     tags: resSkills[0],
+    degree: resComp[0].degree,
+    links:  Object.fromEntries(
+      cvs.map(([lang, format]) => [
+        `${lang}_${format}`,
+        resComp[0].link.replace('{LANG}', lang).replace('{FORMAT}', format),
+      ]))
+
   };
 };
 
