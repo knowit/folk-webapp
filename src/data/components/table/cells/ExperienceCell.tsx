@@ -84,7 +84,7 @@ export const months = [
   'November',
   'Desember',
 ];
-function toNorwegianMonths(date: string) {
+ function toNorwegianMonths(date: string) {
   if (date !== '') {
     const dateArray = date.split('/');
     const formattedMont = months[Number(dateArray[1]) - 1] || '';
