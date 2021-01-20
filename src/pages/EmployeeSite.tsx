@@ -5,10 +5,13 @@ import { Skeleton } from '@material-ui/lab';
 import DDItem, { DDChart } from '../data/DDItem';
 import { useFetchedData } from '../hooks/service';
 import { startedInKnowit, totalExperience } from '../components/EmployeeInfo';
-import { months } from '../data/components/table/cells/ExperienceCell';
+import {
+  getExperience,
+  months,
+} from '../data/components/table/cells/ExperienceCell';
 import { NoData } from '../components/ErrorText';
 
-type Experience = {
+type WorkExperience = {
   employer: string;
   month_from: number;
   year_from: number;
@@ -22,22 +25,35 @@ type EmpData = {
   user_id: string;
 };
 
+interface ProjectExperience {
+  customer: string;
+  project: string;
+  time_to: string;
+  time_from: string;
+}
+
+interface ExperienceData {
+  name: string;
+  experience: ProjectExperience[];
+}
+
 type EmpSiteData = {
   id: string;
+  id2: string;
   employee: EmpData;
   tags: {
     skill: string;
     role: string;
     language: string;
   };
-  workExperience: Experience[];
-  degree:string; 
-  links:  {
-    no_pdf: string,
-    int_pdf: string,
-    no_word: string,
-    int_word: string,
-}
+  workExperience: WorkExperience[];
+  degree: string;
+  links: {
+    no_pdf: string;
+    int_pdf: string;
+    no_word: string;
+    int_word: string;
+  };
 };
 
 const useStyles = makeStyles({
@@ -59,17 +75,18 @@ const ChartSkeleton = () => (
   <Skeleton variant="rect" height={320} width={400} animation="wave" />
 );
 
-function printWorkExperience(workExperience:Experience[]|undefined|null){
-  if(!workExperience) return <NoData/>
+function printWorkExperience(
+  workExperience: WorkExperience[] | undefined | null
+) {
+  if (!workExperience) return <NoData />;
   //sort so newest is first
   workExperience.sort((a, b) => b.year_from - a.year_from);
-  const getYear = (year:number) =>(
-    year!== -1 ? year : null
-  ) 
+  const getYear = (year: number) => (year !== -1 ? year : null);
   return workExperience.map((exp, index) => (
     <div key={index}>
       <h4>
-        {months[exp.month_from]} {getYear(exp.year_from)} - {months[exp.month_to]} {getYear(exp.year_to)}
+        {months[exp.month_from]} {getYear(exp.year_from)} -{' '}
+        {months[exp.month_to]} {getYear(exp.year_to)}
       </h4>
       <div>{exp.employer}</div>
     </div>
@@ -82,15 +99,19 @@ export default function EmployeeSite() {
   const idRegex = /(\w+\.?)*@knowit.no/;
   const url = '/api/data/empData?email=' + email;
   const [data, pending] = useFetchedData<EmpSiteData>({ url });
+
   const classes = useStyles();
 
+  const id = data ? data.id : 'not found';
+  const id2 = data ? data.id2 : null;
+  const emp = data ? data.employee : null;
+  const tags = data ? data.tags : null;
+  const [expData, expPending] = useFetchedData<ExperienceData>({
+    url: `/api/data/employeeExperience?user_id=${id2}`,
+  });
   if (!email.match(idRegex)) {
     return <Redirect to={{ pathname: '/404' }} />;
   }
-
-  const id = data ? data.id : 'not found';
-  const emp = data ? data.employee : null;
-  const tags = data ? data.tags : null;
   return (
     <>
       {pending ? (
@@ -157,7 +178,7 @@ export default function EmployeeSite() {
           ) : (
             <>
               <b>Utdanning: </b>
-              {data?.degree}
+              {data && data?.degree}
             </>
           )}
         </div>
@@ -190,16 +211,28 @@ export default function EmployeeSite() {
           <h1>Arbeidserfaring</h1>
           {pending ? (
             <p>loading....</p>
-          ) : ( printWorkExperience(data?.workExperience)
+          ) : (
+            printWorkExperience(data?.workExperience)
+          )}
+        </div>
+        <div>
+          <h1>Prosjekterfaring</h1>
+          {!expPending && expData && expData !== undefined ? (
+            getExperience(expData.experience)
+          ) : (
+            <p>loading....</p>
           )}
         </div>
         <div>
           <h1>Download CV</h1>
           {pending || !data ? (
             <p>loading....</p>
-          ) : ( Object.entries(data!.links).map(link=>(
-            <p key={link[1]} ><a  href={link[1]}>{link[0]}</a></p>
-          ))
+          ) : (
+            Object.entries(data!.links).map((link) => (
+              <p key={link[1]}>
+                <a href={link[1]}>{link[0]}</a>
+              </p>
+            ))
           )}
         </div>
       </div>
