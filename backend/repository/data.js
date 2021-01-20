@@ -719,7 +719,7 @@ exports.empData = async ({
 
  
 
-  const [reqSkills, reqWork, reqEmp, reqComp, reqProjects] = await Promise.all([
+  const [reqSkills, reqWork, reqEmp, reqComp] = await Promise.all([
     dataplattformClient.report({
       reportName: 'employeeSkills',
       filter: { email },
@@ -737,27 +737,17 @@ exports.empData = async ({
       reportName: 'competence',
       filter: { email },
     }),
-
-    dataplattformClient.report({
-      reportName: 'projectExperience',
-      // filter: {
-      //   user_id: user_id,
-      // }
-    }),
   ]);
 
-  const [resSkills, resWork, resEmp, resComp, resProjects] = await Promise.all([
+  const [resSkills, resWork, resEmp, resComp] = await Promise.all([
     reqSkills.json(),
     reqWork.json(),
     reqEmp.json(),
     reqComp.json(),
-    reqProjects.json(),
   ]);
-  
-  console.log(resProjects)
-
   return {
     id: emailUuid,
+    id2: resEmp[0].user_id, 
     employee: resEmp[0],
     workExperience: resWork,
     tags: resSkills[0],
