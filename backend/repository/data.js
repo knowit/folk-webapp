@@ -103,7 +103,6 @@ exports.competence = async ({ dataplattformClient }) => {
     encrypted: true,
   });
 
- 
   return allEmployees.map((employee) => ({
     rowId: uuid(),
     rowData: [
@@ -138,10 +137,10 @@ exports.competence = async ({ dataplattformClient }) => {
   }));
 };
 const formatTime = (year, month) =>
-    [
-      year && year > 0 ? year : '',
-      year && year > 0 && month && month > 0 ? `/${month}` : '',
-    ].join('');
+  [
+    year && year > 0 ? year : '',
+    year && year > 0 && month && month > 0 ? `/${month}` : '',
+  ].join('');
 
 exports.employeeExperience = async ({
   dataplattformClient,
@@ -154,7 +153,6 @@ exports.employeeExperience = async ({
     },
   });
   const empExperience = await req.json();
-  
 
   return {
     name: empExperience.length > 0 ? empExperience[0].navn : '',
@@ -717,8 +715,6 @@ exports.empData = async ({
   });
   const emailUuid = makeEmailUuid(email, salt);
 
- 
-
   const [reqSkills, reqWork, reqEmp, reqComp] = await Promise.all([
     dataplattformClient.report({
       reportName: 'employeeSkills',
@@ -747,17 +743,17 @@ exports.empData = async ({
   ]);
   return {
     id: emailUuid,
-    id2: resEmp[0].user_id, 
+    id2: resEmp[0].user_id,
     employee: resEmp[0],
     workExperience: resWork,
     tags: resSkills[0],
     degree: resComp[0].degree,
-    links:  Object.fromEntries(
+    links: Object.fromEntries(
       cvs.map(([lang, format]) => [
         `${lang}_${format}`,
         resComp[0].link.replace('{LANG}', lang).replace('{FORMAT}', format),
-      ]))
-
+      ])
+    ),
   };
 };
 
@@ -802,7 +798,7 @@ exports.employeeRadar = async ({
   const [structuredCats, setNames] = reStructCategories(
     categories,
     thisMotivation,
-    thisCompetence,
+    thisCompetence
   );
 
   return {
@@ -813,23 +809,22 @@ exports.employeeRadar = async ({
 };
 
 const reStructCategories = (categories, motScores, compScores) => {
-
   //find the main categoreis
   const mainCategories = new Set(
     categories.flatMap((item) => Object.keys(item))
   );
 
   /**
-   * returns the score of the category with name = name from 
+   * returns the score of the category with name = name from
    * the array scores. kompOrMot is either "kompetanse" or
-   * "motivasjon", depending on the score to find 
+   * "motivasjon", depending on the score to find
    */
-  const score = (name,scores,komOrMot) => {
+  const score = (name, scores, komOrMot) => {
     const thisCat = scores.find((obj) => {
       return obj['kategori'] === name;
     });
     const returnValue = thisCat ? thisCat[komOrMot] : 0;
-    return returnValue || 0;
+    return returnValue || 0;
   };
 
   let catSet = [];
@@ -840,8 +835,8 @@ const reStructCategories = (categories, motScores, compScores) => {
     const upperCaseName = name.charAt(0).toUpperCase() + name.slice(1);
     mainCats.push({
       kategori: upperCaseName,
-      "motivasjon": score(upperCaseName, motScores, "motivasjon"),
-      "kompetanse": score(upperCaseName, compScores, "kompetanse")
+      motivasjon: score(upperCaseName, motScores, 'motivasjon'),
+      kompetanse: score(upperCaseName, compScores, 'kompetanse'),
     });
     const categoryObject = {
       [name]: [],
@@ -852,8 +847,8 @@ const reStructCategories = (categories, motScores, compScores) => {
         // Create child category
         const childCategoryObject = {
           kategori: childName,
-          "motivasjon": score(childName, motScores, "motivasjon"),
-          "kompetanse": score(childName, compScores, "kompetanse")
+          motivasjon: score(childName, motScores, 'motivasjon'),
+          kompetanse: score(childName, compScores, 'kompetanse'),
         };
         categoryObject[name].push(childCategoryObject);
       }
