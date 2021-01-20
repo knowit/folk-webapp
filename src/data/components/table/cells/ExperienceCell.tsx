@@ -94,7 +94,6 @@ export const months = [
   }
 }
 export function getExperience(experience: Experience[] | undefined) {
-  console.log(experience)
   if (!experience) return <NoData />;
   return experience.map((exp, index) => (
     <div key={index}>
