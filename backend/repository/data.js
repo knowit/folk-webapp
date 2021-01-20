@@ -742,8 +742,8 @@ exports.empData = async ({
     reqComp.json(),
   ]);
   return {
-    id: emailUuid,
-    id2: resEmp[0].user_id,
+    emailId: emailUuid,
+    user_id: resEmp[0].user_id,
     employee: resEmp[0],
     workExperience: resWork,
     tags: resSkills[0],

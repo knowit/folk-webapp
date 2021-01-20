@@ -38,8 +38,8 @@ interface ExperienceData {
 }
 
 type EmpSiteData = {
-  id: string;
-  id2: string;
+  email_id: string;
+  user_id: string;
   employee: EmpData;
   tags: {
     skill: string;
@@ -102,12 +102,12 @@ export default function EmployeeSite() {
 
   const classes = useStyles();
 
-  const id = data ? data.id : 'not found';
-  const id2 = data ? data.id2 : null;
+  const email_id = data ? data.email_id : 'not found';
+  const user_id = data ? data.user_id : null;
   const emp = data ? data.employee : null;
   const tags = data ? data.tags : null;
   const [expData, expPending] = useFetchedData<ExperienceData>({
-    url: `/api/data/employeeExperience?user_id=${id2}`,
+    url: `/api/data/employeeExperience?user_id=${user_id}`,
   });
   if (!email.match(idRegex)) {
     return <Redirect to={{ pathname: '/404' }} />;
@@ -197,7 +197,7 @@ export default function EmployeeSite() {
             <ChartSkeleton />
           ) : (
             <DDItem
-              url={'/api/data/employeeRadar?user_id=' + id}
+              url={'/api/data/employeeRadar?user_id=' + email_id}
               title="Motivasjon"
               Component={DDChart}
               SkeletonComponent={ChartSkeleton}
