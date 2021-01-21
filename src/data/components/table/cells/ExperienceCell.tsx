@@ -70,7 +70,7 @@ const useModalStyles = makeStyles({
     },
   },
 });
-const months = [
+export const months = [
   'Januar',
   'Februar',
   'Mars',
@@ -92,6 +92,18 @@ function toNorwegianMonths(date: string) {
   } else {
     return '';
   }
+}
+export function getExperience(experience: Experience[] | undefined) {
+  if (!experience) return <NoData />;
+  return experience.map((exp, index) => (
+    <div key={index}>
+      <h4>
+        {toNorwegianMonths(exp.time_from)} - {toNorwegianMonths(exp.time_to)}
+      </h4>
+      <div>{exp.customer}</div>
+      <div>{exp.project}</div>
+    </div>
+  ));
 }
 function ExperiencePopoverModel({
   url,
@@ -124,16 +136,7 @@ function ExperiencePopoverModel({
           ''
         )}
         {!pending && userInfo?.experience ? (
-          userInfo?.experience.map((exp, index) => (
-            <div key={index}>
-              <h4>
-                {toNorwegianMonths(exp.time_from)} -{' '}
-                {toNorwegianMonths(exp.time_to)}
-              </h4>
-              <div>{exp.customer}</div>
-              <div>{exp.project}</div>
-            </div>
-          ))
+          getExperience(userInfo.experience)
         ) : (
           <ErrorText />
         )}

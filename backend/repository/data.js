@@ -73,6 +73,13 @@ exports.projectStatus = async ({ dataplattformClient }) => {
   }));
 };
 
+const cvs = [
+  ['no', 'pdf'],
+  ['int', 'pdf'],
+  ['no', 'word'],
+  ['int', 'word'],
+];
+
 exports.competence = async ({ dataplattformClient }) => {
   const [reqCompetenceTable, reqMotivation, reqCompetence] = await Promise.all([
     dataplattformClient.report({
@@ -96,12 +103,6 @@ exports.competence = async ({ dataplattformClient }) => {
     encrypted: true,
   });
 
-  const cvs = [
-    ['no', 'pdf'],
-    ['int', 'pdf'],
-    ['no', 'word'],
-    ['int', 'word'],
-  ];
   return allEmployees.map((employee) => ({
     rowId: uuid(),
     rowData: [
@@ -135,6 +136,11 @@ exports.competence = async ({ dataplattformClient }) => {
     ],
   }));
 };
+const formatTime = (year, month) =>
+  [
+    year && year > 0 ? year : '',
+    year && year > 0 && month && month > 0 ? `/${month}` : '',
+  ].join('');
 
 exports.employeeExperience = async ({
   dataplattformClient,
@@ -147,11 +153,6 @@ exports.employeeExperience = async ({
     },
   });
   const empExperience = await req.json();
-  const formatTime = (year, month) =>
-    [
-      year && year > 0 ? year : '',
-      year && year > 0 && month && month > 0 ? `/${month}` : '',
-    ].join('');
 
   return {
     name: empExperience.length > 0 ? empExperience[0].navn : '',
@@ -478,7 +479,7 @@ function dateRange(startDate, endDate) {
   const dates = [];
 
   for (let i = startYear; i <= endYear; i++) {
-    const endMonth = i != endYear ? 11 : parseInt(end[1]) - 1;
+    const endMonth = i !== endYear ? 11 : parseInt(end[1]) - 1;
     const startMon = i === startYear ? parseInt(start[1]) - 1 : 0;
     for (let j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j + 1) {
       const month = j + 1;
@@ -714,7 +715,7 @@ exports.empData = async ({
   });
   const emailUuid = makeEmailUuid(email, salt);
 
-  const [reqSkills, reqWork, reqEmp] = await Promise.all([
+  const [reqSkills, reqWork, reqEmp, reqComp] = await Promise.all([
     dataplattformClient.report({
       reportName: 'employeeSkills',
       filter: { email },
@@ -728,19 +729,31 @@ exports.empData = async ({
       reportName: 'projectStatus',
       filter: { email },
     }),
+    dataplattformClient.report({
+      reportName: 'competence',
+      filter: { email },
+    }),
   ]);
 
-  const [resSkills, resWork, resEmp] = await Promise.all([
+  const [resSkills, resWork, resEmp, resComp] = await Promise.all([
     reqSkills.json(),
     reqWork.json(),
     reqEmp.json(),
+    reqComp.json(),
   ]);
-
   return {
-    id: emailUuid,
+    emailId: emailUuid,
+    user_id: resEmp[0].user_id,
     employee: resEmp[0],
     workExperience: resWork,
     tags: resSkills[0],
+    degree: resComp[0].degree,
+    links: Object.fromEntries(
+      cvs.map(([lang, format]) => [
+        `${lang}_${format}`,
+        resComp[0].link.replace('{LANG}', lang).replace('{FORMAT}', format),
+      ])
+    ),
   };
 };
 
@@ -785,7 +798,7 @@ exports.employeeRadar = async ({
   const [structuredCats, setNames] = reStructCategories(
     categories,
     thisMotivation,
-    thisCompetence,
+    thisCompetence
   );
 
   return {
@@ -796,23 +809,22 @@ exports.employeeRadar = async ({
 };
 
 const reStructCategories = (categories, motScores, compScores) => {
-
   //find the main categoreis
   const mainCategories = new Set(
     categories.flatMap((item) => Object.keys(item))
   );
 
   /**
-   * returns the score of the category with name = name from 
+   * returns the score of the category with name = name from
    * the array scores. kompOrMot is either "kompetanse" or
-   * "motivasjon", depending on the score to find 
+   * "motivasjon", depending on the score to find
    */
-  const score = (name,scores,komOrMot) => {
+  const score = (name, scores, komOrMot) => {
     const thisCat = scores.find((obj) => {
       return obj['kategori'] === name;
     });
     const returnValue = thisCat ? thisCat[komOrMot] : 0;
-    return returnValue || 0;
+    return returnValue || 0;
   };
 
   let catSet = [];
@@ -823,8 +835,8 @@ const reStructCategories = (categories, motScores, compScores) => {
     const upperCaseName = name.charAt(0).toUpperCase() + name.slice(1);
     mainCats.push({
       kategori: upperCaseName,
-      "motivasjon": score(upperCaseName, motScores, "motivasjon"),
-      "kompetanse": score(upperCaseName, compScores, "kompetanse")
+      motivasjon: score(upperCaseName, motScores, 'motivasjon'),
+      kompetanse: score(upperCaseName, compScores, 'kompetanse'),
     });
     const categoryObject = {
       [name]: [],
@@ -835,8 +847,8 @@ const reStructCategories = (categories, motScores, compScores) => {
         // Create child category
         const childCategoryObject = {
           kategori: childName,
-          "motivasjon": score(childName, motScores, "motivasjon"),
-          "kompetanse": score(childName, compScores, "kompetanse")
+          motivasjon: score(childName, motScores, 'motivasjon'),
+          kompetanse: score(childName, compScores, 'kompetanse'),
         };
         categoryObject[name].push(childCategoryObject);
       }

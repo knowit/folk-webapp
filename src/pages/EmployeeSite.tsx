@@ -5,8 +5,13 @@ import { Skeleton } from '@material-ui/lab';
 import DDItem, { DDChart } from '../data/DDItem';
 import { useFetchedData } from '../hooks/service';
 import { startedInKnowit, totalExperience } from '../components/EmployeeInfo';
+import {
+  getExperience,
+  months,
+} from '../data/components/table/cells/ExperienceCell';
+import { NoData } from '../components/ErrorText';
 
-type Experience = {
+type WorkExperience = {
   employer: string;
   month_from: number;
   year_from: number;
@@ -19,16 +24,36 @@ type EmpData = {
   title: string;
   user_id: string;
 };
-type TagData = {
-  skill: string;
-  role: string;
-  language: string;
-};
+
+interface ProjectExperience {
+  customer: string;
+  project: string;
+  time_to: string;
+  time_from: string;
+}
+
+interface ExperienceData {
+  name: string;
+  experience: ProjectExperience[];
+}
+
 type EmpSiteData = {
-  id: string;
+  email_id: string;
+  user_id: string;
   employee: EmpData;
-  tags: TagData;
-  workExperience: Experience[];
+  tags: {
+    skill: string;
+    role: string;
+    language: string;
+  };
+  workExperience: WorkExperience[];
+  degree: string;
+  links: {
+    no_pdf: string;
+    int_pdf: string;
+    no_word: string;
+    int_word: string;
+  };
 };
 
 const useStyles = makeStyles({
@@ -47,8 +72,26 @@ const useStyles = makeStyles({
 });
 
 const ChartSkeleton = () => (
-  <Skeleton variant="rect" height={320} animation="wave" />
+  <Skeleton variant="rect" height={320} width={400} animation="wave" />
 );
+
+function printWorkExperience(
+  workExperience: WorkExperience[] | undefined | null
+) {
+  if (!workExperience) return <NoData />;
+  //sort so newest is first
+  workExperience.sort((a, b) => b.year_from - a.year_from);
+  const getYear = (year: number) => (year !== -1 ? year : null);
+  return workExperience.map((exp, index) => (
+    <div key={index}>
+      <h4>
+        {months[exp.month_from]} {getYear(exp.year_from)} -{' '}
+        {months[exp.month_to]} {getYear(exp.year_to)}
+      </h4>
+      <div>{exp.employer}</div>
+    </div>
+  ));
+}
 
 export default function EmployeeSite() {
   const location = useLocation();
@@ -56,15 +99,19 @@ export default function EmployeeSite() {
   const idRegex = /(\w+\.?)*@knowit.no/;
   const url = '/api/data/empData?email=' + email;
   const [data, pending] = useFetchedData<EmpSiteData>({ url });
+
   const classes = useStyles();
 
+  const email_id = data ? data.email_id : 'not found';
+  const user_id = data ? data.user_id : null;
+  const emp = data ? data.employee : null;
+  const tags = data ? data.tags : null;
+  const [expData, expPending] = useFetchedData<ExperienceData>({
+    url: `/api/data/employeeExperience?user_id=${user_id}`,
+  });
   if (!email.match(idRegex)) {
     return <Redirect to={{ pathname: '/404' }} />;
   }
-
-  const id = data ? data.id : 'not found';
-  const emp = data ? data.employee : null;
-  const tags = data ? data.tags : null;
   return (
     <>
       {pending ? (
@@ -130,6 +177,16 @@ export default function EmployeeSite() {
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
           ) : (
             <>
+              <b>Utdanning: </b>
+              {data && data?.degree}
+            </>
+          )}
+        </div>
+        <div className={classes.cell}>
+          {pending ? (
+            <Skeleton variant="rect" width={340} height={15} animation="wave" />
+          ) : (
+            <>
               <b>Nærmeste leder: </b>
               *DATA FRA AD HER*
             </>
@@ -140,7 +197,7 @@ export default function EmployeeSite() {
             <ChartSkeleton />
           ) : (
             <DDItem
-              url={'/api/data/employeeRadar?user_id=' + id}
+              url={'/api/data/employeeRadar?user_id=' + email_id}
               title="Motivasjon"
               Component={DDChart}
               SkeletonComponent={ChartSkeleton}
@@ -150,6 +207,34 @@ export default function EmployeeSite() {
             />
           )}
         </Grid>
+        <div>
+          <h1>Arbeidserfaring</h1>
+          {pending ? (
+            <p>loading....</p>
+          ) : (
+            printWorkExperience(data?.workExperience)
+          )}
+        </div>
+        <div>
+          <h1>Prosjekterfaring</h1>
+          {!expPending && expData && expData !== undefined ? (
+            getExperience(expData.experience)
+          ) : (
+            <p>loading....</p>
+          )}
+        </div>
+        <div>
+          <h1>Download CV</h1>
+          {pending || !data ? (
+            <p>loading....</p>
+          ) : (
+            Object.entries(data!.links).map((link) => (
+              <p key={link[1]}>
+                <a href={link[1]}>{link[0]}</a>
+              </p>
+            ))
+          )}
+        </div>
       </div>
     </>
   );
