@@ -14,22 +14,16 @@ interface SunburstChartsProps {
   big?: boolean;
 }
 
-const CustomTooltip = ({ id, value }: NormalizedDatum<unknown>) => (
-  <p>
-    {id}: <b>{value.toFixed(2)}</b>
-  </p>
-);
-
-const GetCorrectValue=(node:NormalizedDatum<unknown>)=>{
-  if(node.children){
-    const sumValue = node.children.reduce(getParentSize,0)
-    return node["verdi"] - sumValue
+const GetCorrectValue = (node: NormalizedDatum<unknown>) => {
+  if (node.children) {
+    const sumValue = node.children.reduce(getParentSize, 0);
+    return node['verdi'] - sumValue;
   }
-  return node["size"]
-}
+  return node['size'];
+};
 function getParentSize(total, child) {
   return total + child['size'];
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+}
 
 export default function Sunburst({
   data,
@@ -37,6 +31,27 @@ export default function Sunburst({
   big,
 }: SunburstChartsProps) {
   const height = big ? '400px' : '300px';
+
+  const CustomTooltip = ({
+    id,
+    value,
+    ancestor,
+    depth,
+  }: NormalizedDatum<unknown>) => {
+    const childValue =
+      depth === 1
+        ? value
+        : data.children
+            .find((kategori) => kategori.kategori === ancestor.id)
+            .children.find((kategori) => kategori.kategori === id).verdi;
+
+    return (
+      <p>
+        {id}: <b>{childValue.toFixed(2)}</b>
+      </p>
+    );
+  };
+
   return (
     <div style={{ height, width: '100%' }}>
       <ResponsiveSunburst
