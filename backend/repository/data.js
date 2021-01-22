@@ -402,18 +402,12 @@ exports.ageDistribution = async ({ dataplattformClient }) => {
 
 function getEventSet(events) {
   // Finds earliest and latest dates for creating a range of years
-  const earliestDate = new Date(
+  const firstYear = new Date(
     Math.min(...events.map((event) => new Date(event.time_from)))
-  ).toISOString();
-  const latestDate = new Date(
+  ).getFullYear();
+  const lastYear = new Date(
     Math.max(...events.map((event) => new Date(event.time_to)))
-  ).toISOString();
-
-  const [earlyDate] = earliestDate.split('T');
-  const [lastDate] = latestDate.split('T');
-  
-  const [firstYear] = earlyDate.split('-');
-  const [lastYear] = lastDate.split('-');
+  ).getFullYear();
 
   const years = []; // Range of years in dataset, [2015, 2016, 2017, etc...]
   for (let year = parseInt(firstYear); year <= parseInt(lastYear); year++)
