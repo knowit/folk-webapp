@@ -119,6 +119,7 @@ export default function EmployeeSite() {
   if (!email.match(idRegex)) {
     return <Redirect to={{ pathname: '/404' }} />;
   }
+
   return (
     <>
       {pending ? (
