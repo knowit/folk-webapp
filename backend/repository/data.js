@@ -404,16 +404,16 @@ function getEventSet(events) {
   // Finds earliest and latest dates for creating a range of years
   const earliestDate = new Date(
     Math.min(...events.map((event) => new Date(event.time_from)))
-  ).toLocaleString('no-NO');
+  ).toISOString();
   const latestDate = new Date(
     Math.max(...events.map((event) => new Date(event.time_to)))
-  ).toLocaleString('no-NO');
+  ).toISOString();
 
-  const [earlyDate] = earliestDate.split(',');
-  const [lastDate] = latestDate.split(',');
-
-  const firstYear = earlyDate.split('.')[2];
-  const lastYear = lastDate.split('.')[2];
+  const [earlyDate] = earliestDate.split('T');
+  const [lastDate] = latestDate.split('T');
+  
+  const [firstYear] = earlyDate.split('-');
+  const [lastYear] = lastDate.split('-');
 
   const years = []; // Range of years in dataset, [2015, 2016, 2017, etc...]
   for (let year = parseInt(firstYear); year <= parseInt(lastYear); year++)
