@@ -5,7 +5,7 @@ import { Skeleton } from '@material-ui/lab';
 import DDItem, { DDChart } from '../data/DDItem';
 import { useFetchedData } from '../hooks/service';
 import { startedInKnowit, totalExperience } from '../components/EmployeeInfo';
- import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
+import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
 import {
   getExperience,
   months,
@@ -125,7 +125,11 @@ export default function EmployeeSite() {
         <Skeleton variant="rect" width={340} height={15} animation="wave" />
       ) : (
         <div className={classes.header}>
-        {data?.image ? <img src={data?.image} alt={emp?.navn} /> : <FallbackUserIcon/>}
+          {data?.image ? (
+            <img src={data?.image} alt={emp?.navn} />
+          ) : (
+            <FallbackUserIcon />
+          )}
           <div>
             <h1>{emp?.navn}</h1>
             <h2>{emp?.title}</h2>

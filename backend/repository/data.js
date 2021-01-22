@@ -21,7 +21,7 @@ const getThisEmployeeMotivationList = (uuidComp, threshold, categoryList) => {
   return skillList;
 };
 
-const getStorageUrl = (key) => (`${process.env.STORAGE_URL}/${key}`);
+const getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`;
 
 exports.projectStatus = async ({ dataplattformClient }) => {
   const [reqProjectStatus, reqMotivation, reqCompetence] = await Promise.all([
@@ -46,7 +46,6 @@ exports.projectStatus = async ({ dataplattformClient }) => {
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   });
-
   return allEmployees.map((employee) => ({
     rowId: uuid(),
     rowData: [
@@ -742,7 +741,7 @@ exports.empData = async ({
     reqEmp.json(),
     reqComp.json(),
   ]);
-  const emp = resEmp[0]
+  const emp = resEmp[0];
   return {
     emailId: emailUuid,
     user_id: emp.user_id,
