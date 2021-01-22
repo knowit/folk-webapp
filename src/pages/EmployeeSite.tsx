@@ -5,6 +5,7 @@ import { Skeleton } from '@material-ui/lab';
 import DDItem, { DDChart } from '../data/DDItem';
 import { useFetchedData } from '../hooks/service';
 import { startedInKnowit, totalExperience } from '../components/EmployeeInfo';
+import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
 import {
   getExperience,
   months,
@@ -41,6 +42,7 @@ type EmpSiteData = {
   email_id: string;
   user_id: string;
   employee: EmpData;
+  image: string;
   tags: {
     skill: string;
     role: string;
@@ -68,6 +70,11 @@ const useStyles = makeStyles({
     marginBottom: '12px',
     padding: '0 15px',
     lineHeight: '20px',
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '12px',
   },
 });
 
@@ -117,10 +124,17 @@ export default function EmployeeSite() {
       {pending ? (
         <Skeleton variant="rect" width={340} height={15} animation="wave" />
       ) : (
-        <>
-          <h1>{emp?.navn}</h1>
-          <h2>{emp?.title}</h2>
-        </>
+        <div className={classes.header}>
+          {data?.image ? (
+            <img src={data?.image} alt={emp?.navn} />
+          ) : (
+            <FallbackUserIcon />
+          )}
+          <div>
+            <h1>{emp?.navn}</h1>
+            <h2>{emp?.title}</h2>
+          </div>
+        </div>
       )}
       <div className={classes.root}>
         <div className={classes.cell}>

@@ -21,6 +21,8 @@ const getThisEmployeeMotivationList = (uuidComp, threshold, categoryList) => {
   return skillList;
 };
 
+const getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`;
+
 exports.projectStatus = async ({ dataplattformClient }) => {
   const [reqProjectStatus, reqMotivation, reqCompetence] = await Promise.all([
     dataplattformClient.report({
@@ -44,7 +46,6 @@ exports.projectStatus = async ({ dataplattformClient }) => {
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   });
-
   return allEmployees.map((employee) => ({
     rowId: uuid(),
     rowData: [
@@ -108,7 +109,7 @@ exports.competence = async ({ dataplattformClient }) => {
     rowData: [
       {
         value: employee.navn,
-        image: null,
+        image: getStorageUrl(employee.image_key),
         competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
           employee.email
         )}`,
@@ -724,7 +725,6 @@ exports.empData = async ({
       reportName: 'workExperience',
       filter: { email },
     }),
-
     dataplattformClient.report({
       reportName: 'projectStatus',
       filter: { email },
@@ -741,10 +741,12 @@ exports.empData = async ({
     reqEmp.json(),
     reqComp.json(),
   ]);
+  const emp = resEmp[0];
   return {
     emailId: emailUuid,
-    user_id: resEmp[0].user_id,
-    employee: resEmp[0],
+    user_id: emp.user_id,
+    employee: emp,
+    image: getStorageUrl(resComp[0].image_key),
     workExperience: resWork,
     tags: resSkills[0],
     degree: resComp[0].degree,
