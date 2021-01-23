@@ -26,7 +26,7 @@ const getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`;
 exports.projectStatus = async ({ dataplattformClient }) => {
   const [reqProjectStatus, reqMotivation, reqCompetence] = await Promise.all([
     dataplattformClient.report({
-      reportName: 'projectStatus',
+      reportName: 'competence',
     }),
     dataplattformClient.report({
       //Henter ut rapport med alles data fra motivasjon
@@ -51,7 +51,7 @@ exports.projectStatus = async ({ dataplattformClient }) => {
     rowData: [
       {
         value: employee.navn,
-        image: null,
+        image: getStorageUrl(employee.image_key),
         competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
           employee.email
         )}`,
@@ -710,7 +710,7 @@ exports.empData = async ({
   });
   const emailUuid = makeEmailUuid(email, salt);
 
-  const [reqSkills, reqWork, reqEmp, reqComp] = await Promise.all([
+  const [reqSkills, reqWork, reqComp] = await Promise.all([
     dataplattformClient.report({
       reportName: 'employeeSkills',
       filter: { email },
@@ -720,34 +720,29 @@ exports.empData = async ({
       filter: { email },
     }),
     dataplattformClient.report({
-      reportName: 'projectStatus',
-      filter: { email },
-    }),
-    dataplattformClient.report({
       reportName: 'competence',
       filter: { email },
     }),
   ]);
 
-  const [resSkills, resWork, resEmp, resComp] = await Promise.all([
+  const [resSkills, resWork, resComp] = await Promise.all([
     reqSkills.json(),
     reqWork.json(),
-    reqEmp.json(),
     reqComp.json(),
   ]);
-  const emp = resEmp[0];
+  const emp = resComp[0];
   return {
     emailId: emailUuid,
     user_id: emp.user_id,
     employee: emp,
-    image: getStorageUrl(resComp[0].image_key),
+    image: getStorageUrl(emp.image_key),
     workExperience: resWork,
     tags: resSkills[0],
     degree: resComp[0].degree,
     links: Object.fromEntries(
       cvs.map(([lang, format]) => [
         `${lang}_${format}`,
-        resComp[0].link.replace('{LANG}', lang).replace('{FORMAT}', format),
+        emp.link.replace('{LANG}', lang).replace('{FORMAT}', format),
       ])
     ),
   };
