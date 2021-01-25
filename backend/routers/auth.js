@@ -61,7 +61,7 @@ router.get('/callback', async function (req, res) {
 
   res.cookie('accessToken', tokens.access_token, {
     httpOnly: false,
-    maxAge: tokens.expires_in,
+    maxAge: tokens.expires_in * 1000,
     ...cookieSettings,
   });
   res.cookie('refreshToken', tokens.refresh_token, {
