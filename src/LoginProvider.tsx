@@ -38,7 +38,9 @@ export default function LoginProvider({
     setInterval(async () => {
       const renewedAccessToken = await renewToken(cookies.accessToken, cookies.refreshToken);
       if(renewedAccessToken) setCookie('accessToken', renewedAccessToken.accessToken, {
-        maxAge: renewedAccessToken.expiration
+        maxAge: renewedAccessToken.expiration,
+        sameSite: renewedAccessToken.sameSite,
+        secure: renewedAccessToken.secure
       });
     }, 600000);
   }

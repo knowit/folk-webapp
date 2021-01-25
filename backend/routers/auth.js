@@ -100,7 +100,9 @@ router.post('/refresh', async function (req, res) {
 
   res.send({
     accessToken: tokens.access_token,
-    expiration: tokens.expires_in
+    expiration: tokens.expires_in,
+    sameSite: true,
+    secure: true
   });
 });
 
