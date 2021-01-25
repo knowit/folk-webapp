@@ -16,7 +16,7 @@ export async function renewToken(accessToken: string, refreshToken: string) {
           body: JSON.stringify({refreshToken: refreshToken})
         };
         
-        const data = 
+        const tokenData = 
             await fetch(url, opts)
                 .then((res) => 
                     res.ok ? res.json() : Promise.reject(new Error(res.statusText))
@@ -25,7 +25,7 @@ export async function renewToken(accessToken: string, refreshToken: string) {
                 );
         
         
-        return data ? data.accessToken : null;
+        return tokenData ? tokenData : null;
     }
 
     return await getNewToken();
