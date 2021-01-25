@@ -7,20 +7,20 @@ import {
   ProjectStatusCell,
   CustomerStatusCell,
 } from '../data/components/table/DataCells';
-import DDItem, { DDTable, DDChart } from '../data/DDItem';
+import DDItem, { DDTable } from '../data/DDItem';
 import EmployeeInfo from '../components/EmployeeInfo';
 
 export default function Employee() {
   const TableSkeleton = () => (
     <Skeleton variant="rect" height={780} animation="wave" />
   );
-  const ChartSkeleton = () => (
+/*   const ChartSkeleton = () => (
     <Skeleton variant="rect" height={320} animation="wave" />
-  );
+  ); */
 
   return (
     <Grid container spacing={2}>
-      <DDItem
+   {/*    <DDItem
         url="/api/data/inbound"
         title="På vei inn"
         Component={DDChart}
@@ -49,7 +49,7 @@ export default function Employee() {
         title="Ressurstype"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
-      />
+      /> */}
 
       <DDItem
         url="/api/data/projectStatus"
