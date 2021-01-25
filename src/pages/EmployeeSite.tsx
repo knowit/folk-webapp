@@ -109,7 +109,7 @@ export default function EmployeeSite() {
 
   const classes = useStyles();
 
-  const email_id = data ? data.email_id : 'not found';
+  const email_id = data ? data.email_id : null;
   const user_id = data ? data.user_id : null;
   const emp = data ? data.employee : null;
   const tags = data ? data.tags : null;

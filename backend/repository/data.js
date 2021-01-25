@@ -708,7 +708,6 @@ exports.empData = async ({
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   });
-  const emailUuid = makeEmailUuid(email, salt);
 
   const [reqSkills, reqWork, reqComp] = await Promise.all([
     dataplattformClient.report({
@@ -732,7 +731,7 @@ exports.empData = async ({
   ]);
   const emp = resComp[0];
   return {
-    emailId: emailUuid,
+    email_id: makeEmailUuid(email, salt),
     user_id: emp.user_id,
     employee: emp,
     image: getStorageUrl(emp.image_key),
