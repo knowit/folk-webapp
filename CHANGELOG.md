@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2.0.0] - 2021-01-26
+### Added
+- Radar chart for displaying average competence and motivation
+- Line chart for displaying events in the "Fag og hendelser" visualizations
+- Pictures of the employees in both tables
+- Separate page for each employee
+
+### Changed
+- Changed from using sum of subcategories to average score for each category in Sunburst graph for displaying score for competence and motivation
+
+### Removed
+- Placeholders for charts at "Ansatte"-page
+
 ## [1.1.0] - 2021-01-06
 ### Added
 - Filtering on competence from the competence mapping
@@ -19,9 +32,6 @@ All notable changes to this project will be documented in this file.
 - Mailto link for contact and general feedback
 - New chart colors
 
-
-
-
 ### Changed
 - Changed from bar chart to sunburst chart for the "Kompetansekartlegging" visualization.
 - Changed from bar chart to line chart for the "Aktivitet faggrupper" visualization. 
@@ -33,11 +43,8 @@ All notable changes to this project will be documented in this file.
 - Some design updates
 - Changed labels on charts
 
-
-
 ### Removed
 - Removed optional chaining for backend part
-
 
 ### Fixed
 - Fixed height of charts when in expanded view.
