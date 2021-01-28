@@ -291,14 +291,6 @@ exports.competenceSum = async () => {
   };
 };
 
-exports.competenceAreas = async () => {
-  return {
-    componentType: null,
-    setNames: [],
-    sets: {},
-  };
-};
-
 function setInGroups(list) {
   const detailedGroupedList = [
     { years: 'Under 2 år', count: 0 },
@@ -787,8 +779,8 @@ exports.employeeRadar = async ({
 
   const [structuredCats, setNames] = reStructCategories(
     categories,
-    thisMotivation,
-    thisCompetence
+    thisCompetence,
+    thisMotivation
   );
 
   return {
@@ -798,7 +790,7 @@ exports.employeeRadar = async ({
   };
 };
 
-const reStructCategories = (categories, motScores, compScores) => {
+const reStructCategories = (categories, compScores = [], motScores = []) => {
   //find the main categoreis
   const mainCategories = new Set(
     categories.flatMap((item) => Object.keys(item))
@@ -825,8 +817,8 @@ const reStructCategories = (categories, motScores, compScores) => {
     const upperCaseName = name.charAt(0).toUpperCase() + name.slice(1);
     mainCats.push({
       kategori: upperCaseName,
-      motivasjon: score(upperCaseName, motScores, 'motivasjon'),
       kompetanse: score(upperCaseName, compScores, 'kompetanse'),
+      motivasjon: score(upperCaseName, motScores, 'motivasjon')
     });
     const categoryObject = {
       [name]: [],
@@ -837,8 +829,8 @@ const reStructCategories = (categories, motScores, compScores) => {
         // Create child category
         const childCategoryObject = {
           kategori: childName,
-          motivasjon: score(childName, motScores, 'motivasjon'),
           kompetanse: score(childName, compScores, 'kompetanse'),
+          motivasjon: score(childName, motScores, 'motivasjon')
         };
         categoryObject[name].push(childCategoryObject);
       }
@@ -855,3 +847,72 @@ const reStructCategories = (categories, motScores, compScores) => {
 
   return [catSet, setNames];
 };
+
+exports.competenceAreas = async ({ dataplattformClient }) => {
+
+  const [reqCategories, reqCompetence] = await Promise.all([
+    dataplattformClient.report({
+      reportName: 'categories'
+    }),
+    dataplattformClient.report({
+      reportName: 'competenceAverage'
+    })
+  ]);
+
+  const [categories, competence] = await Promise.all([
+    reqCategories.json(),
+    reqCompetence.json()
+  ]);
+
+  const output = [];
+  
+  const mainCategories = new Set(
+    categories.flatMap((item) => Object.keys(item))
+  );
+
+  mainCategories.forEach(name => {
+
+    const categoryObject = {
+      kategori: name.charAt(0).toUpperCase() + name.slice(1),
+      kompetanse: 0,
+    }
+
+    let categorySum = 0;
+    let numberOfSubCategories = 0;
+    
+    categories.forEach(item => {
+
+      const childName = item[name];
+      
+      if (childName) {
+        const value = competence[0][childName.toLowerCase()] || null;
+
+        categorySum += value;
+        numberOfSubCategories++;
+
+        const childCategoryObject = {
+          kategori: childName,
+          kompetanse: value
+        }
+
+        output.push(childCategoryObject);
+      }
+      
+    });
+
+    categoryObject.kompetanse = categorySum / numberOfSubCategories;
+    output.push(categoryObject);
+
+  });
+
+  const [structuredCats, setNames] = reStructCategories(
+    categories,
+    output
+  );
+
+  return {
+    componentType: 'Radar',
+    setNames: setNames,
+    sets: structuredCats,
+  }
+}
