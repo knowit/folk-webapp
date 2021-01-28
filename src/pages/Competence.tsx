@@ -35,7 +35,7 @@ export default function Competence() {
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
-          yLabels: [],
+          valueKey: ['kompetanse']
         }}
       />
 
