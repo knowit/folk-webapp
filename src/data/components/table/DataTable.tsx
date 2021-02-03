@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type createCellFunction = (props: { data: any; rowData: any[]; isOpen?:boolean; email?:string; rowStates?:RowStates; dispatch?:Dispatch<Action>, id?: string }) => JSX.Element;
+type createCellFunction = (props: { data: any; rowData: any[]; email?:string; rowStates?:RowStates; dispatch?:Dispatch<Action>, id?: string }) => JSX.Element;
 type renderExpandedCell = (data: any, callBack: () => void) => JSX.Element;
 
 
@@ -114,10 +114,9 @@ function GetCell({
 
   const classes = useStyles();
   const data = cellData !== null ? cellData : '-';
-  const isOpen = () => rowStates[id] && rowStates[id].height !== 70;
   if (expandable && RenderCell) {
     return (
-      <RenderCell data={cellData} rowData={[]} isOpen={isOpen()} email={cellData.email} rowStates={rowStates} dispatch={dispatch} id={id}/>
+      <RenderCell data={cellData} rowData={[]} email={cellData.email} rowStates={rowStates} dispatch={dispatch} id={id}/>
     );
   }
   return (
@@ -198,14 +197,12 @@ function MuiVirtualizedTable({
   const cellWidth = (index: number) =>
     columns.length === 5 ? consultantTableWidths[index] : widthList[index];
 
-  const rowRenderer = (props: { className: string; index: number, key:string}) => {
-    const { className, index } = props;
+  const rowRenderer = (props: { className: string; index: number, key:string, rowData:any}) => {
+    const { className, index, key, rowData } = props;
     const id = rows[index].rowId;
-    const rowData = rows[index].rowData;
-    const height = state[id] ? state[id].height : 70;
     const RenderExpanded:renderExpandedCell|undefined = columns[0].renderExpanded
     return (
-      <div key={id} className={classes.column}style={{ height} }>
+      <div key={key} className={classes.column}>
         <div className={className} >
           {columns.map((column, i) => {
             return (
@@ -223,7 +220,7 @@ function MuiVirtualizedTable({
             );
           })}
         </div>
-        {height !== 70 && RenderExpanded &&
+        {state[id] && state[id].height !== 70 && RenderExpanded &&
           <div>
             <RenderExpanded
               data={rowData[0]}
@@ -287,6 +284,7 @@ function MuiVirtualizedTable({
     <AutoSizer>
       {({ height, width }) => (
         <Table
+          rowRenderer={rowRenderer}
           ref={setRef}
           height={height}
           width={width}
@@ -297,7 +295,6 @@ function MuiVirtualizedTable({
           rowClassName={classes.flexContainer}
           noRowsRenderer={emptyRow}
           gridClassName={classes.noFocus}
-          rowRenderer={rowRenderer}
         >
           {columns.map(
             ({ title, headerRenderCell, checkBoxChangeHandler }, index) => {

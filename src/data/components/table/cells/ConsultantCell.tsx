@@ -59,7 +59,6 @@ const useCompetenceMappingStyles = makeStyles((theme: Theme) =>
     },
     borders: {
       borderLeft: `1px solid ${theme.palette.background.paper}`,
-      borderTop: `1px solid ${theme.palette.background.paper}`,
     },
     spread: {
       display: 'flex',
@@ -106,7 +105,6 @@ const OpenInNewStyled = withStyles({
 export default function ConsultantCell(cellData: {
   data: { value: string; image: string | undefined };
   email: string;
-  isOpen: boolean;
   rowStates: RowStates;
   dispatch: Dispatch<Action>;
   id: string;
@@ -162,7 +160,7 @@ export default function ConsultantCell(cellData: {
           </span>
         </div>
         <div className={classes.root}>
-          {cellData.isOpen ? (
+          {isOpen() ? (
             <ExpandLessIconWithStyles />
           ) : (
             <ExpandMoreIconWithStyles />
