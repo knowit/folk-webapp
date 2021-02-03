@@ -20,9 +20,6 @@ interface ConsultantType {
 
 type rowDataArray = [ConsultantType, string, string, string, CvCellData];
 
-interface RowData {
-  rowData: rowDataArray;
-}
 
 const useStyles = makeStyles({
   root: {
@@ -47,7 +44,7 @@ export default function CvCell({
   rowData,
 }: {
   data: CvCellData;
-  rowData: RowData;
+  rowData: rowDataArray;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -66,7 +63,7 @@ export default function CvCell({
       <CvDialog
         open={open}
         onClose={handleClose}
-        name={rowData.rowData[0].value}
+        name={rowData[0].value}
         data={data}
       />
     </>

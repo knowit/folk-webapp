@@ -20,7 +20,6 @@ const useCompetenceMappingStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
-      width: '300px',
       alignItems: 'center',
     },
     image: {
@@ -62,11 +61,11 @@ const useCompetenceMappingStyles = makeStyles((theme: Theme) =>
       borderLeft: `1px solid ${theme.palette.background.paper}`,
       borderTop: `1px solid ${theme.palette.background.paper}`,
     },
-    spread:{
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: 'space-between'
-    }
+    spread: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
   })
 );
 const TableCellNoBorders = withStyles({
@@ -142,36 +141,35 @@ export default function ConsultantCell(cellData: {
           openStyle,
           classes.standardSize,
           classes.flexContainer,
+          classes.spread,
         ].join(' ')}
         onClick={() => openClick()}
       >
-        <div className={classes.spread}>
-          <div className={classes.root}>
-            {data.image ? (
-              <Avatar
-                alt={data.value}
-                className={classes.image}
-                src={data.image}
-              />
-            ) : (
-              <Avatar alt={data.value} className={classes.image}>
-                <FallbackUserIcon className={classes.image} />
-              </Avatar>
-            )}
-            <span className={classes.text}>
-              <CharacterLimitBox text={data.value} />
-            </span>
-          </div>
-          <div className={classes.root}>
-            {cellData.isOpen ? (
-              <ExpandLessIconWithStyles />
-            ) : (
-              <ExpandMoreIconWithStyles />
-            )}
-            <Link to={'/ansatt/' + cellData.email} target="_blank">
-              <OpenInNewStyled />
-            </Link>
-          </div>
+        <div className={classes.root}>
+          {data.image ? (
+            <Avatar
+              alt={data.value}
+              className={classes.image}
+              src={data.image}
+            />
+          ) : (
+            <Avatar alt={data.value} className={classes.image}>
+              <FallbackUserIcon className={classes.image} />
+            </Avatar>
+          )}
+          <span className={classes.text}>
+            <CharacterLimitBox text={data.value} />
+          </span>
+        </div>
+        <div className={classes.root}>
+          {cellData.isOpen ? (
+            <ExpandLessIconWithStyles />
+          ) : (
+            <ExpandMoreIconWithStyles />
+          )}
+          <Link to={'/ansatt/' + cellData.email} target="_blank">
+            <OpenInNewStyled />
+          </Link>
         </div>
       </Button>
     </TableCellNoBorders>
