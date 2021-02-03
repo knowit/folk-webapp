@@ -233,7 +233,7 @@ const searchAndFilter = (
         passedFilters++;
       }
     });
-    passedFilters === (motFilterLength + comFilterLength) && newRows.push(row);
+    passedFilters === motFilterLength + comFilterLength && newRows.push(row);
   });
   return newRows;
 };
@@ -267,14 +267,14 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
             dispatch={dispatch}
             allRows={allRows}
             searchableColumns={searchableColumn}
-            type = 'COMPETENCE'
+            type="COMPETENCE"
           />
           <CompetenceFilterInput
             filterList={state.motivationFilter}
             dispatch={dispatch}
             allRows={allRows}
             searchableColumns={searchableColumn}
-            type = 'MOTIVATION'
+            type="MOTIVATION"
           />
           <SearchInput
             dispatch={dispatch}
@@ -289,7 +289,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
           dispatch={dispatch}
           allRows={allRows}
           searchableColumns={searchableColumn}
-          type = 'COMPETENCE'
+          type="COMPETENCE"
         />
       )}
       {state.motivationFilter.length > 0 && (
@@ -298,7 +298,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
           dispatch={dispatch}
           allRows={allRows}
           searchableColumns={searchableColumn}
-          type = 'MOTIVATION'
+          type="MOTIVATION"
         />
       )}
       <DataTable rows={state.rows} columns={[]} {...props} />
