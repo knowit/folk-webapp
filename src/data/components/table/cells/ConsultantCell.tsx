@@ -59,6 +59,7 @@ const useCompetenceMappingStyles = makeStyles((theme: Theme) =>
     },
     borders: {
       borderLeft: `1px solid ${theme.palette.background.paper}`,
+      borderTop: `1px solid ${theme.palette.background.paper}`,
     },
     spread: {
       display: 'flex',

@@ -197,12 +197,12 @@ function MuiVirtualizedTable({
   const cellWidth = (index: number) =>
     columns.length === 5 ? consultantTableWidths[index] : widthList[index];
 
-  const rowRenderer = (props: { className: string; index: number, key:string, rowData:any}) => {
-    const { className, index, key, rowData } = props;
+  const rowRenderer = (props: { className: string; index: number, key:string, rowData:any, style:any}) => {
+    const { className, index, key, rowData, style } = props;
     const id = rows[index].rowId;
     const RenderExpanded:renderExpandedCell|undefined = columns[0].renderExpanded
     return (
-      <div key={key} className={classes.column}>
+      <div key={key} className={classes.column} style={style}>
         <div className={className} >
           {columns.map((column, i) => {
             return (
