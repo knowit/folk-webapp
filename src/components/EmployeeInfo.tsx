@@ -1,7 +1,6 @@
 import React, { Dispatch, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
-import CharacterLimitBox from './CharacterLimitBox';
 import { useFetchedData } from '../hooks/service';
 import { NoData } from './ErrorText';
 import { RowStates, Action } from '../data/components/table/DataTable';
@@ -29,40 +28,6 @@ interface EmployeeInfoData {
   manager: string;
   guid: string;
 }
-
-const useMotivationMappingStyles = makeStyles({
-  root: {
-    backgroundColor: '#f2f2f2',
-    fontSize: '12px',
-    padding: '10px',
-    '& > div': {
-      display: 'flex',
-      justifyContent: 'space-between',
-      marginBottom: '5px',
-      '& > div': {
-        width: '33%',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-      },
-      '& :nth-child(2)': {
-        textAlign: 'center',
-      },
-      '& :nth-child(3)': {
-        textAlign: 'right',
-      },
-    },
-  },
-  gradient: {
-    backgroundImage: 'linear-gradient(to right, #0040d5, #ff0707)',
-    '& >div': {
-      fontSize: '10px',
-      fontWeight: 'bold',
-      color: 'white',
-      padding: '2px 5px',
-    },
-  },
-});
 
 export const startedInKnowit = (allExperience: Experience[] | undefined) => {
   if(!allExperience){
@@ -106,78 +71,39 @@ export const totalExperience = (allExperience: Experience[] | undefined) => {
   );
 };
 
-const makeKeyFromText = (value: string): string => value.replace(' ', '_');
 
-function MotivationMapping({
-  motivations,
-}: {
-  motivations: MotivationMap | undefined;
-}) {
-  const classes = useMotivationMappingStyles();
-
-  const motivationMap = Object.entries(motivations || {}).sort(
-    ([, a], [, b]) => a - b
-  );
-  const motivationList =
-    motivationMap.length > 2
-      ? [
-          motivationMap[0][0],
-          motivationMap[Math.floor(motivationMap.length / 2)][0],
-          motivationMap.slice(-1)[0][0],
-        ]
-      : [];
-
-  return (
-    <div className={classes.root}>
-      <div>
-        {motivationList.length > 0 ? (
-          motivationList.map((competence) => (
-            <div key={makeKeyFromText(competence)}>
-              <CharacterLimitBox
-                text={competence.charAt(0).toUpperCase() + competence.slice(1)}
-              />
-            </div>
-          ))
-        ) : (
-          <>
-            <div key={1}>
-              <NoData />
-            </div>
-            <div key={2}>
-              <NoData />
-            </div>
-            <div key={3}>
-              <NoData />
-            </div>
-          </>
-        )}
-      </div>
-      <div className={classes.gradient}>
-        {['Uinteressert', 'Tja', 'Interessert'].map((level) => (
-          <div key={makeKeyFromText(level)}>{level}</div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-const useStyles = makeStyles({
-  root: {
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+  info: {
+    paddingTop: "15px",
+    width:"385px",
     lineHeight: '1.2em',
     whiteSpace: 'normal',
-    marginTop: '10px',
-    paddingBottom: '10px',
     fontSize: '12px',
-    background:
-      'transparent linear-gradient(180deg, #FFFFFF 0%, #f7f7f7 100%) 0% 0%',
-    '& div.expandable-box-cell': {},
   },
   cell: {
     marginBottom: '12px',
     padding: '0 15px',
     lineHeight: '18px',
   },
-});
+  erfaring:{
+    width:"365px",
+    borderLeft: `1px solid ${theme.palette.background.paper}`,
+    paddingLeft:"15px",
+    overflowY: "scroll",
+    maxHeight: "390px",
+  },
+  oversikt:{
+    width:"390px",
+    borderLeft: `1px solid ${theme.palette.background.paper}`,
+  },
+  root:{
+    display:"flex",
+    flexDirection:"row",
+    background:"#E4E1DB",
+  }
+}
+));
 
 export default function EmployeeInfo({
   data,
@@ -215,14 +141,14 @@ export default function EmployeeInfo({
   useEffect(() => {
     if (!pending && targetRef) {
       const dataHeight = getOffsetHeight(targetRef);
-      dispatch({ type: 'CHANGE_HEIGHT', id, height: dataHeight + 77 });
+      dispatch({ type: 'CHANGE_HEIGHT', id, height: dataHeight + 72 });
       dispatch({ type: 'SET_EXPANDED_DATA', id, expandedData: empData });
     }
   }, [pending, empData, targetRef, id, dispatch]);
 
   return (
-    <div ref={setRef}>
-      <div className={classes.root}>
+    <div ref={setRef} className={classes.root}>
+      <div className={classes.info}>
         <div className={classes.cell}>
           {pending ? (
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
@@ -284,11 +210,23 @@ export default function EmployeeInfo({
           )}
         </div>
       </div>
-      {pending ? (
-        <Skeleton variant="rect" height={67} animation="wave" />
-      ) : (
-        <MotivationMapping motivations={empData?.motivation} />
-      )}
+      <div className={classes.erfaring}>
+        <h3> Arbeidserfaring</h3>
+          <p>2021 - Eksempel </p>
+          <p>2021 - Eksempel </p>
+          <p>2021 - Eksempel </p>
+          <p>2021 - Eksempel </p>
+          <p>2021 - Eksempel </p>
+        <h3> Prosjekterfaring </h3>
+          <p>2021 - Eksempel </p>
+          <p>2021 - Eksempel </p>
+          <p>2021 - Eksempel </p>
+          <p>2021 - Eksempel </p>
+          <p>2021 - Eksempel </p>
+      </div>
+      <div className={classes.oversikt}>
+        Oversikt over kompetansekartleggingen
+      </div>
     </div>
   );
 }
