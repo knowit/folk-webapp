@@ -5,7 +5,6 @@ import { useFetchedData } from '../hooks/service';
 import { NoData } from './ErrorText';
 import { RowStates, Action } from '../data/components/table/DataTable';
 import { ChartSkeleton, ExperienceData } from '../pages/EmployeeSite';
-import { Grid } from '@material-ui/core';
 import DDItem, { DDChart } from '../data/DDItem';
 
 type Experience = {
