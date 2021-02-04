@@ -4,6 +4,9 @@ import { Skeleton } from '@material-ui/lab';
 import { useFetchedData } from '../hooks/service';
 import { NoData } from './ErrorText';
 import { RowStates, Action } from '../data/components/table/DataTable';
+import { ChartSkeleton, ExperienceData } from '../pages/EmployeeSite';
+import { Grid } from '@material-ui/core';
+import DDItem, { DDChart } from '../data/DDItem';
 
 type Experience = {
   employer: string;
@@ -30,8 +33,8 @@ interface EmployeeInfoData {
 }
 
 export const startedInKnowit = (allExperience: Experience[] | undefined) => {
-  if(!allExperience){
-    return <NoData/>
+  if (!allExperience) {
+    return <NoData />;
   }
   const knowit = allExperience?.find((x) =>
     x.employer
@@ -54,8 +57,8 @@ export const startedInKnowit = (allExperience: Experience[] | undefined) => {
 };
 
 export const totalExperience = (allExperience: Experience[] | undefined) => {
-  if(!allExperience){
-    return <NoData/>
+  if (!allExperience) {
+    return <NoData />;
   }
   const dates: Date[] = [];
   allExperience?.map((job) => {
@@ -71,39 +74,45 @@ export const totalExperience = (allExperience: Experience[] | undefined) => {
   );
 };
 
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-  info: {
-    paddingTop: "15px",
-    width:"385px",
-    lineHeight: '1.2em',
-    whiteSpace: 'normal',
-    fontSize: '12px',
-  },
-  cell: {
-    marginBottom: '12px',
-    padding: '0 15px',
-    lineHeight: '18px',
-  },
-  erfaring:{
-    width:"365px",
-    borderLeft: `1px solid ${theme.palette.background.paper}`,
-    paddingLeft:"15px",
-    overflowY: "scroll",
-    maxHeight: "390px",
-  },
-  oversikt:{
-    width:"390px",
-    borderLeft: `1px solid ${theme.palette.background.paper}`,
-  },
-  root:{
-    display:"flex",
-    flexDirection:"row",
-    background:"#E4E1DB",
-  }
-}
-));
+    info: {
+      paddingTop: '15px',
+      width: '385px',
+      lineHeight: '1.2em',
+      whiteSpace: 'normal',
+    },
+    cell: {
+      marginBottom: '12px',
+      padding: '0 15px',
+      lineHeight: '18px',
+    },
+    prosjektliste: {
+      lineHeight: '18px',
+    },
+    erfaring: {
+      width: '365px',
+      borderLeft: `1px solid white`,
+      paddingLeft: '15px',
+      overflowY: 'auto',
+      maxHeight: '390px',
+      paddingBottom: '15px',
+    },
+    oversikt: {
+      width: '390px',
+      borderLeft: `1px solid white`,
+    },
+    root: {
+      display: 'flex',
+      flexDirection: 'row',
+      background: `${theme.palette.background.paper}`,
+      borderLeft: '1px solid white',
+      borderRight: '1px solid white',
+      fontSize: '12px',
+      height: '450px',
+    },
+  })
+);
 
 export default function EmployeeInfo({
   data,
@@ -111,7 +120,7 @@ export default function EmployeeInfo({
   rowStates,
   dispatch,
 }: {
-  data: { competenceUrl: string };
+  data: { competenceUrl: string; user_id: string; email_id: string };
   id: string;
   rowStates: RowStates;
   dispatch: Dispatch<Action>;
@@ -124,6 +133,10 @@ export default function EmployeeInfo({
   const classes = useStyles();
   const url = data.competenceUrl;
   const [empData, pending] = useFetchedData<EmployeeInfoData>({ url });
+  const user_id = data ? data.user_id : null;
+  const [expData, expPending] = useFetchedData<ExperienceData>({
+    url: `/api/data/employeeExperience?user_id=${user_id}`,
+  });
 
   const getStringFromList = (
     list: string[] | null | undefined,
@@ -212,21 +225,66 @@ export default function EmployeeInfo({
       </div>
       <div className={classes.erfaring}>
         <h3> Arbeidserfaring</h3>
-          <p>2021 - Eksempel </p>
-          <p>2021 - Eksempel </p>
-          <p>2021 - Eksempel </p>
-          <p>2021 - Eksempel </p>
-          <p>2021 - Eksempel </p>
+        {pending ? (
+          <Skeleton variant="rect" width={340} height={15} animation="wave" />
+        ) : (
+          getWorkExperience(empData?.workExperience)
+        )}
         <h3> Prosjekterfaring </h3>
-          <p>2021 - Eksempel </p>
-          <p>2021 - Eksempel </p>
-          <p>2021 - Eksempel </p>
-          <p>2021 - Eksempel </p>
-          <p>2021 - Eksempel </p>
+        {expPending ? (
+          <Skeleton variant="rect" width={340} height={15} animation="wave" />
+        ) : (
+          <GetProjects expData={expData} />
+        )}
       </div>
       <div className={classes.oversikt}>
-        Oversikt over kompetansekartleggingen
+        <DDItem
+          url={'/api/data/employeeRadar?user_id=' + data.email_id}
+          title="Motivasjon"
+          Component={DDChart}
+          SkeletonComponent={ChartSkeleton}
+          fullSize
+          dataComponentProps={{
+            valueKey: ['motivasjon', 'kompetanse'],
+          }}
+        />
       </div>
     </div>
   );
 }
+
+function getWorkExperience(workExp: Experience[] | undefined) {
+  if (!workExp) return <div> Fant ingen arbeidserfaring </div>;
+  const timeToNumber = (year: number, month: number) => {
+    return Number(year + (month > 9 ? '' : '0') + month);
+  };
+  const sortedExp = workExp.sort(
+    (expA, expB) =>
+      timeToNumber(expB.year_from, expB.month_from) -
+      timeToNumber(expA.year_from, expA.month_from)
+  );
+  return sortedExp.map((exp, index) => (
+    <div key={index}>
+      {exp.year_from !== -1 ? exp.year_from : ' '} - {exp.employer}
+    </div>
+  ));
+}
+
+const GetProjects = (expData: { expData: ExperienceData | null }) => {
+  const classes = useStyles();
+  if (!expData || !expData.expData) return <div> Fant ingen prosjekter </div>;
+  const timeToNumber = (time: string) => Number(time.split('/').join(''));
+  const sortedExp = expData!.expData!.experience.sort(
+    (projectA, projectB) =>
+      timeToNumber(projectB.time_from) - timeToNumber(projectA.time_from)
+  );
+  return (
+    <>
+      {sortedExp.map((exp, index) => (
+        <div className={classes.prosjektliste} key={index}>
+          {exp.project}
+        </div>
+      ))}
+    </>
+  );
+};
