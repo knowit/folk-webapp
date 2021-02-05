@@ -100,7 +100,7 @@ export default function DDChart({ payload, title, description, props }: DDCompon
     setNames: string[];
     sets: { [key: string]: any };
   };
-  const [set, setSet] = useState(setNames.length > 0 ? setNames[0] : '');
+  const [set, setSet] = useState(setNames && setNames.length > 0 ? setNames[0] : '');
   const [big, setBig] = useState(false);
   const ChartComponent = getChartComponent(componentType) as (
     props: any
