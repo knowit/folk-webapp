@@ -26,7 +26,7 @@ export default function Bar({
         data={data}
         keys={yLabels}
         indexBy={dataKey}
-        margin={{ top: 0, right: 20, bottom: 20, left: 40 }}
+        margin={{ top: 10, right: 20, bottom: 25, left: 40 }}
         padding={0.1}
         valueScale={{ type: 'linear' }}
         colors={colors}
