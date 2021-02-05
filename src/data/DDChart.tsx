@@ -110,7 +110,7 @@ export default function DDChart({ payload, title, description, props }: DDCompon
     setSet(value as string);
   };
 
-  const setNamesLength = payload.setNames.length;
+  const setNamesLength = payload.setNames ? payload.setNames.length : 0;
 
   const GridItem = () => {
     const altText = big ? 'Exit stor størrelse' : 'Utvid til stor størrelse';
