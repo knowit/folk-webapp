@@ -356,7 +356,7 @@ exports.experienceDistribution = async ({ data }) => {
   const experience = data;
   const [groups, detailedGroups] = setInGroups(experience);
   return {
-    componentType: 'Pie',
+    componentType: 'Bar',
     setNames: ['Erfaring', 'Detaljert oversikt'],
     sets: {
       Erfaring: groups,
