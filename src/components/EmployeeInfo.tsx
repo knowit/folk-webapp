@@ -6,6 +6,7 @@ import { NoData } from './ErrorText';
 import { RowStates, Action } from '../data/components/table/DataTable';
 import { ChartSkeleton, ExperienceData } from '../pages/EmployeeSite';
 import DDItem, { DDChart } from '../data/DDItem';
+import { months } from '../data/components/table/cells/ExperienceCell';
 
 type Experience = {
   employer: string;
@@ -266,12 +267,14 @@ function getWorkExperience(workExp: Experience[] | undefined) {
   );
   return sortedExp.map((exp, index) => (
     <div key={index}>
-      {exp.year_from !== -1 ? exp.year_from : ' '} - {exp.employer}
+      {exp.month_from !== -1 && months[exp.month_from - 1] + ' '}
+      {exp.year_from !== -1 ? exp.year_from + ': ' : ' '}
+      {exp.employer}
     </div>
   ));
 }
 
-const GetProjects = (expData: { expData: ExperienceData | null }) => {
+export const GetProjects = (expData: { expData: ExperienceData | null }) => {
   const classes = useStyles();
   if (!expData || !expData.expData || !expData.expData.experience)
     return <div> Fant ingen prosjekter </div>;
@@ -284,9 +287,23 @@ const GetProjects = (expData: { expData: ExperienceData | null }) => {
     <>
       {sortedExp.map((exp, index) => (
         <div className={classes.prosjektliste} key={index}>
-          {exp.project}
+          {getPrettyDates(exp.time_from, exp.time_to)}: {exp.customer} -{' '}
+          <i>{exp.project}</i>
         </div>
       ))}
     </>
   );
+};
+
+const getPrettyDates = (date1: string, date2: string) => {
+  const fromDates = date1.split('/');
+  const fromMonth =
+    fromDates[1] !== undefined ? months[Number(fromDates[1]) - 1] + ' ' : '';
+  const fromYear = fromDates[0] !== '-1' ? fromDates[0] : '';
+  const toDates = date2.split('/');
+  const toMonth =
+    toDates[1] !== undefined ? months[Number(toDates[1]) - 1] + ' ' : '';
+  const toYear = toDates[0] !== '-1' ? toDates[0] : '';
+  const bothYears = fromYear && toYear ? ' - ' : '';
+  return fromMonth + fromYear + bothYears + toMonth + toYear;
 };
