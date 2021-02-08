@@ -62,7 +62,7 @@ export const totalExperience = (allExperience: Experience[] | undefined) => {
   }
   const dates: Date[] = [];
   allExperience &&
-    allExperience.map((job) => {
+    allExperience.forEach((job) => {
       job.year_from !== -1 && dates.push({ year: job.year_from });
       job.year_to !== -1 && dates.push({ year: job.year_to });
     });
