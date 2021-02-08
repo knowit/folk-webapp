@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
-import { Fullscreen, FullscreenExit } from '@material-ui/icons';
-import { Theme, withStyles, createStyles, makeStyles } from '@material-ui/core';
+import { BarChart, Fullscreen, FullscreenExit } from '@material-ui/icons';
+import {
+  Theme,
+  withStyles,
+  createStyles,
+  makeStyles,
+  ButtonGroup,
+} from '@material-ui/core';
 import { GridItemHeader, GridItemContent } from '../components/GridItem';
 import DropdownPicker from '../components/DropdownPicker';
 import Line from './components/Line';
 import Bar from './components/Bar';
 import PercentArea from './components/PercentArea';
 import Pie from './components/Pie';
-import { DDComponentProps } from './types';
 import BigChart from '../components/BigChart';
 import { ErrorText } from '../components/ErrorText';
 import Sunburst from './components/Sunburst';
 import Radar from './components/Radar';
+import { DDComponentProps, DDPassProps } from './types';
+import Button from '@material-ui/core/Button';
 
 const usePlaceholderStyle = makeStyles(() =>
   createStyles({
@@ -100,8 +107,7 @@ export default function DDChart({
   description,
   props,
 }: DDComponentProps) {
-  const { componentType, setNames, sets } = payload as {
-    componentType: string;
+  const { setNames, sets } = payload as {
     setNames: string[];
     sets: { [key: string]: any };
   };
@@ -109,15 +115,48 @@ export default function DDChart({
     setNames && setNames.length > 0 ? setNames[0] : ''
   );
   const [big, setBig] = useState(false);
-  const ChartComponent = getChartComponent(componentType) as (
-    props: any
-  ) => JSX.Element;
+  const [selectedChart, setSelectedChart] = useState<number>(0);
 
-  const onChange = (value: any) => {
+  const ChartComponent = getChartComponent(
+    props.chartVariants[selectedChart].chartType
+  );
+  const passProps = props.chartVariants[selectedChart].chartProps;
+
+  const handleSetChange = (value: any) => {
     setSet(value as string);
   };
 
   const setNamesLength = payload.setNames ? payload.setNames.length : 0;
+
+  const generateChartTypeToggle = (
+    chartVariants: Array<{
+      chartType: string;
+      chartProps: DDPassProps;
+    }>
+  ) => {
+    if (chartVariants.length > 1) {
+      return (
+        <ButtonGroup>
+          {chartVariants.map((chartVariant, chartIndex) => {
+            // const chartTypeInfo = getChartTypeInfo(chartVariant.chartType);
+            // const ChartTypeIcon = chartTypeInfo.icon;
+            return (
+              <Button
+                key={chartIndex}
+                onClick={() => setSelectedChart(chartIndex)}
+                disabled={selectedChart === chartIndex}
+                // aria-label={chartTypeInfo.label}
+                startIcon={<BarChart />}
+              >
+                Visning {chartIndex + 1}
+              </Button>
+            );
+          })}
+        </ButtonGroup>
+      );
+    }
+    return null;
+  };
 
   const GridItem = () => {
     const altText = big ? 'Exit stor størrelse' : 'Utvid til stor størrelse';
@@ -127,7 +166,7 @@ export default function DDChart({
           {setNamesLength > 1 ? (
             <DropdownPicker
               values={setNames}
-              onChange={onChange}
+              onChange={handleSetChange}
               selected={set}
               big={big}
             />
@@ -142,7 +181,8 @@ export default function DDChart({
                 <LargerIcon onClick={() => setBig(true)} />
               )}
             </span>
-            <ChartComponent big={big} data={sets[set]} {...props} />
+            <ChartComponent big={big} data={sets[set]} {...passProps} />
+            {generateChartTypeToggle(props.chartVariants)}
           </GridItemContent>
         ) : (
           <ErrorText />
