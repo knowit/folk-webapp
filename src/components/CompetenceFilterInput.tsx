@@ -69,12 +69,12 @@ function useCategories() {
   const categoriesWithGroup: CategoriesWithGroup[] = [];
   categories &&
     categories.forEach((category) => {
-      category.subCategories.forEach((skill) => {
+      return category.subCategories.forEach((skill) =>
         categoriesWithGroup.push({
           skill: skill,
           category: category.category,
-        });
-      });
+        })
+      );
     });
   if (categoriesWithGroup !== null) {
     return categoriesWithGroup;

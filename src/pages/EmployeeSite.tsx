@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
-import { Grid, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import DDItem, { DDChart } from '../data/DDItem';
 import { useFetchedData } from '../hooks/service';
@@ -64,18 +64,42 @@ const useStyles = makeStyles({
     lineHeight: '1.2em',
     whiteSpace: 'normal',
     marginTop: '10px',
-    paddingBottom: '10px',
+    paddingLeft: '25px',
     fontSize: '16px',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  firstPart: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '70px',
+  },
+  left: {
+    width: '50%',
+  },
+  right: {
+    width: '50%',
+  },
+  image: {
+    borderRadius: '50%',
+    backgroundColor: '#C4C4C4',
+    height: '158px',
+    width: '158px',
   },
   cell: {
     marginBottom: '12px',
-    padding: '0 15px',
     lineHeight: '20px',
   },
   header: {
     display: 'flex',
-    flexDirection: 'row',
-    gap: '12px',
+    paddingRight:'10px',
+    paddingBottom: '20px',
+    gap: '15px',
+    lineHeight: '2em',
+    
+  },
+  nextPart: {
+    
   },
 });
 
@@ -122,93 +146,138 @@ export default function EmployeeSite() {
   }
 
   return (
-    <>
-      {pending ? (
-        <Skeleton variant="rect" width={340} height={15} animation="wave" />
-      ) : (
-        <div className={classes.header}>
-          {data?.image ? (
-            <img src={data?.image} alt={emp?.navn} />
+    <div className={classes.root}>
+      <div className={classes.firstPart}>
+        <div className={classes.left}>
+          {pending ? (
+            <Skeleton variant="rect" width={340} height={15} animation="wave" />
           ) : (
-            <FallbackUserIcon />
+            <div className={classes.header}>
+              {data?.image ? (
+                <img
+                  className={classes.image}
+                  src={data?.image}
+                  alt={emp?.navn}
+                />
+              ) : (
+                <FallbackUserIcon />
+              )}
+              <div>
+                <h1>{emp?.navn}</h1>
+                <h2>{emp?.title}</h2>
+              </div>
+            </div>
           )}
           <div>
-            <h1>{emp?.navn}</h1>
-            <h2>{emp?.title}</h2>
+            <div className={classes.cell}>
+              {pending ? (
+                <Skeleton
+                  variant="rect"
+                  width={340}
+                  height={15}
+                  animation="wave"
+                />
+              ) : (
+                <>
+                  <b>Hovedkompetanse: </b>
+                  {tags?.skill.replace(/;/g, ', ')}
+                </>
+              )}
+            </div>
+            <div className={classes.cell}>
+              {pending ? (
+                <Skeleton
+                  variant="rect"
+                  width={340}
+                  height={15}
+                  animation="wave"
+                />
+              ) : (
+                <>
+                  <b>Roller: </b>
+                  {tags?.role.replace(/;/g, ', ')}
+                </>
+              )}
+            </div>
+            <div className={classes.cell}>
+              {pending ? (
+                <Skeleton
+                  variant="rect"
+                  width={340}
+                  height={15}
+                  animation="wave"
+                />
+              ) : (
+                <>
+                  <b>Startet i Knowit: </b>{' '}
+                  {startedInKnowit(data?.workExperience)}
+                </>
+              )}
+            </div>
+            <div className={classes.cell}>
+              {pending ? (
+                <Skeleton
+                  variant="rect"
+                  width={340}
+                  height={15}
+                  animation="wave"
+                />
+              ) : (
+                <div title="beregnet ut i fra første jobb på cv">
+                  <b>Beregnet arbeidserfaring: </b>
+                  {totalExperience(data?.workExperience)}
+                </div>
+              )}
+            </div>
+            <div className={classes.cell}>
+              {pending ? (
+                <Skeleton
+                  variant="rect"
+                  width={340}
+                  height={15}
+                  animation="wave"
+                />
+              ) : (
+                <>
+                  <b>Språk: </b>
+                  {tags?.language.replace(';', ', ')}
+                </>
+              )}
+            </div>
+            <div className={classes.cell}>
+              {pending ? (
+                <Skeleton
+                  variant="rect"
+                  width={340}
+                  height={15}
+                  animation="wave"
+                />
+              ) : (
+                <>
+                  <b>Utdanning: </b>
+                  {data && data?.degree}
+                </>
+              )}
+            </div>
+            <div className={classes.cell}>
+              {pending ? (
+                <Skeleton
+                  variant="rect"
+                  width={340}
+                  height={15}
+                  animation="wave"
+                />
+              ) : (
+                <>
+                  <b>Nærmeste leder: </b>
+                  *DATA FRA AD HER*
+                </>
+              )}
+            </div>
           </div>
         </div>
-      )}
-      <div className={classes.root}>
-        <div className={classes.cell}>
-          {pending ? (
-            <Skeleton variant="rect" width={340} height={15} animation="wave" />
-          ) : (
-            <>
-              <b>Hovedkompetanse: </b>
-              {tags?.skill.replace(/;/g, ', ')}
-            </>
-          )}
-        </div>
-        <div className={classes.cell}>
-          {pending ? (
-            <Skeleton variant="rect" width={340} height={15} animation="wave" />
-          ) : (
-            <>
-              <b>Roller: </b>
-              {tags?.role.replace(/;/g, ', ')}
-            </>
-          )}
-        </div>
-        <div className={classes.cell}>
-          {pending ? (
-            <Skeleton variant="rect" width={340} height={15} animation="wave" />
-          ) : (
-            <>
-              <b>Startet i Knowit: </b> {startedInKnowit(data?.workExperience)}
-            </>
-          )}
-        </div>
-        <div className={classes.cell}>
-          {pending ? (
-            <Skeleton variant="rect" width={340} height={15} animation="wave" />
-          ) : (
-            <>
-              <b>Total arbeidserfaring: </b>
-              {totalExperience(data?.workExperience)}
-            </>
-          )}
-        </div>
-        <div className={classes.cell}>
-          {pending ? (
-            <Skeleton variant="rect" width={340} height={15} animation="wave" />
-          ) : (
-            <>
-              <b>Språk: </b>
-              {tags?.language.replace(';', ', ')}
-            </>
-          )}
-        </div>
-        <div className={classes.cell}>
-          {pending ? (
-            <Skeleton variant="rect" width={340} height={15} animation="wave" />
-          ) : (
-            <>
-              <b>Utdanning: </b>
-              {data && data?.degree}
-            </>
-          )}
-        </div>
-        <div className={classes.cell}>
-          {pending ? (
-            <Skeleton variant="rect" width={340} height={15} animation="wave" />
-          ) : (
-            <>
-              <b>Nærmeste leder: </b>
-              {emp?.manager}
-            </>
-          )}
-        </div>
-        <Grid container spacing={2}>
+        <div className={classes.right}>
+          <p><b>Kompetansekartlegging</b></p>
           {pending ? (
             <ChartSkeleton />
           ) : (
@@ -217,6 +286,7 @@ export default function EmployeeSite() {
               title="Motivasjon"
               Component={DDChart}
               SkeletonComponent={ChartSkeleton}
+              fullSize
               dataComponentProps={{
                 chartVariants: [
                   {
@@ -230,36 +300,33 @@ export default function EmployeeSite() {
               }}
             />
           )}
-        </Grid>
-        <div>
-          <h1>Arbeidserfaring</h1>
-          {pending ? (
-            <p>loading....</p>
-          ) : (
-            printWorkExperience(data?.workExperience)
-          )}
-        </div>
-        <div>
-          <h1>Prosjekterfaring</h1>
-          {!expPending && expData && expData !== undefined ? (
-            getExperience(expData.experience)
-          ) : (
-            <p>loading....</p>
-          )}
-        </div>
-        <div>
-          <h1>Download CV</h1>
-          {pending || !data ? (
-            <p>loading....</p>
-          ) : (
-            Object.entries(data!.links).map((link) => (
-              <p key={link[1]}>
-                <a href={link[1]}>{link[0]}</a>
-              </p>
-            ))
-          )}
         </div>
       </div>
-    </>
+      <div className={classes.nextPart}>
+        <h2>Arbeidserfaring</h2>
+        {pending ? (
+          <p>loading....</p>
+        ) : (
+          printWorkExperience(data?.workExperience)
+        )}
+
+        <h2>Prosjekterfaring</h2>
+        {!expPending && expData && expData !== undefined ? (
+          getExperience(expData.experience)
+        ) : (
+          <p>loading....</p>
+        )}
+        <h2>Download CV</h2>
+        {pending || !data ? (
+          <p>loading....</p>
+        ) : (
+          Object.entries(data!.links).map((link) => (
+            <p key={link[1]}>
+              <a href={link[1]}>{link[0]}</a>
+            </p>
+          ))
+        )}
+      </div>
+    </div>
   );
 }
