@@ -186,6 +186,14 @@ exports.employeeCompetence = async ({ data, parameters: { email } = {} }) => {
   };
 };
 
+exports.faggrupper = async () => {
+  return {
+    componentType: null,
+    setNames: [],
+    sets: {},
+  };
+}
+
 exports.resourceType = async () => {
   return {
     componentType: null,
