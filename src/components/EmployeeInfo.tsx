@@ -90,13 +90,13 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     prosjektliste: {
       lineHeight: '18px',
+      paddingBottom: '12px',
     },
     erfaring: {
       width: '365px',
       borderLeft: `1px solid white`,
       paddingLeft: '15px',
       overflowY: 'auto',
-      maxHeight: '390px',
       paddingBottom: '15px',
     },
     oversikt: {
@@ -121,7 +121,12 @@ export default function EmployeeInfo({
   rowStates,
   dispatch,
 }: {
-  data: { competenceUrl: string; user_id: string; email_id: string };
+  data: {
+    competenceUrl: string;
+    user_id: string;
+    email_id: string;
+    degree: string;
+  };
   id: string;
   rowStates: RowStates;
   dispatch: Dispatch<Action>;
@@ -164,6 +169,10 @@ export default function EmployeeInfo({
   return (
     <div ref={setRef} className={classes.root}>
       <div className={classes.info}>
+        <div className={classes.cell}>
+          <b>Utdanning: </b>
+          {data.degree}
+        </div>
         <div className={classes.cell}>
           {pending ? (
             <Skeleton variant="rect" width={340} height={15} animation="wave" />

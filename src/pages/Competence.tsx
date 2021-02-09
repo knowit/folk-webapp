@@ -3,10 +3,10 @@ import { Grid } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import {
   ConsultantCell,
-  ExperienceCell,
   CheckBoxHeaderCell,
-  EducationCell,
   CvCell,
+  ProjectStatusCell,
+  CustomerStatusCell,
 } from '../data/components/table/DataCells';
 import DDItem, { DDTable, DDChart } from '../data/DDItem';
 import EmployeeInfo from '../components/EmployeeInfo';
@@ -103,10 +103,9 @@ export default function Competence() {
           yLabels: ['value'],
         }}
       />
-
       <DDItem
-        url="/api/data/competence"
-        title="Konsulentkompetanse"
+        url="/api/data/employeeTable"
+        title="Prosjektstatus"
         fullSize
         Component={DDTable}
         dataComponentProps={{
@@ -122,8 +121,8 @@ export default function Competence() {
               checkBoxLabel: 'Vis kun ledige',
             },
             { title: 'Tittel' },
-            { title: 'Erfaring', renderCell: ExperienceCell },
-            { title: 'Utdanning', renderCell: EducationCell },
+            { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
+            { title: 'Kunde', renderCell: CustomerStatusCell },
             { title: 'CV', renderCell: CvCell },
           ],
         }}

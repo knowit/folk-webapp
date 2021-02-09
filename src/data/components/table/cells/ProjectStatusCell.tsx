@@ -1,31 +1,33 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core';
 import React from 'react';
-import { NoData } from '../../../../components/ErrorText';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import classes from '*.module.css';
+
+const StatusCircle = ({ color }: { color: string }) => {
+  const Circle = withStyles(() => ({
+    colorPrimary: { color },
+    root: {
+      width: '30px',
+      height: '30px',
+    },
+  }))(FiberManualRecordIcon);
+
+  return <Circle color="primary" />;
+};
 
 const useStyles = makeStyles({
-  root: (percentData: number) => ({
-    backgroundColor: '#EFEFEF',
-    borderRadius: 12,
-    padding: '4px 10px',
-    lineHeight: 1,
-    width: percentData,
-  }),
-});
-
-
-
-export default function ProjectStatusCell({ data }: { data: number|undefined }) {
-  const classes = useStyles(data||0);
-  const percentData = `${data}%`;
-  switch(data) {
-  case null :
-    return <NoData/>;
-  case undefined :
-    return <NoData/>;
-  case 0:
-    return 'Ikke i prosjekt';
-  default:
+  root:{
+    display:"flex",
+    justifyContent: "center",
+    width: "100%",
     
-    return <div className={classes.root}>{percentData}</div>;
-}
+  }
+})
+
+export default function ProjectStatusCell(status?: 'red' | 'green') {
+  const classes = useStyles();
+  const color = status && status === 'green' ? '#4C8E00' : '#D10000';
+  return <div className={classes.root}>
+ <StatusCircle color={status ? color : '#777777'} />
+  </div>;
 }

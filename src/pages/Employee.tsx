@@ -6,6 +6,7 @@ import {
   CheckBoxHeaderCell,
   ProjectStatusCell,
   CustomerStatusCell,
+  CvCell,
 } from '../data/components/table/DataCells';
 import DDItem, { DDTable } from '../data/DDItem';
 import EmployeeInfo from '../components/EmployeeInfo';
@@ -52,7 +53,7 @@ export default function Employee() {
       /> */}
 
       <DDItem
-        url="/api/data/projectStatus"
+        url="/api/data/employeeTable"
         title="Prosjektstatus"
         fullSize
         Component={DDTable}
@@ -71,6 +72,7 @@ export default function Employee() {
             { title: 'Tittel' },
             { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
             { title: 'Kunde', renderCell: CustomerStatusCell },
+            { title: 'CV', renderCell: CvCell },
           ],
         }}
         SkeletonComponent={TableSkeleton}

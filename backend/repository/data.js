@@ -24,12 +24,12 @@ const getThisEmployeeMotivationList = (uuidComp, threshold, categoryList) => {
 const getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`;
 
 
-exports.projectStatusReports = [
+exports.employeeTableReports = [
   { reportName: 'competence' },
   { reportName: 'employeeMotivation' },
   { reportName: 'employee_competence' },
 ];
-exports.projectStatus = async ({ data }) => {
+exports.employeeTable = async ({ data }) => {
   const [allEmployees, resMotivation, resCompetence] = data
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
@@ -46,10 +46,17 @@ exports.projectStatus = async ({ data }) => {
         email: employee.email,
         email_id: makeEmailUuid(employee.email, salt),
         user_id: employee.user_id,
+        degree:  employee.degree,
       },
       employee.title,
       0,
-      { value: null, status: null },
+      { value: null},
+      Object.fromEntries(
+        cvs.map(([lang, format]) => [
+          `${lang}_${format}`,
+          employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
+        ])
+      ),
       getThisEmployeeMotivationList(
         makeEmailUuid(employee.email, salt).slice(0, 8),
         MOTIVATION_THRESHOLD,
