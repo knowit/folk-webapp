@@ -23,26 +23,14 @@ const getThisEmployeeMotivationList = (uuidComp, threshold, categoryList) => {
 
 const getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`;
 
-exports.projectStatus = async ({ dataplattformClient }) => {
-  const [reqProjectStatus, reqMotivation, reqCompetence] = await Promise.all([
-    dataplattformClient.report({
-      reportName: 'competence',
-    }),
-    dataplattformClient.report({
-      //Henter ut rapport med alles data fra motivasjon
-      reportName: 'employeeMotivation',
-    }),
-    dataplattformClient.report({
-      //Henter ut rapport med alles data fra motivasjon
-      reportName: 'employee_competence',
-    }),
-  ]);
-  const [allEmployees, resMotivation, resCompetence] = await Promise.all([
-    reqProjectStatus.json(),
-    reqMotivation.json(),
-    reqCompetence.json(),
-  ]);
 
+exports.projectStatusReports = [
+  { reportName: 'competence' },
+  { reportName: 'employeeMotivation' },
+  { reportName: 'employee_competence' },
+];
+exports.projectStatus = async ({ data }) => {
+  const [allEmployees, resMotivation, resCompetence] = data
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   });
@@ -80,26 +68,13 @@ const cvs = [
   ['no', 'word'],
   ['int', 'word'],
 ];
-
-exports.competence = async ({ dataplattformClient }) => {
-  const [reqCompetenceTable, reqMotivation, reqCompetence] = await Promise.all([
-    dataplattformClient.report({
-      reportName: 'competence',
-    }),
-    dataplattformClient.report({
-      reportName: 'employeeMotivation',
-    }),
-    dataplattformClient.report({
-      //Henter ut rapport med alles data fra motivasjon
-      reportName: 'employee_competence',
-    }),
-  ]);
-  const [allEmployees, resMotivation, resCompetence] = await Promise.all([
-    reqCompetenceTable.json(),
-    reqMotivation.json(),
-    reqCompetence.json(),
-  ]);
-
+exports.competenceReports = [
+  { reportName: 'competence' },
+  { reportName: 'employeeMotivation' },
+  { reportName: 'employee_competence' },
+];
+exports.competence = async ({ data }) => {
+  const [allEmployees, resMotivation, resCompetence] = data
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   });
@@ -137,23 +112,23 @@ exports.competence = async ({ dataplattformClient }) => {
     ],
   }));
 };
-const formatTime = (year, month) =>
-  [
-    year && year > 0 ? year : '',
-    year && year > 0 && month && month > 0 ? `/${month}` : '',
-  ].join('');
 
-exports.employeeExperience = async ({
-  dataplattformClient,
-  queryStringParameters: { user_id } = {},
-}) => {
-  const req = await dataplattformClient.report({
+
+exports.employeeExperienceReports = ({
+  parameters: { user_id } = {}
+}) => ([
+  {
     reportName: 'projectExperience',
-    filter: {
-      user_id: user_id,
-    },
-  });
-  const empExperience = await req.json();
+    filter: { user_id },
+  }
+])
+exports.employeeExperience = async ({ data }) => {
+  const empExperience = data
+  const formatTime = (year, month) =>
+    [
+      year && year > 0 ? year : '',
+      year && year > 0 && month && month > 0 ? `/${month}` : '',
+    ].join('');
 
   return {
     name: empExperience.length > 0 ? empExperience[0].navn : '',
@@ -166,34 +141,31 @@ exports.employeeExperience = async ({
   };
 };
 
-exports.employeeCompetence = async ({
-  dataplattformClient,
-  queryStringParameters: { email } = {},
-}) => {
+exports.employeeCompetenceReports = ({
+  parameters: { email } = {}
+}) => ([
+  {
+    reportName: 'categorizedMotivation'
+  },
+  {
+    reportName: 'employeeSkills',
+    filter: { email },
+  },
+  {
+    reportName: 'workExperience',
+    filter: { email },
+  },
+])
+exports.employeeCompetence = async ({ data, parameters: { email } = {} }) => {
+  const [resMotivation, resSkills, resEmp] = data
+  const catMotivation = {};
+
+  // Get salt
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   });
   const uuidComp = makeEmailUuid(email, salt);
 
-  const [reqMotivation, reqSkills, reqEmp] = await Promise.all([
-    dataplattformClient.report({
-      reportName: 'categorizedMotivation',
-    }),
-    dataplattformClient.report({
-      reportName: 'employeeSkills',
-      filter: { email },
-    }),
-    dataplattformClient.report({
-      reportName: 'workExperience',
-      filter: { email },
-    }),
-  ]);
-  const [resMotivation, resSkills, resEmp] = await Promise.all([
-    reqMotivation.json(),
-    reqSkills.json(),
-    reqEmp.json(),
-  ]);
-  const catMotivation = {};
   resMotivation.map((category) => {
     catMotivation[category.category] = category[uuidComp.slice(0, 8)];
   });
@@ -246,33 +218,35 @@ exports.inbound = async () => {
   };
 };
 
-function makeFagTimerDataForNivo(data) {
-  const setData = range(2018, new Date().getFullYear()).map((year) => ({
-    id: year.toString(),
-    data: range(1, 53).map((i) => {
-      const currentYear = data.filter((dataItem) => dataItem.year === year);
-      const currentWeekData = currentYear.find(
-        (dataItem) => dataItem.week === i
-      );
+exports.fagtimerReports = [
+  { reportName: 'categorizedMotivation' }
+]
+exports.fagtimer = async ({ data }) => {
+  const fagActivity = data;
+  const makeFagTimerDataForNivo = data => {
+    const setData = range(2018, new Date().getFullYear()).map(
+      year => ({
+        id: year.toString(),
+        data: range(1, 53).map(
+          i => {
+            const currentYear = data.filter((dataItem) => dataItem.year === year);
+            const currentWeekData = currentYear.find(
+              dataItem => dataItem.week === i
+            );
 
-      return {
-        x: i,
-        y:
-          currentWeekData && currentWeekData.used_hrs
-            ? currentWeekData.used_hrs
-            : 0,
-      };
-    }),
-  }));
-  return setData;
-}
+            return {
+              x: i,
+              y: currentWeekData && currentWeekData.used_hrs
+                ? currentWeekData.used_hrs
+                : 0,
+            };
+          }
+        ),
+      })
+    );
 
-exports.fagtimer = async ({ dataplattformClient }) => {
-  const req = await dataplattformClient.report({
-    reportName: 'fagActivity',
-  });
-
-  const fagActivity = await req.json();
+    return setData;
+  }
 
   return {
     componentType: 'Line',
@@ -291,70 +265,70 @@ exports.competenceSum = async () => {
   };
 };
 
-function setInGroups(list) {
-  const detailedGroupedList = [
-    { years: 'Under 2 år', count: 0 },
-    { years: '2 til 5 år', count: 0 },
-    { years: '6 til 10 år', count: 0 },
-    { years: '11 til 15 år', count: 0 },
-    { years: '16 til 20 år', count: 0 },
-    { years: '21 til 25 år', count: 0 },
-    { years: '26 til 30 år', count: 0 },
-    { years: 'over 31 år', count: 0 },
-  ];
+exports.experienceDistributionReports = [
+  { reportName: 'yearsSinceSchoolDist' },
+];
+exports.experienceDistribution = async ({ data }) => {
+  const setInGroups = list => {
+    const detailedGroupedList = [
+      { years: 'Under 2 år', count: 0 },
+      { years: '2 til 5 år', count: 0 },
+      { years: '6 til 10 år', count: 0 },
+      { years: '11 til 15 år', count: 0 },
+      { years: '16 til 20 år', count: 0 },
+      { years: '21 til 25 år', count: 0 },
+      { years: '26 til 30 år', count: 0 },
+      { years: 'over 31 år', count: 0 },
+    ];
 
-  const groupedList = [
-    { years: 'Under 1 år', count: 0 },
-    { years: '1 til 2 år', count: 0 },
-    { years: '3 til 5 år', count: 0 },
-    { years: '6 til 10 år', count: 0 },
-    { years: 'over 10 år', count: 0 },
-  ];
+    const groupedList = [
+      { years: 'Under 1 år', count: 0 },
+      { years: '1 til 2 år', count: 0 },
+      { years: '3 til 5 år', count: 0 },
+      { years: '6 til 10 år', count: 0 },
+      { years: 'over 10 år', count: 0 },
+    ]
 
-  list.forEach((item) => {
-    const years = Number(item.years);
-    const count = Number(item.count);
-    if (years === 0) {
-      detailedGroupedList[0].count += count;
-      groupedList[0].count += count;
-    } else if (years === 1) {
-      detailedGroupedList[0].count += count;
-      groupedList[1].count += count;
-    } else if (years === 2) {
-      detailedGroupedList[1].count += count;
-      groupedList[1].count += count;
-    } else if (years > 2 && years < 6) {
-      detailedGroupedList[1].count += count;
-      groupedList[2].count += count;
-    } else if (years > 5 && years < 11) {
-      detailedGroupedList[2].count += count;
-      groupedList[3].count += count;
-    } else if (years > 10 && years < 16) {
-      detailedGroupedList[3].count += count;
-      groupedList[4].count += count;
-    } else if (years > 15 && years < 21) {
-      detailedGroupedList[4].count += count;
-      groupedList[4].count += count;
-    } else if (years > 20 && years < 26) {
-      detailedGroupedList[5].count += count;
-      groupedList[4].count += count;
-    } else if (years > 25 && years < 31) {
-      detailedGroupedList[6].count += count;
-      groupedList[4].count += count;
-    } else if (years > 30) {
-      detailedGroupedList[7].count += count;
-      groupedList[4].count += count;
-    }
-  });
+    list.forEach((item) => {
+      const years = Number(item.years);
+      const count = Number(item.count);
+      if (years === 0){
+        detailedGroupedList[0].count += count;
+        groupedList[0].count += count;
+      }else if (years === 1) {
+        detailedGroupedList[0].count += count;
+        groupedList[1].count += count;
+      }else if (years === 2) {
+        detailedGroupedList[1].count += count;
+        groupedList[1].count += count;
+      } else if (years > 2 && years < 6) {
+        detailedGroupedList[1].count += count;
+        groupedList[2].count += count;
+      } else if (years > 5 && years < 11) {
+        detailedGroupedList[2].count += count;
+        groupedList[3].count += count;
+      } else if (years > 10 && years < 16) {
+        detailedGroupedList[3].count += count;
+        groupedList[4].count += count;
+      } else if (years > 15 && years < 21) {
+        detailedGroupedList[4].count += count;
+        groupedList[4].count += count;
+      } else if (years > 20 && years < 26) {
+        detailedGroupedList[5].count += count;
+        groupedList[4].count += count;
+      } else if (years > 25 && years < 31) {
+        detailedGroupedList[6].count += count;
+        groupedList[4].count += count;
+      } else if (years > 30) {
+        detailedGroupedList[7].count += count;
+        groupedList[4].count += count;
+      }
+    });
 
-  return [groupedList, detailedGroupedList];
-}
+    return [groupedList, detailedGroupedList];
+  }
 
-exports.experienceDistribution = async ({ dataplattformClient }) => {
-  const req = await dataplattformClient.report({
-    reportName: 'yearsSinceSchoolDist',
-  });
-  const experience = await req.json();
+  const experience = data;
   const [groups, detailedGroups] = setInGroups(experience);
   return {
     componentType: 'Pie',
@@ -366,20 +340,12 @@ exports.experienceDistribution = async ({ dataplattformClient }) => {
   };
 };
 
-exports.ageDistribution = async ({ dataplattformClient }) => {
-  const [setAgeDistReq, setAgeDistGroupReq] = await Promise.all([
-    dataplattformClient.report({
-      reportName: 'ageDistribution',
-    }),
-    dataplattformClient.report({
-      reportName: 'ageDistributionGroups',
-    }),
-  ]);
-
-  const [setAgeDist, setAgeDistGroup] = await Promise.all([
-    setAgeDistReq.json(),
-    setAgeDistGroupReq.json(),
-  ]);
+exports.ageDistributionReports = [
+  { reportName: 'ageDistribution' },
+  { reportName: 'ageDistributionGroups' },
+];
+exports.ageDistribution = async ({ data }) => {
+  const [setAgeDist, setAgeDistGroup] = data
 
   return {
     componentType: 'Bar',
@@ -495,11 +461,11 @@ exports.fagEvents = async ({ dataplattformClient }) => {
   };
 };
 
-exports.education = async ({ dataplattformClient }) => {
-  const req = await dataplattformClient.report({
-    reportName: 'degreeDist',
-  });
-  const education = await req.json();
+exports.educationReports = [
+  { reportName: 'degreeDist' },
+];
+exports.education = async ({ data }) => {
+  const education = data;
 
   return {
     componentType: 'Pie',
@@ -514,11 +480,11 @@ exports.education = async ({ dataplattformClient }) => {
  * competence mapping. Its used to define the options in the
  * filter dropdown menu.
  */
-exports.competenceFilter = async ({ dataplattformClient }) => {
-  const req = await dataplattformClient.report({
-    reportName: 'categories',
-  });
-  const categories = await req.json();
+exports.competenceFilterReports = [
+  { reportName: 'categories' },
+];
+exports.competenceFilter = async ({ data }) => {
+  const categories = data;
   // Categories structure
   const output = [];
   // Get the main categories
@@ -544,23 +510,14 @@ exports.competenceFilter = async ({ dataplattformClient }) => {
   return output;
 };
 
-exports.competenceMapping = async ({ dataplattformClient }) => {
-  const [reqCategories, reqCompetence, reqMotivation] = await Promise.all([
-    dataplattformClient.report({
-      reportName: 'categories',
-    }),
-    dataplattformClient.report({
-      reportName: 'competenceAverage',
-    }),
-    dataplattformClient.report({
-      reportName: 'motivationAverage',
-    }),
-  ]);
-  const [categories, competence, motivation] = await Promise.all([
-    reqCategories.json(),
-    reqCompetence.json(),
-    reqMotivation.json(),
-  ]);
+
+exports.competenceMappingReports = [
+  { reportName: 'categories' },
+  { reportName: 'competenceAverage' },
+  { reportName: 'motivationAverage' },
+];
+exports.competenceMapping = async ({ data }) => {
+  const [categories, competence, motivation] = data
 
   const competenceCategories = (data) => {
     // Categories structure
@@ -619,24 +576,13 @@ exports.competenceMapping = async ({ dataplattformClient }) => {
   };
 };
 
-exports.competenceAmount = async ({ dataplattformClient }) => {
-  const [reqCategories, reqCompetence, reqMotivation] = await Promise.all([
-    dataplattformClient.report({
-      reportName: 'categories',
-    }),
-    dataplattformClient.report({
-      reportName: 'competenceAverage',
-    }),
-    dataplattformClient.report({
-      reportName: 'motivationAverage',
-    }),
-  ]);
-
-  const [categories, competence, motivation] = await Promise.all([
-    reqCategories.json(),
-    reqCompetence.json(),
-    reqMotivation.json(),
-  ]);
+exports.competenceAmountReports = [
+  { reportName: 'categories' },
+  { reportName: 'competenceAverage' },
+  { reportName: 'motivationAverage' },
+];
+exports.competenceAmount = async ({ data }) => {
+  const [categories, competence, motivation] = data;
 
   const setCategories = (data, valueKey) => {
     const output = [];
@@ -693,35 +639,29 @@ exports.competenceAmount = async ({ dataplattformClient }) => {
   };
 };
 
-exports.empData = async ({
-  dataplattformClient,
-  queryStringParameters: { email } = {},
-}) => {
+exports.empDataReports = ({
+  parameters: { email } = {}
+}) => ([
+  {
+    reportName: 'employeeSkills',
+    filter: { email },
+  },
+  {
+    reportName: 'workExperience',
+    filter: { email },
+  },
+  {
+    reportName: 'competence',
+    filter: { email },
+  }
+])
+exports.empData = async ({ data, parameters: { email } = {} }) => {
+  const [resSkills, resWork, resComp] = data
+  const emp = resComp[0];
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   });
 
-  const [reqSkills, reqWork, reqComp] = await Promise.all([
-    dataplattformClient.report({
-      reportName: 'employeeSkills',
-      filter: { email },
-    }),
-    dataplattformClient.report({
-      reportName: 'workExperience',
-      filter: { email },
-    }),
-    dataplattformClient.report({
-      reportName: 'competence',
-      filter: { email },
-    }),
-  ]);
-
-  const [resSkills, resWork, resComp] = await Promise.all([
-    reqSkills.json(),
-    reqWork.json(),
-    reqComp.json(),
-  ]);
-  const emp = resComp[0];
   return {
     email_id: makeEmailUuid(email, salt),
     user_id: emp.user_id,
@@ -739,27 +679,21 @@ exports.empData = async ({
   };
 };
 
-exports.employeeRadar = async ({
-  dataplattformClient,
-  queryStringParameters: { user_id } = {},
-}) => {
-  const [reqCategories, reqMotivation, reqCompetence] = await Promise.all([
-    dataplattformClient.report({
-      reportName: 'categories',
-    }),
-    dataplattformClient.report({
-      reportName: 'employeeMotivation',
-    }),
-    dataplattformClient.report({
-      reportName: 'employee_competence',
-    }),
-  ]);
-
-  const [categories, empMotivation, empCompetence] = await Promise.all([
-    reqCategories.json(),
-    reqMotivation.json(),
-    reqCompetence.json(),
-  ]);
+exports.employeeRadarReports = ({
+  parameters: { user_id } = {}
+}) => ([
+  {
+    reportName: 'categories',
+  },
+  {
+    reportName: 'employeeMotivation',
+  },
+  {
+    reportName: 'employee_competence',
+  }
+])
+exports.employeeRadar = async ({ data, parameters: { user_id } = {} }) => {
+  const [categories, empMotivation, empCompetence] = data;
 
   const thisMotivation = [];
   empMotivation.forEach((item) => {
@@ -790,80 +724,12 @@ exports.employeeRadar = async ({
   };
 };
 
-const reStructCategories = (categories, compScores = [], motScores = []) => {
-  //find the main categoreis
-  const mainCategories = new Set(
-    categories.flatMap((item) => Object.keys(item))
-  );
-
-  /**
-   * returns the score of the category with name = name from
-   * the array scores. kompOrMot is either "kompetanse" or
-   * "motivasjon", depending on the score to find
-   */
-  const score = (name, scores, komOrMot) => {
-    const thisCat = scores.find((obj) => {
-      return obj['kategori'] === name;
-    });
-    const returnValue = thisCat ? thisCat[komOrMot] : 0;
-    return returnValue || 0;
-  };
-
-  let catSet = [];
-
-  const mainCats = [];
-
-  mainCategories.forEach((name) => {
-    const upperCaseName = name.charAt(0).toUpperCase() + name.slice(1);
-    mainCats.push({
-      kategori: upperCaseName,
-      kompetanse: score(upperCaseName, compScores, 'kompetanse'),
-      motivasjon: score(upperCaseName, motScores, 'motivasjon')
-    });
-    const categoryObject = {
-      [name]: [],
-    };
-    categories.forEach((item) => {
-      const childName = item[name];
-      if (childName) {
-        // Create child category
-        const childCategoryObject = {
-          kategori: childName,
-          kompetanse: score(childName, compScores, 'kompetanse'),
-          motivasjon: score(childName, motScores, 'motivasjon')
-        };
-        categoryObject[name].push(childCategoryObject);
-      }
-    });
-    catSet.push(categoryObject);
-  });
-  catSet.unshift({ Hovedkategorier: mainCats });
-  catSet = catSet.reduce(function (cat, x) {
-    for (var key in x) cat[key] = x[key];
-    return cat;
-  }, {});
-
-  const setNames = Object.keys(catSet);
-
-  return [catSet, setNames];
-};
-
-exports.competenceAreas = async ({ dataplattformClient }) => {
-
-  const [reqCategories, reqCompetence] = await Promise.all([
-    dataplattformClient.report({
-      reportName: 'categories'
-    }),
-    dataplattformClient.report({
-      reportName: 'competenceAverage'
-    })
-  ]);
-
-  const [categories, competence] = await Promise.all([
-    reqCategories.json(),
-    reqCompetence.json()
-  ]);
-
+exports.competenceAreasReports = [
+  { reportName: 'categories' },
+  { reportName: 'competenceAverage' },
+]
+exports.competenceAreas = async ({ data }) => {
+  const [categories, competence] = data
   const output = [];
   
   const mainCategories = new Set(
@@ -871,7 +737,6 @@ exports.competenceAreas = async ({ dataplattformClient }) => {
   );
 
   mainCategories.forEach(name => {
-
     const categoryObject = {
       kategori: name.charAt(0).toUpperCase() + name.slice(1),
       kompetanse: 0,
@@ -881,9 +746,7 @@ exports.competenceAreas = async ({ dataplattformClient }) => {
     let numberOfSubCategories = 0;
     
     categories.forEach(item => {
-
       const childName = item[name];
-      
       if (childName) {
         const value = competence[0][childName.toLowerCase()] || null;
 
@@ -897,13 +760,71 @@ exports.competenceAreas = async ({ dataplattformClient }) => {
 
         output.push(childCategoryObject);
       }
-      
     });
 
     categoryObject.kompetanse = categorySum / numberOfSubCategories;
     output.push(categoryObject);
 
   });
+
+  const reStructCategories = (categories, compScores = [], motScores = []) => {
+    //find the main categoreis
+    const mainCategories = new Set(
+      categories.flatMap((item) => Object.keys(item))
+    );
+
+    /**
+     * returns the score of the category with name = name from
+     * the array scores. kompOrMot is either "kompetanse" or
+     * "motivasjon", depending on the score to find
+     */
+    const score = (name, scores, komOrMot) => {
+      const thisCat = scores.find((obj) => {
+        return obj['kategori'] === name;
+      });
+      const returnValue = thisCat ? thisCat[komOrMot] : 0;
+      return returnValue || 0;
+    };
+
+    let catSet = [];
+
+    const mainCats = [];
+
+    mainCategories.forEach((name) => {
+      const upperCaseName = name.charAt(0).toUpperCase() + name.slice(1);
+      mainCats.push({
+        kategori: upperCaseName,
+        kompetanse: score(upperCaseName, compScores, 'kompetanse'),
+        motivasjon: score(upperCaseName, motScores, 'motivasjon')
+      });
+      const categoryObject = {
+        [name]: [],
+      };
+      categories.forEach((item) => {
+        const childName = item[name];
+        if (childName) {
+          // Create child category
+          const childCategoryObject = {
+            kategori: childName,
+            kompetanse: score(childName, compScores, 'kompetanse'),
+            motivasjon: score(childName, motScores, 'motivasjon')
+          };
+          categoryObject[name].push(childCategoryObject);
+        }
+      });
+      catSet.push(categoryObject);
+    });
+    catSet.unshift({ Hovedkategorier: mainCats });
+    catSet = catSet.reduce(function (cat, x) {
+      for (var key in x) cat[key] = x[key];
+      return cat;
+    }, {});
+
+    const setNames = Object.keys(catSet);
+
+    return [catSet, setNames];
+  };
+
 
   const [structuredCats, setNames] = reStructCategories(
     categories,

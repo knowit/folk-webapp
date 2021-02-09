@@ -1,4 +1,4 @@
-const { DataplattformClient } = require('../dataplattform/lib');
+//const { DataplattformClient } = require('../dataplattform/lib');
 
 module.exports = function () {
   return function (req, res, next) {
@@ -6,12 +6,12 @@ module.exports = function () {
       return res.sendStatus(403);
     }
 
-    const accessToken = req.headers.authorization
+    req.accessToken = req.headers.authorization
       .split(/bearer/i)
       .pop()
       .trim();
 
-    req.dataplattform = new DataplattformClient({ accessToken });
+    //req.dataplattform = new DataplattformClient({ accessToken });
     next();
   };
 };
