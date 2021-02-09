@@ -1,5 +1,3 @@
-//const { DataplattformClient } = require('../dataplattform/lib');
-
 module.exports = function () {
   return function (req, res, next) {
     if (!req.headers.authorization) {
@@ -11,7 +9,6 @@ module.exports = function () {
       .pop()
       .trim();
 
-    //req.dataplattform = new DataplattformClient({ accessToken });
     next();
   };
 };
