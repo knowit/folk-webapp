@@ -20,29 +20,35 @@ exports.handler = async (req) => {
   const parameters = req.query
   const accessToken = req.accessToken
 
-  console.log("the end is", endpoint, parameters)
+  //console.log("the end is", endpoint, parameters)
 
   // Check endpoint's handler and reports
   const endpointHandler = aggregation[endpoint]
   const endpointReports = aggregation[endpoint + 'Reports']
   if (!endpointHandler) {
+    console.log("endpoint err", responses.noEndpoint)
     return responses.noEndpoint
   } else if (!endpointReports) {
-    return responses.noReports
+    console.log("endpoint warn", responses.noReports)
+    return await endpointHandler() //responses.noReports
   }
 
   // Get endpoint's reports data
   var error
   const data = await reports(accessToken, endpointReports, parameters)
-  	.catch(err => error = err)
-  	console.log("data err", error)
+  	.catch(err => {
+      error = err
+      console.log("data err", error)
+    })
   if (error)
   	return error
 
   // Run data aggregation for endpoint
   const result = await endpointHandler({data, parameters})
-  	.catch(err => error = err)
-  	console.log("result err", error)
+  	.catch(err => {
+      error = err
+      console.log("result err", error)
+    })
   if (error)
   	return error
 

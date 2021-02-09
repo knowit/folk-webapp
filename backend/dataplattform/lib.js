@@ -30,7 +30,7 @@ async function report(
       apiUrl = process.env.API_URL || 'https://dev-api.dataplattform.knowit.no',
     }
   ) {
-  //console.log("name ETC", reportName, filter, accessToken, apiUrl)
+    //console.log("name ETC", reportName, filter, accessToken, apiUrl)
     const filters = Object.entries(filter).map(([key, value]) => {
       const val = typeof value === 'string' ? `'${value}'` : value;
       return `filter=${encodeURIComponent(key)}:${encodeURIComponent(val)}`;
@@ -41,7 +41,7 @@ async function report(
       apiUrl || this.apiUrl
     }/data/query/report/${reportName}${filterString}`;
 
-    console.log("REPORRT URL", reportUrl)
+    //console.log("REPORT URL", reportUrl)
 
     const response = await fetch(reportUrl, {
       method: 'GET',
@@ -61,7 +61,7 @@ async function report(
     }
   }
 exports.reports = async (accessToken, reports, parameters) => {
-  console.log("reports params", parameters)
+  //console.log("reports params", parameters)
   // Check and resolve parameters type
   if (typeof reports === 'function') {
     if (parameters) {
