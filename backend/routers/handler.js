@@ -26,10 +26,10 @@ exports.handler = async (req) => {
   const endpointHandler = aggregation[endpoint]
   const endpointReports = aggregation[endpoint + 'Reports']
   if (!endpointHandler) {
-    console.log("endpoint err", responses.noEndpoint)
+    console.log("endpoint err", responses.noEndpoint, endpoint)
     return responses.noEndpoint
   } else if (!endpointReports) {
-    console.log("endpoint warn", responses.noReports)
+    console.log("endpoint warn", responses.noReports, endpoint)
     return await endpointHandler() //responses.noReports
   }
 
