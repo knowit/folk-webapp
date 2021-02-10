@@ -96,5 +96,11 @@ exports.reports = async (accessToken, reports, parameters) => {
     )
   )
 
+  // Return single object for single report queries
+  if (data.length == 1)
+    return data[0]
+  else if (data.length == 0)
+    console.warn('Server response is empty for reports', reports, data)
+
   return data
 }
