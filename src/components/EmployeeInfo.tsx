@@ -197,7 +197,6 @@ export default function EmployeeInfo({
   const getOffsetHeight = (thisTargetRef: any) => thisTargetRef.offsetHeight;
   const classes = useStyles();
   const url = data.competenceUrl;
-  console.warn('url', url)
   const [empData, pending] = useFetchedData<EmployeeInfoData>({ url });
 
   const getStringFromList = (
