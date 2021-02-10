@@ -24,6 +24,7 @@ type EmpData = {
   navn: string;
   title: string;
   user_id: string;
+  manager: string;
 };
 
 interface ProjectExperience {
@@ -203,7 +204,7 @@ export default function EmployeeSite() {
           ) : (
             <>
               <b>Nærmeste leder: </b>
-              *DATA FRA AD HER*
+              {emp?.manager}
             </>
           )}
         </div>

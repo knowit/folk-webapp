@@ -26,6 +26,8 @@ interface EmployeeInfoData {
     roles: string[];
   };
   workExperience: Experience[];
+  manager: string;
+  guid: string;
 }
 
 const useMotivationMappingStyles = makeStyles({
@@ -268,6 +270,16 @@ export default function EmployeeInfo({
             <>
               <b>Språk: </b>
               {getStringFromList(empData?.tags.languages, 'languages')}
+            </>
+          )}
+        </div>
+        <div className={classes.cell}>
+          {pending ? (
+            <Skeleton variant="rect" width={340} height={15} animation="wave" />
+          ) : (
+            <>
+              <b>Nærmeste leder: </b>
+              {empData?.manager}
             </>
           )}
         </div>
