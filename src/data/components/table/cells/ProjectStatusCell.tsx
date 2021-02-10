@@ -1,7 +1,6 @@
 import { makeStyles, withStyles } from '@material-ui/core';
 import React from 'react';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import classes from '*.module.css';
 
 const StatusCircle = ({ color }: { color: string }) => {
   const Circle = withStyles(() => ({

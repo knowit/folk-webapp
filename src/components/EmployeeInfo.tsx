@@ -4,7 +4,11 @@ import { Skeleton } from '@material-ui/lab';
 import { useFetchedData } from '../hooks/service';
 import { NoData } from './ErrorText';
 import { RowStates, Action } from '../data/components/table/DataTable';
-import { ChartSkeleton, ExperienceData, ProjectExperience } from '../pages/EmployeeSite';
+import {
+  ChartSkeleton,
+  ExperienceData,
+  ProjectExperience,
+} from '../pages/EmployeeSite';
 import DDItem, { DDChart } from '../data/DDItem';
 import { months } from '../data/components/table/cells/ExperienceCell';
 
@@ -264,13 +268,20 @@ export default function EmployeeInfo({
   );
 }
 const yearAndMonthToNumber = (year: number, month: number) => {
-  const thisMonth = month > 9? month+"" : "0"+month || "00"
-  return Number(year + thisMonth);
+  let stringMonth;
+  if (month < 10) {
+    stringMonth = '0' + month;
+  } else if (month > 9) {
+    stringMonth = String(month);
+  } else {
+    stringMonth = '00';
+  }
+  return Number(year + stringMonth);
 };
 
 function getWorkExperience(workExp: Experience[] | undefined) {
   if (!workExp) return <div> Fant ingen arbeidserfaring </div>;
-  
+
   workExp.sort(
     (expA, expB) =>
       yearAndMonthToNumber(expB.year_from, expB.month_from) -
@@ -285,13 +296,18 @@ function getWorkExperience(workExp: Experience[] | undefined) {
   ));
 }
 
-const timeToNumber = (time: string) => yearAndMonthToNumber(Number(time.split('/')[0]),Number(time.split('/')[1]));
-function compare( a:ProjectExperience, b:ProjectExperience ) {
-  if ( timeToNumber(a.time_from) < timeToNumber( b.time_from )){
-    return -1;
-  }
-  if ( timeToNumber(a.time_from) > timeToNumber( b.time_from )){
+const timeToNumber = (time: string) => {
+  const [year, month] = time.split('/');
+  return yearAndMonthToNumber(Number(year), Number(month));
+};
+function compare(a: ProjectExperience, b: ProjectExperience) {
+  const aTime = a.time_from ? a.time_from : a.time_to;
+  const bTime = b.time_from ? b.time_from : b.time_to;
+  if (timeToNumber(aTime) < timeToNumber(bTime)) {
     return 1;
+  }
+  if (timeToNumber(aTime) > timeToNumber(bTime)) {
+    return -1;
   }
   return 0;
 }
@@ -300,10 +316,9 @@ export const GetProjects = (expData: { expData: ExperienceData | null }) => {
   const classes = useStyles();
   if (!expData || !expData.expData || !expData.expData.experience)
     return <div> Fant ingen prosjekter </div>;
- 
-  expData.expData.experience.sort( compare )
-  console.log("Begining:")
-  expData.expData.experience.forEach(item => console.log(timeToNumber(item.time_from)))
+
+  expData.expData.experience.sort(compare);
+  console.log(expData.expData.experience);
 
   return (
     <>
