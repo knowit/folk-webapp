@@ -220,8 +220,8 @@ export default function EmployeeSite() {
               dataComponentProps={{
                 chartVariants: [
                   {
-                    chartType: 'Radar',
-                    chartProps: {
+                    type: 'Radar',
+                    props: {
                       groupKey: 'kategori',
                       valueKey: ['motivasjon', 'kompetanse'],
                     },

@@ -33,7 +33,7 @@ const useStyles = makeStyles(() =>
     },
     gridContentRoot: {
       width: '100%',
-      padding: '20px 15px 15px 15px',
+      padding: '15px',
       backgroundColor: 'white',
       borderLeft: '1px solid #E4E1DB',
       borderBottom: '1px solid #E4E1DB',

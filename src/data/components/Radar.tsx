@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { colors } from './common';
 import { ResponsiveRadar } from '@nivo/radar';
@@ -9,8 +8,8 @@ type RadarChartsData = {
 
 interface RadarChartsProps {
   data: RadarChartsData[];
-  groupKey?: string;
-  valueKey?: string[];
+  groupKey: string;
+  valueKey: string[];
   big?: boolean;
 }
 
@@ -18,8 +17,8 @@ const RadarChartColors = colors.filter((_, k) => k !== 1);
 
 export default function Radar({
   data,
-  groupKey = 'kategori',
-  valueKey = ['motivasjon','kompetanse'],
+  groupKey,
+  valueKey,
   big,
 }: RadarChartsProps) {
   const height = big ? '400px' : '300px';
@@ -29,7 +28,7 @@ export default function Radar({
         data={data}
         keys={valueKey}
         indexBy={groupKey}
-        maxValue='5'
+        maxValue={5}
         margin={{ top: 50, right: 10, bottom: 50, left: 10 }}
         curve="linearClosed"
         borderWidth={2}
@@ -41,31 +40,29 @@ export default function Radar({
         dotColor={{ theme: 'background' }}
         dotBorderWidth={2}
         enableDotLabel={false}
-        dotLabel = { props => props.value.toFixed(1) }
+        dotLabel={({ value }: { value: number }) => value.toFixed(1)}
         dotLabelYOffset={-12}
         colors={RadarChartColors}
         fillOpacity={0.25}
         blendMode="multiply"
         animate={true}
-        motionConfig="wobbly"
         isInteractive={true}
-        tooltipFormat = {
-          value => 
+        tooltipFormat={(value) =>
           `${Number(value).toLocaleString('no-NO', {
-            maximumFractionDigits: 2
+            maximumFractionDigits: 2,
           })}`
         }
         legends={[
           {
-              anchor: 'bottom',
-              direction: 'row',
-              translateY: -48,
-              itemWidth: 80,
-              itemHeight: 20,
-              itemTextColor: '#999',
-              symbolSize: 12,
-              symbolShape: 'circle'
-          }
+            anchor: 'bottom',
+            direction: 'row',
+            translateY: -48,
+            itemWidth: 80,
+            itemHeight: 20,
+            itemTextColor: '#999',
+            symbolSize: 12,
+            symbolShape: 'circle',
+          },
         ]}
       />
     </div>

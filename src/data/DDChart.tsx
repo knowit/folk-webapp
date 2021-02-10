@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { BarChart, Fullscreen, FullscreenExit } from '@material-ui/icons';
 import {
-  Theme,
-  withStyles,
-  createStyles,
-  makeStyles,
-  ButtonGroup,
-} from '@material-ui/core';
+  BarChart,
+  Fullscreen,
+  FullscreenExit,
+  PieChart,
+  ShowChart,
+} from '@material-ui/icons';
+import { Theme, withStyles } from '@material-ui/core';
 import { GridItemHeader, GridItemContent } from '../components/GridItem';
 import DropdownPicker from '../components/DropdownPicker';
 import Line from './components/Line';
@@ -18,88 +18,101 @@ import { ErrorText } from '../components/ErrorText';
 import Sunburst from './components/Sunburst';
 import Radar from './components/Radar';
 import { DDComponentProps, DDPassProps } from './types';
-import Button from '@material-ui/core/Button';
+import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import IconButton from '@material-ui/core/IconButton';
 
-const usePlaceholderStyle = makeStyles(() =>
-  createStyles({
-    root: {
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    titleText: {
-      fontSize: '18px',
-      fontWeight: 'bold',
-      lineHeight: 1.28,
-    },
-    text: {
-      fontSize: '16px',
-      lineHeight: 1.5,
-    },
-  })
-);
+export type ChartType =
+  | 'Line'
+  | 'Bar'
+  | 'Pie'
+  | 'Radar'
+  | 'Sunburst'
+  | 'PercentArea';
 
-const Placeholder = (props: { big: boolean }) => {
-  const classes = usePlaceholderStyle();
-  const height = props.big ? '400px' : '280px';
+const ToggleFullscreenButton = withStyles((theme: Theme) => ({
+  root: {
+    marginLeft: 'auto',
+    padding: 0,
+    borderRadius: 0,
+    cursor: 'pointer',
+    '& svg': {
+      color: theme.palette.primary.main,
+      height: '40px',
+      width: '40px',
+      '&:hover': {
+        color: theme.palette.text.primary,
+      },
+    },
+  },
+}))(IconButton);
+
+const chartTypeInfo: {
+  [key in ChartType]: {
+    label: string;
+    icon: React.ReactNode;
+  };
+} = {
+  Line: { label: 'linjediagram', icon: <ShowChart /> },
+  Bar: { label: 'stolpediagram', icon: <BarChart /> },
+  Pie: { label: 'kakediagram', icon: <PieChart /> },
+  Radar: { label: 'radardiagram', icon: <PieChart /> },
+  Sunburst: { label: 'sunburst', icon: <PieChart /> },
+  PercentArea: { label: 'prosent', icon: <PieChart /> },
+};
+
+function ChartVariantToggle({
+  selectedVariant,
+  onVariantChange,
+  chartVariants,
+}: {
+  selectedVariant: number;
+  onVariantChange: (value: number) => void;
+  chartVariants: Array<{ type: ChartType; props: DDPassProps }>;
+}) {
+  const handleChartVariantChange = (
+    event: React.MouseEvent,
+    newChartIndex: number | null
+  ) => {
+    onVariantChange(Number(newChartIndex));
+  };
+
   return (
-    <div className={classes.root} style={{ height }}>
-      <div className={classes.titleText}>Oida</div>
-      <div className={classes.text}>Data kan ikke vises for dette valget</div>
-    </div>
+    <ToggleButtonGroup
+      exclusive
+      value={selectedVariant}
+      onChange={handleChartVariantChange}
+      size="small"
+    >
+      {chartVariants.map((chartVariant, chartIndex) => {
+        const { label, icon: ChartIcon } = chartTypeInfo[chartVariant.type];
+        const buttonLabel = `Vis som ${label}`;
+
+        return (
+          <ToggleButton
+            key={label}
+            value={chartIndex}
+            disableRipple
+            aria-label={buttonLabel}
+            title={buttonLabel}
+          >
+            {ChartIcon}
+          </ToggleButton>
+        );
+      })}
+    </ToggleButtonGroup>
   );
+}
+
+const chartComponents: {
+  [key in ChartType]: (props: any) => JSX.Element;
+} = {
+  Line: Line,
+  Bar: Bar,
+  Pie: Pie,
+  Radar: Radar,
+  Sunburst: Sunburst,
+  PercentArea: PercentArea,
 };
-
-const getChartComponent = (name: string) => {
-  switch (name) {
-    case 'Line':
-      return Line;
-    case 'Bar':
-      return Bar;
-    case 'PercentArea':
-      return PercentArea;
-    case 'Pie':
-      return Pie;
-    case 'Sunburst':
-      return Sunburst;
-    case 'Radar':
-      return Radar;
-    default:
-      return Placeholder;
-  }
-};
-
-const LargerIcon = withStyles((theme: Theme) => ({
-  root: {
-    height: '41.17px',
-    width: '41.17px',
-    position: 'relative',
-    left: '491px',
-    bottom: '10px',
-    cursor: 'pointer',
-    color: theme.palette.primary.main,
-    '&:hover': {
-      color: theme.palette.text.primary,
-    },
-  },
-}))(Fullscreen);
-
-const SmallerIcon = withStyles((theme: Theme) => ({
-  root: {
-    height: '60px',
-    width: '60px',
-    position: 'relative',
-    bottom: '15px',
-    left: '861px',
-    cursor: 'pointer',
-    color: theme.palette.primary.main,
-    '&:hover': {
-      color: theme.palette.text.primary,
-    },
-  },
-}))(FullscreenExit);
 
 export default function DDChart({
   payload,
@@ -111,55 +124,29 @@ export default function DDChart({
     setNames: string[];
     sets: { [key: string]: any };
   };
-  const [set, setSet] = useState(
+  const [set, setSet] = useState<string>(
     setNames && setNames.length > 0 ? setNames[0] : ''
   );
-  const [big, setBig] = useState(false);
-  const [selectedChart, setSelectedChart] = useState<number>(0);
+  const [big, setBig] = useState<boolean>(false);
+  const [selectedChartType, setSelectedChartType] = useState<number>(0);
 
-  const ChartComponent = getChartComponent(
-    props.chartVariants[selectedChart].chartType
-  );
-  const passProps = props.chartVariants[selectedChart].chartProps;
+  const chartVariants = props.chartVariants as Array<{
+    type: ChartType;
+    props: DDPassProps;
+  }>;
+  const { type: chartTypeToRender, props: chartProps } = chartVariants[
+    selectedChartType
+  ];
+  const ChartComponent = chartComponents[chartTypeToRender];
 
   const handleSetChange = (value: any) => {
     setSet(value as string);
   };
 
   const setNamesLength = payload.setNames ? payload.setNames.length : 0;
-
-  const generateChartTypeToggle = (
-    chartVariants: Array<{
-      chartType: string;
-      chartProps: DDPassProps;
-    }>
-  ) => {
-    if (chartVariants.length > 1) {
-      return (
-        <ButtonGroup>
-          {chartVariants.map((chartVariant, chartIndex) => {
-            // const chartTypeInfo = getChartTypeInfo(chartVariant.chartType);
-            // const ChartTypeIcon = chartTypeInfo.icon;
-            return (
-              <Button
-                key={chartIndex}
-                onClick={() => setSelectedChart(chartIndex)}
-                disabled={selectedChart === chartIndex}
-                // aria-label={chartTypeInfo.label}
-                startIcon={<BarChart />}
-              >
-                Visning {chartIndex + 1}
-              </Button>
-            );
-          })}
-        </ButtonGroup>
-      );
-    }
-    return null;
-  };
+  const altText = big ? 'Exit stor størrelse' : 'Utvid til stor størrelse';
 
   const GridItem = () => {
-    const altText = big ? 'Exit stor størrelse' : 'Utvid til stor størrelse';
     return (
       <>
         <GridItemHeader title={title} description={description} big={big}>
@@ -174,15 +161,32 @@ export default function DDChart({
         </GridItemHeader>
         {sets ? (
           <GridItemContent>
-            <span title={altText}>
-              {big ? (
-                <SmallerIcon onClick={() => setBig(false)} />
-              ) : (
-                <LargerIcon onClick={() => setBig(true)} />
-              )}
-            </span>
-            <ChartComponent big={big} data={sets[set]} {...passProps} />
-            {generateChartTypeToggle(props.chartVariants)}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignContent: 'flex-start',
+                alignItems: 'flex-start',
+              }}
+            >
+              {chartVariants.length > 1 ? (
+                <ChartVariantToggle
+                  chartVariants={chartVariants}
+                  selectedVariant={selectedChartType}
+                  onVariantChange={setSelectedChartType}
+                />
+              ) : null}
+              <ToggleFullscreenButton
+                aria-label={altText}
+                title={altText}
+                onClick={() => setBig(!big)}
+                disableRipple
+                size="small"
+              >
+                {big ? <FullscreenExit /> : <Fullscreen />}
+              </ToggleFullscreenButton>
+            </div>
+            <ChartComponent big={big} data={sets[set]} {...chartProps} />
           </GridItemContent>
         ) : (
           <ErrorText />

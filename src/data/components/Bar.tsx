@@ -13,12 +13,7 @@ interface BarChartsProps {
   big?: boolean;
 }
 
-export default function Bar({
-  data,
-  yLabels,
-  dataKey = 'x',
-  big,
-}: BarChartsProps) {
+export default function Bar({ data, yLabels, dataKey, big }: BarChartsProps) {
   const height = big ? '400px' : '300px';
   return (
     <div style={{ height, width: '100%' }}>
