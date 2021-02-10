@@ -155,9 +155,13 @@ exports.employeeCompetenceReports = ({
     reportName: 'workExperience',
     filter: { email },
   },
+  {
+    reportName: 'competence_test_with_manager_and_guid',
+    filter: { email },
+  },
 ])
 exports.employeeCompetence = async ({ data, parameters: { email } = {} }) => {
-  const [resMotivation, resSkills, resEmp] = data
+  const [resMotivation, resSkills, resEmp, resComp] = data
   const catMotivation = {};
 
   // Get salt
@@ -183,6 +187,8 @@ exports.employeeCompetence = async ({ data, parameters: { email } = {} }) => {
     motivation: catMotivation,
     workExperience: resEmp,
     tags: mapTags(resSkills),
+    manager: resComp[0].manager,
+    guid: resComp[0].guid,
   };
 };
 
@@ -657,7 +663,7 @@ exports.empDataReports = ({
     filter: { email },
   },
   {
-    reportName: 'competence',
+    reportName: 'competence_test_with_manager_and_guid',
     filter: { email },
   }
 ])
