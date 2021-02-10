@@ -101,6 +101,6 @@ exports.reports = async (accessToken, reports, parameters) => {
     return data[0]
   else if (data.length == 0)
     console.warn('Server response is empty for reports', reports, data)
-  else
-    return data
+
+  return data
 }
