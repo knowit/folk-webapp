@@ -452,13 +452,11 @@ function dateRange(startDate, endDate) {
   return dates;
 }
 
-exports.fagEvents = async ({ dataplattformClient }) => {
-  const reqEvents = await dataplattformClient.report({
-    reportName: 'fagEvents',
-  });
-
-  const events = await reqEvents.json();
-  const eventSet = getEventSet(events);
+exports.fagEventsReports = [
+  { reportName: 'fagEvents' }
+]
+exports.fagEvents = async ({ data }) => {
+  const eventSet = getEventSet(data);
 
   return {
     componentType: 'Line',
