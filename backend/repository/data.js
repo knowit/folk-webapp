@@ -227,7 +227,7 @@ exports.inbound = async () => {
 };
 
 exports.fagtimerReports = [
-  { reportName: 'categorizedMotivation' }
+  { reportName: 'fagActivity' }
 ]
 exports.fagtimer = async ({ data }) => {
   const fagActivity = data;
