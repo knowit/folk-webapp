@@ -4,7 +4,7 @@ import { Skeleton } from '@material-ui/lab';
 import { useFetchedData } from '../hooks/service';
 import { NoData } from './ErrorText';
 import { RowStates, Action } from '../data/components/table/DataTable';
-import { ChartSkeleton, ExperienceData } from '../pages/EmployeeSite';
+import { ChartSkeleton, ExperienceData, ProjectExperience } from '../pages/EmployeeSite';
 import DDItem, { DDChart } from '../data/DDItem';
 import { months } from '../data/components/table/cells/ExperienceCell';
 
@@ -263,18 +263,20 @@ export default function EmployeeInfo({
     </div>
   );
 }
+const yearAndMonthToNumber = (year: number, month: number) => {
+  const thisMonth = month > 9? month+"" : "0"+month || "00"
+  return Number(year + thisMonth);
+};
 
 function getWorkExperience(workExp: Experience[] | undefined) {
   if (!workExp) return <div> Fant ingen arbeidserfaring </div>;
-  const timeToNumber = (year: number, month: number) => {
-    return Number(year + (month > 9 ? '' : '0') + month);
-  };
-  const sortedExp = workExp.sort(
+  
+  workExp.sort(
     (expA, expB) =>
-      timeToNumber(expB.year_from, expB.month_from) -
-      timeToNumber(expA.year_from, expA.month_from)
+      yearAndMonthToNumber(expB.year_from, expB.month_from) -
+      yearAndMonthToNumber(expA.year_from, expA.month_from)
   );
-  return sortedExp.map((exp, index) => (
+  return workExp.map((exp, index) => (
     <div key={index}>
       {exp.month_from !== -1 && months[exp.month_from - 1] + ' '}
       {exp.year_from !== -1 ? exp.year_from + ': ' : ' '}
@@ -283,18 +285,29 @@ function getWorkExperience(workExp: Experience[] | undefined) {
   ));
 }
 
+const timeToNumber = (time: string) => yearAndMonthToNumber(Number(time.split('/')[0]),Number(time.split('/')[1]));
+function compare( a:ProjectExperience, b:ProjectExperience ) {
+  if ( timeToNumber(a.time_from) < timeToNumber( b.time_from )){
+    return -1;
+  }
+  if ( timeToNumber(a.time_from) > timeToNumber( b.time_from )){
+    return 1;
+  }
+  return 0;
+}
+
 export const GetProjects = (expData: { expData: ExperienceData | null }) => {
   const classes = useStyles();
   if (!expData || !expData.expData || !expData.expData.experience)
     return <div> Fant ingen prosjekter </div>;
-  const timeToNumber = (time: string) => Number(time.split('/').join(''));
-  const sortedExp = expData!.expData!.experience.sort(
-    (projectA, projectB) =>
-      timeToNumber(projectB.time_from) - timeToNumber(projectA.time_from)
-  );
+ 
+  expData.expData.experience.sort( compare )
+  console.log("Begining:")
+  expData.expData.experience.forEach(item => console.log(timeToNumber(item.time_from)))
+
   return (
     <>
-      {sortedExp.map((exp, index) => (
+      {expData.expData.experience.map((exp, index) => (
         <div className={classes.prosjektliste} key={index}>
           {getPrettyDates(exp.time_from, exp.time_to)}: {exp.customer} -{' '}
           <i>{exp.project}</i>
