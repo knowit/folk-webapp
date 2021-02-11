@@ -1,11 +1,10 @@
 import React from 'react';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { ChartDetails, ChartVariant } from '../data/DDChart';
-import { BarChart, PieChart, ShowChart } from '@material-ui/icons';
+import { BarChart, Error, PieChart, ShowChart } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { createStyles } from '@material-ui/core';
 
-// TODO: add icons for all chart variants
 const chartVariantInfo: {
   [key in ChartVariant]: {
     label: string;
@@ -15,9 +14,8 @@ const chartVariantInfo: {
   Line: { label: 'linjediagram', icon: <ShowChart /> },
   Bar: { label: 'stolpediagram', icon: <BarChart /> },
   Pie: { label: 'kakediagram', icon: <PieChart /> },
-  Radar: { label: 'radardiagram', icon: <PieChart /> },
-  Sunburst: { label: 'sunburst', icon: <PieChart /> },
-  PercentArea: { label: 'prosent', icon: <PieChart /> },
+  Radar: { label: 'radardiagram', icon: <Error /> },
+  Sunburst: { label: 'sunburst-diagram', icon: <Error /> },
 };
 
 interface ChartVariantToggleProps {

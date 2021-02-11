@@ -3,7 +3,6 @@ import { GridItemHeader, GridItemContent } from '../components/GridItem';
 import DropdownPicker from '../components/DropdownPicker';
 import Line from './components/Line';
 import Bar from './components/Bar';
-import PercentArea from './components/PercentArea';
 import Pie from './components/Pie';
 import BigChart from '../components/BigChart';
 import { ErrorText } from '../components/ErrorText';
@@ -16,13 +15,7 @@ import {
 } from '../components/ChartDisplayOptions';
 import { ToggleFullscreenButton } from '../components/ToggleFullscreenButton';
 
-export type ChartVariant =
-  | 'Line'
-  | 'Bar'
-  | 'Pie'
-  | 'Radar'
-  | 'Sunburst'
-  | 'PercentArea';
+export type ChartVariant = 'Line' | 'Bar' | 'Pie' | 'Radar' | 'Sunburst';
 
 export interface ChartDetails {
   type: ChartVariant;
@@ -37,7 +30,6 @@ const chartComponents: {
   Pie: Pie,
   Radar: Radar,
   Sunburst: Sunburst,
-  PercentArea: PercentArea,
 };
 
 export default function DDChart({
