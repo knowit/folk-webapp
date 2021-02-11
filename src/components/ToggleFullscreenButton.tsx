@@ -6,21 +6,25 @@ import React from 'react';
 const FullscreenIconButton = withStyles((theme: Theme) => ({
   root: {
     marginLeft: 'auto',
-    // TODO: set negative padding?
     padding: 0,
     borderRadius: 0,
     cursor: 'pointer',
     '& svg': {
       color: theme.palette.primary.main,
-      // TODO: resize on fullscreen
-      height: '40px',
-      width: '40px',
       '&:hover': {
         color: theme.palette.text.primary,
       },
     },
   },
 }))(IconButton);
+
+const CloseFullscreenIcon = withStyles({
+  root: { height: '60px', width: '60px' },
+})(FullscreenExit);
+
+const OpenFullscreenIcon = withStyles({
+  root: { height: '42px', width: '42px' },
+})(Fullscreen);
 
 interface ToggleFullscreenButtonProps {
   isFullscreen: boolean;
@@ -43,7 +47,7 @@ export function ToggleFullscreenButton({
       disableRipple
       size="small"
     >
-      {isFullscreen ? <FullscreenExit /> : <Fullscreen />}
+      {isFullscreen ? <CloseFullscreenIcon /> : <OpenFullscreenIcon />}
     </FullscreenIconButton>
   );
 }
