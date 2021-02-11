@@ -1,6 +1,6 @@
 import React from 'react';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import { ChartDetails, ChartVariant } from '../data/DDChart';
+import { ChartComponentInfo, ChartVariant } from '../data/DDChart';
 import { BarChart, Error, PieChart, ShowChart } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { createStyles } from '@material-ui/core';
@@ -19,7 +19,7 @@ const chartVariantInfo: {
 };
 
 interface ChartVariantToggleProps {
-  chartVariants: Array<ChartDetails>;
+  chartVariants: Array<ChartComponentInfo>;
   selected: number;
   onChange: (value: number) => void;
   big?: boolean;
@@ -29,7 +29,7 @@ export function ChartVariantToggle({
   chartVariants,
   selected,
   onChange,
-  big = false, // TODO: resize on fullscreen?
+  big = false,
 }: ChartVariantToggleProps) {
   const handleChartVariantChange = (
     event: React.MouseEvent,
@@ -45,7 +45,7 @@ export function ChartVariantToggle({
       exclusive
       value={selected}
       onChange={handleChartVariantChange}
-      size="small"
+      size={big ? 'medium' : 'small'}
     >
       {chartVariants.map((chartVariant, chartIndex) => {
         const { label, icon: ChartIcon } = chartVariantInfo[chartVariant.type];

@@ -17,7 +17,7 @@ import { ToggleFullscreenButton } from '../components/ToggleFullscreenButton';
 
 export type ChartVariant = 'Line' | 'Bar' | 'Pie' | 'Radar' | 'Sunburst';
 
-export interface ChartDetails {
+export interface ChartComponentInfo {
   type: ChartVariant;
   props: DDPassProps;
 }
@@ -48,7 +48,7 @@ export default function DDChart({
   const [big, setBig] = useState<boolean>(false);
   const [chartVariantIdx, setChartVariantIdx] = useState<number>(0);
 
-  const chartVariants = props.chartVariants as Array<ChartDetails>;
+  const chartVariants = props.chartVariants as Array<ChartComponentInfo>;
   const { type: chartVariantToRender, props: chartProps } = chartVariants[
     chartVariantIdx
   ];
@@ -81,6 +81,7 @@ export default function DDChart({
                   chartVariants={chartVariants}
                   selected={chartVariantIdx}
                   onChange={setChartVariantIdx}
+                  big={big}
                 />
               ) : null}
               <ToggleFullscreenButton
