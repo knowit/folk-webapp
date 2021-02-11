@@ -152,7 +152,7 @@ export default function EmployeeInfo({
     list: string[] | null | undefined,
     listName: 'skills' | 'roles' | 'languages'
   ) => {
-    if (!list || list === undefined) return <NoData />;
+    if (!list) return <NoData />;
     return list.length > 0 ? (
       `${Array.from(new Set(empData?.tags[listName]))
         .filter((x) => x)
@@ -316,10 +316,7 @@ export const GetProjects = (expData: { expData: ExperienceData | null }) => {
   const classes = useStyles();
   if (!expData || !expData.expData || !expData.expData.experience)
     return <div> Fant ingen prosjekter </div>;
-
   expData.expData.experience.sort(compare);
-  console.log(expData.expData.experience);
-
   return (
     <>
       {expData.expData.experience.map((exp, index) => (

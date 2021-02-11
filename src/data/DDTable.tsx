@@ -220,10 +220,10 @@ const searchAndFilter = (
   const newRows: any[] = [];
 
   searchedRows.forEach((row) => {
-    var passedFilters = 0;
+    let passedFilters = 0;
     motivationFilter.forEach((skill) => {
       const rowSkills = row.rowData[row.rowData.length - 2];
-      if (rowSkills?.indexOf(skill) !== -1 && rowSkills !== undefined) {
+      if (rowSkills !== undefined && rowSkills.indexOf(skill) !== -1) {
         passedFilters++;
       }
     });

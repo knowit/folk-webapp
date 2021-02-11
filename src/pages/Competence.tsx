@@ -21,7 +21,6 @@ export default function Competence() {
 
   return (
     <Grid container spacing={2}>
-
       <DDItem
         url="/api/data/competenceAmount"
         title="Kompetansemengde"
@@ -35,7 +34,7 @@ export default function Competence() {
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
-          valueKey: ['kompetanse']
+          valueKey: ['kompetanse'],
         }}
       />
 

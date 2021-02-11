@@ -1,6 +1,12 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { NotFound, UnderConstruction, Employee, Competence, EmployeeSite } from '../pages';
+import {
+  NotFound,
+  UnderConstruction,
+  Employee,
+  Competence,
+  EmployeeSite,
+} from '../pages';
 
 export default function Content() {
   return (

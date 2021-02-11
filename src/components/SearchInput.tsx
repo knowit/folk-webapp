@@ -6,7 +6,6 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { Action } from '../data/DDTable';
 
-
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     backgroundColor: 'white',
@@ -42,8 +41,12 @@ export default function SearchInput({
   const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     setVal(event.target.value);
-    dispatch({type:'CHANGE_SEARCH_TERM', searchTerm:event.target.value, allRows, searchableColumns })
-    
+    dispatch({
+      type: 'CHANGE_SEARCH_TERM',
+      searchTerm: event.target.value,
+      allRows,
+      searchableColumns,
+    });
   };
 
   return (

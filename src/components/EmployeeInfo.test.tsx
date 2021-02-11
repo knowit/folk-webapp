@@ -46,6 +46,13 @@ const fakeUser = {
     },
   ],
 };
+
+const mockData = {
+  competenceUrl: '/404',
+  user_id: '123',
+  email_id: '123',
+  degree: 'some degree',
+};
 const mockCallbackFunction = () => {};
 (useFetchedData as jest.Mock).mockReturnValue([fakeUser, false, null]);
 //(DDChart as jest.Mock).mockReturnValue(<div>hei</div>);
@@ -54,11 +61,7 @@ describe('EmployeeInfo', () => {
   it('should call mockFetch', () => {
     render(
       <EmployeeInfo
-        data={{
-          competenceUrl: 'falskUrl.com',
-          user_id: '123',
-          email_id: '123',
-        }}
+        data={mockData}
         id={'1'}
         rowStates={{ '1': { expandedData: null, height: 70 } }}
         dispatch={mockCallbackFunction}
@@ -71,11 +74,7 @@ describe('EmployeeInfo', () => {
     (language) => {
       render(
         <EmployeeInfo
-          data={{
-            competenceUrl: 'falskUrl.com',
-            user_id: '123',
-            email_id: '123',
-          }}
+          data={mockData}
           id={'1'}
           rowStates={{ '1': { expandedData: null, height: 70 } }}
           dispatch={mockCallbackFunction}
@@ -87,11 +86,7 @@ describe('EmployeeInfo', () => {
   it.each(fakeUser.tags.skills)('should render all skills', (skill) => {
     render(
       <EmployeeInfo
-        data={{
-          competenceUrl: 'falskUrl.com',
-          user_id: '123',
-          email_id: '123',
-        }}
+        data={mockData}
         id={'1'}
         rowStates={{ '1': { expandedData: null, height: 70 } }}
         dispatch={mockCallbackFunction}
@@ -102,11 +97,7 @@ describe('EmployeeInfo', () => {
   it.each(fakeUser.tags.roles)('should render all roles', (role) => {
     render(
       <EmployeeInfo
-        data={{
-          competenceUrl: 'falskUrl.com',
-          user_id: '123',
-          email_id: '123',
-        }}
+        data={mockData}
         id={'1'}
         rowStates={{ '1': { expandedData: null, height: 70 } }}
         dispatch={mockCallbackFunction}
@@ -117,11 +108,7 @@ describe('EmployeeInfo', () => {
   it('should render correct active years', () => {
     render(
       <EmployeeInfo
-        data={{
-          competenceUrl: 'falskUrl.com',
-          user_id: '123',
-          email_id: '123',
-        }}
+        data={mockData}
         id={'1'}
         rowStates={{ '1': { expandedData: null, height: 70 } }}
         dispatch={mockCallbackFunction}
@@ -133,11 +120,7 @@ describe('EmployeeInfo', () => {
   it('Should render correct start date in knowit', () => {
     render(
       <EmployeeInfo
-        data={{
-          competenceUrl: 'falskUrl.com',
-          user_id: '123',
-          email_id: '123',
-        }}
+        data={mockData}
         id={'1'}
         rowStates={{ '1': { expandedData: null, height: 70 } }}
         dispatch={mockCallbackFunction}
