@@ -1,10 +1,16 @@
 import React, { Dispatch, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
-import CharacterLimitBox from './CharacterLimitBox';
 import { useFetchedData } from '../hooks/service';
 import { NoData } from './ErrorText';
 import { RowStates, Action } from '../data/components/table/DataTable';
+import {
+  ChartSkeleton,
+  ExperienceData,
+  ProjectExperience,
+} from '../pages/EmployeeSite';
+import DDItem, { DDChart } from '../data/DDItem';
+import { months } from '../data/components/table/cells/ExperienceCell';
 
 type Experience = {
   employer: string;
@@ -30,43 +36,9 @@ interface EmployeeInfoData {
   guid: string;
 }
 
-const useMotivationMappingStyles = makeStyles({
-  root: {
-    backgroundColor: '#f2f2f2',
-    fontSize: '12px',
-    padding: '10px',
-    '& > div': {
-      display: 'flex',
-      justifyContent: 'space-between',
-      marginBottom: '5px',
-      '& > div': {
-        width: '33%',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-      },
-      '& :nth-child(2)': {
-        textAlign: 'center',
-      },
-      '& :nth-child(3)': {
-        textAlign: 'right',
-      },
-    },
-  },
-  gradient: {
-    backgroundImage: 'linear-gradient(to right, #0040d5, #ff0707)',
-    '& >div': {
-      fontSize: '10px',
-      fontWeight: 'bold',
-      color: 'white',
-      padding: '2px 5px',
-    },
-  },
-});
-
 export const startedInKnowit = (allExperience: Experience[] | undefined) => {
-  if(!allExperience){
-    return <NoData/>
+  if (!allExperience) {
+    return <NoData />;
   }
   const knowit = allExperience?.find((x) =>
     x.employer
@@ -89,14 +61,15 @@ export const startedInKnowit = (allExperience: Experience[] | undefined) => {
 };
 
 export const totalExperience = (allExperience: Experience[] | undefined) => {
-  if(!allExperience){
-    return <NoData/>
+  if (!allExperience) {
+    return <NoData />;
   }
   const dates: Date[] = [];
-  allExperience?.map((job) => {
-    job.year_from !== -1 && dates.push({ year: job.year_from });
-    job.year_to !== -1 && dates.push({ year: job.year_to });
-  });
+  allExperience &&
+    allExperience.forEach((job) => {
+      job.year_from !== -1 && dates.push({ year: job.year_from });
+      job.year_to !== -1 && dates.push({ year: job.year_to });
+    });
   const firstJob = dates?.sort((dateA, dateB) => dateA.year - dateB.year)[0];
 
   return firstJob?.year === undefined || firstJob?.year < 0 ? (
@@ -106,78 +79,45 @@ export const totalExperience = (allExperience: Experience[] | undefined) => {
   );
 };
 
-const makeKeyFromText = (value: string): string => value.replace(' ', '_');
-
-function MotivationMapping({
-  motivations,
-}: {
-  motivations: MotivationMap | undefined;
-}) {
-  const classes = useMotivationMappingStyles();
-
-  const motivationMap = Object.entries(motivations || {}).sort(
-    ([, a], [, b]) => a - b
-  );
-  const motivationList =
-    motivationMap.length > 2
-      ? [
-          motivationMap[0][0],
-          motivationMap[Math.floor(motivationMap.length / 2)][0],
-          motivationMap.slice(-1)[0][0],
-        ]
-      : [];
-
-  return (
-    <div className={classes.root}>
-      <div>
-        {motivationList.length > 0 ? (
-          motivationList.map((competence) => (
-            <div key={makeKeyFromText(competence)}>
-              <CharacterLimitBox
-                text={competence.charAt(0).toUpperCase() + competence.slice(1)}
-              />
-            </div>
-          ))
-        ) : (
-          <>
-            <div key={1}>
-              <NoData />
-            </div>
-            <div key={2}>
-              <NoData />
-            </div>
-            <div key={3}>
-              <NoData />
-            </div>
-          </>
-        )}
-      </div>
-      <div className={classes.gradient}>
-        {['Uinteressert', 'Tja', 'Interessert'].map((level) => (
-          <div key={makeKeyFromText(level)}>{level}</div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-const useStyles = makeStyles({
-  root: {
-    lineHeight: '1.2em',
-    whiteSpace: 'normal',
-    marginTop: '10px',
-    paddingBottom: '10px',
-    fontSize: '12px',
-    background:
-      'transparent linear-gradient(180deg, #FFFFFF 0%, #f7f7f7 100%) 0% 0%',
-    '& div.expandable-box-cell': {},
-  },
-  cell: {
-    marginBottom: '12px',
-    padding: '0 15px',
-    lineHeight: '18px',
-  },
-});
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    info: {
+      paddingTop: '15px',
+      width: '385px',
+      lineHeight: '1.2em',
+      whiteSpace: 'normal',
+    },
+    cell: {
+      marginBottom: '12px',
+      padding: '0 15px',
+      lineHeight: '18px',
+    },
+    prosjektliste: {
+      lineHeight: '18px',
+      paddingBottom: '12px',
+    },
+    erfaring: {
+      width: '365px',
+      borderLeft: `1px solid white`,
+      paddingLeft: '15px',
+      overflowY: 'auto',
+      paddingBottom: '15px',
+    },
+    oversikt: {
+      width: '390px',
+      borderLeft: `1px solid white`,
+    },
+    root: {
+      display: 'flex',
+      flexDirection: 'row',
+      background: `${theme.palette.background.paper}`,
+      borderLeft: '1px solid white',
+      borderRight: '1px solid white',
+      fontSize: '12px',
+      height: '450px',
+    },
+  })
+);
 
 export default function EmployeeInfo({
   data,
@@ -185,7 +125,12 @@ export default function EmployeeInfo({
   rowStates,
   dispatch,
 }: {
-  data: { competenceUrl: string };
+  data: {
+    competenceUrl: string;
+    user_id: string;
+    email_id: string;
+    degree: string;
+  };
   id: string;
   rowStates: RowStates;
   dispatch: Dispatch<Action>;
@@ -198,12 +143,17 @@ export default function EmployeeInfo({
   const classes = useStyles();
   const url = data.competenceUrl;
   const [empData, pending] = useFetchedData<EmployeeInfoData>({ url });
+  const user_id = data ? data.user_id : null;
+  const [expData, expPending] = useFetchedData<ExperienceData>({
+    url: `/api/data/employeeExperience?user_id=${user_id}`,
+  });
 
   const getStringFromList = (
     list: string[] | null | undefined,
     listName: 'skills' | 'roles' | 'languages'
   ) => {
-    return list && list.length > 0 ? (
+    if (!list) return <NoData />;
+    return list.length > 0 ? (
       `${Array.from(new Set(empData?.tags[listName]))
         .filter((x) => x)
         .join(', ')}.`
@@ -215,14 +165,18 @@ export default function EmployeeInfo({
   useEffect(() => {
     if (!pending && targetRef) {
       const dataHeight = getOffsetHeight(targetRef);
-      dispatch({ type: 'CHANGE_HEIGHT', id, height: dataHeight + 77 });
+      dispatch({ type: 'CHANGE_HEIGHT', id, height: dataHeight + 72 });
       dispatch({ type: 'SET_EXPANDED_DATA', id, expandedData: empData });
     }
   }, [pending, empData, targetRef, id, dispatch]);
 
   return (
-    <div ref={setRef}>
-      <div className={classes.root}>
+    <div ref={setRef} className={classes.root}>
+      <div className={classes.info}>
+        <div className={classes.cell}>
+          <b>Utdanning: </b>
+          {data.degree}
+        </div>
         <div className={classes.cell}>
           {pending ? (
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
@@ -284,11 +238,106 @@ export default function EmployeeInfo({
           )}
         </div>
       </div>
-      {pending ? (
-        <Skeleton variant="rect" height={67} animation="wave" />
-      ) : (
-        <MotivationMapping motivations={empData?.motivation} />
-      )}
+      <div className={classes.erfaring}>
+        <h3> Arbeidserfaring</h3>
+        {pending ? (
+          <Skeleton variant="rect" width={340} height={15} animation="wave" />
+        ) : (
+          getWorkExperience(empData?.workExperience)
+        )}
+        <h3> Prosjekterfaring </h3>
+        {expPending ? (
+          <Skeleton variant="rect" width={340} height={15} animation="wave" />
+        ) : (
+          <GetProjects expData={expData} />
+        )}
+      </div>
+      <div className={classes.oversikt}>
+        <DDItem
+          url={'/api/data/employeeRadar?user_id=' + data.email_id}
+          title="Motivasjon"
+          Component={DDChart}
+          SkeletonComponent={ChartSkeleton}
+          fullSize
+          dataComponentProps={{
+            valueKey: ['motivasjon', 'kompetanse'],
+          }}
+        />
+      </div>
     </div>
   );
 }
+const yearAndMonthToNumber = (year: number, month: number) => {
+  let stringMonth;
+  if (month < 10) {
+    stringMonth = '0' + month;
+  } else if (month > 9) {
+    stringMonth = String(month);
+  } else {
+    stringMonth = '00';
+  }
+  return Number(year + stringMonth);
+};
+
+function getWorkExperience(workExp: Experience[] | undefined) {
+  if (!workExp) return <div> Fant ingen arbeidserfaring </div>;
+
+  workExp.sort(
+    (expA, expB) =>
+      yearAndMonthToNumber(expB.year_from, expB.month_from) -
+      yearAndMonthToNumber(expA.year_from, expA.month_from)
+  );
+  return workExp.map((exp, index) => (
+    <div key={index}>
+      {exp.month_from !== -1 && months[exp.month_from - 1] + ' '}
+      {exp.year_from !== -1 ? exp.year_from + ': ' : ' '}
+      {exp.employer}
+    </div>
+  ));
+}
+
+const timeToNumber = (time: string) => {
+  const [year, month] = time.split('/');
+  return yearAndMonthToNumber(Number(year), Number(month));
+};
+function compare(a: ProjectExperience, b: ProjectExperience) {
+  const aTime = a.time_from ? a.time_from : a.time_to;
+  const bTime = b.time_from ? b.time_from : b.time_to;
+  if (timeToNumber(aTime) < timeToNumber(bTime)) {
+    return 1;
+  }
+  if (timeToNumber(aTime) > timeToNumber(bTime)) {
+    return -1;
+  }
+  return 0;
+}
+
+export const GetProjects = (expData: { expData: ExperienceData | null }) => {
+  const classes = useStyles();
+  if (!expData || !expData.expData || !expData.expData.experience)
+    return <div> Fant ingen prosjekter </div>;
+  expData.expData.experience.sort(compare);
+  return (
+    <>
+      {expData.expData.experience.map((exp, index) => (
+        <div className={classes.prosjektliste} key={index}>
+          {getPrettyDates(exp.time_from, exp.time_to)}: {exp.customer} -{' '}
+          <i>{exp.project}</i>
+        </div>
+      ))}
+    </>
+  );
+};
+
+const getPrettyDates = (date1: string, date2: string) => {
+  const fromDates = date1.split('/');
+  const fromMonth =
+    fromDates[1] !== undefined ? months[Number(fromDates[1]) - 1] + ' ' : '';
+  const fromYear = fromDates[0] !== '-1' ? fromDates[0] : '';
+  const toDates = date2.split('/');
+  const toMonth =
+    toDates[1] !== undefined ? months[Number(toDates[1]) - 1] + ' ' : '';
+  const toYear = toDates[0] !== '-1' ? toDates[0] : '';
+  const bothYears = fromYear && toYear ? ' - ' : '';
+  return fromMonth + fromYear + bothYears + toMonth + toYear;
+};

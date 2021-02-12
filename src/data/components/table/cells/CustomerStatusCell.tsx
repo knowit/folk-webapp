@@ -1,21 +1,10 @@
 import React from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import { makeStyles } from '@material-ui/core/styles';
 import CharacterLimitBox from '../../../../components/CharacterLimitBox';
 
-const StatusCircle = ({ color }: { color: string }) => {
-  const Circle = withStyles(() => ({
-    colorPrimary: { color },
-    root: {
-      width: '30px',
-      height: '30px',
-    },
-  }))(FiberManualRecordIcon);
 
-  return <Circle color="primary" />;
-};
 interface CustomerStatusData {
-  data: { value: string; status?: 'red' | 'green' };
+  data: { value: string; };
   rowData: any[];
 }
 
@@ -28,13 +17,10 @@ const useStyles = makeStyles({
 });
 
 export default function CustomerStatusCell(customerData: CustomerStatusData) {
-  const d = customerData.data;
-  const color = d.status && d.status === 'green' ? '#4C8E00' : '#D10000';
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <CharacterLimitBox text={d.value || '-'} />
-      <StatusCircle color={d.status ? color : '#777777'} />
+      <CharacterLimitBox text={customerData.data.value || '-'} />
     </div>
   );
 }

@@ -49,7 +49,12 @@ export default function DDItem({
           </GridItemContent>
         </>
       ) : (
-        <Component payload={payload} title={title} description={description} props={dataComponentProps} />
+        <Component
+          payload={payload}
+          title={title}
+          description={description}
+          props={dataComponentProps}
+        />
       )}
     </GridItem>
   );

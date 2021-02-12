@@ -94,13 +94,20 @@ const SmallerIcon = withStyles((theme: Theme) => ({
   },
 }))(FullscreenExit);
 
-export default function DDChart({ payload, title, description, props }: DDComponentProps) {
+export default function DDChart({
+  payload,
+  title,
+  description,
+  props,
+}: DDComponentProps) {
   const { componentType, setNames, sets } = payload as {
     componentType: string;
     setNames: string[];
     sets: { [key: string]: any };
   };
-  const [set, setSet] = useState(setNames.length > 0 ? setNames[0] : '');
+  const [set, setSet] = useState(
+    setNames && setNames.length > 0 ? setNames[0] : ''
+  );
   const [big, setBig] = useState(false);
   const ChartComponent = getChartComponent(componentType) as (
     props: any
@@ -110,7 +117,7 @@ export default function DDChart({ payload, title, description, props }: DDCompon
     setSet(value as string);
   };
 
-  const setNamesLength = payload.setNames.length;
+  const setNamesLength = payload.setNames ? payload.setNames.length : 0;
 
   const GridItem = () => {
     const altText = big ? 'Exit stor størrelse' : 'Utvid til stor størrelse';

@@ -61,7 +61,7 @@ exports.reStructCategories = (categories, compScores = [], motScores = []) => {
    */
   const score = (name, scores, komOrMot) => {
     const thisCat = scores.find((obj) => {
-      return obj['kategori'] === name;
+      return obj['kategori'].toUpperCase() === name.toUpperCase();
     });
     const returnValue = thisCat ? thisCat[komOrMot] : 0;
     return returnValue || 0;
@@ -72,11 +72,10 @@ exports.reStructCategories = (categories, compScores = [], motScores = []) => {
   const mainCats = [];
 
   mainCategories.forEach((name) => {
-    const upperCaseName = name.charAt(0).toUpperCase() + name.slice(1);
     mainCats.push({
-      kategori: upperCaseName,
-      kompetanse: score(upperCaseName, compScores, 'kompetanse'),
-      motivasjon: score(upperCaseName, motScores, 'motivasjon')
+      kategori: name,
+      kompetanse: score(name, compScores, 'kompetanse'),
+      motivasjon: score(name, motScores, 'motivasjon')
     });
     const categoryObject = {
       [name]: [],

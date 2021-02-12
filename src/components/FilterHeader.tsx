@@ -109,7 +109,9 @@ export function FilterHeader({
 
   return (
     <div className={classes.gridHeaderRoot}>
-      <b>{type === 'COMPETENCE' ? 'Kompetansefilter' : 'Motivasjonsfilter'}:  </b>
+      <b>
+        {type === 'COMPETENCE' ? 'Kompetansefilter' : 'Motivasjonsfilter'}:{' '}
+      </b>
       {filterList.length > 1 && (
         <RemoveAllTag
           onDelete={() =>

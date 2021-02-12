@@ -62,12 +62,12 @@ export function GridItemHeader({
 
   return (
     <div className={[classes.gridHeaderRoot, headerHeight].join(' ')}>
-      <Grid container direction='row' alignItems='center'>
+      <Grid container direction="row" alignItems="center">
         <h3 className={[classes.gridHeaderTitle, fontSize].join(' ')}>
           {title}
           {big}
         </h3>
-        <Info description={description}/>
+        <Info description={description} />
       </Grid>
       {children}
     </div>

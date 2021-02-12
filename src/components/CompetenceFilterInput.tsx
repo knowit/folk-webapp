@@ -57,9 +57,9 @@ const useStyles = makeStyles({
       color: 'black',
     },
   },
-  auto:{
-    paddingRight:'10px',
-  }
+  auto: {
+    paddingRight: '10px',
+  },
 });
 
 function useCategories() {
@@ -67,14 +67,15 @@ function useCategories() {
     url: '/api/data/competenceFilter',
   });
   const categoriesWithGroup: CategoriesWithGroup[] = [];
-  categories?.forEach((category) => {
-    category.subCategories.forEach((skill) => {
-      categoriesWithGroup.push({
-        skill: skill,
-        category: category.category,
+  categories &&
+    categories.forEach((category) => {
+      category.subCategories.forEach((skill) => {
+        categoriesWithGroup.push({
+          skill: skill,
+          category: category.category,
+        });
       });
     });
-  });
   if (categoriesWithGroup !== null) {
     return categoriesWithGroup;
   } else {
@@ -87,17 +88,23 @@ export default function CheckboxesTags({
   dispatch,
   allRows,
   searchableColumns,
-  type
+  type,
 }: {
   filterList: string[];
   dispatch: Dispatch<Action>;
   allRows: any[];
   searchableColumns: [string, number][];
-  type: 'COMPETENCE' | 'MOTIVATION'
+  type: 'COMPETENCE' | 'MOTIVATION';
 }) {
   const categoriesWithGroup = useCategories();
-  const dispatchRemove = type === 'COMPETENCE' ? 'REMOVE_FROM_COMPETENCE_FILTER' : 'REMOVE_FROM_MOTIVATION_FILTER'
-  const dispatchAdd = type === 'COMPETENCE' ? 'ADD_TO_COMPETENCE_FILTER' : 'ADD_TO_MOTIVATION_FILTER'
+  const dispatchRemove =
+    type === 'COMPETENCE'
+      ? 'REMOVE_FROM_COMPETENCE_FILTER'
+      : 'REMOVE_FROM_MOTIVATION_FILTER';
+  const dispatchAdd =
+    type === 'COMPETENCE'
+      ? 'ADD_TO_COMPETENCE_FILTER'
+      : 'ADD_TO_MOTIVATION_FILTER';
   const alterFilterList = (skill: string) => {
     const index = filterList.indexOf(skill, 0);
     index > -1
@@ -145,7 +152,11 @@ export default function CheckboxesTags({
             type="text"
             {...params.inputProps}
             className={classes.input}
-            placeholder={type === 'COMPETENCE'? "Filtrer på kompetanse..":"Filtrer på motivasjon..."}
+            placeholder={
+              type === 'COMPETENCE'
+                ? 'Filtrer på kompetanse..'
+                : 'Filtrer på motivasjon...'
+            }
             endAdornment={<FilterListIcon />}
           />
         </div>

@@ -27,14 +27,14 @@ type EmpData = {
   manager: string;
 };
 
-interface ProjectExperience {
+export interface ProjectExperience {
   customer: string;
   project: string;
   time_to: string;
   time_from: string;
 }
 
-interface ExperienceData {
+export interface ExperienceData {
   name: string;
   experience: ProjectExperience[];
 }
@@ -79,7 +79,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ChartSkeleton = () => (
+export const ChartSkeleton = () => (
   <Skeleton variant="rect" height={320} width={400} animation="wave" />
 );
 

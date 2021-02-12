@@ -24,12 +24,12 @@ const getThisEmployeeMotivationList = (uuidComp, threshold, categoryList) => {
 const getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`;
 
 
-exports.projectStatusReports = [
+exports.employeeTableReports = [
   { reportName: 'competence' },
   { reportName: 'employeeMotivation' },
   { reportName: 'employee_competence' },
 ];
-exports.projectStatus = async ({ data }) => {
+exports.employeeTable = async ({ data }) => {
   const [allEmployees, resMotivation, resCompetence] = data
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
@@ -44,10 +44,19 @@ exports.projectStatus = async ({ data }) => {
           employee.email
         )}`,
         email: employee.email,
+        email_id: makeEmailUuid(employee.email, salt),
+        user_id: employee.user_id,
+        degree:  employee.degree,
       },
       employee.title,
       0,
-      { value: null, status: null },
+      { value: null},
+      Object.fromEntries(
+        cvs.map(([lang, format]) => [
+          `${lang}_${format}`,
+          employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
+        ])
+      ),
       getThisEmployeeMotivationList(
         makeEmailUuid(employee.email, salt).slice(0, 8),
         MOTIVATION_THRESHOLD,
@@ -89,6 +98,8 @@ exports.competence = async ({ data }) => {
           employee.email
         )}`,
         email: employee.email,
+        email_id: makeEmailUuid(employee.email, salt),
+        user_id: employee.user_id,
       },
       employee.title,
       `/api/data/employeeExperience?user_id=${employee.user_id}`,
@@ -743,7 +754,7 @@ exports.competenceAreasReports = [
 exports.competenceAreas = async ({ data }) => {
   const [categories, competence] = data
   const output = [];
-  
+
   const mainCategories = new Set(
     categories.flatMap((item) => Object.keys(item))
   );
@@ -752,7 +763,7 @@ exports.competenceAreas = async ({ data }) => {
     const categoryObject = {
       kategori: name.charAt(0).toUpperCase() + name.slice(1),
       kompetanse: 0,
-    }
+    };
 
     let categorySum = 0;
     let numberOfSubCategories = 0;
@@ -767,8 +778,8 @@ exports.competenceAreas = async ({ data }) => {
 
         const childCategoryObject = {
           kategori: childName,
-          kompetanse: value
-        }
+          kompetanse: value,
+        };
 
         output.push(childCategoryObject);
       }
@@ -776,7 +787,6 @@ exports.competenceAreas = async ({ data }) => {
 
     categoryObject.kompetanse = categorySum / numberOfSubCategories;
     output.push(categoryObject);
-
   });
 
   const [structuredCats, setNames] = reStructCategories(
@@ -788,5 +798,5 @@ exports.competenceAreas = async ({ data }) => {
     componentType: 'Radar',
     setNames: setNames,
     sets: structuredCats,
-  }
-}
+  };
+};
