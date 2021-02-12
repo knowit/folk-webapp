@@ -10,7 +10,6 @@ import {
   ProjectExperience,
 } from '../pages/EmployeeSite';
 import DDItem, { DDChart } from '../data/DDItem';
-import { months } from '../data/components/table/cells/ExperienceCell';
 
 type Experience = {
   employer: string;
@@ -35,6 +34,21 @@ interface EmployeeInfoData {
   manager: string;
   guid: string;
 }
+
+export const months = [
+  'Januar',
+  'Februar',
+  'Mars',
+  'April',
+  'Mai',
+  'Juni',
+  'Juli',
+  'August',
+  'September',
+  'Oktober',
+  'November',
+  'Desember',
+];
 
 export const startedInKnowit = (allExperience: Experience[] | undefined) => {
   if (!allExperience) {
@@ -243,7 +257,7 @@ export default function EmployeeInfo({
         {pending ? (
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
-          getWorkExperience(empData?.workExperience)
+          <GetWorkExperience workExp={empData?.workExperience} />
         )}
         <h3> Prosjekterfaring </h3>
         {expPending ? (
@@ -287,22 +301,26 @@ const yearAndMonthToNumber = (year: number, month: number) => {
   return Number(year + stringMonth);
 };
 
-function getWorkExperience(workExp: Experience[] | undefined) {
-  if (!workExp) return <div> Fant ingen arbeidserfaring </div>;
+export const GetWorkExperience = (workExp:{workExp:Experience[] | undefined}) => {
+  if (!workExp.workExp) return <div> Fant ingen arbeidserfaring </div>;
 
-  workExp.sort(
+  workExp.workExp.sort(
     (expA, expB) =>
       yearAndMonthToNumber(expB.year_from, expB.month_from) -
       yearAndMonthToNumber(expA.year_from, expA.month_from)
   );
-  return workExp.map((exp, index) => (
-    <div key={index}>
-      {exp.month_from !== -1 && months[exp.month_from - 1] + ' '}
-      {exp.year_from !== -1 ? exp.year_from + ': ' : ' '}
-      {exp.employer}
-    </div>
-  ));
-}
+  return (
+    <>
+      {workExp.workExp.map((exp, index) => (
+        <div key={index}>
+          {exp.month_from !== -1 && months[exp.month_from - 1] + ' '}
+          {exp.year_from !== -1 ? exp.year_from + ': ' : ' '}
+          {exp.employer}
+        </div>
+      ))}
+    </>
+  );
+};
 
 const timeToNumber = (time: string) => {
   const [year, month] = time.split('/');

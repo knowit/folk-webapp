@@ -4,12 +4,8 @@ import { makeStyles } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import DDItem, { DDChart } from '../data/DDItem';
 import { useFetchedData } from '../hooks/service';
-import { GetProjects, startedInKnowit, totalExperience } from '../components/EmployeeInfo';
+import { GetProjects, GetWorkExperience, startedInKnowit, totalExperience } from '../components/EmployeeInfo';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
-import {
-  getExperience,
-  months,
-} from '../data/components/table/cells/ExperienceCell';
 import { NoData } from '../components/ErrorText';
 
 type WorkExperience = {
@@ -106,24 +102,6 @@ const useStyles = makeStyles({
 export const ChartSkeleton = () => (
   <Skeleton variant="rect" height={320} width={400} animation="wave" />
 );
-
-function printWorkExperience(
-  workExperience: WorkExperience[] | undefined | null
-) {
-  if (!workExperience) return <NoData />;
-  //sort so newest is first
-  workExperience.sort((a, b) => b.year_from - a.year_from);
-  const getYear = (year: number) => (year !== -1 ? year : null);
-  return workExperience.map((exp, index) => (
-    <div key={index}>
-      <h4>
-        {months[exp.month_from]} {getYear(exp.year_from)} -{' '}
-        {months[exp.month_to]} {getYear(exp.year_to)}
-      </h4>
-      <div>{exp.employer}</div>
-    </div>
-  ));
-}
 
 export default function EmployeeSite() {
   const location = useLocation();
@@ -307,7 +285,7 @@ export default function EmployeeSite() {
         {pending ? (
           <p>loading....</p>
         ) : (
-          printWorkExperience(data?.workExperience)
+          <GetWorkExperience workExp={data?.workExperience} />
         )}
 
         <h2>Prosjekterfaring</h2>
