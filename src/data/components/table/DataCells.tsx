@@ -2,7 +2,6 @@ import React from 'react';
 import CharacterLimitBox from '../../../components/CharacterLimitBox';
 
 import ConsultantCell from './cells/ConsultantCell';
-import ExperienceCell from './cells/ExperienceCell';
 import CvCell from './cells/CvCell';
 import ProjectStatusCell from './cells/ProjectStatusCell';
 import CustomerStatusCell from './cells/CustomerStatusCell';
@@ -14,7 +13,6 @@ const EducationCell = ({ data }: { data: string | null }) => (
 
 export {
   ConsultantCell,
-  ExperienceCell,
   EducationCell,
   CvCell,
   ProjectStatusCell,
