@@ -200,10 +200,7 @@ function MuiVirtualizedTable({
   }, [state, ArrayRef]);
 
   const widthList = [385, 222, 143, 390];
-  const consultantTableWidths = [385, 222, 143, 337, 53];
 
-  const cellWidth = (index: number) =>
-    columns.length === 5 ? consultantTableWidths[index] : widthList[index];
 
   const rowRenderer: TableRowRenderer = ({
     className,
@@ -220,7 +217,7 @@ function MuiVirtualizedTable({
         <div className={className}>
           {columns.map((column, i) => {
             return (
-              <div key={i} style={{ width: cellWidth(i) }}>
+              <div key={i} style={{ width: widthList[i] }}>
                 <GetCell
                   RenderCell={column.renderCell}
                   expandable={column.expandable}
@@ -322,7 +319,7 @@ function MuiVirtualizedTable({
                   }
                   className={classes.flexContainer}
                   dataKey={String(index)}
-                  width={cellWidth(index)}
+                  width={widthList[index]}
                 />
               );
             }
