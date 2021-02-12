@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import DDItem, { DDChart } from '../data/DDItem';
 import { useFetchedData } from '../hooks/service';
-import { startedInKnowit, totalExperience } from '../components/EmployeeInfo';
+import { GetProjects, startedInKnowit, totalExperience } from '../components/EmployeeInfo';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
 import {
   getExperience,
@@ -312,7 +312,7 @@ export default function EmployeeSite() {
 
         <h2>Prosjekterfaring</h2>
         {!expPending && expData && expData !== undefined ? (
-          getExperience(expData.experience)
+          <GetProjects expData={expData} />
         ) : (
           <p>loading....</p>
         )}
