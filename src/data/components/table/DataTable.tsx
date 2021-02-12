@@ -199,8 +199,7 @@ function MuiVirtualizedTable({
     ArrayRef.forceUpdate();
   }, [state, ArrayRef]);
 
-  const widthList = [385, 222, 143, 390];
-
+  const widthList = [385, 222, 143, 337, 53];
 
   const rowRenderer: TableRowRenderer = ({
     className,
