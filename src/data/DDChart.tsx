@@ -1,98 +1,36 @@
 import React, { useState } from 'react';
-import { Fullscreen, FullscreenExit } from '@material-ui/icons';
-import { Theme, withStyles, createStyles, makeStyles } from '@material-ui/core';
 import { GridItemHeader, GridItemContent } from '../components/GridItem';
 import DropdownPicker from '../components/DropdownPicker';
 import Line from './components/Line';
 import Bar from './components/Bar';
-import PercentArea from './components/PercentArea';
 import Pie from './components/Pie';
-import { DDComponentProps } from './types';
 import BigChart from '../components/BigChart';
 import { ErrorText } from '../components/ErrorText';
 import Sunburst from './components/Sunburst';
 import Radar from './components/Radar';
+import { DDComponentProps, DDPassProps } from './types';
+import {
+  ChartDisplayOptions,
+  ChartVariantToggle,
+} from '../components/ChartDisplayOptions';
+import { ToggleFullscreenButton } from '../components/ToggleFullscreenButton';
 
-const usePlaceholderStyle = makeStyles(() =>
-  createStyles({
-    root: {
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    titleText: {
-      fontSize: '18px',
-      fontWeight: 'bold',
-      lineHeight: 1.28,
-    },
-    text: {
-      fontSize: '16px',
-      lineHeight: 1.5,
-    },
-  })
-);
+export type ChartVariant = 'Line' | 'Bar' | 'Pie' | 'Radar' | 'Sunburst';
 
-const Placeholder = (props: { big: boolean }) => {
-  const classes = usePlaceholderStyle();
-  const height = props.big ? '400px' : '280px';
-  return (
-    <div className={classes.root} style={{ height }}>
-      <div className={classes.titleText}>Oida</div>
-      <div className={classes.text}>Data kan ikke vises for dette valget</div>
-    </div>
-  );
+export interface ChartComponentInfo {
+  type: ChartVariant;
+  props: DDPassProps;
+}
+
+const chartComponents: {
+  [key in ChartVariant]: (props: any) => JSX.Element;
+} = {
+  Line: Line,
+  Bar: Bar,
+  Pie: Pie,
+  Radar: Radar,
+  Sunburst: Sunburst,
 };
-
-const getChartComponent = (name: string) => {
-  switch (name) {
-    case 'Line':
-      return Line;
-    case 'Bar':
-      return Bar;
-    case 'PercentArea':
-      return PercentArea;
-    case 'Pie':
-      return Pie;
-    case 'Sunburst':
-      return Sunburst;
-    case 'Radar':
-      return Radar;
-    default:
-      return Placeholder;
-  }
-};
-
-const LargerIcon = withStyles((theme: Theme) => ({
-  root: {
-    height: '41.17px',
-    width: '41.17px',
-    position: 'relative',
-    left: '491px',
-    bottom: '10px',
-    cursor: 'pointer',
-    color: theme.palette.primary.main,
-    '&:hover': {
-      color: theme.palette.text.primary,
-    },
-  },
-}))(Fullscreen);
-
-const SmallerIcon = withStyles((theme: Theme) => ({
-  root: {
-    height: '60px',
-    width: '60px',
-    position: 'relative',
-    bottom: '15px',
-    left: '861px',
-    cursor: 'pointer',
-    color: theme.palette.primary.main,
-    '&:hover': {
-      color: theme.palette.text.primary,
-    },
-  },
-}))(FullscreenExit);
 
 export default function DDChart({
   payload,
@@ -100,34 +38,36 @@ export default function DDChart({
   description,
   props,
 }: DDComponentProps) {
-  const { componentType, setNames, sets } = payload as {
-    componentType: string;
+  const { setNames, sets } = payload as {
     setNames: string[];
     sets: { [key: string]: any };
   };
-  const [set, setSet] = useState(
+  const [set, setSet] = useState<string>(
     setNames && setNames.length > 0 ? setNames[0] : ''
   );
-  const [big, setBig] = useState(false);
-  const ChartComponent = getChartComponent(componentType) as (
-    props: any
-  ) => JSX.Element;
+  const [big, setBig] = useState<boolean>(false);
+  const [chartVariantIdx, setChartVariantIdx] = useState<number>(0);
 
-  const onChange = (value: any) => {
-    setSet(value as string);
-  };
+  const chartVariants = props.chartVariants as Array<ChartComponentInfo>;
+  const { type: chartVariantToRender, props: chartProps } = chartVariants[
+    chartVariantIdx
+  ];
+  const ChartComponent = chartComponents[chartVariantToRender];
 
   const setNamesLength = payload.setNames ? payload.setNames.length : 0;
 
-  const GridItem = () => {
-    const altText = big ? 'Exit stor størrelse' : 'Utvid til stor størrelse';
+  const handleSetChange = (setName: string) => {
+    setSet(setName);
+  };
+
+  const ChartGridItem = () => {
     return (
       <>
         <GridItemHeader title={title} description={description} big={big}>
           {setNamesLength > 1 ? (
             <DropdownPicker
               values={setNames}
-              onChange={onChange}
+              onChange={handleSetChange}
               selected={set}
               big={big}
             />
@@ -135,14 +75,21 @@ export default function DDChart({
         </GridItemHeader>
         {sets ? (
           <GridItemContent>
-            <span title={altText}>
-              {big ? (
-                <SmallerIcon onClick={() => setBig(false)} />
-              ) : (
-                <LargerIcon onClick={() => setBig(true)} />
-              )}
-            </span>
-            <ChartComponent big={big} data={sets[set]} {...props} />
+            <ChartDisplayOptions>
+              {chartVariants.length > 1 ? (
+                <ChartVariantToggle
+                  chartVariants={chartVariants}
+                  selected={chartVariantIdx}
+                  onChange={setChartVariantIdx}
+                  big={big}
+                />
+              ) : null}
+              <ToggleFullscreenButton
+                isFullscreen={big}
+                onChange={() => setBig(!big)}
+              />
+            </ChartDisplayOptions>
+            <ChartComponent big={big} data={sets[set]} {...chartProps} />
           </GridItemContent>
         ) : (
           <ErrorText />
@@ -153,9 +100,9 @@ export default function DDChart({
 
   return (
     <>
-      <GridItem />
+      <ChartGridItem />
       <BigChart open={big} onClose={() => setBig(false)}>
-        <GridItem />
+        <ChartGridItem />
       </BigChart>
     </>
   );

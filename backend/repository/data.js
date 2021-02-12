@@ -356,7 +356,6 @@ exports.experienceDistribution = async ({ data }) => {
   const experience = data;
   const [groups, detailedGroups] = setInGroups(experience);
   return {
-    componentType: 'Pie',
     setNames: ['Erfaring', 'Detaljert oversikt'],
     sets: {
       Erfaring: groups,
@@ -373,7 +372,6 @@ exports.ageDistribution = async ({ data }) => {
   const [setAgeDist, setAgeDistGroup] = data
 
   return {
-    componentType: 'Bar',
     setNames: ['Aldersgrupper', 'Detaljert oversikt'],
     sets: {
       Aldersgrupper: setAgeDistGroup.map(({ age_group, count }) => ({
@@ -476,7 +474,6 @@ exports.fagEvents = async ({ data }) => {
   const eventSet = getEventSet(data);
 
   return {
-    componentType: 'Line',
     setNames: ['Fag og hendelser'],
     sets: {
       'Fag og hendelser': eventSet,
@@ -491,7 +488,6 @@ exports.education = async ({ data }) => {
   const education = data;
 
   return {
-    componentType: 'Pie',
     setNames: ['Utdanning'],
     sets: {
       Utdanning: education,
@@ -590,7 +586,6 @@ exports.competenceMapping = async ({ data }) => {
   };
 
   return {
-    componentType: 'Sunburst',
     setNames: ['Kompetanse', 'Motivasjon'],
     sets: {
       Kompetanse: competenceCategories(competence),
@@ -654,7 +649,6 @@ exports.competenceAmount = async ({ data }) => {
   });
 
   return {
-    componentType: 'Radar',
     setNames: ['Kompetansemengde'],
     sets: {
       Kompetansemengde: mergedArrs,
@@ -741,7 +735,6 @@ exports.employeeRadar = async ({ data, parameters: { user_id } = {} }) => {
   );
 
   return {
-    componentType: 'Radar',
     setNames: setNames,
     sets: structuredCats,
   };
@@ -795,7 +788,6 @@ exports.competenceAreas = async ({ data }) => {
   );
 
   return {
-    componentType: 'Radar',
     setNames: setNames,
     sets: structuredCats,
   };

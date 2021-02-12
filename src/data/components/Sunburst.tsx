@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from 'react';
 import { colors } from './common';
-import { ResponsiveSunburst } from '@nivo/sunburst';
+import { ResponsiveSunburst, NormalizedDatum } from '@nivo/sunburst';
 
 type SunburstChartsData = {
   [key: string]: string | number | Array<SunburstChartsData>;
@@ -9,8 +9,7 @@ type SunburstChartsData = {
 
 interface SunburstChartsProps {
   data: SunburstChartsData[];
-  groupKey?: string;
-  valueKey?: string;
+  groupKey: string;
   big?: boolean;
 }
 
@@ -25,11 +24,7 @@ function getParentSize(total, child) {
   return total + child['size'];
 }
 
-export default function Sunburst({
-  data,
-  groupKey = 'kategori',
-  big,
-}: SunburstChartsProps) {
+export default function Sunburst({ data, groupKey, big }: SunburstChartsProps) {
   const height = big ? '400px' : '300px';
 
   const CustomTooltip = ({

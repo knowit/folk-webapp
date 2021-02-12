@@ -26,6 +26,17 @@ export default function Competence() {
         title="Kompetansemengde"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
+        dataComponentProps={{
+          chartVariants: [
+            {
+              type: 'Radar',
+              props: {
+                groupKey: 'kategori',
+                valueKey: ['motivasjon', 'kompetanse'],
+              },
+            },
+          ],
+        }}
       />
 
       <DDItem
@@ -34,7 +45,15 @@ export default function Competence() {
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
-          valueKey: ['kompetanse'],
+          chartVariants: [
+            {
+              type: 'Radar',
+              props: {
+                groupKey: 'kategori',
+                valueKey: ['kompetanse'],
+              },
+            },
+          ],
         }}
       />
 
@@ -44,8 +63,22 @@ export default function Competence() {
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
-          groupKey: 'years',
-          valueKey: ['count'],
+          chartVariants: [
+            {
+              type: 'Bar',
+              props: {
+                dataKey: 'years',
+                yLabels: ['count'],
+              },
+            },
+            {
+              type: 'Pie',
+              props: {
+                groupKey: 'years',
+                valueKey: ['count'],
+              },
+            },
+          ],
         }}
       />
 
@@ -55,8 +88,15 @@ export default function Competence() {
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
-          dataKey: 'age',
-          yLabels: ['count'],
+          chartVariants: [
+            {
+              type: 'Bar',
+              props: {
+                dataKey: 'age',
+                yLabels: ['count'],
+              },
+            },
+          ],
         }}
       />
 
@@ -66,17 +106,27 @@ export default function Competence() {
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
-          dataKey: 'week',
-          yLabels: ['used_hrs'],
+          chartVariants: [
+            {
+              type: 'Line',
+            },
+          ],
         }}
       />
 
       <DDItem
         url="/api/data/fagEvents"
         title="Fag og hendelser"
-        description="Hver vertikal akse viser antall unike hendelser per måned fra Google kalenderne Knowit Events og Knowit Fagkalender."
+        description="Hver vertikal akse viser antall unike hendelser per måned fra Google kalenderne Knowit Events og Knowit Fagkalender."
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
+        dataComponentProps={{
+          chartVariants: [
+            {
+              type: 'Line',
+            },
+          ],
+        }}
       />
 
       <DDItem
@@ -85,21 +135,34 @@ export default function Competence() {
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
-          groupKey: 'degree',
-          valueKey: 'count',
+          chartVariants: [
+            {
+              type: 'Pie',
+              props: {
+                groupKey: 'degree',
+                valueKey: 'count',
+              },
+            },
+          ],
         }}
       />
 
       <DDItem
         url="/api/data/competenceMapping"
         title="Kompetansekartlegging"
-        description="Grafen viser gjennomsnittlig score på
-        kompetanse/motivasjon innenfor hver av hovedkategoriene. I tillegg vises gjennomsnittlig score for hver underkategori og forholdet mellom underkategoriene i samme hovedkategori."
+        description="Grafen viser gjennomsnittlig score på kompetanse/motivasjon innenfor hver av hovedkategoriene. I tillegg vises gjennomsnittlig score for hver underkategori og forholdet mellom underkategoriene i samme hovedkategori."
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
-          dataKey: 'section',
-          yLabels: ['value'],
+          chartVariants: [
+            {
+              type: 'Sunburst',
+              props: {
+                yLabels: ['value'],
+                groupKey: 'kategori',
+              },
+            },
+          ],
         }}
       />
       <DDItem

@@ -218,7 +218,15 @@ export default function EmployeeSite() {
               Component={DDChart}
               SkeletonComponent={ChartSkeleton}
               dataComponentProps={{
-                valueKey: ['motivasjon', 'kompetanse'],
+                chartVariants: [
+                  {
+                    type: 'Radar',
+                    props: {
+                      groupKey: 'kategori',
+                      valueKey: ['motivasjon', 'kompetanse'],
+                    },
+                  },
+                ],
               }}
             />
           )}

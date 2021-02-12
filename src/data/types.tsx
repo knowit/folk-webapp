@@ -5,7 +5,7 @@ export interface DDComponentProps {
   payload: DDPayload;
   title: string;
   description?: string;
-  props?: DDPassProps;
+  props: DDPassProps;
 }
 
 export interface DDItemProps {

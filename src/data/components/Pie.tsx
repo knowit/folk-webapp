@@ -8,17 +8,12 @@ type PieChartsData = {
 
 interface PieChartsProps {
   data: PieChartsData[];
-  groupKey?: string;
-  valueKey?: string;
+  groupKey: string;
+  valueKey: string;
   big?: boolean;
 }
 
-export default function Pie({
-  data,
-  groupKey = 'group',
-  valueKey = 'value',
-  big,
-}: PieChartsProps) {
+export default function Pie({ data, groupKey, valueKey, big }: PieChartsProps) {
   const height = big ? '400px' : '300px';
   return (
     <div style={{ height, width: '100%' }}>

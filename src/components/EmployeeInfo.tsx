@@ -260,7 +260,15 @@ export default function EmployeeInfo({
           SkeletonComponent={ChartSkeleton}
           fullSize
           dataComponentProps={{
-            valueKey: ['motivasjon', 'kompetanse'],
+            chartVariants: [
+              {
+                type: 'Radar',
+                props: {
+                  groupKey: 'kategori',
+                  valueKey: ['motivasjon', 'kompetanse'],
+                },
+              },
+            ],
           }}
         />
       </div>

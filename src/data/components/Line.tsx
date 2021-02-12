@@ -3,8 +3,6 @@ import React from 'react';
 import { ResponsiveLine } from '@nivo/line';
 import { colors } from './common';
 interface LineChartsProps {
-  yLabels?: string[];
-  dataKey?: string;
   data: any;
   big?: boolean;
 }
