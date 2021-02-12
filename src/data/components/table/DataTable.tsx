@@ -2,7 +2,7 @@ import React, { Dispatch, useEffect, useReducer } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { TableCell, withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import { AutoSizer, Column, Table } from 'react-virtualized';
+import { AutoSizer, Column, Table, TableRowRenderer } from 'react-virtualized';
 import CharacterLimitBox from '../../../components/CharacterLimitBox';
 
 interface DataTableProps {
@@ -205,14 +205,13 @@ function MuiVirtualizedTable({
   const cellWidth = (index: number) =>
     columns.length === 5 ? consultantTableWidths[index] : widthList[index];
 
-  const rowRenderer = (props: {
-    className: string;
-    index: number;
-    key: string;
-    rowData: any;
-    style: any;
+  const rowRenderer: TableRowRenderer = ({
+    className,
+    index,
+    key,
+    rowData,
+    style,
   }) => {
-    const { className, index, key, rowData, style } = props;
     const id = rows[index].rowId;
     const RenderExpanded: renderExpandedCell | undefined =
       columns[0].renderExpanded;
