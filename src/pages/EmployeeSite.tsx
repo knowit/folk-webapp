@@ -288,7 +288,7 @@ export default function EmployeeSite() {
         )}
 
         <h2>Prosjekterfaring</h2>
-        {!expPending && expData && expData !== undefined ? (
+        {!expPending && expData ? (
           <GetProjects expData={expData} />
         ) : (
           <p>loading....</p>
