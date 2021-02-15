@@ -687,6 +687,7 @@ exports.empData = async ({ data, parameters: { email } = {} }) => {
     workExperience: resWork,
     tags: resSkills[0],
     degree: resComp[0].degree,
+    manager: resComp[0].manager,
     links: Object.fromEntries(
       cvs.map(([lang, format]) => [
         `${lang}_${format}`,

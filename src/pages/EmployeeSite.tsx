@@ -51,6 +51,8 @@ type EmpSiteData = {
   };
   workExperience: WorkExperience[];
   degree: string;
+  manager: string;
+  guid: string;
   links: {
     no_pdf: string;
     int_pdf: string;
@@ -249,7 +251,7 @@ export default function EmployeeSite() {
               ) : (
                 <>
                   <b>Nærmeste leder: </b>
-                  *DATA FRA AD HER*
+                  {data && data?.manager}
                 </>
               )}
             </div>
