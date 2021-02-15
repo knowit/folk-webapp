@@ -4,7 +4,12 @@ import { makeStyles } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import DDItem, { DDChart } from '../data/DDItem';
 import { useFetchedData } from '../hooks/service';
-import { GetProjects, GetWorkExperience, startedInKnowit, totalExperience } from '../components/EmployeeInfo';
+import {
+  GetProjects,
+  GetWorkExperience,
+  startedInKnowit,
+  totalExperience,
+} from '../components/EmployeeInfo';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
 
 type WorkExperience = {
@@ -87,15 +92,12 @@ const useStyles = makeStyles({
   },
   header: {
     display: 'flex',
-    paddingRight:'10px',
+    paddingRight: '10px',
     paddingBottom: '20px',
     gap: '15px',
     lineHeight: '2em',
-    
   },
-  nextPart: {
-    
-  },
+  nextPart: {},
 });
 
 export const ChartSkeleton = () => (
@@ -254,7 +256,9 @@ export default function EmployeeSite() {
           </div>
         </div>
         <div className={classes.right}>
-          <p><b>Kompetansekartlegging</b></p>
+          <p>
+            <b>Kompetansekartlegging</b>
+          </p>
           {pending ? (
             <ChartSkeleton />
           ) : (
