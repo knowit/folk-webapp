@@ -38,6 +38,16 @@ export default function SearchInput({
   const classes = useStyles();
   const [val, setVal] = useState('');
 
+  const clearInput = () => {
+    setVal('');
+    dispatch({
+      type: 'CHANGE_SEARCH_TERM',
+      searchTerm: '',
+      allRows,
+      searchableColumns,
+    });
+  }
+
   const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     setVal(event.target.value);
@@ -67,7 +77,7 @@ export default function SearchInput({
                 color="inherit"
                 className={classes.icon}
                 aria-label="Tøm"
-                onClick={() => setVal('')}
+                onClick={clearInput}
                 title="Tøm"
               >
                 <CloseIcon />
