@@ -204,7 +204,7 @@ export default function EmployeeSite() {
                   animation="wave"
                 />
               ) : (
-                <div title="beregnet ut i fra første jobb på cv">
+                <div title="Beregnet ut i fra første jobb på CV">
                   <b>Beregnet arbeidserfaring: </b>
                   {totalExperience(data?.workExperience)}
                 </div>
