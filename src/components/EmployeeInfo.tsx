@@ -319,7 +319,7 @@ export const GetWorkExperience = (workExp: {
             exp.month_from,
             exp.year_from,
             exp.month_to,
-            exp.year_to,
+            exp.year_to
           )}
           {exp.employer}
         </div>
@@ -354,8 +354,8 @@ export const GetProjects = (expData: { expData: ExperienceData | null }) => {
     <>
       {expData.expData.experience.map((exp, index) => (
         <div className={classes.prosjektliste} key={index}>
-          {prettyDates(exp.time_from, exp.time_to)}{exp.customer} -{' '}
-          <i>{exp.project}</i>
+          {prettyDates(exp.time_from, exp.time_to)}
+          {exp.customer} - <i>{exp.project}</i>
         </div>
       ))}
     </>
@@ -377,10 +377,19 @@ const getPrettyDates = (
   toMonth: number,
   toYear: number
 ) => {
-  const prettyFromMonth = fromMonth && fromMonth!== -1? months[fromMonth - 1] + ' ' : '';
+  const prettyFromMonth =
+    fromMonth && fromMonth !== -1 ? months[fromMonth - 1] + ' ' : '';
   const prettyFromYear = fromYear && fromYear !== -1 ? fromYear : '';
-  const prettyToMonth = toMonth  && toMonth!== -1? months[toMonth - 1] + ' ' : '';
-  const prettyToYear = toYear && toYear!== -1 ? toYear : '';
+  const prettyToMonth =
+    toMonth && toMonth !== -1 ? months[toMonth - 1] + ' ' : '';
+  const prettyToYear = toYear && toYear !== -1 ? toYear : '';
   const bothYears = prettyFromYear && prettyToYear ? ' - ' : '';
-  return prettyFromMonth + prettyFromYear + bothYears + prettyToMonth + prettyToYear+': ';
+  return (
+    prettyFromMonth +
+    prettyFromYear +
+    bothYears +
+    prettyToMonth +
+    prettyToYear +
+    ': '
+  );
 };
