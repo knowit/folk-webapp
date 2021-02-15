@@ -6,7 +6,6 @@ import DDItem, { DDChart } from '../data/DDItem';
 import { useFetchedData } from '../hooks/service';
 import { GetProjects, GetWorkExperience, startedInKnowit, totalExperience } from '../components/EmployeeInfo';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
-import { NoData } from '../components/ErrorText';
 
 type WorkExperience = {
   employer: string;
