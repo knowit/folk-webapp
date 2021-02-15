@@ -42,6 +42,14 @@
     "typescript": "~3.9.7",
     "underscore": "^1.12.0"
   },
+  "resolutions": {
+    "immer": "^8.0.1",
+    "react-dev-utils/immer": "^8.0.1",
+    "node-notifier": "^8.0.1",
+    "@jest/reporters/node-notifier": "^8.0.1",
+    "node-fetch": "^2.6.1",
+    "isomorphic-fetch/node-fetch": "^2.6.1"
+  },
   "scripts": {
     "start": "react-scripts start",
     "start:local": "cross-env PROXY_URL=http://localhost:3010 react-scripts start",
