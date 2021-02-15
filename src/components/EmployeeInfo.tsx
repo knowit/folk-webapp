@@ -301,7 +301,9 @@ const yearAndMonthToNumber = (year: number, month: number) => {
   return Number(year + stringMonth);
 };
 
-export const GetWorkExperience = (workExp:{workExp:Experience[] | undefined}) => {
+export const GetWorkExperience = (workExp: {
+  workExp: Experience[] | undefined;
+}) => {
   if (!workExp.workExp) return <div> Fant ingen arbeidserfaring </div>;
 
   workExp.workExp.sort(
@@ -313,8 +315,12 @@ export const GetWorkExperience = (workExp:{workExp:Experience[] | undefined}) =>
     <>
       {workExp.workExp.map((exp, index) => (
         <div key={index}>
-          {exp.month_from !== -1 && months[exp.month_from - 1] + ' '}
-          {exp.year_from !== -1 ? exp.year_from + ': ' : ' '}
+          {getPrettyDates(
+            exp.month_from,
+            exp.year_from,
+            exp.month_to,
+            exp.year_to,
+          )}
           {exp.employer}
         </div>
       ))}
@@ -326,6 +332,7 @@ const timeToNumber = (time: string) => {
   const [year, month] = time.split('/');
   return yearAndMonthToNumber(Number(year), Number(month));
 };
+
 function compare(a: ProjectExperience, b: ProjectExperience) {
   const aTime = a.time_from ? a.time_from : a.time_to;
   const bTime = b.time_from ? b.time_from : b.time_to;
@@ -347,23 +354,33 @@ export const GetProjects = (expData: { expData: ExperienceData | null }) => {
     <>
       {expData.expData.experience.map((exp, index) => (
         <div className={classes.prosjektliste} key={index}>
-          {getPrettyDates(exp.time_from, exp.time_to)}: {exp.customer} -{' '}
+          {prettyDates(exp.time_from, exp.time_to)}{exp.customer} -{' '}
           <i>{exp.project}</i>
         </div>
       ))}
     </>
   );
 };
-
-const getPrettyDates = (date1: string, date2: string) => {
-  const fromDates = date1.split('/');
-  const fromMonth =
-    fromDates[1] !== undefined ? months[Number(fromDates[1]) - 1] + ' ' : '';
-  const fromYear = fromDates[0] !== '-1' ? fromDates[0] : '';
-  const toDates = date2.split('/');
-  const toMonth =
-    toDates[1] !== undefined ? months[Number(toDates[1]) - 1] + ' ' : '';
-  const toYear = toDates[0] !== '-1' ? toDates[0] : '';
-  const bothYears = fromYear && toYear ? ' - ' : '';
-  return fromMonth + fromYear + bothYears + toMonth + toYear;
+const prettyDates = (date1: string, date2: string) => {
+  const [fromYear, fromMonth] = date1.split('/');
+  const [toYear, toMonth] = date2.split('/');
+  return getPrettyDates(
+    Number(fromMonth),
+    Number(fromYear),
+    Number(toMonth),
+    Number(toYear)
+  );
+};
+const getPrettyDates = (
+  fromMonth: number,
+  fromYear: number,
+  toMonth: number,
+  toYear: number
+) => {
+  const prettyFromMonth = fromMonth && fromMonth!== -1? months[fromMonth - 1] + ' ' : '';
+  const prettyFromYear = fromYear && fromYear !== -1 ? fromYear : '';
+  const prettyToMonth = toMonth  && toMonth!== -1? months[toMonth - 1] + ' ' : '';
+  const prettyToYear = toYear && toYear!== -1 ? toYear : '';
+  const bothYears = prettyFromYear && prettyToYear ? ' - ' : '';
+  return prettyFromMonth + prettyFromYear + bothYears + prettyToMonth + prettyToYear+': ';
 };
