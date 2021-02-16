@@ -225,10 +225,10 @@ export default function EmployeeInfo({
           {pending ? (
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
           ) : (
-            <>
-              <b>Total arbeidserfaring:</b>{' '}
+            <div title="Beregnet ut i fra første jobb på CV">
+              <b>Beregnet arbeidserfaring: </b>
               {totalExperience(empData?.workExperience)}
-            </>
+            </div>
           )}
         </div>
         <div className={classes.cell}>
