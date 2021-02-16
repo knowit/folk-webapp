@@ -44,6 +44,7 @@ export default function Bar({ data, yLabels, dataKey, big }: BarChartsProps) {
           legendPosition: 'middle',
           legendOffset: -40,
         }}
+        groupMode="grouped"
         enableLabel={false}
         tooltip={({ indexValue, value }) => (
           <div>
@@ -51,6 +52,25 @@ export default function Bar({ data, yLabels, dataKey, big }: BarChartsProps) {
             <br /> {value}
           </div>
         )}
+        legends={
+          yLabels.length > 1
+            ? [
+                {
+                  dataFrom: yLabels.length > 1 ? 'keys' : 'indexes',
+                  anchor: 'top',
+                  direction: 'row',
+                  justify: false,
+                  translateX: 0,
+                  translateY: -15,
+                  itemWidth: 100,
+                  itemHeight: 10,
+                  itemsSpacing: 0,
+                  symbolSize: 10,
+                  itemDirection: 'left-to-right',
+                },
+              ]
+            : undefined
+        }
       />
     </div>
   );
