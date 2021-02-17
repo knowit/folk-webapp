@@ -17,7 +17,7 @@ interface BarChartsProps {
 
 const splitText = (text:string)=>{
   const maxLength = 10;
-  let ret: string[] = [];
+  const textList: string[] = [];
   let start = 0; 
   while(start+maxLength < text.length){
     let index = text.lastIndexOf(" ", start + maxLength);
@@ -27,11 +27,11 @@ const splitText = (text:string)=>{
         index = text.indexOf(" ", start+maxLength)
         if (index < start) break;
     }
-    ret.push(text.substring(start, index));
+    textList.push(text.substring(start, index));
     start = index + 1;
   }
-  ret.push(text.substring(start))
-  return ret;
+  textList.push(text.substring(start))
+  return textList;
 }
 
 const CustomTick = (tick:any) => {
