@@ -1,5 +1,3 @@
-/* eslint-disable no-use-before-define */
-
 import React, { Dispatch } from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -83,7 +81,7 @@ function useCategories() {
   }
 }
 
-export default function CheckboxesTags({
+export default function CompetenceFilterInput({
   filterList,
   dispatch,
   allRows,
