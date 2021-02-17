@@ -21,7 +21,7 @@ export default function Bar({ data, yLabels, dataKey, big }: BarChartsProps) {
         data={data}
         keys={yLabels}
         indexBy={dataKey}
-        margin={{ top: 10, right: 20, bottom: 25, left: 40 }}
+        margin={{ top: 40, right: 20, bottom: 25, left: 40 }}
         padding={0.1}
         valueScale={{ type: 'linear' }}
         colors={colors}
