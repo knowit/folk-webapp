@@ -13,6 +13,54 @@ interface BarChartsProps {
   big?: boolean;
 }
 
+
+
+const splitText = (text:string)=>{
+  const maxLength = 10;
+  let ret: string[] = [];
+  let start = 0; 
+  while(start+maxLength < text.length){
+    let index = text.lastIndexOf(" ", start + maxLength);
+    if (index < start){
+        console.log("Unable to break into strings of " +
+                "no more than " + maxLength);
+        index = text.indexOf(" ", start+maxLength)
+        if (index < start) break;
+    }
+    ret.push(text.substring(start, index));
+    start = index + 1;
+  }
+  ret.push(text.substring(start))
+  return ret;
+}
+
+const CustomTick = (tick:any) => {
+  const y = tick.tickIndex%2 === 0 ? 10 : -15;
+  const values = splitText(tick.value)
+  return (
+    <g transform={`translate(${tick.x},${tick.y + 22})`}>
+      <line stroke="rgb(119,119,119)" strokeWidth={1.5} y1={-22} y2={y} />
+      <text
+        y={y+5}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        style={{
+          fill: '#333',
+          fontSize: 10,
+        }}
+      >
+        {values.map((value:string, index: number) => {
+          return(
+            <tspan y={y+5+(index*8)} x={0}>
+              {value}
+            </tspan>
+          )
+        })}
+      </text>
+    </g>
+  );
+};
+
 export default function Bar({ data, yLabels, dataKey, big }: BarChartsProps) {
   const height = big ? '400px' : '300px';
   return (
@@ -21,42 +69,34 @@ export default function Bar({ data, yLabels, dataKey, big }: BarChartsProps) {
         data={data}
         keys={yLabels}
         indexBy={dataKey}
-        margin={{ top: 40, right: 20, bottom: 25, left: 40 }}
+        margin={{ top: 40, right: 20, bottom: 65, left: 30 }}
         padding={0.1}
         valueScale={{ type: 'linear' }}
         colors={colors}
         axisTop={null}
         axisRight={null}
         borderRadius={3}
-        axisBottom={
-          big || data.length < 10
-            ? {
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-              }
-            : null
-        }
+        axisBottom={{
+          renderTick: CustomTick,
+        }}
         axisLeft={{
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legendPosition: 'middle',
-          legendOffset: -40,
         }}
         groupMode="grouped"
         enableLabel={false}
-        tooltip={({ indexValue, value }) => (
+        tooltip={({ indexValue, value, id }) => (
           <div>
             <b>{indexValue}:</b>
-            <br /> {value}
+            <br /> {id}: {value.toFixed(1)}
           </div>
         )}
         legends={
           yLabels.length > 1
             ? [
                 {
-                  dataFrom: yLabels.length > 1 ? 'keys' : 'indexes',
+                  dataFrom: 'keys',
                   anchor: 'top',
                   direction: 'row',
                   justify: false,
