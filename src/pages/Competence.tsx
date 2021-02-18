@@ -22,24 +22,6 @@ export default function Competence() {
   return (
     <Grid container spacing={2}>
       <DDItem
-        url="/api/data/competenceAmount"
-        title="Kompetansemengde"
-        Component={DDChart}
-        SkeletonComponent={ChartSkeleton}
-        dataComponentProps={{
-          chartVariants: [
-            {
-              type: 'Radar',
-              props: {
-                groupKey: 'kategori',
-                valueKey: ['motivasjon', 'kompetanse'],
-              },
-            },
-          ],
-        }}
-      />
-
-      <DDItem
         url="/api/data/competenceAreas"
         title="Kompetanseområder"
         Component={DDChart}
