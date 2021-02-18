@@ -50,7 +50,7 @@ export default function Competence() {
               type: 'Radar',
               props: {
                 groupKey: 'kategori',
-                valueKey: ['kompetanse'],
+                valueKey: ['motivasjon','kompetanse'],
               },
             },
           ],

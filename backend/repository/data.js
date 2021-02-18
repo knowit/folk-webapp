@@ -744,48 +744,66 @@ exports.employeeRadar = async ({ data, parameters: { user_id } = {} }) => {
 exports.competenceAreasReports = [
   { reportName: 'categories' },
   { reportName: 'competenceAverage' },
+  { reportName: 'motivationAverage' }
 ]
 exports.competenceAreas = async ({ data }) => {
-  const [categories, competence] = data
-  const output = [];
+  const [categories, competence, motivation] = data
+  const thisCompetence = [];
+  const thisMotivation = [];
 
   const mainCategories = new Set(
     categories.flatMap((item) => Object.keys(item))
   );
 
+
   mainCategories.forEach(name => {
-    const categoryObject = {
+    const compCategory = {
       kategori: name.charAt(0).toUpperCase() + name.slice(1),
       kompetanse: 0,
     };
+    const motCategory = {
+      kategori: name.charAt(0).toUpperCase() + name.slice(1),
+      motivasjon: 0,
+    };
 
-    let categorySum = 0;
+    let categoryComp = 0;
+    let categoryMot = 0;
     let numberOfSubCategories = 0;
     
     categories.forEach(item => {
       const childName = item[name];
       if (childName) {
-        const value = competence[0][childName.toLowerCase()] || null;
+        const compValue = competence[0][childName.toLowerCase()] || null;
+        const motValue = motivation[0][childName.toLowerCase()] || null;
 
-        categorySum += value;
+        categoryComp += compValue;
+        categoryMot += motValue
         numberOfSubCategories++;
 
-        const childCategoryObject = {
+        const childCatComp = {
           kategori: childName,
-          kompetanse: value,
+          kompetanse: compValue,
+        };
+        const childCatMot = {
+          kategori: childName,
+          motivasjon: motValue,
         };
 
-        output.push(childCategoryObject);
+        thisCompetence.push(childCatComp);
+        thisMotivation.push(childCatMot)
       }
     });
 
-    categoryObject.kompetanse = categorySum / numberOfSubCategories;
-    output.push(categoryObject);
+    compCategory.kompetanse = categoryComp / numberOfSubCategories;
+    motCategory.motivasjon = categoryMot / numberOfSubCategories;
+    thisCompetence.push(compCategory);
+    thisMotivation.push(motCategory)
   });
 
   const [structuredCats, setNames] = reStructCategories(
     categories,
-    output
+    thisCompetence,
+    thisMotivation
   );
 
   return {
