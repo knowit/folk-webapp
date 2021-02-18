@@ -15,15 +15,14 @@ interface BarChartsProps {
 
 
 
-const splitText = (text:string)=>{
+const splitText = (longText:string|number)=>{
   const maxLength = 10;
+  const text = longText.toString()
   const textList: string[] = [];
   let start = 0; 
   while(start+maxLength < text.length){
     let index = text.lastIndexOf(" ", start + maxLength);
     if (index < start){
-        console.log("Unable to break into strings of " +
-                "no more than " + maxLength);
         index = text.indexOf(" ", start+maxLength)
         if (index < start) break;
     }
@@ -51,7 +50,7 @@ const CustomTick = (tick:any) => {
       >
         {values.map((value:string, index: number) => {
           return(
-            <tspan y={y+5+(index*8)} x={0}>
+            <tspan key={value} y={y+5+(index*8)} x={0}>
               {value}
             </tspan>
           )
@@ -72,6 +71,7 @@ export default function Bar({ data, yLabels, dataKey, big }: BarChartsProps) {
         margin={{ top: 40, right: 20, bottom: 65, left: 30 }}
         padding={0.1}
         valueScale={{ type: 'linear' }}
+        maxValue = {dataKey === "kategori"? 5 : 'auto'}
         colors={colors}
         axisTop={null}
         axisRight={null}
