@@ -1,4 +1,4 @@
-import React, { Dispatch } from 'react';
+import React, { ChangeEvent, Dispatch } from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useFetchedData } from '../hooks/service';
@@ -25,9 +25,9 @@ interface CategoryList {
   subCategories: string[];
 }
 
-type CategoriesWithGroup = {
-  skill: string;
+type CategoryWithGroup = {
   category: string;
+  group: string;
 };
 
 const useStyles = makeStyles({
@@ -55,30 +55,21 @@ const useStyles = makeStyles({
       color: 'black',
     },
   },
-  auto: {
+  autocomplete: {
     paddingRight: '10px',
   },
 });
 
-function useCategories() {
+function useCategories(): CategoryWithGroup[] {
   const [categories] = useFetchedData<CategoryList[]>({
     url: '/api/data/competenceFilter',
   });
-  const categoriesWithGroup: CategoriesWithGroup[] = [];
-  categories &&
-    categories.forEach((category) => {
-      return category.subCategories.forEach((skill) =>
-        categoriesWithGroup.push({
-          skill: skill,
-          category: category.category,
-        })
-      );
-    });
-  if (categoriesWithGroup !== null) {
-    return categoriesWithGroup;
-  } else {
-    return [{ skill: '', category: '' }];
-  }
+  return (categories ?? []).flatMap((mainCategory) =>
+    mainCategory.subCategories.map((subCategory) => ({
+      category: subCategory,
+      group: mainCategory.category,
+    }))
+  );
 }
 
 export default function CompetenceFilterInput({
@@ -95,42 +86,48 @@ export default function CompetenceFilterInput({
   type: 'COMPETENCE' | 'MOTIVATION';
 }) {
   const categoriesWithGroup = useCategories();
-  const updateFilters =
-    type === 'COMPETENCE'
-      ? 'UPDATE_COMPETENCE_FILTER'
-      : 'UPDATE_MOTIVATION_FILTER';
-  const alterFilterList = (skillFilters: string[]) => {
+  const classes = useStyles();
+
+  const activeCategories = categoriesWithGroup.filter((categoryWithGroup) =>
+    filterList.includes(categoryWithGroup.category)
+  );
+
+  const handleCategoryChange = (
+    event: ChangeEvent<unknown>,
+    values: CategoryWithGroup[]
+  ) => {
+    const dispatchAction =
+      type === 'COMPETENCE'
+        ? 'UPDATE_COMPETENCE_FILTER'
+        : 'UPDATE_MOTIVATION_FILTER';
+
     dispatch({
-      type: updateFilters,
-      filterList: skillFilters,
+      type: dispatchAction,
+      filterList: values.map((categoryWithGroup) => categoryWithGroup.category),
       allRows,
       searchableColumns,
     });
   };
-  const classes = useStyles();
 
   return (
     <Autocomplete
-      multiple
-      className={classes.auto}
       id={type}
+      value={activeCategories}
       options={categoriesWithGroup}
+      groupBy={(option) => option.group}
+      getOptionLabel={(option) => option.category}
+      getOptionSelected={(option, value) => option.category === value.category}
+      multiple
       disableCloseOnSelect
-      groupBy={(option) => option.category}
-      getOptionLabel={(options) => options.skill}
-      getOptionSelected={(option, value) => option.skill === value.skill}
-      onChange={(_, values: CategoriesWithGroup[]) => {
-        alterFilterList(
-          values.map((categoryWithGroup) => categoryWithGroup.skill)
-        );
-      }}
-      renderOption={(options, state) => (
+      className={classes.autocomplete}
+      onChange={handleCategoryChange}
+      renderOption={(option, state) => (
         <div className={classes.option}>
           <StyledCheckBox
             className={classes.checkbox}
             checked={state.selected}
           />
-          {options.skill}
+          {option.category}
         </div>
       )}
       renderInput={(params) => (
@@ -141,7 +138,7 @@ export default function CompetenceFilterInput({
             className={classes.input}
             placeholder={
               type === 'COMPETENCE'
-                ? 'Filtrer på kompetanse..'
+                ? 'Filtrer på kompetanse...'
                 : 'Filtrer på motivasjon...'
             }
             endAdornment={<FilterListIcon />}

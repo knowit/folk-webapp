@@ -1,7 +1,8 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { Dispatch } from 'react';
+import React, { ChangeEvent, Dispatch, FormEvent } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import { Action } from '../data/DDTable';
+import { Slider } from '@material-ui/core';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -47,6 +48,16 @@ const useStyles = makeStyles(() =>
         padding: '4px',
       },
     },
+    thresholdContainer: {
+      display: 'flex',
+      width: '450px',
+      justifyContents: 'flex-start',
+      alignItems: 'center',
+      gap: '20px',
+      '& > :last-child': {
+        flexBasis: '50px',
+      },
+    },
   })
 );
 
@@ -86,12 +97,14 @@ const RemoveAllTag = (onDelete: { onDelete: () => void }) => {
 
 export function FilterHeader({
   filterList,
+  filterThreshold,
   dispatch,
   allRows,
   searchableColumns,
   type,
 }: {
   filterList: string[];
+  filterThreshold: number;
   dispatch: Dispatch<Action>;
   allRows: any[];
   searchableColumns: [string, number][];
@@ -106,6 +119,42 @@ export function FilterHeader({
     type === 'COMPETENCE'
       ? 'CLEAR_COMPETENCE_FILTER'
       : 'CLEAR_MOTIVATION_FILTER';
+  const dispatchThresholdUpdate =
+    type === 'COMPETENCE'
+      ? 'UPDATE_COMPETENCE_THRESHOLD'
+      : 'UPDATE_MOTIVATION_THRESHOLD';
+
+  const updateThresholdFilter = (threshold: number) => {
+    dispatch({
+      type: dispatchThresholdUpdate,
+      threshold,
+      allRows,
+      searchableColumns,
+    });
+  };
+
+  function handleThresholdSliderChange(
+    event: React.ChangeEvent<unknown>,
+    value: number | number[]
+  ) {
+    if (Array.isArray(value)) {
+      value = value?.[0];
+    }
+    if (value !== filterThreshold) {
+      updateThresholdFilter(value);
+    }
+  }
+
+  function handleThresholdInputChange(event: FormEvent<HTMLInputElement>) {
+    const value = Number(event.currentTarget.value);
+    console.log(value);
+    // // if (value === 0) {
+    // //   event.preventDefault();
+    // // }
+    if (value !== filterThreshold) {
+      updateThresholdFilter(value);
+    }
+  }
 
   return (
     <div className={classes.gridHeaderRoot}>
@@ -133,6 +182,29 @@ export function FilterHeader({
           }
         />
       ))}
+      <div className={classes.thresholdContainer}>
+        <b>Terskel:</b>
+        <Slider
+          value={filterThreshold}
+          // getAriaValueText={valuetext}
+          aria-labelledby="discrete-slider-custom"
+          step={1}
+          valueLabelDisplay="auto"
+          // marks={marks}
+          min={1}
+          max={5}
+          onChange={handleThresholdSliderChange}
+        />
+        <input
+          type="number"
+          name="number"
+          id="number"
+          min="1"
+          max="5"
+          value={filterThreshold}
+          onChange={handleThresholdInputChange}
+        />
+      </div>
     </div>
   );
 }
