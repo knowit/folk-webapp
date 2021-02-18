@@ -95,29 +95,17 @@ export default function CompetenceFilterInput({
   type: 'COMPETENCE' | 'MOTIVATION';
 }) {
   const categoriesWithGroup = useCategories();
-  const dispatchRemove =
+  const updateFilters =
     type === 'COMPETENCE'
-      ? 'REMOVE_FROM_COMPETENCE_FILTER'
-      : 'REMOVE_FROM_MOTIVATION_FILTER';
-  const dispatchAdd =
-    type === 'COMPETENCE'
-      ? 'ADD_TO_COMPETENCE_FILTER'
-      : 'ADD_TO_MOTIVATION_FILTER';
-  const alterFilterList = (skill: string) => {
-    const index = filterList.indexOf(skill, 0);
-    index > -1
-      ? dispatch({
-          type: dispatchRemove,
-          filter: skill,
-          allRows,
-          searchableColumns,
-        })
-      : dispatch({
-          type: dispatchAdd,
-          filter: skill,
-          allRows,
-          searchableColumns,
-        });
+      ? 'UPDATE_COMPETENCE_FILTER'
+      : 'UPDATE_MOTIVATION_FILTER';
+  const alterFilterList = (skillFilters: string[]) => {
+    dispatch({
+      type: updateFilters,
+      filterList: skillFilters,
+      allRows,
+      searchableColumns,
+    });
   };
   const classes = useStyles();
 
@@ -131,15 +119,16 @@ export default function CompetenceFilterInput({
       groupBy={(option) => option.category}
       getOptionLabel={(options) => options.skill}
       getOptionSelected={(option, value) => option.skill === value.skill}
-      noOptionsText={'No options'}
-      renderOption={(options) => (
-        <div
-          className={classes.option}
-          onClick={() => alterFilterList(options.skill)}
-        >
+      onChange={(_, values: CategoriesWithGroup[]) => {
+        alterFilterList(
+          values.map((categoryWithGroup) => categoryWithGroup.skill)
+        );
+      }}
+      renderOption={(options, state) => (
+        <div className={classes.option}>
           <StyledCheckBox
             className={classes.checkbox}
-            checked={filterList.indexOf(options.skill, 0) > -1}
+            checked={state.selected}
           />
           {options.skill}
         </div>

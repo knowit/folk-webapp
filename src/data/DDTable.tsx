@@ -32,12 +32,6 @@ export interface RowStates {
 
 export type Action =
   | {
-      type: 'ADD_TO_MOTIVATION_FILTER';
-      filter: string;
-      allRows: any[];
-      searchableColumns: any[];
-    }
-  | {
       type: 'REMOVE_FROM_MOTIVATION_FILTER';
       filter: string;
       allRows: any[];
@@ -45,12 +39,6 @@ export type Action =
     }
   | {
       type: 'CLEAR_MOTIVATION_FILTER';
-      allRows: any[];
-      searchableColumns: any[];
-    }
-  | {
-      type: 'ADD_TO_COMPETENCE_FILTER';
-      filter: string;
       allRows: any[];
       searchableColumns: any[];
     }
@@ -70,24 +58,22 @@ export type Action =
       searchTerm: string;
       allRows: any[];
       searchableColumns: any[];
+    }
+  | {
+      type: 'UPDATE_COMPETENCE_FILTER';
+      filterList: string[];
+      allRows: any[];
+      searchableColumns: any[];
+    }
+  | {
+      type: 'UPDATE_MOTIVATION_FILTER';
+      filterList: string[];
+      allRows: any[];
+      searchableColumns: any[];
     };
 
 function reducer(currentState: RowStates, action: Action) {
   switch (action.type) {
-    case 'ADD_TO_MOTIVATION_FILTER':
-      return {
-        rows: searchAndFilter(
-          currentState.rows,
-          [...currentState.motivationFilter, action.filter],
-          currentState.competenceFilter,
-          currentState.searchTerm,
-          action.allRows,
-          action.searchableColumns
-        ),
-        motivationFilter: [...currentState.motivationFilter, action.filter],
-        competenceFilter: currentState.competenceFilter,
-        searchTerm: currentState.searchTerm,
-      };
     case 'REMOVE_FROM_MOTIVATION_FILTER':
       return {
         rows: searchAndFilter(
@@ -118,20 +104,6 @@ function reducer(currentState: RowStates, action: Action) {
         ),
         motivationFilter: [],
         competenceFilter: currentState.competenceFilter,
-        searchTerm: currentState.searchTerm,
-      };
-    case 'ADD_TO_COMPETENCE_FILTER':
-      return {
-        rows: searchAndFilter(
-          currentState.rows,
-          currentState.motivationFilter,
-          [...currentState.competenceFilter, action.filter],
-          currentState.searchTerm,
-          action.allRows,
-          action.searchableColumns
-        ),
-        motivationFilter: currentState.motivationFilter,
-        competenceFilter: [...currentState.competenceFilter, action.filter],
         searchTerm: currentState.searchTerm,
       };
     case 'REMOVE_FROM_COMPETENCE_FILTER':
@@ -179,6 +151,34 @@ function reducer(currentState: RowStates, action: Action) {
         motivationFilter: currentState.motivationFilter,
         competenceFilter: currentState.competenceFilter,
         searchTerm: action.searchTerm,
+      };
+    case 'UPDATE_MOTIVATION_FILTER':
+      return {
+        rows: searchAndFilter(
+          currentState.rows,
+          action.filterList,
+          currentState.competenceFilter,
+          currentState.searchTerm,
+          action.allRows,
+          action.searchableColumns
+        ),
+        motivationFilter: action.filterList,
+        competenceFilter: currentState.competenceFilter,
+        searchTerm: currentState.searchTerm,
+      };
+    case 'UPDATE_COMPETENCE_FILTER':
+      return {
+        rows: searchAndFilter(
+          currentState.rows,
+          currentState.motivationFilter,
+          action.filterList,
+          currentState.searchTerm,
+          action.allRows,
+          action.searchableColumns
+        ),
+        motivationFilter: currentState.motivationFilter,
+        competenceFilter: action.filterList,
+        searchTerm: currentState.searchTerm,
       };
     default:
       return currentState;
