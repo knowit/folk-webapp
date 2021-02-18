@@ -1,9 +1,14 @@
 import React from 'react';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { ChartComponentInfo, ChartVariant } from '../data/DDChart';
-import { BarChart, Error, PieChart, ShowChart } from '@material-ui/icons';
+import { BarChart, Error, PieChart, ShowChart} from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { createStyles } from '@material-ui/core';
+import { createStyles, SvgIcon } from '@material-ui/core';
+import { ReactComponent as RadarLogo } from '../assets/RadarChart.svg';
+
+
+
+
 
 const chartVariantInfo: {
   [key in ChartVariant]: {
@@ -14,7 +19,7 @@ const chartVariantInfo: {
   Line: { label: 'linjediagram', icon: <ShowChart /> },
   Bar: { label: 'stolpediagram', icon: <BarChart /> },
   Pie: { label: 'kakediagram', icon: <PieChart /> },
-  Radar: { label: 'radardiagram', icon: <Error /> },
+  Radar: { label: 'radardiagram', icon: <SvgIcon> <RadarLogo/> </SvgIcon> },
   Sunburst: { label: 'sunburst-diagram', icon: <Error /> },
 };
 
