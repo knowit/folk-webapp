@@ -273,6 +273,13 @@ export default function EmployeeSite() {
               dataComponentProps={{
                 chartVariants: [
                   {
+                    type: 'Bar',
+                    props: {
+                      dataKey: 'kategori',
+                      yLabels: ['motivasjon', 'kompetanse'],
+                    },
+                  },
+                  {
                     type: 'Radar',
                     props: {
                       groupKey: 'kategori',
