@@ -26,6 +26,10 @@ function getParentSize(total, child) {
 
 export default function Sunburst({ data, groupKey, big }: SunburstChartsProps) {
   const height = big ? '400px' : '300px';
+  const formatedData = {
+    kategori: 'kompetansekartlegging',
+    children: data,
+  };
 
   const CustomTooltip = ({
     id,
@@ -36,7 +40,7 @@ export default function Sunburst({ data, groupKey, big }: SunburstChartsProps) {
     const childValue =
       depth === 1
         ? value
-        : data.children
+        : formatedData.children
             .find((kategori) => kategori.kategori === ancestor.id)
             .children.find((kategori) => kategori.kategori === id).verdi;
 
@@ -50,7 +54,7 @@ export default function Sunburst({ data, groupKey, big }: SunburstChartsProps) {
   return (
     <div style={{ height, width: '100%' }}>
       <ResponsiveSunburst
-        data={data}
+        data={formatedData}
         margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
         identity={groupKey}
         cornerRadius={2}

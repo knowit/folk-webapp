@@ -540,10 +540,7 @@ exports.competenceMapping = async ({ data }) => {
 
   const competenceCategories = (data) => {
     // Categories structure
-    const output = {
-      kategori: 'kompetansekartlegging',
-      children: [],
-    };
+    const output = [];
 
     // Get the main categories
     const mainCategories = new Set(
@@ -579,7 +576,7 @@ exports.competenceMapping = async ({ data }) => {
       });
 
       categoryObject.verdi = avgValue;
-      output.children.push(categoryObject);
+      output.push(categoryObject);
     });
 
     return output;
