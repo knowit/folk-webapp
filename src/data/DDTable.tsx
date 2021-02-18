@@ -200,6 +200,8 @@ const searchAndFilter = (
     return rows;
   }
   const lowerCaseSearchTerm = searchTerm?.toLowerCase();
+  const MOTIVATION_THRESHOLD = 4;
+  const COMPETENCE_THRESHOLD = 3;
 
   //searching for name
   const searchedRows = allRows.filter((row) => {
@@ -222,14 +224,14 @@ const searchAndFilter = (
   searchedRows.forEach((row) => {
     let passedFilters = 0;
     motivationFilter.forEach((skill) => {
-      const rowSkills = row.rowData[row.rowData.length - 2];
-      if (rowSkills !== undefined && rowSkills.indexOf(skill) !== -1) {
+      const employeeMotivation = row.rowData[row.rowData.length - 2];
+      if (employeeMotivation?.[skill] >= MOTIVATION_THRESHOLD) {
         passedFilters++;
       }
     });
     competenceFilter.forEach((skill) => {
-      const rowSkills = row.rowData[row.rowData.length - 1];
-      if (rowSkills?.indexOf(skill) !== -1 && rowSkills !== undefined) {
+      const employeeCompetence = row.rowData[row.rowData.length - 1];
+      if (employeeCompetence?.[skill] >= COMPETENCE_THRESHOLD) {
         passedFilters++;
       }
     });

@@ -27,7 +27,25 @@ const getThisEmployeeMotivationList = (uuidComp, threshold, categoryList) => {
   return skillList
 }
 
-const getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`
+/**
+ *
+ * @param {string} employeeUuid  Uuid that identifies the employee.
+ * @param {object} categoryList  List of categories. Each category has a list of UUIDs, mapped to a score.
+ *
+ * @return {object} All categories with scores for the employee
+ */
+const getCategoryScoresForEmployee = (employeeUuid, categoryList) =>
+  categoryList.reduce((categoryScores, thisCategory) => {
+    // name of categories is stored as 'category' for motivation and 'categories' for competence
+    const categoryName = thisCategory.category || thisCategory.categories;
+    const categoryScore = thisCategory[employeeUuid];
+    return {
+      ...categoryScores,
+      [categoryName]: categoryScore,
+    };
+  }, {});
+
+const getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`;
 
 exports.employeeTableReports = [
   { reportName: 'employeeInformation' },
@@ -36,7 +54,7 @@ exports.employeeTableReports = [
 ]
 /**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
 exports.employeeTable = async ({ data }) => {
-  const [allEmployees, resMotivation, resCompetence] = data
+  const [allEmployees, motivationData, competenceData] = data;
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   })
@@ -64,15 +82,13 @@ exports.employeeTable = async ({ data }) => {
           employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
         ])
       ),
-      getThisEmployeeMotivationList(
-        makeEmailUuid(employee.email, salt)?.slice(0, 8),
-        MOTIVATION_THRESHOLD,
-        resMotivation
+      getCategoryScoresForEmployee(
+        makeEmailUuid(employee.email, salt).slice(0, 8),
+        motivationData
       ),
-      getThisEmployeeMotivationList(
+      getCategoryScoresForEmployee(
         makeEmailUuid(employee.email, salt),
-        COMPETENCE_THRESHOLD,
-        resCompetence
+        competenceData
       ),
     ],
   }))
