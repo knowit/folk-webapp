@@ -248,13 +248,12 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
   };
   const [state, dispatch] = useReducer(reducer, initialState);
   const { columns } = props as { columns: Column[] };
-  const searchableColumn = columns
+  const searchableColumns = columns
+    .filter((column) => column.searchable)
     .map(
-      (col, i) =>
-        [col.searchable, col.searchKey, i] as [boolean, string, number]
-    )
-    .filter(([searchable]) => searchable)
-    .map(([, key, i]) => [key, i] as [string, number]);
+      (column, columnIndex) =>
+        [column.searchKey, columnIndex] as [string, number]
+    );
 
   const classes = useStyles();
 
@@ -266,20 +265,20 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
             filterList={state.competenceFilter}
             dispatch={dispatch}
             allRows={allRows}
-            searchableColumns={searchableColumn}
+            searchableColumns={searchableColumns}
             type="COMPETENCE"
           />
           <CompetenceFilterInput
             filterList={state.motivationFilter}
             dispatch={dispatch}
             allRows={allRows}
-            searchableColumns={searchableColumn}
+            searchableColumns={searchableColumns}
             type="MOTIVATION"
           />
           <SearchInput
             dispatch={dispatch}
             allRows={allRows}
-            searchableColumns={searchableColumn}
+            searchableColumns={searchableColumns}
           />
         </div>
       </GridItemHeader>
@@ -288,7 +287,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
           filterList={state.competenceFilter}
           dispatch={dispatch}
           allRows={allRows}
-          searchableColumns={searchableColumn}
+          searchableColumns={searchableColumns}
           type="COMPETENCE"
         />
       )}
@@ -297,7 +296,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
           filterList={state.motivationFilter}
           dispatch={dispatch}
           allRows={allRows}
-          searchableColumns={searchableColumn}
+          searchableColumns={searchableColumns}
           type="MOTIVATION"
         />
       )}
