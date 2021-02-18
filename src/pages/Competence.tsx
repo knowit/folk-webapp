@@ -53,6 +53,13 @@ export default function Competence() {
                 valueKey: ['motivasjon','kompetanse'],
               },
             },
+            {
+              type: 'Bar',
+              props: {
+                dataKey: 'kategori',
+                yLabels: ['motivasjon','kompetanse'],
+              },
+            },
           ],
         }}
       />
