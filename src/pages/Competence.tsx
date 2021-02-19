@@ -147,8 +147,15 @@ export default function Competence() {
             {
               type: 'Sunburst',
               props: {
-                yLabels: ['value'],
+                yLabels: ['verdi'],
                 groupKey: 'kategori',
+              },
+            },
+            {
+              type: 'Bar',
+              props: {
+                dataKey: 'kategori',
+                yLabels: ['verdi'],
               },
             },
           ],
