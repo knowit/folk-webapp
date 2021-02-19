@@ -1,20 +1,28 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { ChangeEvent, Dispatch, FormEvent } from 'react';
+import React, { Dispatch, FormEvent } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import { Action } from '../data/DDTable';
-import { Slider } from '@material-ui/core';
+import { Mark, Slider } from '@material-ui/core';
 
 const useStyles = makeStyles(() =>
   createStyles({
-    gridHeaderRoot: {
-      minHeight: '55.3px',
+    filterHeaderRoot: {
       backgroundColor: '#ffffff',
       borderBottom: 'solid 1px #e0ded7',
-      padding: '0px 15px 0px 15px',
+      padding: '0 15px',
       display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'left',
+      justifyContent: 'flex-start',
+    },
+    filterHeaderTitle: {
+      paddingTop: '20px',
+      fontWeight: 'bold',
+    },
+    filterTagsContainer: {
+      padding: '15px',
+      display: 'flex',
       flexWrap: 'wrap',
+      justifyContent: 'flex-start',
+      flex: 'auto',
     },
     removeAllTag: {
       padding: '1px 15px 1px 1px',
@@ -48,16 +56,23 @@ const useStyles = makeStyles(() =>
         padding: '4px',
       },
     },
-    thresholdContainer: {
+    filterThresholdContainer: {
       display: 'flex',
-      width: '450px',
       justifyContents: 'flex-start',
       alignItems: 'center',
-      gap: '20px',
-      '& > :last-child': {
-        flexBasis: '50px',
-      },
+      borderLeft: 'solid 1px #e0ded7',
+      padding: '5px',
     },
+    filterThresholdTitle: {
+      padding: '10px',
+      paddingTop: '6px',
+      paddingLeft: '5px',
+      fontStyle: 'italic',
+      // fontWeight: 'bold',
+      alignSelf: 'flex-start',
+    },
+    thresholdSlider: { minWidth: '150px' },
+    thresholdInput: { display: 'none' },
   })
 );
 
@@ -111,6 +126,7 @@ export function FilterHeader({
   type: 'COMPETENCE' | 'MOTIVATION';
 }) {
   const classes = useStyles();
+
   const dispatchRemove =
     type === 'COMPETENCE'
       ? 'REMOVE_FROM_COMPETENCE_FILTER'
@@ -124,14 +140,14 @@ export function FilterHeader({
       ? 'UPDATE_COMPETENCE_THRESHOLD'
       : 'UPDATE_MOTIVATION_THRESHOLD';
 
-  const updateThresholdFilter = (threshold: number) => {
+  function updateThresholdFilter(threshold: number) {
     dispatch({
       type: dispatchThresholdUpdate,
       threshold,
       allRows,
       searchableColumns,
     });
-  };
+  }
 
   function handleThresholdSliderChange(
     event: React.ChangeEvent<unknown>,
@@ -145,57 +161,73 @@ export function FilterHeader({
     }
   }
 
-  function handleThresholdInputChange(event: FormEvent<HTMLInputElement>) {
-    const value = Number(event.currentTarget.value);
-    console.log(value);
-    // // if (value === 0) {
-    // //   event.preventDefault();
-    // // }
-    if (value !== filterThreshold) {
-      updateThresholdFilter(value);
-    }
-  }
+  // function handleThresholdInputChange(event: FormEvent<HTMLInputElement>) {
+  //   const value = Number(event.currentTarget.value);
+  //   if (value !== filterThreshold) {
+  //     updateThresholdFilter(value);
+  //   }
+  // }
+
+  const thresholdLabels: Mark[] = [
+    { value: 1, label: '1+' },
+    { value: 2, label: '2+' },
+    { value: 3, label: '3+' },
+    { value: 4, label: '4+' },
+    { value: 5, label: '5' },
+  ];
 
   return (
-    <div className={classes.gridHeaderRoot}>
-      <b>
+    <div className={classes.filterHeaderRoot}>
+      <div className={classes.filterHeaderTitle}>
         {type === 'COMPETENCE' ? 'Kompetansefilter' : 'Motivasjonsfilter'}:{' '}
-      </b>
-      {filterList.length > 1 && (
-        <RemoveAllTag
-          onDelete={() =>
-            dispatch({ type: dispatchClear, allRows, searchableColumns })
-          }
-        />
-      )}
-      {filterList.map((skill) => (
-        <Tag
-          key={skill}
-          label={skill}
-          onDelete={() =>
-            dispatch({
-              type: dispatchRemove,
-              filter: skill,
-              allRows,
-              searchableColumns,
-            })
-          }
-        />
-      ))}
-      <div className={classes.thresholdContainer}>
-        <b>Terskel:</b>
+      </div>
+      <div className={classes.filterTagsContainer}>
+        {filterList.length > 1 && (
+          <RemoveAllTag
+            onDelete={() =>
+              dispatch({ type: dispatchClear, allRows, searchableColumns })
+            }
+          />
+        )}
+        {filterList.map((skill) => (
+          <Tag
+            key={skill}
+            label={skill}
+            onDelete={() =>
+              dispatch({
+                type: dispatchRemove,
+                filter: skill,
+                allRows,
+                searchableColumns,
+              })
+            }
+          />
+        ))}
+      </div>
+      <div className={classes.filterThresholdContainer}>
+        <label
+          htmlFor={`${type}-threshold-slider`}
+          className={classes.filterThresholdTitle}
+        >
+          Terskel:
+        </label>
         <Slider
+          className={classes.thresholdSlider}
+          id={`${type}-threshold-slider`}
           value={filterThreshold}
-          // getAriaValueText={valuetext}
-          aria-labelledby="discrete-slider-custom"
           step={1}
           valueLabelDisplay="auto"
-          // marks={marks}
+          marks={thresholdLabels}
+          valueLabelFormat={(value) =>
+            thresholdLabels.find((mark) => mark.value === value)?.label ?? value
+          }
           min={1}
           max={5}
           onChange={handleThresholdSliderChange}
         />
+        {/* TODO: for better a11y, there should be a text input option as well:
         <input
+          className={classes.thresholdInput}
           type="number"
           name="number"
           id="number"
@@ -203,7 +235,7 @@ export function FilterHeader({
           max="5"
           value={filterThreshold}
           onChange={handleThresholdInputChange}
-        />
+        />*/}
       </div>
     </div>
   );
