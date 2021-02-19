@@ -27,7 +27,6 @@ function getParentSize(total, child) {
 export default function Sunburst({ data, groupKey, big }: SunburstChartsProps) {
   const height = big ? '400px' : '300px';
   const formatedData = {
-    kategori: 'kompetansekartlegging',
     children: data,
   };
 
