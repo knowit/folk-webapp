@@ -124,7 +124,6 @@ exports.competence = async ({ data }) => {
   }))
 }
 
-
 exports.employeeExperienceReports = ({
   parameters: { user_id } = {}
 }) => ([
