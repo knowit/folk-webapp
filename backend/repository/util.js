@@ -1,7 +1,7 @@
-const crypto = require('crypto');
-const AWS = require('aws-sdk');
+const crypto = require('crypto')
+const AWS = require('aws-sdk')
 
-const ssm = new AWS.SSM();
+const ssm = new AWS.SSM()
 
 exports.getSecret = (name, { encrypted = false } = {}) => {
   return new Promise((resolve, reject) => {
@@ -11,17 +11,17 @@ exports.getSecret = (name, { encrypted = false } = {}) => {
         WithDecryption: encrypted,
       },
       (err, data) => {
-        if (err) reject(err);
-        else resolve(data && data.Parameter ? data.Parameter.Value : null);
+        if (err) reject(err)
+        else resolve(data && data.Parameter ? data.Parameter.Value : null)
       }
-    );
-  });
-};
+    )
+  })
+}
 
 exports.makeEmailUuid = (email, salt) => {
-  const hmac = crypto.createHmac('sha256', salt);
-  hmac.update(email);
-  const sig = hmac.digest('hex');
+  const hmac = crypto.createHmac('sha256', salt)
+  hmac.update(email)
+  const sig = hmac.digest('hex')
 
   return [
     sig.substring(0, 8),
@@ -29,8 +29,8 @@ exports.makeEmailUuid = (email, salt) => {
     sig.substring(12, 16),
     sig.substring(16, 20),
     sig.substring(20, 32),
-  ].join('-');
-};
+  ].join('-')
+}
 
 exports.groupBy = (items, key) =>
   items.reduce(
@@ -39,20 +39,20 @@ exports.groupBy = (items, key) =>
       [item[key]]: [...(result[item[key]] || []), item],
     }),
     {}
-  );
+  )
 
 exports.range = (x, y) =>
   Array.from(
     (function* () {
-      while (x <= y) yield x++;
+      while (x <= y) yield x++
     })()
-  );
+  )
 
 exports.reStructCategories = (categories, compScores = [], motScores = []) => {
   //find the main categoreis
   const mainCategories = new Set(
     categories.flatMap((item) => Object.keys(item))
-  );
+  )
 
   /**
    * returns the score of the category with name = name from
@@ -61,46 +61,46 @@ exports.reStructCategories = (categories, compScores = [], motScores = []) => {
    */
   const score = (name, scores, komOrMot) => {
     const thisCat = scores.find((obj) => {
-      return obj['kategori'].toUpperCase() === name.toUpperCase();
-    });
-    const returnValue = thisCat ? thisCat[komOrMot] : 0;
-    return returnValue || 0;
-  };
+      return obj['kategori'].toUpperCase() === name.toUpperCase()
+    })
+    const returnValue = thisCat ? thisCat[komOrMot] : 0
+    return returnValue || 0
+  }
 
-  let catSet = [];
+  let catSet = []
 
-  const mainCats = [];
+  const mainCats = []
 
   mainCategories.forEach((name) => {
     mainCats.push({
       kategori: name,
       kompetanse: score(name, compScores, 'kompetanse'),
       motivasjon: score(name, motScores, 'motivasjon')
-    });
+    })
     const categoryObject = {
       [name]: [],
-    };
+    }
     categories.forEach((item) => {
-      const childName = item[name];
+      const childName = item[name]
       if (childName) {
         // Create child category
         const childCategoryObject = {
           kategori: childName,
           kompetanse: score(childName, compScores, 'kompetanse'),
           motivasjon: score(childName, motScores, 'motivasjon')
-        };
-        categoryObject[name].push(childCategoryObject);
+        }
+        categoryObject[name].push(childCategoryObject)
       }
-    });
-    catSet.push(categoryObject);
-  });
-  catSet.unshift({ Hovedkategorier: mainCats });
+    })
+    catSet.push(categoryObject)
+  })
+  catSet.unshift({ Hovedkategorier: mainCats })
   catSet = catSet.reduce(function (cat, x) {
-    for (var key in x) cat[key] = x[key];
-    return cat;
-  }, {});
+    for (var key in x) cat[key] = x[key]
+    return cat
+  }, {})
 
-  const setNames = Object.keys(catSet);
+  const setNames = Object.keys(catSet)
 
-  return [catSet, setNames];
-};
+  return [catSet, setNames]
+}

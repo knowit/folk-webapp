@@ -1,67 +1,72 @@
-const fetch = require('node-fetch');
-
-/*exports.query = async (
-    {
-      querySql,
-      accessToken = null,
-      apiUrl = process.env.API_URL || 'https://dev-api.dataplattform.knowit.no',
-      format = 'json',
-    }
-  ) => {
-    const queryUrl = `${apiUrl || this.apiUrl}/data/query`;
-    return await fetch(queryUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken || this.accessToken}`,
-      },
-      body: JSON.stringify({
-        sql: querySql,
-        format,
-      }),
-    });
-  }*/
+const fetch = require('node-fetch')
+const reporting = require('../reporting')
 
 async function report(
-    {
-      reportName,
-      filter = {},
-      accessToken = null,
-      apiUrl = process.env.API_URL || 'https://dev-api.dataplattform.knowit.no',
-    }
-  ) {
-    //console.log("name ETC", reportName, filter, accessToken, apiUrl)
-    const filters = Object.entries(filter).map(([key, value]) => {
-      const val = typeof value === 'string' ? `'${value}'` : value;
-      return `filter=${encodeURIComponent(key)}:${encodeURIComponent(val)}`;
-    });
-    const filterString = filters.length > 0 ? `?${filters.join('&')}` : '';
-
-    const reportUrl = `${
-      apiUrl || this.apiUrl
-    }/data/query/report/${reportName}${filterString}`;
-
-    //console.log("REPORT URL", reportUrl)
-
-    const response = await fetch(reportUrl, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    if (response.status == 200) {
-      return response
-    } else {
-      throw {
-        message: response.status + " " + response.statusText,
-        status: 1,
-        type: "error"
-      }
-    }
+  {
+    reportName,
+    filter = {},
+    accessToken = null,
+    apiUrl = process.env.API_URL || 'https://dev-api.dataplattform.knowit.no',
   }
+) {
+  // Reporting
+  reporting({
+    message: 'Report received instruction: ',
+    data: { reportName, filter, hasToken: (accessToken ? true : false) },
+    type: 'info'
+  })
+
+  const filters = Object.entries(filter).map(([key, value]) => {
+    const val = typeof value === 'string' ? `'${value}'` : value
+    return `filter=${encodeURIComponent(key)}:${encodeURIComponent(val)}`
+  })
+  const filterString = filters.length > 0 ? `?${filters.join('&')}` : ''
+
+  const reportUrl = `${
+    apiUrl || this.apiUrl
+  }/data/query/report/${reportName}${filterString}`
+
+  // Reporting
+  reporting({
+    message: 'Report processed request metadata: ',
+    data: { filterString, reportUrl },
+    type: 'info'
+  })
+
+  const response = await fetch(reportUrl, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+
+  // Reporting
+  reporting({
+    message: 'Report request responded: ',
+    data: { reportName, status: response.status, response: response.statusText },
+    type: 'info'
+  })
+
+  if (response.status == 200) {
+    return response
+  } else {
+    throw reporting({
+      status: response.status,
+      message: response.statusText,
+      external: (response.status >= 500 && response.status < 600),
+      data: { reportName }
+    })
+  }
+}
+
 exports.reports = async (accessToken, reports, parameters) => {
-  //console.log("reports params", parameters)
+  // Reporting
+  reporting({
+    message: 'Reports received instruction for reports: ',
+    data: { accessToken, reports, parameters },
+    type: 'info'
+  })
+
   // Check and resolve parameters type
   if (typeof reports === 'function') {
     if (parameters) {
@@ -74,15 +79,22 @@ exports.reports = async (accessToken, reports, parameters) => {
 
   // Iterate and fetch all reports
   const reportRequests = reports.map(reportElement => {
-    const reportName = reportElement.reportName;
-    const filter = reportElement.filter;
+    const reportName = reportElement.reportName
+    const filter = reportElement.filter
 
     return report({reportName, filter, accessToken})
       .catch(err => Promise.reject(err))
   })
 
   const request = await Promise.all(reportRequests)
-    .catch(err => { throw err });
+    .catch(err => { throw err })
+
+  // Reporting
+  reporting({
+    message: 'Reports have fetched: ',
+    data: reports,
+    type: 'info'
+  })
 
   // Handle fetched data
   const data = await Promise.all(
@@ -90,7 +102,10 @@ exports.reports = async (accessToken, reports, parameters) => {
       req => req.json()
         .catch(
           err => {
-            throw err
+            throw reporting({
+              message: err,
+              external: false,
+            })
           }
         )
     )
@@ -100,7 +115,11 @@ exports.reports = async (accessToken, reports, parameters) => {
   if (data.length == 1)
     return data[0]
   else if (data.length == 0)
-    console.warn('Server response is empty for reports', reports, data)
+    reporting({
+      message: 'Server response is empty for reports: ',
+      data: { reports },
+      type: 'warning'
+    })
 
   return data
 }
