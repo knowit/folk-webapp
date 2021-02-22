@@ -342,7 +342,7 @@ function getEventSet(events) {
   ).getFullYear()
 
   const years = [] // Range of years in dataset, [2015, 2016, 2017, etc...]
-  for (let year = parseInt(firstYear) year <= parseInt(lastYear) year++)
+  for (let year = parseInt(firstYear); year <= parseInt(lastYear); year++)
     years.push(year)
 
   const set = []
