@@ -277,6 +277,7 @@ export default function EmployeeSite() {
                     props: {
                       dataKey: 'kategori',
                       yLabels: ['motivasjon', 'kompetanse'],
+                      maxValue: 5,
                     },
                   },
                   {
@@ -284,6 +285,7 @@ export default function EmployeeSite() {
                     props: {
                       groupKey: 'kategori',
                       valueKey: ['motivasjon', 'kompetanse'],
+                      maxValue: 5,
                     },
                   },
                 ],

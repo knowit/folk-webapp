@@ -22,6 +22,27 @@ export default function Competence() {
   return (
     <Grid container spacing={2}>
       <DDItem
+        url="/api/data/competenceAmount"
+        title="Kompetansemengde"
+        Component={DDChart}
+        SkeletonComponent={ChartSkeleton}
+        description="Andel ansatte som har svart 3 eller mer på kompetansekartleggingen"
+        dataComponentProps={{
+          chartVariants: [
+            {
+              type: 'Bar',
+              props: {
+                dataKey: 'kategori',
+                yLabels: ['kompetanseandel','motivasjonandel'],
+                maxValue: 'auto',
+                tooltipValues: ['kompetanseverdi','motivasjonverdi'],
+              },
+            },
+          ],
+        }}
+      />
+
+      <DDItem
         url="/api/data/competenceAreas"
         title="Kompetanseområder"
         Component={DDChart}
