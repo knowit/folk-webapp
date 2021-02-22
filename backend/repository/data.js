@@ -563,48 +563,10 @@ exports.competenceAmount = async ({ data }) => {
   const [categories, allComp, allMot] = data
   const compAmount = getAmountOverX(allComp, 3, 'categories', 'kompetanse')
   const motAmount = getAmountOverX(allMot, 3, 'category', 'motivasjon')
-
-  // Merges the two arrays on the same category
-  const mergedArrs = compAmount.map((i) => {
-    const found = motAmount.find((j) => j.kategori === i.kategori)
-    found['kompetanseverdi'] = i.kompetanseverdi
-    found['kompetanseandel'] = i.kompetanseandel
-    return found
-  })
-  let catSet = []
-  const mainCats = []
-  const mainCategories = new Set(
-    categories.flatMap((item) => Object.keys(item))
-  )
-  mainCategories.forEach((name) => {
-    const found = mergedArrs.find((obj) => {
-      return obj['kategori'].toUpperCase() == name.toUpperCase()
-    })
-    mainCats.push(found)
-
-    const categoryObject = {
-      [name]: [],
-    }
-    categories.forEach((item) => {
-      const childName = item[name]
-      if (childName) {
-        // Create child category
-        const foundSubCat = mergedArrs.find((obj) => {
-          return obj['kategori'].toUpperCase() === childName.toUpperCase()
-        })
-        categoryObject[name].push(foundSubCat)
-      }
-    })
-    catSet.push(categoryObject)
-  })
-  catSet.unshift({ Hovedkategorier: mainCats })
-  catSet = catSet.reduce(function (cat, x) {
-    for (var key in x) cat[key] = x[key]
-    return cat
-  }, {})
+  const [catSet, setNames] = reStructCategories(categories, compAmount, motAmount)
 
   return {
-    setNames: ['Hovedkategorier', ...mainCategories],
+    setNames: setNames,
     sets: catSet,
   }
 }
