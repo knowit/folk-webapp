@@ -1,7 +1,7 @@
-const crypto = require('crypto');
-const AWS = require('aws-sdk');
+const crypto = require('crypto')
+const AWS = require('aws-sdk')
 
-const ssm = new AWS.SSM();
+const ssm = new AWS.SSM()
 
 exports.getSecret = (name, { encrypted = false } = {}) => {
   return new Promise((resolve, reject) => {
@@ -44,52 +44,52 @@ exports.groupBy = (items, key) =>
 exports.range = (x, y) =>
   Array.from(
     (function* () {
-      while (x <= y) yield x++;
+      while (x <= y) yield x++
     })()
-  );
+  )
 
 exports.reStructCategories = (categories, compScores = [], motScores = []) => {
   //find the main categoreis
   const mainCategories = new Set(
     categories.flatMap((item) => Object.keys(item))
-  );
-  let catSet = [];
-  const mainCats = [];
+  )
+  let catSet = []
+  const mainCats = []
   
   // Merges the two arrays on the same category
   const mergedArrs = compScores.map((i) => {
-    const found = motScores.find((j) => j.kategori === i.kategori);
+    const found = motScores.find((j) => j.kategori === i.kategori)
     const mergedObj = { ...found, ...i}
-    return mergedObj;
-  });
+    return mergedObj
+  })
 
   mainCategories.forEach((name) => {
     mainCats.push(mergedArrs.find((obj) => {
-      return obj['kategori'].toUpperCase() == name.toUpperCase();
-    }));
+      return obj['kategori'].toUpperCase() == name.toUpperCase()
+    }))
     
     const categoryObject = {
       [name]: [],
-    };
+    }
     categories.forEach((item) => {
-      const childName = item[name];
+      const childName = item[name]
       if (childName) {
         // Create child category
         const foundSubCat = mergedArrs.find((obj) => {
-          return obj['kategori'].toUpperCase() === childName.toUpperCase();
-        });
-        categoryObject[name].push(foundSubCat);
+          return obj['kategori'].toUpperCase() === childName.toUpperCase()
+        })
+        categoryObject[name].push(foundSubCat)
       }
-    });
-    catSet.push(categoryObject);
-  });
-  catSet.unshift({ Hovedkategorier: mainCats });
+    })
+    catSet.push(categoryObject)
+  })
+  catSet.unshift({ Hovedkategorier: mainCats })
   catSet = catSet.reduce(function (cat, x) {
-    for (var key in x) cat[key] = x[key];
-    return cat;
-  }, {});
+    for (var key in x) cat[key] = x[key]
+    return cat
+  }, {})
 
-  const setNames = Object.keys(catSet);
+  const setNames = Object.keys(catSet)
 
-  return [catSet, setNames];
+  return [catSet, setNames]
 };
