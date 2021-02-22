@@ -33,9 +33,9 @@ export default function Competence() {
               type: 'Bar',
               props: {
                 dataKey: 'kategori',
-                yLabels: ['kompetanseandel','motivasjonandel'],
+                yLabels: ['kompetanseandel', 'motivasjonandel'],
                 maxValue: 'auto',
-                tooltipValues: ['kompetanseverdi','motivasjonverdi'],
+                tooltipValues: ['kompetanseverdi', 'motivasjonverdi'],
               },
             },
           ],
@@ -53,14 +53,14 @@ export default function Competence() {
               type: 'Radar',
               props: {
                 groupKey: 'kategori',
-                valueKey: ['motivasjon','kompetanse'],
+                valueKey: ['motivasjon', 'kompetanse'],
               },
             },
             {
               type: 'Bar',
               props: {
                 dataKey: 'kategori',
-                yLabels: ['motivasjon','kompetanse'],
+                yLabels: ['motivasjon', 'kompetanse'],
               },
             },
           ],
