@@ -97,7 +97,7 @@ export default function Bar({
           ({ indexValue, value, id }) => {
             const motOrComp = id.toString().includes("motivasjon")? "motivasjon":"kompetanse"
             const numberId = motOrComp === "motivasjon"? tooltipValues[1]:tooltipValues[0]
-            const thisData = data.find(i => (i.kategori = indexValue))
+            const thisData = data.find(i => (i.kategori === indexValue))
             const numberValue = thisData? thisData[numberId] : 0
             return(<div>
               <b>{indexValue}:</b>

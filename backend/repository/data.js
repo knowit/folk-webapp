@@ -533,7 +533,7 @@ exports.competenceMapping = async ({ data }) => {
   }
 }
 
-const getAmountOverX = (data, x, katName, compOrMot) => {
+const getAmountOverOrEqualToX = (data, x, katName, compOrMot) => {
   const result = []
   const verdiNavn = compOrMot + 'verdi'
   const andelNavn = compOrMot + 'andel'
@@ -543,7 +543,7 @@ const getAmountOverX = (data, x, katName, compOrMot) => {
       [verdiNavn]: 0,
     }
     Object.entries(cat).forEach((person) => {
-      if (person[0] !== katName && person[1] > x) {
+      if (person[0] !== katName && person[1] >= x) {
         thisCatRes[verdiNavn] += 1
       }
     })
@@ -561,8 +561,8 @@ exports.competenceAmountReports = [
 ]
 exports.competenceAmount = async ({ data }) => {
   const [categories, allComp, allMot] = data
-  const compAmount = getAmountOverX(allComp, 3, 'categories', 'kompetanse')
-  const motAmount = getAmountOverX(allMot, 3, 'category', 'motivasjon')
+  const compAmount = getAmountOverOrEqualToX(allComp, 3, 'categories', 'kompetanse')
+  const motAmount = getAmountOverOrEqualToX(allMot, 3, 'category', 'motivasjon')
   const [catSet, setNames] = reStructCategories(categories, compAmount, motAmount)
 
   return {
