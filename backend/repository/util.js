@@ -53,30 +53,21 @@ exports.reStructCategories = (categories, compScores = [], motScores = []) => {
   const mainCategories = new Set(
     categories.flatMap((item) => Object.keys(item))
   )
-
-  /**
-   * returns the score of the category with name = name from
-   * the array scores. kompOrMot is either "kompetanse" or
-   * "motivasjon", depending on the score to find
-   */
-  const score = (name, scores, komOrMot) => {
-    const thisCat = scores.find((obj) => {
-      return obj['kategori'].toUpperCase() === name.toUpperCase()
-    })
-    const returnValue = thisCat ? thisCat[komOrMot] : 0
-    return returnValue || 0
-  }
-
   let catSet = []
-
   const mainCats = []
+  
+  // Merges the two arrays on the same category
+  const mergedArrs = compScores.map((i) => {
+    const found = motScores.find((j) => j.kategori === i.kategori)
+    const mergedObj = { ...found, ...i}
+    return mergedObj
+  })
 
   mainCategories.forEach((name) => {
-    mainCats.push({
-      kategori: name,
-      kompetanse: score(name, compScores, 'kompetanse'),
-      motivasjon: score(name, motScores, 'motivasjon')
-    })
+    mainCats.push(mergedArrs.find((obj) => {
+      return obj['kategori'].toUpperCase() == name.toUpperCase()
+    }))
+    
     const categoryObject = {
       [name]: [],
     }
@@ -84,12 +75,10 @@ exports.reStructCategories = (categories, compScores = [], motScores = []) => {
       const childName = item[name]
       if (childName) {
         // Create child category
-        const childCategoryObject = {
-          kategori: childName,
-          kompetanse: score(childName, compScores, 'kompetanse'),
-          motivasjon: score(childName, motScores, 'motivasjon')
-        }
-        categoryObject[name].push(childCategoryObject)
+        const foundSubCat = mergedArrs.find((obj) => {
+          return obj['kategori'].toUpperCase() === childName.toUpperCase()
+        })
+        categoryObject[name].push(foundSubCat)
       }
     })
     catSet.push(categoryObject)

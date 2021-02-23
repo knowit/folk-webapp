@@ -279,7 +279,8 @@ export default function EmployeeInfo({
                 type: 'Bar',
                 props: {
                   dataKey: 'kategori',
-                  yLabels: ['motivasjon', 'kompetanse' ],
+                  yLabels: ['motivasjon', 'kompetanse'],
+                  maxValue: 5,
                 },
               },
               {
@@ -287,6 +288,7 @@ export default function EmployeeInfo({
                 props: {
                   groupKey: 'kategori',
                   valueKey: ['motivasjon', 'kompetanse'],
+                  maxValue: 5,
                 },
               },
             ],

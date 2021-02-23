@@ -1,4 +1,9 @@
-const { getSecret, makeEmailUuid, range, reStructCategories } = require('./util')
+const {
+  getSecret,
+  makeEmailUuid,
+  range,
+  reStructCategories,
+} = require('./util')
 const { v4: uuid } = require('uuid')
 const MOTIVATION_THRESHOLD = 4
 const COMPETENCE_THRESHOLD = 3
@@ -46,11 +51,11 @@ exports.employeeTable = async ({ data }) => {
         email: employee.email,
         email_id: makeEmailUuid(employee.email, salt),
         user_id: employee.user_id,
-        degree:  employee.degree,
+        degree: employee.degree,
       },
       employee.title,
       0,
-      { value: null},
+      { value: null },
       Object.fromEntries(
         cvs.map(([lang, format]) => [
           `${lang}_${format}`,
@@ -77,62 +82,13 @@ const cvs = [
   ['no', 'word'],
   ['int', 'word'],
 ]
-exports.competenceReports = [
-  { reportName: 'competence' },
-  { reportName: 'employeeMotivation' },
-  { reportName: 'employee_competence' },
-]
-exports.competence = async ({ data }) => {
-  const [allEmployees, resMotivation, resCompetence] = data
-  const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
-    encrypted: true,
-  })
 
-  return allEmployees.map((employee) => ({
-    rowId: uuid(),
-    rowData: [
-      {
-        value: employee.navn,
-        image: getStorageUrl(employee.image_key),
-        competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
-          employee.email
-        )}`,
-        email: employee.email,
-        email_id: makeEmailUuid(employee.email, salt),
-        user_id: employee.user_id,
-      },
-      employee.title,
-      `/api/data/employeeExperience?user_id=${employee.user_id}`,
-      employee.degree,
-      Object.fromEntries(
-        cvs.map(([lang, format]) => [
-          `${lang}_${format}`,
-          employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
-        ])
-      ),
-      getThisEmployeeMotivationList(
-        makeEmailUuid(employee.email, salt).slice(0, 8),
-        MOTIVATION_THRESHOLD,
-        resMotivation
-      ),
-      getThisEmployeeMotivationList(
-        makeEmailUuid(employee.email, salt),
-        COMPETENCE_THRESHOLD,
-        resCompetence
-      ),
-    ],
-  }))
-}
-
-
-exports.employeeExperienceReports = ({
-  parameters: { user_id } = {}
-}) => ([
+exports.employeeExperienceReports = ({ parameters: { user_id } = {} }) => [
   {
     reportName: 'projectExperience',
     filter: { user_id },
-  }
-])
+  },
+]
 exports.employeeExperience = async ({ data }) => {
   const empExperience = data
   const formatTime = (year, month) =>
@@ -152,11 +108,9 @@ exports.employeeExperience = async ({ data }) => {
   }
 }
 
-exports.employeeCompetenceReports = ({
-  parameters: { email } = {}
-}) => ([
+exports.employeeCompetenceReports = ({ parameters: { email } = {} }) => [
   {
-    reportName: 'categorizedMotivation'
+    reportName: 'categorizedMotivation',
   },
   {
     reportName: 'employeeSkills',
@@ -170,7 +124,7 @@ exports.employeeCompetenceReports = ({
     reportName: 'competence_test_with_manager_and_guid',
     filter: { email },
   },
-])
+]
 exports.employeeCompetence = async ({ data, parameters: { email } = {} }) => {
   const [resMotivation, resSkills, resEmp, resComp] = data
   const catMotivation = {}
@@ -243,32 +197,27 @@ exports.inbound = async () => {
   }
 }
 
-exports.fagtimerReports = [
-  { reportName: 'fagActivity' }
-]
+exports.fagtimerReports = [{ reportName: 'fagActivity' }]
 exports.fagtimer = async ({ data }) => {
   const fagActivity = data
-  const makeFagTimerDataForNivo = data => {
-    const setData = range(2018, new Date().getFullYear()).map(
-      year => ({
-        id: year.toString(),
-        data: range(1, 53).map(
-          i => {
-            const currentYear = data.filter((dataItem) => dataItem.year === year)
-            const currentWeekData = currentYear.find(
-              dataItem => dataItem.week === i
-            )
+  const makeFagTimerDataForNivo = (data) => {
+    const setData = range(2018, new Date().getFullYear()).map((year) => ({
+      id: year.toString(),
+      data: range(1, 53).map((i) => {
+        const currentYear = data.filter((dataItem) => dataItem.year === year)
+        const currentWeekData = currentYear.find(
+          (dataItem) => dataItem.week === i
+        )
 
-            return {
-              x: i,
-              y: currentWeekData && currentWeekData.used_hrs
-                ? currentWeekData.used_hrs
-                : 0,
-            }
-          }
-        ),
-      })
-    )
+        return {
+          x: i,
+          y:
+            currentWeekData && currentWeekData.used_hrs
+              ? currentWeekData.used_hrs
+              : 0,
+        }
+      }),
+    }))
 
     return setData
   }
@@ -317,13 +266,13 @@ exports.experienceDistribution = async ({ data }) => {
     list.forEach((item) => {
       const years = Number(item.years)
       const count = Number(item.count)
-      if (years === 0){
+      if (years === 0) {
         detailedGroupedList[0].count += count
         groupedList[0].count += count
-      }else if (years === 1) {
+      } else if (years === 1) {
         detailedGroupedList[0].count += count
         groupedList[1].count += count
-      }else if (years === 2) {
+      } else if (years === 2) {
         detailedGroupedList[1].count += count
         groupedList[1].count += count
       } else if (years > 2 && years < 6) {
@@ -467,9 +416,7 @@ function dateRange(startDate, endDate) {
   return dates
 }
 
-exports.fagEventsReports = [
-  { reportName: 'fagEvents' }
-]
+exports.fagEventsReports = [{ reportName: 'fagEvents' }]
 exports.fagEvents = async ({ data }) => {
   const eventSet = getEventSet(data)
 
@@ -481,9 +428,7 @@ exports.fagEvents = async ({ data }) => {
   }
 }
 
-exports.educationReports = [
-  { reportName: 'degreeDist' },
-]
+exports.educationReports = [{ reportName: 'degreeDist' }]
 exports.education = async ({ data }) => {
   const education = data
 
@@ -499,9 +444,7 @@ exports.education = async ({ data }) => {
  * competence mapping. Its used to define the options in the
  * filter dropdown menu.
  */
-exports.competenceFilterReports = [
-  { reportName: 'categories' },
-]
+exports.competenceFilterReports = [{ reportName: 'categories' }]
 exports.competenceFilter = async ({ data }) => {
   const categories = data
   // Categories structure
@@ -528,7 +471,6 @@ exports.competenceFilter = async ({ data }) => {
 
   return output
 }
-
 
 exports.competenceMappingReports = [
   { reportName: 'categories' },
@@ -591,71 +533,45 @@ exports.competenceMapping = async ({ data }) => {
   }
 }
 
+const getAmountOverOrEqualToX = (data, x, katName, compOrMot) => {
+  const result = []
+  const verdiNavn = compOrMot + 'verdi'
+  const andelNavn = compOrMot + 'andel'
+  data.map((cat) => {
+    const thisCatRes = {
+      kategori: cat[katName],
+      [verdiNavn]: 0,
+    }
+    Object.entries(cat).forEach((person) => {
+      if (person[0] !== katName && person[1] >= x) {
+        thisCatRes[verdiNavn] += 1
+      }
+    })
+    thisCatRes[andelNavn] =
+      (thisCatRes[verdiNavn] / (Object.keys(cat).length - 1)) * 100
+    result.push(thisCatRes)
+  })
+  return result
+}
+
 exports.competenceAmountReports = [
   { reportName: 'categories' },
-  { reportName: 'competenceAverage' },
-  { reportName: 'motivationAverage' },
+  { reportName: 'employee_competence' },
+  { reportName: 'employeeMotivation' },
 ]
 exports.competenceAmount = async ({ data }) => {
-  const [categories, competence, motivation] = data
-
-  const setCategories = (data, valueKey) => {
-    const output = []
-
-    // Get the main categories
-    const mainCategories = new Set(
-      categories.flatMap((item) => Object.keys(item))
-    )
-
-    mainCategories.forEach((name) => {
-      const categoryObject = {
-        kategori: name,
-        [valueKey]: 0,
-      }
-
-      // Sum of subcategories values
-      let categorySum = 0
-      // Number of subcategories
-      let numberOfSubCategories = 0
-
-      categories.forEach((item) => {
-        const childName = item[name]
-        if (childName) {
-          const value = data[0][childName.toLowerCase()] || null
-          categorySum += value
-          numberOfSubCategories++
-        }
-      })
-
-      // Sets category value as the average
-      categoryObject[valueKey] = categorySum / numberOfSubCategories
-      output.push(categoryObject)
-    })
-
-    return output
-  }
-
-  const comArr = setCategories(competence, 'kompetanse')
-  const motArr = setCategories(motivation, 'motivasjon')
-
-  // Merges the two arrays on the same category
-  const mergedArrs = comArr.map((i) => {
-    const found = motArr.find((j) => j.kategori === i.kategori)
-    found['kompetanse'] = i.kompetanse
-    return found
-  })
+  const [categories, allComp, allMot] = data
+  const compAmount = getAmountOverOrEqualToX(allComp, 3, 'categories', 'kompetanse')
+  const motAmount = getAmountOverOrEqualToX(allMot, 3, 'category', 'motivasjon')
+  const [catSet, setNames] = reStructCategories(categories, compAmount, motAmount)
 
   return {
-    setNames: ['Kompetansemengde'],
-    sets: {
-      Kompetansemengde: mergedArrs,
-    },
+    setNames: setNames,
+    sets: catSet,
   }
 }
 
-exports.empDataReports = ({
-  parameters: { email } = {}
-}) => ([
+exports.empDataReports = ({ parameters: { email } = {} }) => [
   {
     reportName: 'employeeSkills',
     filter: { email },
@@ -667,8 +583,8 @@ exports.empDataReports = ({
   {
     reportName: 'competence_test_with_manager_and_guid',
     filter: { email },
-  }
-])
+  },
+]
 exports.empData = async ({ data, parameters: { email } = {} }) => {
   const [resSkills, resWork, resComp] = data
   const emp = resComp[0]
@@ -694,9 +610,7 @@ exports.empData = async ({ data, parameters: { email } = {} }) => {
   }
 }
 
-exports.employeeRadarReports = ({
-  parameters: { user_id } = {}
-}) => ([
+exports.employeeRadarReports = ({ parameters: { user_id } = {} }) => [
   {
     reportName: 'categories',
   },
@@ -705,8 +619,8 @@ exports.employeeRadarReports = ({
   },
   {
     reportName: 'employee_competence',
-  }
-])
+  },
+]
 exports.employeeRadar = async ({ data, parameters: { user_id } = {} }) => {
   const [categories, empMotivation, empCompetence] = data
 
@@ -741,7 +655,7 @@ exports.employeeRadar = async ({ data, parameters: { user_id } = {} }) => {
 exports.competenceAreasReports = [
   { reportName: 'categories' },
   { reportName: 'competenceAverage' },
-  { reportName: 'motivationAverage' }
+  { reportName: 'motivationAverage' },
 ]
 exports.competenceAreas = async ({ data }) => {
   const [categories, competence, motivation] = data
@@ -752,8 +666,7 @@ exports.competenceAreas = async ({ data }) => {
     categories.flatMap((item) => Object.keys(item))
   )
 
-
-  mainCategories.forEach(name => {
+  mainCategories.forEach((name) => {
     const compCategory = {
       kategori: name.charAt(0).toUpperCase() + name.slice(1),
       kompetanse: 0,
@@ -766,7 +679,7 @@ exports.competenceAreas = async ({ data }) => {
     let categoryComp = 0
     let categoryMot = 0
     let numberOfSubCategories = 0
-    
+
     categories.forEach(item => {
       const childName = item[name]
       if (childName) {

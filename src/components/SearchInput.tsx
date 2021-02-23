@@ -38,7 +38,7 @@ export default function SearchInput({
   const classes = useStyles();
   const [val, setVal] = useState('');
 
-  const clearInput = () => {
+  const clearInput = () => {
     setVal('');
     dispatch({
       type: 'CHANGE_SEARCH_TERM',
@@ -46,7 +46,7 @@ export default function SearchInput({
       allRows,
       searchableColumns,
     });
-  }
+  };
 
   const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
