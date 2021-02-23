@@ -39,7 +39,7 @@ exports.groupBy = (items, key) =>
       [item[key]]: [...(result[item[key]] || []), item],
     }),
     {}
-  );
+  )
 
 exports.range = (x, y) =>
   Array.from(
@@ -92,4 +92,4 @@ exports.reStructCategories = (categories, compScores = [], motScores = []) => {
   const setNames = Object.keys(catSet)
 
   return [catSet, setNames]
-};
+}

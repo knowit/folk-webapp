@@ -243,7 +243,7 @@ exports.experienceDistributionReports = [
   { reportName: 'yearsSinceSchoolDist' },
 ]
 exports.experienceDistribution = async ({ data }) => {
-  const setInGroups = (list) => {
+  const setInGroups = list => {
     const detailedGroupedList = [
       { years: 'Under 2 år', count: 0 },
       { years: '2 til 5 år', count: 0 },
@@ -680,7 +680,7 @@ exports.competenceAreas = async ({ data }) => {
     let categoryMot = 0
     let numberOfSubCategories = 0
 
-    categories.forEach((item) => {
+    categories.forEach(item => {
       const childName = item[name]
       if (childName) {
         const compValue = competence[0][childName.toLowerCase()] || null
