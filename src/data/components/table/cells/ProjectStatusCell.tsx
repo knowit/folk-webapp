@@ -23,10 +23,10 @@ const useStyles = makeStyles({
   }
 })
 
-export default function ProjectStatusCell(status?: 'red' | 'green') {
+export default function ProjectStatusCell(status?:{data: 'red' | 'green'}) {
   const classes = useStyles();
-  const color = status && status === 'green' ? '#4C8E00' : '#D10000';
+  const color = status && status.data === 'green' ? '#4C8E00' : '#D10000';
   return <div className={classes.root}>
- <StatusCircle color={status ? color : '#777777'} />
+  <StatusCircle color={status ? color : '#777777'} />
   </div>;
 }
