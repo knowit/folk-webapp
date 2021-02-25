@@ -30,7 +30,7 @@ const getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`
 
 
 exports.employeeTableReports = [
-  { reportName: 'competence' },
+  { reportName: 'employeeInformation' },
   { reportName: 'employeeMotivation' },
   { reportName: 'employee_competence' },
 ]
