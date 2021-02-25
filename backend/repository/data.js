@@ -28,6 +28,34 @@ const getThisEmployeeMotivationList = (uuidComp, threshold, categoryList) => {
 
 const getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`
 
+function mergeEmployee(array) {
+  const newArray = []
+  const mergedIndexes = []
+  array.forEach((current, j) => {
+    current.customerArray = [{
+      customer: current.customer,
+      workOrderDescription: current.work_order_description,
+      weight: current.weight,
+    }]
+    for (var i = j + 1; i < array.length; i++) {
+      if (current.guid === array[i].guid && !mergedIndexes.includes(i)) {
+        array[i].customerArray = [{
+          customer: array[i].customer,
+          workOrderDescription: array[i].work_order_description,
+          weight: array[i].weight,
+        }]
+        array[i].customerArray = [...array[i].customerArray, ...current.customerArray]
+        current = { ...current, ...array[i] }
+        mergedIndexes.push(i)
+      }
+    }
+    if (!mergedIndexes.includes(j)) {
+      newArray.push(current)
+      mergedIndexes.push(j)
+    }
+  })
+  return newArray
+}
 
 exports.employeeTableReports = [
   { reportName: 'employeeInformation' },
@@ -39,11 +67,12 @@ exports.employeeTable = async ({ data }) => {
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   })
-  return allEmployees.map((employee) => ({
+  const mergedEmployees = mergeEmployee(allEmployees)
+  return mergedEmployees.map(employee => ({
     rowId: uuid(),
     rowData: [
       {
-        value: employee.navn,
+        value: employee.displayname,
         image: getStorageUrl(employee.image_key),
         competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
           employee.email
@@ -54,8 +83,8 @@ exports.employeeTable = async ({ data }) => {
         degree: employee.degree,
       },
       employee.title,
-      0,
-      { value: null },
+      employee.customer ? 'red' : 'green',
+      employee.customerArray,
       Object.fromEntries(
         cvs.map(([lang, format]) => [
           `${lang}_${format}`,
@@ -63,7 +92,7 @@ exports.employeeTable = async ({ data }) => {
         ])
       ),
       getThisEmployeeMotivationList(
-        makeEmailUuid(employee.email, salt).slice(0, 8),
+        makeEmailUuid(employee.email, salt)?.slice(0, 8),
         MOTIVATION_THRESHOLD,
         resMotivation
       ),
@@ -581,13 +610,13 @@ exports.empDataReports = ({ parameters: { email } = {} }) => [
     filter: { email },
   },
   {
-    reportName: 'competence_test_with_manager_and_guid',
+    reportName: 'employeeInformation',
     filter: { email },
   },
 ]
 exports.empData = async ({ data, parameters: { email } = {} }) => {
   const [resSkills, resWork, resComp] = data
-  const emp = resComp[0]
+  const emp = mergeEmployee(resComp)[0]
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   })
@@ -607,6 +636,7 @@ exports.empData = async ({ data, parameters: { email } = {} }) => {
         emp.link.replace('{LANG}', lang).replace('{FORMAT}', format),
       ])
     ),
+    customerArray: emp.customerArray,
   }
 }
 
