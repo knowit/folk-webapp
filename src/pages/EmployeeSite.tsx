@@ -333,7 +333,8 @@ export default function EmployeeSite() {
 const PrintCustomers = (data: {
   customerArray: CustomerStatusData[] | undefined;
 }) => {
-  if (!data.customerArray || !data.customerArray[0].customer) return <div>-</div>;
+  if (!data.customerArray || !data.customerArray[0].customer)
+    return <div>-</div>;
   data.customerArray.sort(
     (customerA, customerB) => customerA.weight - customerB.weight
   );
