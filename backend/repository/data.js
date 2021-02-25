@@ -72,7 +72,7 @@ exports.employeeTable = async ({ data }) => {
     rowId: uuid(),
     rowData: [
       {
-        value: employee.displayname,
+        value: employee.navn,
         image: getStorageUrl(employee.image_key),
         competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
           employee.email
