@@ -19,7 +19,6 @@ exports.getSecret = (name, { encrypted = false } = {}) => {
 }
 
 exports.makeEmailUuid = (email, salt) => {
-  if (!email || !salt) return null
   const hmac = crypto.createHmac('sha256', salt)
   hmac.update(email)
   const sig = hmac.digest('hex')
