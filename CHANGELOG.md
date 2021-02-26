@@ -3,17 +3,44 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
-- 
+- User can change the threshold for competence and motivation score on filters
 
-
-## [2.0.0] - 2021-01-26
+## [3.0.0] - 2021-01-26
 ### Added
 - The posibility to switch between chart types on the visulizations
 - "Erfaring" is shown as bar chart as well as pie chart
 - "Kompetanseområder" shows average score for competence and motivation for all employees on every main- and subcategory. Both as bar chart and radar chart. 
-- "Kompetansemengde" shows percentage of employees that has scored 3 on motivation and competence for each category as barchart. Tooltip shows 
+- "Kompetansemengde" shows percentage of employees that has scored 3 on motivation and competence for each category as barchart. Tooltip shows number of employyes aswell
+- Sunburst graph is also shown as barchart
+- Expanded view in table shows project- and work experience
+- Expanded view in table shows kompetence and motivation score for all categories as bar chart and radar chart
+- Customer data in table and on the page for each employee
+
+### Changed
+- bumped node version to 14.x
+- Equal tables on both "Ansatte" and "Kompetanse"
 
 
+## [2.1.0] - 2021-02-10
+### Added
+- Employee manager in employee list and employee site
+- Backend error handling for faster identification and rectification of issues
+- Competence areas graph and refactored reStructCategories to fit both employeeradar and competenceareas
+
+### Changed
+- Refactored backend
+- Data aggregation now only deals with data (no more requests from data.js)
+- Dataplattform lib now handles all reports needed for the request in one blow
+- Better token management within nested calls
+- New API handler with error handling nested in all directions
+- All endpoints have been refactored to export reports outside of the aggregation function
+- Reports exports support pre-processing (resolve parameters)
+- Got rid of the UnhandledPromiseRejectionWarning that plagued every async function
+- Made ready for (easier) further error handling implementation
+- competence report in employeeCompetence and empData endpoints.
+
+### Removed
+- DataplattformClient implementation from backend
 
 ## [2.0.0] - 2021-01-26
 ### Added
