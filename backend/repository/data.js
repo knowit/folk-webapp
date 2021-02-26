@@ -150,7 +150,7 @@ exports.employeeCompetenceReports = ({ parameters: { email } = {} }) => [
     filter: { email },
   },
   {
-    reportName: 'competence_test_with_manager_and_guid',
+    reportName: 'employeeInformation',
     filter: { email },
   },
 ]
@@ -168,6 +168,8 @@ exports.employeeCompetence = async ({ data, parameters: { email } = {} }) => {
     catMotivation[category.category] = category[uuidComp.slice(0, 8)]
   })
 
+  const mergedRes = mergeEmployee(resComp)
+
   const mapTags = (skills) => {
     const mappedSkills = skills && skills.length > 0 ? skills[0] : {}
     return {
@@ -181,8 +183,8 @@ exports.employeeCompetence = async ({ data, parameters: { email } = {} }) => {
     motivation: catMotivation,
     workExperience: resEmp,
     tags: mapTags(resSkills),
-    manager: resComp[0].manager,
-    guid: resComp[0].guid,
+    manager: mergedRes[0].manager,
+    guid: mergedRes[0].guid,
   }
 }
 
