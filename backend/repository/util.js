@@ -19,7 +19,7 @@ exports.getSecret = (name, { encrypted = false } = {}) => {
 }
 
 exports.makeEmailUuid = (email, salt) => {
-  if(!email || !salt )return null
+  if (!email || !salt) return null
   const hmac = crypto.createHmac('sha256', salt)
   hmac.update(email)
   const sig = hmac.digest('hex')
@@ -56,11 +56,11 @@ exports.reStructCategories = (categories, compScores = [], motScores = []) => {
   )
   let catSet = []
   const mainCats = []
-  
+
   // Merges the two arrays on the same category
   const mergedArrs = compScores.map((i) => {
     const found = motScores.find((j) => j.kategori === i.kategori)
-    const mergedObj = { ...found, ...i}
+    const mergedObj = { ...found, ...i }
     return mergedObj
   })
 
@@ -68,7 +68,7 @@ exports.reStructCategories = (categories, compScores = [], motScores = []) => {
     mainCats.push(mergedArrs.find((obj) => {
       return obj['kategori'].toUpperCase() == name.toUpperCase()
     }))
-    
+
     const categoryObject = {
       [name]: [],
     }
