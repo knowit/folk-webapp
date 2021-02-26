@@ -7,13 +7,13 @@ All notable changes to this project will be documented in this file.
 
 ## [3.0.0] - 2021-02-26
 ### Added
-- The posibility to switch between chart types on the visulizations
+- The possibility to switch between chart types on the visulizations
 - "Erfaring" is shown as bar chart as well as pie chart
-- "Kompetanseområder" shows average score for competence and motivation for all employees on every main- and subcategory. Both as bar chart and radar chart. 
-- "Kompetansemengde" shows percentage of employees that has scored 3 on motivation and competence for each category as barchart. Tooltip shows number of employyes aswell
+- "Kompetanseområder" shows average score for competence and motivation for all employees on every main- and subcategory. Both as bar chart and radar chart
+- "Kompetansemengde" shows percentage of employees that has scored 3 on motivation and competence for each category as barchart. Tooltip shows number of eemployees as well
 - Sunburst graph is also shown as barchart
 - Expanded view in table shows project- and work experience
-- Expanded view in table shows kompetence and motivation score for all categories as bar chart and radar chart
+- Expanded view in table shows competence and motivation score for all categories as bar chart and radar chart
 - Customer data in table and on the page for each employee
 
 ### Changed
