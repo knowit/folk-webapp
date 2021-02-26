@@ -83,7 +83,7 @@ exports.employeeTable = async ({ data }) => {
         degree: employee.degree,
       },
       employee.title,
-      employee.customer ? 'red' : 'green',
+      'red',
       employee.customerArray,
       Object.fromEntries(
         cvs.map(([lang, format]) => [
