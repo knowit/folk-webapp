@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - User can change the threshold for competence and motivation score on filters
 
-## [3.0.0] - 2021-01-26
+## [3.0.0] - 2021-02-26
 ### Added
 - The posibility to switch between chart types on the visulizations
 - "Erfaring" is shown as bar chart as well as pie chart
