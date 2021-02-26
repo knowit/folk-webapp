@@ -56,11 +56,11 @@ exports.reStructCategories = (categories, compScores = [], motScores = []) => {
   )
   let catSet = []
   const mainCats = []
-
+  
   // Merges the two arrays on the same category
   const mergedArrs = compScores.map((i) => {
     const found = motScores.find((j) => j.kategori === i.kategori)
-    const mergedObj = { ...found, ...i }
+    const mergedObj = { ...found, ...i}
     return mergedObj
   })
 
@@ -68,7 +68,7 @@ exports.reStructCategories = (categories, compScores = [], motScores = []) => {
     mainCats.push(mergedArrs.find((obj) => {
       return obj['kategori'].toUpperCase() == name.toUpperCase()
     }))
-
+    
     const categoryObject = {
       [name]: [],
     }

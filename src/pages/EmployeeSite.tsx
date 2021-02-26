@@ -11,7 +11,6 @@ import {
   totalExperience,
 } from '../components/EmployeeInfo';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
-import { CustomerStatusData } from '../data/components/table/cells/CustomerStatusCell';
 
 type WorkExperience = {
   employer: string;
@@ -25,6 +24,7 @@ type EmpData = {
   navn: string;
   title: string;
   user_id: string;
+  manager: string;
 };
 
 export interface ProjectExperience {
@@ -59,7 +59,6 @@ type EmpSiteData = {
     no_word: string;
     int_word: string;
   };
-  customerArray: CustomerStatusData[];
 };
 
 const useStyles = makeStyles({
@@ -296,12 +295,6 @@ export default function EmployeeSite() {
         </div>
       </div>
       <div className={classes.nextPart}>
-        <h2>Kunde(r)</h2>
-        {pending ? (
-          <p>loading....</p>
-        ) : (
-          <PrintCustomers customerArray={data?.customerArray} />
-        )}
         <h2>Arbeidserfaring</h2>
         {pending ? (
           <p>loading....</p>
@@ -329,25 +322,3 @@ export default function EmployeeSite() {
     </div>
   );
 }
-
-const PrintCustomers = (data: {
-  customerArray: CustomerStatusData[] | undefined;
-}) => {
-  if (!data.customerArray || !data.customerArray[0].customer)
-    return <div>-</div>;
-  data.customerArray.sort(
-    (customerA, customerB) => customerA.weight - customerB.weight
-  );
-  return (
-    <>
-      {data.customerArray.map((customer, index) => {
-        return (
-          <div key={index}>
-            <b>{customer.customer}: </b>
-            {customer.workOrderDescription}
-          </div>
-        );
-      })}
-    </>
-  );
-};
