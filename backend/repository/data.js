@@ -144,46 +144,6 @@ exports.employeeCompetence = async ({ data }) => {
   }
 }
 
-exports.faggrupper = async () => {
-  return {
-    componentType: null,
-    setNames: [],
-    sets: {},
-  }
-}
-
-exports.resourceType = async () => {
-  return {
-    componentType: null,
-    setNames: [],
-    sets: {},
-  }
-}
-
-exports.experience = async () => {
-  return {
-    componentType: null,
-    setNames: [],
-    sets: {},
-  }
-}
-
-exports.outbound = async () => {
-  return {
-    componentType: null,
-    setNames: [],
-    sets: {},
-  }
-}
-
-exports.inbound = async () => {
-  return {
-    componentType: null,
-    setNames: [],
-    sets: {},
-  }
-}
-
 exports.fagtimerReports = [{ reportName: 'fagActivity' }]
 exports.fagtimer = async ({ data }) => {
   const fagActivity = data
@@ -215,14 +175,6 @@ exports.fagtimer = async ({ data }) => {
     sets: {
       Fagtimer: makeFagTimerDataForNivo(fagActivity),
     },
-  }
-}
-
-exports.competenceSum = async () => {
-  return {
-    componentType: null,
-    setNames: [],
-    sets: {},
   }
 }
 
