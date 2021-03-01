@@ -1,5 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { Dispatch, FormEvent } from 'react';
+import React, { Dispatch } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import { Action } from '../data/DDTable';
 import { Mark, Slider } from '@material-ui/core';
@@ -68,7 +68,6 @@ const useStyles = makeStyles(() =>
       paddingTop: '6px',
       paddingLeft: '5px',
       fontStyle: 'italic',
-      // fontWeight: 'bold',
       alignSelf: 'flex-start',
     },
     thresholdSlider: { minWidth: '150px' },
@@ -161,13 +160,6 @@ export function FilterHeader({
     }
   }
 
-  // function handleThresholdInputChange(event: FormEvent<HTMLInputElement>) {
-  //   const value = Number(event.currentTarget.value);
-  //   if (value !== filterThreshold) {
-  //     updateThresholdFilter(value);
-  //   }
-  // }
-
   const thresholdLabels: Mark[] = [
     { value: 1, label: '1+' },
     { value: 2, label: '2+' },
@@ -225,17 +217,6 @@ export function FilterHeader({
           max={5}
           onChange={handleThresholdSliderChange}
         />
-        {/* TODO: for better a11y, there should be a text input option as well:
-        <input
-          className={classes.thresholdInput}
-          type="number"
-          name="number"
-          id="number"
-          min="1"
-          max="5"
-          value={filterThreshold}
-          onChange={handleThresholdInputChange}
-        />*/}
       </div>
     </div>
   );
