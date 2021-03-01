@@ -6,26 +6,6 @@ const {
   mergeEmployee,
 } = require('./util')
 const { v4: uuid } = require('uuid')
-const MOTIVATION_THRESHOLD = 4
-const COMPETENCE_THRESHOLD = 3
-
-/**
- *
- * @param {string} uuidComp      A string of the uuid of the person.
- * @param {number} threshold     The threshold (number between 0-5) for deciding whether a category should be put in the list or not.
- * @param {object} categoryList List of categories. In each category there is a list of uuids, and their motivation on a scale from 0-5.
- *
- * @return {object} List of all categories where the motivation is higher than the threshold
- */
-const getThisEmployeeMotivationList = (uuidComp, threshold, categoryList) => {
-  const skillList = []
-  categoryList.forEach((category) => {
-    const cat = category.category || category.categories //name of categories is category for motivation and categories for competence
-    category[uuidComp] >= threshold && skillList.push(cat)
-  })
-
-  return skillList
-}
 
 /**
  *
@@ -37,15 +17,15 @@ const getThisEmployeeMotivationList = (uuidComp, threshold, categoryList) => {
 const getCategoryScoresForEmployee = (employeeUuid, categoryList) =>
   categoryList.reduce((categoryScores, thisCategory) => {
     // name of categories is stored as 'category' for motivation and 'categories' for competence
-    const categoryName = thisCategory.category || thisCategory.categories;
-    const categoryScore = thisCategory[employeeUuid];
+    const categoryName = thisCategory.category || thisCategory.categories
+    const categoryScore = thisCategory[employeeUuid]
     return {
       ...categoryScores,
       [categoryName]: categoryScore,
-    };
-  }, {});
+    }
+  }, {})
 
-const getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`;
+const getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`
 
 exports.employeeTableReports = [
   { reportName: 'employeeInformation' },
@@ -54,7 +34,7 @@ exports.employeeTableReports = [
 ]
 /**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
 exports.employeeTable = async ({ data }) => {
-  const [allEmployees, motivationData, competenceData] = data;
+  const [allEmployees, motivationData, competenceData] = data
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   })
