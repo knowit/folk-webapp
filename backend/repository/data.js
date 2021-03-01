@@ -111,9 +111,6 @@ exports.employeeExperience = async ({ data }) => {
 
 exports.employeeCompetenceReports = ({ parameters: { email } = {} }) => [
   {
-    reportName: 'categorizedMotivation',
-  },
-  {
     reportName: 'employeeSkills',
     filter: { email },
   },
@@ -127,19 +124,7 @@ exports.employeeCompetenceReports = ({ parameters: { email } = {} }) => [
   },
 ]
 exports.employeeCompetence = async ({ data, parameters: { email } = {} }) => {
-  const [resMotivation, resSkills, resEmp, resComp] = data
-  const catMotivation = {}
-
-  // Get salt
-  const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
-    encrypted: true,
-  })
-  const uuidComp = makeEmailUuid(email, salt)
-
-  resMotivation.map((category) => {
-    catMotivation[category.category] = category[uuidComp.slice(0, 8)]
-  })
-
+  const [resSkills, resEmp, resComp] = data
   const mergedRes = mergeEmployee(resComp)
 
   const mapTags = (skills) => {
@@ -152,7 +137,6 @@ exports.employeeCompetence = async ({ data, parameters: { email } = {} }) => {
   }
 
   return {
-    motivation: catMotivation,
     workExperience: resEmp,
     tags: mapTags(resSkills),
     manager: mergedRes[0].manager,
