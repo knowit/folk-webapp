@@ -123,7 +123,7 @@ exports.employeeCompetenceReports = ({ parameters: { email } = {} }) => [
     filter: { email },
   },
 ]
-exports.employeeCompetence = async ({ data, parameters: { email } = {} }) => {
+exports.employeeCompetence = async ({ data }) => {
   const [resSkills, resEmp, resComp] = data
   const mergedRes = mergeEmployee(resComp)
 
