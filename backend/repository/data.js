@@ -3,6 +3,7 @@ const {
   makeEmailUuid,
   range,
   reStructCategories,
+  mergeEmployee,
 } = require('./util')
 const { v4: uuid } = require('uuid')
 const MOTIVATION_THRESHOLD = 4
@@ -28,40 +29,12 @@ const getThisEmployeeMotivationList = (uuidComp, threshold, categoryList) => {
 
 const getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`
 
-function mergeEmployee(array) {
-  const newArray = []
-  const mergedIndexes = []
-  array.forEach((current, j) => {
-    current.customerArray = [{
-      customer: current.customer,
-      workOrderDescription: current.work_order_description,
-      weight: current.weight,
-    }]
-    for (var i = j + 1; i < array.length; i++) {
-      if (current.guid === array[i].guid && !mergedIndexes.includes(i)) {
-        array[i].customerArray = [{
-          customer: array[i].customer,
-          workOrderDescription: array[i].work_order_description,
-          weight: array[i].weight,
-        }]
-        array[i].customerArray = [...array[i].customerArray, ...current.customerArray]
-        current = { ...current, ...array[i] }
-        mergedIndexes.push(i)
-      }
-    }
-    if (!mergedIndexes.includes(j)) {
-      newArray.push(current)
-      mergedIndexes.push(j)
-    }
-  })
-  return newArray
-}
-
 exports.employeeTableReports = [
   { reportName: 'employeeInformation' },
   { reportName: 'employeeMotivation' },
   { reportName: 'employee_competence' },
 ]
+/**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
 exports.employeeTable = async ({ data }) => {
   const [allEmployees, resMotivation, resCompetence] = data
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
@@ -118,6 +91,9 @@ exports.employeeExperienceReports = ({ parameters: { user_id } = {} }) => [
     filter: { user_id },
   },
 ]
+/** Dette endepunktet henter data om ansattes prosjekterfating.
+ * Brukes i EmployeeInfo.tsx (utvidet tabell) og EmployeeSite.tsx
+ */
 exports.employeeExperience = async ({ data }) => {
   const empExperience = data
   const formatTime = (year, month) =>
@@ -139,9 +115,6 @@ exports.employeeExperience = async ({ data }) => {
 
 exports.employeeCompetenceReports = ({ parameters: { email } = {} }) => [
   {
-    reportName: 'categorizedMotivation',
-  },
-  {
     reportName: 'employeeSkills',
     filter: { email },
   },
@@ -154,20 +127,12 @@ exports.employeeCompetenceReports = ({ parameters: { email } = {} }) => [
     filter: { email },
   },
 ]
-exports.employeeCompetence = async ({ data, parameters: { email } = {} }) => {
-  const [resMotivation, resSkills, resEmp, resComp] = data
-  const catMotivation = {}
-
-  // Get salt
-  const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
-    encrypted: true,
-  })
-  const uuidComp = makeEmailUuid(email, salt)
-
-  resMotivation.map((category) => {
-    catMotivation[category.category] = category[uuidComp.slice(0, 8)]
-  })
-
+/** Dette endepunktet henter mer data om ansatte. 
+ *  Arbeidserfaring, ferdigheter, språk,  utdanning og roller fra CV-partner og nærmeste leder fra AD,
+ *  Brukes i EmployeeInfo.tsx (utvidet tabell) og EmployeeSite.tsx
+ */
+exports.employeeCompetence = async ({ data }) => {
+  const [resSkills, resEmp, resComp] = data
   const mergedRes = mergeEmployee(resComp)
 
   const mapTags = (skills) => {
@@ -180,7 +145,6 @@ exports.employeeCompetence = async ({ data, parameters: { email } = {} }) => {
   }
 
   return {
-    motivation: catMotivation,
     workExperience: resEmp,
     tags: mapTags(resSkills),
     manager: mergedRes[0].manager,
@@ -188,47 +152,8 @@ exports.employeeCompetence = async ({ data, parameters: { email } = {} }) => {
   }
 }
 
-exports.faggrupper = async () => {
-  return {
-    componentType: null,
-    setNames: [],
-    sets: {},
-  }
-}
-
-exports.resourceType = async () => {
-  return {
-    componentType: null,
-    setNames: [],
-    sets: {},
-  }
-}
-
-exports.experience = async () => {
-  return {
-    componentType: null,
-    setNames: [],
-    sets: {},
-  }
-}
-
-exports.outbound = async () => {
-  return {
-    componentType: null,
-    setNames: [],
-    sets: {},
-  }
-}
-
-exports.inbound = async () => {
-  return {
-    componentType: null,
-    setNames: [],
-    sets: {},
-  }
-}
-
 exports.fagtimerReports = [{ reportName: 'fagActivity' }]
+/**Henter data om hvor mange fagtimer som er rapportert. Brukes i Competence.tsx */
 exports.fagtimer = async ({ data }) => {
   const fagActivity = data
   const makeFagTimerDataForNivo = (data) => {
@@ -239,7 +164,6 @@ exports.fagtimer = async ({ data }) => {
         const currentWeekData = currentYear.find(
           (dataItem) => dataItem.week === i
         )
-
         return {
           x: i,
           y:
@@ -249,7 +173,6 @@ exports.fagtimer = async ({ data }) => {
         }
       }),
     }))
-
     return setData
   }
 
@@ -262,17 +185,12 @@ exports.fagtimer = async ({ data }) => {
   }
 }
 
-exports.competenceSum = async () => {
-  return {
-    componentType: null,
-    setNames: [],
-    sets: {},
-  }
-}
-
 exports.experienceDistributionReports = [
   { reportName: 'yearsSinceSchoolDist' },
 ]
+/** Dette endepunktet henter ut erfarings-fordelingen blant de ansatte.
+ * Det brukes for å lage stolpe- og kakediagram i Competence.tsx
+ */
 exports.experienceDistribution = async ({ data }) => {
   const setInGroups = list => {
     const detailedGroupedList = [
@@ -348,6 +266,9 @@ exports.ageDistributionReports = [
   { reportName: 'ageDistribution' },
   { reportName: 'ageDistributionGroups' },
 ]
+/** Dette endepunktet henter ut aldersfordelingen blant de ansatte.
+ * Det brukes for å lage et stolpediagram i Competence.tsx
+ */
 exports.ageDistribution = async ({ data }) => {
   const [setAgeDist, setAgeDistGroup] = data
 
@@ -448,6 +369,9 @@ function dateRange(startDate, endDate) {
 }
 
 exports.fagEventsReports = [{ reportName: 'fagEvents' }]
+/** Henter ut antall unike hendelser per uke i knowit events og Knowit Fagkalender
+ * Brukes for å lage linjediagram i Competence.tsx
+ */
 exports.fagEvents = async ({ data }) => {
   const eventSet = getEventSet(data)
 
@@ -508,6 +432,7 @@ exports.competenceMappingReports = [
   { reportName: 'competenceAverage' },
   { reportName: 'motivationAverage' },
 ]
+/** Dette endepunktet brukes i competence for å vise data fra kompteansekartleggingen som både sunburst-graf og stolpediagram */
 exports.competenceMapping = async ({ data }) => {
   const [categories, competence, motivation] = data
 
@@ -526,7 +451,6 @@ exports.competenceMapping = async ({ data }) => {
         verdi: 0,
         children: [],
       }
-
       // Get child categories
       var sumOfCategories = 0
       categories.forEach((item) => {
@@ -590,6 +514,10 @@ exports.competenceAmountReports = [
   { reportName: 'employee_competence' },
   { reportName: 'employeeMotivation' },
 ]
+/** Dette endepunktet henter antall ansatte i knowit som har svart 3 eller over på kompetanse og/eller motivasjon på kompetansekartleggingen
+ * for de forskjellige kategoriene. Den regner også ut den prosentivse andelen som har svart 3 eller mer sammenlignet med alle om har svart. 
+ * Endepuktet brukes i Competence.tsx for å fremstille denne dataen som et stolpediagram.
+ */
 exports.competenceAmount = async ({ data }) => {
   const [categories, allComp, allMot] = data
   const compAmount = getAmountOverOrEqualToX(allComp, 3, 'categories', 'kompetanse')
@@ -616,6 +544,7 @@ exports.empDataReports = ({ parameters: { email } = {} }) => [
     filter: { email },
   },
 ]
+/** Dette endepunktet henter data om en enkelt person for å fylle opp sidene for hver enkelt ansatt.  */
 exports.empData = async ({ data, parameters: { email } = {} }) => {
   const [resSkills, resWork, resComp] = data
   const emp = mergeEmployee(resComp)[0]
@@ -653,6 +582,9 @@ exports.employeeRadarReports = ({ parameters: { user_id } = {} }) => [
     reportName: 'employee_competence',
   },
 ]
+/** Dette endepunktet hetner data om hvordan en konulent har scoret på de forskjellige kategoriene på kompetansekartleggingen 
+ *  Det brukes i EmployeeInfo (utvidet tabell), og EmployeeSite (siden for hver enkelt ansatt)
+ */
 exports.employeeRadar = async ({ data, parameters: { user_id } = {} }) => {
   const [categories, empMotivation, empCompetence] = data
 
@@ -689,6 +621,9 @@ exports.competenceAreasReports = [
   { reportName: 'competenceAverage' },
   { reportName: 'motivationAverage' },
 ]
+/** Dette endepunktet hetner gjennomsnittsdata om hvordan ansatte har scoret på de forskjellige kategoriene på kompetansekartleggingen 
+ *  Det brukes i Competence for å vise radar- og stolpediagram. 
+ */
 exports.competenceAreas = async ({ data }) => {
   const [categories, competence, motivation] = data
   const thisCompetence = []

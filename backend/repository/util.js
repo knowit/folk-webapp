@@ -1,6 +1,6 @@
 const crypto = require('crypto')
 const AWS = require('aws-sdk')
-AWS.config.update({region: 'eu-central-1'})
+AWS.config.update({ region: 'eu-central-1' })
 
 const ssm = new AWS.SSM()
 
@@ -48,6 +48,36 @@ exports.range = (x, y) =>
       while (x <= y) yield x++
     })()
   )
+
+exports.mergeEmployee = (array) => {
+  const newArray = []
+  const mergedIndexes = []
+  array.forEach((current, j) => {
+    current.customerArray = [{
+      customer: current.customer,
+      workOrderDescription: current.work_order_description,
+      weight: current.weight,
+    }]
+    for (var i = j + 1; i < array.length; i++) {
+      if (current.guid === array[i].guid && !mergedIndexes.includes(i)) {
+        array[i].customerArray = [{
+          customer: array[i].customer,
+          workOrderDescription: array[i].work_order_description,
+          weight: array[i].weight,
+        }]
+        array[i].customerArray = [...array[i].customerArray, ...current.customerArray]
+        current = { ...current, ...array[i] }
+        mergedIndexes.push(i)
+      }
+    }
+    if (!mergedIndexes.includes(j)) {
+      newArray.push(current)
+      mergedIndexes.push(j)
+    }
+  })
+  return newArray
+}
+
 
 exports.reStructCategories = (categories, compScores = [], motScores = []) => {
   //find the main categoreis
