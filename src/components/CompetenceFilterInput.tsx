@@ -1,6 +1,4 @@
-/* eslint-disable no-use-before-define */
-
-import React, { Dispatch } from 'react';
+import React, { ChangeEvent, Dispatch } from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useFetchedData } from '../hooks/service';
@@ -27,9 +25,9 @@ interface CategoryList {
   subCategories: string[];
 }
 
-type CategoriesWithGroup = {
-  skill: string;
+type CategoryWithGroup = {
   category: string;
+  group: string;
 };
 
 const useStyles = makeStyles({
@@ -57,33 +55,24 @@ const useStyles = makeStyles({
       color: 'black',
     },
   },
-  auto: {
+  autocomplete: {
     paddingRight: '10px',
   },
 });
 
-function useCategories() {
+function useCategories(): CategoryWithGroup[] {
   const [categories] = useFetchedData<CategoryList[]>({
     url: '/api/data/competenceFilter',
   });
-  const categoriesWithGroup: CategoriesWithGroup[] = [];
-  categories &&
-    categories.forEach((category) => {
-      return category.subCategories.forEach((skill) =>
-        categoriesWithGroup.push({
-          skill: skill,
-          category: category.category,
-        })
-      );
-    });
-  if (categoriesWithGroup !== null) {
-    return categoriesWithGroup;
-  } else {
-    return [{ skill: '', category: '' }];
-  }
+  return (categories ?? []).flatMap((mainCategory) =>
+    mainCategory.subCategories.map((subCategory) => ({
+      category: subCategory,
+      group: mainCategory.category,
+    }))
+  );
 }
 
-export default function CheckboxesTags({
+export default function CompetenceFilterInput({
   filterList,
   dispatch,
   allRows,
@@ -97,53 +86,48 @@ export default function CheckboxesTags({
   type: 'COMPETENCE' | 'MOTIVATION';
 }) {
   const categoriesWithGroup = useCategories();
-  const dispatchRemove =
-    type === 'COMPETENCE'
-      ? 'REMOVE_FROM_COMPETENCE_FILTER'
-      : 'REMOVE_FROM_MOTIVATION_FILTER';
-  const dispatchAdd =
-    type === 'COMPETENCE'
-      ? 'ADD_TO_COMPETENCE_FILTER'
-      : 'ADD_TO_MOTIVATION_FILTER';
-  const alterFilterList = (skill: string) => {
-    const index = filterList.indexOf(skill, 0);
-    index > -1
-      ? dispatch({
-          type: dispatchRemove,
-          filter: skill,
-          allRows,
-          searchableColumns,
-        })
-      : dispatch({
-          type: dispatchAdd,
-          filter: skill,
-          allRows,
-          searchableColumns,
-        });
-  };
   const classes = useStyles();
+
+  const activeCategories = categoriesWithGroup.filter((categoryWithGroup) =>
+    filterList.includes(categoryWithGroup.category)
+  );
+
+  const handleCategoryChange = (
+    event: ChangeEvent<unknown>,
+    values: CategoryWithGroup[]
+  ) => {
+    const dispatchAction =
+      type === 'COMPETENCE'
+        ? 'UPDATE_COMPETENCE_FILTER'
+        : 'UPDATE_MOTIVATION_FILTER';
+
+    dispatch({
+      type: dispatchAction,
+      filterList: values.map((categoryWithGroup) => categoryWithGroup.category),
+      allRows,
+      searchableColumns,
+    });
+  };
 
   return (
     <Autocomplete
-      multiple
-      className={classes.auto}
       id={type}
+      value={activeCategories}
       options={categoriesWithGroup}
+      groupBy={(option) => option.group}
+      getOptionLabel={(option) => option.category}
+      getOptionSelected={(option, value) => option.category === value.category}
+      multiple
       disableCloseOnSelect
-      groupBy={(option) => option.category}
-      getOptionLabel={(options) => options.skill}
-      getOptionSelected={(option, value) => option.skill === value.skill}
-      noOptionsText={'No options'}
-      renderOption={(options) => (
-        <div
-          className={classes.option}
-          onClick={() => alterFilterList(options.skill)}
-        >
+      className={classes.autocomplete}
+      onChange={handleCategoryChange}
+      renderOption={(option, state) => (
+        <div className={classes.option}>
           <StyledCheckBox
             className={classes.checkbox}
-            checked={filterList.indexOf(options.skill, 0) > -1}
+            checked={state.selected}
           />
-          {options.skill}
+          {option.category}
         </div>
       )}
       renderInput={(params) => (
@@ -154,7 +138,7 @@ export default function CheckboxesTags({
             className={classes.input}
             placeholder={
               type === 'COMPETENCE'
-                ? 'Filtrer på kompetanse..'
+                ? 'Filtrer på kompetanse...'
                 : 'Filtrer på motivasjon...'
             }
             endAdornment={<FilterListIcon />}

@@ -23,20 +23,16 @@ const useStyles = makeStyles({
   },
 });
 
-export interface RowStates {
+export interface TableState {
   rows: any[];
   motivationFilter: string[];
+  motivationThreshold: number;
   competenceFilter: string[];
+  competenceThreshold: number;
   searchTerm: string;
 }
 
 export type Action =
-  | {
-      type: 'ADD_TO_MOTIVATION_FILTER';
-      filter: string;
-      allRows: any[];
-      searchableColumns: any[];
-    }
   | {
       type: 'REMOVE_FROM_MOTIVATION_FILTER';
       filter: string;
@@ -45,12 +41,6 @@ export type Action =
     }
   | {
       type: 'CLEAR_MOTIVATION_FILTER';
-      allRows: any[];
-      searchableColumns: any[];
-    }
-  | {
-      type: 'ADD_TO_COMPETENCE_FILTER';
-      filter: string;
       allRows: any[];
       searchableColumns: any[];
     }
@@ -70,32 +60,45 @@ export type Action =
       searchTerm: string;
       allRows: any[];
       searchableColumns: any[];
+    }
+  | {
+      type: 'UPDATE_COMPETENCE_FILTER';
+      filterList: string[];
+      allRows: any[];
+      searchableColumns: any[];
+    }
+  | {
+      type: 'UPDATE_MOTIVATION_FILTER';
+      filterList: string[];
+      allRows: any[];
+      searchableColumns: any[];
+    }
+  | {
+      type: 'UPDATE_MOTIVATION_THRESHOLD';
+      threshold: number;
+      allRows: any[];
+      searchableColumns: any[];
+    }
+  | {
+      type: 'UPDATE_COMPETENCE_THRESHOLD';
+      threshold: number;
+      allRows: any[];
+      searchableColumns: any[];
     };
 
-function reducer(currentState: RowStates, action: Action) {
+function reducer(currentState: TableState, action: Action) {
   switch (action.type) {
-    case 'ADD_TO_MOTIVATION_FILTER':
-      return {
-        rows: searchAndFilter(
-          currentState.rows,
-          [...currentState.motivationFilter, action.filter],
-          currentState.competenceFilter,
-          currentState.searchTerm,
-          action.allRows,
-          action.searchableColumns
-        ),
-        motivationFilter: [...currentState.motivationFilter, action.filter],
-        competenceFilter: currentState.competenceFilter,
-        searchTerm: currentState.searchTerm,
-      };
     case 'REMOVE_FROM_MOTIVATION_FILTER':
       return {
+        ...currentState,
         rows: searchAndFilter(
           currentState.rows,
           currentState.motivationFilter.filter(
             (filter) => filter !== action.filter
           ),
+          currentState.motivationThreshold,
           currentState.competenceFilter,
+          currentState.competenceThreshold,
           currentState.searchTerm,
           action.allRows,
           action.searchableColumns
@@ -103,82 +106,130 @@ function reducer(currentState: RowStates, action: Action) {
         motivationFilter: currentState.motivationFilter.filter(
           (filter) => filter !== action.filter
         ),
-        competenceFilter: currentState.competenceFilter,
-        searchTerm: currentState.searchTerm,
       };
     case 'CLEAR_MOTIVATION_FILTER':
       return {
+        ...currentState,
         rows: searchAndFilter(
           currentState.rows,
           [],
+          currentState.motivationThreshold,
           currentState.competenceFilter,
+          currentState.competenceThreshold,
           currentState.searchTerm,
           action.allRows,
           action.searchableColumns
         ),
         motivationFilter: [],
-        competenceFilter: currentState.competenceFilter,
-        searchTerm: currentState.searchTerm,
-      };
-    case 'ADD_TO_COMPETENCE_FILTER':
-      return {
-        rows: searchAndFilter(
-          currentState.rows,
-          currentState.motivationFilter,
-          [...currentState.competenceFilter, action.filter],
-          currentState.searchTerm,
-          action.allRows,
-          action.searchableColumns
-        ),
-        motivationFilter: currentState.motivationFilter,
-        competenceFilter: [...currentState.competenceFilter, action.filter],
-        searchTerm: currentState.searchTerm,
       };
     case 'REMOVE_FROM_COMPETENCE_FILTER':
       return {
+        ...currentState,
         rows: searchAndFilter(
           currentState.rows,
           currentState.motivationFilter,
+          currentState.motivationThreshold,
           currentState.competenceFilter.filter(
             (filter) => filter !== action.filter
           ),
+          currentState.competenceThreshold,
           currentState.searchTerm,
           action.allRows,
           action.searchableColumns
         ),
-        motivationFilter: currentState.motivationFilter,
         competenceFilter: currentState.competenceFilter.filter(
           (filter) => filter !== action.filter
         ),
-        searchTerm: currentState.searchTerm,
       };
     case 'CLEAR_COMPETENCE_FILTER':
       return {
+        ...currentState,
         rows: searchAndFilter(
           currentState.rows,
           currentState.motivationFilter,
+          currentState.motivationThreshold,
           [],
+          currentState.competenceThreshold,
           currentState.searchTerm,
           action.allRows,
           action.searchableColumns
         ),
-        motivationFilter: currentState.motivationFilter,
         competenceFilter: [],
-        searchTerm: currentState.searchTerm,
       };
     case 'CHANGE_SEARCH_TERM':
       return {
+        ...currentState,
         rows: searchAndFilter(
           currentState.rows,
           currentState.motivationFilter,
+          currentState.motivationThreshold,
           currentState.competenceFilter,
+          currentState.competenceThreshold,
           action.searchTerm,
           action.allRows,
           action.searchableColumns
         ),
-        motivationFilter: currentState.motivationFilter,
-        competenceFilter: currentState.competenceFilter,
         searchTerm: action.searchTerm,
+      };
+    case 'UPDATE_MOTIVATION_FILTER':
+      return {
+        ...currentState,
+        rows: searchAndFilter(
+          currentState.rows,
+          action.filterList,
+          currentState.motivationThreshold,
+          currentState.competenceFilter,
+          currentState.competenceThreshold,
+          currentState.searchTerm,
+          action.allRows,
+          action.searchableColumns
+        ),
+        motivationFilter: action.filterList,
+      };
+    case 'UPDATE_COMPETENCE_FILTER':
+      return {
+        ...currentState,
+        rows: searchAndFilter(
+          currentState.rows,
+          currentState.motivationFilter,
+          currentState.motivationThreshold,
+          action.filterList,
+          currentState.competenceThreshold,
+          currentState.searchTerm,
+          action.allRows,
+          action.searchableColumns
+        ),
+        competenceFilter: action.filterList,
+      };
+    case 'UPDATE_MOTIVATION_THRESHOLD':
+      return {
+        ...currentState,
+        rows: searchAndFilter(
+          currentState.rows,
+          currentState.motivationFilter,
+          action.threshold,
+          currentState.competenceFilter,
+          currentState.competenceThreshold,
+          currentState.searchTerm,
+          action.allRows,
+          action.searchableColumns
+        ),
+        motivationThreshold: action.threshold,
+      };
+    case 'UPDATE_COMPETENCE_THRESHOLD':
+      return {
+        ...currentState,
+        rows: searchAndFilter(
+          currentState.rows,
+          currentState.motivationFilter,
+          currentState.motivationThreshold,
+          currentState.competenceFilter,
+          action.threshold,
+          currentState.searchTerm,
+          action.allRows,
+          action.searchableColumns
+        ),
+        competenceThreshold: action.threshold,
       };
     default:
       return currentState;
@@ -188,7 +239,9 @@ function reducer(currentState: RowStates, action: Action) {
 const searchAndFilter = (
   rows: any[],
   motivationFilter: string[],
+  motivationThreshold: number,
   competenceFilter: string[],
+  competenceThreshold: number,
   searchTerm: string,
   allRows: any[],
   searchableColumn: any[]
@@ -222,14 +275,14 @@ const searchAndFilter = (
   searchedRows.forEach((row) => {
     let passedFilters = 0;
     motivationFilter.forEach((skill) => {
-      const rowSkills = row.rowData[row.rowData.length - 2];
-      if (rowSkills !== undefined && rowSkills.indexOf(skill) !== -1) {
+      const employeeMotivation = row.rowData[row.rowData.length - 2];
+      if (employeeMotivation?.[skill] >= motivationThreshold) {
         passedFilters++;
       }
     });
     competenceFilter.forEach((skill) => {
-      const rowSkills = row.rowData[row.rowData.length - 1];
-      if (rowSkills?.indexOf(skill) !== -1 && rowSkills !== undefined) {
+      const employeeCompetence = row.rowData[row.rowData.length - 1];
+      if (employeeCompetence?.[skill] >= competenceThreshold) {
         passedFilters++;
       }
     });
@@ -240,21 +293,22 @@ const searchAndFilter = (
 
 export default function DDTable({ payload, title, props }: DDComponentProps) {
   const allRows = payload as { rowData: any[] }[];
-  const initialState: RowStates = {
+  const initialState: TableState = {
     rows: allRows,
     motivationFilter: [],
+    motivationThreshold: 4,
     competenceFilter: [],
+    competenceThreshold: 3,
     searchTerm: '',
   };
   const [state, dispatch] = useReducer(reducer, initialState);
   const { columns } = props as { columns: Column[] };
-  const searchableColumn = columns
+  const searchableColumns = columns
+    .filter((column) => column.searchable)
     .map(
-      (col, i) =>
-        [col.searchable, col.searchKey, i] as [boolean, string, number]
-    )
-    .filter(([searchable]) => searchable)
-    .map(([, key, i]) => [key, i] as [string, number]);
+      (column, columnIndex) =>
+        [column.searchKey, columnIndex] as [string, number]
+    );
 
   const classes = useStyles();
 
@@ -266,38 +320,40 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
             filterList={state.competenceFilter}
             dispatch={dispatch}
             allRows={allRows}
-            searchableColumns={searchableColumn}
+            searchableColumns={searchableColumns}
             type="COMPETENCE"
           />
           <CompetenceFilterInput
             filterList={state.motivationFilter}
             dispatch={dispatch}
             allRows={allRows}
-            searchableColumns={searchableColumn}
+            searchableColumns={searchableColumns}
             type="MOTIVATION"
           />
           <SearchInput
             dispatch={dispatch}
             allRows={allRows}
-            searchableColumns={searchableColumn}
+            searchableColumns={searchableColumns}
           />
         </div>
       </GridItemHeader>
       {state.competenceFilter.length > 0 && (
         <FilterHeader
           filterList={state.competenceFilter}
+          filterThreshold={state.competenceThreshold}
           dispatch={dispatch}
           allRows={allRows}
-          searchableColumns={searchableColumn}
+          searchableColumns={searchableColumns}
           type="COMPETENCE"
         />
       )}
       {state.motivationFilter.length > 0 && (
         <FilterHeader
           filterList={state.motivationFilter}
+          filterThreshold={state.motivationThreshold}
           dispatch={dispatch}
           allRows={allRows}
-          searchableColumns={searchableColumn}
+          searchableColumns={searchableColumns}
           type="MOTIVATION"
         />
       )}
