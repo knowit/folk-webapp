@@ -1,7 +1,7 @@
 import React from 'react';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { ChartComponentInfo, ChartVariant } from '../data/DDChart';
-import { BarChart, Error, PieChart, ShowChart } from '@material-ui/icons';
+import { BarChart, PieChart, ShowChart, DonutLarge } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { createStyles, SvgIcon } from '@material-ui/core';
 import { ReactComponent as RadarLogo } from '../assets/RadarChart.svg';
@@ -24,7 +24,7 @@ const chartVariantInfo: {
       </SvgIcon>
     ),
   },
-  Sunburst: { label: 'sunburst-diagram', icon: <Error /> },
+  Sunburst: { label: 'sunburst-diagram', icon: <DonutLarge /> },
 };
 
 interface ChartVariantToggleProps {
