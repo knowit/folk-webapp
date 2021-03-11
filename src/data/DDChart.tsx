@@ -13,7 +13,7 @@ import {
   ChartDisplayOptions,
   ChartVariantToggle,
 } from '../components/ChartDisplayOptions';
-import { ToggleFullscreenButton } from '../components/ToggleFullscreenButton';
+import { ToggleBigChartButton } from '../components/ToggleBigChartButton';
 
 export type ChartVariant = 'Line' | 'Bar' | 'Pie' | 'Radar' | 'Sunburst';
 
@@ -45,7 +45,7 @@ export default function DDChart({
   const [set, setSet] = useState<string>(
     setNames && setNames.length > 0 ? setNames[0] : ''
   );
-  const [big, setBig] = useState<boolean>(false);
+  const [bigChartOpen, setBigChartOpen] = useState<boolean>(false);
   const [chartVariantIdx, setChartVariantIdx] = useState<number>(0);
 
   const chartVariants = props.chartVariants as Array<ChartComponentInfo>;
@@ -60,49 +60,47 @@ export default function DDChart({
     setSet(setName);
   };
 
-  const ChartGridItem = () => {
-    return (
-      <>
-        <GridItemHeader title={title} description={description} big={big}>
-          {setNamesLength > 1 ? (
-            <DropdownPicker
-              values={setNames}
-              onChange={handleSetChange}
-              selected={set}
-              big={big}
-            />
-          ) : null}
-        </GridItemHeader>
-        {sets ? (
-          <GridItemContent>
-            <ChartDisplayOptions>
-              {chartVariants.length > 1 ? (
-                <ChartVariantToggle
-                  chartVariants={chartVariants}
-                  selected={chartVariantIdx}
-                  onChange={setChartVariantIdx}
-                  big={big}
-                />
-              ) : null}
-              <ToggleFullscreenButton
-                isFullscreen={big}
-                onChange={() => setBig(!big)}
+  const ChartGridItem = ({ isBig = false }: { isBig?: boolean }) => (
+    <>
+      <GridItemHeader title={title} description={description} big={isBig}>
+        {setNamesLength > 1 ? (
+          <DropdownPicker
+            values={setNames}
+            onChange={handleSetChange}
+            selected={set}
+            big={isBig}
+          />
+        ) : null}
+      </GridItemHeader>
+      {sets ? (
+        <GridItemContent>
+          <ChartDisplayOptions>
+            {chartVariants.length > 1 ? (
+              <ChartVariantToggle
+                chartVariants={chartVariants}
+                selected={chartVariantIdx}
+                onChange={setChartVariantIdx}
+                big={isBig}
               />
-            </ChartDisplayOptions>
-            <ChartComponent big={big} data={sets[set]} {...chartProps} />
-          </GridItemContent>
-        ) : (
-          <ErrorText />
-        )}
-      </>
-    );
-  };
+            ) : null}
+            <ToggleBigChartButton
+              big={isBig}
+              onChange={() => setBigChartOpen(!bigChartOpen)}
+            />
+          </ChartDisplayOptions>
+          <ChartComponent big={isBig} data={sets[set]} {...chartProps} />
+        </GridItemContent>
+      ) : (
+        <ErrorText />
+      )}
+    </>
+  );
 
   return (
     <>
       <ChartGridItem />
-      <BigChart open={big} onClose={() => setBig(false)}>
-        <ChartGridItem />
+      <BigChart open={bigChartOpen} onClose={() => setBigChartOpen(false)}>
+        <ChartGridItem isBig />
       </BigChart>
     </>
   );
