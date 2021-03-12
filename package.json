@@ -36,7 +36,7 @@
     "react-cookie": "^4.0.3",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.4",
+    "react-scripts": "^4.0.3",
     "react-virtualized": "^9.22.2",
     "recharts": "^1.8.5",
     "typescript": "~3.9.7",
@@ -71,6 +71,9 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "jest": {
+    "resetMocks": false
   },
   "proxy": "https://ew7i722sxi.execute-api.eu-central-1.amazonaws.com/",
   "browserslist": {
