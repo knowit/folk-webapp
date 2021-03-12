@@ -26,18 +26,16 @@ const OpenFullscreenIcon = withStyles({
   root: { height: '42px', width: '42px' },
 })(Fullscreen);
 
-interface ToggleFullscreenButtonProps {
-  isFullscreen: boolean;
+interface ToggleBigChartButtonProps {
+  big: boolean;
   onChange: () => void;
 }
 
-export function ToggleFullscreenButton({
-  isFullscreen,
+export function ToggleBigChartButton({
+  big,
   onChange,
-}: ToggleFullscreenButtonProps) {
-  const altText = isFullscreen
-    ? 'Exit stor størrelse'
-    : 'Utvid til stor størrelse';
+}: ToggleBigChartButtonProps) {
+  const altText = big ? 'Lukk stor størrelse' : 'Utvid til stor størrelse';
 
   return (
     <FullscreenIconButton
@@ -47,7 +45,7 @@ export function ToggleFullscreenButton({
       disableRipple
       size="small"
     >
-      {isFullscreen ? <CloseFullscreenIcon /> : <OpenFullscreenIcon />}
+      {big ? <CloseFullscreenIcon /> : <OpenFullscreenIcon />}
     </FullscreenIconButton>
   );
 }
