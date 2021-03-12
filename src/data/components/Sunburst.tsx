@@ -1,10 +1,13 @@
-// @ts-nocheck
 import React from 'react';
 import { colors } from './common';
 import { ResponsiveSunburst, NormalizedDatum } from '@nivo/sunburst';
+import { BasicTooltip } from '@nivo/tooltip';
 
 type SunburstChartsData = {
-  [key: string]: string | number | Array<SunburstChartsData>;
+  kategori?: string;
+  verdi?: number;
+  size?: number;
+  children?: SunburstChartsData[];
 };
 
 interface SunburstChartsProps {
@@ -13,56 +16,59 @@ interface SunburstChartsProps {
   big?: boolean;
 }
 
-const GetCorrectValue = (node: NormalizedDatum<unknown>) => {
+function GetCorrectValue(node: SunburstChartsData): number {
   if (node.children) {
     const sumValue = node.children.reduce(getParentSize, 0);
-    return node['verdi'] - sumValue;
+    return (node.verdi as number) - sumValue;
   }
-  return node['size'];
-};
-function getParentSize(total, child) {
-  return total + child['size'];
+  return node.size || 0;
+}
+
+function getParentSize(total: number, child: SunburstChartsData): number {
+  return total + (child.size || 0);
 }
 
 export default function Sunburst({ data, groupKey, big }: SunburstChartsProps) {
   const height = big ? '400px' : '300px';
-  const formatedData = {
+  const formattedData = {
     children: data,
   };
 
   const CustomTooltip = ({
     id,
     value,
-    ancestor,
+    parent,
     depth,
-  }: NormalizedDatum<unknown>) => {
-    const childValue =
+    color,
+  }: NormalizedDatum<SunburstChartsData>) => {
+    const displayValue =
       depth === 1
         ? value
-        : formatedData.children
-            .find((kategori) => kategori.kategori === ancestor.id)
-            .children.find((kategori) => kategori.kategori === id).verdi;
+        : formattedData.children
+            ?.find((node) => node.kategori === parent?.data.id)
+            ?.children?.find((node) => node.kategori === id)?.verdi;
 
     return (
-      <p>
-        {id}: <b>{childValue.toFixed(2)}</b>
-      </p>
+      <BasicTooltip
+        id={id}
+        value={displayValue?.toFixed(2)}
+        enableChip={true}
+        color={color}
+      />
     );
   };
 
   return (
     <div style={{ height, width: '100%' }}>
       <ResponsiveSunburst
-        data={formatedData}
+        data={formattedData}
         margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
-        identity={groupKey}
+        id={groupKey}
         cornerRadius={2}
         borderWidth={1}
         borderColor="white"
         colors={colors}
         animate
-        motionStiffness={90}
-        motionDamping={15}
         isInteractive
         value={GetCorrectValue}
         tooltip={CustomTooltip}
