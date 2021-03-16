@@ -136,7 +136,6 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function EmployeeInfo({
   data,
   id,
-  rowStates,
   dispatch,
 }: {
   data: {

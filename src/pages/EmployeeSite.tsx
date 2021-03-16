@@ -319,7 +319,8 @@ export default function EmployeeSite() {
         {pending || !data ? (
           <p>loading....</p>
         ) : (
-          Object.entries(data!.links).map((link) => (
+          data &&
+          Object.entries(data.links).map((link) => (
             <p key={link[1]}>
               <a href={link[1]}>{link[0]}</a>
             </p>
