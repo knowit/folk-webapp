@@ -32,23 +32,17 @@
     "@nivo/sunburst": "^0.67.0",
     "http-proxy-middleware": "^1.0.5",
     "react": "^17.0.1",
-    "react-beautiful-dnd": "^13.0.0",
     "react-cookie": "^4.0.3",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.4",
+    "react-scripts": "^4.0.3",
     "react-virtualized": "^9.22.2",
     "recharts": "^1.8.5",
-    "typescript": "~3.9.7",
-    "underscore": "^1.12.0"
+    "typescript": "~4.2.3"
   },
   "resolutions": {
-    "immer": "^8.0.1",
-    "react-dev-utils/immer": "^8.0.1",
-    "node-notifier": "^8.0.1",
-    "@jest/reporters/node-notifier": "^8.0.1",
-    "node-fetch": "^2.6.1",
-    "isomorphic-fetch/node-fetch": "^2.6.1"
+    "node-notifier": "^8.0.2",
+    "node-fetch": "^2.6.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -72,6 +66,9 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "jest": {
+    "resetMocks": false
+  },
   "proxy": "https://ew7i722sxi.execute-api.eu-central-1.amazonaws.com/",
   "browserslist": {
     "production": [
@@ -92,22 +89,18 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.1",
-    "@testing-library/user-event": "^12.2.2",
     "@types/jest": "^26.0.15",
-    "@types/node": "^14.14.9",
-    "@types/react": "^16.9.56",
-    "@types/react-beautiful-dnd": "^13.0.0",
-    "@types/react-dom": "^16.9.9",
+    "@types/node": "14.14.34",
+    "@types/react": "17.0.3",
+    "@types/react-dom": "17.0.2",
     "@types/react-router-dom": "^5.1.6",
     "@types/react-virtualized": "^9.21.10",
     "@types/recharts": "^1.8.16",
-    "@types/underscore": "^1.10.24",
-    "@typescript-eslint/eslint-plugin": "^4.8.2",
-    "@typescript-eslint/parser": "^4.8.2",
+    "@typescript-eslint/eslint-plugin": "^4.17.0",
+    "@typescript-eslint/parser": "^4.17.0",
     "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
-    "eslint": "^7.13.0",
-    "eslint-config-airbnb-typescript-prettier": "^4.0.0",
+    "eslint": "^7.22.0",
     "eslint-plugin-react": "^7.21.5",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "nodemon": "^2.0.6",
