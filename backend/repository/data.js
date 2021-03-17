@@ -3,7 +3,7 @@ const {
   makeEmailUuid,
   range,
   reStructCategories,
-  mergeEmployee,
+  mergeEmployees,
 } = require('./util')
 const { v4: uuid } = require('uuid')
 
@@ -38,7 +38,7 @@ exports.employeeTable = async ({ data }) => {
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   })
-  const mergedEmployees = mergeEmployee(allEmployees)
+  const mergedEmployees = mergeEmployees(allEmployees)
   return mergedEmployees.map(employee => ({
     rowId: uuid(),
     rowData: [
@@ -129,7 +129,7 @@ exports.employeeCompetenceReports = ({ parameters: { email } = {} }) => [
  */
 exports.employeeCompetence = async ({ data }) => {
   const [resSkills, resEmp, resComp] = data
-  const mergedRes = mergeEmployee(resComp)
+  const mergedRes = mergeEmployees(resComp)
 
   const mapTags = (skills) => {
     const mappedSkills = skills && skills.length > 0 ? skills[0] : {}
@@ -543,7 +543,7 @@ exports.empDataReports = ({ parameters: { email } = {} }) => [
 /** Dette endepunktet henter data om en enkelt person for å fylle opp sidene for hver enkelt ansatt.  */
 exports.empData = async ({ data, parameters: { email } = {} }) => {
   const [resSkills, resWork, resComp] = data
-  const emp = mergeEmployee(resComp)[0]
+  const emp = mergeEmployees(resComp)[0]
   const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
     encrypted: true,
   })
