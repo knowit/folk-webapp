@@ -4,7 +4,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import { Action } from '../data/DDTable';
+import { Action, SearchableColumn } from '../data/DDTable';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -33,7 +33,7 @@ export default function SearchInput({
 }: {
   dispatch: Dispatch<Action>;
   allRows: any[];
-  searchableColumns: [string, number][];
+  searchableColumns: SearchableColumn[];
 }) {
   const classes = useStyles();
   const [val, setVal] = useState('');

@@ -11,7 +11,14 @@ interface Column {
   title: string;
   expandable?: boolean;
   searchable?: boolean;
-  searchKey?: string;
+  getSearchValue?: GetSearchValueFn;
+}
+
+type GetSearchValueFn = (data: unknown) => string;
+
+export interface SearchableColumn {
+  columnIndex: number;
+  getSearchValue: GetSearchValueFn;
 }
 
 const useStyles = makeStyles({
@@ -37,53 +44,53 @@ export type Action =
       type: 'REMOVE_FROM_MOTIVATION_FILTER';
       filter: string;
       allRows: any[];
-      searchableColumns: any[];
+      searchableColumns: SearchableColumn[];
     }
   | {
       type: 'CLEAR_MOTIVATION_FILTER';
       allRows: any[];
-      searchableColumns: any[];
+      searchableColumns: SearchableColumn[];
     }
   | {
       type: 'REMOVE_FROM_COMPETENCE_FILTER';
       filter: string;
       allRows: any[];
-      searchableColumns: any[];
+      searchableColumns: SearchableColumn[];
     }
   | {
       type: 'CLEAR_COMPETENCE_FILTER';
       allRows: any[];
-      searchableColumns: any[];
+      searchableColumns: SearchableColumn[];
     }
   | {
       type: 'CHANGE_SEARCH_TERM';
       searchTerm: string;
       allRows: any[];
-      searchableColumns: any[];
+      searchableColumns: SearchableColumn[];
     }
   | {
       type: 'UPDATE_COMPETENCE_FILTER';
       filterList: string[];
       allRows: any[];
-      searchableColumns: any[];
+      searchableColumns: SearchableColumn[];
     }
   | {
       type: 'UPDATE_MOTIVATION_FILTER';
       filterList: string[];
       allRows: any[];
-      searchableColumns: any[];
+      searchableColumns: SearchableColumn[];
     }
   | {
       type: 'UPDATE_MOTIVATION_THRESHOLD';
       threshold: number;
       allRows: any[];
-      searchableColumns: any[];
+      searchableColumns: SearchableColumn[];
     }
   | {
       type: 'UPDATE_COMPETENCE_THRESHOLD';
       threshold: number;
       allRows: any[];
-      searchableColumns: any[];
+      searchableColumns: SearchableColumn[];
     };
 
 function reducer(currentState: TableState, action: Action) {
@@ -237,58 +244,69 @@ function reducer(currentState: TableState, action: Action) {
 }
 
 const searchAndFilter = (
-  rows: any[],
+  currentRows: any[],
   motivationFilter: string[],
   motivationThreshold: number,
   competenceFilter: string[],
   competenceThreshold: number,
   searchTerm: string,
   allRows: any[],
-  searchableColumn: any[]
+  searchableColumns: SearchableColumn[]
 ) => {
-  const motFilterLength = motivationFilter.length;
-  const comFilterLength = competenceFilter.length;
-  if (!searchTerm && motFilterLength === 0 && comFilterLength === 0) {
-    if (rows.length !== allRows.length) return allRows;
-    return rows;
-  }
-  const lowerCaseSearchTerm = searchTerm?.toLowerCase();
+  const hasMotivationFilters = motivationFilter.length > 0;
+  const hasCompetenceFilters = competenceFilter.length > 0;
+  const hasSearchTerm = !!searchTerm && searchTerm.trim() !== '';
 
-  //searching for name
-  const searchedRows = allRows.filter((row) => {
-    return searchableColumn
-      .map(([key, index]) => {
-        const rowValue = key
-          ? row.rowData[index][key].toLowerCase()
-          : row.rowData[index].toLowerCase();
-        return rowValue.includes(lowerCaseSearchTerm);
-      })
+  if (!hasSearchTerm && !hasMotivationFilters && !hasCompetenceFilters) {
+    if (currentRows.length !== allRows.length) return allRows;
+    return currentRows;
+  }
+
+  const searchRow = (row: any, searchTerm: string) =>
+    searchableColumns
+      .map(({ getSearchValue, columnIndex }) =>
+        getSearchValue(row.rowData[columnIndex])
+          .toLowerCase()
+          .trim()
+          .includes(searchTerm.toLowerCase().trim())
+      )
       .reduce((a, b) => a || b, false);
-  });
 
-  //if no filter, then skip filtering
-  if (motFilterLength === 0 && comFilterLength === 0) {
-    return searchedRows;
-  }
-  const newRows: any[] = [];
+  const filterRow = (
+    columnValue: any,
+    filters: string[],
+    filterThreshold: number
+  ) =>
+    filters
+      .map((skillCategory) => {
+        return columnValue?.[skillCategory] >= filterThreshold;
+      })
+      .reduce((a, b) => a && b);
 
-  searchedRows.forEach((row) => {
-    let passedFilters = 0;
-    motivationFilter.forEach((skill) => {
-      const employeeMotivation = row.rowData[row.rowData.length - 2];
-      if (employeeMotivation?.[skill] >= motivationThreshold) {
-        passedFilters++;
-      }
-    });
-    competenceFilter.forEach((skill) => {
-      const employeeCompetence = row.rowData[row.rowData.length - 1];
-      if (employeeCompetence?.[skill] >= competenceThreshold) {
-        passedFilters++;
-      }
-    });
-    passedFilters === motFilterLength + comFilterLength && newRows.push(row);
+  return allRows.filter((row) => {
+    const rowMatchesSearchTerm = hasSearchTerm
+      ? searchRow(row, searchTerm)
+      : true;
+    const rowMatchesMotivationFilters = hasMotivationFilters
+      ? filterRow(
+          row.rowData[row.rowData.length - 2],
+          motivationFilter,
+          motivationThreshold
+        )
+      : true;
+    const rowMatchesCompetenceFilters = hasCompetenceFilters
+      ? filterRow(
+          row.rowData[row.rowData.length - 1],
+          competenceFilter,
+          competenceThreshold
+        )
+      : true;
+    return (
+      rowMatchesSearchTerm &&
+      rowMatchesMotivationFilters &&
+      rowMatchesCompetenceFilters
+    );
   });
-  return newRows;
 };
 
 export default function DDTable({ payload, title, props }: DDComponentProps) {
@@ -302,13 +320,17 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
     searchTerm: '',
   };
   const [state, dispatch] = useReducer(reducer, initialState);
+
   const { columns } = props as { columns: Column[] };
-  const searchableColumns = columns
-    .filter((column) => column.searchable)
-    .map(
-      (column, columnIndex) =>
-        [column.searchKey, columnIndex] as [string, number]
-    );
+  const searchableColumns = columns.reduce((result, column, index) => {
+    if (column.searchable && column.getSearchValue) {
+      result.push({
+        columnIndex: index,
+        getSearchValue: column.getSearchValue,
+      });
+    }
+    return result;
+  }, [] as SearchableColumn[]);
 
   const classes = useStyles();
 

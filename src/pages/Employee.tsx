@@ -10,6 +10,7 @@ import {
 } from '../data/components/table/DataCells';
 import DDItem, { DDTable } from '../data/DDItem';
 import EmployeeInfo from '../components/EmployeeInfo';
+import { CustomerStatusData } from '../data/components/table/cells/CustomerStatusCell';
 
 export default function Employee() {
   const TableSkeleton = () => (
@@ -29,7 +30,9 @@ export default function Employee() {
               title: 'Konsulent',
               expandable: true,
               searchable: true,
-              searchKey: 'value',
+              getSearchValue: (consultant: { value: string }) => {
+                return consultant.value;
+              },
               renderCell: ConsultantCell,
               renderExpanded: EmployeeInfo,
               headerRenderCell: CheckBoxHeaderCell,
@@ -37,7 +40,22 @@ export default function Employee() {
             },
             { title: 'Tittel' },
             { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
-            { title: 'Kunde', renderCell: CustomerStatusCell },
+            {
+              title: 'Kunde',
+              renderCell: CustomerStatusCell,
+              searchable: true,
+              getSearchValue: (customers: CustomerStatusData[]) => {
+                const {
+                  customer,
+                  workOrderDescription,
+                } = customers.reduce((prevCustomer, currCustomer) =>
+                  currCustomer.weight < prevCustomer.weight
+                    ? currCustomer
+                    : prevCustomer
+                );
+                return `${customer} ${workOrderDescription}`;
+              },
+            },
             { title: 'CV', renderCell: CvCell },
           ],
         }}
