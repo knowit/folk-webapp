@@ -36,10 +36,10 @@ export default function SearchInput({
   searchableColumns: SearchableColumn[];
 }) {
   const classes = useStyles();
-  const [val, setVal] = useState('');
+  const [searchValue, setSearchValue] = useState('');
 
   const clearInput = () => {
-    setVal('');
+    setSearchValue('');
     dispatch({
       type: 'CHANGE_SEARCH_TERM',
       searchTerm: '',
@@ -48,7 +48,7 @@ export default function SearchInput({
     });
   };
 
-  // This function is debounced (≈delayed), so that each keystroke doesn't trigger a new search
+  // This function is debounced, so that we wait a bit (250ms) between each search
   const triggerSearch = debounce((searchTerm) => {
     dispatch({
       type: 'CHANGE_SEARCH_TERM',
@@ -56,11 +56,11 @@ export default function SearchInput({
       allRows,
       searchableColumns,
     });
-  }, 200);
+  }, 250);
 
   const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    setVal(event.target.value);
+    setSearchValue(event.target.value);
     triggerSearch(event.target.value);
   };
 
@@ -69,13 +69,13 @@ export default function SearchInput({
       <InputBase
         className={classes.root}
         onChange={changeValue}
-        value={val}
+        value={searchValue}
         type="text"
         name="search"
         placeholder="Søk konsulent, kunde..."
         endAdornment={
           <InputAdornment position="end">
-            {val === '' ? (
+            {searchValue === '' ? (
               <SearchIcon className={classes.icon} />
             ) : (
               <IconButton
