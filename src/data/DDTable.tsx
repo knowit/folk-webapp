@@ -243,6 +243,32 @@ function reducer(currentState: TableState, action: Action) {
   }
 }
 
+const searchRow = (
+  row: any,
+  searchableColumns: SearchableColumn[],
+  searchTerm: string
+) =>
+  searchableColumns
+    .map((column) =>
+      column
+        .getSearchValue(row.rowData[column.columnIndex])
+        .toLowerCase()
+        .trim()
+        .includes(searchTerm.toLowerCase().trim())
+    )
+    .reduce((a, b) => a || b, false);
+
+const filterRow = (
+  columnValue: { [key: string]: any },
+  filters: string[],
+  filterThreshold: number
+) =>
+  filters
+    .map((filterKey) => {
+      return columnValue?.[filterKey] >= filterThreshold;
+    })
+    .reduce((a, b) => a && b);
+
 const searchAndFilter = (
   currentRows: any[],
   motivationFilter: string[],
@@ -258,34 +284,15 @@ const searchAndFilter = (
   const hasSearchTerm = !!searchTerm && searchTerm.trim() !== '';
 
   if (!hasSearchTerm && !hasMotivationFilters && !hasCompetenceFilters) {
-    if (currentRows.length !== allRows.length) return allRows;
+    if (currentRows.length !== allRows.length) {
+      return allRows;
+    }
     return currentRows;
   }
 
-  const searchRow = (row: any, searchTerm: string) =>
-    searchableColumns
-      .map(({ getSearchValue, columnIndex }) =>
-        getSearchValue(row.rowData[columnIndex])
-          .toLowerCase()
-          .trim()
-          .includes(searchTerm.toLowerCase().trim())
-      )
-      .reduce((a, b) => a || b, false);
-
-  const filterRow = (
-    columnValue: any,
-    filters: string[],
-    filterThreshold: number
-  ) =>
-    filters
-      .map((skillCategory) => {
-        return columnValue?.[skillCategory] >= filterThreshold;
-      })
-      .reduce((a, b) => a && b);
-
   return allRows.filter((row) => {
     const rowMatchesSearchTerm = hasSearchTerm
-      ? searchRow(row, searchTerm)
+      ? searchRow(row, searchableColumns, searchTerm)
       : true;
     const rowMatchesMotivationFilters = hasMotivationFilters
       ? filterRow(
