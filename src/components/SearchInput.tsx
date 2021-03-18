@@ -1,5 +1,5 @@
 import React, { Dispatch, useState } from 'react';
-import { InputBase, InputAdornment, Theme } from '@material-ui/core';
+import { InputBase, InputAdornment, Theme, debounce } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -48,15 +48,20 @@ export default function SearchInput({
     });
   };
 
-  const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setVal(event.target.value);
+  // This function is debounced (≈delayed), so that each keystroke doesn't trigger a new search
+  const triggerSearch = debounce((searchTerm) => {
     dispatch({
       type: 'CHANGE_SEARCH_TERM',
-      searchTerm: event.target.value,
+      searchTerm,
       allRows,
       searchableColumns,
     });
+  }, 200);
+
+  const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    setVal(event.target.value);
+    triggerSearch(event.target.value);
   };
 
   return (
