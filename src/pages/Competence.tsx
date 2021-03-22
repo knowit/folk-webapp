@@ -1,20 +1,10 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-import {
-  ConsultantCell,
-  CheckBoxHeaderCell,
-  CvCell,
-  ProjectStatusCell,
-  CustomerStatusCell,
-} from '../data/components/table/DataCells';
-import DDItem, { DDTable, DDChart } from '../data/DDItem';
-import EmployeeInfo from '../components/EmployeeInfo';
+import DDItem, { DDChart } from '../data/DDItem';
+import { EmployeeTable } from '../components/EmployeeTable';
 
 export default function Competence() {
-  const TableSkeleton = () => (
-    <Skeleton variant="rect" height={780} animation="wave" />
-  );
   const ChartSkeleton = () => (
     <Skeleton variant="rect" height={320} animation="wave" />
   );
@@ -182,31 +172,8 @@ export default function Competence() {
           ],
         }}
       />
-      <DDItem
-        url="/api/data/employeeTable"
-        title="Prosjektstatus"
-        fullSize
-        Component={DDTable}
-        dataComponentProps={{
-          columns: [
-            {
-              title: 'Konsulent',
-              expandable: true,
-              searchable: true,
-              searchKey: 'value',
-              renderCell: ConsultantCell,
-              renderExpanded: EmployeeInfo,
-              headerRenderCell: CheckBoxHeaderCell,
-              checkBoxLabel: 'Vis kun ledige',
-            },
-            { title: 'Tittel' },
-            { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
-            { title: 'Kunde', renderCell: CustomerStatusCell },
-            { title: 'CV', renderCell: CvCell },
-          ],
-        }}
-        SkeletonComponent={TableSkeleton}
-      />
+
+      <EmployeeTable />
     </Grid>
   );
 }
