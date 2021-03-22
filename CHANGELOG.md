@@ -1,9 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.1.0] - 2021-03-23
 ### Added
-- User can change the threshold for competence and motivation score on filters
+- User can change the threshold for competence and motivation score when filtering the employee list
+- Search in employee list includes the current customer and work order, in addition to employee name
+- Icon for sunburst chart
+
+### Changed
+- All dependencies in both front- and backend is updated to the latest version
+
+### Fixed
+- Opening an enlarged view of a chart no longer causes the original chart to resize in the background
+- Yarn is now the only valid package manager for handling dependencies (use of npm is prevented)
+
+### Removed
+- Dependencies that are no longer used
 
 ## [3.0.0] - 2021-02-26
 ### Added
