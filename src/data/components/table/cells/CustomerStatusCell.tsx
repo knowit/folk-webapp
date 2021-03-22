@@ -16,18 +16,16 @@ const useStyles = makeStyles({
 });
 
 export default function CustomerStatusCell(customerData: {
-  data: CustomerStatusData[];
+  data: CustomerStatusData;
 }) {
   const classes = useStyles();
-  if (customerData.data[0].customer) {
-    const mostWorked = customerData.data.sort(
-      (customerA, customerB) => customerA.weight - customerB.weight
-    )[0];
-    return (
-      <div className={classes.root}>
-        {mostWorked.customer}: {mostWorked.workOrderDescription}
-      </div>
-    );
-  }
-  return <div className={classes.root}>Ikke i prosjekt</div>;
+  const { data } = customerData;
+
+  return (
+    <div className={classes.root}>
+      {data.customer
+        ? `${data.customer}: ${data.workOrderDescription}`
+        : 'Ikke i prosjekt'}
+    </div>
+  );
 }

@@ -55,7 +55,12 @@ exports.employeeTable = async ({ data }) => {
       },
       employee.title,
       'red',
-      employee.customerArray,
+      employee.customerArray.reduce((prevCustomer, thisCustomer) => {
+        if(thisCustomer.weight < prevCustomer.weight) {
+          return thisCustomer
+        }
+        return prevCustomer
+      }),
       Object.fromEntries(
         cvs.map(([lang, format]) => [
           `${lang}_${format}`,
