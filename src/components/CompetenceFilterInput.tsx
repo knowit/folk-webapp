@@ -5,7 +5,7 @@ import { useFetchedData } from '../hooks/service';
 import { makeStyles } from '@material-ui/core/styles';
 import { InputBase, withStyles } from '@material-ui/core';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import { Action } from '../data/DDTable';
+import { Action, SearchableColumn } from '../data/DDTable';
 
 const StyledCheckBox = withStyles(() => ({
   root: {
@@ -82,7 +82,7 @@ export default function CompetenceFilterInput({
   filterList: string[];
   dispatch: Dispatch<Action>;
   allRows: any[];
-  searchableColumns: [string, number][];
+  searchableColumns: SearchableColumn[];
   type: 'COMPETENCE' | 'MOTIVATION';
 }) {
   const categoriesWithGroup = useCategories();

@@ -1,7 +1,7 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { Dispatch } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
-import { Action } from '../data/DDTable';
+import { Action, SearchableColumn } from '../data/DDTable';
 import { Mark, Slider } from '@material-ui/core';
 
 const useStyles = makeStyles(() =>
@@ -121,7 +121,7 @@ export function FilterHeader({
   filterThreshold: number;
   dispatch: Dispatch<Action>;
   allRows: any[];
-  searchableColumns: [string, number][];
+  searchableColumns: SearchableColumn[];
   type: 'COMPETENCE' | 'MOTIVATION';
 }) {
   const classes = useStyles();

@@ -1,10 +1,10 @@
 import React, { Dispatch, useState } from 'react';
-import { InputBase, InputAdornment, Theme } from '@material-ui/core';
+import { InputBase, InputAdornment, Theme, debounce } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import { Action } from '../data/DDTable';
+import { Action, SearchableColumn } from '../data/DDTable';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -33,13 +33,13 @@ export default function SearchInput({
 }: {
   dispatch: Dispatch<Action>;
   allRows: any[];
-  searchableColumns: [string, number][];
+  searchableColumns: SearchableColumn[];
 }) {
   const classes = useStyles();
-  const [val, setVal] = useState('');
+  const [searchValue, setSearchValue] = useState('');
 
   const clearInput = () => {
-    setVal('');
+    setSearchValue('');
     dispatch({
       type: 'CHANGE_SEARCH_TERM',
       searchTerm: '',
@@ -48,15 +48,20 @@ export default function SearchInput({
     });
   };
 
-  const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setVal(event.target.value);
+  // This function is debounced, so that we wait a bit (250ms) between each search
+  const triggerSearch = debounce((searchTerm) => {
     dispatch({
       type: 'CHANGE_SEARCH_TERM',
-      searchTerm: event.target.value,
+      searchTerm,
       allRows,
       searchableColumns,
     });
+  }, 250);
+
+  const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    setSearchValue(event.target.value);
+    triggerSearch(event.target.value);
   };
 
   return (
@@ -64,13 +69,13 @@ export default function SearchInput({
       <InputBase
         className={classes.root}
         onChange={changeValue}
-        value={val}
+        value={searchValue}
         type="text"
         name="search"
         placeholder="Søk konsulent, kunde..."
         endAdornment={
           <InputAdornment position="end">
-            {val === '' ? (
+            {searchValue === '' ? (
               <SearchIcon className={classes.icon} />
             ) : (
               <IconButton
