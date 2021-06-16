@@ -4,6 +4,7 @@ import { FilterHeader } from '../components/FilterHeader';
 import DataTable from './components/table/DataTable';
 import SearchInput from '../components/SearchInput';
 import CompetenceFilterInput from '../components/CompetenceFilterInput';
+import RowCount from '../components/RowCount';
 import { DDComponentProps } from './types';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -386,6 +387,9 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
           type="MOTIVATION"
         />
       )}
+      <RowCount>
+        {state.rows.length} av {allRows.length}
+      </RowCount>
       <DataTable rows={state.rows} columns={[]} {...props} />
     </>
   );
