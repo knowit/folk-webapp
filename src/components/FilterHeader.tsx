@@ -1,7 +1,6 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { Dispatch } from 'react';
+import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
-import { Action, SearchableColumn } from '../data/DDTable';
 import { Mark, Slider } from '@material-ui/core';
 
 const useStyles = makeStyles(() =>
@@ -110,53 +109,29 @@ const RemoveAllTag = (onDelete: { onDelete: () => void }) => {
 };
 
 export function FilterHeader({
+  title,
   filterList,
   filterThreshold,
-  dispatch,
-  allRows,
-  searchableColumns,
-  type,
+  onThresholdUpdate,
+  onSkillClick,
 }: {
+  title: string;
   filterList: string[];
   filterThreshold: number;
-  dispatch: Dispatch<Action>;
-  allRows: any[];
-  searchableColumns: SearchableColumn[];
-  type: 'COMPETENCE' | 'MOTIVATION';
+  onThresholdUpdate: (value: number) => void;
+  onSkillClick: (values: string[]) => void;
 }) {
   const classes = useStyles();
 
-  const dispatchRemove =
-    type === 'COMPETENCE'
-      ? 'REMOVE_FROM_COMPETENCE_FILTER'
-      : 'REMOVE_FROM_MOTIVATION_FILTER';
-  const dispatchClear =
-    type === 'COMPETENCE'
-      ? 'CLEAR_COMPETENCE_FILTER'
-      : 'CLEAR_MOTIVATION_FILTER';
-  const dispatchThresholdUpdate =
-    type === 'COMPETENCE'
-      ? 'UPDATE_COMPETENCE_THRESHOLD'
-      : 'UPDATE_MOTIVATION_THRESHOLD';
-
-  function updateThresholdFilter(threshold: number) {
-    dispatch({
-      type: dispatchThresholdUpdate,
-      threshold,
-      allRows,
-      searchableColumns,
-    });
-  }
-
   function handleThresholdSliderChange(
-    event: React.ChangeEvent<unknown>,
+    _event: React.ChangeEvent<unknown>,
     value: number | number[]
   ) {
     if (Array.isArray(value)) {
       value = value?.[0];
     }
     if (value !== filterThreshold) {
-      updateThresholdFilter(value);
+      onThresholdUpdate(value);
     }
   }
 
@@ -170,42 +145,31 @@ export function FilterHeader({
 
   return (
     <div className={classes.filterHeaderRoot}>
-      <div className={classes.filterHeaderTitle}>
-        {type === 'COMPETENCE' ? 'Kompetansefilter' : 'Motivasjonsfilter'}:{' '}
-      </div>
+      <div className={classes.filterHeaderTitle}>{title}</div>
       <div className={classes.filterTagsContainer}>
         {filterList.length > 1 && (
-          <RemoveAllTag
-            onDelete={() =>
-              dispatch({ type: dispatchClear, allRows, searchableColumns })
-            }
-          />
+          <RemoveAllTag onDelete={() => onSkillClick([])} />
         )}
         {filterList.map((skill) => (
           <Tag
             key={skill}
             label={skill}
             onDelete={() =>
-              dispatch({
-                type: dispatchRemove,
-                filter: skill,
-                allRows,
-                searchableColumns,
-              })
+              onSkillClick(filterList.filter((item) => item !== skill))
             }
           />
         ))}
       </div>
       <div className={classes.filterThresholdContainer}>
         <label
-          htmlFor={`${type}-threshold-slider`}
+          htmlFor={`${title}-threshold-slider`}
           className={classes.filterThresholdTitle}
         >
           Terskel:
         </label>
         <Slider
           className={classes.thresholdSlider}
-          id={`${type}-threshold-slider`}
+          id={`${title}-threshold-slider`}
           value={filterThreshold}
           step={1}
           valueLabelDisplay="auto"
