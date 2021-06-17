@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# [3.2.0] - 2021-06-17
+## Added
+- Showing number of rows currently displayed, respecting filtering and search.
+
+## Changed
+- All dependencies in both front- and backend is updated to the latest version
+
 ## [3.1.0] - 2021-03-23
 ### Added
 - User can change the threshold for competence and motivation score when filtering the employee list
