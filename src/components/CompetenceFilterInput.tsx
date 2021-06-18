@@ -1,11 +1,10 @@
-import React, { ChangeEvent, Dispatch } from 'react';
+import React, { ChangeEvent } from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useFetchedData } from '../hooks/service';
 import { makeStyles } from '@material-ui/core/styles';
 import { InputBase, withStyles } from '@material-ui/core';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import { Action, SearchableColumn } from '../data/DDTable';
 
 const StyledCheckBox = withStyles(() => ({
   root: {
@@ -74,16 +73,12 @@ function useCategories(): CategoryWithGroup[] {
 
 export default function CompetenceFilterInput({
   filterList,
-  dispatch,
-  allRows,
-  searchableColumns,
-  type,
+  onSelect,
+  placeholder,
 }: {
   filterList: string[];
-  dispatch: Dispatch<Action>;
-  allRows: any[];
-  searchableColumns: SearchableColumn[];
-  type: 'COMPETENCE' | 'MOTIVATION';
+  onSelect: (val: string[]) => void;
+  placeholder: string;
 }) {
   const categoriesWithGroup = useCategories();
   const classes = useStyles();
@@ -93,25 +88,14 @@ export default function CompetenceFilterInput({
   );
 
   const handleCategoryChange = (
-    event: ChangeEvent<unknown>,
+    _event: ChangeEvent<unknown>,
     values: CategoryWithGroup[]
   ) => {
-    const dispatchAction =
-      type === 'COMPETENCE'
-        ? 'UPDATE_COMPETENCE_FILTER'
-        : 'UPDATE_MOTIVATION_FILTER';
-
-    dispatch({
-      type: dispatchAction,
-      filterList: values.map((categoryWithGroup) => categoryWithGroup.category),
-      allRows,
-      searchableColumns,
-    });
+    onSelect(values.map((categoryWithGroup) => categoryWithGroup.category));
   };
 
   return (
     <Autocomplete
-      id={type}
       value={activeCategories}
       options={categoriesWithGroup}
       groupBy={(option) => option.group}
@@ -136,11 +120,7 @@ export default function CompetenceFilterInput({
             type="text"
             {...params.inputProps}
             className={classes.input}
-            placeholder={
-              type === 'COMPETENCE'
-                ? 'Filtrer på kompetanse...'
-                : 'Filtrer på motivasjon...'
-            }
+            placeholder={placeholder}
             endAdornment={<FilterListIcon />}
           />
         </div>
