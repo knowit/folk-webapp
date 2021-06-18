@@ -1,11 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-# [3.2.0] - 2021-06-17
-## Added
+## [3.2.0] - 2021-06-17
+### Added
 - Showing number of rows currently displayed, respecting filtering and search.
 
-## Changed
+### Changed
 - All dependencies in both front- and backend is updated to the latest version
 
 ## [3.1.0] - 2021-03-23
