@@ -13,8 +13,6 @@ interface RadarChartsProps {
   big?: boolean;
 }
 
-const RadarChartColors = colors.filter((_, k) => k !== 1);
-
 export default function Radar({
   data,
   groupKey,
@@ -42,7 +40,7 @@ export default function Radar({
         enableDotLabel={false}
         dotLabel={({ value }: { value: number }) => value.toFixed(1)}
         dotLabelYOffset={-12}
-        colors={RadarChartColors}
+        colors={colors}
         fillOpacity={0.25}
         blendMode="multiply"
         animate={true}

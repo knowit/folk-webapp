@@ -222,7 +222,7 @@ export default function EmployeeSite() {
               ) : (
                 <>
                   <b>Språk: </b>
-                  {tags?.language.replace(';', ', ')}
+                  {tags?.language.replace(/;/g, ', ')}
                 </>
               )}
             </div>
@@ -277,7 +277,7 @@ export default function EmployeeSite() {
                     type: 'Bar',
                     props: {
                       dataKey: 'kategori',
-                      yLabels: ['motivasjon', 'kompetanse'],
+                      yLabels: ['kompetanse', 'motivasjon'],
                       maxValue: 5,
                     },
                   },
@@ -285,7 +285,7 @@ export default function EmployeeSite() {
                     type: 'Radar',
                     props: {
                       groupKey: 'kategori',
-                      valueKey: ['motivasjon', 'kompetanse'],
+                      valueKey: ['kompetanse', 'motivasjon'],
                       maxValue: 5,
                     },
                   },
