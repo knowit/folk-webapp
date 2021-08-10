@@ -517,7 +517,7 @@ exports.competenceMapping = async ({ data }) => {
     let categoriesMap = {}
     data.forEach(row => {
       if (row.category in categoriesMap) {
-        categoriesMap[row.category].children.push({ category: row.subCategory, value: row.value })
+        categoriesMap[row.category].children.push({ category: `${row.category}: ${row.subCategory}`, value: row.value })
         categoriesMap[row.category].value += row.value
       }
       else {
