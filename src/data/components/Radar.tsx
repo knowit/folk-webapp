@@ -22,6 +22,7 @@ export default function Radar({
   big,
 }: RadarChartsProps) {
   const height = big ? '400px' : '300px';
+  console.log(data);
   return (
     <div style={{ height, width: '100%' }}>
       <ResponsiveRadar

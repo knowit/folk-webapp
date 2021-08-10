@@ -42,15 +42,15 @@ export default function Competence() {
             {
               type: 'Radar',
               props: {
-                groupKey: 'kategori',
-                valueKey: ['motivasjon', 'kompetanse'],
+                groupKey: 'category',
+                valueKey: ['motivation', 'competence'],
               },
             },
             {
               type: 'Bar',
               props: {
-                dataKey: 'kategori',
-                yLabels: ['motivasjon', 'kompetanse'],
+                dataKey: 'category',
+                yLabels: ['motivation', 'competence'],
               },
             },
           ],
@@ -158,15 +158,15 @@ export default function Competence() {
             {
               type: 'Sunburst',
               props: {
-                yLabels: ['verdi'],
-                groupKey: 'kategori',
+                yLabels: ['value'],
+                groupKey: 'category',
               },
             },
             {
               type: 'Bar',
               props: {
-                dataKey: 'kategori',
-                yLabels: ['verdi'],
+                dataKey: 'category',
+                yLabels: ['value'],
               },
             },
           ],

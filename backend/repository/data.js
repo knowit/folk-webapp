@@ -133,7 +133,7 @@ exports.employeeCompetenceReports = ({ parameters: { email } = {} }) => [
     filter: { email },
   },
 ]
-/** Dette endepunktet henter mer data om ansatte. 
+/** Dette endepunktet henter mer data om ansatte.
  *  Arbeidserfaring, ferdigheter, språk,  utdanning og roller fra CV-partner og nærmeste leder fra AD,
  *  Brukes i EmployeeInfo.tsx (utvidet tabell) og EmployeeSite.tsx
  */
@@ -517,33 +517,33 @@ exports.competenceMapping = async ({ data }) => {
     let categoriesMap = {}
     data.forEach(row => {
       if (row.category in categoriesMap) {
-        categoriesMap[row.category].children.push({ kategori: row.subCategory, verdi: row.value })
-        categoriesMap[row.category].verdi += row.value
+        categoriesMap[row.category].children.push({ category: row.subCategory, value: row.value })
+        categoriesMap[row.category].value += row.value
       }
       else {
         categoriesMap[row.category] = {
-          kategori: row.category,
+          category: row.category,
           children: [],
-          verdi: 0
+          value: 0
         }
       }
     })
     for (const key of Object.keys(categoriesMap)) {
-      categoryObj = categoriesMap[key]
-      avg = categoryObj.verdi / categoryObj.children.length
+      const categoryObj = categoriesMap[key]
+      const avg = categoryObj.value / categoryObj.children.length
       categoryObj.children.forEach(child => {
-        child.size = (child.verdi / categoryObj.verdi) * avg
+        child.size = (child.value / categoryObj.value) * avg
       })
-      categoryObj.verdi = avg
+      categoryObj.value = avg
     }
     return Object.values(categoriesMap)
   }
 
   return {
-    setNames: ['Kompetanse', 'Motivasjon'],
+    setNames: ['Motivation', 'Competence'],
     sets: {
-      Kompetanse: competenceCategories(competence),
-      Motivasjon: competenceCategories(motivation),
+      Competence: competenceCategories(competence),
+      Motivation: competenceCategories(motivation),
     },
   }
 }
@@ -576,7 +576,7 @@ exports.competenceAmountReports = [
   { reportName: 'employeeMotivation' },
 ]
 /** Dette endepunktet henter antall ansatte i knowit som har svart 3 eller over på kompetanse og/eller motivasjon på kompetansekartleggingen
- * for de forskjellige kategoriene. Den regner også ut den prosentivse andelen som har svart 3 eller mer sammenlignet med alle om har svart. 
+ * for de forskjellige kategoriene. Den regner også ut den prosentivse andelen som har svart 3 eller mer sammenlignet med alle om har svart.
  * Endepuktet brukes i Competence.tsx for å fremstille denne dataen som et stolpediagram.
  */
 exports.competenceAmount = async ({ data }) => {
@@ -643,7 +643,7 @@ exports.employeeRadarReports = ({ parameters: { user_id } = {} }) => [
     reportName: 'employee_competence',
   },
 ]
-/** Dette endepunktet hetner data om hvordan en konulent har scoret på de forskjellige kategoriene på kompetansekartleggingen 
+/** Dette endepunktet hetner data om hvordan en konulent har scoret på de forskjellige kategoriene på kompetansekartleggingen
  *  Det brukes i EmployeeInfo (utvidet tabell), og EmployeeSite (siden for hver enkelt ansatt)
  */
 exports.employeeRadar = async ({ data, parameters: { user_id } = {} }) => {
@@ -682,8 +682,8 @@ exports.employeeRadar = async ({ data, parameters: { user_id } = {} }) => {
   { reportName: 'competenceAverage' },
   { reportName: 'motivationAverage' },
 ] */
-/** Dette endepunktet hetner gjennomsnittsdata om hvordan ansatte har scoret på de forskjellige kategoriene på kompetansekartleggingen 
- *  Det brukes i Competence for å vise radar- og stolpediagram. 
+/** Dette endepunktet hetner gjennomsnittsdata om hvordan ansatte har scoret på de forskjellige kategoriene på kompetansekartleggingen
+ *  Det brukes i Competence for å vise radar- og stolpediagram.
  */
 /* exports.competenceAreas = async ({ data }) => {
   const [categories, competence, motivation] = data
@@ -757,47 +757,47 @@ exports.competenceAreasReports = [
   { reportName: 'newMotivationAverage' },
 ]
 
- exports.competenceAreas = async ({ data }) => {
+exports.competenceAreas = async ({ data }) => {
   const [competence, motivation] = data
   console.log(competence)
 
-  categoriesMap = {Hovedkategorier: {}}
+  const categoriesMap = {mainCategories: {}}
 
   competence.forEach(row => {
     const category = row.category
-    const subCategory = row.subCategory 
+    const subCategory = row.subCategory
     const competence = row.value || null
     if (!(category in categoriesMap)) {
       categoriesMap[category] = {}
-      categoriesMap["Hovedkategorier"][category] = {kategori: category, motivasjon: 0, kompetanse: 0}
+      categoriesMap['mainCategories'][category] = {category, motivation: 0, competence: 0}
     }
-    categoriesMap[category][subCategory] = {kategori: subCategory, kompetanse: competence, motivasjon: null}
-    categoriesMap["Hovedkategorier"][category].kompetanse += competence
+    categoriesMap[category][subCategory] = {category: subCategory, competence, motivation: null}
+    categoriesMap['mainCategories'][category].competence += competence
   })
 
   motivation.forEach(row => {
-    const category = row.category 
-    const subCategory = row.subCategory 
+    const category = row.category
+    const subCategory = row.subCategory
     const motivation = row.value || null
     if (!(category in categoriesMap)) {
       categoriesMap[category] = {}
-      categoriesMap["Hovedkategorier"][category] = {kategori: category, motivasjon: 0, kompetanse: 0}
+      categoriesMap['mainCategories'][category] = {category, motivation: 0, competence: 0}
     }
     if (subCategory in categoriesMap[category]) {
-      categoriesMap[category][subCategory].motivasjon = motivation
+      categoriesMap[category][subCategory].motivation = motivation
     }
     else {
-      categoriesMap[category][subCategory] = {kategori: subCategory, kompetanse: null, motivasjon: motivation}
+      categoriesMap[category][subCategory] = {category: subCategory, competence: null, motivation}
     }
-    categoriesMap["Hovedkategorier"][category].motivasjon += motivation
+    categoriesMap['mainCategories'][category].motivation += motivation
   })
 
-  console.log(categoriesMap["Hovedkategorier"])
-  output = {}
+  console.log(categoriesMap['mainCategories'])
+  const output = {}
   for (const category of Object.keys(categoriesMap)) {
-    if (category !== "Hovedkategorier") {
-      categoriesMap["Hovedkategorier"][category].kompetanse /= Object.keys(categoriesMap[category]).length
-      categoriesMap["Hovedkategorier"][category].motivasjon /= Object.keys(categoriesMap[category]).length
+    if (category !== 'mainCategories') {
+      categoriesMap['mainCategories'][category].competence /= Object.keys(categoriesMap[category]).length
+      categoriesMap['mainCategories'][category].motivation /= Object.keys(categoriesMap[category]).length
     }
     output[category] = Object.values(categoriesMap[category])
   }
@@ -805,5 +805,5 @@ exports.competenceAreasReports = [
     setNames: Object.keys(output),
     sets: output
   }
-  
+
 }

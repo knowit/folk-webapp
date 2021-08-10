@@ -4,8 +4,8 @@ import { ResponsiveSunburst, NormalizedDatum } from '@nivo/sunburst';
 import { BasicTooltip } from '@nivo/tooltip';
 
 type SunburstChartsData = {
-  kategori?: string;
-  verdi?: number;
+  category?: string;
+  value?: number;
   size?: number;
   children?: SunburstChartsData[];
 };
@@ -19,7 +19,7 @@ interface SunburstChartsProps {
 function GetCorrectValue(node: SunburstChartsData): number {
   if (node.children) {
     const sumValue = node.children.reduce(getParentSize, 0);
-    return (node.verdi as number) - sumValue;
+    return (node.value as number) - sumValue;
   }
   return node.size || 0;
 }
@@ -29,11 +29,14 @@ function getParentSize(total: number, child: SunburstChartsData): number {
 }
 
 export default function Sunburst({ data, groupKey, big }: SunburstChartsProps) {
+  console.log(groupKey);
   const height = big ? '400px' : '300px';
   const formattedData = {
     children: data,
   };
 
+
+  console.log(data);
   const CustomTooltip = ({
     id,
     value,
@@ -45,8 +48,8 @@ export default function Sunburst({ data, groupKey, big }: SunburstChartsProps) {
       depth === 1
         ? value
         : formattedData.children
-            ?.find((node) => node.kategori === parent?.data.id)
-            ?.children?.find((node) => node.kategori === id)?.verdi;
+            ?.find((node) => node.category === parent?.data.id)
+            ?.children?.find((node) => node.category === id)?.value;
 
     return (
       <BasicTooltip
