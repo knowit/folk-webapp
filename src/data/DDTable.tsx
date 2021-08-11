@@ -141,6 +141,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
             onSelect={(competences) =>
               setFilter((prev) => ({ ...prev, competenceFilter: competences }))
             }
+            type="COMPETENCE"
           />
           <CompetenceFilterInput
             placeholder="Filtrer på motivasjon..."
@@ -148,6 +149,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
             onSelect={(motivations) =>
               setFilter((prev) => ({ ...prev, motivationFilter: motivations }))
             }
+            type="MOTIVATION"
           />
           <SearchInput
             placeholder="Søk konsulent, kunde..."
