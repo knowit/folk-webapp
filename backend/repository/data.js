@@ -764,30 +764,27 @@ exports.competenceAreas = async ({ data }) => {
   const categoriesMap = {mainCategories: {}}
 
   competence.forEach(row => {
-    const category = row.category
-    const subCategory = row.subCategory
+    const { category, subCategory } = row
     const competence = row.value || null
     if (!(category in categoriesMap)) {
       categoriesMap[category] = {}
-      categoriesMap['mainCategories'][category] = {category, motivation: 0, competence: 0}
+      categoriesMap['mainCategories'][category] = { category, motivation: 0, competence: 0 }
     }
-    categoriesMap[category][subCategory] = {category: subCategory, competence, motivation: null}
+    categoriesMap[category][subCategory] = { category: subCategory, competence, motivation: null }
     categoriesMap['mainCategories'][category].competence += competence
   })
 
   motivation.forEach(row => {
-    const category = row.category
-    const subCategory = row.subCategory
+    const { category, subCategory } = row
     const motivation = row.value || null
     if (!(category in categoriesMap)) {
       categoriesMap[category] = {}
-      categoriesMap['mainCategories'][category] = {category, motivation: 0, competence: 0}
+      categoriesMap['mainCategories'][category] = { category, motivation: 0, competence: 0 }
     }
     if (subCategory in categoriesMap[category]) {
       categoriesMap[category][subCategory].motivation = motivation
-    }
-    else {
-      categoriesMap[category][subCategory] = {category: subCategory, competence: null, motivation}
+    } else {
+      categoriesMap[category][subCategory] = { category: subCategory, competence: null, motivation }
     }
     categoriesMap['mainCategories'][category].motivation += motivation
   })
