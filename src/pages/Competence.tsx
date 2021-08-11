@@ -43,14 +43,14 @@ export default function Competence() {
               type: 'Radar',
               props: {
                 groupKey: 'kategori',
-                valueKey: ['motivasjon', 'kompetanse'],
+                valueKey: ['kompetanse', 'motivasjon'],
               },
             },
             {
               type: 'Bar',
               props: {
                 dataKey: 'kategori',
-                yLabels: ['motivasjon', 'kompetanse'],
+                yLabels: ['kompetanse', 'motivasjon'],
               },
             },
           ],
