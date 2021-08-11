@@ -75,10 +75,12 @@ export default function CompetenceFilterInput({
   filterList,
   onSelect,
   placeholder,
+  type,
 }: {
   filterList: string[];
   onSelect: (val: string[]) => void;
   placeholder: string;
+  type: 'COMPETENCE' | 'MOTIVATION';
 }) {
   const categoriesWithGroup = useCategories();
   const classes = useStyles();
@@ -96,6 +98,7 @@ export default function CompetenceFilterInput({
 
   return (
     <Autocomplete
+      id={type}
       value={activeCategories}
       options={categoriesWithGroup}
       groupBy={(option) => option.group}
