@@ -22,10 +22,10 @@ export default function Competence() {
             {
               type: 'Bar',
               props: {
-                dataKey: 'kategori',
-                yLabels: ['kompetanseandel', 'motivasjonandel'],
+                dataKey: 'category',
+                yLabels: ['competenceProportion', 'motivationProportion'],
                 maxValue: 'auto',
-                tooltipValues: ['kompetanseverdi', 'motivasjonverdi'],
+                tooltipValues: ['competenceAmount', 'motivationAmount'],
               },
             },
           ],

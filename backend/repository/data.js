@@ -15,34 +15,26 @@ const e = require('express')
  *
  * @return {object} All categories with scores for the employee
  */
-const getCategoryScoresForEmployee = (employeeUuid, categoryList) =>
-  categoryList.reduce((categoryScores, thisCategory) => {
-    // name of categories is stored as 'category' for motivation and 'categories' for competence
-    const categoryName = thisCategory.category || thisCategory.categories
-    const categoryScore = thisCategory[employeeUuid]
-    return {
-      ...categoryScores,
-      [categoryName]: categoryScore,
-    }
-  }, {})
+const getCategoryScoresForEmployee = (employeeEmail, categoryList) => {
+  let employeeCategories = categoryList.filter(categoryRow => categoryRow.email === employeeEmail)
+  let employeeMotivation = {}
+  let employeeCompetence = {}
+  employeeCategories.forEach(employeeRow => {
+    employeeMotivation[[employeeRow.subCategory]] = employeeRow.motivation
+    employeeCompetence[[employeeRow.subCategory]] = employeeRow.competence
+  })
+  return [employeeMotivation, employeeCompetence]
+}
 
 const getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`
 
 exports.employeeTableReports = [
   { reportName: 'employeeInformation' },
-  { reportName: 'employeeMotivation' },
-  { reportName: 'employee_competence' },
+  { reportName: 'employeeMotivationAndCompetence'}, 
 ]
 /**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
 exports.employeeTable = async ({ data }) => {
-  const [allEmployees, motivationData, competenceData] = data
-  /*   console.log("motivationData:")
-    console.log(motivationData)
-    conmsole.log("competenceData:")
-    console.log(competenceData) */
-  const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
-    encrypted: true,
-  })
+  const [allEmployees, motivationAndCompetence] = data
   const mergedEmployees = mergeEmployees(allEmployees)
   return mergedEmployees.map(employee => ({
     rowId: uuid(),
@@ -54,7 +46,7 @@ exports.employeeTable = async ({ data }) => {
           employee.email
         )}`,
         email: employee.email,
-        email_id: makeEmailUuid(employee.email, salt),
+        email_id: employee.email,
         user_id: employee.user_id,
         degree: employee.degree,
       },
@@ -72,14 +64,8 @@ exports.employeeTable = async ({ data }) => {
           employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
         ])
       ),
-      getCategoryScoresForEmployee(
-        makeEmailUuid(employee.email, salt).slice(0, 8),
-        motivationData
-      ),
-      getCategoryScoresForEmployee(
-        makeEmailUuid(employee.email, salt),
-        competenceData
-      ),
+      getCategoryScoresForEmployee(employee.email, motivationAndCompetence)[0],
+      getCategoryScoresForEmployee(employee.email, motivationAndCompetence)[1],
     ],
   }))
 }
@@ -401,42 +387,6 @@ exports.education = async ({ data }) => {
   }
 }
 
-/** This exports a lits of all categories and subcategories for the
- * competence mapping. Its used to define the options in the
- * filter dropdown menu.
- */
-/* exports.competenceFilterReports = [{ reportName: 'categories' }]
-exports.competenceFilter = async ({ data }) => {
-  const categories = data
-  console.log("categories:")
-  console.log(categories)
-  // Categories structure
-  const output = []
-  // Get the main categories
-  const mainCategories = new Set(
-    categories.flatMap((item) => Object.keys(item))
-  )
-  console.log("mainCategories:")
-  console.log(mainCategories)
-  mainCategories.forEach((name) => {
-    const categoryObject = {
-      category: name,
-      subCategories: [],
-    }
-
-    // Get child categories
-    categories.forEach((item) => {
-      const childName = item[name]
-      if (childName) {
-        categoryObject.subCategories.push(childName)
-      }
-    })
-    output.push(categoryObject)
-  })
-  console.log("output:")
-  console.log(output)
-  return output
-} */
 
 exports.competenceFilterReports = [{ reportName: 'newCategories' }]
 exports.competenceFilter = async ({ data }) => {
@@ -444,66 +394,6 @@ exports.competenceFilter = async ({ data }) => {
   let output = categories.map(e => ({ category: e.category, subCategories: JSON.parse(e.subCategories) }))
   return output
 }
-
-/* exports.competenceMappingReports = [
-  { reportName: 'categories' },
-  { reportName: 'competenceAverage' },
-  { reportName: 'motivationAverage' },
-] */
-/** Dette endepunktet brukes i competence for å vise data fra kompteansekartleggingen som både sunburst-graf og stolpediagram */
-/* exports.competenceMapping = async ({ data }) => {
-  const [categories, competence, motivation] = data
-
-  const competenceCategories = (data) => {
-    // Categories structure
-    const output = []
-
-    // Get the main categories
-    const mainCategories = new Set(
-      categories.flatMap((item) => Object.keys(item))
-    )
-
-    mainCategories.forEach((name) => {
-      const categoryObject = {
-        kategori: name,
-        verdi: 0,
-        children: [],
-      }
-      // Get child categories
-      var sumOfCategories = 0
-      categories.forEach((item) => {
-        const childName = item[name]
-        if (childName) {
-          // Create child category and merge competence data
-          const value = data[0][childName.toLowerCase()] || null
-          const childCategoryObject = {
-            kategori: childName,
-            verdi: value,
-          }
-          sumOfCategories += value
-          categoryObject.children.push(childCategoryObject)
-        }
-      })
-
-      const avgValue = sumOfCategories / categoryObject.children.length
-      categoryObject.children.forEach((child) => {
-        child.size = (child.verdi / sumOfCategories) * avgValue
-      })
-
-      categoryObject.verdi = avgValue
-      output.push(categoryObject)
-    })
-    return output
-  }
-
-  return {
-    setNames: ['Kompetanse', 'Motivasjon'],
-    sets: {
-      Kompetanse: competenceCategories(competence),
-      Motivasjon: competenceCategories(motivation),
-    },
-  }
-} */
 
 
 exports.competenceMappingReports = [
@@ -549,45 +439,71 @@ exports.competenceMapping = async ({ data }) => {
 }
 
 
-const getAmountOverOrEqualToX = (data, x, katName, compOrMot) => {
-  const result = []
-  const verdiNavn = compOrMot + 'verdi'
-  const andelNavn = compOrMot + 'andel'
-  data.map((cat) => {
-    const thisCatRes = {
-      kategori: cat[katName],
-      [verdiNavn]: 0,
-    }
-    Object.entries(cat).forEach((person) => {
-      if (person[0] !== katName && person[1] >= x) {
-        thisCatRes[verdiNavn] += 1
-      }
-    })
-    thisCatRes[andelNavn] =
-      (thisCatRes[verdiNavn] / (Object.keys(cat).length - 1)) * 100
-    result.push(thisCatRes)
-  })
-  return result
-}
 
 exports.competenceAmountReports = [
-  { reportName: 'categories' },
-  { reportName: 'employee_competence' },
-  { reportName: 'employeeMotivation' },
+  { reportName: 'employeeMotivationAndCompetence' },
 ]
 /** Dette endepunktet henter antall ansatte i knowit som har svart 3 eller over på kompetanse og/eller motivasjon på kompetansekartleggingen
  * for de forskjellige kategoriene. Den regner også ut den prosentivse andelen som har svart 3 eller mer sammenlignet med alle om har svart.
  * Endepuktet brukes i Competence.tsx for å fremstille denne dataen som et stolpediagram.
  */
 exports.competenceAmount = async ({ data }) => {
-  const [categories, allComp, allMot] = data
-  const compAmount = getAmountOverOrEqualToX(allComp, 3, 'categories', 'kompetanse')
-  const motAmount = getAmountOverOrEqualToX(allMot, 3, 'category', 'motivasjon')
-  const [catSet, setNames] = reStructCategories(categories, compAmount, motAmount)
+  const THRESHOLD=3
+  const motAndComp = data
+  const categoriesMap = {"mainCategories": {}}
+  // used to ensure that each participant is only counted once for each main category and to count the number of distinct participants
+  const emailMap = {}
+  data.forEach(employeeRow => {
+    const { categoryMotivationAvg, categoryCompetenceAvg, category, subCategory, motivation, competence, email } = employeeRow
+    
+    if (!(category in categoriesMap)) {
+      categoriesMap["mainCategories"][category] = {"competenceAmount": 0, "motivationAmount": 0, category: category}
+      categoriesMap[category] = {}
+    }
+    
+    if (!(subCategory in categoriesMap[category])) {
+      categoriesMap[category][subCategory] = {"competenceAmount": 0, "motivationAmount": 0, category: subCategory}
+    }
+
+    if (!(email in emailMap)) {
+      emailMap[email] = []
+    }
+
+    if (!emailMap[email].includes(category)) {
+      if (categoryMotivationAvg > THRESHOLD) {
+        categoriesMap["mainCategories"][category].motivationAmount += 1
+      }
+  
+      if (categoryCompetenceAvg > THRESHOLD) {
+        categoriesMap["mainCategories"][category].competenceAmount += 1
+      }
+
+      emailMap[email].push(category)
+    }
+
+    if (motivation > THRESHOLD) {
+      categoriesMap[category][subCategory].motivationAmount += 1
+    }
+
+    if (competence > THRESHOLD) {
+      categoriesMap[category][subCategory].competenceAmount += 1
+    }
+  })
+
+  const output = {}
+  const nParticipants = Object.keys(emailMap).length
+  for (const category of Object.keys(categoriesMap)) {
+    for (const subCategory of Object.keys(categoriesMap[category])) {
+      const { motivationAmount, competenceAmount } = categoriesMap[category][subCategory]
+      categoriesMap[category][subCategory]["motivationProportion"] = motivationAmount/nParticipants*100
+      categoriesMap[category][subCategory]["competenceProportion"] = competenceAmount/nParticipants*100
+    }
+    output[category] = Object.values(categoriesMap[category])
+  }
 
   return {
-    setNames: setNames,
-    sets: catSet,
+    setNames: Object.keys(output),
+    sets: output,
   }
 }
 
@@ -609,12 +525,9 @@ exports.empDataReports = ({ parameters: { email } = {} }) => [
 exports.empData = async ({ data, parameters: { email } = {} }) => {
   const [resSkills, resWork, resComp] = data
   const emp = mergeEmployees(resComp)[0]
-  const salt = await getSecret('/folk-webapp/KOMPETANSEKARTLEGGING_SALT', {
-    encrypted: true,
-  })
 
   return {
-    email_id: makeEmailUuid(email, salt),
+    email_id: emp.email,
     user_id: emp.user_id,
     employee: emp,
     image: getStorageUrl(emp.image_key),
@@ -632,124 +545,35 @@ exports.empData = async ({ data, parameters: { email } = {} }) => {
   }
 }
 
-exports.employeeRadarReports = ({ parameters: { user_id } = {} }) => [
+exports.employeeRadarReports = ({ parameters: { email } = {} }) => [
   {
-    reportName: 'categories',
-  },
-  {
-    reportName: 'employeeMotivation',
-  },
-  {
-    reportName: 'employee_competence',
-  },
+    reportName: 'employeeMotivationAndCompetence',
+    filter: { email },
+  }
 ]
 /** Dette endepunktet hetner data om hvordan en konulent har scoret på de forskjellige kategoriene på kompetansekartleggingen
  *  Det brukes i EmployeeInfo (utvidet tabell), og EmployeeSite (siden for hver enkelt ansatt)
  */
-exports.employeeRadar = async ({ data, parameters: { user_id } = {} }) => {
-  const [categories, empMotivation, empCompetence] = data
-
-  const thisMotivation = []
-  empMotivation.forEach((item) => {
-    thisMotivation.push({
-      kategori: item['category'],
-      motivasjon: item[user_id.slice(0, 8)],
-    })
+exports.employeeRadar = async ({ data }) => {
+  const competenceAndMotivation = data
+  categoriesMap = {"mainCategories": {}}
+  competenceAndMotivation.forEach(row => {
+    const { category, subCategory, categoryCompetenceAvg, categoryMotivationAvg, competence, motivation } = row
+    if (!(category in categoriesMap)) {
+      categoriesMap[category] = {}
+    }
+    categoriesMap[category][subCategory] = {category: subCategory, motivation, competence}
+    categoriesMap["mainCategories"][category] = {category, motivation: categoryMotivationAvg, competence: categoryCompetenceAvg}
   })
-
-  const thisCompetence = []
-  empCompetence.forEach((item) => {
-    thisCompetence.push({
-      kategori: item['categories'],
-      kompetanse: item[user_id],
-    })
-  })
-
-  const [structuredCats, setNames] = reStructCategories(
-    categories,
-    thisCompetence,
-    thisMotivation
-  )
-
+  const output = {}
+  for (const category of Object.keys(categoriesMap)) {
+    output[category] = Object.values(categoriesMap[category])
+  }
   return {
-    setNames: setNames,
-    sets: structuredCats,
+    setNames: Object.keys(output),
+    sets: output
   }
 }
-
-/* exports.competenceAreasReports = [
-  { reportName: 'categories' },
-  { reportName: 'competenceAverage' },
-  { reportName: 'motivationAverage' },
-] */
-/** Dette endepunktet hetner gjennomsnittsdata om hvordan ansatte har scoret på de forskjellige kategoriene på kompetansekartleggingen
- *  Det brukes i Competence for å vise radar- og stolpediagram.
- */
-/* exports.competenceAreas = async ({ data }) => {
-  const [categories, competence, motivation] = data
-  const thisCompetence = []
-  const thisMotivation = []
-
-  const mainCategories = new Set(
-    categories.flatMap((item) => Object.keys(item))
-  )
-
-  mainCategories.forEach((name) => {
-    const compCategory = {
-      kategori: name.charAt(0).toUpperCase() + name.slice(1),
-      kompetanse: 0,
-    }
-    const motCategory = {
-      kategori: name.charAt(0).toUpperCase() + name.slice(1),
-      motivasjon: 0,
-    }
-
-    let categoryComp = 0
-    let categoryMot = 0
-    let numberOfSubCategories = 0
-
-    categories.forEach(item => {
-      const childName = item[name]
-      if (childName) {
-        const compValue = competence[0][childName.toLowerCase()] || null
-        const motValue = motivation[0][childName.toLowerCase()] || null
-
-        categoryComp += compValue
-        categoryMot += motValue
-        numberOfSubCategories++
-
-        const childCatComp = {
-          kategori: childName,
-          kompetanse: compValue,
-        }
-        const childCatMot = {
-          kategori: childName,
-          motivasjon: motValue,
-        }
-
-        thisCompetence.push(childCatComp)
-        thisMotivation.push(childCatMot)
-      }
-    })
-
-    compCategory.kompetanse = categoryComp / numberOfSubCategories
-    motCategory.motivasjon = categoryMot / numberOfSubCategories
-    thisCompetence.push(compCategory)
-    thisMotivation.push(motCategory)
-  })
-
-  const [structuredCats, setNames] = reStructCategories(
-    categories,
-    thisCompetence,
-    thisMotivation
-  )
-  console.log(structuredCats)
-
-  return {
-    setNames: setNames,
-    sets: structuredCats,
-  }
-} */
 
 
 exports.competenceAreasReports = [
@@ -759,7 +583,6 @@ exports.competenceAreasReports = [
 
 exports.competenceAreas = async ({ data }) => {
   const [competence, motivation] = data
-  console.log(competence)
 
   const categoriesMap = {mainCategories: {}}
 
@@ -789,7 +612,6 @@ exports.competenceAreas = async ({ data }) => {
     categoriesMap['mainCategories'][category].motivation += motivation
   })
 
-  console.log(categoriesMap['mainCategories'])
   const output = {}
   for (const category of Object.keys(categoriesMap)) {
     if (category !== 'mainCategories') {

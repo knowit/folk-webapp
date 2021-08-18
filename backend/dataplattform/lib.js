@@ -6,7 +6,7 @@ async function report(
     reportName,
     filter = {},
     accessToken = null,
-    apiUrl = process.env.API_URL || 'https://dev-api.dataplattform.knowit.no',
+    apiUrl = process.env.API_URL || 'https://api.new-dev.dataplattform.knowit.no',
   }
 ) {
   // Reporting

@@ -95,9 +95,9 @@ export default function Bar({
         enableLabel={false}
         tooltip={tooltipValues ? 
           ({ indexValue, value, id }) => {
-            const motOrComp = id.toString().includes("motivasjon")? "motivasjon":"kompetanse"
-            const numberId = motOrComp === "motivasjon"? tooltipValues[1]:tooltipValues[0]
-            const thisData = data.find(i => (i.kategori === indexValue))
+            const motOrComp = id.toString().includes("motivation")? "motivation":"competence"
+            const numberId = motOrComp === "motivation"? tooltipValues[1]:tooltipValues[0]
+            const thisData = data.find(i => (i.category === indexValue))
             const numberValue = thisData? thisData[numberId] : 0
             return(<div>
               <b>{indexValue}:</b>
