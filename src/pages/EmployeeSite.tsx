@@ -222,7 +222,7 @@ export default function EmployeeSite() {
               ) : (
                 <>
                   <b>Språk: </b>
-                  {tags?.language.replace(';', ', ')}
+                  {tags?.language.replace(/;/g, ', ')}
                 </>
               )}
             </div>
