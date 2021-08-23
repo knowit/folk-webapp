@@ -626,3 +626,11 @@ exports.competenceAreas = async ({ data }) => {
   }
 
 }
+
+exports.perProjectTableReports = [
+  { reportName: 'perProject' },
+]
+/** Dette endepunktet henter data fra perProject-rapporten som viser hvor mange som er tilknyttet ulike kunder, 
+ * og hvor mange timer de har jobbet for disse kundene 
+ */
+exports.perProjectTable = async ({ data }) => data
