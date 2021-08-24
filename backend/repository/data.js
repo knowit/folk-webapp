@@ -630,7 +630,41 @@ exports.competenceAreas = async ({ data }) => {
 exports.perProjectTableReports = [
   { reportName: 'perProject' },
 ]
+
 /** Dette endepunktet henter data fra perProject-rapporten som viser hvor mange som er tilknyttet ulike kunder, 
  * og hvor mange timer de har jobbet for disse kundene 
  */
-exports.perProjectTable = async ({ data }) => data
+exports.perProjectTable = async ({ data }) => {
+
+  // Reducing over reg_period and timestamp to have only one entry per customer
+  const deduped = {}
+  data.forEach(line => {
+    if (!(deduped.hasOwnProperty(line.customer))) {
+      deduped[line.customer] = {employees: 0, hours: 0}
+    }
+    deduped[line.customer].employees = deduped[line.customer].employees + line.employees
+    deduped[line.customer].hours = deduped[line.customer].hours + line.hours  
+  })
+
+  // Placing entries in main categories ANTALL_TIMER and ANTALL_ANSATTE for displaying in chart
+
+  const ANTALL_TIMER = 'Antall timer'
+  const ANTALL_ANSATTE = 'Antall ansatte'
+
+  const output = {
+    [ANTALL_ANSATTE]: [],
+    [ANTALL_TIMER]: [],
+  }
+  
+  Object.entries(deduped).forEach(([key, values]) => {
+    output[ANTALL_ANSATTE].push({customer: key, value: values.employees})
+    output[ANTALL_TIMER].push({customer: key, value: values.hours})
+  })
+
+  output[ANTALL_ANSATTE].sort((a, b) => b.value - a.value);
+  output[ANTALL_TIMER].sort((a, b) => b.value - a.value);
+
+  return output
+}
+
+
