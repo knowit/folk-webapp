@@ -16,9 +16,9 @@ const e = require('express')
  * @return {object} All categories with scores for the employee
  */
 const getCategoryScoresForEmployee = (employeeEmail, categoryList) => {
-  let employeeCategories = categoryList.filter(categoryRow => categoryRow.email === employeeEmail)
-  let employeeMotivation = {}
-  let employeeCompetence = {}
+  const employeeCategories = categoryList.filter(categoryRow => categoryRow.email === employeeEmail)
+  const employeeMotivation = {}
+  const employeeCompetence = {}
   employeeCategories.forEach(employeeRow => {
     employeeMotivation[[employeeRow.subCategory]] = employeeRow.motivation
     employeeCompetence[[employeeRow.subCategory]] = employeeRow.competence
@@ -402,7 +402,7 @@ exports.competenceMappingReports = [
 exports.competenceMapping = async ({ data }) => {
   const [competence, motivation] = data
   const competenceCategories = (data) => {
-    let categoriesMap = {}
+    const categoriesMap = {}
     data.forEach(row => {
       if (row.category in categoriesMap) {
         categoriesMap[row.category].children.push({ category: `${row.category}: ${row.subCategory}`, value: row.value })
