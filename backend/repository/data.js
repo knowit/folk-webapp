@@ -639,7 +639,7 @@ exports.perProjectTable = async ({ data }) => {
   // Reducing over reg_period and timestamp to have only one entry per customer
   const deduped = {}
   data.forEach(line => {
-    if (!(deduped.hasOwnProperty(line.customer))) {
+    if (!(line.customer in Object.keys(deduped))) {
       deduped[line.customer] = {employees: 0, hours: 0}
     }
     deduped[line.customer].employees = deduped[line.customer].employees + line.employees
@@ -655,16 +655,93 @@ exports.perProjectTable = async ({ data }) => {
     [ANTALL_ANSATTE]: [],
     [ANTALL_TIMER]: [],
   }
-  
+
   Object.entries(deduped).forEach(([key, values]) => {
     output[ANTALL_ANSATTE].push({customer: key, value: values.employees})
     output[ANTALL_TIMER].push({customer: key, value: values.hours})
   })
 
-  output[ANTALL_ANSATTE].sort((a, b) => b.value - a.value);
-  output[ANTALL_TIMER].sort((a, b) => b.value - a.value);
+  output[ANTALL_ANSATTE].sort((a, b) => b.value - a.value)
+  output[ANTALL_TIMER].sort((a, b) => b.value - a.value)
 
   return output
 }
 
+exports.customerTableReports = [
+  { reportName: 'perProject' },
+]
+/**Dette endepunktet henter dataen til kundetabellen */
+exports.customerTable = async ({ data }) => {
 
+  const latestPeriod = data.reduce((max, line) => max = max > line.reg_period ? max : line.reg_period, 0)
+  console.log(latestPeriod)
+
+  // Reducing over timestamp for entries in the latest reg_period to have only one entry per customer
+  const deduped = {}
+  data.forEach(line => {
+    if (line.reg_period === latestPeriod) {
+      if (!(line.customer in Object.keys(deduped))) {
+        deduped[line.customer] = {employees: 0, hours: 0}
+      }
+      deduped[line.customer].employees = deduped[line.customer].employees + line.employees
+      deduped[line.customer].hours = deduped[line.customer].hours + line.hours  
+    }
+  })
+
+  console.log(deduped)
+
+  const output = []
+
+  Object.entries(deduped).forEach(([key, entry]) => {
+    output.push({
+      rowId: uuid(),
+      rowData: [
+        key,
+        entry.employees,
+        entry.hours,
+      ],
+    })
+  })
+
+  console.log(output)
+
+  return output
+
+
+  /*
+  const [allEmployees, motivationAndCompetence] = data
+  const mergedEmployees = mergeEmployees(allEmployees)
+  return mergedEmployees.map(employee => ({
+    rowId: uuid(),
+    rowData: [
+      {
+        value: employee.navn,
+        image: getStorageUrl(employee.image_key),
+        competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
+          employee.email
+        )}`,
+        email: employee.email,
+        email_id: employee.email,
+        user_id: employee.user_id,
+        degree: employee.degree,
+      },
+      employee.title,
+      'red',
+      employee.customerArray.reduce((prevCustomer, thisCustomer) => {
+        if (thisCustomer.weight < prevCustomer.weight) {
+          return thisCustomer
+        }
+        return prevCustomer
+      }),
+      Object.fromEntries(
+        cvs.map(([lang, format]) => [
+          `${lang}_${format}`,
+          employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
+        ])
+      ),
+      getCategoryScoresForEmployee(employee.email, motivationAndCompetence)[0],
+      getCategoryScoresForEmployee(employee.email, motivationAndCompetence)[1],
+    ],
+  }))
+  */
+}
