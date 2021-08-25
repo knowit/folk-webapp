@@ -116,3 +116,22 @@ exports.reStructCategories = (categories, compScores = [], motScores = []) => {
 
   return [catSet, setNames]
 }
+
+
+exports.dedupeLatestPeriod = (data) => {
+  const latestPeriod = data.reduce((max, line) => max > line.reg_period ? max : line.reg_period, 0)
+
+  // Reducing over timestamp for entries in the latest reg_period to have only one entry per customer
+  const deduped = {}
+  data.forEach(line => {
+    if (line.reg_period === latestPeriod) {
+      if (!(line.customer in Object.keys(deduped))) {
+        deduped[line.customer] = {employees: 0, hours: 0}
+      }
+      deduped[line.customer].employees = deduped[line.customer].employees + line.employees
+      deduped[line.customer].hours = deduped[line.customer].hours + line.hours
+    }
+  })
+
+  return deduped
+}
