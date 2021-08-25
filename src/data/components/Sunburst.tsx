@@ -29,14 +29,12 @@ function getParentSize(total: number, child: SunburstChartsData): number {
 }
 
 export default function Sunburst({ data, groupKey, big }: SunburstChartsProps) {
-  console.log(groupKey);
   const height = big ? '400px' : '300px';
   const formattedData = {
     children: data,
   };
 
 
-  console.log(data);
   const CustomTooltip = ({
     id,
     value,
