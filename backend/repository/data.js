@@ -390,9 +390,7 @@ exports.education = async ({ data }) => {
 
 exports.competenceFilterReports = [{ reportName: 'newCategories' }]
 exports.competenceFilter = async ({ data }) => {
-  const categories = data
-  let output = categories.map(e => ({ category: e.category, subCategories: JSON.parse(e.subCategories) }))
-  return output
+  return data.map(e => ({ category: e.category, subCategories: JSON.parse(e.subCategories) }))
 }
 
 
