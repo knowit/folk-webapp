@@ -9,26 +9,23 @@ import SearchInputMinimal from './SearchInputMinimal';
 
 const useStyles = makeStyles({
   searchBars: {
-    flexDirection: 'row',
-    display: 'flex',
-    justifyContent: 'space-around',
-    width: '900px',
   },
+  tableContainer: {
+  }
 });
 
-export function CustomerTable({ payload, title }: {payload: DDPayload, title: string}) {
-  const allRows = payload as [];
+type RowType = {
+  rowID: string,
+  rowData: any[]
+}
 
+export function CustomerTable({ payload, title }: {payload: DDPayload, title: string}) {
+  const allRows = payload as RowType[];
   const [displayRows, setDisplayRows] = useState(allRows);
 
   const classes = useStyles();
 
-  const handleSearchInput = (newValue: string) => {
-    console.log('søkeinput:', newValue)
-
-    // TODO: Do the filtering
-    setDisplayRows(allRows)
-  }
+  const handleSearchInput = (newValue: string) => {setDisplayRows(allRows.filter(row => row.rowData[0].toLowerCase().includes(newValue.toLowerCase())))}
 
   return (
     <>
@@ -36,13 +33,14 @@ export function CustomerTable({ payload, title }: {payload: DDPayload, title: st
         <div className={classes.searchBars}>
           <SearchInputMinimal
             callback={handleSearchInput}
-            placeholder="Søk kunde (funker ikke enda)"
+            placeholder="Søk etter kunde"
           />
         </div>
       </GridItemHeader>
       <RowCount>
         {payload.length} av {displayRows.length}
       </RowCount>
+      <div className={classes.tableContainer}>
       <DataTable
         rows={displayRows}
         columns={[
@@ -51,6 +49,7 @@ export function CustomerTable({ payload, title }: {payload: DDPayload, title: st
           { title: 'Antall timer' },
         ]}
       />
+      </div>
     </>
   );
 }
