@@ -38,7 +38,7 @@ export function CustomerTable({ payload, title }: {payload: DDPayload, title: st
         </div>
       </GridItemHeader>
       <RowCount>
-        {payload.length} av {displayRows.length}
+        {displayRows.length} av {payload.length}
       </RowCount>
       <div className={classes.tableContainer}>
       <DataTable
