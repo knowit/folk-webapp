@@ -17,6 +17,7 @@ interface DataTableColumn {
   renderExpanded?: (data: any) => JSX.Element;
   headerRenderCell?: () => JSX.Element;
   checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  headerCellAddition?: any,
 }
 
 interface DataTableRow {
@@ -251,7 +252,8 @@ function MuiVirtualizedTable({
     HeaderRenderCell: any | null,
     checkBoxChangeHandler:
       | ((event: React.ChangeEvent<HTMLInputElement>) => void)
-      | undefined
+      | undefined,
+    HeaderCellAddition?: any,
   ) {
     return HeaderRenderCell ? (
       <HeaderRenderCell
@@ -267,6 +269,7 @@ function MuiVirtualizedTable({
         align="left"
       >
         {title}
+        {HeaderCellAddition ? <HeaderCellAddition /> : <></>}
       </TableCell>
     );
   }
@@ -305,7 +308,7 @@ function MuiVirtualizedTable({
           gridClassName={classes.noFocus}
         >
           {columns.map(
-            ({ title, headerRenderCell, checkBoxChangeHandler }, index) => {
+            ({ title, headerRenderCell, checkBoxChangeHandler, headerCellAddition }, index) => {
               return (
                 <Column
                   key={title}
@@ -313,7 +316,8 @@ function MuiVirtualizedTable({
                     headerRenderer(
                       title,
                       headerRenderCell,
-                      checkBoxChangeHandler
+                      checkBoxChangeHandler,
+                      headerCellAddition
                     )
                   }
                   className={classes.flexContainer}
