@@ -132,6 +132,7 @@ export function CustomerTable({ payload, title }: {payload: DDPayload, title: st
       <DataTable
         rows={displayRows}
         columns={columns}
+        widthList={[670, 235, 235]}
       />
       </div>
     </>

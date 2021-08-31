@@ -8,6 +8,7 @@ import CharacterLimitBox from '../../../components/CharacterLimitBox';
 interface DataTableProps {
   columns: DataTableColumn[];
   rows: Omit<DataTableRow, 'columns'>[];
+  widthList: number[];
 }
 
 interface DataTableColumn {
@@ -17,7 +18,7 @@ interface DataTableColumn {
   renderExpanded?: (data: any) => JSX.Element;
   headerRenderCell?: () => JSX.Element;
   checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  headerCellAddition?: any,
+  headerCellAddition?: any;
 }
 
 interface DataTableRow {
@@ -94,6 +95,7 @@ interface MuiVirtualizedTableProps {
   rowCount: number;
   rowGetter: (row: { index: number }) => any;
   rows: any[];
+  widthList: number[];
 }
 
 function GetCell({
@@ -186,6 +188,7 @@ function MuiVirtualizedTable({
   rowCount,
   rowGetter,
   rows,
+  widthList
 }: MuiVirtualizedTableProps) {
   const classes = useStyles();
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -199,8 +202,6 @@ function MuiVirtualizedTable({
     ArrayRef.recomputeRowHeights();
     ArrayRef.forceUpdate();
   }, [state, ArrayRef]);
-
-  const widthList = [385, 222, 143, 337, 53];
 
   const rowRenderer: TableRowRenderer = ({
     className,
@@ -333,7 +334,7 @@ function MuiVirtualizedTable({
   );
 }
 
-export default function DataTable({ columns, rows }: DataTableProps) {
+export default function DataTable({ columns, rows, widthList }: DataTableProps) {
   return (
     <Paper
       style={{
@@ -347,6 +348,7 @@ export default function DataTable({ columns, rows }: DataTableProps) {
         rowGetter={({ index }) => rows[index].rowData}
         columns={columns}
         rows={rows}
+        widthList={widthList}
       />
     </Paper>
   );

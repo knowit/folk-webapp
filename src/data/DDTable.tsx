@@ -390,7 +390,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
       <RowCount>
         {state.rows.length} av {allRows.length}
       </RowCount>
-      <DataTable rows={state.rows} columns={[]} {...props} />
+      <DataTable rows={state.rows} columns={[]} widthList={[385, 222, 143, 337, 53]} {...props}/>
     </>
   );
 }
