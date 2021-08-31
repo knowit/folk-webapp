@@ -14,8 +14,21 @@ const useStyles = makeStyles({
   },
   tableContainer: {
   },
+  sortHeadCell: {
+    height: '100%',
+    width: '100%',
+    marginRight: 0,
+  },
+  arrowAnchor: {
+    marginRight: 0,
+    height: '100%',
+    display: 'flex',
+    width: '100%',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-end',
+  },
   arrowContainer: {
-
+    margin: '1.2em 0 0 auto',
   },
   arrowInactive: {
     opacity: '50%',
@@ -72,18 +85,19 @@ export function CustomerTable({ payload, title }: {payload: DDPayload, title: st
   }
 
   const SortHeadCell = (callBackID : number) => (
-    <div>
+    <div className={classes.sortHeadCell}>
       <a onClick={
         (e) => {
           e.preventDefault()
           sortChangeHandler(callBackID)
         }
       }
-         className={classes.arrowContainer}
-
+         className={classes.arrowAnchor}
       >
-        <ArrowDownwardIcon className={columnSortState[callBackID] !== COLUMN_SORT_STATE.DESC ? classes.arrowInactive : ''}/>
-        <ArrowUpwardIcon className={columnSortState[callBackID] !== COLUMN_SORT_STATE.ASC ? classes.arrowInactive : ''}/>
+        <div className={classes.arrowContainer}>
+          <ArrowDownwardIcon className={columnSortState[callBackID] !== COLUMN_SORT_STATE.DESC ? classes.arrowInactive : ''}/>
+          <ArrowUpwardIcon className={columnSortState[callBackID] !== COLUMN_SORT_STATE.ASC ? classes.arrowInactive : ''}/>
+        </div>
       </a>
     </div>
   )
