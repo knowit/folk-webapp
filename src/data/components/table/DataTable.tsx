@@ -47,6 +47,9 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingRight: '15px',
       paddingLeft: '15px',
     },
+    headerCellTitle : {
+      width: '100%',
+    },
     flexContainer: {
       display: 'flex',
       padding: 0,
@@ -269,7 +272,7 @@ function MuiVirtualizedTable({
         variant="head"
         align="left"
       >
-        {title}
+        <span className={classes.headerCellTitle}>{title}</span>
         {HeaderCellAddition ? <HeaderCellAddition /> : <></>}
       </TableCell>
     );
