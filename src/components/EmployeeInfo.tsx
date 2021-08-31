@@ -267,7 +267,7 @@ export default function EmployeeInfo({
       </div>
       <div className={classes.oversikt}>
         <DDItem
-          url={'/api/data/employeeRadar?email=' + data.email_id}
+          url={'/api/data/employeeRadar?user_id=' + data.email_id}
           title="Motivasjon"
           Component={DDChart}
           SkeletonComponent={ChartSkeleton}
@@ -277,16 +277,16 @@ export default function EmployeeInfo({
               {
                 type: 'Bar',
                 props: {
-                  dataKey: 'category',
-                  yLabels: ['motivation', 'competence'],
+                  dataKey: 'kategori',
+                  yLabels: ['motivasjon', 'kompetanse'],
                   maxValue: 5,
                 },
               },
               {
                 type: 'Radar',
                 props: {
-                  groupKey: 'category',
-                  valueKey: ['motivation', 'competence'],
+                  groupKey: 'kategori',
+                  valueKey: ['motivasjon', 'kompetanse'],
                   maxValue: 5,
                 },
               },
