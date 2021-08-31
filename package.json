@@ -57,7 +57,7 @@
     "predeploy:prod": "yarn build",
     "deploy:dev": "aws s3 sync build s3://dev-folk-webapp-static-web",
     "deploy:prod": "aws s3 sync build s3://prod-folk-webapp-static-web",
-    "postdeploy:dev": "aws cloudfront create-invalidation --distribution-id EYKLHWDAKRWEW --paths /",
+    "postdeploy:dev": "aws cloudfront create-invalidation --distribution-id E215UYR726ILDS --paths /",
     "postdeploy:prod": "aws cloudfront create-invalidation --distribution-id E16SNX0CEZ21PY --paths /",
     "format": "prettier --write ./src/**/*.{js,ts,tsx}",
     "lint": "eslint --quiet ./src/**/*.{ts,tsx}",
