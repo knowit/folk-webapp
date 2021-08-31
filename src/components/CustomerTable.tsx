@@ -5,13 +5,22 @@ import RowCount from '../components/RowCount';
 import DataTable from '../data/components/table/DataTable';
 import { makeStyles } from '@material-ui/core/styles';
 import SearchInputMinimal from './SearchInputMinimal';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
 
 const useStyles = makeStyles({
   searchBars: {
   },
   tableContainer: {
-  }
+  },
+  arrowContainer: {
+
+  },
+  arrowInactive: {
+    opacity: '50%',
+  },
+
 });
 
 type RowType = {
@@ -63,17 +72,19 @@ export function CustomerTable({ payload, title }: {payload: DDPayload, title: st
   }
 
   const SortHeadCell = (callBackID : number) => (
-    <div> - {columnSortState[callBackID]}
-      <button
-        onClick={
-          (e) => {
-            e.preventDefault()
-            sortChangeHandler(callBackID)
-          }
+    <div>
+      <a onClick={
+        (e) => {
+          e.preventDefault()
+          sortChangeHandler(callBackID)
         }
+      }
+         className={classes.arrowContainer}
+
       >
-        Trykk!
-      </button>
+        <ArrowDownwardIcon className={columnSortState[callBackID] !== COLUMN_SORT_STATE.DESC ? classes.arrowInactive : ''}/>
+        <ArrowUpwardIcon className={columnSortState[callBackID] !== COLUMN_SORT_STATE.ASC ? classes.arrowInactive : ''}/>
+      </a>
     </div>
   )
 
