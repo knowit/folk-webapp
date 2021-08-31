@@ -266,7 +266,7 @@ export default function EmployeeSite() {
             <ChartSkeleton />
           ) : (
             <DDItem
-              url={'/api/data/employeeRadar?email=' + email_id}
+              url={'/api/data/employeeRadar?user_id=' + email_id}
               title="Motivasjon"
               Component={DDChart}
               SkeletonComponent={ChartSkeleton}
@@ -276,16 +276,16 @@ export default function EmployeeSite() {
                   {
                     type: 'Bar',
                     props: {
-                      dataKey: 'category',
-                      yLabels: ['motivation', 'competence'],
+                      dataKey: 'kategori',
+                      yLabels: ['kompetanse', 'motivasjon'],
                       maxValue: 5,
                     },
                   },
                   {
                     type: 'Radar',
                     props: {
-                      groupKey: 'category',
-                      valueKey: ['motivation', 'competence'],
+                      groupKey: 'kategori',
+                      valueKey: ['kompetanse', 'motivasjon'],
                       maxValue: 5,
                     },
                   },
