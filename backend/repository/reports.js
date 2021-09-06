@@ -105,7 +105,6 @@ reports = [
       "dataProtection": 3,
       "created": "2021-08-13T13:16:20.155542",
       "lastUsed": null,
-
       "lastCacheUpdate": "2021-08-13T13:16:25.733266"
     },
     {
@@ -233,7 +232,6 @@ reports = [
       "dataProtection": 3,
       "created": "2021-08-17T12:05:24.577376",
       "lastUsed": null,
-
       "lastCacheUpdate": "2021-08-17T12:05:30.839125"
     },
     {
@@ -260,4 +258,4 @@ reports = [
       "lastUsed": null,
       "lastCacheUpdate": "2021-08-13T13:19:01.327776"
     }
-    ]
+  ]
