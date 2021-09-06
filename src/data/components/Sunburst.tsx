@@ -34,9 +34,7 @@ export default function Sunburst({ data, groupKey, big }: SunburstChartsProps) {
   const formattedData = {
     children: data,
   };
-
-
-  console.log(data);
+  
   const CustomTooltip = ({
     id,
     value,

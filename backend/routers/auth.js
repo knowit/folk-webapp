@@ -12,8 +12,6 @@ const dpIssuer = new Issuer({
   authorization_endpoint: `${authEndpoint}/oauth2/authorize`,
   token_endpoint: `${authEndpoint}/oauth2/token`,
   userinfo_endpoint: `${authEndpoint}/oauth2/userInfo`,
-  issuer:
-    'https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_cS2QV4bqa',
 })
 
 const getClient = (applicationUrl = '') =>
