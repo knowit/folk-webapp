@@ -2,7 +2,7 @@
 reports = [
     {
       "name": "employeeInformation",
-      "queryString": "WITH last_education AS (SELECT a.user_id, array_agg(a.degree)[1] AS degree, array_agg(a.year_to)[1] AS year_to FROM cv_partner_education a INNER JOIN (SELECT user_id, max(year_to) AS year_to FROM cv_partner_education GROUP BY user_id) b ON a.user_id = b.user_id AND a.year_to = b.year_to GROUP BY  a.user_id) SELECT emp.user_id, emp.guid, navn,ad.manager, title, link, degree, emp.email, image_key, cv_no_pdf, cv_int_pdf, cv_no_docx, cv_int_docx, ubw_cost.customer, ubw_cost.weigth as weight, ubw_cost.work_order_description FROM cv_partner_employees AS emp LEFT OUTER JOIN last_education AS e ON e.user_id = emp.user_id LEFT OUTER JOIN ubw_customer_per_resource as ubw_cost ON emp.guid=ubw_cost.guid LEFT OUTER JOIN active_directory as ad ON ad.guid=emp.guid order by navn",
+      "queryString": "WITH last_education AS (SELECT a.user_id, array_agg(a.degree)[1] AS degree, array_agg(a.year_to)[1] AS year_to FROM cv_partner_education a INNER JOIN (SELECT user_id, max(year_to) AS year_to FROM cv_partner_education GROUP BY user_id) b ON a.user_id = b.user_id AND a.year_to = b.year_to GROUP BY  a.user_id) SELECT emp.user_id, emp.guid, navn,ad.manager, title, link, degree, emp.email, image_key, ubw_cost.customer, ubw_cost.weigth as weight, ubw_cost.work_order_description FROM cv_partner_employees AS emp LEFT OUTER JOIN last_education AS e ON e.user_id = emp.user_id LEFT OUTER JOIN ubw_customer_per_resource as ubw_cost ON emp.guid=ubw_cost.guid LEFT OUTER JOIN active_directory as ad ON ad.guid=emp.guid order by navn",
       "tables": [
         "active_directory",
         "cv_partner_education",
@@ -13,18 +13,6 @@ reports = [
       "created": "2021-07-28T10:24:10.068026",
       "lastUsed": null,
       "lastCacheUpdate": "2021-07-28T10:24:12.544158"
-    },
-    {
-      "name": "competence",
-      "queryString": "WITH last_education AS (SELECT a.user_id, array_agg(a.degree)[1] AS degree, array_agg(a.year_to)[1] AS year_to FROM cv_partner_education a INNER JOIN (SELECT user_id, max(year_to) AS year_to FROM cv_partner_education GROUP BY  user_id ) b ON a.user_id = b.user_id AND a.year_to = b.year_to GROUP BY  a.user_id) SELECT emp.user_id, navn, title, link, degree, email, image_key, cv_no_pdf, cv_int_pdf, cv_no_docx, cv_int_docx FROM cv_partner_employees AS emp LEFT OUTER JOIN last_education AS e ON e.user_id = emp.user_id order by navn",
-      "tables": [
-        "cv_partner_education",
-        "cv_partner_employees"
-      ],
-      "dataProtection": 3,
-      "created": "2021-07-28T10:25:35.914212",
-      "lastUsed": null,
-      "lastCacheUpdate": "2021-07-28T10:25:37.736122"
     },
     {
       "name": "motivationAverage",
@@ -167,7 +155,7 @@ reports = [
     },
     {
       "name": "yearsSinceSchoolDist",
-      "queryString": "SELECT year(now()) - career_start AS years, count(career_start) AS count FROM (SELECT user_id, max(year_to) AS career_start FROM cv_partner_education GROUP BY  user_id) GROUP BY  career_start ORDER BY  count desc",
+      "queryString": "WITH ad_users AS (SELECT cpemp.user_id, year_from, year_to, month_from, month_to FROM cv_partner_employees AS cpemp INNER JOIN cv_partner_education AS cped ON cpemp.user_id = cped.user_id) SELECT year(now()) - career_start AS years, count(career_start) AS count FROM (SELECT user_id, max(year_to) AS career_start FROM ad_users AS cped GROUP BY  user_id) GROUP BY  career_start ORDER BY  count desc",
       "tables": [
         "cv_partner_education"
       ],
@@ -178,7 +166,7 @@ reports = [
     },
     {
       "name": "degreeDist",
-      "queryString": "SELECT CASE highest_degree WHEN 1 THEN 'bachelor' WHEN 2 THEN 'master' WHEN 3 THEN 'phd' END AS degree, count(highest_degree) AS count FROM (SELECT user_id, max(norm_degree) AS highest_degree FROM (SELECT user_id, CASE WHEN lower(degree) LIKE '%phd %' OR lower(degree) LIKE '%doktor %' OR lower(degree) LIKE '%doktorgrad%' OR lower(degree) LIKE '%profesjonsstudiet%' THEN 3 WHEN lower(degree) LIKE '%master %' OR lower(degree) LIKE '% master' OR lower(degree) LIKE '%mastergrad%' OR lower(degree) LIKE '%sivil%' OR lower(degree) LIKE '%(master)%' OR lower(degree) LIKE '%siv.%' OR lower(degree) LIKE '%cand%' OR lower(degree) LIKE '%m.%' THEN 2 WHEN lower(degree) LIKE '%bachelor %' OR lower(degree) LIKE '%bachelor,%' OR lower(degree) LIKE '%bachelor' OR lower(degree) LIKE '%(bachelor)%' OR lower(degree) LIKE '%bachelorgrad%' OR lower(degree) LIKE '%ingeniør%' OR lower(degree) LIKE '%b.%' OR lower(degree) LIKE '%3-år%' THEN 1 ELSE 0 END AS norm_degree FROM cv_partner_education) GROUP BY  user_id) WHERE highest_degree > 0 GROUP BY  highest_degree",
+      "queryString": "WITH ad_users AS (SELECT cpemp.user_id, degree FROM cv_partner_employees AS cpemp INNER JOIN cv_partner_education AS cped ON cpemp.user_id = cped.user_id) SELECT CASE highest_degree WHEN 1 THEN 'bachelor' WHEN 2 THEN 'master' WHEN 3 THEN 'phd' END AS degree, count(highest_degree) AS count FROM (SELECT user_id, max(norm_degree) AS highest_degree FROM (SELECT user_id, CASE WHEN lower(degree) LIKE '%phd %' OR lower(degree) LIKE '%doktor %' OR lower(degree) LIKE '%doktorgrad%' OR lower(degree) LIKE '%profesjonsstudiet%' THEN 3 WHEN lower(degree) LIKE '%master %' OR lower(degree) LIKE '% master' OR lower(degree) LIKE '%master%' OR lower(degree) LIKE '%mastergrad%' OR lower(degree) LIKE '%sivil%' OR lower(degree) LIKE '%(master)%' OR lower(degree) LIKE '%siv.%' OR lower(degree) LIKE '%cand%' OR lower(degree) LIKE '%m.%' THEN 2 WHEN lower(degree) LIKE '%bachelor %' OR lower(degree) LIKE '%bachelor,%' OR lower(degree) LIKE '%bachelor' OR lower(degree) LIKE '%(bachelor)%' OR lower(degree) LIKE '%bachelorgrad%' OR lower(degree) LIKE '%ingeniør%' OR lower(degree) LIKE '%b.%' OR lower(degree) LIKE '%3-år%' THEN 1 ELSE 0 END AS norm_degree FROM ad_users) GROUP BY  user_id) WHERE highest_degree > 0 GROUP BY  highest_degree",
       "tables": [
         "cv_partner_education"
       ],
