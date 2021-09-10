@@ -26,7 +26,15 @@ const getCategoryScoresForEmployee = (employeeEmail, categoryList) => {
   return [employeeMotivation, employeeCompetence]
 }
 
-const getStorageUrl = (key) => `${process.env.STORAGE_URL}/${key}`
+const getStorageUrl = (key) => {
+  if (key !== undefined) {
+    return `${process.env.STORAGE_URL}/${key}`
+  }
+  else {
+    return undefined
+  }
+}
+
 
 exports.employeeTableReports = [
   { reportName: 'employeeInformation' },
