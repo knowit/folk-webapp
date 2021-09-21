@@ -10,6 +10,7 @@ custom:
     STORAGE_URL: ${ssm:/${self:custom.stage}/folk-webapp/DATAPLATTFORM_RAW_STORAGE_URL}
     CLIENT_ID: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_ID~true}
     CLIENT_SECRET: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_SECRET~true}
+    PRIVACY_POLICY: ${ssm:/${self:custom.stage}/folk-webapp/PRIVACY_POLICY}
   allowedMethods:
     - GET
     - HEAD

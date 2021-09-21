@@ -1,5 +1,10 @@
 import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { useFetchedData } from '../hooks/service';
+
+interface PrivacyPolicy {
+  urlname: string
+}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,7 +36,8 @@ export default function Footer() {
 
   const improvementsHref = `mailto:${improvementsEmail}`;
   const correctionHref = `mailto:${datacorrectionEmail}?subject=Melding%20om%20datafeil&body=Feilen%20ble%20funnet%20her%3A%20%0D%0AOg%20omhandler%20dette%3A%20`;
-
+  const privacypolicyHref = `${useFetchedData<PrivacyPolicy>({url: "/api/data/PrivacyPolicy"})[0]?.urlname}`
+  console.log(useFetchedData<PrivacyPolicy>({url: "/api/data/PrivacyPolicy"})[0]?.urlname)
   return (
     <div className={classes.root}>
       <footer className={classes.footer}>
@@ -44,6 +50,10 @@ export default function Footer() {
           &ensp; | &ensp;
           <a className={classes.link} href={correctionHref}>
             Meld om datafeil
+          </a>
+          &ensp; | &ensp;
+          <a className={classes.link} href={privacypolicyHref} download>
+            Personvernserklæring
           </a>
         </p>
       </footer>
