@@ -3,7 +3,7 @@ const {
   makeEmailUuid,
   range,
   reStructCategories,
-  mergeEmployees
+  mergeEmployees,
 } = require('./util')
 const { v4: uuid } = require('uuid')
 const e = require('express')
@@ -633,7 +633,7 @@ exports.competenceAreas = async ({ data }) => {
 
 }
 
-exports.PrivacyPolicy = async () => {
+exports.privacyPolicy = async () => {
   const privacypol = getStorageUrl(process.env.PRIVACY_POLICY)
   return {urlname: privacypol}
 }
