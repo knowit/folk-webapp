@@ -634,6 +634,6 @@ exports.competenceAreas = async ({ data }) => {
 }
 
 exports.privacyPolicy = async () => {
-  const privacypol = getStorageUrl(process.env.PRIVACY_POLICY)
+  const privacypol = getStorageUrl(process.env.PRIVACY_POLICY_KEY)
   return {urlname: privacypol}
 }
