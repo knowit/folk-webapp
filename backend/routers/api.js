@@ -14,4 +14,10 @@ router.get('/data/:source', async (req, res) =>
     })
 )
 
+router.get('/privacyPolicy', async (req, res) => {
+  const privacypol = `${process.env.STORAGE_URL}/${process.env.PRIVACY_POLICY_KEY}`
+  res.send({urlname: privacypol})
+  }
+)
+
 module.exports = router
