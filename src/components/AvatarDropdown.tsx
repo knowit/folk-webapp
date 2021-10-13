@@ -1,0 +1,72 @@
+import { Avatar, Box, Fade, IconButton, ListItemIcon, Menu, MenuItem } from '@material-ui/core';
+import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
+import { ExitToApp } from '@material-ui/icons';
+import React from 'react';
+import { useUserInfo } from '../LoginProvider';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(() =>
+  createStyles({
+    userAvatar: {
+      height: '40px',
+    },
+  })
+);
+
+export const AvatarDropdown = () => {
+  const classes = useStyles();
+  const userInfo = useUserInfo();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    window.location.replace('/auth/logout')
+  };
+
+
+  return(
+    <React.Fragment>
+      <Box>
+        <IconButton onClick={handleClick}>
+          <Avatar
+            alt={userInfo.name}
+            src={userInfo.picture}
+            className={classes.userAvatar}
+          >
+            <FallbackUserIcon />
+          </Avatar>
+        </IconButton>
+      </Box>
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        PaperProps={{elevation:0,
+          style: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            marginTop: 1.5,
+          },
+        }}
+        getContentAnchorEl={null}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        TransitionComponent={Fade}
+      >
+        <MenuItem onClick={handleLogout} >
+          <ListItemIcon style={{minWidth: '0',marginRight: '15px'}}>
+            <ExitToApp fontSize={"small"}/>
+          </ListItemIcon>
+          Logg ut
+        </MenuItem>
+      </Menu>
+    </React.Fragment>
+  );
+};

@@ -2,6 +2,8 @@ const express = require('express')
 const { Issuer } = require('openid-client')
 const URL = require('url')
 const reporting = require('../reporting')
+const axios = require('axios')
+const { response } = require('express')
 const router = express.Router()
 
 const authEndpoint = process.env.OAUTH_URL
@@ -12,6 +14,7 @@ const dpIssuer = new Issuer({
   authorization_endpoint: `${authEndpoint}/oauth2/authorize`,
   token_endpoint: `${authEndpoint}/oauth2/token`,
   userinfo_endpoint: `${authEndpoint}/oauth2/userInfo`,
+  logout_endpoint: '${authEndpoint}/oauth2/v2/logout',
 })
 
 const getClient = (applicationUrl = '') =>
@@ -41,6 +44,38 @@ router.get('/login', function (req, res) {
     sameSite: 'lax',
   })
   res.redirect(302, authorizationUrl)
+})
+
+/*
+router.get('/logout', async function (req,res) {
+  const cookies = req.cookies
+  cookies.clearCookie()
+
+  res.redirect(302, 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue='
+    +'https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?'
+    + 'client_id='+getClient(clientId)
+    + '&response_type='+getClient(response)
+    + '&redirect_uri='+'https://auth.new-dev.dataplattform.knowit.no'
+    + '&scope='+'email openid profile'
+    + '&response_type='+'code'
+    + '&flowName=GeneralOAuthFlow')
+})
+ */
+
+router.get('/logout', async function (req,res) {
+  const logoutUrl = `${authEndpoint}/logout`
+  const { referer } = req.headers
+  const client = getClient(getOrigin(referer))
+  const clientID = client.metadata.client_id
+  console.log(clientID)
+  const origin = getOrigin(referer)
+  console.log(origin)
+  const tokens = await getClient(origin).oauthCallback(
+    `${origin}/auth/callback`,
+    req.query
+  )
+  console.log(tokens)
+  console.log(tokens.refresh_token)
 })
 
 router.get('/callback', async function (req, res) {
