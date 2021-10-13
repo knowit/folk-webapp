@@ -23,10 +23,18 @@ const useStyles = makeStyles({
   }
 })
 
-export default function ProjectStatusCell(status?:{data: 'red' | 'green'}) {
+interface ColorMap {
+  [index: string]: string;
+}
+
+export default function ProjectStatusCell(status?:{data: string}) {
   const classes = useStyles();
-  const color = status && status.data === 'green' ? '#4C8E00' : '#D10000';
-  return <div className={classes.root}>
-  <StatusCircle color={status ? color : '#777777'} />
-  </div>;
+  const colors: ColorMap = {"green": '#4C8E00', "yellow": '#ffff00', "orange": '#ffa500', "red": '#D10000'}
+  const color = (status !== undefined || status !== null ) ? colors[status!.data] : '#777777';
+
+  return (
+    <div className={classes.root}>
+      <StatusCircle color={color} />
+    </div>
+  );
 }

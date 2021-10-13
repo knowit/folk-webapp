@@ -1,8 +1,5 @@
 const {
-  getSecret,
-  makeEmailUuid,
   range,
-  reStructCategories,
   mergeEmployees,
 } = require('./util')
 const { v4: uuid } = require('uuid')
@@ -35,47 +32,96 @@ const getStorageUrl = (key) => {
   }
 }
 
+/**For øyeblikket så blir uketallet 1 uke for høyt */
+const findCurrentRegPeriod = () => {
+  let currentdate = new Date()
+  const oneJan = new Date(currentdate.getFullYear(), 0, 1)
+  const numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000))
+  const currentWeekNumber = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7)
+
+  const currentYear = currentdate.getFullYear()
+  return currentYear.toString() + currentWeekNumber.toString()
+}
+
+const findProjectStatusForEmployee = (jobRotationEmployees, employeeUBW, email) => {
+  const currentRegPeriod = findCurrentRegPeriod()
+  const highestRegPeriod = Math.max.apply(Math, employeeUBW.map((object) => { return object.email = email ?? object.reg_period }))
+  let motivationWishNewProject,motivationOpenForNewProject
+
+  /**Denne kan nok gjøres om til færre linjer med kode */
+  jobRotationEmployees.forEach((employee) => {
+    if(employee.email == email){
+      if(employee.index === 1){
+        motivationWishNewProject = employee.customscalevalue
+      }
+      if(employee.index === 2){
+        motivationOpenForNewProject = employee.customscalevalue
+      }
+    }
+  })
+  if(motivationWishNewProject > 0 || motivationOpenForNewProject > 0){
+    if(motivationWishNewProject > motivationOpenForNewProject){
+      return  'yellow'
+    }
+    if(motivationWishNewProject < motivationOpenForNewProject){
+      return 'orange'
+    }
+  }else{
+    if((currentRegPeriod - highestRegPeriod) < 4){
+      return 'red'
+    }
+    else{
+      return 'green'
+    }
+  }
+
+}
 
 exports.employeeTableReports = [
   { reportName: 'employeeInformation' },
-  { reportName: 'employeeMotivationAndCompetence'}, 
+  { reportName: 'employeeMotivationAndCompetence'},
+  { reportName: 'jobRotationInformation'},
+  { reportName: 'employeeDataUBW'}
 ]
 /**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
 exports.employeeTable = async ({ data }) => {
-  const [allEmployees, motivationAndCompetence] = data
+  const [allEmployees, motivationAndCompetence, jobRotation, employeeUBW] = data
   const mergedEmployees = mergeEmployees(allEmployees)
-  return mergedEmployees.map(employee => ({
-    rowId: uuid(),
-    rowData: [
-      {
-        value: employee.navn,
-        image: getStorageUrl(employee.image_key),
-        competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
-          employee.email
-        )}`,
-        email: employee.email,
-        email_id: employee.email,
-        user_id: employee.user_id,
-        degree: employee.degree,
-      },
-      employee.title,
-      'red',
-      employee.customerArray.reduce((prevCustomer, thisCustomer) => {
-        if (thisCustomer.weight < prevCustomer.weight) {
-          return thisCustomer
-        }
-        return prevCustomer
-      }),
-      Object.fromEntries(
-        cvs.map(([lang, format]) => [
-          `${lang}_${format}`,
-          employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
-        ])
-      ),
-      getCategoryScoresForEmployee(employee.email, motivationAndCompetence)[0],
-      getCategoryScoresForEmployee(employee.email, motivationAndCompetence)[1],
-    ],
-  }))
+  return mergedEmployees.map(employee => (
+    {
+      rowId: uuid(),
+      rowData: [
+        {
+          value: employee.navn,
+          image: getStorageUrl(employee.image_key),
+          competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
+            employee.email,
+          )}`,
+          email: employee.email,
+          email_id: employee.email,
+          user_id: employee.user_id,
+          degree: employee.degree,
+        },
+        employee.title,
+        findProjectStatusForEmployee(jobRotation, employeeUBW, employee.email),
+        employee.customerArray.reduce((prevCustomer, thisCustomer) => {
+          if (thisCustomer.weight < prevCustomer.weight) {
+            return thisCustomer
+          }
+          else {
+            return prevCustomer
+          }
+        }),
+        Object.fromEntries(
+          cvs.map(([lang, format]) => [
+            `${lang}_${format}`,
+            employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
+          ]),
+        ),
+        getCategoryScoresForEmployee(employee.email, motivationAndCompetence)[0],
+        getCategoryScoresForEmployee(employee.email, motivationAndCompetence)[1],
+      ],
+    }))
 }
 
 const cvs = [
@@ -456,19 +502,19 @@ exports.competenceAmountReports = [
 exports.competenceAmount = async ({ data }) => {
   const THRESHOLD=3
   const motAndComp = data
-  const categoriesMap = {"mainCategories": {}}
+  const categoriesMap = {'mainCategories': {}}
   // used to ensure that each participant is only counted once for each main category and to count the number of distinct participants
   const emailMap = {}
   data.forEach(employeeRow => {
     const { categoryMotivationAvg, categoryCompetenceAvg, category, subCategory, motivation, competence, email } = employeeRow
-    
+
     if (!(category in categoriesMap)) {
-      categoriesMap["mainCategories"][category] = {"competenceAmount": 0, "motivationAmount": 0, category: category}
+      categoriesMap['mainCategories'][category] = {'competenceAmount': 0, 'motivationAmount': 0, category: category}
       categoriesMap[category] = {}
     }
-    
+
     if (!(subCategory in categoriesMap[category])) {
-      categoriesMap[category][subCategory] = {"competenceAmount": 0, "motivationAmount": 0, category: subCategory}
+      categoriesMap[category][subCategory] = {'competenceAmount': 0, 'motivationAmount': 0, category: subCategory}
     }
 
     if (!(email in emailMap)) {
@@ -477,11 +523,11 @@ exports.competenceAmount = async ({ data }) => {
 
     if (!emailMap[email].includes(category)) {
       if (categoryMotivationAvg > THRESHOLD) {
-        categoriesMap["mainCategories"][category].motivationAmount += 1
+        categoriesMap['mainCategories'][category].motivationAmount += 1
       }
-  
+
       if (categoryCompetenceAvg > THRESHOLD) {
-        categoriesMap["mainCategories"][category].competenceAmount += 1
+        categoriesMap['mainCategories'][category].competenceAmount += 1
       }
 
       emailMap[email].push(category)
@@ -501,8 +547,8 @@ exports.competenceAmount = async ({ data }) => {
   for (const category of Object.keys(categoriesMap)) {
     for (const subCategory of Object.keys(categoriesMap[category])) {
       const { motivationAmount, competenceAmount } = categoriesMap[category][subCategory]
-      categoriesMap[category][subCategory]["motivationProportion"] = motivationAmount/nParticipants*100
-      categoriesMap[category][subCategory]["competenceProportion"] = competenceAmount/nParticipants*100
+      categoriesMap[category][subCategory]['motivationProportion'] = motivationAmount/nParticipants*100
+      categoriesMap[category][subCategory]['competenceProportion'] = competenceAmount/nParticipants*100
     }
     output[category] = Object.values(categoriesMap[category])
   }
@@ -562,14 +608,14 @@ exports.employeeRadarReports = ({ parameters: { email } = {} }) => [
  */
 exports.employeeRadar = async ({ data }) => {
   const competenceAndMotivation = data
-  categoriesMap = {"mainCategories": {}}
+  categoriesMap = {'mainCategories': {}}
   competenceAndMotivation.forEach(row => {
     const { category, subCategory, categoryCompetenceAvg, categoryMotivationAvg, competence, motivation } = row
     if (!(category in categoriesMap)) {
       categoriesMap[category] = {}
     }
     categoriesMap[category][subCategory] = {category: subCategory, motivation, competence}
-    categoriesMap["mainCategories"][category] = {category, motivation: categoryMotivationAvg, competence: categoryCompetenceAvg}
+    categoriesMap['mainCategories'][category] = {category, motivation: categoryMotivationAvg, competence: categoryCompetenceAvg}
   })
   const output = {}
   for (const category of Object.keys(categoriesMap)) {

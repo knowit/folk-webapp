@@ -70,7 +70,6 @@ exports.mergeEmployees = (allEmployees) => {
   return Object.values(mergedEmployees)
 }
 
-
 exports.reStructCategories = (categories, compScores = [], motScores = []) => {
   //find the main categoreis
   const mainCategories = new Set(
