@@ -34,21 +34,31 @@ const getStorageUrl = (key) => {
 
 /**For øyeblikket så blir uketallet 1 uke for høyt */
 const findCurrentRegPeriod = () => {
-  let currentdate = new Date()
-  const oneJan = new Date(currentdate.getFullYear(), 0, 1)
-  const numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000))
-  const currentWeekNumber = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7)
+  let currentDate = new Date()
+  let currentYear = currentDate.getFullYear()
+  let oneJan = new Date(currentYear, 0, 1)
+  let numberOfDays = Math.floor((currentDate - oneJan) / (24 * 60 * 60 * 1000))
+  let currentWeekNumber = Math.ceil((currentDate.getDay() + 1 + numberOfDays) / 7)
 
-  const currentYear = currentdate.getFullYear()
   return currentYear.toString() + currentWeekNumber.toString()
 }
 
 const findProjectStatusForEmployee = (jobRotationEmployees, employeeUBW, email) => {
-  const currentRegPeriod = findCurrentRegPeriod()
-  const highestRegPeriod = Math.max.apply(Math, employeeUBW.map((object) => { return object.email = email ?? object.reg_period }))
-  let motivationWishNewProject,motivationOpenForNewProject
+  const currentRegPeriod = parseInt(findCurrentRegPeriod(), 10)
+  const registeredHoursForEmployee = employeeUBW.filter((UBWObject) => UBWObject.email === email)
+  const newestRegPeriod = parseInt(Math.max.apply(Math, registeredHoursForEmployee.map((object) => { return object.reg_period })), 10)
+  let totalExternalProjectHours = 0
+  let totalLocalProjectHours = 0
+  /**
+   * En mulighet er å sjekke antall timer registrert i den nyeste reg_period.
+   * Hvis dette antallet (bestående av timer på eksterne prosjekter, eller både eksterne og intere) er over en viss sum/prosentandel så burde den ansatte regnes om i prosjekt.
+   * Det prosjektet som den ansatte har flest timer på vil være det som teller/vises frem
+   **/
 
-  /**Denne kan nok gjøres om til færre linjer med kode */
+  registeredHoursForEmployee.forEach((object) => object.project_type==='External Projects' && object.reg_period === newestRegPeriod ? totalExternalProjectHours += object.hours : 0)
+  registeredHoursForEmployee.forEach((object) => object.project_type==='Local Projects' && object.reg_period === newestRegPeriod ? totalLocalProjectHours += object.hours : 0)
+
+  let motivationWishNewProject,motivationOpenForNewProject
   jobRotationEmployees.forEach((employee) => {
     if(employee.email == email){
       if(employee.index === 1){
@@ -67,14 +77,13 @@ const findProjectStatusForEmployee = (jobRotationEmployees, employeeUBW, email) 
       return 'orange'
     }
   }else{
-    if((currentRegPeriod - highestRegPeriod) < 4){
+    if(((currentRegPeriod - newestRegPeriod) < 5) && totalExternalProjectHours > totalLocalProjectHours){
       return 'red'
     }
     else{
       return 'green'
     }
   }
-
 }
 
 exports.employeeTableReports = [
