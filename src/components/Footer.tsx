@@ -36,8 +36,9 @@ export default function Footer() {
 
   const improvementsHref = `mailto:${improvementsEmail}`;
   const correctionHref = `mailto:${datacorrectionEmail}?subject=Melding%20om%20datafeil&body=Feilen%20ble%20funnet%20her%3A%20%0D%0AOg%20omhandler%20dette%3A%20`;
-  const privacypolicyHref = `${useFetchedData<PrivacyPolicy>({url: "/api/privacyPolicy"})[0]?.urlname}`
-  
+  const privacyPolicy = useFetchedData<PrivacyPolicy>({url: "/api/privacyPolicy"})[0]?.urlname ?? ""
+  const privacyPolicyHref = `${privacyPolicy}`
+  console.log(privacyPolicyHref)
   return (
     <div className={classes.root}>
       <footer className={classes.footer}>
@@ -52,7 +53,7 @@ export default function Footer() {
             Meld om datafeil
           </a>
           &ensp; | &ensp;
-          <a className={classes.link} href={privacypolicyHref} download>
+          <a className={classes.link} href={privacyPolicyHref} download>
             Personvernserklæring
           </a>
         </p>
