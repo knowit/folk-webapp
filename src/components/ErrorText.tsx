@@ -32,6 +32,7 @@ export const ErrorText = ({ height = 280 }: { height?: number }) => {
     <div className={classes.root}>
       <div className={classes.titleText}> Oida, en feil har oppstått</div>
       <div className={classes.text}> Data kan ikke vises for dette valget</div>
+      <div className={classes.text}> Vennligst logg ut og inn igjen :) </div>
     </div>
   );
 };

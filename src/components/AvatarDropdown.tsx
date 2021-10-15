@@ -1,9 +1,11 @@
 import { Avatar, Box, Fade, IconButton, ListItemIcon, Menu, MenuItem } from '@material-ui/core';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
-import { ExitToApp } from '@material-ui/icons';
+import { ExitToApp, PersonOutline, ShoppingCartOutlined } from '@material-ui/icons';
 import React from 'react';
 import { useUserInfo } from '../LoginProvider';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+
+// NOT CURRENTLY IN USE
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -26,7 +28,7 @@ export const AvatarDropdown = () => {
   };
 
   const handleLogout = () => {
-    window.location.replace('/auth/logout')
+    window.location.replace('/auth/logout');
   };
 
 
@@ -60,6 +62,18 @@ export const AvatarDropdown = () => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         TransitionComponent={Fade}
       >
+        <MenuItem onClick={handleClick} >
+          <ListItemIcon style={{minWidth: '0',marginRight: '15px'}}>
+            <PersonOutline fontSize={"small"}/>
+          </ListItemIcon>
+          Profil
+        </MenuItem>
+        <MenuItem onClick={handleClick} >
+          <ListItemIcon style={{minWidth: '0',marginRight: '15px'}}>
+            <ShoppingCartOutlined fontSize={"small"}/>
+          </ListItemIcon>
+          Hadlevogn
+        </MenuItem>
         <MenuItem onClick={handleLogout} >
           <ListItemIcon style={{minWidth: '0',marginRight: '15px'}}>
             <ExitToApp fontSize={"small"}/>
