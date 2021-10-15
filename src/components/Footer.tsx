@@ -51,10 +51,13 @@ export default function Footer() {
           <a className={classes.link} href={correctionHref}>
             Meld om datafeil
           </a>
-          &ensp; | &ensp;
-          {(typeof privacyPolicyHref === "string") && <a className={classes.link} href={privacyPolicyHref} download>
-            Personvernserklæring
-          </a>}
+          
+          {privacyPolicyHref && (
+            <>&ensp; | &ensp;
+              <a className={classes.link} href={privacyPolicyHref} download>
+                Personvernserklæring
+              </a>
+            </>)}
         </p>
       </footer>
     </div>
