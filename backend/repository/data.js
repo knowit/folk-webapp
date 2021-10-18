@@ -49,12 +49,8 @@ const findProjectStatusForEmployee = (jobRotationEmployees, employeeUBW, email) 
   const newestRegPeriod = parseInt(Math.max.apply(Math, registeredHoursForEmployee.map((object) => { return object.reg_period })), 10)
   let totalExternalProjectHours = 0
   let totalLocalProjectHours = 0
-  /**
-   * En mulighet er å sjekke antall timer registrert i den nyeste reg_period.
-   * Hvis dette antallet (bestående av timer på eksterne prosjekter, eller både eksterne og intere) er over en viss sum/prosentandel så burde den ansatte regnes om i prosjekt.
-   * Det prosjektet som den ansatte har flest timer på vil være det som teller/vises frem
-   **/
 
+  /**Kan hende project_type ikke kommer til å ha disse navnene og at de bare var placeholdere. Da må i så fall skillet mellom prosjektene fjernes også telles det bare vanlig opp */
   registeredHoursForEmployee.forEach((object) => object.project_type==='External Projects' && object.reg_period === newestRegPeriod ? totalExternalProjectHours += object.hours : 0)
   registeredHoursForEmployee.forEach((object) => object.project_type==='Local Projects' && object.reg_period === newestRegPeriod ? totalLocalProjectHours += object.hours : 0)
 
@@ -80,6 +76,7 @@ const findProjectStatusForEmployee = (jobRotationEmployees, employeeUBW, email) 
     if(((currentRegPeriod - newestRegPeriod) < 5) && totalExternalProjectHours > totalLocalProjectHours){
       return 'red'
     }
+    /**Det kan hende at hvis det er flest timer på lokale prosjekter at det fortsatt vil dukke op kunde og kundetekst. Dette må sjekkes nærmere */
     else{
       return 'green'
     }
