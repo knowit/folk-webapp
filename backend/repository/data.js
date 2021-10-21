@@ -76,7 +76,7 @@ const findProjectStatusForEmployee = (jobRotationEmployees, employeeUBW, email) 
     if(((currentRegPeriod - newestRegPeriod) < 5) && totalExternalProjectHours > totalLocalProjectHours){
       return 'red'
     }
-    /**Det kan hende at hvis det er flest timer på lokale prosjekter at det fortsatt vil dukke op kunde og kundetekst. Dette må sjekkes nærmere */
+    /**Det kan hende at hvis det er flest timer på lokale prosjekter at det fortsatt vil dukke opp kunde og kundetekst. Dette må sjekkes nærmere */
     else{
       return 'green'
     }
