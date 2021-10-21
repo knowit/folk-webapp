@@ -1,8 +1,9 @@
-const { reports } = require('../dataplattform/lib')
-const aggregation = require('../repository/data')
-const reporting = require('../reporting')
+import { reports } from '../dataplattform/lib'
+import aggregation from '../repository/data'
+import reporting from '../reporting'
+import express from 'express'
 
-module.exports = async (req) => {
+async function handler (req:express.Request) {
   // Request data
   const endpoint = req.params.source
   const parameters = req.query
@@ -52,3 +53,5 @@ module.exports = async (req) => {
 
   return result
 }
+
+export default handler
