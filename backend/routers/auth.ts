@@ -1,7 +1,7 @@
-const express = require('express')
-const { Issuer } = require('openid-client')
-const URL = require('url')
-const reporting = require('../reporting')
+import express, { Response} from 'express'
+import { Issuer } from 'openid-client'
+import URL from 'url'
+import reporting from '../reporting'
 const router = express.Router()
 
 const authEndpoint = process.env.OAUTH_URL
@@ -9,6 +9,7 @@ const clientId = process.env.CLIENT_ID
 const clientSecret = process.env.CLIENT_SECRET
 
 const dpIssuer = new Issuer({
+  issuer: `${authEndpoint}/oauth2/`,
   authorization_endpoint: `${authEndpoint}/oauth2/authorize`,
   token_endpoint: `${authEndpoint}/oauth2/token`,
   userinfo_endpoint: `${authEndpoint}/oauth2/userInfo`,
@@ -22,11 +23,11 @@ const getClient = (applicationUrl = '') =>
     response_types: ['code'],
   })
 
-const getOrigin = (url) => {
+const getOrigin = (url:string) => {
   const parsed = URL.parse(url)
   return `${parsed.protocol}//${parsed.host}`
 }
-const getPath = (url) => URL.parse(url).path
+const getPath = (url:string) => URL.parse(url).path
 
 router.get('/login', function (req, res) {
   const { referer } = req.headers
@@ -77,13 +78,14 @@ router.get('/userInfo', async function (req, res) {
     .pop()
     .trim()
 
-  const userInfo = await getClient().userinfo(accessToken)
+  const userInfo: any = await getClient().userinfo(accessToken)
     .catch(err =>
       reporting({
         message: 'Auth failed userInfo on /userInfo',
         data: err
       })
     )
+
   res.send({
     name: [userInfo.given_name || '', userInfo.family_name || ''].join(' '),
     email: userInfo.email,
@@ -91,14 +93,15 @@ router.get('/userInfo', async function (req, res) {
   })
 })
 
-router.post('/refresh', async function (req, res) {
+router.post('/refresh', async function (req, res: Response) {
   const { refreshToken = null } = req.body
 
   if (!refreshToken) {
-    return res.statusCode(403)
+    return res.statusCode = 403
+
   }
 
-  const tokens = await getClient().grant({
+  const tokens: any = await getClient().grant({
     grant_type: 'refresh_token',
     refresh_token: refreshToken,
   }).catch(err =>
@@ -116,4 +119,4 @@ router.post('/refresh', async function (req, res) {
   })
 })
 
-module.exports = router
+export default router

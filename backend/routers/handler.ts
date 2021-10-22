@@ -1,4 +1,4 @@
-import { reports } from '../dataplattform/lib'
+import {reports}  from '../dataplattform/lib'
 import aggregation from '../repository/data'
 import reporting from '../reporting'
 import express from 'express'
@@ -44,7 +44,7 @@ async function handler (req:express.Request) {
 
   // Run data aggregation for endpoint
   const result = await endpointHandler({data, parameters})
-    .catch(err => {
+    .catch((err:string) => {
       throw reporting({
         message: err,
         external: false
