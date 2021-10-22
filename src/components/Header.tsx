@@ -6,7 +6,7 @@ import { NavMenu, NavMenuItem } from './NavMenu';
 import { ReactComponent as KnowitLogo } from '../assets/logo.svg';
 import { useUserInfo } from '../LoginProvider';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
-import { LogoutButton } from './LogoutButton';
+import { LoginLogoutButton } from './LoginLogoutButton';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -58,7 +58,7 @@ export default function Header() {
             <NavMenuItem label="Arbeidsmiljø" to="/arbeidsmiljo" />
             <NavMenuItem label="Rekruttering" to="/rekruttering" />
           </NavMenu>
-          <LogoutButton/>
+          <LoginLogoutButton/>
           <Avatar
             alt={userInfo.name}
             src={userInfo.picture}

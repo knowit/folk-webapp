@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { ButtonBase } from '@material-ui/core';
+import { useUserInfo } from '../LoginProvider';
 
 const useStyles = makeStyles( () =>
   createStyles({
@@ -17,18 +18,31 @@ const useStyles = makeStyles( () =>
   })
 );
 
-export const LogoutButton = () =>{
+export const LoginLogoutButton = () => {
   const classes = useStyles();
-  const handleLogout = () => {
-    window.location.replace('/auth/logout');
+  const userInfo = useUserInfo();
+
+  let buttonText = '';
+  if (userInfo.email == undefined) {
+    buttonText = 'Logg inn'
+  } else {
+    buttonText = 'Logg ut'
+  }
+
+  const handleClick = () => {
+    if (userInfo.email == undefined) {
+      window.location.replace('/auth/login');
+    } else {
+      window.location.replace('/auth/logout');
+    }
   };
 
   return (
     <ButtonBase
       className={`${classes.buttonItem}`}
-      onClick={handleLogout}
+      onClick={handleClick}
     >
-      Logg ut
+      {buttonText}
     </ButtonBase>
   );
 };

@@ -2,8 +2,6 @@ const express = require('express')
 const { Issuer } = require('openid-client')
 const URL = require('url')
 const reporting = require('../reporting')
-const axios = require('axios')
-const { response } = require('express')
 const router = express.Router()
 
 const authEndpoint = process.env.OAUTH_URL
@@ -47,7 +45,9 @@ router.get('/login', function (req, res) {
 })
 
 router.get('/logout', async function (req,res) {
-  const logoutUrl = getClient().endSessionUrl({ client_id: clientId, logout_uri: "https://localhost:3000/"})
+  const { referer } = req.headers
+  const logoutUri = `${getOrigin(referer)}/`
+  const logoutUrl = getClient().endSessionUrl({ client_id: clientId, logout_uri: logoutUri})
   res.clearCookie('refreshToken')
   res.clearCookie('accessToken')
   res.redirect(logoutUrl)
