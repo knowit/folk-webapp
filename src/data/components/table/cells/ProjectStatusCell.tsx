@@ -39,7 +39,7 @@ const toolTipStyles = makeStyles(theme => ({
   },
 }));
 
-function BlackTooltip(props: JSX.IntrinsicAttributes & TooltipProps) {
+function StatusTooltip(props: JSX.IntrinsicAttributes & TooltipProps) {
   const classes = toolTipStyles();
   return <Tooltip arrow classes={classes} {...props} />;
 }
@@ -48,16 +48,16 @@ function BlackTooltip(props: JSX.IntrinsicAttributes & TooltipProps) {
 export default function ProjectStatusCell(status? :{data: string}) {
   const classes = useStyles();
   const colors: ColorMap = {"green": '#4C8E00', "yellow": '#ffd500', "orange": '#ff8800', "red": '#D10000'}
-  const color = (status !== undefined || status !== null ) ? colors[status!.data] : '#777777';
+  const color = status !== undefined  ? colors[status.data] : '#777777';
   const toolTipTitle = status && (status.data === 'orange' ? "Er åpen for å bytte prosjekt" : (status.data === 'yellow' ? 'Ønsker å bytte prosjekt': ''))
 
   return (
     <div className={classes.root}>
-      <BlackTooltip title={toolTipTitle!} arrow placement='bottom'>
+      <StatusTooltip arrow placement='bottom' title={toolTipTitle ? toolTipTitle : ''}>
         <div>
-            <StatusCircle color={color} />
+          <StatusCircle color={color} />
         </div>
-      </BlackTooltip>
+      </StatusTooltip>
     </div>
   );
 }
