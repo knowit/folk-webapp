@@ -1,9 +1,9 @@
-import {reports}  from '../dataplattform/lib'
+import reports  from '../dataplattform/lib'
 import aggregation from '../repository/data'
 import reporting from '../reporting'
-import express from 'express'
+import {Request} from 'express'
 
-async function handler (req:express.Request) {
+async function handler (req:Request) {
   // Request data
   const endpoint = req.params.source
   const parameters = req.query

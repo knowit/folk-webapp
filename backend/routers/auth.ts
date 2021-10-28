@@ -1,4 +1,4 @@
-import express, { Response} from 'express'
+import express, { Request, Response} from 'express'
 import { Issuer } from 'openid-client'
 import URL from 'url'
 import reporting from '../reporting'
@@ -29,7 +29,7 @@ const getOrigin = (url:string) => {
 }
 const getPath = (url:string) => URL.parse(url).path
 
-router.get('/login', function (req, res) {
+router.get('/login', function (req:Request, res:Response) {
   const { referer } = req.headers
   const authorizationUrl = getClient(getOrigin(referer)).authorizationUrl({
     scope: 'email openid profile',
@@ -44,7 +44,7 @@ router.get('/login', function (req, res) {
   res.redirect(302, authorizationUrl)
 })
 
-router.get('/callback', async function (req, res) {
+router.get('/callback', async function (req:Request, res:Response) {
   const { authReferer: referer } = req.cookies
 
   const origin = getOrigin(referer)
@@ -72,8 +72,8 @@ router.get('/callback', async function (req, res) {
   res.redirect(302, getPath(referer))
 })
 
-router.get('/userInfo', async function (req, res) {
-  const accessToken = req.headers.authorization
+router.get('/userInfo', async function (req:Request, res:Response) {
+  const accessToken:string = req.headers.authorization
     .split(/bearer/i)
     .pop()
     .trim()
@@ -93,7 +93,7 @@ router.get('/userInfo', async function (req, res) {
   })
 })
 
-router.post('/refresh', async function (req, res: Response) {
+router.post('/refresh', async function (req:Request, res: Response) {
   const { refreshToken = null } = req.body
 
   if (!refreshToken) {
