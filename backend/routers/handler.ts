@@ -1,5 +1,5 @@
 import reports  from '../dataplattform/lib'
-import aggregation from '../repository/data'
+import * as aggregation from '../repository/data'
 import reporting from '../reporting'
 import {Request} from 'express'
 
