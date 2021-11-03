@@ -1,10 +1,10 @@
-const crypto = require('crypto')
-const AWS = require('aws-sdk')
+import crypto from 'crypto'
+import AWS from 'aws-sdk'
 AWS.config.update({ region: 'eu-central-1' })
 
 const ssm = new AWS.SSM()
 
-exports.getSecret = (name, { encrypted = false } = {}) => {
+export const getSecret = (name:string, { encrypted = false } = {}) => {
   return new Promise((resolve, reject) => {
     ssm.getParameter(
       {
@@ -19,7 +19,7 @@ exports.getSecret = (name, { encrypted = false } = {}) => {
   })
 }
 
-exports.makeEmailUuid = (email, salt) => {
+export const makeEmailUuid = (email, salt) => {
   const hmac = crypto.createHmac('sha256', salt)
   hmac.update(email)
   const sig = hmac.digest('hex')
@@ -33,7 +33,7 @@ exports.makeEmailUuid = (email, salt) => {
   ].join('-')
 }
 
-exports.groupBy = (items, key) =>
+export const groupBy = (items, key) =>
   items.reduce(
     (result, item) => ({
       ...result,
@@ -42,14 +42,35 @@ exports.groupBy = (items, key) =>
     {}
   )
 
-exports.range = (x, y) =>
+export const range = (x, y) =>
   Array.from(
     (function* () {
       while (x <= y) yield x++
     })()
   )
+export type EmployeeInformation = { 
+  user_id:string, 
+  guid:string, 
+  navn:string, 
+  manager:string, 
+  title:string, 
+  link:string, 
+  degree:string, 
+  image_key:string,
+  email:string, 
+  customer:string, 
+  weight:number, 
+  work_order_description:string}
 
-exports.mergeEmployees = (allEmployees) => {
+type MergeEmployeesReturn = EmployeeInformation & {
+  customerArray:  {
+    customer: string, 
+    wordOrderDescription: string,
+    weight:number
+  }[]
+}
+
+export const mergeEmployees = (allEmployees:EmployeeInformation[]):MergeEmployeesReturn[] => {
   const mergedEmployees = {}
 
   allEmployees.forEach((employee) => {
@@ -71,7 +92,7 @@ exports.mergeEmployees = (allEmployees) => {
 }
 
 
-exports.reStructCategories = (categories, compScores = [], motScores = []) => {
+export const reStructCategories = (categories, compScores = [], motScores = []) => {
   //find the main categoreis
   const mainCategories = new Set(
     categories.flatMap((item) => Object.keys(item))
@@ -86,7 +107,7 @@ exports.reStructCategories = (categories, compScores = [], motScores = []) => {
     return mergedObj
   })
 
-  mainCategories.forEach((name) => {
+  mainCategories.forEach((name:string) => {
     mainCats.push(mergedArrs.find((obj) => {
       return obj['kategori'].toUpperCase() == name.toUpperCase()
     }))
@@ -108,7 +129,7 @@ exports.reStructCategories = (categories, compScores = [], motScores = []) => {
   })
   catSet.unshift({ Hovedkategorier: mainCats })
   catSet = catSet.reduce(function (cat, x) {
-    for (var key in x) cat[key] = x[key]
+    for (const key in x) cat[key] = x[key]
     return cat
   }, {})
 
