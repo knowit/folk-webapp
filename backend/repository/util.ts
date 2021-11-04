@@ -62,7 +62,7 @@ export type EmployeeInformation = {
   weight:number, 
   work_order_description:string}
 
-type MergeEmployeesReturn = EmployeeInformation & {
+type MergeEmployees = EmployeeInformation & {
   customerArray:  {
     customer: string, 
     wordOrderDescription: string,
@@ -70,7 +70,7 @@ type MergeEmployeesReturn = EmployeeInformation & {
   }[]
 }
 
-export const mergeEmployees = (allEmployees:EmployeeInformation[]):MergeEmployeesReturn[] => {
+export const mergeEmployees = (allEmployees:EmployeeInformation[]):MergeEmployees[] => {
   const mergedEmployees = {}
 
   allEmployees.forEach((employee) => {
