@@ -90,10 +90,3 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-
-## Push your changes on dev to prod
-After you've done all the coding and finally merged your pull request to dev, you might want to push it to prod as well. 
-Go to the folk-webapp here on github, on the <> Code page there is a link to `Realeases` on the right side of the screen. 
-Click on it, and click `Draft a new release`. 
-
-Here you write what has been changed and call the release x.x.x, ex: 4.0.0 or 4.0.2. 
