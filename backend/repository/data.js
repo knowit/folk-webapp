@@ -49,7 +49,6 @@ const getWeek = () => {
   return currentWeekNumber.toString();
 }
 
-
 const statusColorCode = (wantNewProject, openForNewProject, inProject) => {
   const projectStatus = inProject ? "red" : "green";
   const color = (wantNewProject > openForNewProject) ? "yellow" : "orange"
@@ -79,8 +78,8 @@ const findProjectStatusForEmployee = (jobRotationEmployees, employeeUBW, email) 
     }
   })
   const inProjectStatus = ((currentRegPeriod - latestRegPeriod) < 5) && (totalExternalProjectHours > totalLocalProjectHours);
-  
   const statusColor = statusColorCode(wantNewProject, openForNewProject, inProjectStatus);
+
   return statusColor;
 }
 
