@@ -11,6 +11,7 @@
     "openid-client": "^4.5.1",
     "uuid": "^8.3.2"
   },
+  "resolutions": { "coa": "2.0.2" },
   "scripts": {
     "start:local": "nodemon -r dotenv/config local.js",
     "test": "node_modules/.bin/jest --watch"
