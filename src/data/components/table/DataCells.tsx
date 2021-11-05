@@ -6,6 +6,7 @@ import CvCell from './cells/CvCell';
 import ProjectStatusCell from './cells/ProjectStatusCell';
 import CustomerStatusCell from './cells/CustomerStatusCell';
 import CheckBoxHeaderCell from './cells/CheckBoxHeaderCell';
+import CenteredHeaderCell from './cells/CenteredHeaderCell'
 
 const EducationCell = ({ data }: { data: string | null }) => (
   <CharacterLimitBox text={data || '-'} />
@@ -18,4 +19,5 @@ export {
   ProjectStatusCell,
   CustomerStatusCell,
   CheckBoxHeaderCell,
+  CenteredHeaderCell,
 };
