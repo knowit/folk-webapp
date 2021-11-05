@@ -1,24 +1,26 @@
 // Verbose level
 const DEBUG = parseInt(process.env.DEBUG) || 0
-interface Params {
-  message: string;
+type Params = {
+  message?: string;
   type?: string;
-  data?: {
-    accessToken?:string,
-    filterString?:string, 
-    reportUrl?:string,
-    reportName?:string,
-    filter?:{email?: string,  user_id?:string}, 
-    hasToken?:boolean,
-    status?: number,
-    response?: string,
-    parameters?:{user_id?: string,email?:string},
-    reports?: any,
-    endpoint?:string,
-  }| null;
+  data?: Data| null;
   status?: number;
   error?: {status: number, message:string, external: any};
   external?: boolean | null;
+}
+
+type Data = {
+  accessToken?:string,
+  filterString?:string, 
+  reportUrl?:string,
+  reportName?:string,
+  filter?:{email?: string,  user_id?:string}, 
+  hasToken?:boolean,
+  status?: number,
+  response?: string,
+  parameters?:{user_id?: string,email?:string},
+  reports?: any,
+  endpoint?:string,
 }
 function output({
   type,

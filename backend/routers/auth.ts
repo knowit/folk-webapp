@@ -1,5 +1,5 @@
 import express, { Request, Response} from 'express'
-import { Issuer } from 'openid-client'
+import { Issuer, TokenSet } from 'openid-client'
 import { URL } from 'url'
 import reporting from '../reporting'
 const router = express.Router()
@@ -45,7 +45,7 @@ router.get('/login', function (req:Request, res:Response) {
 })
 
 router.get('/callback', async function (req:Request, res:Response) {
-  const { authReferer: referer } = req.cookies
+  const { authReferer: referer }:{authReferer:string} = req.cookies
 
   const origin = getOrigin(referer)
 
@@ -101,22 +101,21 @@ router.post('/refresh', async function (req:Request, res: Response) {
 
   }
 
-  const tokens: any = await getClient().grant({
+  getClient().grant({
     grant_type: 'refresh_token',
     refresh_token: refreshToken,
-  }).catch(err =>
-    reporting({
-      message: 'Auth failed grant on /refresh',
-      data: err
-    })
-  )
-
-  res.send({
+  }).then((tokens:TokenSet) => res.send({
     accessToken: tokens.access_token,
     expiration: tokens.expires_in,
     sameSite: true,
     secure: true
-  })
+  })).catch(err => res.send(reporting({
+    message: 'Auth failed grant on /refresh',
+    data: err
+  }))
+  )
+
+
 })
 
 export default router
