@@ -685,3 +685,4 @@ exports.competenceAreas = async ({ data }) => {
   }
 
 }
+
