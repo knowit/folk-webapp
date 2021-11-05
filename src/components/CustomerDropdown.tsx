@@ -5,12 +5,12 @@ import { Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { SimpleDDItem } from '../data/SimpleDDItem'
 import {
+  CenteredHeaderCell,
   ConsultantCell,
   CustomerStatusCell, CvCell,
 } from '../data/components/table/DataCells'
 import EmployeeInfo from './EmployeeInfo'
 import CustomerTable from './CustomerTable'
-import CenteredHeaderCell from '../data/components/table/cells/CenteredHeaderCell'
 
 
 const useStyles = makeStyles(() =>
@@ -19,6 +19,9 @@ const useStyles = makeStyles(() =>
       width: '100%',
       backgroundColor: '#E4E1DB',
       fontSize: '18px'
+    },
+    accordionDetails: {
+      padding: '0px',
     }
   })
 );
@@ -55,7 +58,7 @@ export default function CustomerDropdown({customerName, employees, expand, callb
               style={{marginLeft: '15px'}}
               onClick={e => {e.stopPropagation(); /* todo Route til kundeflik */}}/>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails className={classes.accordionDetails}>
             <SimpleDDItem
               fullSize
               callback={callback}
@@ -66,6 +69,7 @@ export default function CustomerDropdown({customerName, employees, expand, callb
                   {
                     title: 'Konsulent',
                     searchable: true,
+                    expandable: true,
                     getSearchValue: (consultant: { value: string }) => {
                       return consultant.value;
                     },
@@ -89,5 +93,4 @@ export default function CustomerDropdown({customerName, employees, expand, callb
         </Accordion>
       </GridItem>
   )
-
 }
