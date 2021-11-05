@@ -6,6 +6,7 @@ import {
   Employee,
   Competence,
   EmployeeSite,
+  Customer
 } from '../pages';
 
 export default function Content() {
@@ -15,7 +16,7 @@ export default function Content() {
         <Employee />
       </Route>
       <Route path="/kunder">
-        <UnderConstruction />
+        <Customer />
       </Route>
       <Route path="/kompetanse">
         <Competence />
