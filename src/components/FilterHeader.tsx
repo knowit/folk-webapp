@@ -12,6 +12,7 @@ const useStyles = makeStyles(() =>
       padding: '0 15px',
       display: 'flex',
       justifyContent: 'flex-start',
+      width: '100%'
     },
     filterHeaderTitle: {
       paddingTop: '20px',
