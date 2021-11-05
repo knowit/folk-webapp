@@ -4,7 +4,6 @@
       "outDir": "./dist",
       "allowJs": true,
       "target": "es6",
-      "lib": ["ES2019.Object"],
       "esModuleInterop": true,
       "typeRoots": [
         "@types",
