@@ -8,7 +8,7 @@ import RowCount from '../components/RowCount';
 import { DDComponentProps } from './types';
 import { makeStyles } from '@material-ui/core/styles';
 
-interface Column {
+export interface Column {
   title: string;
   expandable?: boolean;
   searchable?: boolean;
@@ -94,7 +94,7 @@ export type Action =
       searchableColumns: SearchableColumn[];
     };
 
-function reducer(currentState: TableState, action: Action) {
+export function reducer(currentState: TableState, action: Action) {
   switch (action.type) {
     case 'REMOVE_FROM_MOTIVATION_FILTER':
       return {
@@ -317,6 +317,18 @@ const searchAndFilter = (
   });
 };
 
+export function getSearchableColumns(columns: Column[]): SearchableColumn[] {
+  return columns.reduce((result, column, index) => {
+    if (column.searchable && column.getSearchValue) {
+      result.push({
+        columnIndex: index,
+        getSearchValue: column.getSearchValue,
+      });
+    }
+    return result;
+  }, [] as SearchableColumn[]);
+}
+
 export default function DDTable({ payload, title, props }: DDComponentProps) {
   const allRows = payload as { rowData: any[] }[];
   const initialState: TableState = {
@@ -330,15 +342,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const { columns } = props as { columns: Column[] };
-  const searchableColumns = columns.reduce((result, column, index) => {
-    if (column.searchable && column.getSearchValue) {
-      result.push({
-        columnIndex: index,
-        getSearchValue: column.getSearchValue,
-      });
-    }
-    return result;
-  }, [] as SearchableColumn[]);
+  const searchableColumns = getSearchableColumns(columns)
 
   const classes = useStyles();
 
