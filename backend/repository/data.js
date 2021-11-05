@@ -4,6 +4,7 @@ const {
 } = require('./util')
 const { v4: uuid } = require('uuid')
 const e = require('express')
+const { useState } = require('react')
 
 /**
  *
@@ -32,55 +33,55 @@ const getStorageUrl = (key) => {
   }
 }
 
-/**For øyeblikket så blir uketallet 1 uke for høyt */
-const findCurrentRegPeriod = () => {
+const getYear = () => {
   let currentDate = new Date()
   let currentYear = currentDate.getFullYear()
-  let oneJan = new Date(currentYear, 0, 1)
-  let numberOfDays = Math.floor((currentDate - oneJan) / (24 * 60 * 60 * 1000))
-  let currentWeekNumber = Math.ceil((currentDate.getDay() + 1 + numberOfDays) / 7)
 
-  return currentYear.toString() + currentWeekNumber.toString()
+  return currentYear.toString();
+}
+
+const getWeek = () => { 
+  let currentDate = new Date();
+  let oneJan = new Date(getYear(), 0, 1)
+  let numberOfDays = Math.floor((currentDate - oneJan) / (24 * 60 * 60 * 1000))
+  let currentWeekNumber = Math.floor((currentDate.getDay() + 1 + numberOfDays) / 7)
+
+  return currentWeekNumber.toString();
+}
+
+
+const statusColorCode = (wantNewProject, openForNewProject, inProject) => {
+  const projectStatus = inProject ? "red" : "green";
+  const color = (wantNewProject > openForNewProject) ? "yellow" : "orange"
+  const statusColor = (wantNewProject || openForNewProject) > 0 ? color : projectStatus;
+  
+  return statusColor;
 }
 
 const findProjectStatusForEmployee = (jobRotationEmployees, employeeUBW, email) => {
-  const currentRegPeriod = parseInt(findCurrentRegPeriod(), 10)
+  const currentRegPeriod = parseInt(getYear()+getWeek(), 10)
   const registeredHoursForEmployee = employeeUBW.filter((UBWObject) => UBWObject.email === email)
-  const newestRegPeriod = parseInt(Math.max.apply(Math, registeredHoursForEmployee.map((object) => { return object.reg_period })), 10)
+  const latestRegPeriod = parseInt(Math.max.apply(Math, registeredHoursForEmployee.map((object) => { return object.reg_period })), 10)
   let totalExternalProjectHours = 0
   let totalLocalProjectHours = 0
 
   /**Kan hende project_type ikke kommer til å ha disse navnene og at de bare var placeholdere. Da må i så fall skillet mellom prosjektene fjernes også telles det bare vanlig opp */
-  registeredHoursForEmployee.forEach((object) => object.project_type==='External Projects' && object.reg_period === newestRegPeriod ? totalExternalProjectHours += object.hours : 0)
-  registeredHoursForEmployee.forEach((object) => object.project_type==='Local Projects' && object.reg_period === newestRegPeriod ? totalLocalProjectHours += object.hours : 0)
+  registeredHoursForEmployee.forEach((object) => object.project_type==='External Projects' && object.reg_period === latestRegPeriod ? totalExternalProjectHours += object.hours : 0)
+  registeredHoursForEmployee.forEach((object) => object.project_type==='Local Projects' && object.reg_period ===  latestRegPeriod ? totalLocalProjectHours += object.hours : 0)
 
-  let motivationWishNewProject,motivationOpenForNewProject
+
+  let wantNewProject,openForNewProject
+
   jobRotationEmployees.forEach((employee) => {
     if(employee.email == email){
-      if(employee.index === 1){
-        motivationWishNewProject = employee.customscalevalue
-      }
-      if(employee.index === 2){
-        motivationOpenForNewProject = employee.customscalevalue
-      }
+      employee.index === 1 && (wantNewProject = employee.customscalevalue);
+      employee.index === 2 && (openForNewProject = employee.customscalevalue);
     }
   })
-  if(motivationWishNewProject > 0 || motivationOpenForNewProject > 0){
-    if(motivationWishNewProject > motivationOpenForNewProject){
-      return  'yellow'
-    }
-    if(motivationWishNewProject < motivationOpenForNewProject){
-      return 'orange'
-    }
-  }else{
-    if(((currentRegPeriod - newestRegPeriod) < 5) && totalExternalProjectHours > totalLocalProjectHours){
-      return 'red'
-    }
-    /**Det kan hende at hvis det er flest timer på lokale prosjekter at det fortsatt vil dukke opp kunde og kundetekst. Dette må sjekkes nærmere */
-    else{
-      return 'green'
-    }
-  }
+  const inProjectStatus = ((currentRegPeriod - latestRegPeriod) < 5) && (totalExternalProjectHours > totalLocalProjectHours);
+  
+  const statusColor = statusColorCode(wantNewProject, openForNewProject, inProjectStatus);
+  return statusColor;
 }
 
 exports.employeeTableReports = [
