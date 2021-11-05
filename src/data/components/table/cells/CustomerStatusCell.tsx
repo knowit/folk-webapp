@@ -23,7 +23,7 @@ export default function CustomerStatusCell(customerData: {
 
   return (
     <div className={classes.root}>
-      {data.customer
+      {data.customer && data.workOrderDescription
         ? `${data.customer}: ${data.workOrderDescription}`
         : 'Ikke i prosjekt'}
     </div>
