@@ -1,6 +1,6 @@
 import express, { Request, Response} from 'express'
 import { Issuer } from 'openid-client'
-import URL from 'url'
+import { URL } from 'url'
 import reporting from '../reporting'
 const router = express.Router()
 
@@ -24,10 +24,10 @@ const getClient = (applicationUrl = '') =>
   })
 
 const getOrigin = (url:string) => {
-  const parsed = URL.parse(url)
+  const parsed = new URL(url)
   return `${parsed.protocol}//${parsed.host}`
 }
-const getPath = (url:string) => URL.parse(url).path
+const getPath = (url:string) => new URL(url).pathname
 
 router.get('/login', function (req:Request, res:Response) {
   const { referer } = req.headers

@@ -1,4 +1,3 @@
-import QueryString from 'qs'
 // Verbose level
 const DEBUG = parseInt(process.env.DEBUG) || 0
 interface Params {
@@ -13,7 +12,7 @@ interface Params {
     hasToken?:boolean,
     status?: number,
     response?: string,
-    parameters?:QueryString.ParsedQs,
+    parameters?:{user_id?: string,email?:string},
     reports?: any,
     endpoint?:string,
   }| null;

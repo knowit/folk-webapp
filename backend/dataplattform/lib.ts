@@ -1,5 +1,4 @@
 import fetch from 'node-fetch'
-import QueryString from 'qs'
 import reporting from '../reporting'
 
 type ReportParams = {
@@ -66,7 +65,7 @@ async function report(
   }
 }
 
-async function reports (accessToken:string, reports:any, parameters:QueryString.ParsedQs) {
+async function reports (accessToken:string, reports:any, parameters:{email?:string, user_id?:string}) {
   // Reporting
   reporting({
     message: 'Reports received instruction for reports: ',
