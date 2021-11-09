@@ -1,3 +1,11 @@
+/* AvatarDropdown is a dropdown menu on the Avatar icon.
+    As of 25.10.21, the only functionality that would be present in the dropdown menu
+    is the logout/login functionality. An avatar dropdown menu with only one item in
+    it is not a great design, therefore we opt for using the LoginLogoutButton
+    instead. Since Profile, Shopping Cart, Settings, and similar functionalities may
+    be added in the future, this file remains here for the time being.
+ */
+/*
 import { Avatar, Box, Fade, IconButton, ListItemIcon, Menu, MenuItem } from '@material-ui/core';
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
 import { ExitToApp, PersonOutline, ShoppingCartOutlined } from '@material-ui/icons';
@@ -5,7 +13,6 @@ import React from 'react';
 import { useUserInfo } from '../LoginProvider';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
-// NOT CURRENTLY IN USE
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -27,8 +34,19 @@ export const AvatarDropdown = () => {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
-    window.location.replace('/auth/logout');
+  let buttonText = '';
+  if (userInfo.email == undefined) {
+    buttonText = 'Logg inn'
+  } else {
+    buttonText = 'Logg ut'
+  }
+
+  const handleLoginLogoutClick = () => {
+    if (userInfo.email == undefined) {
+      window.location.replace('/auth/login');
+    } else {
+      window.location.replace('/auth/logout');
+    }
   };
 
 
@@ -74,13 +92,15 @@ export const AvatarDropdown = () => {
           </ListItemIcon>
           Hadlevogn
         </MenuItem>
-        <MenuItem onClick={handleLogout} >
+        <MenuItem onClick={handleLoginLogoutClick} >
           <ListItemIcon style={{minWidth: '0',marginRight: '15px'}}>
             <ExitToApp fontSize={"small"}/>
           </ListItemIcon>
-          Logg ut
+          {buttonText}
         </MenuItem>
       </Menu>
     </React.Fragment>
   );
 };
+
+ */
