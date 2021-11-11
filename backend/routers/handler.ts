@@ -1,8 +1,9 @@
-const { reports } = require('../dataplattform/lib')
-const aggregation = require('../repository/data')
-const reporting = require('../reporting')
+import reports  from '../dataplattform/lib'
+import * as aggregation from '../repository/data'
+import reporting from '../reporting'
+import {Request} from 'express'
 
-module.exports = async (req) => {
+async function handler (req: Request) {
   // Request data
   const endpoint = req.params.source
   const parameters = req.query
@@ -43,7 +44,7 @@ module.exports = async (req) => {
 
   // Run data aggregation for endpoint
   const result = await endpointHandler({data, parameters})
-    .catch(err => {
+    .catch((err: string) => {
       throw reporting({
         message: err,
         external: false
@@ -52,3 +53,5 @@ module.exports = async (req) => {
 
   return result
 }
+
+export default handler

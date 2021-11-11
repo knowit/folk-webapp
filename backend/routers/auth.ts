@@ -1,7 +1,7 @@
-const express = require('express')
-const { Issuer } = require('openid-client')
-const URL = require('url')
-const reporting = require('../reporting')
+import express, { Request, Response} from 'express'
+import { Issuer, TokenSet } from 'openid-client'
+import { URL } from 'url'
+import reporting from '../reporting'
 const router = express.Router()
 
 const authEndpoint = process.env.OAUTH_URL
@@ -9,6 +9,7 @@ const clientId = process.env.CLIENT_ID
 const clientSecret = process.env.CLIENT_SECRET
 
 const dpIssuer = new Issuer({
+  issuer: `${authEndpoint}/oauth2/`,
   authorization_endpoint: `${authEndpoint}/oauth2/authorize`,
   token_endpoint: `${authEndpoint}/oauth2/token`,
   userinfo_endpoint: `${authEndpoint}/oauth2/userInfo`,
@@ -22,13 +23,13 @@ const getClient = (applicationUrl = '') =>
     response_types: ['code'],
   })
 
-const getOrigin = (url) => {
-  const parsed = URL.parse(url)
+const getOrigin = (url: string) => {
+  const parsed = new URL(url)
   return `${parsed.protocol}//${parsed.host}`
 }
-const getPath = (url) => URL.parse(url).path
+const getPath = (url: string) => new URL(url).pathname
 
-router.get('/login', function (req, res) {
+router.get('/login', function (req: Request, res: Response) {
   const { referer } = req.headers
   const authorizationUrl = getClient(getOrigin(referer)).authorizationUrl({
     scope: 'email openid profile',
@@ -43,8 +44,8 @@ router.get('/login', function (req, res) {
   res.redirect(302, authorizationUrl)
 })
 
-router.get('/callback', async function (req, res) {
-  const { authReferer: referer } = req.cookies
+router.get('/callback', async function (req: Request, res: Response) {
+  const { authReferer: referer }: { authReferer:string } = req.cookies
 
   const origin = getOrigin(referer)
 
@@ -71,19 +72,20 @@ router.get('/callback', async function (req, res) {
   res.redirect(302, getPath(referer))
 })
 
-router.get('/userInfo', async function (req, res) {
-  const accessToken = req.headers.authorization
+router.get('/userInfo', async function (req: Request, res: Response) {
+  const accessToken:string = req.headers.authorization
     .split(/bearer/i)
     .pop()
     .trim()
 
-  const userInfo = await getClient().userinfo(accessToken)
+  const userInfo: any = await getClient().userinfo(accessToken)
     .catch(err =>
       reporting({
         message: 'Auth failed userInfo on /userInfo',
         data: err
       })
     )
+
   res.send({
     name: [userInfo.given_name || '', userInfo.family_name || ''].join(' '),
     email: userInfo.email,
@@ -91,29 +93,29 @@ router.get('/userInfo', async function (req, res) {
   })
 })
 
-router.post('/refresh', async function (req, res) {
+router.post('/refresh', async function (req: Request, res: Response) {
   const { refreshToken = null } = req.body
 
   if (!refreshToken) {
-    return res.statusCode(403)
+    return res.statusCode = 403
+
   }
 
-  const tokens = await getClient().grant({
+  getClient().grant({
     grant_type: 'refresh_token',
     refresh_token: refreshToken,
-  }).catch(err =>
-    reporting({
-      message: 'Auth failed grant on /refresh',
-      data: err
-    })
-  )
-
-  res.send({
+  }).then((tokens: TokenSet) => res.send({
     accessToken: tokens.access_token,
     expiration: tokens.expires_in,
     sameSite: true,
     secure: true
-  })
+  })).catch(err => res.send(reporting({
+    message: 'Auth failed grant on /refresh',
+    data: err
+  }))
+  )
+
+
 })
 
-module.exports = router
+export default router
