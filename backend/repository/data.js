@@ -32,7 +32,6 @@ const getStorageUrl = (key) => {
     return undefined
   }
 }
-
 const getYear = () => {
   let currentDate = new Date()
   let currentYear = currentDate.getFullYear()

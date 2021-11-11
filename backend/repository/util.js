@@ -18,6 +18,22 @@ exports.getSecret = (name, { encrypted = false } = {}) => {
     )
   })
 }
+exports.getYear = () => {
+  let currentDate = new Date()
+  let currentYear = currentDate.getFullYear()
+
+  return currentYear.toString();
+}
+
+exports.getWeek = () => { 
+  let currentDate = new Date();
+  let oneJan = new Date(getYear(), 0, 1)
+  let numberOfDays = Math.floor((currentDate - oneJan) / (24 * 60 * 60 * 1000))
+  let currentWeekNumber = Math.floor((currentDate.getDay() + 1 + numberOfDays) / 7)
+
+  return currentWeekNumber.toString();
+}
+
 
 exports.makeEmailUuid = (email, salt) => {
   const hmac = crypto.createHmac('sha256', salt)
