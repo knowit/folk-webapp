@@ -3,7 +3,7 @@
       "module": "CommonJS",
       "outDir": "./dist",
       "allowJs": true,
-      "target": "es6",
+      "target": "ES2019",
       "esModuleInterop": true,
       "typeRoots": [
         "@types",
