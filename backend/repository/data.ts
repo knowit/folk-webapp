@@ -11,7 +11,7 @@ import { v4 as uuid } from 'uuid'
 
 const getCategoryScoresForEmployee = (
   employeeEmail: string, 
-  categoryList:EmployeeMotivationAndCompetence[]) => {
+  categoryList: EmployeeMotivationAndCompetence[]) => {
   const employeeCategories = categoryList.filter(categoryRow => categoryRow.email === employeeEmail)
   const employeeMotivation = {}
   const employeeCompetence = {}
@@ -21,7 +21,7 @@ const getCategoryScoresForEmployee = (
   })
   return [employeeMotivation, employeeCompetence]
 }
-const getStorageUrl = (key:string) => {
+const getStorageUrl = (key: string) => {
   if (key !== undefined) {
     return `${process.env.STORAGE_URL}/${key}`
   }
@@ -31,13 +31,13 @@ const getStorageUrl = (key:string) => {
 }
 
 type EmployeeMotivationAndCompetence = {
-  email:string,
-  motivation:number,
-  competence:number,
-  subCategory:string,
-  category:string,
-  categoryMotivationAvg:number,
-  categoryCompetenceAvg:number
+  email: string,
+  motivation: number,
+  competence: number,
+  subCategory: string,
+  category: string,
+  categoryMotivationAvg: number,
+  categoryCompetenceAvg: number
 }
 
 type EmployeeTable ={
@@ -45,7 +45,7 @@ type EmployeeTable ={
 }
 export const employeeTableReports = [
   { reportName: 'employeeInformation' },
-  { reportName: 'employeeMotivationAndCompetence'}, 
+  { reportName: 'employeeMotivationAndCompetence' }, 
 ]
 /**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
 export const employeeTable = async ({data}: EmployeeTable ) => {
@@ -95,10 +95,10 @@ const cvs = [
 type ReportParams = {
   parameters: {
     user_id?: string,
-    email?:string
+    email?: string
   }
 }
-export const employeeExperienceReports = ({ parameters: { user_id } = {} }:ReportParams) => [
+export const employeeExperienceReports = ({ parameters: { user_id } = {} }: ReportParams) => [
   {
     reportName: 'projectExperience',
     filter: { user_id },
@@ -113,15 +113,15 @@ type EmpExperience = {
     navn: string, 
     customer: string,
     description: string,
-    year_from:number,
+    year_from: number,
     year_to: number,
     month_from: number,
     month_to: number
   }[]
 }
-export const employeeExperience = async ({ data }:EmpExperience) => {
+export const employeeExperience = async ({ data }: EmpExperience) => {
   const empExperience = data
-  const formatTime = (year:number, month: number) =>
+  const formatTime = (year: number, month: number) =>
     [
       year && year > 0 ? year : '',
       year && year > 0 && month && month > 0 ? `/${month}` : '',
@@ -138,7 +138,7 @@ export const employeeExperience = async ({ data }:EmpExperience) => {
   }
 }
 
-export const employeeCompetenceReports = ({ parameters: { email } = {} }:ReportParams) => [
+export const employeeCompetenceReports = ({ parameters: { email } = {} }: ReportParams) => [
   {
     reportName: 'employeeSkills',
     filter: { email },
@@ -177,7 +177,7 @@ type EmployeeData = {
  *  Arbeidserfaring, ferdigheter, språk,  utdanning og roller fra CV-partner og nærmeste leder fra AD,
  *  Brukes i EmployeeInfo.tsx (utvidet tabell) og EmployeeSite.tsx
  */
-export const employeeCompetence = async ({ data }:EmployeeData) => {
+export const employeeCompetence = async ({ data }: EmployeeData) => {
   const [resSkills, resEmp, resComp] = data
   const mergedRes = mergeEmployees(resComp)
 
@@ -206,9 +206,9 @@ type FagActivity = {
 
 export const fagtimerReports = [{ reportName: 'fagActivity' }]
 /**Henter data om hvor mange fagtimer som er rapportert. Brukes i Competence.tsx */
-export const fagtimer = async ({ data }:{data:FagActivity[]}) => {
+export const fagtimer = async ({ data }: { data: FagActivity[] }) => {
   const fagActivity = data
-  const makeFagTimerDataForNivo = (data:FagActivity[]) => {
+  const makeFagTimerDataForNivo = (data: FagActivity[]) => {
     const setData = range(2018, new Date().getFullYear()).map((year) => ({
       id: year.toString(),
       data: range(1, 53).map((i) => {
@@ -248,8 +248,8 @@ type YearsSinceSchoolDist = {
 /** Dette endepunktet henter ut erfarings-fordelingen blant de ansatte.
  * Det brukes for å lage stolpe- og kakediagram i Competence.tsx
  */
-export const experienceDistribution = async ({ data }:{data:YearsSinceSchoolDist[]}) => {
-  const setInGroups = (list:YearsSinceSchoolDist[]) => {
+export const experienceDistribution = async ({ data }:{ data: YearsSinceSchoolDist[] }) => {
+  const setInGroups = (list: YearsSinceSchoolDist[]) => {
     const detailedGroupedList = [
       { years: 'Under 2 år', count: 0 },
       { years: '2 til 5 år', count: 0 },
@@ -336,7 +336,7 @@ type AgeDistributionGroups = {
 /** Dette endepunktet henter ut aldersfordelingen blant de ansatte.
  * Det brukes for å lage et stolpediagram i Competence.tsx
  */
-export const ageDistribution = async ({ data }:{data:[AgeDistribution[], AgeDistributionGroups[]]}) => {
+export const ageDistribution = async ({ data }: { data: [AgeDistribution[], AgeDistributionGroups[]] }) => {
   const [setAgeDist, setAgeDistGroup] = data
 
   return {
@@ -351,7 +351,7 @@ export const ageDistribution = async ({ data }:{data:[AgeDistribution[], AgeDist
   }
 }
 
-function getEventSet(events:{time_from:string ,time_to:string }[]) {
+function getEventSet(events: { time_from: string ,time_to: string }[]) {
   // Finds earliest and latest dates for creating a range of years
 
   const firstYear = new Date(
@@ -361,7 +361,7 @@ function getEventSet(events:{time_from:string ,time_to:string }[]) {
     Math.max(...events.map((event) => new Date(event.time_to).getTime()))
   ).getFullYear()
 
-  const years = [] // Range of years in dataset, [2015, 2016, 2017, etc...]
+  const years: number[] = [] // Range of years in dataset, [2015, 2016, 2017, etc...]
   for (let year = (firstYear); year <= (lastYear); year++)
     years.push(year)
 
@@ -416,7 +416,7 @@ function getEventSet(events:{time_from:string ,time_to:string }[]) {
   return set
 }
 
-function dateRange(startDate:string, endDate:string) {
+function dateRange(startDate: string, endDate: string) {
   const start = startDate.split('-')
   const end = endDate.split('-')
   const startYear = parseInt(start[0])
@@ -445,7 +445,7 @@ export const fagEventsReports = [{ reportName: 'fagEvents' }]
 /** Henter ut antall unike hendelser per uke i knowit events og Knowit Fagkalender
  * Brukes for å lage linjediagram i Competence.tsx
  */
-export const fagEvents = async ({ data }:{data:FagEvent[]}) => {
+export const fagEvents = async ({ data }: { data: FagEvent[] }) => {
   const eventSet = getEventSet(data)
 
   return {
@@ -460,7 +460,7 @@ type DegreeDist = {
   count: number
 }
 export const educationReports = [{ reportName: 'degreeDist' }]
-export const education = async ({ data }:{data:DegreeDist}) => {
+export const education = async ({ data }: { data: DegreeDist }) => {
   const education = data
 
   return {
@@ -472,12 +472,12 @@ export const education = async ({ data }:{data:DegreeDist}) => {
 }
 
 type NewCategories = {
-  category:string,
-  subCategories:string
+  category: string,
+  subCategories: string
 }
 
 export const competenceFilterReports = [{ reportName: 'newCategories' }]
-export const competenceFilter = async ({ data }:{data: NewCategories[]}) => {
+export const competenceFilter = async ({ data }: { data: NewCategories[] }) => {
   return data.map(e => ({ category: e.category, subCategories: JSON.parse(e.subCategories) }))
 }
 
@@ -493,9 +493,9 @@ export const competenceMappingReports = [
   { reportName: 'newMotivationAverage' },
 ]
 /** Dette endepunktet brukes i competence for å vise data fra kompteansekartleggingen som både sunburst-graf og stolpediagram */
-export const competenceMapping = async ({ data }:{data:CompetenceAndMotivationAverage[][]}) => {
+export const competenceMapping = async ({ data }: { data: CompetenceAndMotivationAverage[][] }) => {
   const [competence, motivation] = data
-  const competenceCategories = (data:CompetenceAndMotivationAverage[]) => {
+  const competenceCategories = (data: CompetenceAndMotivationAverage[]) => {
     const categoriesMap = {}
     data.forEach(row => {
       if (row.category in categoriesMap) {
@@ -539,7 +539,7 @@ export const competenceAmountReports = [
  * for de forskjellige kategoriene. Den regner også ut den prosentivse andelen som har svart 3 eller mer sammenlignet med alle om har svart.
  * Endepuktet brukes i Competence.tsx for å fremstille denne dataen som et stolpediagram.
  */
-export const competenceAmount = async ({ data }:{data:EmployeeMotivationAndCompetence[]}) => {
+export const competenceAmount = async ({ data }: { data: EmployeeMotivationAndCompetence[] }) => {
   const THRESHOLD=3
   /*const motAndComp = data*/
   const categoriesMap = {'mainCategories': {}}
@@ -599,7 +599,7 @@ export const competenceAmount = async ({ data }:{data:EmployeeMotivationAndCompe
   }
 }
 
-export const empDataReports = ({ parameters: { email } = {} }:ReportParams) => [
+export const empDataReports = ({ parameters: { email } = {} }: ReportParams) => [
   {
     reportName: 'employeeSkills',
     filter: { email },
@@ -614,7 +614,7 @@ export const empDataReports = ({ parameters: { email } = {} }:ReportParams) => [
   },
 ]
 /** Dette endepunktet henter data om en enkelt person for å fylle opp sidene for hver enkelt ansatt.  */
-export const empData = async ({ data }:EmployeeData) => {
+export const empData = async ({ data }: EmployeeData) => {
   const [resSkills, resWork, resComp] = data
   const emp = mergeEmployees(resComp)[0]
 
@@ -637,7 +637,7 @@ export const empData = async ({ data }:EmployeeData) => {
   }
 }
 
-export const employeeRadarReports = ({ parameters: { email } = {} }:ReportParams) => [
+export const employeeRadarReports = ({ parameters: { email } = {} }: ReportParams) => [
   {
     reportName: 'employeeMotivationAndCompetence',
     filter: { email },
@@ -646,7 +646,7 @@ export const employeeRadarReports = ({ parameters: { email } = {} }:ReportParams
 /** Dette endepunktet hetner data om hvordan en konulent har scoret på de forskjellige kategoriene på kompetansekartleggingen
  *  Det brukes i EmployeeInfo (utvidet tabell), og EmployeeSite (siden for hver enkelt ansatt)
  */
-export const employeeRadar = async ({ data }:{data: EmployeeMotivationAndCompetence[]}) => {
+export const employeeRadar = async ({ data }:{ data: EmployeeMotivationAndCompetence[] }) => {
   const competenceAndMotivation = data
   const categoriesMap = {'mainCategories': {}}
   competenceAndMotivation.forEach(row => {
@@ -673,7 +673,7 @@ export const competenceAreasReports = [
   { reportName: 'newMotivationAverage' },
 ]
 
-export const competenceAreas = async ({ data }:{data: CompetenceAndMotivationAverage[][]}) => {
+export const competenceAreas = async ({ data }: { data: CompetenceAndMotivationAverage[][] }) => {
   const [competence, motivation] = data
 
   const categoriesMap = {mainCategories: {}}

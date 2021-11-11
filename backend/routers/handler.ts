@@ -3,7 +3,7 @@ import * as aggregation from '../repository/data'
 import reporting from '../reporting'
 import {Request} from 'express'
 
-async function handler (req:Request) {
+async function handler (req: Request) {
   // Request data
   const endpoint = req.params.source
   const parameters = req.query
@@ -44,7 +44,7 @@ async function handler (req:Request) {
 
   // Run data aggregation for endpoint
   const result = await endpointHandler({data, parameters})
-    .catch((err:string) => {
+    .catch((err: string) => {
       throw reporting({
         message: err,
         external: false

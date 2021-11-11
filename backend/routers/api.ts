@@ -5,7 +5,7 @@ import handler from './handler'
 const router = express.Router()
 
 router.use(dataplattform())
-router.get('/data/:source', async (req:express.Request, res:express.Response) =>
+router.get('/data/:source', async (req: express.Request, res: express.Response) =>
   handler(req)
     .then(data => res.send(data))
     .catch(err => {

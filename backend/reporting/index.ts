@@ -3,36 +3,36 @@ const DEBUG = parseInt(process.env.DEBUG) || 0
 type Params = {
   message?: string;
   type?: string;
-  data?: Data| null;
+  data?: Data | null;
   status?: number;
-  error?: {status: number, message:string, external: any};
+  error?: {status: number, message: string, external: any};
   external?: boolean | null;
 }
 
 type Data = {
-  accessToken?:string,
-  filterString?:string, 
-  reportUrl?:string,
-  reportName?:string,
-  filter?:{email?: string,  user_id?:string}, 
-  hasToken?:boolean,
+  accessToken?: string,
+  filterString?: string, 
+  reportUrl?: string,
+  reportName?: string,
+  filter?: {email?: string, user_id?: string}, 
+  hasToken?: boolean,
   status?: number,
   response?: string,
-  parameters?:{user_id?: string,email?:string},
+  parameters?: {user_id?: string, email?: string},
   reports?: any,
-  endpoint?:string,
+  endpoint?: string,
 }
 function output({
   type,
   error,
   message,
   data
-}:Params) {
+}: Params) {
   const RED = 31
   const YELLOW = 33
   const BLUE = 34
 
-  const color = (color:number, string:string) => {
+  const color = (color: number, string: string) => {
     return '\x1b[' + color + 'm' + string + '\x1b[0m'
   }
 
@@ -62,7 +62,7 @@ const Reporting = ({
   type = 'error',
   external = null,
   data = null
-}:Params) => {
+}: Params) => {
   const error = { status, message }
   if (DEBUG > 0)
     output({ type, error: {...error, external}, message, data})

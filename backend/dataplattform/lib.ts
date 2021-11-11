@@ -3,7 +3,7 @@ import reporting from '../reporting'
 
 type ReportParams = {
   reportName: string,
-  filter: {email?: string,  user_id?:string},
+  filter: {email?: string,  user_id?: string},
   accessToken: string | null,
   apiUrl?: string
 }
@@ -13,7 +13,7 @@ async function report(
     filter = {},
     accessToken = null,
     apiUrl = process.env.API_URL || 'https://api.new-dev.dataplattform.knowit.no',
-  }:ReportParams
+  }: ReportParams
 ) {
   // Reporting
   reporting({
@@ -39,7 +39,7 @@ async function report(
     type: 'info'
   })
 
-  const response:{status:number, statusText: string} = await fetch(reportUrl, {
+  const response:{status: number, statusText: string} = await fetch(reportUrl, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -65,7 +65,7 @@ async function report(
   }
 }
 
-async function reports (accessToken:string, reports:any, parameters:{email?:string, user_id?:string}) {
+async function reports (accessToken: string, reports: any, parameters: {email?: string, user_id?: string}) {
   // Reporting
   reporting({
     message: 'Reports received instruction for reports: ',
@@ -85,7 +85,7 @@ async function reports (accessToken:string, reports:any, parameters:{email?:stri
 
   // Iterate and fetch all reports
   const reportRequests = reports.map(async (reportElement:
-    {reportName:string, filter?:{email?:string, user_id?:string}}) => {
+    {reportName: string, filter?: {email?: string, user_id?: string}}) => {
     const reportName = reportElement.reportName
     const filter = reportElement.filter
 

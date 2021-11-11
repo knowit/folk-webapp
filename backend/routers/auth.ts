@@ -23,13 +23,13 @@ const getClient = (applicationUrl = '') =>
     response_types: ['code'],
   })
 
-const getOrigin = (url:string) => {
+const getOrigin = (url: string) => {
   const parsed = new URL(url)
   return `${parsed.protocol}//${parsed.host}`
 }
-const getPath = (url:string) => new URL(url).pathname
+const getPath = (url: string) => new URL(url).pathname
 
-router.get('/login', function (req:Request, res:Response) {
+router.get('/login', function (req: Request, res: Response) {
   const { referer } = req.headers
   const authorizationUrl = getClient(getOrigin(referer)).authorizationUrl({
     scope: 'email openid profile',
@@ -44,8 +44,8 @@ router.get('/login', function (req:Request, res:Response) {
   res.redirect(302, authorizationUrl)
 })
 
-router.get('/callback', async function (req:Request, res:Response) {
-  const { authReferer: referer }:{authReferer:string} = req.cookies
+router.get('/callback', async function (req: Request, res: Response) {
+  const { authReferer: referer }: { authReferer:string } = req.cookies
 
   const origin = getOrigin(referer)
 
@@ -72,7 +72,7 @@ router.get('/callback', async function (req:Request, res:Response) {
   res.redirect(302, getPath(referer))
 })
 
-router.get('/userInfo', async function (req:Request, res:Response) {
+router.get('/userInfo', async function (req: Request, res: Response) {
   const accessToken:string = req.headers.authorization
     .split(/bearer/i)
     .pop()
@@ -93,7 +93,7 @@ router.get('/userInfo', async function (req:Request, res:Response) {
   })
 })
 
-router.post('/refresh', async function (req:Request, res: Response) {
+router.post('/refresh', async function (req: Request, res: Response) {
   const { refreshToken = null } = req.body
 
   if (!refreshToken) {
@@ -104,7 +104,7 @@ router.post('/refresh', async function (req:Request, res: Response) {
   getClient().grant({
     grant_type: 'refresh_token',
     refresh_token: refreshToken,
-  }).then((tokens:TokenSet) => res.send({
+  }).then((tokens: TokenSet) => res.send({
     accessToken: tokens.access_token,
     expiration: tokens.expires_in,
     sameSite: true,
