@@ -43,7 +43,7 @@ const useStyles = makeStyles(() =>
     knowitGreen: {
       backgroundColor: '#00897B',
       width: '100%',
-      height: '69px',
+      height: '70px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',

@@ -4,6 +4,8 @@ import { Grid } from '@material-ui/core'
 import { useFetchedData } from '../hooks/service'
 import CustomerDropdown from '../components/CustomerDropdown'
 import { Column, getSearchableColumns, SearchableColumn } from '../data/DDTable'
+import NavTab from '../components/NavTab'
+import ClientGraphs from '../components/ClientGraphs'
 
 interface Customers {
   [key: string]: []
@@ -11,16 +13,17 @@ interface Customers {
 
 type Payload = { [key: string]: any };
 
-export default function Customer() {
+export default function Customer() { // todo rename ClientContent?
   const url = '/api/data/employeeTable'
   const [payload, pending] = useFetchedData<Payload>({ url })
   const [initialData, setInitialData] = useState<Payload>([])
   const [dropdowns, setDropdowns] = useState<any[]>([])
   const [searchableColumns, setSearchableColumns] = useState<SearchableColumn[]>()
-  const statusIconData = 2
-  const customerData = 3
 
   function preparePayloadForTable() {
+    const statusIconData = 2
+    const customerData = 3
+
     if (Array.isArray(payload) && !pending) {
       payload.map(emp => {
         if (emp.rowData[customerData].customer === undefined) {
@@ -30,7 +33,7 @@ export default function Customer() {
       })
       setInitialData(payload)
 
-      const groups = groupByCustomers(payload, 2)
+      const groups = groupByCustomers(payload, 2) // customerIndex changes after splice
       createDropdowns(groups)
     }
   }
@@ -73,7 +76,7 @@ export default function Customer() {
     preparePayloadForTable()
   }, [payload, pending])
 
-  return (
+  const listView = (
     <Grid container> {/* todo placeholder for ingen hits? */}
       {pending ? <></> : // todo skeletoncomponent
         <CustomerFilter
@@ -84,6 +87,14 @@ export default function Customer() {
         />
       }
       { dropdowns } {/* todo skeletoncomponent  */}
-    </Grid>
+    </Grid>)
+
+  const graphView = ClientGraphs()
+
+  return (
+    <NavTab contentList={[
+      {content: listView, title: 'Listevisning'},
+      {content: graphView, title: 'Overordnet oversikt'}
+    ]} />
   );
 }
