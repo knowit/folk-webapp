@@ -116,3 +116,9 @@ exports.reStructCategories = (categories, compScores = [], motScores = []) => {
 
   return [catSet, setNames]
 }
+
+exports.sum = (data, property) => {
+  return data.reduce((a, b) => {
+    return a + b[property]
+  }, 0)
+}
