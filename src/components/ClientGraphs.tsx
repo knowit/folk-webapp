@@ -109,8 +109,6 @@ export default function ClientGraphs() {
             },
           ],
         }}
-        preloadedPayload={lineData}
-        usePreloaded
       />
     </div>
   )

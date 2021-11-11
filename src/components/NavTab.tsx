@@ -45,7 +45,7 @@ interface NavTabProps { // todo unødvendig? kan vel bare bruke NavTabContent[] 
 
 const localStorageKey = "ClientPageCurrentTab"
 const getCurrentTabValue = () => {
-  const currentTabValue = localStorage.getItem(localStorageKey)
+  const currentTabValue = sessionStorage.getItem(localStorageKey)
   return currentTabValue ? parseInt(currentTabValue) : 0
 }
 
@@ -56,7 +56,7 @@ export default function NavTab(props: NavTabProps) {
 
   const handleChange = (event: any, tabValue: number) => {
     setValue(tabValue)
-    localStorage.setItem(localStorageKey, `${tabValue}`)
+    sessionStorage.setItem(localStorageKey, `${tabValue}`)
   }
 
   const createTabs = () => {
