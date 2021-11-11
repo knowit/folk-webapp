@@ -85,7 +85,7 @@ reports = [
     },
     {
       "name": "newCategories",
-      "queryString": "SELECT DISTINCT c.text AS category, CAST(ARRAY_AGG(DISTINCT q.topic) AS JSON) AS subCategories FROM kompetansekartlegging_questions AS q INNER JOIN kompetansekartlegging_categories AS c ON q.categoryid = c.id GROUP BY c.text",
+      "queryString": "SELECT DISTINCT c.text AS category, CAST(ARRAY_AGG(DISTINCT q.topic) AS JSON) AS subCategories FROM kompetansekartlegging_questions AS q INNER JOIN kompetansekartlegging_categories AS c ON q.categoryid = c.id WHERE c.text != 'Jobbrotasjon' GROUP BY c.text",
       "tables": [
         "kompetansekartlegging_categories",
         "kompetansekartlegging_questions"
@@ -142,7 +142,7 @@ reports = [
     },
     {
       "name": "newCompetenceAverage",
-      "queryString": "SELECT AVG(a.knowledge) AS value, q.topic as subCategory, c.text as category FROM kompetansekartlegging_answers AS a INNER JOIN kompetansekartlegging_questions AS q ON a.questionid = q.id INNER JOIN kompetansekartlegging_categories AS c ON q.categoryid = c.id GROUP BY q.topic, c.text",
+      "queryString": "SELECT AVG(a.knowledge) AS value, q.topic as subCategory, c.text as category FROM kompetansekartlegging_answers AS a INNER JOIN kompetansekartlegging_questions AS q ON a.questionid = q.id INNER JOIN kompetansekartlegging_categories AS c ON q.categoryid = c.id WHERE c.text != 'Jobbrotasjon' GROUP BY q.topic, c.text",
       "tables": [
         "kompetansekartlegging_answers",
         "kompetansekartlegging_categories",
@@ -211,7 +211,7 @@ reports = [
     },
     {
       "name": "employeeMotivationAndCompetence",
-      "queryString": "WITH categoryAverage AS (SELECT a.email AS email, c.text AS category, AVG(a.motivation) AS categoryMotivationAvg, AVG(a.knowledge) AS categoryCompetenceAvg FROM kompetansekartlegging_answers AS a INNER JOIN kompetansekartlegging_questions AS q ON a.questionid = q.id INNER JOIN kompetansekartlegging_categories AS c ON q.categoryid = c.id GROUP BY a.email, c.text) SELECT a.email AS email, a.motivation AS motivation, a.knowledge AS competence, q.topic AS subCategory, c.text AS category, ca.categoryMotivationAvg AS categoryMotivationAvg, ca.categoryCompetenceAvg AS categoryCompetenceAvg FROM kompetansekartlegging_answers AS a INNER JOIN kompetansekartlegging_questions AS q ON a.questionid = q.id INNER JOIN kompetansekartlegging_categories AS c ON q.categoryid = c.id INNER JOIN categoryAverage AS ca ON a.email = ca.email AND c.text = ca.category",
+      "queryString": "WITH categoryAverage AS (SELECT a.email AS email, c.text AS category, AVG(a.motivation) AS categoryMotivationAvg, AVG(a.knowledge) AS categoryCompetenceAvg FROM kompetansekartlegging_answers AS a INNER JOIN kompetansekartlegging_questions AS q ON a.questionid = q.id INNER JOIN kompetansekartlegging_categories AS c ON q.categoryid = c.id WHERE c.text != 'Jobbrotasjon' GROUP BY a.email, c.text) SELECT a.email AS email, a.motivation AS motivation, a.knowledge AS competence, q.topic AS subCategory, c.text AS category, ca.categoryMotivationAvg AS categoryMotivationAvg, ca.categoryCompetenceAvg AS categoryCompetenceAvg FROM kompetansekartlegging_answers AS a INNER JOIN kompetansekartlegging_questions AS q ON a.questionid = q.id INNER JOIN kompetansekartlegging_categories AS c ON q.categoryid = c.id INNER JOIN categoryAverage AS ca ON a.email = ca.email AND c.text = ca.category",
       "tables": [
         "kompetansekartlegging_answers",
         "kompetansekartlegging_categories",
@@ -224,7 +224,7 @@ reports = [
     },
     {
       "name": "newMotivationAverage",
-      "queryString": "SELECT AVG(a.motivation) AS value, q.topic as subCategory, c.text as category FROM kompetansekartlegging_answers AS a INNER JOIN kompetansekartlegging_questions AS q ON a.questionid = q.id INNER JOIN kompetansekartlegging_categories AS c ON q.categoryid = c.id GROUP BY q.topic, c.text",
+      "queryString": "SELECT AVG(a.motivation) AS value, q.topic as subCategory, c.text as category FROM kompetansekartlegging_answers AS a INNER JOIN kompetansekartlegging_questions AS q ON a.questionid = q.id INNER JOIN kompetansekartlegging_categories AS c ON q.categoryid = c.id WHERE c.text != 'Jobbrotasjon' GROUP BY q.topic, c.text",
       "tables": [
         "kompetansekartlegging_answers",
         "kompetansekartlegging_categories",
