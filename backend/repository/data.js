@@ -660,97 +660,35 @@ exports.hoursBilledPerWeekReports = [
 ]
 
 exports.hoursBilledPerWeek = async ({ data }) => {
-  const lines = data.reduce((groups, perProject) => {
-    const group = (groups[perProject.reg_period] || [])
-    group.push(perProject)
-    groups[perProject.reg_period] = group
-    return groups
+  const groupedByCustomer = data.reduce((prev, curr) => {
+    const group = (prev[curr.customer] || [])
+    group.push(curr)
+    prev[curr.customer] = group
+    return prev
   }, {})
 
-  const lol = {}
-  Object.keys(lines).forEach(key => {
-    lol[key] = []
+  Object.keys(groupedByCustomer).forEach(key => {
+    groupedByCustomer[key] = groupedByCustomer[key].map(data => ({x: data.reg_period, y: data.hours}))
   })
 
-  // const megalol = Object.keys(lines).forEach(key => {
-  //   return Array.from(lines[key].reduce(
-  //     (m, {name, value}) => m.set(name, (m.get(name) || 0 ) + value), new Map), (name, value]) => ({name, value}))
-  //   ))
-  // })
-  // TODO reduce slik at det blir seendes ish slik ut? deretter FUCKING SLAY IT.
-  const arr = [ { 'name': 'P1', 'value': 150 }, { 'name': 'P1', 'value': 150 }, { 'name': 'P2', 'value': 200 }, { 'name': 'P3', 'value': 450 } ];
+  Object.keys(groupedByCustomer).forEach(key => {
+    groupedByCustomer[key] = Array.from(groupedByCustomer[key].reduce(
+      (m, {x, y}) => m.set(x, (m.get(x) || 0) + y), new Map),
+      ([x, y]) => ({x, y})).sort((a, b) => b.x - a.x) // ascending sort of weeks
+  })
 
-  const res = Array.from(arr.reduce(
-    (m, {name, value}) => m.set(name, (m.get(name) || 0) + value), new Map
-  ), ([name, value]) => ({name, value}));
-  console.log(res);
-
-  console.log(lol)
+  const lineGraphData = Object.entries(groupedByCustomer).map(([key, value]) =>
+    ({
+      id: key,
+      data: value,
+    })).sort((a, b) => b.data.length - a.data.length)
+  // ascending sort by number of week entries
 
   return {
     setNames: ['Lines'],
-    Lines: [
-      lines
-    ]
-
+    sets: {
+      Lines: lineGraphData
+    }
   }
 }
-
-const lineData = { "setNames": ["Lines", "Lines2", "Lines3"], "sets": {
-    "Lines": [
-      {
-        "id": "TestLine1",
-        "color": "hsl(99, 70%, 50%)",
-        "data": [
-          {
-            "x": "plane",
-            "y": 249
-          },
-          {
-            "x": "helicopter",
-            "y": 300
-          },
-          {
-            "x": "boat",
-            "y": 140
-          },
-          {
-            "x": "train",
-            "y": 16
-          },
-          {
-            "x": "subway",
-            "y": 128
-          },
-        ]
-      },
-      {
-        "id": "Line2",
-        "color": "hsl(42, 30%, 90%)",
-        "data": [
-          {
-            "x": "plane",
-            "y": 124
-          },
-          {
-            "x": "helicopter",
-            "y": 32
-          },
-          {
-            "x": "boat",
-            "y": 551
-          },
-          {
-            "x": "train",
-            "y": 24
-          },
-          {
-            "x": "subway",
-            "y": 123
-          },
-        ]
-      }]
-  }
-}
-
 
