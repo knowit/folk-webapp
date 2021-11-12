@@ -1,13 +1,19 @@
-const fetch = require('node-fetch')
-const reporting = require('../reporting')
+import fetch from 'node-fetch'
+import reporting from '../reporting'
 
+type ReportParams = {
+  reportName: string,
+  filter: {email?: string,  user_id?: string},
+  accessToken: string | null,
+  apiUrl?: string
+}
 async function report(
   {
     reportName,
     filter = {},
     accessToken = null,
     apiUrl = process.env.API_URL || 'https://api.new-dev.dataplattform.knowit.no',
-  }
+  }: ReportParams
 ) {
   // Reporting
   reporting({
@@ -33,7 +39,7 @@ async function report(
     type: 'info'
   })
 
-  const response = await fetch(reportUrl, {
+  const response:{status: number, statusText: string} = await fetch(reportUrl, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -59,7 +65,7 @@ async function report(
   }
 }
 
-exports.reports = async (accessToken, reports, parameters) => {
+async function reports (accessToken: string, reports: any, parameters: {email?: string, user_id?: string}) {
   // Reporting
   reporting({
     message: 'Reports received instruction for reports: ',
@@ -78,12 +84,16 @@ exports.reports = async (accessToken, reports, parameters) => {
   }
 
   // Iterate and fetch all reports
-  const reportRequests = reports.map(reportElement => {
+  const reportRequests = reports.map(async (reportElement:
+    {reportName: string, filter?: {email?: string, user_id?: string}}) => {
     const reportName = reportElement.reportName
     const filter = reportElement.filter
 
-    return report({reportName, filter, accessToken})
-      .catch(err => Promise.reject(err))
+    try {
+      return await report({ reportName, filter, accessToken })
+    } catch (err) {
+      return await Promise.reject(err)
+    }
   })
 
   const request = await Promise.all(reportRequests)
@@ -99,9 +109,9 @@ exports.reports = async (accessToken, reports, parameters) => {
   // Handle fetched data
   const data = await Promise.all(
     request.map(
-      req => req.json()
+      (req:any) => req.json()
         .catch(
-          err => {
+          (err:string) => {
             throw reporting({
               message: err,
               external: false,
@@ -123,3 +133,5 @@ exports.reports = async (accessToken, reports, parameters) => {
 
   return data
 }
+
+export default reports
