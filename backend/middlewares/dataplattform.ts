@@ -1,5 +1,7 @@
-module.exports = function () {
-  return function (req, res, next) {
+import { Request, Response, NextFunction }  from 'express'
+
+const dataplattform = () => {
+  return function (req: Request, res: Response, next: NextFunction) {
     if (!req.headers.authorization) {
       return res.sendStatus(403)
     }
@@ -12,3 +14,5 @@ module.exports = function () {
     next()
   }
 }
+
+export default dataplattform

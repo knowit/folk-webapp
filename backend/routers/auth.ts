@@ -124,8 +124,6 @@ router.post('/refresh', async function (req: Request, res: Response) {
     data: err
   }))
   )
-
-
 })
 
 export default router
