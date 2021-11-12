@@ -1,6 +1,7 @@
 import { makeStyles, Tooltip, TooltipProps, withStyles } from '@material-ui/core';
-import React from 'react';
+import React, {useState} from 'react';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import { useEffect } from 'react';
 
 const StatusCircle = ({ color }: { color: string }) => {
   const Circle = withStyles(() => ({
@@ -49,11 +50,26 @@ export default function ProjectStatusCell(status? :{data: string}) {
   const classes = useStyles();
   const colors: ColorMap = {"green": '#4C8E00', "yellow": '#ffd500', "orange": '#ff8800', "red": '#D10000'}
   const color = status ? colors[status.data] : '#777777';
-  const toolTipTitle = status && (status.data === 'orange' ? "Er åpen for å bytte prosjekt" : (status.data === 'yellow' ? 'Ønsker å bytte prosjekt': ''))
+  const [toolTipTitle, setToolTipTitle] = useState('');
+
+  useEffect (() => {
+    switch(status && status.data){
+      case 'orange':
+        setToolTipTitle("Er åpen for å bytte prosjekt");
+        break
+      case 'yellow':
+        setToolTipTitle("Ønsker å bytte prosjekt");
+        break
+      case 'red': 
+        setToolTipTitle("Jeg er opptatt i prosjekt");
+        break
+      case 'green':
+        setToolTipTitle("Jeg er ikke i prosjekt");} 
+      }, [toolTipTitle]);
 
   return (
     <div className={classes.root}>
-      <StatusTooltip arrow placement='bottom' title={toolTipTitle ? toolTipTitle : ''}>
+      <StatusTooltip arrow placement='bottom' title={toolTipTitle}>
         <div>
           <StatusCircle color={color} />
         </div>
