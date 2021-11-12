@@ -29,6 +29,22 @@ type MergeEmployees = EmployeeInformation & {
   }[]
 }
 
+export const getYear = () => {
+  let currentDate = new Date()
+  let currentYear = currentDate.getFullYear()
+
+  return Number(currentYear);
+}
+
+export const getWeek = () => { 
+  let currentDate = new Date();
+  let oneJan = new Date(getYear(), 0, 1)
+  let numberOfDays = Math.floor((Number(currentDate) - Number(oneJan)) / (24 * 60 * 60 * 1000))
+  let currentWeekNumber = Math.floor((currentDate.getDay() + 1 + numberOfDays) / 7)
+
+  return currentWeekNumber.toString();
+}
+
 export const mergeEmployees = (allEmployees: EmployeeInformation[]): MergeEmployees[] => {
   const mergedEmployees = {}
 
