@@ -34,7 +34,7 @@ export function useAsync<T, K = Error>(
       try {
         const result = await asyncFunction(...args);
         setValue(result);
-      } catch (e) {
+      } catch (e:any) {
         setError(e);
       }
 
