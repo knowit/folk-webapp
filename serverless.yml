@@ -51,6 +51,9 @@ functions:
     events:
       - httpApi: "*"
 
+plugins:
+  - serverless-plugin-typescript
+
 resources:
   Resources:
     LambdaRole:
