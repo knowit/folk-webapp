@@ -1,4 +1,4 @@
-import { range, mergeEmployees, EmployeeInformation } from './util'
+import { range, mergeEmployees, EmployeeInformation, sum } from './util'
 import { v4 as uuid } from 'uuid'
 
 /**
@@ -745,6 +745,11 @@ exports.hoursBilledPerWeekReports = [
   { reportName: 'perProject' },
 ]
 
+type LineGraphData = {
+  id: string,
+  data: Array<any>
+}
+
 exports.hoursBilledPerWeek = async ({ data }) => {
   const groupedByCustomer = data.reduce((prev, curr) => {
     const group = (prev[curr.customer] || [])
@@ -760,15 +765,14 @@ exports.hoursBilledPerWeek = async ({ data }) => {
   Object.keys(groupedByCustomer).forEach(key => {
     groupedByCustomer[key] = Array.from(groupedByCustomer[key].reduce(
       (m, {x, y}) => m.set(x, (m.get(x) || 0) + y), new Map),
-      ([x, y]) => ({x, y})).sort((a, b) => b.x - a.x) // ascending sort of weeks
+    ([x, y]) => ({x, y})).sort((a, b) => b.x - a.x) // ascending sort of weeks
   })
 
   const lineGraphData = Object.entries(groupedByCustomer).map(([key, value]) =>
     ({
       id: key,
       data: value,
-    })).sort((a, b) => b.data.length - a.data.length)
-  // ascending sort by number of week entries
+    } as LineGraphData)).sort((a, b) => b.data.length - a.data.length) // ascending sort by number of week entries
 
   return {
     setNames: ['Lines'],
