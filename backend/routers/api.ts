@@ -1,11 +1,11 @@
-const express = require('express')
-const dataplattform = require('../middlewares/dataplattform')
-const handler = require('./handler')
+import express from 'express'
+import dataplattform from '../middlewares/dataplattform'
+import handler from './handler'
 
 const router = express.Router()
 
 router.use(dataplattform())
-router.get('/data/:source', async (req, res) =>
+router.get('/data/:source', async (req: express.Request, res: express.Response) =>
   handler(req)
     .then(data => res.send(data))
     .catch(err => {
@@ -17,7 +17,7 @@ router.get('/data/:source', async (req, res) =>
 router.get('/privacyPolicy', async (req, res) => {
   const privacypol = `${process.env.STORAGE_URL}/${process.env.PRIVACY_POLICY_KEY}`
   res.send({urlname: privacypol})
-  }
+}
 )
 
-module.exports = router
+export default router

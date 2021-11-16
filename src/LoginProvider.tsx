@@ -32,7 +32,7 @@ const UserInfoProvider = ({
 export default function LoginProvider({
   children,
 }: React.PropsWithChildren<React.ReactNode>) {
-  const [cookies, setCookie] = useCookies([]);
+  const [cookies, setCookie] = useCookies();
 
   if(cookies.accessToken && cookies.refreshToken) {
     setInterval(async () => {
