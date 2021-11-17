@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch } from 'react';
+import React, { ChangeEvent, Dispatch, useEffect } from 'react'
 import Checkbox from '@material-ui/core/Checkbox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useFetchedData } from '../hooks/service';
@@ -25,7 +25,7 @@ interface CategoryList {
   subCategories: string[];
 }
 
-type CategoryWithGroup = {
+export type CategoryWithGroup = {
   category: string;
   group: string;
 };
@@ -60,7 +60,7 @@ const useStyles = makeStyles({
   },
 });
 
-function useCategories(): CategoryWithGroup[] {
+export function useCategories(): CategoryWithGroup[] {
   const [categories] = useFetchedData<CategoryList[]>({
     url: '/api/data/competenceFilter',
   });
@@ -78,14 +78,16 @@ export default function CompetenceFilterInput({
   allRows,
   searchableColumns,
   type,
+  categories
 }: {
   filterList: string[];
   dispatch: Dispatch<Action>;
   allRows: any[];
   searchableColumns: SearchableColumn[];
   type: 'COMPETENCE' | 'MOTIVATION';
+  categories?: CategoryWithGroup[]
 }) {
-  const categoriesWithGroup = useCategories();
+  const categoriesWithGroup = categories ? categories : useCategories();
   const classes = useStyles();
 
   const activeCategories = categoriesWithGroup.filter((categoryWithGroup) =>

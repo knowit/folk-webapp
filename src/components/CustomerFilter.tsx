@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react'
 import { GridItemHeader } from './GridItem'
 import SearchInput from './SearchInput'
 import { reducer, SearchableColumn, TableState } from '../data/DDTable'
-import CompetenceFilterInput from './CompetenceFilterInput'
+import CompetenceFilterInput, { CategoryWithGroup } from './CompetenceFilterInput'
 import { FilterHeader } from './FilterHeader'
 
 interface CustomerFilterProps {
@@ -10,9 +10,10 @@ interface CustomerFilterProps {
   filter: any;
   employees: any;
   searchableColumns: SearchableColumn[];
+  categories: CategoryWithGroup[];
 }
 
-export default function CustomerFilter({title, filter, employees, searchableColumns }: CustomerFilterProps) {
+export default function CustomerFilter({title, filter, employees, searchableColumns, categories }: CustomerFilterProps) {
   const allRows = employees as { rowData: any[] }[]
 
   const initialState: TableState = {
@@ -46,6 +47,7 @@ export default function CustomerFilter({title, filter, employees, searchableColu
           allRows={allRows}
           searchableColumns={searchableColumns}
           type="COMPETENCE"
+          categories={categories}
         />
         <SearchInput
           dispatch={dispatch}

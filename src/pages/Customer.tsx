@@ -6,6 +6,7 @@ import CustomerDropdown from '../components/CustomerDropdown'
 import { Column, getSearchableColumns, SearchableColumn } from '../data/DDTable'
 import NavTab from '../components/NavTab'
 import CustomerGraphs from '../components/CustomerGraphs'
+import { useCategories } from '../components/CompetenceFilterInput'
 
 interface Customers {
   [key: string]: []
@@ -19,6 +20,7 @@ export default function Customer() {
   const [initialData, setInitialData] = useState<Payload>([])
   const [dropdowns, setDropdowns] = useState<any[]>([])
   const [searchableColumns, setSearchableColumns] = useState<SearchableColumn[]>()
+  const categories = useCategories()
 
   function preparePayloadForTable() {
     const statusIconData = 2
@@ -51,7 +53,7 @@ export default function Customer() {
     }, {})
   }
 
-  function createDropdowns(customers: Customers, expand?: boolean) {
+  function createDropdowns(customers: Customers, expand?: boolean) { // todo bare gjøre en faktisk filter?
     const dropdowns: any[] = []
     !pending && customers && Object.keys(customers).sort().forEach(customer =>
       dropdowns.push(
@@ -84,6 +86,7 @@ export default function Customer() {
           filter={handleSearchAndFilter}
           employees={initialData}
           searchableColumns={searchableColumns ? searchableColumns : [] as SearchableColumn[]}
+          categories={categories}
         />
       }
       { dropdowns } {/* todo skeletoncomponent  */}
