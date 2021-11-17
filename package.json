@@ -30,6 +30,8 @@
     "@nivo/pie": "^0.67.0",
     "@nivo/radar": "^0.67.0",
     "@nivo/sunburst": "^0.67.0",
+    "ansi-html-community": "0.0.8",
+    "browserslist": "^4.18.1",
     "http-proxy-middleware": "^1.0.5",
     "react": "^17.0.1",
     "react-cookie": "^4.0.3",
@@ -52,9 +54,10 @@
     "postcss": "8.2.10",
     "glob-parent": "5.1.2",
     "ws": "7.4.6",
-    "browserlist": "4.16.5",
-    "nth-check": "2.0.1"
-  }, // todo fix ansi-html dependency
+    "browserlist": "4.18.1",
+    "nth-check": "2.0.1",
+    "ansi-html": "https://registry.yarnpkg.com/ansi-html-community/-/ansi-html-community-0.0.8.tgz#69fbc4d6ccbe383f9736934ae34c3f8290f1bf41"
+  },
   "scripts": {
     "start": "react-scripts start",
     "start:local": "cross-env PROXY_URL=http://localhost:3010 react-scripts start",
