@@ -23,6 +23,10 @@ custom:
     dev: dev.folk.knowit.no
     prod: folk.knowit.no
   domain: ${self:custom.stageDomains.${self:custom.stage}}
+  serverlessPluginTypescript:
+    tsConfigFileLocation: './backend/tsconfig.json'
+
+
 
 provider:
   name: aws
