@@ -39,7 +39,7 @@ const useStyles = makeStyles(() =>
   })
 )
 
-interface NavTabProps { // todo unødvendig? kan vel bare bruke NavTabContent[] direkte (?)
+interface NavTabProps {
   contentList: NavTabContent[];
 }
 
