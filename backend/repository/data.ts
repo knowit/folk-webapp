@@ -719,11 +719,11 @@ export const competenceAreas = async ({ data }: { data: CompetenceAndMotivationA
 
 }
 
-exports.hoursBilledPerClientReports = [
+exports.hoursBilledPerCustomerReports = [
   { reportName: 'perProject' },
 ]
 
-exports.hoursBilledPerClient = async ({ data }) => {
+exports.hoursBilledPerCustomer = async ({ data }) => {
   const groupByCustomer = data.reduce((groups, perProject) => {
     const group = (groups[perProject.customer] || [])
     group.push(perProject)
@@ -731,12 +731,12 @@ exports.hoursBilledPerClient = async ({ data }) => {
     return groups
   }, {})
 
-  const clientHours = Object.keys(groupByCustomer).map(key => groupByCustomer[key] = {'kunde': key, timer: sum(groupByCustomer[key], 'hours')})
+  const customerHours = Object.keys(groupByCustomer).map(key => groupByCustomer[key] = {'kunde': key, timer: sum(groupByCustomer[key], 'hours')})
 
   return {
-    setNames: ['Clients'],
+    setNames: ['Customers'],
     sets: {
-      Clients: clientHours,
+      Clients: customerHours,
     }
   }
 }

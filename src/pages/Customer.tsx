@@ -5,7 +5,7 @@ import { useFetchedData } from '../hooks/service'
 import CustomerDropdown from '../components/CustomerDropdown'
 import { Column, getSearchableColumns, SearchableColumn } from '../data/DDTable'
 import NavTab from '../components/NavTab'
-import ClientGraphs from '../components/ClientGraphs'
+import CustomerGraphs from '../components/CustomerGraphs'
 
 interface Customers {
   [key: string]: []
@@ -13,7 +13,7 @@ interface Customers {
 
 type Payload = { [key: string]: any };
 
-export default function Customer() { // todo rename ClientContent?
+export default function Customer() {
   const url = '/api/data/employeeTable'
   const [payload, pending] = useFetchedData<Payload>({ url })
   const [initialData, setInitialData] = useState<Payload>([])
@@ -89,7 +89,7 @@ export default function Customer() { // todo rename ClientContent?
       { dropdowns } {/* todo skeletoncomponent  */}
     </Grid>)
 
-  const graphView = ClientGraphs()
+  const graphView = CustomerGraphs()
 
   return (
     <NavTab contentList={[

@@ -3,7 +3,7 @@ import DDItem, { DDChart } from '../data/DDItem'
 import { ChartSkeleton } from '../pages/EmployeeSite'
 
 
-export default function ClientGraphs() {
+export default function CustomerGraphs() {
 
   return (
     <div>
