@@ -14,7 +14,7 @@
   "resolutions": {
     "coa": "2.0.2" ,
     "rc": "1.2.8",
-    "ansi-regex": "5.0.1",
+    "ansi-regex": "5.0.1"
   },
   "scripts": {
     "start:local": "nodemon -r dotenv/config local.ts",
