@@ -736,7 +736,7 @@ exports.hoursBilledPerCustomer = async ({ data }) => {
   return {
     setNames: ['Customers'],
     sets: {
-      Clients: customerHours,
+      Customers: customerHours,
     }
   }
 }

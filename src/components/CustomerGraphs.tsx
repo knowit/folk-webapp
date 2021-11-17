@@ -8,7 +8,7 @@ export default function CustomerGraphs() {
   return (
     <div>
       <DDItem
-        url={'/api/data/hoursBilledPerClient'}
+        url={'/api/data/hoursBilledPerCustomer'}
         title="Timer brukt per kunde"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
