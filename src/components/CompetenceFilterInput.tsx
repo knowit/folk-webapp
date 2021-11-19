@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, useEffect } from 'react'
+import React, { ChangeEvent, Dispatch } from 'react'
 import Checkbox from '@material-ui/core/Checkbox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useFetchedData } from '../hooks/service';

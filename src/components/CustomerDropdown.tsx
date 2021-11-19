@@ -43,7 +43,7 @@ export default function CustomerDropdown({customerName, employees, expand, callb
   }, [expand])
 
   return (
-      <GridItem fullSize={true}> { /* todo styling i egen class? */}
+      <GridItem fullSize>
         <Accordion
           style={{paddingTop: '5px', width: '100%'}}
           expanded={expanded}
@@ -56,7 +56,7 @@ export default function CustomerDropdown({customerName, employees, expand, callb
             <OpenInNew
               className={'openNewIconAccordion'}
               style={{marginLeft: '15px'}}
-              onClick={e => {e.stopPropagation(); /* todo Route til kundeflik */}}/>
+              onClick={e => {e.stopPropagation(); /* todo show kundeflik */}}/>
           </AccordionSummary>
           <AccordionDetails className={classes.accordionDetails}>
             <SimpleDDItem
