@@ -4,7 +4,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import { Action, SearchableColumn } from '../data/DDTable';
+import { SearchableColumn } from '../data/DDTable';
+import { Action } from './FilterSearch'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

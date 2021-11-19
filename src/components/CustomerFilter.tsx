@@ -1,7 +1,8 @@
 import React, { useEffect, useReducer } from 'react'
 import { GridItemHeader } from './GridItem'
 import SearchInput from './SearchInput'
-import { reducer, SearchableColumn, TableState } from '../data/DDTable'
+import {  SearchableColumn, TableState } from '../data/DDTable'
+import { reducer }from './FilterSearch'
 import CompetenceFilterInput, { CategoryWithGroup } from './CompetenceFilterInput'
 import { FilterHeader } from './FilterHeader'
 

@@ -1,8 +1,9 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { Dispatch } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
-import { Action, SearchableColumn } from '../data/DDTable';
+import { SearchableColumn } from '../data/DDTable';
 import { Mark, Slider } from '@material-ui/core';
+import { Action } from './FilterSearch'
 
 const useStyles = makeStyles(() =>
   createStyles({

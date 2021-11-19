@@ -5,7 +5,8 @@ import { useFetchedData } from '../hooks/service';
 import { makeStyles } from '@material-ui/core/styles';
 import { InputBase, withStyles } from '@material-ui/core';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import { Action, SearchableColumn } from '../data/DDTable';
+import { SearchableColumn } from '../data/DDTable';
+import { Action } from './FilterSearch'
 
 const StyledCheckBox = withStyles(() => ({
   root: {
