@@ -36,3 +36,13 @@ export const ErrorText = ({ height = 280 }: { height?: number }) => {
     </div>
   );
 };
+
+export const LoggedOutErrorText = ({ height = 280 }: { height?: number }) => {
+  const classes = useErrorStyle({ height });
+  return (
+    <div className={classes.root}>
+      <div className={classes.titleText}> Velkommen til Knowit Folk</div>
+      <div className={classes.text}> Vennligst logg inn :) </div>
+    </div>
+  );
+};
