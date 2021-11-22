@@ -8,9 +8,10 @@ import {
 } from '../components/GridItem';
 import DDTable from './DDTable';
 import DDChart from './DDChart';
-import { ErrorText } from '../components/ErrorText';
+import { ErrorText, LoggedOutErrorText } from '../components/ErrorText';
 import type { DDPayload } from './types';
 import { DDItemProps } from './types';
+import { useCookies } from 'react-cookie';
 
 interface DDErrorProps {
   error: Error;
@@ -19,7 +20,14 @@ interface DDErrorProps {
 function DDError({ error }: DDErrorProps) {
   // eslint-disable-next-line no-console
   console.log(error);
-  return <ErrorText height={320} />;
+  const [cookies] = useCookies();
+  let errormessage = <p />;
+  if(cookies.refreshToken && !cookies.accessToken) {
+    errormessage = <ErrorText height={320} />
+  } if (!cookies.refreshToken && !cookies.accessToken) {
+    errormessage = <LoggedOutErrorText height={320} />
+  }
+  return errormessage;
 }
 
 export default function DDItem({

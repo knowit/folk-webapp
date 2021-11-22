@@ -13,6 +13,7 @@ const dpIssuer = new Issuer({
   authorization_endpoint: `${authEndpoint}/oauth2/authorize`,
   token_endpoint: `${authEndpoint}/oauth2/token`,
   userinfo_endpoint: `${authEndpoint}/oauth2/userInfo`,
+  end_session_endpoint: `${authEndpoint}/logout`,
 })
 
 const getClient = (applicationUrl = '') =>
@@ -42,6 +43,15 @@ router.get('/login', function (req: Request, res: Response) {
     sameSite: 'lax',
   })
   res.redirect(302, authorizationUrl)
+})
+
+router.get('/logout', async function (req: Request, res: Response) {
+  const { referer } = req.headers
+  const logoutUri = `${getOrigin(referer)}/`
+  const logoutUrl = getClient().endSessionUrl({ client_id: clientId, logout_uri: logoutUri})
+  res.clearCookie('refreshToken')
+  res.clearCookie('accessToken')
+  res.redirect(logoutUrl)
 })
 
 router.get('/callback', async function (req: Request, res: Response) {
@@ -114,8 +124,6 @@ router.post('/refresh', async function (req: Request, res: Response) {
     data: err
   }))
   )
-
-
 })
 
 export default router
