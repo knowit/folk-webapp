@@ -5,6 +5,7 @@ import {
   CustomerStatusCell,
   CvCell,
   ProjectStatusCell,
+  SortableHeaderCell,
 } from '../data/components/table/DataCells';
 import EmployeeInfo from './EmployeeInfo';
 import { CustomerStatusData } from '../data/components/table/cells/CustomerStatusCell';
@@ -36,7 +37,10 @@ export function EmployeeTable() {
             headerRenderCell: CheckBoxHeaderCell,
             checkBoxLabel: 'Vis kun ledige',
           },
-          { title: 'Tittel' },
+          {
+            title: 'Tittel',
+            headerRenderCell: SortableHeaderCell,
+          },
           { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
           {
             title: 'Kunde',

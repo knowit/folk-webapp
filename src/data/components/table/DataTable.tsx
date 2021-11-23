@@ -4,6 +4,7 @@ import { TableCell, withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import { AutoSizer, Column, Table, TableRowRenderer } from 'react-virtualized';
 import CharacterLimitBox from '../../../components/CharacterLimitBox';
+import { reducer, TableState } from '../../DDTable';
 
 interface DataTableProps {
   columns: DataTableColumn[];
@@ -155,9 +156,8 @@ export interface RowStates {
 export type Action =
   | { type: 'CHANGE_HEIGHT'; id: string; height: number }
   | { type: 'SET_EXPANDED_DATA'; id: string; expandedData: any }
-  | { type: 'SORT_COLUMN'; id: string; column: number; ascending: boolean };
 
-function reducer(currentState: RowStates, action: Action) {
+function tableReducer(currentState: RowStates, action: Action) {
   switch (action.type) {
     case 'CHANGE_HEIGHT':
       return {
@@ -177,8 +177,6 @@ function reducer(currentState: RowStates, action: Action) {
           expandedData: action.expandedData,
         },
       };
-    case 'SORT_COLUMN':
-      return currentState;
     default:
       return currentState;
   }
@@ -190,7 +188,18 @@ function MuiVirtualizedTable({
   rows,
 }: MuiVirtualizedTableProps) {
   const classes = useStyles();
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(tableReducer, initialState);
+
+  const initialRowState: TableState = {
+    rows: rows,
+    motivationFilter: [],
+    motivationThreshold: 4,
+    competenceFilter: [],
+    competenceThreshold: 3,
+    searchTerm: '',
+  };
+
+  const [rowState, rowDispatch] = useReducer(reducer, initialRowState)
 
   let ArrayRef: any;
   function setRef(ref: any) {
@@ -261,6 +270,7 @@ function MuiVirtualizedTable({
         title={title}
         checkBoxLabel="Se kun ledige"
         checkBoxChangeHandler={checkBoxChangeHandler}
+        dispatch={rowDispatch}
       />
     ) : (
       <TableCell

@@ -92,9 +92,14 @@ export type Action =
       threshold: number;
       allRows: any[];
       searchableColumns: SearchableColumn[];
+    }
+  | {
+      type: 'SORT_COLUMN';
+      columnId: number;
+      sortOrder: number;
     };
 
-function reducer(currentState: TableState, action: Action) {
+export function reducer(currentState: TableState, action: Action) {
   switch (action.type) {
     case 'REMOVE_FROM_MOTIVATION_FILTER':
       return {
@@ -238,6 +243,11 @@ function reducer(currentState: TableState, action: Action) {
           action.searchableColumns
         ),
         competenceThreshold: action.threshold,
+      };
+    case 'SORT_COLUMN':
+      return {
+        ...currentState,
+        rows: currentState.rows.sort((a, b) => a.rowData[1].localeCompare(b.rowData[1])) // todo use columnId, proper sorting impl
       };
     default:
       return currentState;
