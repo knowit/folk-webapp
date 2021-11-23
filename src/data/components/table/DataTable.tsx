@@ -154,7 +154,8 @@ export interface RowStates {
 
 export type Action =
   | { type: 'CHANGE_HEIGHT'; id: string; height: number }
-  | { type: 'SET_EXPANDED_DATA'; id: string; expandedData: any };
+  | { type: 'SET_EXPANDED_DATA'; id: string; expandedData: any }
+  | { type: 'SORT_COLUMN'; id: string; column: number; ascending: boolean };
 
 function reducer(currentState: RowStates, action: Action) {
   switch (action.type) {
@@ -176,6 +177,8 @@ function reducer(currentState: RowStates, action: Action) {
           expandedData: action.expandedData,
         },
       };
+    case 'SORT_COLUMN':
+      return currentState;
     default:
       return currentState;
   }
