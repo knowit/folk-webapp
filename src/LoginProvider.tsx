@@ -1,4 +1,4 @@
-import React, { useEffect, createContext, useContext } from 'react';
+import React, { createContext, useContext } from 'react';
 import { useCookies } from 'react-cookie';
 import { useFetchedData } from './hooks/service';
 import { AuthContext, renewToken } from './authToken';
@@ -12,11 +12,6 @@ interface UserInfo {
 const UserContext = createContext<UserInfo>({});
 
 export const useUserInfo = () => useContext(UserContext);
-
-const AuthRedirect = () => {
-  useEffect(() => window.location.replace('/auth/login'), []);
-  return null;
-};
 
 const UserInfoProvider = ({
   children,
@@ -45,11 +40,9 @@ export default function LoginProvider({
     }, 600000);
   }
 
-  return cookies.accessToken ? (
+  return (
     <AuthContext.Provider value={cookies.accessToken}>
       <UserInfoProvider>{children}</UserInfoProvider>
     </AuthContext.Provider>
-  ) : (
-    <AuthRedirect />
   );
 }

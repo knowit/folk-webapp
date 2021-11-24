@@ -23,6 +23,10 @@ custom:
     dev: dev.folk.knowit.no
     prod: folk.knowit.no
   domain: ${self:custom.stageDomains.${self:custom.stage}}
+  serverlessPluginTypescript:
+    tsConfigFileLocation: './backend/tsconfig.json'
+
+
 
 provider:
   name: aws
@@ -50,6 +54,9 @@ functions:
     role: LambdaRole
     events:
       - httpApi: "*"
+
+plugins:
+  - serverless-plugin-typescript
 
 resources:
   Resources:
