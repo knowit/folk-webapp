@@ -113,13 +113,13 @@ export default function CustomerList() {
         />
       )}
 
-      {!dropdowns ? (
+      {!dropdowns || pending ? (
         <Skeleton width={'100%'} animation="wave" />
       ) : dropdowns.length > 0 ? (
         dropdowns
       ) : (
         <GridItem fullSize>
-          <div style={{ padding: '5px' }}>Ingen tilgjengelig data.</div>
+          <div style={{ padding: '5px' }}>Ingen treff.</div>
         </GridItem>
       )}
     </Grid>
