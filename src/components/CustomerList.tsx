@@ -118,8 +118,8 @@ export default function CustomerList() {
       ) : dropdowns.length > 0 ? (
         dropdowns
       ) : (
-        <GridItem>
-          <div style={{ padding: '5px' }}>Ingen tilgjengelig kompetanse.</div>
+        <GridItem fullSize>
+          <div style={{ padding: '5px' }}>Ingen tilgjengelig data.</div>
         </GridItem>
       )}
     </Grid>
