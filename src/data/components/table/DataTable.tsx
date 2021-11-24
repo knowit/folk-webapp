@@ -199,7 +199,7 @@ function MuiVirtualizedTable({
     searchTerm: '',
   };
 
-  const [rowState, rowDispatch] = useReducer(reducer, initialRowState)
+  const rowDispatch = useReducer(reducer, initialRowState)[1];
 
   let ArrayRef: any;
   function setRef(ref: any) {
@@ -263,7 +263,8 @@ function MuiVirtualizedTable({
     HeaderRenderCell: any | null,
     checkBoxChangeHandler:
       | ((event: React.ChangeEvent<HTMLInputElement>) => void)
-      | undefined
+      | undefined,
+    index: number
   ) {
     return HeaderRenderCell ? (
       <HeaderRenderCell
@@ -271,6 +272,7 @@ function MuiVirtualizedTable({
         checkBoxLabel="Se kun ledige"
         checkBoxChangeHandler={checkBoxChangeHandler}
         dispatch={rowDispatch}
+        index={index}
       />
     ) : (
       <TableCell
@@ -326,7 +328,8 @@ function MuiVirtualizedTable({
                     headerRenderer(
                       title,
                       headerRenderCell,
-                      checkBoxChangeHandler
+                      checkBoxChangeHandler,
+                      index
                     )
                   }
                   className={classes.flexContainer}

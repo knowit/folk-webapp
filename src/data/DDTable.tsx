@@ -7,6 +7,7 @@ import CompetenceFilterInput from '../components/CompetenceFilterInput';
 import RowCount from '../components/RowCount';
 import { DDComponentProps } from './types';
 import { makeStyles } from '@material-ui/core/styles';
+import { SORT_ORDER } from './components/table/cells/SortableHeaderCell';
 
 interface Column {
   title: string;
@@ -95,8 +96,8 @@ export type Action =
     }
   | {
       type: 'SORT_COLUMN';
-      columnId: number;
-      sortOrder: number;
+      columnIndex: number;
+      sortOrder: SORT_ORDER;
     };
 
 export function reducer(currentState: TableState, action: Action) {
@@ -247,12 +248,23 @@ export function reducer(currentState: TableState, action: Action) {
     case 'SORT_COLUMN':
       return {
         ...currentState,
-        rows: currentState.rows.sort((a, b) => a.rowData[1].localeCompare(b.rowData[1])) // todo use columnId, proper sorting impl
+        rows: sortColumnStringValue(currentState.rows, action.sortOrder, action.columnIndex)
       };
     default:
       return currentState;
   }
 }
+
+const sortColumnStringValue = (rows: any[], sortOrder: SORT_ORDER, columnIndex: number) => {
+  switch (sortOrder) {
+    case SORT_ORDER.Ascending:
+      return rows.sort((a, b) => a.rowData[columnIndex].localeCompare(b.rowData[columnIndex]));
+    case SORT_ORDER.Descending:
+      return rows.sort((a, b) => b.rowData[columnIndex].localeCompare(a.rowData[columnIndex]))
+    default:
+      return rows;
+  }
+};
 
 const searchRow = (
   row: any,

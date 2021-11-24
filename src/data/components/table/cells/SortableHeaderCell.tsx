@@ -1,10 +1,9 @@
-import React, { Dispatch, useState } from 'react';
-import { IconButton } from '@material-ui/core';
-import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
-import SortIcon from '@material-ui/icons/Sort';
+import React, { Dispatch, useEffect, useState } from 'react';
 import { Action } from '../../../DDTable';
+import { ArrowDownward, ArrowUpward } from '@material-ui/icons';
+import { SvgIconProps } from '@material-ui/core/SvgIcon';
 
-enum SORT_ORDER {
+export enum SORT_ORDER {
     None,
     Ascending,
     Descending,
@@ -14,47 +13,44 @@ enum SORT_ORDER {
 export default function SortableHeaderCell(cellData: {
   title: string;
   dispatch: Dispatch<Action>;
-  id: number;
+  index: number;
 }) {
   const [currentOrder, setCurrentOrder] = useState(SORT_ORDER.None);
-  const [sortIcon, setSortIcon] = useState(<SortIcon/>);
+  const [sortIcon, setSortIcon] = useState<React.ReactElement<SvgIconProps>>();
 
   const nextOrder = (currentOrder: SORT_ORDER) => {
     switch (currentOrder) {
-      case SORT_ORDER.None:
-        setSortIcon(<SortByAlphaIcon />);
+      case SORT_ORDER.Descending:
+        setSortIcon(<ArrowDownward />);
         return SORT_ORDER.Ascending;
       case SORT_ORDER.Ascending:
-        setSortIcon(<SortIcon />);
-        return SORT_ORDER.Descending;
-      case SORT_ORDER.Descending:
-        setSortIcon(<div>lol</div>);
-        return SORT_ORDER.None;
       default:
-        return SORT_ORDER.None;
+        setSortIcon(<ArrowUpward />);
+        return SORT_ORDER.Descending;
     }
   };
 
   const sortClick = () => {
     setCurrentOrder(nextOrder(currentOrder));
-    console.log(currentOrder)
-    cellData.dispatch({
-      type: 'SORT_COLUMN',
-      columnId: cellData.id,
-      sortOrder: currentOrder,
-    });
   };
 
+  useEffect(() => {
+    cellData.dispatch({
+      type: 'SORT_COLUMN',
+      columnIndex: cellData.index,
+      sortOrder: currentOrder,
+    });
+  }, [currentOrder]);
+
+
   return (
-    <IconButton
-      style={{backgroundColor: 'transparent'}}
-      disableRipple
+    <div
       onClick={() => {
         sortClick()
       }}
     >
       { cellData.title }
       { sortIcon }
-    </IconButton>
+    </div>
   );
 }
