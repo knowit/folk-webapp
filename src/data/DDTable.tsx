@@ -260,7 +260,7 @@ const sortColumnStringValue = (rows: any[], sortOrder: SORT_ORDER, columnIndex: 
     case SORT_ORDER.Ascending:
       return rows.sort((a, b) => a.rowData[columnIndex].localeCompare(b.rowData[columnIndex]));
     case SORT_ORDER.Descending:
-      return rows.sort((a, b) => b.rowData[columnIndex].localeCompare(a.rowData[columnIndex]))
+      return rows.sort((a, b) => b.rowData[columnIndex].localeCompare(a.rowData[columnIndex]));
     default:
       return rows;
   }
