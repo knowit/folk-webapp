@@ -39,15 +39,17 @@ const useCheckBoxStyles = makeStyles((theme: Theme) =>
   })
 );
 
+export interface CheckBoxHeaderCellProps {
+  title: string;
+  checkBoxLabel: string;
+  checkBoxChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
 export default function CheckBoxHeaderCell({
   title,
   checkBoxLabel,
   checkBoxChangeHandler,
-}: {
-  title: string;
-  checkBoxLabel: string;
-  checkBoxChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}) {
+}: CheckBoxHeaderCellProps) {
   const classes = useCheckBoxStyles();
   return (
     <div className={classes.position}>

@@ -125,10 +125,13 @@ type EmployeeUBW = {
   work_order_description: string
 }
 /**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
+/*
 exports.employeeTable = async ({ data }) => {
+  console.log('HALLO', data)
   const [allEmployees, motivationAndCompetence, jobRotation, employeeUBW] = data
   { 'employeeMotivationAndCompetence' }
 }
+*/
 
 
 /**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/

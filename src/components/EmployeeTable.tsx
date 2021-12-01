@@ -16,6 +16,12 @@ export function EmployeeTable() {
     <Skeleton variant="rect" height={780} animation="wave" />
   );
 
+  /* Her er en event handler som reagerer når checkboxen trykkes */
+  /* Den må kobles opp mot filtreringen i DDTable, men utsettes til DDTable har blitt oppdatert */
+  const visKunLedigeFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('Clicked', event);
+  };
+
   return (
     <DDItem
       url="/api/data/employeeTable"
@@ -33,7 +39,11 @@ export function EmployeeTable() {
             },
             renderCell: ConsultantCell,
             renderExpanded: EmployeeInfo,
-            headerRenderCell: CheckBoxHeaderCell,
+            headerRenderCell: CheckBoxHeaderCell({
+              title: 'Konsulent',
+              checkBoxLabel: 'Vis kun ledige',
+              checkBoxChangeHandler: visKunLedigeFilter,
+            }),
             checkBoxLabel: 'Vis kun ledige',
           },
           { title: 'Tittel' },
