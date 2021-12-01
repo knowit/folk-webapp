@@ -1,4 +1,4 @@
-import { range, mergeEmployees, EmployeeInformation, getYear, getWeek } from './util'
+import { range, mergeEmployees, EmployeeInformation, getYear, getWeek, statusColorCode } from './util'
 import { v4 as uuid } from 'uuid'
 
 /**
@@ -20,11 +20,13 @@ import { v4 as uuid } from 'uuid'
 }
 
 type EmployeeTable = {
-  data : [EmployeeInformation[], EmployeeMotivationAndCompetence[],jobRotation[], employeeUBW[]]
+  data : [EmployeeInformation[], EmployeeMotivationAndCompetence[], JobRotation[], EmployeeUBW[]]
 }
+
+type CategoryScores = [Motivation: Record<string, number>, Competence: Record<string, number>]
 const getCategoryScoresForEmployee = (
   employeeEmail: string, 
-  categoryList: EmployeeMotivationAndCompetence[]) => {
+  categoryList: EmployeeMotivationAndCompetence[]): CategoryScores => {
   const employeeCategories = categoryList.filter(categoryRow => categoryRow.email === employeeEmail)
   const employeeMotivation = {}
   const employeeCompetence = {}
@@ -32,6 +34,7 @@ const getCategoryScoresForEmployee = (
     employeeMotivation[employeeRow.subCategory] = employeeRow.motivation
     employeeCompetence[employeeRow.subCategory] = employeeRow.competence
   })
+
   return [employeeMotivation, employeeCompetence]
 }
 const getStorageUrl = (key: string) => {
@@ -43,39 +46,53 @@ const getStorageUrl = (key: string) => {
   }
 }
 
-const statusColorCode = (wantNewProject, openForNewProject, inProject) => {
-  const projectStatus = inProject ? "red" : "green";
-  const color = (wantNewProject > openForNewProject) ? "yellow" : "orange"
-  const statusColor = (wantNewProject || openForNewProject) > 0 ? color : projectStatus;
-  
-  return statusColor;
+const findProjectStatusForEmployee = (jobRotationEmployees: JobRotation[], employeeUBWs: EmployeeUBW[], email: string): string => {
+
+  const currentRegPeriod = parseInt(getYear()+getWeek(), 10)
+  const registeredHoursForEmployee = employeeUBWs.filter((UBWObject) => UBWObject.email === email)
+  const latestRegPeriod = Math.max(...registeredHoursForEmployee.map((registeredHours: EmployeeUBW) => { 
+    return registeredHours.reg_period 
+  }))
+
+  const [totalExternalProjectHours, totalLocalProjectHours]: TotalProjectHours = countProjectHours(registeredHoursForEmployee, latestRegPeriod)
+  const [wantNewProject, openForNewProject]: JobRotationStatus = jobRotationStatus(jobRotationEmployees, email)
+
+  const inProjectStatus = ((currentRegPeriod - latestRegPeriod) < 5) && (totalExternalProjectHours > totalLocalProjectHours)
+  const statusColor = statusColorCode(wantNewProject, openForNewProject, inProjectStatus)
+
+  return statusColor
+
 }
 
-const findProjectStatusForEmployee = (jobRotationEmployees, employeeUBW, email) => {
-  const currentRegPeriod = parseInt(getYear()+getWeek(), 10)
-  const registeredHoursForEmployee = employeeUBW.filter((UBWObject) => UBWObject.email === email)
-  const latestRegPeriod = parseInt(Math.max.apply(Math, registeredHoursForEmployee.map((object) => { return object.reg_period })), 10)
+type TotalProjectHours = [ExternalProjectHours: number, LocalProjectHours: number]
+
+const countProjectHours = (registeredHours: EmployeeUBW[], latestRegPeriod: number): TotalProjectHours => {
+
   let totalExternalProjectHours = 0
   let totalLocalProjectHours = 0
 
   /**Kan hende project_type ikke kommer til å ha disse navnene og at de bare var placeholdere. Da må i så fall skillet mellom prosjektene fjernes også telles det bare vanlig opp */
-  registeredHoursForEmployee.forEach((object) => object.project_type==='External Projects' && object.reg_period === latestRegPeriod ? totalExternalProjectHours += object.hours : 0)
-  registeredHoursForEmployee.forEach((object) => object.project_type==='Local Projects' && object.reg_period ===  latestRegPeriod ? totalLocalProjectHours += object.hours : 0)
+  registeredHours.forEach((object) => object.project_type==='External Projects' && object.reg_period === latestRegPeriod ? totalExternalProjectHours += object.hours : 0)
+  registeredHours.forEach((object) => object.project_type==='Local Projects' && object.reg_period ===  latestRegPeriod ? totalLocalProjectHours += object.hours : 0)
 
+  return [totalExternalProjectHours, totalLocalProjectHours]
 
-  let wantNewProject,openForNewProject
+}
 
-  jobRotationEmployees.forEach((employee) => {
+type JobRotationStatus = [WantNewProject: number, OpenForNewProject: number]
+
+const jobRotationStatus = (jobRotations: JobRotation[], email: string): JobRotationStatus  => {
+
+  let wantNewProject, openForNewProject : number
+
+  jobRotations.forEach((employee) => {
     if(employee.email == email){
-      employee.index === 1 && (wantNewProject = employee.customscalevalue);
-      employee.index === 2 && (openForNewProject = employee.customscalevalue);
+      employee.index === 1 && (wantNewProject = employee.customscalevalue)
+      employee.index === 2 && (openForNewProject = employee.customscalevalue)
     }
   })
-  const inProjectStatus = ((currentRegPeriod - latestRegPeriod) < 5) && (totalExternalProjectHours > totalLocalProjectHours);
-  const statusColor = statusColorCode(wantNewProject, openForNewProject, inProjectStatus);
 
-  return statusColor;
-
+  return [wantNewProject, openForNewProject]
 }
 
 export const employeeTableReports = [
@@ -84,7 +101,7 @@ export const employeeTableReports = [
   { reportName: 'jobRotationInformation'},
   { reportName: 'employeeDataUBW'}
 ]
-type jobRotation = {
+type JobRotation = {
   username: string,
   email: string, 
   questionid: string,
@@ -95,7 +112,7 @@ type jobRotation = {
   categoryid: string
 }
 
-type employeeUBW = {
+type EmployeeUBW = {
   customer: string, 
   email: string, 
   manager: string, 
@@ -110,7 +127,7 @@ type employeeUBW = {
 /**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
 exports.employeeTable = async ({ data }) => {
   const [allEmployees, motivationAndCompetence, jobRotation, employeeUBW] = data
-  { reportName: 'employeeMotivationAndCompetence' }
+  { 'employeeMotivationAndCompetence' }
 }
 
 

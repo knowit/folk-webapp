@@ -1,7 +1,11 @@
-import { makeStyles, Tooltip, TooltipProps, withStyles } from '@material-ui/core';
-import React, {useState} from 'react';
+import {
+  makeStyles,
+  Tooltip,
+  TooltipProps,
+  withStyles,
+} from '@material-ui/core';
+import React from 'react';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import { useEffect } from 'react';
 
 const StatusCircle = ({ color }: { color: string }) => {
   const Circle = withStyles(() => ({
@@ -12,7 +16,7 @@ const StatusCircle = ({ color }: { color: string }) => {
     },
   }))(FiberManualRecordIcon);
 
-  return <Circle color='primary' />;
+  return <Circle color="primary" />;
 };
 
 const useStyles = makeStyles({
@@ -20,7 +24,6 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     width: '100%',
-
   },
 });
 
@@ -28,7 +31,7 @@ interface ColorMap {
   [index: string]: string;
 }
 
-const toolTipStyles = makeStyles(theme => ({
+const toolTipStyles = makeStyles((theme) => ({
   arrow: {
     color: '#F2F2F2',
   },
@@ -40,36 +43,40 @@ const toolTipStyles = makeStyles(theme => ({
   },
 }));
 
-function StatusTooltip(props: JSX.IntrinsicAttributes & TooltipProps) {
+function StatusTooltip(props: TooltipProps) {
   const classes = toolTipStyles();
   return <Tooltip arrow classes={classes} {...props} />;
 }
 
+const applyTitle = (status?: { data: string }): string => {
+  switch (status?.data) {
+    case 'orange':
+      return 'Er åpen for å bytte prosjekt';
+    case 'yellow':
+      return 'Ønsker å bytte prosjekt';
+    case 'red':
+      return 'Jeg er opptatt i prosjekt';
+    case 'green':
+      return 'Jeg er ikke i prosjekt';
+  }
 
-export default function ProjectStatusCell(status? :{data: string}) {
+  return '';
+};
+
+export default function ProjectStatusCell(status?: { data: string }) {
   const classes = useStyles();
-  const colors: ColorMap = {"green": '#4C8E00', "yellow": '#ffd500', "orange": '#ff8800', "red": '#D10000'}
+  const colors: ColorMap = {
+    green: '#4C8E00',
+    yellow: '#ffd500',
+    orange: '#ff8800',
+    red: '#D10000',
+  };
   const color = status ? colors[status.data] : '#777777';
-  const [toolTipTitle, setToolTipTitle] = useState('');
-
-  useEffect (() => {
-    switch(status && status.data){
-      case 'orange':
-        setToolTipTitle("Er åpen for å bytte prosjekt");
-        break
-      case 'yellow':
-        setToolTipTitle("Ønsker å bytte prosjekt");
-        break
-      case 'red': 
-        setToolTipTitle("Jeg er opptatt i prosjekt");
-        break
-      case 'green':
-        setToolTipTitle("Jeg er ikke i prosjekt");} 
-      }, [toolTipTitle]);
+  const toolTipTitle: string = applyTitle(status);
 
   return (
     <div className={classes.root}>
-      <StatusTooltip arrow placement='bottom' title={toolTipTitle}>
+      <StatusTooltip arrow placement="bottom" title={toolTipTitle}>
         <div>
           <StatusCircle color={color} />
         </div>

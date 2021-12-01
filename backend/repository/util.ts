@@ -29,20 +29,20 @@ type MergeEmployees = EmployeeInformation & {
   }[]
 }
 
-export const getYear = () => {
-  let currentDate = new Date()
-  let currentYear = currentDate.getFullYear()
+export const getYear = (): number => {
+  const currentDate = new Date()
+  const currentYear = currentDate.getFullYear()
 
-  return Number(currentYear);
+  return Number(currentYear)
 }
 
-export const getWeek = () => { 
-  let currentDate = new Date();
-  let oneJan = new Date(getYear(), 0, 1)
-  let numberOfDays = Math.floor((Number(currentDate) - Number(oneJan)) / (24 * 60 * 60 * 1000))
-  let currentWeekNumber = Math.floor((currentDate.getDay() + 1 + numberOfDays) / 7)
+export const getWeek = (): string => { 
+  const currentDate = new Date()
+  const oneJan = new Date(getYear(), 0, 1)
+  const numberOfDays = Math.floor((Number(currentDate) - Number(oneJan)) / (24 * 60 * 60 * 1000))
+  const currentWeekNumber = Math.floor((currentDate.getDay() + 1 + numberOfDays) / 7)
 
-  return currentWeekNumber.toString();
+  return currentWeekNumber.toString()
 }
 
 export const mergeEmployees = (allEmployees: EmployeeInformation[]): MergeEmployees[] => {
@@ -64,6 +64,14 @@ export const mergeEmployees = (allEmployees: EmployeeInformation[]): MergeEmploy
     }
   })
   return Object.values(mergedEmployees)
+}
+
+export const statusColorCode = (wantNewProject: number, openForNewProject: number, inProject: boolean): string => {
+  const projectStatus = inProject ? 'red' : 'green'
+  const color = (wantNewProject > openForNewProject) ? 'yellow' : 'orange'
+  const statusColor = (wantNewProject || openForNewProject) > 0 ? color : projectStatus
+  
+  return statusColor
 }
 
 
