@@ -72,9 +72,20 @@ const countProjectHours = (registeredHours: EmployeeUBW[], latestRegPeriod: numb
   let totalLocalProjectHours = 0
 
   /**Kan hende project_type ikke kommer til å ha disse navnene og at de bare var placeholdere. Da må i så fall skillet mellom prosjektene fjernes også telles det bare vanlig opp */
-  registeredHours.forEach((object) => object.project_type==='External Projects' && object.reg_period === latestRegPeriod ? totalExternalProjectHours += object.hours : 0)
-  registeredHours.forEach((object) => object.project_type==='Local Projects' && object.reg_period ===  latestRegPeriod ? totalLocalProjectHours += object.hours : 0)
+  registeredHours.forEach((registeredHour : EmployeeUBW) =>  {
+    if (registeredHour.reg_period === latestRegPeriod) {
+      switch (registeredHour.project_type) {
+      case 'External Projects':
+        totalExternalProjectHours += registeredHour.hours
+        break
+      case 'Local Projects':
+        totalLocalProjectHours += registeredHour.hours
+        break
+      }
 
+    }
+  })
+  
   return [totalExternalProjectHours, totalLocalProjectHours]
 
 }
