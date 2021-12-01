@@ -249,7 +249,6 @@ type YearsSinceSchoolDist = {
  * Det brukes for å lage stolpe- og kakediagram i Competence.tsx
  */
 export const experienceDistribution = async ({ data }:{ data: YearsSinceSchoolDist[] }) => {
-  console.log(data)
   const setInGroups = (list: YearsSinceSchoolDist[]) => {
     const detailedGroupedList = [
       { years: 'Under 2 år', count: 0 },
