@@ -1,15 +1,10 @@
 import React, { Dispatch, useEffect, useState } from 'react';
 import { Action } from '../../../DDTable';
 import { ArrowDownward, ArrowUpward } from '@material-ui/icons';
-import { SvgIconProps } from '@material-ui/core/SvgIcon';
 import { makeStyles } from '@material-ui/core/styles';
 import { createStyles, Theme } from '@material-ui/core';
 
-export enum SORT_ORDER {
-    None,
-    Ascending,
-    Descending,
-}
+export type SortOrder = 'none' | 'ascending' | 'descending';
 
 const useSortableHeaderStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,6 +21,7 @@ const useSortableHeaderStyles = makeStyles((theme: Theme) =>
       padding: 0,
       paddingRight: '15px',
       paddingLeft: '15px',
+      cursor: 'pointer',
     },
   })
 );
@@ -36,25 +32,12 @@ export default function SortableHeaderCell(cellData: {
   dispatch: Dispatch<Action>;
   index: number;
 }) {
-  const [currentOrder, setCurrentOrder] = useState(SORT_ORDER.None);
-  const [sortIcon, setSortIcon] = useState<React.ReactElement<SvgIconProps>>();
-
+  const [currentOrder, setCurrentOrder] = useState<SortOrder>('none');
   const classes = useSortableHeaderStyles();
 
-  const nextOrder = (currentOrder: SORT_ORDER) => {
-    switch (currentOrder) {
-      case SORT_ORDER.Descending:
-        setSortIcon(<ArrowUpward />);
-        return SORT_ORDER.Ascending;
-      case SORT_ORDER.Ascending:
-      default:
-        setSortIcon(<ArrowDownward />);
-        return SORT_ORDER.Descending;
-    }
-  };
 
   const sortClick = () => {
-    setCurrentOrder(nextOrder(currentOrder));
+    setCurrentOrder(currentOrder  === 'ascending' ? 'descending' : 'ascending');
   };
 
   useEffect(() => {
@@ -65,6 +48,17 @@ export default function SortableHeaderCell(cellData: {
     });
   }, [currentOrder]);
 
+  const sortIcon = () => {
+    switch (currentOrder) {
+      case 'ascending':
+        return <ArrowUpward />;
+      case 'descending':
+        return <ArrowDownward />;
+      case 'none':
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className={classes.position}
@@ -73,7 +67,7 @@ export default function SortableHeaderCell(cellData: {
       }}
     >
       { cellData.title }
-      { sortIcon }
+      { sortIcon() }
     </div>
   );
 }

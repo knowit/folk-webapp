@@ -7,7 +7,7 @@ import CompetenceFilterInput from '../components/CompetenceFilterInput';
 import RowCount from '../components/RowCount';
 import { DDComponentProps } from './types';
 import { makeStyles } from '@material-ui/core/styles';
-import { SORT_ORDER } from './components/table/cells/SortableHeaderCell';
+import { SortOrder } from './components/table/cells/SortableHeaderCell';
 
 interface Column {
   title: string;
@@ -97,7 +97,7 @@ export type Action =
   | {
       type: 'SORT_COLUMN';
       columnIndex: number;
-      sortOrder: SORT_ORDER;
+      sortOrder: SortOrder;
     };
 
 export function reducer(currentState: TableState, action: Action) {
@@ -255,11 +255,11 @@ export function reducer(currentState: TableState, action: Action) {
   }
 }
 
-const sortColumnStringValue = (rows: any[], sortOrder: SORT_ORDER, columnIndex: number) => {
+const sortColumnStringValue = (rows: any[], sortOrder: SortOrder, columnIndex: number) => {
   switch (sortOrder) {
-    case SORT_ORDER.Ascending:
+    case 'ascending':
       return rows.sort((a, b) => a.rowData[columnIndex].localeCompare(b.rowData[columnIndex]));
-    case SORT_ORDER.Descending:
+    case 'descending':
       return rows.sort((a, b) => b.rowData[columnIndex].localeCompare(a.rowData[columnIndex]));
     default:
       return rows;
