@@ -719,66 +719,80 @@ export const competenceAreas = async ({ data }: { data: CompetenceAndMotivationA
 
 }
 
-exports.hoursBilledPerCustomerReports = [
-  { reportName: 'perProject' },
-]
+exports.hoursBilledPerCustomerReports = [{ reportName: 'perProject' }]
 
 exports.hoursBilledPerCustomer = async ({ data }) => {
-  const groupByCustomer = data.reduce((groups, perProject) => {
-    const group = (groups[perProject.customer] || [])
-    group.push(perProject)
-    groups[perProject.customer] = group
-    return groups
-  }, {})
+  const groupByCustomer = {}
 
-  const customerHours = Object.keys(groupByCustomer).map(key => groupByCustomer[key] = {'kunde': key, timer: sum(groupByCustomer[key], 'hours')})
+  data.forEach((perProject) => {
+    const group = groupByCustomer[perProject.costumer] || []
+    group.push(perProject)
+    groupByCustomer[perProject.customer] = group
+  })
+
+  const customerHours = Object.keys(groupByCustomer).map(
+    (key) =>
+      (groupByCustomer[key] = {
+        kunde: key,
+        timer: sum(groupByCustomer[key], 'hours'),
+      })
+  )
 
   return {
     setNames: ['Customers'],
     sets: {
       Customers: customerHours,
-    }
+    },
   }
 }
 
-exports.hoursBilledPerWeekReports = [
-  { reportName: 'perProject' },
-]
+exports.hoursBilledPerWeekReports = [{ reportName: 'perProject' }]
 
 type LineGraphData = {
-  id: string,
+  id: string
   data: Array<any>
 }
 
 exports.hoursBilledPerWeek = async ({ data }) => {
-  const groupedByCustomer = data.reduce((prev, curr) => {
-    const group = (prev[curr.customer] || [])
-    group.push(curr)
-    prev[curr.customer] = group
-    return prev
-  }, {})
+  const groupedByCustomer = {}
 
-  Object.keys(groupedByCustomer).forEach(key => {
-    groupedByCustomer[key] = groupedByCustomer[key].map(data => ({x: data.reg_period, y: data.hours}))
+  data.forEach((elem) => {
+    const group = groupedByCustomer[elem.customer] || []
+    group.push(elem)
+    groupedByCustomer[elem.customer] = group
   })
 
-  Object.keys(groupedByCustomer).forEach(key => {
-    groupedByCustomer[key] = Array.from(groupedByCustomer[key].reduce(
-      (m, {x, y}) => m.set(x, (m.get(x) || 0) + y), new Map),
-    ([x, y]) => ({x, y})).sort((a, b) => b.x - a.x) // ascending sort of weeks
+  Object.keys(groupedByCustomer).forEach((key) => {
+    groupedByCustomer[key] = groupedByCustomer[key].map((data) => ({
+      x: data.reg_period,
+      y: data.hours,
+    }))
   })
 
-  const lineGraphData = Object.entries(groupedByCustomer).map(([key, value]) =>
-    ({
-      id: key,
-      data: value,
-    } as LineGraphData)).sort((a, b) => b.data.length - a.data.length) // ascending sort by number of week entries
+  Object.keys(groupedByCustomer).forEach((key) => {
+    groupedByCustomer[key] = Array.from(
+      groupedByCustomer[key].reduce(
+        (m, { x, y }) => m.set(x, (m.get(x) || 0) + y),
+        new Map()
+      ),
+      ([x, y]) => ({ x, y })
+    ).sort((a, b) => b.x - a.x) // ascending sort of weeks
+  })
+
+  const lineGraphData = Object.entries(groupedByCustomer)
+    .map(
+      ([key, value]) =>
+        ({
+          id: key,
+          data: value,
+        } as LineGraphData)
+    )
+    .sort((a, b) => b.data.length - a.data.length) // ascending sort by number of week entries
 
   return {
     setNames: ['Lines'],
     sets: {
-      Lines: lineGraphData
-    }
+      Lines: lineGraphData,
+    },
   }
 }
-
