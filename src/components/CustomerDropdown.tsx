@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { GridItem } from './GridItem'
 import { Add, Minimize, OpenInNew } from '@material-ui/icons'
 import {
