@@ -19,7 +19,6 @@ interface BarChartsProps {
   maxValue: number | 'auto'
   tooltipValues: string[]
   layout: Layout | Layout.VERTICAL
-  margin: any | { top: 40; right: 20; bottom: 65; left: 30 }
 }
 
 const splitText = (longText: string | number) => {
@@ -75,7 +74,6 @@ export default function Bar({
   maxValue,
   tooltipValues,
   layout,
-  margin,
 }: BarChartsProps) {
   const height = big ? '400px' : '300px'
   return (
@@ -84,7 +82,7 @@ export default function Bar({
         data={data}
         keys={yLabels}
         indexBy={dataKey}
-        margin={margin}
+        margin={{ top: 40, right: 20, bottom: 65, left: 30 }}
         padding={0.1}
         valueScale={{ type: 'linear' }}
         maxValue={maxValue}
