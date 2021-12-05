@@ -22,3 +22,5 @@ yarn run lint
 
 echo \”\> ${PURPLE}Prettier Format Check${RESET} \<\"
 yarn run format:check
+
+echo -e \"${GREEN}[Husky] all checks passed!${RESET}\"
