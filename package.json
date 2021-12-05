@@ -61,12 +61,12 @@
     "deploy:prod": "aws s3 sync build s3://prod-folk-webapp-static-web",
     "postdeploy:dev": "aws cloudfront create-invalidation --distribution-id E215UYR726ILDS --paths /",
     "postdeploy:prod": "aws cloudfront create-invalidation --distribution-id E16SNX0CEZ21PY --paths /",
+    "sls": "sls",
+    "prepare": "husky install",
     "format": "prettier --write ./src/**/*.{js,ts,tsx}",
     "format:check": "prettier --check ./src/**/*.{js,ts,tsx}",
     "lint": "eslint --quiet ./src/**/*.{ts,tsx}",
-    "lint:fix": "eslint --fix ./src/**/*.{ts,tsx}",
-    "sls": "sls",
-    "prepare": "husky install"
+    "lint:fix": "eslint --fix ./src/**/*.{ts,tsx}"
   },
   "eslintConfig": {
     "extends": "react-app"
