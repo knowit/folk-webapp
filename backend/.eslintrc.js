@@ -19,4 +19,4 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/no-var-requires': 0,
   },
-};
+}

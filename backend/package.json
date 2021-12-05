@@ -23,7 +23,7 @@
   "scripts": {
     "start:local": "nodemon -r dotenv/config local.ts",
     "test": "node_modules/.bin/jest --watch",
-    "format": "prettier --write ./src/**/*.{js,ts,tsx}",
+    "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint ."
   },
