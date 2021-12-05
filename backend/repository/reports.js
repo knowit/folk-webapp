@@ -1,5 +1,5 @@
 // this file is currently not used for anything other than supporting version control for the reports utilized in data.js.
-reports = [
+const reports = [
   {
     name: 'employeeInformation',
     queryString:

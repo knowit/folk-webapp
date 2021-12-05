@@ -25,7 +25,8 @@
     "test": "node_modules/.bin/jest --watch",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.5.0",
