@@ -1,9 +1,9 @@
-import React from 'react';
-import { Typography, Box } from '@material-ui/core';
-import { useLocation } from 'react-router-dom';
+import React from 'react'
+import { Typography, Box } from '@material-ui/core'
+import { useLocation } from 'react-router-dom'
 
 export default function UnderConstruction() {
-  const location = useLocation();
+  const location = useLocation()
 
   return (
     <Box justifyContent="center">
@@ -11,5 +11,5 @@ export default function UnderConstruction() {
         Under Construction: {location.pathname}
       </Typography>
     </Box>
-  );
+  )
 }

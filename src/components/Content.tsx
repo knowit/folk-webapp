@@ -1,12 +1,12 @@
-import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import React from 'react'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import {
   NotFound,
   UnderConstruction,
   Employee,
   Competence,
   EmployeeSite,
-} from '../pages';
+} from '../pages'
 
 export default function Content() {
   return (
@@ -37,5 +37,5 @@ export default function Content() {
         <NotFound />
       </Route>
     </Switch>
-  );
+  )
 }

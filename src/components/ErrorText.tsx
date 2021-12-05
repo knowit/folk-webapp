@@ -1,5 +1,5 @@
-import React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import React from 'react'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
 const useErrorStyle = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,27 +22,27 @@ const useErrorStyle = makeStyles((theme: Theme) =>
       lineHeight: 1.5,
     },
   })
-);
+)
 
-export const NoData = () => <span title="Data ikke tilgjengelig">-</span>;
+export const NoData = () => <span title="Data ikke tilgjengelig">-</span>
 
 export const ErrorText = ({ height = 280 }: { height?: number }) => {
-  const classes = useErrorStyle({ height });
+  const classes = useErrorStyle({ height })
   return (
     <div className={classes.root}>
       <div className={classes.titleText}> Oida, en feil har oppstått</div>
       <div className={classes.text}> Data kan ikke vises for dette valget</div>
       <div className={classes.text}> Vennligst logg inn igjen :) </div>
     </div>
-  );
-};
+  )
+}
 
 export const LoggedOutErrorText = ({ height = 280 }: { height?: number }) => {
-  const classes = useErrorStyle({ height });
+  const classes = useErrorStyle({ height })
   return (
     <div className={classes.root}>
       <div className={classes.titleText}> Velkommen til Knowit Folk</div>
       <div className={classes.text}> Vennligst logg inn :) </div>
     </div>
-  );
-};
+  )
+}
