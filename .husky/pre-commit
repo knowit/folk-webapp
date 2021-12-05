@@ -6,10 +6,16 @@ PURPLE='\033[0;35m'
 RED='\033[0;31m'
 RESET='\033[0m' # No Color
 
-echo \"${GREEN}[Husky] pre-commit checks:${RESET}\"
+echo \"${GREEN}[Husky] FRONTEND:${RESET}\"
 
-echo \”${PURPLE}Prettier Format Check${RESET}\"
+echo \”> ${PURPLE}ESLint Check${RESET} <\"
+yarn run lint
+
+echo \”> ${PURPLE}Prettier Format Check${RESET} <\"
 yarn run format:check
 
-echo \”${PURPLE}ESLint Check${RESET}\"
+echo \"${GREEN}[Husky] BACKEND:${RESET}\"
+cd backend
+
+echo \”> ${PURPLE}ESLint Check${RESET} <\"
 yarn run lint
