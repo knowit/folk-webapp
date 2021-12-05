@@ -8,14 +8,14 @@ RESET='\033[0m' # No Color
 
 echo \"${GREEN}[Husky] FRONTEND:${RESET}\"
 
-echo \”> ${PURPLE}ESLint Check${RESET} <\"
+echo \”\> ${PURPLE}ESLint Check${RESET} \<\"
 yarn run lint
 
-echo \”> ${PURPLE}Prettier Format Check${RESET} <\"
+echo \”\> ${PURPLE}Prettier Format Check${RESET} \<\"
 yarn run format:check
 
 echo \"${GREEN}[Husky] BACKEND:${RESET}\"
 cd backend
 
-echo \”> ${PURPLE}ESLint Check${RESET} <\"
+echo \”\> ${PURPLE}ESLint Check${RESET} \<\"
 yarn run lint
