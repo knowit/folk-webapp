@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function App() {
+  console.log('halla');
   const classes = useStyles();
   return (
     <div className={classes.container}>
