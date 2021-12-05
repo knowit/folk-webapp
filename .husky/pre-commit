@@ -3,7 +3,6 @@
 
 GREEN='\033[0;32m'
 PURPLE='\033[0;35m'
-RED='\033[0;31m'
 RESET='\033[0m' # No Color
 
 echo \"${GREEN}[Husky] FRONTEND:${RESET}\"
