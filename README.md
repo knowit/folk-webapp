@@ -28,7 +28,6 @@ yarn deploy:dev
 
 To ensure consistent code style, similar conventions and matching formatting, [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) is used.
 There is a _pre-commit_ hook running before code can be committed, and it will not allow commits with convention/format/code style-breaking code.
-
 This ensures that no PR's are cluttered with significant amounts of whitespace-changes, line breaks and so fourth.
 
 > For those using **VSCode**, certain extensions and settings are [recommended](https://github.com/knowit/folk-webapp/tree/code-conventions-setup/.vscode) automatically.
