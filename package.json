@@ -63,8 +63,8 @@
     "postdeploy:prod": "aws cloudfront create-invalidation --distribution-id E16SNX0CEZ21PY --paths /",
     "sls": "sls",
     "prepare": "husky install",
-    "format": "prettier --write ./src/**/*.{js,ts,tsx}",
-    "format:check": "prettier --check ./src/**/*.{js,ts,tsx}",
+    "format": "prettier --write ./src",
+    "format:check": "prettier --check ./src",
     "lint": "eslint --quiet ./src/**/*.{ts,tsx}",
     "lint:fix": "eslint --fix ./src/**/*.{ts,tsx}"
   },
