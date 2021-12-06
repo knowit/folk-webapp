@@ -4,6 +4,7 @@ import { ChartSkeleton } from '../pages/EmployeeSite'
 
 
 export default function CustomerGraphs() {
+  const ubwMessage = "Dataene er fra første registrering i UBW og kan derfor være unøyaktige."
 
   return (
     <div>
@@ -13,6 +14,7 @@ export default function CustomerGraphs() {
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         fullSize
+        description={ubwMessage}
         dataComponentProps={{
           chartVariants: [
             {
@@ -32,6 +34,7 @@ export default function CustomerGraphs() {
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
         fullSize
+        description={ubwMessage}
         dataComponentProps={{
           chartVariants: [
             {
