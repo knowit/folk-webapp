@@ -1,11 +1,12 @@
 import React from 'react';
-import { AppBar, Avatar, Toolbar } from '@material-ui/core';
+import { AppBar, Toolbar, Avatar } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import { NavMenu, NavMenuItem } from './NavMenu';
 import { ReactComponent as KnowitLogo } from '../assets/logo.svg';
-import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
 import { useUserInfo } from '../LoginProvider';
+import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
+import { LoginLogoutButton } from './LoginLogoutButton';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -57,7 +58,7 @@ export default function Header() {
             <NavMenuItem label="Arbeidsmiljø" to="/arbeidsmiljo" />
             <NavMenuItem label="Rekruttering" to="/rekruttering" />
           </NavMenu>
-
+          <LoginLogoutButton/>
           <Avatar
             alt={userInfo.name}
             src={userInfo.picture}
