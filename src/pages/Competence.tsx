@@ -2,7 +2,6 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import DDItem, { DDChart } from '../data/DDItem';
-import { EmployeeTable } from '../components/EmployeeTable';
 
 export default function Competence() {
   const ChartSkeleton = () => (
@@ -172,8 +171,6 @@ export default function Competence() {
           ],
         }}
       />
-
-      <EmployeeTable />
     </Grid>
   );
 }
