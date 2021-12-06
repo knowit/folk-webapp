@@ -1,38 +1,38 @@
-import React, { Dispatch, useEffect } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { Skeleton } from '@material-ui/lab';
-import { useFetchedData } from '../hooks/service';
-import { NoData } from './ErrorText';
-import { RowStates, Action } from '../data/components/table/DataTable';
+import React, { Dispatch, useEffect } from 'react'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { Skeleton } from '@material-ui/lab'
+import { useFetchedData } from '../hooks/service'
+import { NoData } from './ErrorText'
+import { RowStates, Action } from '../data/components/table/DataTable'
 import {
   ChartSkeleton,
   ExperienceData,
   ProjectExperience,
-} from '../pages/EmployeeSite';
-import DDItem, { DDChart } from '../data/DDItem';
+} from '../pages/EmployeeSite'
+import DDItem, { DDChart } from '../data/DDItem'
 
 type Experience = {
-  employer: string;
-  month_from: number;
-  year_from: number;
-  month_to: number;
-  year_to: number;
-};
-type Date = { year: number; month: number } | { year: number };
+  employer: string
+  month_from: number
+  year_from: number
+  month_to: number
+  year_to: number
+}
+type Date = { year: number; month: number } | { year: number }
 type MotivationMap = {
-  [category: string]: number;
-};
+  [category: string]: number
+}
 
 interface EmployeeInfoData {
-  motivation: MotivationMap;
+  motivation: MotivationMap
   tags: {
-    languages: string[];
-    skills: string[];
-    roles: string[];
-  };
-  workExperience: Experience[];
-  manager: string;
-  guid: string;
+    languages: string[]
+    skills: string[]
+    roles: string[]
+  }
+  workExperience: Experience[]
+  manager: string
+  guid: string
 }
 
 export const months = [
@@ -48,11 +48,11 @@ export const months = [
   'Oktober',
   'November',
   'Desember',
-];
+]
 
 export const startedInKnowit = (allExperience: Experience[] | undefined) => {
   if (!allExperience) {
-    return <NoData />;
+    return <NoData />
   }
   const knowit = allExperience?.find((x) =>
     x.employer
@@ -60,38 +60,38 @@ export const startedInKnowit = (allExperience: Experience[] | undefined) => {
         x.employer.toLowerCase().includes('objectnet') ||
         x.employer.toLowerCase().includes('know it')
       : null
-  );
+  )
 
   const monthFrom =
     knowit && knowit?.month_from < 10
       ? `0${knowit?.month_from}`
-      : knowit?.month_from;
+      : knowit?.month_from
 
   return knowit === undefined || knowit === null || knowit.year_from < 0 ? (
     <NoData />
   ) : (
     `${[monthFrom, knowit?.year_from].join('/')}.`
-  );
-};
+  )
+}
 
 export const totalExperience = (allExperience: Experience[] | undefined) => {
   if (!allExperience) {
-    return <NoData />;
+    return <NoData />
   }
-  const dates: Date[] = [];
+  const dates: Date[] = []
   allExperience &&
     allExperience.forEach((job) => {
-      job.year_from !== -1 && dates.push({ year: job.year_from });
-      job.year_to !== -1 && dates.push({ year: job.year_to });
-    });
-  const firstJob = dates?.sort((dateA, dateB) => dateA.year - dateB.year)[0];
+      job.year_from !== -1 && dates.push({ year: job.year_from })
+      job.year_to !== -1 && dates.push({ year: job.year_to })
+    })
+  const firstJob = dates?.sort((dateA, dateB) => dateA.year - dateB.year)[0]
 
   return firstJob?.year === undefined || firstJob?.year < 0 ? (
     <NoData />
   ) : (
     `${new Date().getFullYear() - firstJob?.year} år.`
-  );
-};
+  )
+}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -131,7 +131,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '450px',
     },
   })
-);
+)
 
 export default function EmployeeInfo({
   data,
@@ -139,49 +139,49 @@ export default function EmployeeInfo({
   dispatch,
 }: {
   data: {
-    competenceUrl: string;
-    user_id: string;
-    email_id: string;
-    degree: string;
-  };
-  id: string;
-  rowStates: RowStates;
-  dispatch: Dispatch<Action>;
-}) {
-  let targetRef: any;
-  function setRef(ref: any) {
-    targetRef = ref;
+    competenceUrl: string
+    user_id: string
+    email_id: string
+    degree: string
   }
-  const getOffsetHeight = (thisTargetRef: any) => thisTargetRef.offsetHeight;
-  const classes = useStyles();
-  const url = data.competenceUrl;
-  const [empData, pending] = useFetchedData<EmployeeInfoData>({ url });
-  const user_id = data ? data.user_id : null;
+  id: string
+  rowStates: RowStates
+  dispatch: Dispatch<Action>
+}) {
+  let targetRef: any
+  function setRef(ref: any) {
+    targetRef = ref
+  }
+  const getOffsetHeight = (thisTargetRef: any) => thisTargetRef.offsetHeight
+  const classes = useStyles()
+  const url = data.competenceUrl
+  const [empData, pending] = useFetchedData<EmployeeInfoData>({ url })
+  const user_id = data ? data.user_id : null
   const [expData, expPending] = useFetchedData<ExperienceData>({
     url: `/api/data/employeeExperience?user_id=${user_id}`,
-  });
+  })
 
   const getStringFromList = (
     list: string[] | null | undefined,
     listName: 'skills' | 'roles' | 'languages'
   ) => {
-    if (!list) return <NoData />;
+    if (!list) return <NoData />
     return list.length > 0 ? (
       `${Array.from(new Set(empData?.tags[listName]))
         .filter((x) => x)
         .join(', ')}.`
     ) : (
       <NoData />
-    );
-  };
+    )
+  }
 
   useEffect(() => {
     if (!pending && targetRef) {
-      const dataHeight = getOffsetHeight(targetRef);
-      dispatch({ type: 'CHANGE_HEIGHT', id, height: dataHeight + 72 });
-      dispatch({ type: 'SET_EXPANDED_DATA', id, expandedData: empData });
+      const dataHeight = getOffsetHeight(targetRef)
+      dispatch({ type: 'CHANGE_HEIGHT', id, height: dataHeight + 72 })
+      dispatch({ type: 'SET_EXPANDED_DATA', id, expandedData: empData })
     }
-  }, [pending, empData, targetRef, id, dispatch]);
+  }, [pending, empData, targetRef, id, dispatch])
 
   return (
     <div ref={setRef} className={classes.root}>
@@ -295,30 +295,30 @@ export default function EmployeeInfo({
         />
       </div>
     </div>
-  );
+  )
 }
 const yearAndMonthToNumber = (year: number, month: number) => {
-  let stringMonth;
+  let stringMonth
   if (month < 10) {
-    stringMonth = '0' + month;
+    stringMonth = '0' + month
   } else if (month > 9) {
-    stringMonth = String(month);
+    stringMonth = String(month)
   } else {
-    stringMonth = '00';
+    stringMonth = '00'
   }
-  return Number(year + stringMonth);
-};
+  return Number(year + stringMonth)
+}
 
 export const GetWorkExperience = (workExp: {
-  workExp: Experience[] | undefined;
+  workExp: Experience[] | undefined
 }) => {
-  if (!workExp.workExp) return <div> Fant ingen arbeidserfaring </div>;
+  if (!workExp.workExp) return <div> Fant ingen arbeidserfaring </div>
 
   workExp.workExp.sort(
     (expA, expB) =>
       yearAndMonthToNumber(expB.year_from, expB.month_from) -
       yearAndMonthToNumber(expA.year_from, expA.month_from)
-  );
+  )
   return (
     <>
       {workExp.workExp.map((exp, index) => (
@@ -333,31 +333,31 @@ export const GetWorkExperience = (workExp: {
         </div>
       ))}
     </>
-  );
-};
+  )
+}
 
 const timeToNumber = (time: string) => {
-  const [year, month] = time.split('/');
-  return yearAndMonthToNumber(Number(year), Number(month));
-};
+  const [year, month] = time.split('/')
+  return yearAndMonthToNumber(Number(year), Number(month))
+}
 
 function compare(a: ProjectExperience, b: ProjectExperience) {
-  const aTime = a.time_from ? a.time_from : a.time_to;
-  const bTime = b.time_from ? b.time_from : b.time_to;
+  const aTime = a.time_from ? a.time_from : a.time_to
+  const bTime = b.time_from ? b.time_from : b.time_to
   if (timeToNumber(aTime) < timeToNumber(bTime)) {
-    return 1;
+    return 1
   }
   if (timeToNumber(aTime) > timeToNumber(bTime)) {
-    return -1;
+    return -1
   }
-  return 0;
+  return 0
 }
 
 export const GetProjects = (expData: { expData: ExperienceData | null }) => {
-  const classes = useStyles();
+  const classes = useStyles()
   if (!expData || !expData.expData || !expData.expData.experience)
-    return <div> Fant ingen prosjekter </div>;
-  expData.expData.experience.sort(compare);
+    return <div> Fant ingen prosjekter </div>
+  expData.expData.experience.sort(compare)
   return (
     <>
       {expData.expData.experience.map((exp, index) => (
@@ -367,18 +367,18 @@ export const GetProjects = (expData: { expData: ExperienceData | null }) => {
         </div>
       ))}
     </>
-  );
-};
+  )
+}
 const prettyDates = (date1: string, date2: string) => {
-  const [fromYear, fromMonth] = date1.split('/');
-  const [toYear, toMonth] = date2.split('/');
+  const [fromYear, fromMonth] = date1.split('/')
+  const [toYear, toMonth] = date2.split('/')
   return getPrettyDates(
     Number(fromMonth),
     Number(fromYear),
     Number(toMonth),
     Number(toYear)
-  );
-};
+  )
+}
 const getPrettyDates = (
   fromMonth: number,
   fromYear: number,
@@ -386,12 +386,12 @@ const getPrettyDates = (
   toYear: number
 ) => {
   const prettyFromMonth =
-    fromMonth && fromMonth !== -1 ? months[fromMonth - 1] + ' ' : '';
-  const prettyFromYear = fromYear && fromYear !== -1 ? fromYear : '';
+    fromMonth && fromMonth !== -1 ? months[fromMonth - 1] + ' ' : ''
+  const prettyFromYear = fromYear && fromYear !== -1 ? fromYear : ''
   const prettyToMonth =
-    toMonth && toMonth !== -1 ? months[toMonth - 1] + ' ' : '';
-  const prettyToYear = toYear && toYear !== -1 ? toYear : '';
-  const bothYears = prettyFromYear && prettyToYear ? ' - ' : '';
+    toMonth && toMonth !== -1 ? months[toMonth - 1] + ' ' : ''
+  const prettyToYear = toYear && toYear !== -1 ? toYear : ''
+  const bothYears = prettyFromYear && prettyToYear ? ' - ' : ''
   return (
     prettyFromMonth +
     prettyFromYear +
@@ -399,5 +399,5 @@ const getPrettyDates = (
     prettyToMonth +
     prettyToYear +
     ': '
-  );
-};
+  )
+}

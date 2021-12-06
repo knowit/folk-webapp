@@ -1,9 +1,9 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import EmployeeInfo from './EmployeeInfo'; // component to test
-import { useFetchedData } from '../hooks/service';
+import React from 'react'
+import { render, screen } from '@testing-library/react'
+import EmployeeInfo from './EmployeeInfo' // component to test
+import { useFetchedData } from '../hooks/service'
 
-jest.mock('../hooks/service');
+jest.mock('../hooks/service')
 
 const fakeUser = {
   competence: {
@@ -45,16 +45,16 @@ const fakeUser = {
       year_to: -1,
     },
   ],
-};
+}
 
 const mockData = {
   competenceUrl: '/404',
   user_id: '123',
   email_id: '123',
   degree: 'some degree',
-};
-const mockCallbackFunction = () => {};
-(useFetchedData as jest.Mock).mockReturnValue([fakeUser, false, null]);
+}
+const mockCallbackFunction = () => {}
+;(useFetchedData as jest.Mock).mockReturnValue([fakeUser, false, null])
 //(DDChart as jest.Mock).mockReturnValue(<div>hei</div>);
 
 describe('EmployeeInfo', () => {
@@ -66,9 +66,9 @@ describe('EmployeeInfo', () => {
         rowStates={{ '1': { expandedData: null, height: 70 } }}
         dispatch={mockCallbackFunction}
       />
-    );
-    expect(useFetchedData).toHaveBeenCalled;
-  });
+    )
+    expect(useFetchedData).toHaveBeenCalled
+  })
   it.each(fakeUser.tags.languages)(
     'should render all languages',
     (language) => {
@@ -79,10 +79,10 @@ describe('EmployeeInfo', () => {
           rowStates={{ '1': { expandedData: null, height: 70 } }}
           dispatch={mockCallbackFunction}
         />
-      );
-      expect(screen.getByText(language, { exact: false })).toBeInTheDocument;
+      )
+      expect(screen.getByText(language, { exact: false })).toBeInTheDocument
     }
-  );
+  )
   it.each(fakeUser.tags.skills)('should render all skills', (skill) => {
     render(
       <EmployeeInfo
@@ -91,9 +91,9 @@ describe('EmployeeInfo', () => {
         rowStates={{ '1': { expandedData: null, height: 70 } }}
         dispatch={mockCallbackFunction}
       />
-    );
-    expect(screen.getByText(skill, { exact: false })).toBeInTheDocument;
-  });
+    )
+    expect(screen.getByText(skill, { exact: false })).toBeInTheDocument
+  })
   it.each(fakeUser.tags.roles)('should render all roles', (role) => {
     render(
       <EmployeeInfo
@@ -102,9 +102,9 @@ describe('EmployeeInfo', () => {
         rowStates={{ '1': { expandedData: null, height: 70 } }}
         dispatch={mockCallbackFunction}
       />
-    );
-    expect(screen.getByText(role, { exact: false })).toBeInTheDocument;
-  });
+    )
+    expect(screen.getByText(role, { exact: false })).toBeInTheDocument
+  })
   it('should render correct active years', () => {
     render(
       <EmployeeInfo
@@ -113,10 +113,10 @@ describe('EmployeeInfo', () => {
         rowStates={{ '1': { expandedData: null, height: 70 } }}
         dispatch={mockCallbackFunction}
       />
-    );
-    const ActiveYears = String(new Date().getFullYear() - 2010) + ' år.';
-    expect(screen.getByText(ActiveYears)).toBeInTheDocument;
-  });
+    )
+    const ActiveYears = String(new Date().getFullYear() - 2010) + ' år.'
+    expect(screen.getByText(ActiveYears)).toBeInTheDocument
+  })
   it('Should render correct start date in knowit', () => {
     render(
       <EmployeeInfo
@@ -125,7 +125,7 @@ describe('EmployeeInfo', () => {
         rowStates={{ '1': { expandedData: null, height: 70 } }}
         dispatch={mockCallbackFunction}
       />
-    );
-    expect(screen.getByText('05/2017.')).toBeInTheDocument;
-  });
-});
+    )
+    expect(screen.getByText('05/2017.')).toBeInTheDocument
+  })
+})

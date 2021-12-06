@@ -1,7 +1,7 @@
-import React from 'react';
-import { Grid } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import Info from './Info';
+import React from 'react'
+import { Grid } from '@material-ui/core'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
+import Info from './Info'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -41,13 +41,13 @@ const useStyles = makeStyles(() =>
       borderRadius: '0px 0px 6px 6px',
     },
   })
-);
+)
 
 interface GridItemHeaderProps {
-  title: string;
-  description?: string;
-  children?: React.ReactNode | React.ReactNode[];
-  big?: boolean;
+  title: string
+  description?: string
+  children?: React.ReactNode | React.ReactNode[]
+  big?: boolean
 }
 
 export function GridItemHeader({
@@ -56,9 +56,9 @@ export function GridItemHeader({
   children = null,
   big,
 }: GridItemHeaderProps) {
-  const classes = useStyles();
-  const headerHeight = big ? classes.bigGridHeaderRoot : null;
-  const fontSize = big ? classes.BigGridHeaderTitle : null;
+  const classes = useStyles()
+  const headerHeight = big ? classes.bigGridHeaderRoot : null
+  const fontSize = big ? classes.BigGridHeaderTitle : null
 
   return (
     <div className={[classes.gridHeaderRoot, headerHeight].join(' ')}>
@@ -71,28 +71,28 @@ export function GridItemHeader({
       </Grid>
       {children}
     </div>
-  );
+  )
 }
 interface GridItemContentProps {
-  children: React.ReactNode | React.ReactNode[];
+  children: React.ReactNode | React.ReactNode[]
 }
 
 export function GridItemContent({ children }: GridItemContentProps) {
-  const classes = useStyles();
-  return <div className={classes.gridContentRoot}>{children}</div>;
+  const classes = useStyles()
+  return <div className={classes.gridContentRoot}>{children}</div>
 }
 
 interface GridItemProps {
-  fullSize?: boolean;
-  children: React.ReactNode | React.ReactNode[];
+  fullSize?: boolean
+  children: React.ReactNode | React.ReactNode[]
 }
 
 export function GridItem({ children, fullSize = false }: GridItemProps) {
-  const classes = useStyles();
+  const classes = useStyles()
 
   return (
     <Grid item xs={fullSize ? 12 : 6}>
       <div className={classes.gridRoot}>{children}</div>
     </Grid>
-  );
+  )
 }

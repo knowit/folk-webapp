@@ -1,33 +1,28 @@
 // Verbose level
 const DEBUG = parseInt(process.env.DEBUG) || 0
 type Params = {
-  message?: string;
-  type?: string;
-  data?: Data | null;
-  status?: number;
-  error?: {status: number, message: string, external: any};
-  external?: boolean | null;
+  message?: string
+  type?: string
+  data?: Data | null
+  status?: number
+  error?: { status: number; message: string; external: any }
+  external?: boolean | null
 }
 
 type Data = {
-  accessToken?: string,
-  filterString?: string, 
-  reportUrl?: string,
-  reportName?: string,
-  filter?: {email?: string, user_id?: string}, 
-  hasToken?: boolean,
-  status?: number,
-  response?: string,
-  parameters?: {user_id?: string, email?: string},
-  reports?: any,
-  endpoint?: string,
+  accessToken?: string
+  filterString?: string
+  reportUrl?: string
+  reportName?: string
+  filter?: { email?: string; user_id?: string }
+  hasToken?: boolean
+  status?: number
+  response?: string
+  parameters?: { user_id?: string; email?: string }
+  reports?: any
+  endpoint?: string
 }
-function output({
-  type,
-  error,
-  message,
-  data
-}: Params) {
+function output({ type, error, message, data }: Params) {
   const RED = 31
   const YELLOW = 33
   const BLUE = 34
@@ -38,19 +33,17 @@ function output({
 
   if (DEBUG > 0) {
     switch (type) {
-    case 'error':
-      console.error(color(RED, type), error, data)
-      break
-    case 'warning':
-      if (DEBUG >= 2)
-        console.warn(color(YELLOW, type), error, data)
-      break
-    case 'info':
-      if (DEBUG >= 3)
-        console.log(color(BLUE, type), message, data)
-      break
-    default:
-      console.log(error, data)
+      case 'error':
+        console.error(color(RED, type), error, data)
+        break
+      case 'warning':
+        if (DEBUG >= 2) console.warn(color(YELLOW, type), error, data)
+        break
+      case 'info':
+        if (DEBUG >= 3) console.log(color(BLUE, type), message, data)
+        break
+      default:
+        console.log(error, data)
     }
   }
 }
@@ -61,11 +54,10 @@ const Reporting = ({
   message = '',
   type = 'error',
   external = null,
-  data = null
+  data = null,
 }: Params) => {
   const error = { status, message }
-  if (DEBUG > 0)
-    output({ type, error: {...error, external}, message, data})
+  if (DEBUG > 0) output({ type, error: { ...error, external }, message, data })
   return error
 }
 

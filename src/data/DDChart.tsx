@@ -1,36 +1,36 @@
-import React, { useState } from 'react';
-import { GridItemHeader, GridItemContent } from '../components/GridItem';
-import DropdownPicker from '../components/DropdownPicker';
-import Line from './components/Line';
-import Bar from './components/Bar';
-import Pie from './components/Pie';
-import BigChart from '../components/BigChart';
-import { ErrorText } from '../components/ErrorText';
-import Sunburst from './components/Sunburst';
-import Radar from './components/Radar';
-import { DDComponentProps, DDPassProps } from './types';
+import React, { useState } from 'react'
+import { GridItemHeader, GridItemContent } from '../components/GridItem'
+import DropdownPicker from '../components/DropdownPicker'
+import Line from './components/Line'
+import Bar from './components/Bar'
+import Pie from './components/Pie'
+import BigChart from '../components/BigChart'
+import { ErrorText } from '../components/ErrorText'
+import Sunburst from './components/Sunburst'
+import Radar from './components/Radar'
+import { DDComponentProps, DDPassProps } from './types'
 import {
   ChartDisplayOptions,
   ChartVariantToggle,
-} from '../components/ChartDisplayOptions';
-import { ToggleBigChartButton } from '../components/ToggleBigChartButton';
+} from '../components/ChartDisplayOptions'
+import { ToggleBigChartButton } from '../components/ToggleBigChartButton'
 
-export type ChartVariant = 'Line' | 'Bar' | 'Pie' | 'Radar' | 'Sunburst';
+export type ChartVariant = 'Line' | 'Bar' | 'Pie' | 'Radar' | 'Sunburst'
 
 export interface ChartComponentInfo {
-  type: ChartVariant;
-  props: DDPassProps;
+  type: ChartVariant
+  props: DDPassProps
 }
 
 const chartComponents: {
-  [key in ChartVariant]: (props: any) => JSX.Element;
+  [key in ChartVariant]: (props: any) => JSX.Element
 } = {
   Line: Line,
   Bar: Bar,
   Pie: Pie,
   Radar: Radar,
   Sunburst: Sunburst,
-};
+}
 
 export default function DDChart({
   payload,
@@ -39,26 +39,25 @@ export default function DDChart({
   props,
 }: DDComponentProps) {
   const { setNames, sets } = payload as {
-    setNames: string[];
-    sets: { [key: string]: any };
-  };
+    setNames: string[]
+    sets: { [key: string]: any }
+  }
   const [set, setSet] = useState<string>(
     setNames && setNames.length > 0 ? setNames[0] : ''
-  );
-  const [bigChartOpen, setBigChartOpen] = useState<boolean>(false);
-  const [chartVariantIdx, setChartVariantIdx] = useState<number>(0);
+  )
+  const [bigChartOpen, setBigChartOpen] = useState<boolean>(false)
+  const [chartVariantIdx, setChartVariantIdx] = useState<number>(0)
 
-  const chartVariants = props.chartVariants as Array<ChartComponentInfo>;
-  const { type: chartVariantToRender, props: chartProps } = chartVariants[
-    chartVariantIdx
-  ];
-  const ChartComponent = chartComponents[chartVariantToRender];
+  const chartVariants = props.chartVariants as Array<ChartComponentInfo>
+  const { type: chartVariantToRender, props: chartProps } =
+    chartVariants[chartVariantIdx]
+  const ChartComponent = chartComponents[chartVariantToRender]
 
-  const setNamesLength = payload.setNames ? payload.setNames.length : 0;
+  const setNamesLength = payload.setNames ? payload.setNames.length : 0
 
   const handleSetChange = (setName: string) => {
-    setSet(setName);
-  };
+    setSet(setName)
+  }
 
   const ChartGridItem = ({ isBig = false }: { isBig?: boolean }) => (
     <>
@@ -94,7 +93,7 @@ export default function DDChart({
         <ErrorText />
       )}
     </>
-  );
+  )
 
   return (
     <>
@@ -103,5 +102,5 @@ export default function DDChart({
         <ChartGridItem isBig />
       </BigChart>
     </>
-  );
+  )
 }
