@@ -1,34 +1,34 @@
-import React, { Dispatch, useEffect, useReducer } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { TableCell, withStyles } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
-import { AutoSizer, Column, Table, TableRowRenderer } from 'react-virtualized';
-import CharacterLimitBox from '../../../components/CharacterLimitBox';
+import React, { Dispatch, useEffect, useReducer } from 'react'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { TableCell, withStyles } from '@material-ui/core'
+import Paper from '@material-ui/core/Paper'
+import { AutoSizer, Column, Table, TableRowRenderer } from 'react-virtualized'
+import CharacterLimitBox from '../../../components/CharacterLimitBox'
 
 interface DataTableProps {
-  columns: DataTableColumn[];
-  rows: Omit<DataTableRow, 'columns'>[];
+  columns: DataTableColumn[]
+  rows: Omit<DataTableRow, 'columns'>[]
 }
 
 interface DataTableColumn {
-  title: string;
-  expandable?: boolean;
-  renderCell?: (props: { data: any; rowData: any[] }) => JSX.Element;
-  renderExpanded?: (data: any) => JSX.Element;
-  headerRenderCell?: () => JSX.Element;
-  checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  title: string
+  expandable?: boolean
+  renderCell?: (props: { data: any; rowData: any[] }) => JSX.Element
+  renderExpanded?: (data: any) => JSX.Element
+  headerRenderCell?: () => JSX.Element
+  checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 interface DataTableRow {
-  rowData: any[];
-  columns: DataTableColumn[];
+  rowData: any[]
+  columns: DataTableColumn[]
 }
 
 const TableCellNoBorders = withStyles({
   root: {
     borderBottom: '1px solid #F1F0ED',
   },
-})(TableCell);
+})(TableCell)
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,23 +76,23 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
   })
-);
+)
 
 type createCellFunction = (props: {
-  data: any;
-  rowData: any[];
-  email?: string;
-  rowStates?: RowStates;
-  dispatch?: Dispatch<Action>;
-  id?: string;
-}) => JSX.Element;
-type renderExpandedCell = (data: any, callBack: () => void) => JSX.Element;
+  data: any
+  rowData: any[]
+  email?: string
+  rowStates?: RowStates
+  dispatch?: Dispatch<Action>
+  id?: string
+}) => JSX.Element
+type renderExpandedCell = (data: any, callBack: () => void) => JSX.Element
 
 interface MuiVirtualizedTableProps {
-  columns: DataTableColumn[];
-  rowCount: number;
-  rowGetter: (row: { index: number }) => any;
-  rows: any[];
+  columns: DataTableColumn[]
+  rowCount: number
+  rowGetter: (row: { index: number }) => any
+  rows: any[]
 }
 
 function GetCell({
@@ -104,16 +104,16 @@ function GetCell({
   rowStates,
   dispatch,
 }: {
-  RenderCell: createCellFunction | undefined;
-  expandable: boolean | undefined;
-  cellData: any;
-  id: string;
-  rowData: any[];
-  rowStates: RowStates;
-  dispatch: Dispatch<Action>;
+  RenderCell: createCellFunction | undefined
+  expandable: boolean | undefined
+  cellData: any
+  id: string
+  rowData: any[]
+  rowStates: RowStates
+  dispatch: Dispatch<Action>
 }): JSX.Element {
-  const classes = useStyles();
-  const data = cellData !== null ? cellData : '-';
+  const classes = useStyles()
+  const data = cellData !== null ? cellData : '-'
   if (expandable && RenderCell) {
     return (
       <RenderCell
@@ -124,7 +124,7 @@ function GetCell({
         dispatch={dispatch}
         id={id}
       />
-    );
+    )
   }
   return (
     <TableCellNoBorders
@@ -140,21 +140,21 @@ function GetCell({
         )}
       </div>
     </TableCellNoBorders>
-  );
+  )
 }
 
-const initialState: RowStates = {};
+const initialState: RowStates = {}
 
 export interface RowStates {
   [id: string]: {
-    height: number;
-    expandedData: null | any;
-  };
+    height: number
+    expandedData: null | any
+  }
 }
 
 export type Action =
   | { type: 'CHANGE_HEIGHT'; id: string; height: number }
-  | { type: 'SET_EXPANDED_DATA'; id: string; expandedData: any };
+  | { type: 'SET_EXPANDED_DATA'; id: string; expandedData: any }
 
 function reducer(currentState: RowStates, action: Action) {
   switch (action.type) {
@@ -167,7 +167,7 @@ function reducer(currentState: RowStates, action: Action) {
             ? currentState[action.id].expandedData
             : null,
         },
-      };
+      }
     case 'SET_EXPANDED_DATA':
       return {
         ...currentState,
@@ -175,9 +175,9 @@ function reducer(currentState: RowStates, action: Action) {
           height: currentState[action.id] ? currentState[action.id].height : 70,
           expandedData: action.expandedData,
         },
-      };
+      }
     default:
-      return currentState;
+      return currentState
   }
 }
 function MuiVirtualizedTable({
@@ -186,20 +186,20 @@ function MuiVirtualizedTable({
   rowGetter,
   rows,
 }: MuiVirtualizedTableProps) {
-  const classes = useStyles();
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const classes = useStyles()
+  const [state, dispatch] = useReducer(reducer, initialState)
 
-  let ArrayRef: any;
+  let ArrayRef: any
   function setRef(ref: any) {
-    ArrayRef = ref;
+    ArrayRef = ref
   }
 
   useEffect(() => {
-    ArrayRef.recomputeRowHeights();
-    ArrayRef.forceUpdate();
-  }, [state, ArrayRef]);
+    ArrayRef.recomputeRowHeights()
+    ArrayRef.forceUpdate()
+  }, [state, ArrayRef])
 
-  const widthList = [385, 222, 143, 337, 53];
+  const widthList = [385, 222, 143, 337, 53]
 
   const rowRenderer: TableRowRenderer = ({
     className,
@@ -208,9 +208,9 @@ function MuiVirtualizedTable({
     rowData,
     style,
   }) => {
-    const id = rows[index].rowId;
+    const id = rows[index].rowId
     const RenderExpanded: renderExpandedCell | undefined =
-      columns[0].renderExpanded;
+      columns[0].renderExpanded
     return (
       <div key={key} className={classes.column} style={style}>
         <div className={className}>
@@ -227,15 +227,15 @@ function MuiVirtualizedTable({
                   dispatch={dispatch}
                 />
               </div>
-            );
+            )
           })}
         </div>
         {state[id] && state[id].height !== 70 && RenderExpanded && (
           <RenderExpanded
             data={rowData[0]}
             callBack={() => {
-              ArrayRef.recomputeRowHeights();
-              ArrayRef.forceUpdate();
+              ArrayRef.recomputeRowHeights()
+              ArrayRef.forceUpdate()
             }}
             id={id}
             dispatch={dispatch}
@@ -243,8 +243,8 @@ function MuiVirtualizedTable({
           />
         )}
       </div>
-    );
-  };
+    )
+  }
 
   function headerRenderer(
     title: string,
@@ -268,12 +268,12 @@ function MuiVirtualizedTable({
       >
         {title}
       </TableCell>
-    );
+    )
   }
 
   const getRowHeight = ({ index }: { index: number }) => {
-    return state[rows[index].rowId] ? state[rows[index].rowId].height : 70;
-  };
+    return state[rows[index].rowId] ? state[rows[index].rowId].height : 70
+  }
 
   function emptyRow() {
     return (
@@ -285,7 +285,7 @@ function MuiVirtualizedTable({
       >
         Ingen resultater
       </TableCell>
-    );
+    )
   }
 
   return (
@@ -320,13 +320,13 @@ function MuiVirtualizedTable({
                   dataKey={String(index)}
                   width={widthList[index]}
                 />
-              );
+              )
             }
           )}
         </Table>
       )}
     </AutoSizer>
-  );
+  )
 }
 
 export default function DataTable({ columns, rows }: DataTableProps) {
@@ -345,5 +345,5 @@ export default function DataTable({ columns, rows }: DataTableProps) {
         rows={rows}
       />
     </Paper>
-  );
+  )
 }
