@@ -1,4 +1,5 @@
 # Knowit folk
+
 ![Knowit Folk - Backend](https://github.com/knowit/folk-webapp/workflows/Knowit%20Folk%20-%20Backend/badge.svg)
 ![Knowit Folk - Frontend](https://github.com/knowit/folk-webapp/workflows/Knowit%20Folk%20-%20Frontend/badge.svg)
 
@@ -9,9 +10,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 Automatic deployment of `master` branch to development environment
 
 ### Manual
+
 ```
 # deploy backend and infrastructure
-sls deploy --stage dev 
+sls deploy --stage dev
 
 # deploy frontend
 yarn deploy:dev
@@ -21,6 +23,15 @@ yarn deploy:dev
 
 - `dev`: https://dev.folk.knowit.no/
 - `prod`: https://folk.knowit.no/
+
+## Code Conventions
+
+To ensure consistent code style, similar conventions and matching formatting, [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) is used.
+There is a _pre-commit_ hook running before code can be committed, and it will not allow commits with convention/format/code style-breaking code.
+
+This ensures that no PR's are cluttered with significant amounts of whitespace-changes, line breaks and so fourth.
+
+> For those using **VSCode**, certain extensions and settings are [recommended](https://github.com/knowit/folk-webapp/tree/code-conventions-setup/.vscode) automatically.
 
 ## Available Scripts
 
@@ -43,7 +54,7 @@ You will also see any lint errors in the console.
 
 Same as `yarn start` but routes API queries to localhost using a proxy.
 
-###  `yarn start:screen`
+### `yarn start:screen`
 
 Same as `yarn start:local` but starts both the frontend and backend in a screen session.
 Quit using <kbd>ctrl+a</kbd> and type `:quit`.
@@ -89,4 +100,3 @@ It formats all the scripts with prettier to standards specified in `.prettier.js
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-
