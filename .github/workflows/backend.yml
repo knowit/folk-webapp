@@ -1,5 +1,9 @@
 name: Knowit Folk - Backend
 
+defaults:
+  run:
+    working-directory: backend
+
 on:
   pull_request:
     paths:
@@ -17,7 +21,6 @@ jobs:
           node-version: '14'
 
       - name: Install dependencies
-        working-directory: backend
         run: yarn install
 
       # - name: Run tests

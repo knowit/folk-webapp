@@ -1,5 +1,9 @@
 name: Knowit Folk - Frontend
 
+defaults:
+  run:
+    working-directory: .
+
 on:
   pull_request:
     paths:
