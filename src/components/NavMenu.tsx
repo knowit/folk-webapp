@@ -1,7 +1,7 @@
-import React from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { ButtonBase } from '@material-ui/core';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import React from 'react'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { ButtonBase } from '@material-ui/core'
+import { Link as RouterLink, useLocation } from 'react-router-dom'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -27,11 +27,11 @@ const useStyles = makeStyles(() =>
       color: selected ? '#FAC0B1' : '#F1F0ED',
     }),
   })
-);
+)
 
 export function NavMenuItem({ label, to }: { label: string; to: string }) {
-  const location = useLocation();
-  const classes = useStyles(location.pathname === to);
+  const location = useLocation()
+  const classes = useStyles(location.pathname === to)
 
   return (
     <ButtonBase
@@ -42,11 +42,11 @@ export function NavMenuItem({ label, to }: { label: string; to: string }) {
     >
       {label}
     </ButtonBase>
-  );
+  )
 }
 
 export function NavMenu({ children }: { children: React.ReactNode }) {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  return <div className={classes.root}>{children}</div>;
+  return <div className={classes.root}>{children}</div>
 }

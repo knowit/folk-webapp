@@ -1,7 +1,7 @@
-import React from 'react';
-import { createStyles, FormControlLabel, Theme } from '@material-ui/core';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import React from 'react'
+import { createStyles, FormControlLabel, Theme } from '@material-ui/core'
+import { makeStyles, withStyles } from '@material-ui/core/styles'
+import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox'
 
 const BlackCheckBox = withStyles({
   root: {
@@ -16,7 +16,7 @@ const BlackCheckBox = withStyles({
   checked: {},
 })((props: CheckboxProps) => (
   <Checkbox color="default" disableRipple {...props} />
-));
+))
 
 const useCheckBoxStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,18 +37,18 @@ const useCheckBoxStyles = makeStyles((theme: Theme) =>
       paddingLeft: '15px',
     },
   })
-);
+)
 
 export default function CheckBoxHeaderCell({
   title,
   checkBoxLabel,
   checkBoxChangeHandler,
 }: {
-  title: string;
-  checkBoxLabel: string;
-  checkBoxChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  title: string
+  checkBoxLabel: string
+  checkBoxChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
 }) {
-  const classes = useCheckBoxStyles();
+  const classes = useCheckBoxStyles()
   return (
     <div className={classes.position}>
       {title}
@@ -58,5 +58,5 @@ export default function CheckBoxHeaderCell({
         label={checkBoxLabel}
       />
     </div>
-  );
+  )
 }

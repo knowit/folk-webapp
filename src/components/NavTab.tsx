@@ -3,8 +3,8 @@ import { createStyles, Tab, Tabs } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 interface NavTabContent {
-  content: any;
-  title: string;
+  content: any
+  title: string
 }
 
 const useStyles = makeStyles(() =>
@@ -24,26 +24,26 @@ const useStyles = makeStyles(() =>
       textTransform: 'none',
       borderRadius: '5px 5px 0 0',
       backgroundColor: '#F1F0ED',
-      lineHeight: "1.0",
+      lineHeight: '1.0',
     },
-    " & :selected": {
+    ' & :selected': {
       backgroundColor: '#330059',
     },
     indicator: {
       display: 'none',
     },
     root: {
-      marginTop: "-78px",
-      marginBottom: "20px",
-    }
+      marginTop: '-78px',
+      marginBottom: '20px',
+    },
   })
 )
 
 interface NavTabProps {
-  contentList: NavTabContent[];
+  contentList: NavTabContent[]
 }
 
-const localStorageKey = "ClientPageCurrentTab"
+const localStorageKey = 'ClientPageCurrentTab'
 const getCurrentTabValue = () => {
   const currentTabValue = sessionStorage.getItem(localStorageKey)
   return currentTabValue ? parseInt(currentTabValue) : 0
@@ -51,8 +51,8 @@ const getCurrentTabValue = () => {
 
 export default function NavTab(props: NavTabProps) {
   const currentTabValue = getCurrentTabValue()
-  const [value, setValue] = useState<number>(currentTabValue);
-  const classes = useStyles();
+  const [value, setValue] = useState<number>(currentTabValue)
+  const classes = useStyles()
 
   const handleChange = (event: any, tabValue: number) => {
     setValue(tabValue)
@@ -60,13 +60,14 @@ export default function NavTab(props: NavTabProps) {
   }
 
   const createTabs = () => {
-    return props.contentList.map((content, index) =>
+    return props.contentList.map((content, index) => (
       <Tab
         classes={{ root: classes.tabsTab }}
         value={index}
         key={`navigation-tab-${content.title}`}
         label={content.title}
-      />)
+      />
+    ))
   }
 
   return (
@@ -75,7 +76,7 @@ export default function NavTab(props: NavTabProps) {
         classes={{
           root: classes.root,
           flexContainer: classes.tabsContainer,
-          indicator: classes.indicator
+          indicator: classes.indicator,
         }}
         value={value}
         onChange={handleChange}
@@ -83,7 +84,7 @@ export default function NavTab(props: NavTabProps) {
       >
         {createTabs()}
       </Tabs>
-      { props.contentList[value].content }
+      {props.contentList[value].content}
     </>
   )
 }

@@ -11,11 +11,14 @@ import { v4 as uuid } from 'uuid'
 
 const getCategoryScoresForEmployee = (
   employeeEmail: string,
-  categoryList: EmployeeMotivationAndCompetence[]) => {
-  const employeeCategories = categoryList.filter(categoryRow => categoryRow.email === employeeEmail)
+  categoryList: EmployeeMotivationAndCompetence[]
+) => {
+  const employeeCategories = categoryList.filter(
+    (categoryRow) => categoryRow.email === employeeEmail
+  )
   const employeeMotivation = {}
   const employeeCompetence = {}
-  employeeCategories.forEach(employeeRow => {
+  employeeCategories.forEach((employeeRow) => {
     employeeMotivation[employeeRow.subCategory] = employeeRow.motivation
     employeeCompetence[employeeRow.subCategory] = employeeRow.competence
   })
@@ -24,34 +27,33 @@ const getCategoryScoresForEmployee = (
 const getStorageUrl = (key: string) => {
   if (key !== undefined) {
     return `${process.env.STORAGE_URL}/${key}`
-  }
-  else {
+  } else {
     return undefined
   }
 }
 
 type EmployeeMotivationAndCompetence = {
-  email: string,
-  motivation: number,
-  competence: number,
-  subCategory: string,
-  category: string,
-  categoryMotivationAvg: number,
+  email: string
+  motivation: number
+  competence: number
+  subCategory: string
+  category: string
+  categoryMotivationAvg: number
   categoryCompetenceAvg: number
 }
 
-type EmployeeTable ={
-  data : [EmployeeInformation[], EmployeeMotivationAndCompetence[]]
+type EmployeeTable = {
+  data: [EmployeeInformation[], EmployeeMotivationAndCompetence[]]
 }
 export const employeeTableReports = [
   { reportName: 'employeeInformation' },
   { reportName: 'employeeMotivationAndCompetence' },
 ]
 /**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
-export const employeeTable = async ({data}: EmployeeTable ) => {
+export const employeeTable = async ({ data }: EmployeeTable) => {
   const [allEmployees, motivationAndCompetence] = data
   const mergedEmployees = mergeEmployees(allEmployees)
-  return mergedEmployees.map(employee => ({
+  return mergedEmployees.map((employee) => ({
     rowId: uuid(),
     rowData: [
       {
@@ -94,11 +96,13 @@ const cvs = [
 
 type ReportParams = {
   parameters: {
-    user_id?: string,
+    user_id?: string
     email?: string
   }
 }
-export const employeeExperienceReports = ({ parameters: { user_id } = {} }: ReportParams) => [
+export const employeeExperienceReports = ({
+  parameters: { user_id } = {},
+}: ReportParams) => [
   {
     reportName: 'projectExperience',
     filter: { user_id },
@@ -109,13 +113,13 @@ export const employeeExperienceReports = ({ parameters: { user_id } = {} }: Repo
  */
 type EmpExperience = {
   data: {
-    user_id: string,
-    navn: string,
-    customer: string,
-    description: string,
-    year_from: number,
-    year_to: number,
-    month_from: number,
+    user_id: string
+    navn: string
+    customer: string
+    description: string
+    year_from: number
+    year_to: number
+    month_from: number
     month_to: number
   }[]
 }
@@ -138,7 +142,9 @@ export const employeeExperience = async ({ data }: EmpExperience) => {
   }
 }
 
-export const employeeCompetenceReports = ({ parameters: { email } = {} }: ReportParams) => [
+export const employeeCompetenceReports = ({
+  parameters: { email } = {},
+}: ReportParams) => [
   {
     reportName: 'employeeSkills',
     filter: { email },
@@ -153,24 +159,24 @@ export const employeeCompetenceReports = ({ parameters: { email } = {} }: Report
   },
 ]
 type EmployeeSkills = {
-  user_id: string,
-  email: string,
-  language: string,
-  skill: string,
+  user_id: string
+  email: string
+  language: string
+  skill: string
   role: string
 }
 type WorkExperience = {
-  user_id: string,
-  email: string,
-  employer: string,
-  month_from: number,
-  month_to: number,
-  year_from: number,
+  user_id: string
+  email: string
+  employer: string
+  month_from: number
+  month_to: number
+  year_from: number
   year_to: number
 }
 
 type EmployeeData = {
-  data:[EmployeeSkills[], WorkExperience[], EmployeeInformation[]]
+  data: [EmployeeSkills[], WorkExperience[], EmployeeInformation[]]
 }
 
 /** Dette endepunktet henter mer data om ansatte.
@@ -182,7 +188,8 @@ export const employeeCompetence = async ({ data }: EmployeeData) => {
   const mergedRes = mergeEmployees(resComp)
 
   const mapTags = (skills: EmployeeSkills[]) => {
-    const mappedSkills = skills && skills.length > 0 ? skills[0] : {} as EmployeeSkills
+    const mappedSkills =
+      skills && skills.length > 0 ? skills[0] : ({} as EmployeeSkills)
     return {
       languages: mappedSkills.language ? mappedSkills.language.split(';') : [],
       skills: mappedSkills.skill ? mappedSkills.skill.split(';') : [],
@@ -199,8 +206,8 @@ export const employeeCompetence = async ({ data }: EmployeeData) => {
 }
 
 type FagActivity = {
-  year: number,
-  week: number,
+  year: number
+  week: number
   used_hrs: number
 }
 
@@ -242,13 +249,17 @@ export const experienceDistributionReports = [
 ]
 
 type YearsSinceSchoolDist = {
-  years: number,
+  years: number
   count: number
 }
 /** Dette endepunktet henter ut erfarings-fordelingen blant de ansatte.
  * Det brukes for å lage stolpe- og kakediagram i Competence.tsx
  */
-export const experienceDistribution = async ({ data }:{ data: YearsSinceSchoolDist[] }) => {
+export const experienceDistribution = async ({
+  data,
+}: {
+  data: YearsSinceSchoolDist[]
+}) => {
   const setInGroups = (list: YearsSinceSchoolDist[]) => {
     const detailedGroupedList = [
       { years: 'Under 2 år', count: 0 },
@@ -325,18 +336,22 @@ export const ageDistributionReports = [
 ]
 
 type AgeDistribution = {
-  age: number,
+  age: number
   count: number
 }
 
 type AgeDistributionGroups = {
-  age_group: number,
+  age_group: number
   count: number
 }
 /** Dette endepunktet henter ut aldersfordelingen blant de ansatte.
  * Det brukes for å lage et stolpediagram i Competence.tsx
  */
-export const ageDistribution = async ({ data }: { data: [AgeDistribution[], AgeDistributionGroups[]] }) => {
+export const ageDistribution = async ({
+  data,
+}: {
+  data: [AgeDistribution[], AgeDistributionGroups[]]
+}) => {
   const [setAgeDist, setAgeDistGroup] = data
 
   return {
@@ -351,7 +366,7 @@ export const ageDistribution = async ({ data }: { data: [AgeDistribution[], AgeD
   }
 }
 
-function getEventSet(events: { time_from: string ,time_to: string }[]) {
+function getEventSet(events: { time_from: string; time_to: string }[]) {
   // Finds earliest and latest dates for creating a range of years
 
   const firstYear = new Date(
@@ -362,8 +377,7 @@ function getEventSet(events: { time_from: string ,time_to: string }[]) {
   ).getFullYear()
 
   const years: number[] = [] // Range of years in dataset, [2015, 2016, 2017, etc...]
-  for (let year = (firstYear); year <= (lastYear); year++)
-    years.push(year)
+  for (let year = firstYear; year <= lastYear; year++) years.push(year)
 
   const set = []
   years.map((year) =>
@@ -437,8 +451,8 @@ function dateRange(startDate: string, endDate: string) {
 }
 
 type FagEvent = {
-  event_summary: string,
-  time_from: string,
+  event_summary: string
+  time_from: string
   time_to: string
 }
 export const fagEventsReports = [{ reportName: 'fagEvents' }]
@@ -456,7 +470,7 @@ export const fagEvents = async ({ data }: { data: FagEvent[] }) => {
   }
 }
 type DegreeDist = {
-  degree: string,
+  degree: string
   count: number
 }
 export const educationReports = [{ reportName: 'degreeDist' }]
@@ -472,19 +486,21 @@ export const education = async ({ data }: { data: DegreeDist }) => {
 }
 
 type NewCategories = {
-  category: string,
+  category: string
   subCategories: string
 }
 
 export const competenceFilterReports = [{ reportName: 'newCategories' }]
 export const competenceFilter = async ({ data }: { data: NewCategories[] }) => {
-  return data.map(e => ({ category: e.category, subCategories: JSON.parse(e.subCategories) }))
+  return data.map((e) => ({
+    category: e.category,
+    subCategories: JSON.parse(e.subCategories),
+  }))
 }
 
-
 type CompetenceAndMotivationAverage = {
-  value: number,
-  subCategory: string,
+  value: number
+  subCategory: string
   category: string
 }
 
@@ -493,27 +509,33 @@ export const competenceMappingReports = [
   { reportName: 'newMotivationAverage' },
 ]
 /** Dette endepunktet brukes i competence for å vise data fra kompteansekartleggingen som både sunburst-graf og stolpediagram */
-export const competenceMapping = async ({ data }: { data: CompetenceAndMotivationAverage[][] }) => {
+export const competenceMapping = async ({
+  data,
+}: {
+  data: CompetenceAndMotivationAverage[][]
+}) => {
   const [competence, motivation] = data
   const competenceCategories = (data: CompetenceAndMotivationAverage[]) => {
     const categoriesMap = {}
-    data.forEach(row => {
+    data.forEach((row) => {
       if (row.category in categoriesMap) {
-        categoriesMap[row.category].children.push({ category: `${row.category}: ${row.subCategory}`, value: row.value })
+        categoriesMap[row.category].children.push({
+          category: `${row.category}: ${row.subCategory}`,
+          value: row.value,
+        })
         categoriesMap[row.category].value += row.value
-      }
-      else {
+      } else {
         categoriesMap[row.category] = {
           category: row.category,
           children: [],
-          value: 0
+          value: 0,
         }
       }
     })
     for (const key of Object.keys(categoriesMap)) {
       const categoryObj = categoriesMap[key]
       const avg = categoryObj.value / categoryObj.children.length
-      categoryObj.children.forEach(child => {
+      categoryObj.children.forEach((child) => {
         child.size = (child.value / categoryObj.value) * avg
       })
       categoryObj.value = avg
@@ -530,8 +552,6 @@ export const competenceMapping = async ({ data }: { data: CompetenceAndMotivatio
   }
 }
 
-
-
 export const competenceAmountReports = [
   { reportName: 'employeeMotivationAndCompetence' },
 ]
@@ -539,22 +559,42 @@ export const competenceAmountReports = [
  * for de forskjellige kategoriene. Den regner også ut den prosentivse andelen som har svart 3 eller mer sammenlignet med alle om har svart.
  * Endepuktet brukes i Competence.tsx for å fremstille denne dataen som et stolpediagram.
  */
-export const competenceAmount = async ({ data }: { data: EmployeeMotivationAndCompetence[] }) => {
-  const THRESHOLD=3
+export const competenceAmount = async ({
+  data,
+}: {
+  data: EmployeeMotivationAndCompetence[]
+}) => {
+  const THRESHOLD = 3
   /*const motAndComp = data*/
-  const categoriesMap = {'mainCategories': {}}
+  const categoriesMap = { mainCategories: {} }
   // used to ensure that each participant is only counted once for each main category and to count the number of distinct participants
   const emailMap = {}
-  data.forEach(employeeRow => {
-    const { categoryMotivationAvg, categoryCompetenceAvg, category, subCategory, motivation, competence, email } = employeeRow
+  data.forEach((employeeRow) => {
+    const {
+      categoryMotivationAvg,
+      categoryCompetenceAvg,
+      category,
+      subCategory,
+      motivation,
+      competence,
+      email,
+    } = employeeRow
 
     if (!(category in categoriesMap)) {
-      categoriesMap['mainCategories'][category] = {'competenceAmount': 0, 'motivationAmount': 0, category: category}
+      categoriesMap['mainCategories'][category] = {
+        competenceAmount: 0,
+        motivationAmount: 0,
+        category: category,
+      }
       categoriesMap[category] = {}
     }
 
     if (!(subCategory in categoriesMap[category])) {
-      categoriesMap[category][subCategory] = {'competenceAmount': 0, 'motivationAmount': 0, category: subCategory}
+      categoriesMap[category][subCategory] = {
+        competenceAmount: 0,
+        motivationAmount: 0,
+        category: subCategory,
+      }
     }
 
     if (!(email in emailMap)) {
@@ -586,9 +626,12 @@ export const competenceAmount = async ({ data }: { data: EmployeeMotivationAndCo
   const nParticipants = Object.keys(emailMap).length
   for (const category of Object.keys(categoriesMap)) {
     for (const subCategory of Object.keys(categoriesMap[category])) {
-      const { motivationAmount, competenceAmount } = categoriesMap[category][subCategory]
-      categoriesMap[category][subCategory]['motivationProportion'] = motivationAmount/nParticipants*100
-      categoriesMap[category][subCategory]['competenceProportion'] = competenceAmount/nParticipants*100
+      const { motivationAmount, competenceAmount } =
+        categoriesMap[category][subCategory]
+      categoriesMap[category][subCategory]['motivationProportion'] =
+        (motivationAmount / nParticipants) * 100
+      categoriesMap[category][subCategory]['competenceProportion'] =
+        (competenceAmount / nParticipants) * 100
     }
     output[category] = Object.values(categoriesMap[category])
   }
@@ -599,7 +642,9 @@ export const competenceAmount = async ({ data }: { data: EmployeeMotivationAndCo
   }
 }
 
-export const empDataReports = ({ parameters: { email } = {} }: ReportParams) => [
+export const empDataReports = ({
+  parameters: { email } = {},
+}: ReportParams) => [
   {
     reportName: 'employeeSkills',
     filter: { email },
@@ -637,25 +682,46 @@ export const empData = async ({ data }: EmployeeData) => {
   }
 }
 
-export const employeeRadarReports = ({ parameters: { email } = {} }: ReportParams) => [
+export const employeeRadarReports = ({
+  parameters: { email } = {},
+}: ReportParams) => [
   {
     reportName: 'employeeMotivationAndCompetence',
     filter: { email },
-  }
+  },
 ]
 /** Dette endepunktet hetner data om hvordan en konulent har scoret på de forskjellige kategoriene på kompetansekartleggingen
  *  Det brukes i EmployeeInfo (utvidet tabell), og EmployeeSite (siden for hver enkelt ansatt)
  */
-export const employeeRadar = async ({ data }:{ data: EmployeeMotivationAndCompetence[] }) => {
+export const employeeRadar = async ({
+  data,
+}: {
+  data: EmployeeMotivationAndCompetence[]
+}) => {
   const competenceAndMotivation = data
-  const categoriesMap = {'mainCategories': {}}
-  competenceAndMotivation.forEach(row => {
-    const { category, subCategory, categoryCompetenceAvg, categoryMotivationAvg, competence, motivation } = row
+  const categoriesMap = { mainCategories: {} }
+  competenceAndMotivation.forEach((row) => {
+    const {
+      category,
+      subCategory,
+      categoryCompetenceAvg,
+      categoryMotivationAvg,
+      competence,
+      motivation,
+    } = row
     if (!(category in categoriesMap)) {
       categoriesMap[category] = {}
     }
-    categoriesMap[category][subCategory] = {category: subCategory, motivation, competence}
-    categoriesMap['mainCategories'][category] = {category, motivation: categoryMotivationAvg, competence: categoryCompetenceAvg}
+    categoriesMap[category][subCategory] = {
+      category: subCategory,
+      motivation,
+      competence,
+    }
+    categoriesMap['mainCategories'][category] = {
+      category,
+      motivation: categoryMotivationAvg,
+      competence: categoryCompetenceAvg,
+    }
   })
   const output = {}
   for (const category of Object.keys(categoriesMap)) {
@@ -663,43 +729,62 @@ export const employeeRadar = async ({ data }:{ data: EmployeeMotivationAndCompet
   }
   return {
     setNames: Object.keys(output),
-    sets: output
+    sets: output,
   }
 }
-
 
 export const competenceAreasReports = [
   { reportName: 'newCompetenceAverage' },
   { reportName: 'newMotivationAverage' },
 ]
 
-export const competenceAreas = async ({ data }: { data: CompetenceAndMotivationAverage[][] }) => {
+export const competenceAreas = async ({
+  data,
+}: {
+  data: CompetenceAndMotivationAverage[][]
+}) => {
   const [competence, motivation] = data
 
-  const categoriesMap = {mainCategories: {}}
+  const categoriesMap = { mainCategories: {} }
 
-  competence.forEach(row => {
+  competence.forEach((row) => {
     const { category, subCategory } = row
     const competence = row.value || null
     if (!(category in categoriesMap)) {
       categoriesMap[category] = {}
-      categoriesMap['mainCategories'][category] = { category, motivation: 0, competence: 0 }
+      categoriesMap['mainCategories'][category] = {
+        category,
+        motivation: 0,
+        competence: 0,
+      }
     }
-    categoriesMap[category][subCategory] = { category: subCategory, competence, motivation: null }
+    categoriesMap[category][subCategory] = {
+      category: subCategory,
+      competence,
+      motivation: null,
+    }
     categoriesMap['mainCategories'][category].competence += competence
   })
 
-  motivation.forEach(row => {
+  motivation.forEach((row) => {
     const { category, subCategory } = row
     const motivation = row.value || null
     if (!(category in categoriesMap)) {
       categoriesMap[category] = {}
-      categoriesMap['mainCategories'][category] = { category, motivation: 0, competence: 0 }
+      categoriesMap['mainCategories'][category] = {
+        category,
+        motivation: 0,
+        competence: 0,
+      }
     }
     if (subCategory in categoriesMap[category]) {
       categoriesMap[category][subCategory].motivation = motivation
     } else {
-      categoriesMap[category][subCategory] = { category: subCategory, competence: null, motivation }
+      categoriesMap[category][subCategory] = {
+        category: subCategory,
+        competence: null,
+        motivation,
+      }
     }
     categoriesMap['mainCategories'][category].motivation += motivation
   })
@@ -707,16 +792,19 @@ export const competenceAreas = async ({ data }: { data: CompetenceAndMotivationA
   const output = {}
   for (const category of Object.keys(categoriesMap)) {
     if (category !== 'mainCategories') {
-      categoriesMap['mainCategories'][category].competence /= Object.keys(categoriesMap[category]).length
-      categoriesMap['mainCategories'][category].motivation /= Object.keys(categoriesMap[category]).length
+      categoriesMap['mainCategories'][category].competence /= Object.keys(
+        categoriesMap[category]
+      ).length
+      categoriesMap['mainCategories'][category].motivation /= Object.keys(
+        categoriesMap[category]
+      ).length
     }
     output[category] = Object.values(categoriesMap[category])
   }
   return {
     setNames: Object.keys(output),
-    sets: output
+    sets: output,
   }
-
 }
 
 exports.hoursBilledPerCustomerReports = [{ reportName: 'perProject' }]

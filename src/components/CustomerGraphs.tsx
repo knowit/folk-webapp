@@ -2,9 +2,9 @@ import React from 'react'
 import DDItem, { DDChart } from '../data/DDItem'
 import { ChartSkeleton } from '../pages/EmployeeSite'
 
-
 export default function CustomerGraphs() {
-  const ubwMessage = "Dataene er fra første registrering i UBW og kan derfor være unøyaktige."
+  const ubwMessage =
+    'Dataene er fra første registrering i UBW og kan derfor være unøyaktige.'
 
   return (
     <div>
@@ -41,12 +41,11 @@ export default function CustomerGraphs() {
               type: 'Line',
               props: {
                 big: true,
-              }
+              },
             },
           ],
         }}
       />
     </div>
   )
-
 }

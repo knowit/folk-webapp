@@ -1,20 +1,20 @@
-import DDItem, { DDTable } from '../data/DDItem';
+import DDItem, { DDTable } from '../data/DDItem'
 import {
   CheckBoxHeaderCell,
   ConsultantCell,
   CustomerStatusCell,
   CvCell,
   ProjectStatusCell,
-} from '../data/components/table/DataCells';
-import EmployeeInfo from './EmployeeInfo';
-import { CustomerStatusData } from '../data/components/table/cells/CustomerStatusCell';
-import React from 'react';
-import { Skeleton } from '@material-ui/lab';
+} from '../data/components/table/DataCells'
+import EmployeeInfo from './EmployeeInfo'
+import { CustomerStatusData } from '../data/components/table/cells/CustomerStatusCell'
+import React from 'react'
+import { Skeleton } from '@material-ui/lab'
 
 export function EmployeeTable() {
   const TableSkeleton = () => (
     <Skeleton variant="rect" height={780} animation="wave" />
-  );
+  )
 
   return (
     <DDItem
@@ -29,7 +29,7 @@ export function EmployeeTable() {
             expandable: true,
             searchable: true,
             getSearchValue: (consultant: { value: string }) => {
-              return consultant.value;
+              return consultant.value
             },
             renderCell: ConsultantCell,
             renderExpanded: EmployeeInfo,
@@ -43,7 +43,7 @@ export function EmployeeTable() {
             renderCell: CustomerStatusCell,
             searchable: true,
             getSearchValue: (customer: CustomerStatusData) => {
-              return `${customer.customer} ${customer.workOrderDescription}`;
+              return `${customer.customer} ${customer.workOrderDescription}`
             },
           },
           { title: 'CV', renderCell: CvCell },
@@ -51,5 +51,5 @@ export function EmployeeTable() {
       }}
       SkeletonComponent={TableSkeleton}
     />
-  );
+  )
 }

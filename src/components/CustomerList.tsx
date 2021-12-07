@@ -1,54 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import { useFetchedData } from '../hooks/service';
-import CustomerDropdown from './CustomerDropdown';
-import {
-  Column,
-  getSearchableColumns,
-  SearchableColumn,
-} from '../data/DDTable';
-import { Grid } from '@material-ui/core';
-import CustomerFilter from './CustomerFilter';
-import { useCategories } from './CompetenceFilterInput';
-import { Skeleton } from '@material-ui/lab';
-import { GridItem } from './GridItem';
+import React, { useEffect, useState } from 'react'
+import { useFetchedData } from '../hooks/service'
+import CustomerDropdown from './CustomerDropdown'
+import { Column, getSearchableColumns, SearchableColumn } from '../data/DDTable'
+import { Grid } from '@material-ui/core'
+import CustomerFilter from './CustomerFilter'
+import { useCategories } from './CompetenceFilterInput'
+import { Skeleton } from '@material-ui/lab'
+import { GridItem } from './GridItem'
 
 interface Customers {
-  [key: string]: [];
+  [key: string]: []
 }
 
-export type Payload = { [key: string]: any };
+export type Payload = { [key: string]: any }
 
 export default function CustomerList() {
-  const [initialData, setInitialData] = useState<Payload>([]);
-  const [dropdowns, setDropdowns] = useState<any[]>([]);
+  const [initialData, setInitialData] = useState<Payload>([])
+  const [dropdowns, setDropdowns] = useState<any[]>([])
   const [searchableColumns, setSearchableColumns] =
-    useState<SearchableColumn[]>();
+    useState<SearchableColumn[]>()
 
   const [payload, pending] = useFetchedData<Payload>({
     url: '/api/data/employeeTable',
-  });
-  const categories = useCategories();
+  })
+  const categories = useCategories()
 
   function preparePayloadForTable() {
-    const statusIconData = 2;
-    const customerData = 3;
+    const statusIconData = 2
+    const customerData = 3
 
     if (Array.isArray(payload) && !pending) {
       payload.map((emp) => {
         if (emp.rowData[customerData].customer === undefined) {
-          emp.rowData[customerData] = { customer: 'Uten prosjekt' };
+          emp.rowData[customerData] = { customer: 'Uten prosjekt' }
         }
-        emp.rowData.splice(statusIconData, 1);
-      });
-      setInitialData(payload);
+        emp.rowData.splice(statusIconData, 1)
+      })
+      setInitialData(payload)
 
-      const groups = groupByCustomers(payload, 2); // customerIndex changes after splice
-      createDropdowns(groups);
+      const groups = groupByCustomers(payload, 2) // customerIndex changes after splice
+      createDropdowns(groups)
     }
   }
 
   function handleColumns(columns: Column[]) {
-    setSearchableColumns(getSearchableColumns(columns));
+    setSearchableColumns(getSearchableColumns(columns))
   }
 
   function groupByCustomers(payload: Payload, customerDataIndex: number) {
@@ -57,18 +53,17 @@ export default function CustomerList() {
         groups: { [x: string]: any },
         employee: { rowData: { customer: string | number }[] }
       ) => {
-        const group =
-          groups[employee.rowData[customerDataIndex].customer] || [];
-        group.push(employee);
-        groups[employee.rowData[customerDataIndex].customer] = group;
-        return groups;
+        const group = groups[employee.rowData[customerDataIndex].customer] || []
+        group.push(employee)
+        groups[employee.rowData[customerDataIndex].customer] = group
+        return groups
       },
       {}
-    );
+    )
   }
 
   function createDropdowns(customers: Customers, expand?: boolean) {
-    const dropdowns: any[] = [];
+    const dropdowns: any[] = []
     !pending &&
       customers &&
       Object.keys(customers)
@@ -83,19 +78,19 @@ export default function CustomerList() {
               callback={handleColumns}
             />
           )
-        );
-    setDropdowns(dropdowns);
+        )
+    setDropdowns(dropdowns)
   }
 
   const handleSearchAndFilter = (filtered: []) => {
-    const expand = filtered.length === initialData.length;
-    const grouped = groupByCustomers(filtered, 2);
-    createDropdowns(grouped, !expand);
-  };
+    const expand = filtered.length === initialData.length
+    const grouped = groupByCustomers(filtered, 2)
+    createDropdowns(grouped, !expand)
+  }
 
   useEffect(() => {
-    preparePayloadForTable();
-  }, [payload, pending]);
+    preparePayloadForTable()
+  }, [payload, pending])
 
   return (
     <Grid container>
@@ -123,5 +118,5 @@ export default function CustomerList() {
         </GridItem>
       )}
     </Grid>
-  );
+  )
 }

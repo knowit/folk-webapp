@@ -4,20 +4,26 @@ import { GridItem } from '../components/GridItem'
 import React from 'react'
 
 export interface SimpleComponentProps {
-  payload: DDPayload;
-  props: DDPassProps;
-  callback(columns: Column[]): void;
+  payload: DDPayload
+  props: DDPassProps
+  callback(columns: Column[]): void
 }
 
 export interface SimpleItemProps {
-  fullSize?: boolean;
-  dataComponentProps?: DDPassProps;
-  Component: (props: SimpleComponentProps ) => JSX.Element;
-  payload: DDPayload;
-  callback(columns: Column[]): void;
+  fullSize?: boolean
+  dataComponentProps?: DDPassProps
+  Component: (props: SimpleComponentProps) => JSX.Element
+  payload: DDPayload
+  callback(columns: Column[]): void
 }
 
-export function SimpleDDItem({Component, fullSize, payload, callback, dataComponentProps = {}}: SimpleItemProps ) {
+export function SimpleDDItem({
+  Component,
+  fullSize,
+  payload,
+  callback,
+  dataComponentProps = {},
+}: SimpleItemProps) {
   return (
     <GridItem fullSize={fullSize}>
       <Component

@@ -1,25 +1,24 @@
-import React, { useState } from 'react';
-import GetApp from '@material-ui/icons/GetApp';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import { withStyles } from '@material-ui/core';
-import { NoData } from '../../../../components/ErrorText';
-import CvDialog from '../../../../components/CvDialog';
+import React, { useState } from 'react'
+import GetApp from '@material-ui/icons/GetApp'
+import makeStyles from '@material-ui/core/styles/makeStyles'
+import { withStyles } from '@material-ui/core'
+import { NoData } from '../../../../components/ErrorText'
+import CvDialog from '../../../../components/CvDialog'
 
 interface CvCellData {
-  no_pdf: string;
-  int_pdf: string;
-  no_word: string;
-  int_word: string;
+  no_pdf: string
+  int_pdf: string
+  no_word: string
+  int_word: string
 }
 
 interface ConsultantType {
-  value: string;
-  image: string | null;
-  competenceUrl: string;
+  value: string
+  image: string | null
+  competenceUrl: string
 }
 
-type rowDataArray = [ConsultantType, string, string, string, CvCellData];
-
+type rowDataArray = [ConsultantType, string, string, string, CvCellData]
 
 const useStyles = makeStyles({
   root: {
@@ -27,7 +26,7 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
   },
-});
+})
 
 const DownloadIcon = withStyles({
   root: {
@@ -37,24 +36,24 @@ const DownloadIcon = withStyles({
       color: '#333333',
     },
   },
-})(GetApp);
+})(GetApp)
 
 export default function CvCell({
   data,
   rowData,
 }: {
-  data: CvCellData;
-  rowData: rowDataArray;
+  data: CvCellData
+  rowData: rowDataArray
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   const handleClickOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
   const handleClose = () => {
-    setOpen(false);
-  };
-  const classes = useStyles();
+    setOpen(false)
+  }
+  const classes = useStyles()
   return data ? (
     <>
       <div className={classes.root} title="last ned CV">
@@ -69,5 +68,5 @@ export default function CvCell({
     </>
   ) : (
     <NoData />
-  );
+  )
 }

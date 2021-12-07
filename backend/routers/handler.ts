@@ -1,9 +1,9 @@
-import reports  from '../dataplattform/lib'
+import reports from '../dataplattform/lib'
 import * as aggregation from '../repository/data'
 import reporting from '../reporting'
-import {Request} from 'express'
+import { Request } from 'express'
 
-async function handler (req: Request) {
+async function handler(req: Request) {
   // Request data
   const endpoint = req.params.source
   const parameters = req.query
@@ -13,7 +13,7 @@ async function handler (req: Request) {
   reporting({
     message: 'Handler received request: ',
     data: { endpoint, parameters },
-    type: 'info'
+    type: 'info',
   })
 
   // Check endpoint's handler and reports
@@ -23,33 +23,35 @@ async function handler (req: Request) {
   if (!endpointHandler) {
     throw reporting({
       status: 404,
-      message: 'No endpoint with name'
+      message: 'No endpoint with name',
     })
   } else if (!endpointReports) {
     // Return endpoint without making any requests
     reporting({
       status: 202,
       message: 'No reports given for endpoint',
-      type: 'warning'
+      type: 'warning',
     })
 
     return await endpointHandler()
   }
 
   // Get endpoint's reports data
-  const data = await reports(accessToken, endpointReports, parameters)
-    .catch(err => {
+  const data = await reports(accessToken, endpointReports, parameters).catch(
+    (err) => {
       throw err
-    })
+    }
+  )
 
   // Run data aggregation for endpoint
-  const result = await endpointHandler({data, parameters})
-    .catch((err: string) => {
+  const result = await endpointHandler({ data, parameters }).catch(
+    (err: string) => {
       throw reporting({
         message: err,
-        external: false
+        external: false,
       })
-    })
+    }
+  )
 
   return result
 }

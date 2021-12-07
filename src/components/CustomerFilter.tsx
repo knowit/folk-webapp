@@ -1,20 +1,29 @@
 import React, { useEffect, useReducer } from 'react'
 import { GridItemHeader } from './GridItem'
 import SearchInput from './SearchInput'
-import {  SearchableColumn, TableState } from '../data/DDTable'
-import { reducer }from './FilterSearch'
-import CompetenceFilterInput, { CategoryWithGroup } from './CompetenceFilterInput'
+import { SearchableColumn, TableState } from '../data/DDTable'
+import { reducer } from './FilterSearch'
+
 import { FilterHeader } from './FilterHeader'
+import CompetenceFilterInput, {
+  CategoryWithGroup,
+} from './CompetenceFilterInput'
 
 interface CustomerFilterProps {
-  title: string;
-  filter: any;
-  employees: any;
-  searchableColumns: SearchableColumn[];
-  categories: CategoryWithGroup[];
+  title: string
+  filter: any
+  employees: any
+  searchableColumns: SearchableColumn[]
+  categories: CategoryWithGroup[]
 }
 
-export default function CustomerFilter({title, filter, employees, searchableColumns, categories }: CustomerFilterProps) {
+export default function CustomerFilter({
+  title,
+  filter,
+  employees,
+  searchableColumns,
+  categories,
+}: CustomerFilterProps) {
   const allRows = employees as { rowData: any[] }[]
 
   const initialState: TableState = {
@@ -24,7 +33,7 @@ export default function CustomerFilter({title, filter, employees, searchableColu
     competenceFilter: [],
     competenceThreshold: 3,
     searchTerm: '',
-  };
+  }
 
   const handleSearchAndFilter = (rows: any[]) => {
     filter(rows)
@@ -38,10 +47,7 @@ export default function CustomerFilter({title, filter, employees, searchableColu
 
   return (
     <>
-      <GridItemHeader
-        title={title}
-        green
-      >
+      <GridItemHeader title={title} green>
         <CompetenceFilterInput
           filterList={state.competenceFilter}
           dispatch={dispatch}
@@ -68,5 +74,4 @@ export default function CustomerFilter({title, filter, employees, searchableColu
       )}
     </>
   )
-
 }
