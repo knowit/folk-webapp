@@ -7,23 +7,23 @@ export const range = (x: number, y: number) =>
       while (x <= y) yield x++
     })()
   )
-export type EmployeeInformation = { 
-  user_id: string, 
-  guid: string, 
-  navn: string, 
-  manager: string, 
-  title: string, 
-  link: string, 
-  degree: string, 
+export type EmployeeInformation = {
+  user_id: string,
+  guid: string,
+  navn: string,
+  manager: string,
+  title: string,
+  link: string,
+  degree: string,
   image_key: string,
-  email: string, 
-  customer: string, 
-  weight: number, 
+  email: string,
+  customer: string,
+  weight: number,
   work_order_description: string}
 
 type MergeEmployees = EmployeeInformation & {
   customerArray:  {
-    customer: string, 
+    customer: string,
     wordOrderDescription: string,
     weight: number
   }[]
@@ -50,4 +50,8 @@ export const mergeEmployees = (allEmployees: EmployeeInformation[]): MergeEmploy
   return Object.values(mergedEmployees)
 }
 
-
+export const sum = (data, property) => {
+  return data.reduce((a, b) => {
+    return a + b[property]
+  }, 0)
+}

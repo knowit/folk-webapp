@@ -1,4 +1,4 @@
-import { range, mergeEmployees, EmployeeInformation } from './util'
+import { range, mergeEmployees, EmployeeInformation, sum } from './util'
 import { v4 as uuid } from 'uuid'
 
 /**
@@ -10,7 +10,7 @@ import { v4 as uuid } from 'uuid'
  */
 
 const getCategoryScoresForEmployee = (
-  employeeEmail: string, 
+  employeeEmail: string,
   categoryList: EmployeeMotivationAndCompetence[]) => {
   const employeeCategories = categoryList.filter(categoryRow => categoryRow.email === employeeEmail)
   const employeeMotivation = {}
@@ -45,7 +45,7 @@ type EmployeeTable ={
 }
 export const employeeTableReports = [
   { reportName: 'employeeInformation' },
-  { reportName: 'employeeMotivationAndCompetence' }, 
+  { reportName: 'employeeMotivationAndCompetence' },
 ]
 /**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
 export const employeeTable = async ({data}: EmployeeTable ) => {
@@ -110,7 +110,7 @@ export const employeeExperienceReports = ({ parameters: { user_id } = {} }: Repo
 type EmpExperience = {
   data: {
     user_id: string,
-    navn: string, 
+    navn: string,
     customer: string,
     description: string,
     year_from: number,
@@ -437,7 +437,7 @@ function dateRange(startDate: string, endDate: string) {
 }
 
 type FagEvent = {
-  event_summary: string, 
+  event_summary: string,
   time_from: string,
   time_to: string
 }
@@ -547,12 +547,12 @@ export const competenceAmount = async ({ data }: { data: EmployeeMotivationAndCo
   const emailMap = {}
   data.forEach(employeeRow => {
     const { categoryMotivationAvg, categoryCompetenceAvg, category, subCategory, motivation, competence, email } = employeeRow
-    
+
     if (!(category in categoriesMap)) {
       categoriesMap['mainCategories'][category] = {'competenceAmount': 0, 'motivationAmount': 0, category: category}
       categoriesMap[category] = {}
     }
-    
+
     if (!(subCategory in categoriesMap[category])) {
       categoriesMap[category][subCategory] = {'competenceAmount': 0, 'motivationAmount': 0, category: subCategory}
     }
@@ -565,7 +565,7 @@ export const competenceAmount = async ({ data }: { data: EmployeeMotivationAndCo
       if (categoryMotivationAvg > THRESHOLD) {
         categoriesMap['mainCategories'][category].motivationAmount += 1
       }
-  
+
       if (categoryCompetenceAvg > THRESHOLD) {
         categoriesMap['mainCategories'][category].competenceAmount += 1
       }
@@ -719,3 +719,80 @@ export const competenceAreas = async ({ data }: { data: CompetenceAndMotivationA
 
 }
 
+exports.hoursBilledPerCustomerReports = [{ reportName: 'perProject' }]
+
+exports.hoursBilledPerCustomer = async ({ data }) => {
+  const groupByCustomer = {}
+
+  data.forEach((perProject) => {
+    const group = groupByCustomer[perProject.costumer] || []
+    group.push(perProject)
+    groupByCustomer[perProject.customer] = group
+  })
+
+  const customerHours = Object.keys(groupByCustomer).map(
+    (key) =>
+      (groupByCustomer[key] = {
+        kunde: key,
+        timer: sum(groupByCustomer[key], 'hours'),
+      })
+  )
+
+  return {
+    setNames: ['Customers'],
+    sets: {
+      Customers: customerHours,
+    },
+  }
+}
+
+exports.hoursBilledPerWeekReports = [{ reportName: 'perProject' }]
+
+type LineGraphData = {
+  id: string
+  data: Array<any>
+}
+
+exports.hoursBilledPerWeek = async ({ data }) => {
+  const groupedByCustomer = {}
+
+  data.forEach((elem) => {
+    const group = groupedByCustomer[elem.customer] || []
+    group.push(elem)
+    groupedByCustomer[elem.customer] = group
+  })
+
+  Object.keys(groupedByCustomer).forEach((key) => {
+    groupedByCustomer[key] = groupedByCustomer[key].map((data) => ({
+      x: data.reg_period,
+      y: data.hours,
+    }))
+  })
+
+  Object.keys(groupedByCustomer).forEach((key) => {
+    groupedByCustomer[key] = Array.from(
+      groupedByCustomer[key].reduce(
+        (m, { x, y }) => m.set(x, (m.get(x) || 0) + y),
+        new Map()
+      ),
+      ([x, y]) => ({ x, y })
+    ).sort((a, b) => b.x - a.x) // ascending sort of weeks
+  })
+
+  const lineGraphData = Object.entries(groupedByCustomer)
+    .map(
+      ([key, value]) =>
+        ({
+          id: key,
+          data: value,
+        } as LineGraphData)
+    )
+    .sort((a, b) => b.data.length - a.data.length) // ascending sort by number of week entries
+
+  return {
+    setNames: ['Lines'],
+    sets: {
+      Lines: lineGraphData,
+    },
+  }
+}
