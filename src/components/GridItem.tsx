@@ -40,6 +40,15 @@ const useStyles = makeStyles(() =>
       borderRight: '1px solid #E4E1DB',
       borderRadius: '0px 0px 6px 6px',
     },
+    knowitGreen: {
+      backgroundColor: '#00897B',
+      width: '100%',
+      height: '70px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      margin: '0px',
+    },
   })
 )
 
@@ -48,6 +57,7 @@ interface GridItemHeaderProps {
   description?: string
   children?: React.ReactNode | React.ReactNode[]
   big?: boolean
+  green?: boolean
 }
 
 export function GridItemHeader({
@@ -55,13 +65,17 @@ export function GridItemHeader({
   description,
   children = null,
   big,
+  green = false,
 }: GridItemHeaderProps) {
   const classes = useStyles()
   const headerHeight = big ? classes.bigGridHeaderRoot : null
   const fontSize = big ? classes.BigGridHeaderTitle : null
+  const knowitGreen = green ? classes.knowitGreen : null
 
   return (
-    <div className={[classes.gridHeaderRoot, headerHeight].join(' ')}>
+    <div
+      className={[classes.gridHeaderRoot, headerHeight, knowitGreen].join(' ')}
+    >
       <Grid container direction="row" alignItems="center">
         <h3 className={[classes.gridHeaderTitle, fontSize].join(' ')}>
           {title}

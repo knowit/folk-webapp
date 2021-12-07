@@ -30,7 +30,7 @@ const TableCellNoBorders = withStyles({
   },
 })(TableCell)
 
-const useStyles = makeStyles((theme: Theme) =>
+export const tableStyles = makeStyles((theme: Theme) =>
   createStyles({
     tableHead: {
       fontWeight: 'bold',
@@ -112,7 +112,7 @@ function GetCell({
   rowStates: RowStates
   dispatch: Dispatch<Action>
 }): JSX.Element {
-  const classes = useStyles()
+  const classes = tableStyles()
   const data = cellData !== null ? cellData : '-'
   if (expandable && RenderCell) {
     return (
@@ -186,7 +186,7 @@ function MuiVirtualizedTable({
   rowGetter,
   rows,
 }: MuiVirtualizedTableProps) {
-  const classes = useStyles()
+  const classes = tableStyles()
   const [state, dispatch] = useReducer(reducer, initialState)
 
   let ArrayRef: any

@@ -30,6 +30,8 @@
     "@nivo/pie": "^0.67.0",
     "@nivo/radar": "^0.67.0",
     "@nivo/sunburst": "^0.67.0",
+    "ansi-html-community": "0.0.8",
+    "browserslist": "^4.18.1",
     "http-proxy-middleware": "^1.0.5",
     "react": "^17.0.1",
     "react-cookie": "^4.0.3",
@@ -45,7 +47,8 @@
     "is-svg": "^4.3.1",
     "ssri": "^8.0.1",
     "coa": "2.0.2",
-    "rc": "1.2.8"
+    "rc": "1.2.8",
+    "immer": "9.0.6"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -103,7 +106,7 @@
     "@types/react-virtualized": "^9.21.10",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
-    "cross-env": "^7.0.2",
+    "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
     "eslint": "^7.22.0",
     "eslint-plugin-react": "^7.21.5",

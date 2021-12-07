@@ -6,6 +6,11 @@ type BarChartsData = { [chartLabel: string]: number | string } & {
   x: number | string
 }
 
+export enum Layout {
+  VERTICAL = 'vertical',
+  HORIZONTAL = 'horizontal',
+}
+
 interface BarChartsProps {
   yLabels: string[]
   dataKey: string
@@ -13,6 +18,7 @@ interface BarChartsProps {
   big?: boolean
   maxValue: number | 'auto'
   tooltipValues: string[]
+  layout: Layout | Layout.VERTICAL
 }
 
 const splitText = (longText: string | number) => {
@@ -67,6 +73,7 @@ export default function Bar({
   big,
   maxValue,
   tooltipValues,
+  layout,
 }: BarChartsProps) {
   const height = big ? '400px' : '300px'
   return (
@@ -83,6 +90,7 @@ export default function Bar({
         axisTop={null}
         axisRight={null}
         borderRadius={3}
+        layout={layout}
         axisBottom={{
           renderTick: CustomTick,
         }}

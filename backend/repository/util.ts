@@ -52,3 +52,9 @@ export const mergeEmployees = (
   })
   return Object.values(mergedEmployees)
 }
+
+export const sum = (data, property) => {
+  return data.reduce((a, b) => {
+    return a + b[property]
+  }, 0)
+}

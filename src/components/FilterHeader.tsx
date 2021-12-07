@@ -1,8 +1,9 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import React, { Dispatch } from 'react'
 import CloseIcon from '@material-ui/icons/Close'
-import { Action, SearchableColumn } from '../data/DDTable'
+import { SearchableColumn } from '../data/DDTable'
 import { Mark, Slider } from '@material-ui/core'
+import { Action } from './FilterSearch'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -12,6 +13,7 @@ const useStyles = makeStyles(() =>
       padding: '0 15px',
       display: 'flex',
       justifyContent: 'flex-start',
+      width: '100%',
     },
     filterHeaderTitle: {
       paddingTop: '20px',
