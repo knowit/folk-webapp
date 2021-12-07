@@ -1,4 +1,4 @@
-import Header from './Header'
+import Header from '../components/Header'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
