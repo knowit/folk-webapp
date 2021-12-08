@@ -3,9 +3,9 @@ import {
   Tooltip,
   TooltipProps,
   withStyles,
-} from '@material-ui/core';
-import React from 'react';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+} from '@material-ui/core'
+import React from 'react'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 
 const StatusCircle = ({ color }: { color: string }) => {
   const Circle = withStyles(() => ({
@@ -14,10 +14,10 @@ const StatusCircle = ({ color }: { color: string }) => {
       width: '30px',
       height: '30px',
     },
-  }))(FiberManualRecordIcon);
+  }))(FiberManualRecordIcon)
 
-  return <Circle color="primary" />;
-};
+  return <Circle color="primary" />
+}
 
 const useStyles = makeStyles({
   root: {
@@ -25,10 +25,10 @@ const useStyles = makeStyles({
     justifyContent: 'center',
     width: '100%',
   },
-});
+})
 
 interface ColorMap {
-  [index: string]: string;
+  [index: string]: string
 }
 
 const toolTipStyles = makeStyles((theme) => ({
@@ -41,38 +41,38 @@ const toolTipStyles = makeStyles((theme) => ({
     fontSize: theme.typography.pxToRem(13),
     border: '1px solid #E4E1DB',
   },
-}));
+}))
 
 function StatusTooltip(props: TooltipProps) {
-  const classes = toolTipStyles();
-  return <Tooltip arrow classes={classes} {...props} />;
+  const classes = toolTipStyles()
+  return <Tooltip arrow classes={classes} {...props} />
 }
 
 const applyTitle = (status?: { data: string }): string => {
   switch (status?.data) {
     case 'orange':
-      return 'Er åpen for å bytte prosjekt';
+      return 'Er åpen for å bytte prosjekt'
     case 'yellow':
-      return 'Ønsker å bytte prosjekt';
+      return 'Ønsker å bytte prosjekt'
     case 'red':
-      return 'Jeg er opptatt i prosjekt';
+      return 'Jeg er opptatt i prosjekt'
     case 'green':
-      return 'Jeg er ikke i prosjekt';
+      return 'Jeg er ikke i prosjekt'
   }
 
-  return '';
-};
+  return ''
+}
 
 export default function ProjectStatusCell(status?: { data: string }) {
-  const classes = useStyles();
+  const classes = useStyles()
   const colors: ColorMap = {
     green: '#4C8E00',
     yellow: '#ffd500',
     orange: '#ff8800',
     red: '#D10000',
-  };
-  const color = status ? colors[status.data] : '#777777';
-  const toolTipTitle: string = applyTitle(status);
+  }
+  const color = status ? colors[status.data] : '#777777'
+  const toolTipTitle: string = applyTitle(status)
 
   return (
     <div className={classes.root}>
@@ -82,5 +82,5 @@ export default function ProjectStatusCell(status?: { data: string }) {
         </div>
       </StatusTooltip>
     </div>
-  );
+  )
 }

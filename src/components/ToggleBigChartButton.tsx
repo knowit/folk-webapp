@@ -1,7 +1,7 @@
-import { Theme, withStyles } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import { Fullscreen, FullscreenExit } from '@material-ui/icons';
-import React from 'react';
+import { Theme, withStyles } from '@material-ui/core'
+import IconButton from '@material-ui/core/IconButton'
+import { Fullscreen, FullscreenExit } from '@material-ui/icons'
+import React from 'react'
 
 const FullscreenIconButton = withStyles((theme: Theme) => ({
   root: {
@@ -16,26 +16,26 @@ const FullscreenIconButton = withStyles((theme: Theme) => ({
       },
     },
   },
-}))(IconButton);
+}))(IconButton)
 
 const CloseFullscreenIcon = withStyles({
   root: { height: '60px', width: '60px' },
-})(FullscreenExit);
+})(FullscreenExit)
 
 const OpenFullscreenIcon = withStyles({
   root: { height: '42px', width: '42px' },
-})(Fullscreen);
+})(Fullscreen)
 
 interface ToggleBigChartButtonProps {
-  big: boolean;
-  onChange: () => void;
+  big: boolean
+  onChange: () => void
 }
 
 export function ToggleBigChartButton({
   big,
   onChange,
 }: ToggleBigChartButtonProps) {
-  const altText = big ? 'Lukk stor størrelse' : 'Utvid til stor størrelse';
+  const altText = big ? 'Lukk stor størrelse' : 'Utvid til stor størrelse'
 
   return (
     <FullscreenIconButton
@@ -47,5 +47,5 @@ export function ToggleBigChartButton({
     >
       {big ? <CloseFullscreenIcon /> : <OpenFullscreenIcon />}
     </FullscreenIconButton>
-  );
+  )
 }

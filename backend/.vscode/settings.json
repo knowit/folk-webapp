@@ -1,0 +1,17 @@
+{
+  // Git
+  "git.confirmSync": false,
+  "git.autofetch": true,
+
+  // Editor
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "files.autoSave": "onFocusChange",
+
+  // ESLint
+  "eslint.alwaysShowStatus": true,
+
+  // Prettier
+  "prettier.semi": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}

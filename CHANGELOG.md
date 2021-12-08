@@ -1,6 +1,14 @@
 # Changelog
-All notable changes to this project will be documented in this file.
 
+All notable changes to this project will be documented in this file.
+## [4.0.0] - 2021-11-04
+### Added
+  - Added privacy policy to footer
+### Changed:
+- folk.knowit.no now uses the new production environment as the backend
+- dev.folk.knowit.no now uses an actual development environment with artificial data
+- The code that is responsible for handling data from kompetansekartlegging has been altered since the ingested format has changed drastically
+ 
 ## [3.2.0] - 2021-06-17
 ### Added
 - Showing number of rows currently displayed, respecting filtering and search.

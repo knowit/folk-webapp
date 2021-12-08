@@ -1,66 +1,66 @@
-import React from 'react';
-import { Redirect, useLocation } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
-import DDItem, { DDChart } from '../data/DDItem';
-import { useFetchedData } from '../hooks/service';
+import React from 'react'
+import { Redirect, useLocation } from 'react-router-dom'
+import { makeStyles } from '@material-ui/core'
+import { Skeleton } from '@material-ui/lab'
+import DDItem, { DDChart } from '../data/DDItem'
+import { useFetchedData } from '../hooks/service'
 import {
   GetProjects,
   GetWorkExperience,
   startedInKnowit,
   totalExperience,
-} from '../components/EmployeeInfo';
-import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg';
-import { CustomerStatusData } from '../data/components/table/cells/CustomerStatusCell';
+} from '../components/EmployeeInfo'
+import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg'
+import { CustomerStatusData } from '../data/components/table/cells/CustomerStatusCell'
 
 type WorkExperience = {
-  employer: string;
-  month_from: number;
-  year_from: number;
-  month_to: number;
-  year_to: number;
-};
+  employer: string
+  month_from: number
+  year_from: number
+  month_to: number
+  year_to: number
+}
 type EmpData = {
-  email: string;
-  navn: string;
-  title: string;
-  user_id: string;
-};
+  email: string
+  navn: string
+  title: string
+  user_id: string
+}
 
 export interface ProjectExperience {
-  customer: string;
-  project: string;
-  time_to: string;
-  time_from: string;
+  customer: string
+  project: string
+  time_to: string
+  time_from: string
 }
 
 export interface ExperienceData {
-  name: string;
-  experience: ProjectExperience[];
+  name: string
+  experience: ProjectExperience[]
 }
 
 type EmpSiteData = {
-  email_id: string;
-  user_id: string;
-  employee: EmpData;
-  image: string;
+  email_id: string
+  user_id: string
+  employee: EmpData
+  image: string
   tags: {
-    skill: string;
-    role: string;
-    language: string;
-  };
-  workExperience: WorkExperience[];
-  degree: string;
-  manager: string;
-  guid: string;
+    skill: string
+    role: string
+    language: string
+  }
+  workExperience: WorkExperience[]
+  degree: string
+  manager: string
+  guid: string
   links: {
-    no_pdf: string;
-    int_pdf: string;
-    no_word: string;
-    int_word: string;
-  };
-  customerArray: CustomerStatusData[];
-};
+    no_pdf: string
+    int_pdf: string
+    no_word: string
+    int_word: string
+  }
+  customerArray: CustomerStatusData[]
+}
 
 const useStyles = makeStyles({
   root: {
@@ -101,30 +101,30 @@ const useStyles = makeStyles({
     lineHeight: '2em',
   },
   nextPart: {},
-});
+})
 
 export const ChartSkeleton = () => (
   <Skeleton variant="rect" height={320} width={400} animation="wave" />
-);
+)
 
 export default function EmployeeSite() {
-  const location = useLocation();
-  const email = location.pathname.split('/')[2];
-  const idRegex = /(\w+\.?)*@knowit.no/;
-  const url = '/api/data/empData?email=' + email;
-  const [data, pending] = useFetchedData<EmpSiteData>({ url });
+  const location = useLocation()
+  const email = location.pathname.split('/')[2]
+  const idRegex = /(\w+\.?)*@knowit.no/
+  const url = '/api/data/empData?email=' + email
+  const [data, pending] = useFetchedData<EmpSiteData>({ url })
 
-  const classes = useStyles();
+  const classes = useStyles()
 
-  const email_id = data ? data.email_id : null;
-  const user_id = data ? data.user_id : null;
-  const emp = data ? data.employee : null;
-  const tags = data ? data.tags : null;
+  const email_id = data ? data.email_id : null
+  const user_id = data ? data.user_id : null
+  const emp = data ? data.employee : null
+  const tags = data ? data.tags : null
   const [expData, expPending] = useFetchedData<ExperienceData>({
     url: `/api/data/employeeExperience?user_id=${user_id}`,
-  });
+  })
   if (!email.match(idRegex)) {
-    return <Redirect to={{ pathname: '/404' }} />;
+    return <Redirect to={{ pathname: '/404' }} />
   }
 
   return (
@@ -328,17 +328,17 @@ export default function EmployeeSite() {
         )}
       </div>
     </div>
-  );
+  )
 }
 
 const PrintCustomers = (data: {
-  customerArray: CustomerStatusData[] | undefined;
+  customerArray: CustomerStatusData[] | undefined
 }) => {
   if (!data.customerArray || !data.customerArray[0].customer)
-    return <div>-</div>;
+    return <div>-</div>
   data.customerArray.sort(
     (customerA, customerB) => customerA.weight - customerB.weight
-  );
+  )
   return (
     <>
       {data.customerArray.map((customer, index) => {
@@ -347,8 +347,8 @@ const PrintCustomers = (data: {
             <b>{customer.customer}: </b>
             {customer.workOrderDescription}
           </div>
-        );
+        )
       })}
     </>
-  );
-};
+  )
+}
