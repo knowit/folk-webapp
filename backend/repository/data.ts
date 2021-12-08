@@ -245,11 +245,11 @@ export const fagtimer = async ({ data }: { data: FagActivity[] }) => {
 }
 
 export const experienceDistributionReports = [
-  { reportName: 'yearsSinceSchoolDist' },
+  { reportName: 'workExperienceDistributedInYears' },
 ]
 
 type YearsSinceSchoolDist = {
-  years: number
+  years_working: number
   count: number
 }
 /** Dette endepunktet henter ut erfarings-fordelingen blant de ansatte.
@@ -270,25 +270,26 @@ export const experienceDistribution = async ({
       { years: '21 til 25 år', count: 0 },
       { years: '26 til 30 år', count: 0 },
       { years: 'over 31 år', count: 0 },
+      { years: 'Ukjent erfaring', count: 0 },
     ]
 
     const groupedList = [
-      { years: 'Under 1 år', count: 0 },
       { years: '1 til 2 år', count: 0 },
       { years: '3 til 5 år', count: 0 },
       { years: '6 til 10 år', count: 0 },
       { years: 'over 10 år', count: 0 },
+      { years: 'Ukjent erfaring', count: 0 },
     ]
 
     list.forEach((item) => {
-      const years = Number(item.years)
+      const years = Number(item.years_working)
       const count = Number(item.count)
       if (years === 0) {
-        detailedGroupedList[0].count += count
-        groupedList[0].count += count
+        detailedGroupedList[8].count += count
+        groupedList[4].count += count
       } else if (years === 1) {
         detailedGroupedList[0].count += count
-        groupedList[1].count += count
+        groupedList[0].count += count
       } else if (years === 2) {
         detailedGroupedList[1].count += count
         groupedList[1].count += count
