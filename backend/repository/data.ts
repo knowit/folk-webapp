@@ -1,4 +1,12 @@
-import { range, mergeEmployees, EmployeeInformation, sum } from './util'
+import {
+  range,
+  mergeEmployees,
+  EmployeeInformation,
+  sum,
+  getYear,
+  getWeek,
+  statusColorCode,
+} from './util'
 import { v4 as uuid } from 'uuid'
 
 /**
@@ -8,29 +16,6 @@ import { v4 as uuid } from 'uuid'
  *
  * @return {object} All categories with scores for the employee
  */
-
-const getCategoryScoresForEmployee = (
-  employeeEmail: string,
-  categoryList: EmployeeMotivationAndCompetence[]
-) => {
-  const employeeCategories = categoryList.filter(
-    (categoryRow) => categoryRow.email === employeeEmail
-  )
-  const employeeMotivation = {}
-  const employeeCompetence = {}
-  employeeCategories.forEach((employeeRow) => {
-    employeeMotivation[employeeRow.subCategory] = employeeRow.motivation
-    employeeCompetence[employeeRow.subCategory] = employeeRow.competence
-  })
-  return [employeeMotivation, employeeCompetence]
-}
-const getStorageUrl = (key: string) => {
-  if (key !== undefined) {
-    return `${process.env.STORAGE_URL}/${key}`
-  } else {
-    return undefined
-  }
-}
 
 type EmployeeMotivationAndCompetence = {
   email: string
@@ -43,15 +28,162 @@ type EmployeeMotivationAndCompetence = {
 }
 
 type EmployeeTable = {
-  data: [EmployeeInformation[], EmployeeMotivationAndCompetence[]]
+  data: [
+    EmployeeInformation[],
+    EmployeeMotivationAndCompetence[],
+    JobRotation[],
+    EmployeeUBW[]
+  ]
 }
+
+type CategoryScores = [
+  Motivation: Record<string, number>,
+  Competence: Record<string, number>
+]
+const getCategoryScoresForEmployee = (
+  employeeEmail: string,
+  categoryList: EmployeeMotivationAndCompetence[]
+): CategoryScores => {
+  const employeeCategories = categoryList.filter(
+    (categoryRow) => categoryRow.email === employeeEmail
+  )
+  const employeeMotivation = {}
+  const employeeCompetence = {}
+  employeeCategories.forEach((employeeRow) => {
+    employeeMotivation[employeeRow.subCategory] = employeeRow.motivation
+    employeeCompetence[employeeRow.subCategory] = employeeRow.competence
+  })
+
+  return [employeeMotivation, employeeCompetence]
+}
+const getStorageUrl = (key: string) => {
+  if (key !== undefined) {
+    return `${process.env.STORAGE_URL}/${key}`
+  } else {
+    return undefined
+  }
+}
+
+const findProjectStatusForEmployee = (
+  jobRotationEmployees: JobRotation[],
+  employeeUBWs: EmployeeUBW[],
+  email: string
+): string => {
+  const currentRegPeriod = parseInt(getYear() + getWeek(), 10)
+  const registeredHoursForEmployee = employeeUBWs.filter(
+    (UBWObject) => UBWObject.email === email
+  )
+  const latestRegPeriod = Math.max(
+    ...registeredHoursForEmployee.map((registeredHours: EmployeeUBW) => {
+      return registeredHours.reg_period
+    })
+  )
+
+  const [totalExternalProjectHours, totalLocalProjectHours]: TotalProjectHours =
+    countProjectHours(registeredHoursForEmployee, latestRegPeriod)
+  const [wantNewProject, openForNewProject]: JobRotationStatus =
+    jobRotationStatus(jobRotationEmployees, email)
+
+  const inProjectStatus =
+    currentRegPeriod - latestRegPeriod < 5 &&
+    totalExternalProjectHours > totalLocalProjectHours
+  const statusColor = statusColorCode(
+    wantNewProject,
+    openForNewProject,
+    inProjectStatus
+  )
+
+  return statusColor
+}
+
+type TotalProjectHours = [
+  ExternalProjectHours: number,
+  LocalProjectHours: number
+]
+
+const countProjectHours = (
+  registeredHours: EmployeeUBW[],
+  latestRegPeriod: number
+): TotalProjectHours => {
+  let totalExternalProjectHours = 0
+  let totalLocalProjectHours = 0
+
+  /**Kan hende project_type ikke kommer til å ha disse navnene og at de bare var placeholdere. Da må i så fall skillet mellom prosjektene fjernes også telles det bare vanlig opp */
+  registeredHours.forEach((registeredHour: EmployeeUBW) => {
+    if (registeredHour.reg_period === latestRegPeriod) {
+      switch (registeredHour.project_type) {
+        case 'External Projects':
+          totalExternalProjectHours += registeredHour.hours
+          break
+        case 'Local Projects':
+          totalLocalProjectHours += registeredHour.hours
+          break
+      }
+    }
+  })
+
+  return [totalExternalProjectHours, totalLocalProjectHours]
+}
+
+type JobRotationStatus = [WantNewProject: number, OpenForNewProject: number]
+
+const jobRotationStatus = (
+  jobRotations: JobRotation[],
+  email: string
+): JobRotationStatus => {
+  let wantNewProject, openForNewProject: number
+
+  jobRotations.forEach((employee) => {
+    if (employee.email == email) {
+      employee.index === 1 && (wantNewProject = employee.customscalevalue)
+      employee.index === 2 && (openForNewProject = employee.customscalevalue)
+    }
+  })
+
+  return [wantNewProject, openForNewProject]
+}
+
 export const employeeTableReports = [
   { reportName: 'employeeInformation' },
   { reportName: 'employeeMotivationAndCompetence' },
+  { reportName: 'jobRotationInformation' },
+  { reportName: 'employeeDataUBW' },
 ]
+type JobRotation = {
+  username: string
+  email: string
+  questionid: string
+  customscalevalue: number
+  guid: string
+  index: number
+  text: string
+  categoryid: string
+}
+
+type EmployeeUBW = {
+  customer: string
+  email: string
+  manager: string
+  guid: string
+  hours: number
+  timestamp: number
+  reg_period: number
+  project_type: string
+  work_order: string
+  work_order_description: string
+}
+/**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
+/*
+exports.employeeTable = async ({ data }) => {
+  console.log('HALLO', data)
+  const [allEmployees, motivationAndCompetence, jobRotation, employeeUBW] = data
+  { 'employeeMotivationAndCompetence' }
+}
+*/
+
 /**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
 export const employeeTable = async ({ data }: EmployeeTable) => {
-  const [allEmployees, motivationAndCompetence] = data
+  const [allEmployees, motivationAndCompetence, jobRotation, employeeUBW] = data
   const mergedEmployees = mergeEmployees(allEmployees)
   return mergedEmployees.map((employee) => ({
     rowId: uuid(),
@@ -68,12 +200,13 @@ export const employeeTable = async ({ data }: EmployeeTable) => {
         degree: employee.degree,
       },
       employee.title,
-      'red',
+      findProjectStatusForEmployee(jobRotation, employeeUBW, employee.email),
       employee.customerArray.reduce((prevCustomer, thisCustomer) => {
         if (thisCustomer.weight < prevCustomer.weight) {
           return thisCustomer
+        } else {
+          return prevCustomer
         }
-        return prevCustomer
       }),
       Object.fromEntries(
         cvs.map(([lang, format]) => [
@@ -570,6 +703,7 @@ export const competenceAmount = async ({
   const categoriesMap = { mainCategories: {} }
   // used to ensure that each participant is only counted once for each main category and to count the number of distinct participants
   const emailMap = {}
+
   data.forEach((employeeRow) => {
     const {
       categoryMotivationAvg,

@@ -10,12 +10,13 @@ interface DataTableProps {
   rows: Omit<DataTableRow, 'columns'>[]
 }
 
-interface DataTableColumn {
+export interface DataTableColumn {
   title: string
   expandable?: boolean
+  searchable?: boolean
   renderCell?: (props: { data: any; rowData: any[] }) => JSX.Element
   renderExpanded?: (data: any) => JSX.Element
-  headerRenderCell?: () => JSX.Element
+  headerRenderCell?: JSX.Element
   checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -246,19 +247,9 @@ function MuiVirtualizedTable({
     )
   }
 
-  function headerRenderer(
-    title: string,
-    HeaderRenderCell: any | null,
-    checkBoxChangeHandler:
-      | ((event: React.ChangeEvent<HTMLInputElement>) => void)
-      | undefined
-  ) {
+  function headerRenderer(title: string, HeaderRenderCell?: JSX.Element) {
     return HeaderRenderCell ? (
-      <HeaderRenderCell
-        title={title}
-        checkBoxLabel="Se kun ledige"
-        checkBoxChangeHandler={checkBoxChangeHandler}
-      />
+      HeaderRenderCell
     ) : (
       <TableCell
         component="div"
@@ -304,25 +295,17 @@ function MuiVirtualizedTable({
           noRowsRenderer={emptyRow}
           gridClassName={classes.noFocus}
         >
-          {columns.map(
-            ({ title, headerRenderCell, checkBoxChangeHandler }, index) => {
-              return (
-                <Column
-                  key={title}
-                  headerRenderer={() =>
-                    headerRenderer(
-                      title,
-                      headerRenderCell,
-                      checkBoxChangeHandler
-                    )
-                  }
-                  className={classes.flexContainer}
-                  dataKey={String(index)}
-                  width={widthList[index]}
-                />
-              )
-            }
-          )}
+          {columns.map(({ title, headerRenderCell }, index) => {
+            return (
+              <Column
+                key={title}
+                headerRenderer={() => headerRenderer(title, headerRenderCell)}
+                className={classes.flexContainer}
+                dataKey={String(index)}
+                width={widthList[index]}
+              />
+            )
+          })}
         </Table>
       )}
     </AutoSizer>

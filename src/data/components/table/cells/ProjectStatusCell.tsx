@@ -1,4 +1,9 @@
-import { makeStyles, withStyles } from '@material-ui/core'
+import {
+  makeStyles,
+  Tooltip,
+  TooltipProps,
+  withStyles,
+} from '@material-ui/core'
 import React from 'react'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 
@@ -22,12 +27,64 @@ const useStyles = makeStyles({
   },
 })
 
-export default function ProjectStatusCell(status?: { data: 'red' | 'green' }) {
+interface ColorMap {
+  [index: string]: string
+}
+
+const toolTipStyles = makeStyles((theme) => ({
+  arrow: {
+    color: '#F2F2F2',
+  },
+  tooltip: {
+    backgroundColor: '#F2F2F2',
+    color: '#333333',
+    fontSize: theme.typography.pxToRem(13),
+    border: '1px solid #E4E1DB',
+  },
+}))
+
+function StatusTooltip(props: TooltipProps) {
+  const classes = toolTipStyles()
+  return <Tooltip arrow classes={classes} {...props} />
+}
+
+const applyTitle = (status?: { data: string }): string => {
+  switch (status?.data) {
+    case 'orange':
+      return 'Er åpen for å bytte prosjekt'
+    case 'yellow':
+      return 'Ønsker å bytte prosjekt'
+    case 'red':
+      return 'Jeg er opptatt i prosjekt'
+    case 'green':
+      return 'Jeg er ikke i prosjekt'
+  }
+
+  return ''
+}
+
+interface ProjectStatusCellProps {
+  data: string
+}
+
+export default function ProjectStatusCell(props?: ProjectStatusCellProps) {
   const classes = useStyles()
-  const color = status && status.data === 'green' ? '#4C8E00' : '#D10000'
+  const colors: ColorMap = {
+    green: '#4C8E00',
+    yellow: '#ffd500',
+    orange: '#ff8800',
+    red: '#D10000',
+  }
+  const color = props ? colors[props.data] : '#777777'
+  const toolTipTitle: string = applyTitle(props)
+
   return (
     <div className={classes.root}>
-      <StatusCircle color={status ? color : '#777777'} />
+      <StatusTooltip arrow placement="bottom" title={toolTipTitle}>
+        <div>
+          <StatusCircle color={color} />
+        </div>
+      </StatusTooltip>
     </div>
   )
 }
