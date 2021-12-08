@@ -63,7 +63,11 @@ const applyTitle = (status?: { data: string }): string => {
   return ''
 }
 
-export default function ProjectStatusCell(status?: { data: string }) {
+interface ProjectStatusCellProps {
+  data: string
+}
+
+export default function ProjectStatusCell(props?: ProjectStatusCellProps) {
   const classes = useStyles()
   const colors: ColorMap = {
     green: '#4C8E00',
@@ -71,8 +75,8 @@ export default function ProjectStatusCell(status?: { data: string }) {
     orange: '#ff8800',
     red: '#D10000',
   }
-  const color = status ? colors[status.data] : '#777777'
-  const toolTipTitle: string = applyTitle(status)
+  const color = props ? colors[props.data] : '#777777'
+  const toolTipTitle: string = applyTitle(props)
 
   return (
     <div className={classes.root}>
