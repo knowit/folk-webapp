@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import EmployeeInfo from './EmployeeInfo' // component to test
+import EmployeeInfo from '../components/EmployeeInfo' // component to test
 import { useFetchedData } from '../hooks/service'
 
 jest.mock('../hooks/service')

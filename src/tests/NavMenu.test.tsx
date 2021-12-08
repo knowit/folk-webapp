@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
-import { NavMenu, NavMenuItem } from './NavMenu'
+import { NavMenu, NavMenuItem } from '../components/NavMenu'
 import { render, screen } from '@testing-library/react'
 
 describe('NavMenuItem', () => {

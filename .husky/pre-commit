@@ -5,21 +5,23 @@ GREEN='\033[0;32m'
 PURPLE='\033[0;35m'
 RESET='\033[0m' # No Color
 
-echo \"${GREEN}[Husky] FRONTEND:${RESET}\"
+echo 🐺  Husky running pre-commit tasks!
 
-echo \”\> ${PURPLE}ESLint Check${RESET} \<\"
+echo 💻 Frontend checks:
+
+echo 🧹 Running ESLint
 yarn run lint
 
-echo \”\> ${PURPLE}Prettier Format Check${RESET} \<\"
+echo 💅 Running Prettier
 yarn run format:check
 
-echo \"${GREEN}[Husky] BACKEND:${RESET}\"
+echo 💾 Backend checks:
 cd backend
 
-echo \”\> ${PURPLE}ESLint Check${RESET} \<\"
+echo 🧹 Running ESLint
 yarn run lint
 
-echo \”\> ${PURPLE}Prettier Format Check${RESET} \<\"
+echo 💅 Running Prettier
 yarn run format:check
 
-echo -e \"${GREEN}[Husky] all checks passed!${RESET}\"
+echo ✅ all checks passed!
