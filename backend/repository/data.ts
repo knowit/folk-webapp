@@ -393,6 +393,7 @@ export const experienceDistribution = async ({
 }: {
   data: YearsSinceSchoolDist[]
 }) => {
+  console.log(data)
   const setInGroups = (list: YearsSinceSchoolDist[]) => {
     const detailedGroupedList = [
       { years: 'Under 2 år', count: 0 },
@@ -425,28 +426,28 @@ export const experienceDistribution = async ({
         groupedList[0].count += count
       } else if (years === 2) {
         detailedGroupedList[1].count += count
-        groupedList[1].count += count
+        groupedList[0].count += count
       } else if (years > 2 && years < 6) {
         detailedGroupedList[1].count += count
-        groupedList[2].count += count
+        groupedList[1].count += count
       } else if (years > 5 && years < 11) {
         detailedGroupedList[2].count += count
-        groupedList[3].count += count
+        groupedList[2].count += count
       } else if (years > 10 && years < 16) {
         detailedGroupedList[3].count += count
-        groupedList[4].count += count
+        groupedList[3].count += count
       } else if (years > 15 && years < 21) {
         detailedGroupedList[4].count += count
-        groupedList[4].count += count
+        groupedList[3].count += count
       } else if (years > 20 && years < 26) {
         detailedGroupedList[5].count += count
-        groupedList[4].count += count
+        groupedList[3].count += count
       } else if (years > 25 && years < 31) {
         detailedGroupedList[6].count += count
-        groupedList[4].count += count
+        groupedList[3].count += count
       } else if (years > 30) {
         detailedGroupedList[7].count += count
-        groupedList[4].count += count
+        groupedList[3].count += count
       }
     })
 
