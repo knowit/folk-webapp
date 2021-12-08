@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Tooltip from '@material-ui/core/Tooltip';
-import { NoData } from './ErrorText';
+import React, { useState, useEffect } from 'react'
+import { withStyles } from '@material-ui/core/styles'
+import Tooltip from '@material-ui/core/Tooltip'
+import { NoData } from './ErrorText'
 
 const HtmlTooltip = withStyles((theme) => ({
   tooltip: {
@@ -13,26 +13,26 @@ const HtmlTooltip = withStyles((theme) => ({
   arrow: {
     color: '#F2F2F2',
   },
-}))(Tooltip);
+}))(Tooltip)
 
 function isEllipsisActive(e: HTMLSpanElement | null | undefined): boolean {
   if (e === null || e === undefined) {
-    return false;
+    return false
   }
-  return e.offsetHeight < e.scrollHeight || e.offsetWidth < e.scrollWidth;
+  return e.offsetHeight < e.scrollHeight || e.offsetWidth < e.scrollWidth
 }
 
 export default function CharacterLimitBox({ text }: { text: string }) {
-  const [overflowActive, setOverflowActive] = useState(false);
+  const [overflowActive, setOverflowActive] = useState(false)
 
-  let targetRef: any;
+  let targetRef: any
   function setRef(ref: any) {
-    targetRef = ref;
+    targetRef = ref
   }
 
   useEffect(() => {
-    setOverflowActive(isEllipsisActive(targetRef));
-  }, [text, targetRef]);
+    setOverflowActive(isEllipsisActive(targetRef))
+  }, [text, targetRef])
 
   return (
     <div
@@ -52,5 +52,5 @@ export default function CharacterLimitBox({ text }: { text: string }) {
         <span>{text === '-' ? <NoData /> : text}</span>
       </HtmlTooltip>
     </div>
-  );
+  )
 }

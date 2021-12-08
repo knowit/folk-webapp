@@ -1,17 +1,17 @@
-import React from 'react';
+import React from 'react'
 
-import { ResponsiveLine } from '@nivo/line';
-import { colors } from './common';
+import { ResponsiveLine } from '@nivo/line'
+import { colors } from './common'
 interface LineChartsProps {
-  data: any;
-  big?: boolean;
+  data: any
+  big?: boolean
 }
 
-const lineChartColors = colors.filter((_, k) => k !== 1);
+const lineChartColors = colors.filter((_, k) => k !== 1)
 
 export default function Line({ data, big }: LineChartsProps) {
-  const height = big ? '400px' : '280px';
-  const legendTranslateY = big ? 50 : 30;
+  const height = big ? '400px' : '280px'
+  const legendTranslateY = big ? 50 : 30
   return (
     <div style={{ height, width: '100%' }}>
       <ResponsiveLine
@@ -73,5 +73,5 @@ export default function Line({ data, big }: LineChartsProps) {
         ]}
       />
     </div>
-  );
+  )
 }

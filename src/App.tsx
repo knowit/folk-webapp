@@ -1,8 +1,8 @@
-import React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Header from './components/Header';
-import Content from './components/Content';
-import Footer from './components/Footer';
+import React from 'react'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import Header from './components/Header'
+import Content from './components/Content'
+import Footer from './components/Footer'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,10 +20,10 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '0px 0px 10px 10px',
     },
   })
-);
+)
 
 export default function App() {
-  const classes = useStyles();
+  const classes = useStyles()
   return (
     <div className={classes.container}>
       <Header />
@@ -32,5 +32,5 @@ export default function App() {
         <Footer />
       </div>
     </div>
-  );
+  )
 }

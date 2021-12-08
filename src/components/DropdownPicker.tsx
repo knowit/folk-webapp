@@ -1,14 +1,14 @@
-import React, { useRef } from 'react';
-import { Select, InputBase, MenuItem, Fade } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useRef } from 'react'
+import { Select, InputBase, MenuItem, Fade } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 
-type ValueType = { displayValue: string; value: any } | string;
+type ValueType = { displayValue: string; value: any } | string
 
 interface DropdownPickerProps {
-  values: ValueType[];
-  onChange?: (newValue: any) => void;
-  selected?: any;
-  big?: boolean;
+  values: ValueType[]
+  onChange?: (newValue: any) => void
+  selected?: any
+  big?: boolean
 }
 
 const useStyles = makeStyles({
@@ -44,7 +44,7 @@ const useStyles = makeStyles({
     borderBottom: '1px solid white',
     paddingLeft: 12,
   },
-});
+})
 
 const useBigStyles = makeStyles({
   root: ({ width }: { width: number }) => ({
@@ -80,7 +80,7 @@ const useBigStyles = makeStyles({
     borderBottom: '1px solid white',
     paddingLeft: 12,
   },
-});
+})
 
 const useMuiOverrideStyles = makeStyles({
   icon: {
@@ -90,7 +90,7 @@ const useMuiOverrideStyles = makeStyles({
   select: {
     backgroundColor: '#F1F0ED !important',
   },
-});
+})
 
 const useMuiOverrideStylesBig = makeStyles({
   icon: {
@@ -103,23 +103,23 @@ const useMuiOverrideStylesBig = makeStyles({
   select: {
     backgroundColor: '#F1F0ED !important',
   },
-});
+})
 
 const getDisplayValue = (value: ValueType): string =>
-  typeof value === 'string' ? value : value.displayValue;
+  typeof value === 'string' ? value : value.displayValue
 const getValue = (value: ValueType): any =>
-  typeof value === 'string' ? value : value.value;
+  typeof value === 'string' ? value : value.value
 
 function measureTextWidth(text: string, font: string): number {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
+  const canvas = document.createElement('canvas')
+  const context = canvas.getContext('2d')
 
   if (!context) {
-    return 0;
+    return 0
   }
 
-  context.font = font;
-  return context.measureText(text).width;
+  context.font = font
+  return context.measureText(text).width
 }
 
 export default function DropdownPicker({
@@ -134,16 +134,16 @@ export default function DropdownPicker({
         .map((x) => getDisplayValue(x))
         .reduce((prev, next) => (prev.length > next.length ? prev : next), ''),
       big ? '25pt arial' : '16pt arial'
-    ) + 46;
-  const smallClasses = useStyles({ width });
-  const bigClasses = useBigStyles({ width });
-  const classes = big ? bigClasses : smallClasses;
-  const overrideClasses = useMuiOverrideStyles();
-  const overrideClassesBig = useMuiOverrideStylesBig();
-  const sizeOverrideClasses = big ? overrideClassesBig : overrideClasses;
-  const selectRef = useRef<HTMLElement | null>();
+    ) + 46
+  const smallClasses = useStyles({ width })
+  const bigClasses = useBigStyles({ width })
+  const classes = big ? bigClasses : smallClasses
+  const overrideClasses = useMuiOverrideStyles()
+  const overrideClassesBig = useMuiOverrideStylesBig()
+  const sizeOverrideClasses = big ? overrideClassesBig : overrideClasses
+  const selectRef = useRef<HTMLElement | null>()
 
-  const defaultValue = selected || values.length > 0 ? values[0] : '';
+  const defaultValue = selected || values.length > 0 ? values[0] : ''
   return (
     <Select
       className={classes.root}
@@ -190,5 +190,5 @@ export default function DropdownPicker({
         </MenuItem>
       ))}
     </Select>
-  );
+  )
 }

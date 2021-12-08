@@ -1,10 +1,11 @@
-import React, { Dispatch, useState } from 'react';
-import { InputBase, InputAdornment, Theme, debounce } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-import { makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import { Action, SearchableColumn } from '../data/DDTable';
+import React, { Dispatch, useState } from 'react'
+import { InputBase, InputAdornment, Theme, debounce } from '@material-ui/core'
+import SearchIcon from '@material-ui/icons/Search'
+import { makeStyles } from '@material-ui/core/styles'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
+import { SearchableColumn } from '../data/DDTable'
+import { Action } from './FilterSearch'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -24,29 +25,29 @@ const useStyles = makeStyles((theme: Theme) => ({
       backgroundColor: 'transparent',
     },
   },
-}));
+}))
 
 export default function SearchInput({
   dispatch,
   allRows,
   searchableColumns,
 }: {
-  dispatch: Dispatch<Action>;
-  allRows: any[];
-  searchableColumns: SearchableColumn[];
+  dispatch: Dispatch<Action>
+  allRows: any[]
+  searchableColumns: SearchableColumn[]
 }) {
-  const classes = useStyles();
-  const [searchValue, setSearchValue] = useState('');
+  const classes = useStyles()
+  const [searchValue, setSearchValue] = useState('')
 
   const clearInput = () => {
-    setSearchValue('');
+    setSearchValue('')
     dispatch({
       type: 'CHANGE_SEARCH_TERM',
       searchTerm: '',
       allRows,
       searchableColumns,
-    });
-  };
+    })
+  }
 
   // This function is debounced, so that we wait a bit (250ms) between each search
   const triggerSearch = debounce((searchTerm) => {
@@ -55,14 +56,14 @@ export default function SearchInput({
       searchTerm,
       allRows,
       searchableColumns,
-    });
-  }, 250);
+    })
+  }, 250)
 
   const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setSearchValue(event.target.value);
-    triggerSearch(event.target.value);
-  };
+    event.preventDefault()
+    setSearchValue(event.target.value)
+    triggerSearch(event.target.value)
+  }
 
   return (
     <>
@@ -92,5 +93,5 @@ export default function SearchInput({
         }
       />
     </>
-  );
+  )
 }
