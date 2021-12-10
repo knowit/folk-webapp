@@ -887,9 +887,4 @@ export const hoursBilledPerWeek = async ({ data }) => {
 
 export const customerCardsReports = [{ reportName: 'allProjectsOverview' }]
 
-export const customerCards = async ({ data }) => {
-  console.log(
-    'Customer Mini Cards Received the following data:',
-    JSON.stringify(data, null, 2)
-  )
-}
+export const customerCards = async ({ data }) => data
