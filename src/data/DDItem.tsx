@@ -9,7 +9,7 @@ import {
 import DDTable from './DDTable'
 import DDChart from './DDChart'
 import { ErrorText, LoggedOutErrorText } from '../components/ErrorText'
-import type { DDPayload } from './types'
+import { DDPayload } from './types'
 import { DDItemProps } from './types'
 import { useCookies } from 'react-cookie'
 

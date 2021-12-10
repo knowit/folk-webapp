@@ -165,8 +165,8 @@ export default function Competence() {
             {
               type: 'Bar',
               props: {
-                dataKey: 'category',
                 yLabels: ['value'],
+                dataKey: 'category',
               },
             },
           ],

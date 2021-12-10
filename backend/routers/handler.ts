@@ -20,8 +20,7 @@ async function handler(req: Request) {
   const endpointHandler = aggregation[endpoint]
   const endpointReports = aggregation[endpoint + 'Reports']
 
-  console.log('Endpointhandler:', endpointHandler)
-  console.log('EndpointReport', endpointReports)
+  console.log('Endpoint called: ', endpoint)
 
   if (!endpointHandler) {
     throw reporting({

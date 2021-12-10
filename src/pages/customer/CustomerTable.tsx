@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import DataTable from '../data/components/table/DataTable'
-import { SimpleComponentProps } from '../data/SimpleDDItem'
+import DataTable from '../../data/components/table/DataTable'
+import { SimpleComponentProps } from '../../data/SimpleDDItem'
 
 export default function CustomerTable({
   payload,

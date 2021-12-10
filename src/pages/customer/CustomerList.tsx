@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { useFetchedData } from '../hooks/service'
-import CustomerDropdown from './CustomerDropdown'
-import { Column, getSearchableColumns, SearchableColumn } from '../data/DDTable'
 import { Grid } from '@material-ui/core'
-import CustomerFilter from './CustomerFilter'
-import { useCategories } from './CompetenceFilterInput'
 import { Skeleton } from '@material-ui/lab'
-import { GridItem } from './GridItem'
-
+import React, { useEffect, useState } from 'react'
+import { useCategories } from '../../components/CompetenceFilterInput'
+import { GridItem } from '../../components/GridItem'
+import {
+  Column,
+  getSearchableColumns,
+  SearchableColumn,
+} from '../../data/DDTable'
+import { useFetchedData } from '../../hooks/service'
+import CustomerDropdown from './CustomerDropdown'
+import CustomerFilter from './CustomerFilter'
 interface Customers {
   [key: string]: []
 }
@@ -23,6 +26,9 @@ export default function CustomerList() {
   const [payload, pending] = useFetchedData<Payload>({
     url: '/api/data/employeeTable',
   })
+
+  console.log('Customer list rendered')
+
   const categories = useCategories()
 
   function preparePayloadForTable() {
