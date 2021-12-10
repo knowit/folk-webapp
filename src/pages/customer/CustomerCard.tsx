@@ -1,11 +1,4 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  CardHeader,
-  Typography,
-} from '@material-ui/core'
-import { OpenInNew } from '@material-ui/icons'
+import { Box } from '@material-ui/core'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import {
@@ -15,19 +8,19 @@ import {
 } from '../../components/GridItem'
 import { OpenInNewStyled } from '../../data/components/table/cells/ConsultantCell'
 
-interface CustomerCardProps {
+export type CustomerData = {
   customer: string
   consultants: number
   billedLastPeriod: number
   billedTotal: number
 }
 
-const CustomerCard: React.FC<CustomerCardProps> = ({
-  customer,
-  consultants,
-  billedLastPeriod,
-  billedTotal,
-}) => {
+interface CustomerCardProps {
+  data: CustomerData
+}
+
+const CustomerCard: React.FC<CustomerCardProps> = ({ data }) => {
+  const { customer, consultants, billedLastPeriod, billedTotal } = data
   return (
     <GridItem>
       <GridItemHeader title={customer}>
