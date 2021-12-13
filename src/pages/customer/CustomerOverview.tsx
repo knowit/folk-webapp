@@ -8,7 +8,6 @@ export const CustomerOverview = () => {
   const ubwMessage =
     'Dataene er fra første registrering i UBW og kan derfor være unøyaktige.'
 
-  console.log('Customer overview rendered')
   return (
     <Grid container spacing={2}>
       <DDItem

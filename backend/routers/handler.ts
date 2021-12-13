@@ -20,8 +20,6 @@ async function handler(req: Request) {
   const endpointHandler = aggregation[endpoint]
   const endpointReports = aggregation[endpoint + 'Reports']
 
-  console.log('Endpoint called: ', endpoint)
-
   if (!endpointHandler) {
     throw reporting({
       status: 404,

@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import { useFetchedData } from './hooks/service'
 import { AuthContext, renewToken } from './authToken'
@@ -29,20 +29,24 @@ export default function LoginProvider({
 }: React.PropsWithChildren<React.ReactNode>) {
   const [cookies, setCookie] = useCookies()
 
-  if (cookies.accessToken && cookies.refreshToken) {
-    setInterval(async () => {
-      const renewedAccessToken = await renewToken(
-        cookies.accessToken,
-        cookies.refreshToken
-      )
-      if (renewedAccessToken)
-        setCookie('accessToken', renewedAccessToken.accessToken, {
-          maxAge: renewedAccessToken.expiration,
-          sameSite: renewedAccessToken.sameSite,
-          secure: renewedAccessToken.secure,
-        })
-    }, 600000)
-  }
+  useEffect(() => {
+    if (cookies.accessToken && cookies.refreshToken) {
+      const interval = setInterval(async () => {
+        const renewedAccessToken = await renewToken(
+          cookies.accessToken,
+          cookies.refreshToken
+        )
+        if (renewedAccessToken)
+          setCookie('accessToken', renewedAccessToken.accessToken, {
+            maxAge: renewedAccessToken.expiration,
+            sameSite: renewedAccessToken.sameSite,
+            secure: renewedAccessToken.secure,
+          })
+      }, 600000)
+
+      return () => clearInterval(interval)
+    }
+  }, [cookies])
 
   return (
     <AuthContext.Provider value={cookies.accessToken}>

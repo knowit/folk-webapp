@@ -28,6 +28,7 @@ const getOrigin = (url: string) => {
   const parsed = new URL(url)
   return `${parsed.protocol}//${parsed.host}`
 }
+
 const getPath = (url: string) => new URL(url).pathname
 
 router.get('/login', function (req: Request, res: Response) {
