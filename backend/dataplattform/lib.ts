@@ -7,6 +7,7 @@ type ReportParams = {
   accessToken: string | null
   apiUrl?: string
 }
+
 async function report({
   reportName,
   filter = {},
@@ -24,6 +25,7 @@ async function report({
     const val = typeof value === 'string' ? `'${value}'` : value
     return `filter=${encodeURIComponent(key)}:${encodeURIComponent(val)}`
   })
+
   const filterString = filters.length > 0 ? `?${filters.join('&')}` : ''
 
   const reportUrl = `${
