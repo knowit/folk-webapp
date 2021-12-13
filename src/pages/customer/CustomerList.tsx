@@ -27,8 +27,6 @@ export default function CustomerList() {
     url: '/api/data/employeeTable',
   })
 
-  console.log('Customer list rendered')
-
   const categories = useCategories()
 
   function preparePayloadForTable() {

@@ -87,7 +87,6 @@ router.get('/callback', async function (req: Request, res: Response) {
 })
 
 router.get('/userInfo', async function (req: Request, res: Response) {
-  console.log('/userInfo called')
   const accessToken: string = req.headers.authorization
     .split(/bearer/i)
     .pop()
@@ -111,8 +110,6 @@ router.get('/userInfo', async function (req: Request, res: Response) {
 
 router.post('/refresh', async function (req: Request, res: Response) {
   const { refreshToken = null } = req.body
-
-  console.log('/refresh called')
 
   if (!refreshToken) {
     return (res.statusCode = 403)

@@ -22,8 +22,6 @@ export function EmployeeTable() {
     console.log('Clicked', event)
   }
 
-  console.log('Emp Table rendered')
-
   return (
     <DDItem
       url="/api/data/employeeTable"
