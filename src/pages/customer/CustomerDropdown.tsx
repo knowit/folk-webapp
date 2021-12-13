@@ -1,20 +1,21 @@
-import React, { useState } from 'react'
-import { GridItem } from './GridItem'
-import { Add, Minimize, OpenInNew } from '@material-ui/icons'
 import {
+  makeStyles,
+  createStyles,
   Accordion,
-  AccordionDetails,
   AccordionSummary,
+  AccordionDetails,
 } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
-import { SimpleDDItem } from '../data/SimpleDDItem'
+import { Minimize, Add, OpenInNew } from '@material-ui/icons'
+import React, { useState } from 'react'
+import EmployeeInfo from '../../components/EmployeeInfo'
+import { GridItem } from '../../components/GridItem'
 import {
-  CenteredHeaderCell,
   ConsultantCell,
   CustomerStatusCell,
   CvCell,
-} from '../data/components/table/DataCells'
-import EmployeeInfo from './EmployeeInfo'
+  CenteredHeaderCell,
+} from '../../data/components/table/DataCells'
+import { SimpleDDItem } from '../../data/SimpleDDItem'
 import CustomerTable from './CustomerTable'
 
 const useStyles = makeStyles(() =>

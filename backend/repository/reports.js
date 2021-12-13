@@ -224,4 +224,14 @@ const reports = [
     lastUsed: null,
     lastCacheUpdate: '2021-08-13T13:19:01.327776',
   },
+  {
+    name: 'allProjectsOverview',
+    queryString:
+      'SELECT d1.customer, consultants, billedLastPeriod, billedTotal, null AS customerSince FROM ( (SELECT customer, sum(hours) as billedTotal FROM dev_level_3_database.ubw_per_project_data d1 WHERE timestamp = (SELECT MAX(timestamp) FROM dev_level_3_database.ubw_per_project_data d2 WHERE d1.customer = d2.customer AND d1.reg_period = d2.reg_period) GROUP BY customer, employees ) d1 JOIN (SELECT customer, hours as billedLastPeriod FROM dev_level_3_database.ubw_per_project_data d1 WHERE reg_period = (SELECT MAX(reg_period) FROM dev_level_3_database.ubw_per_project_data d2 WHERE d1.customer = d2.customer) group by customer, hours) d4 ON d1.customer = d4.customer JOIN (SELECT customer, MAX(employees) as consultants FROM ( SELECT *, RANK() OVER (PARTITION BY customer ORDER BY reg_period DESC) AS row_number FROM ( SELECT customer, employees, reg_period FROM dev_level_3_database.ubw_per_project_data d1 WHERE timestamp = (SELECT MAX(timestamp) FROM dev_level_3_database.ubw_per_project_data d2 WHERE d1.customer = d2.customer AND d1.reg_period = d2.reg_period) ORDER BY customer DESC, reg_period DESC ) ) WHERE row_number <= 5 GROUP BY customer) d5 ON d1.customer = d5.customer )',
+    tables: ['ubw_per_project_data'],
+    dataProtection: 3,
+    created: '2021-12-08T16:30:51.129847',
+    lastUsed: null,
+    lastCacheUpdate: null,
+  },
 ]

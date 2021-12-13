@@ -942,9 +942,9 @@ export const competenceAreas = async ({
   }
 }
 
-exports.hoursBilledPerCustomerReports = [{ reportName: 'perProject' }]
+export const hoursBilledPerCustomerReports = [{ reportName: 'perProject' }]
 
-exports.hoursBilledPerCustomer = async ({ data }) => {
+export const hoursBilledPerCustomer = async ({ data }) => {
   const groupByCustomer = {}
 
   data.forEach((perProject) => {
@@ -969,14 +969,14 @@ exports.hoursBilledPerCustomer = async ({ data }) => {
   }
 }
 
-exports.hoursBilledPerWeekReports = [{ reportName: 'perProject' }]
+export const hoursBilledPerWeekReports = [{ reportName: 'perProject' }]
 
 type LineGraphData = {
   id: string
   data: Array<any>
 }
 
-exports.hoursBilledPerWeek = async ({ data }) => {
+export const hoursBilledPerWeek = async ({ data }) => {
   const groupedByCustomer = {}
 
   data.forEach((elem) => {
@@ -1019,3 +1019,7 @@ exports.hoursBilledPerWeek = async ({ data }) => {
     },
   }
 }
+
+export const customerCardsReports = [{ reportName: 'allProjectsOverview' }]
+
+export const customerCards = async ({ data }) => data

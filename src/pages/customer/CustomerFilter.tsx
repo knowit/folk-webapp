@@ -1,13 +1,12 @@
 import React, { useEffect, useReducer } from 'react'
-import { GridItemHeader } from './GridItem'
-import SearchInput from './SearchInput'
-import { SearchableColumn, TableState } from '../data/DDTable'
-import { reducer } from './FilterSearch'
-
-import { FilterHeader } from './FilterHeader'
 import CompetenceFilterInput, {
   CategoryWithGroup,
-} from './CompetenceFilterInput'
+} from '../../components/CompetenceFilterInput'
+import { FilterHeader } from '../../components/FilterHeader'
+import { reducer } from '../../components/FilterSearch'
+import { GridItemHeader } from '../../components/GridItem'
+import SearchInput from '../../components/SearchInput'
+import { SearchableColumn, TableState } from '../../data/DDTable'
 
 interface CustomerFilterProps {
   title: string

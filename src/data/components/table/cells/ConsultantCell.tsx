@@ -93,7 +93,8 @@ const ExpandLessIconWithStyles = withStyles({
     },
   },
 })(ExpandLessIcon)
-const OpenInNewStyled = withStyles({
+
+export const OpenInNewStyled = withStyles({
   root: {
     color: '#707070',
     cursor: 'pointer',

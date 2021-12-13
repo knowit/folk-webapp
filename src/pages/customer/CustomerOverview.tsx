@@ -1,19 +1,21 @@
+import { Grid } from '@material-ui/core'
 import React from 'react'
-import DDItem, { DDChart } from '../data/DDItem'
-import { ChartSkeleton } from '../pages/EmployeeSite'
+import DDItem, { DDChart } from '../../data/DDItem'
+import { ChartSkeleton } from '../EmployeeSite'
+import CustomerCardList from './CustomerCardList'
 
-export default function CustomerGraphs() {
+export const CustomerOverview = () => {
   const ubwMessage =
     'Dataene er fra første registrering i UBW og kan derfor være unøyaktige.'
 
+  console.log('Customer overview rendered')
   return (
-    <div>
+    <Grid container spacing={2}>
       <DDItem
         url={'/api/data/hoursBilledPerCustomer'}
         title="Timer brukt per kunde"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
-        fullSize
         description={ubwMessage}
         dataComponentProps={{
           chartVariants: [
@@ -28,24 +30,23 @@ export default function CustomerGraphs() {
           ],
         }}
       />
+
       <DDItem
         url={'/api/data/hoursBilledPerWeek'}
         title="Timer brukt per uke"
         Component={DDChart}
         SkeletonComponent={ChartSkeleton}
-        fullSize
         description={ubwMessage}
         dataComponentProps={{
           chartVariants: [
             {
               type: 'Line',
-              props: {
-                big: true,
-              },
             },
           ],
         }}
       />
-    </div>
+
+      <CustomerCardList />
+    </Grid>
   )
 }
