@@ -32,7 +32,6 @@ export default function LoginProvider({
   useEffect(() => {
     if (cookies.accessToken && cookies.refreshToken) {
       const interval = setInterval(async () => {
-        console.log('Interval started')
         const renewedAccessToken = await renewToken(
           cookies.accessToken,
           cookies.refreshToken
