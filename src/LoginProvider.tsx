@@ -31,6 +31,7 @@ export default function LoginProvider({
 
   if (cookies.accessToken && cookies.refreshToken) {
     setInterval(async () => {
+      console.log('Interval started')
       const renewedAccessToken = await renewToken(
         cookies.accessToken,
         cookies.refreshToken
@@ -41,7 +42,7 @@ export default function LoginProvider({
           sameSite: renewedAccessToken.sameSite,
           secure: renewedAccessToken.secure,
         })
-    }, 600000)
+    }, 30000)
   }
 
   return (

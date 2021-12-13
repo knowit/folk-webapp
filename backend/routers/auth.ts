@@ -47,6 +47,7 @@ router.get('/login', function (req: Request, res: Response) {
 })
 
 router.get('/logout', async function (req: Request, res: Response) {
+  console.log('/logout called')
   const { referer } = req.headers
   const logoutUri = `${getOrigin(referer)}/`
   const logoutUrl = getClient().endSessionUrl({
@@ -62,6 +63,7 @@ router.get('/callback', async function (req: Request, res: Response) {
   const { authReferer: referer }: { authReferer: string } = req.cookies
 
   const origin = getOrigin(referer)
+  console.log('/callback called')
 
   const tokens = await getClient(origin).oauthCallback(
     `${origin}/auth/callback`,
@@ -75,7 +77,7 @@ router.get('/callback', async function (req: Request, res: Response) {
 
   res.cookie('accessToken', tokens.access_token, {
     httpOnly: false,
-    maxAge: tokens.expires_in * 1000,
+    maxAge: tokens.expires_in * 60,
     ...cookieSettings,
   })
   res.cookie('refreshToken', tokens.refresh_token, {
@@ -87,6 +89,7 @@ router.get('/callback', async function (req: Request, res: Response) {
 })
 
 router.get('/userInfo', async function (req: Request, res: Response) {
+  console.log('/userInfo called')
   const accessToken: string = req.headers.authorization
     .split(/bearer/i)
     .pop()
