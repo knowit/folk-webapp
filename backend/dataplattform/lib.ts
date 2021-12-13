@@ -39,6 +39,8 @@ async function report({
     type: 'info',
   })
 
+  console.log(`API call at: ${reportUrl}`)
+
   const response: { status: number; statusText: string } = await fetch(
     reportUrl,
     {
@@ -47,6 +49,10 @@ async function report({
         Authorization: `Bearer ${accessToken}`,
       },
     }
+  )
+
+  console.log(
+    `Fetched data for ${reportName}: ${JSON.stringify(response, null, 2)}`
   )
 
   // Reporting
