@@ -7,7 +7,9 @@ export default function CustomerTable({ payload, callback, props }: SimpleCompon
   const allRows = payload as { rowData: any[] }[];
 
   useEffect(() => {
-    callback(props.columns)
+    if (callback) {
+      callback(props.columns)
+    }
   }, [])
 
   return (

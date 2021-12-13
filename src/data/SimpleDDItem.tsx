@@ -6,7 +6,7 @@ import React from 'react'
 export interface SimpleComponentProps {
   payload: DDPayload;
   props: DDPassProps;
-  callback(columns: Column[]): void;
+  callback?(columns: Column[]): void;
 }
 
 export interface SimpleItemProps {
@@ -14,7 +14,7 @@ export interface SimpleItemProps {
   dataComponentProps?: DDPassProps;
   Component: (props: SimpleComponentProps ) => JSX.Element;
   payload: DDPayload;
-  callback(columns: Column[]): void;
+  callback?(columns: Column[]): void;
 }
 
 export function SimpleDDItem({Component, fullSize, payload, callback, dataComponentProps = {}}: SimpleItemProps ) {
