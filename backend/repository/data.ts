@@ -796,3 +796,15 @@ exports.hoursBilledPerWeek = async ({ data }) => {
     },
   }
 }
+
+exports.projectsOverviewReports =  [{ reportName: 'allProjectsOverview' }]
+
+exports.projectsOverview = async ({ data }) => {
+  return data
+}
+
+exports.ubwEmployeeReports = [{reportName: 'employeeDataUBW'}]
+
+exports.ubwEmployee = async ({ data }) => {
+  return data
+}
