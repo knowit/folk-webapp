@@ -6,7 +6,8 @@ import {
   Employee,
   Competence,
   EmployeeSite,
-  Customer
+  Customer,
+  CustomerSite,
 } from '../pages';
 
 export default function Content() {
@@ -14,6 +15,9 @@ export default function Content() {
     <Switch>
       <Route path="/ansatte">
         <Employee />
+      </Route>
+      <Route path="/kunder/:id">
+        <CustomerSite />
       </Route>
       <Route path="/kunder">
         <Customer />

@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react';
 import { GridItem } from './GridItem'
 import { Add, Minimize, OpenInNew } from '@material-ui/icons'
 import {
   Accordion,
   AccordionDetails,
-  AccordionSummary,
-} from '@material-ui/core'
+  AccordionSummary, withStyles,
+} from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { SimpleDDItem } from '../data/SimpleDDItem'
 import {
@@ -16,6 +16,7 @@ import {
 } from '../data/components/table/DataCells'
 import EmployeeInfo from './EmployeeInfo'
 import CustomerTable from './CustomerTable'
+import { Link, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -27,6 +28,14 @@ const useStyles = makeStyles(() =>
     accordionDetails: {
       padding: '0px',
     },
+    openNewIcon: {
+      color: '#707070',
+      cursor: 'pointer',
+      marginLeft: '15px',
+      '&:hover': {
+        color: '#333333',
+      }
+    },
   })
 )
 
@@ -37,6 +46,19 @@ interface CustomerDropdownProps {
   callback(columns: any[]): void
 }
 
+const OpenInNewStyled = withStyles({ // todo reuse
+  root: {
+    color: '#707070',
+    cursor: 'pointer',
+    '&:hover': {
+      color: '#333333',
+    },
+  },
+  openNewIcon: {
+
+  }
+})(OpenInNew);
+
 export default function CustomerDropdown({
   customerName,
   employees,
@@ -45,6 +67,8 @@ export default function CustomerDropdown({
 }: CustomerDropdownProps) {
   const [expanded, setExpanded] = useState(expand)
   const classes = useStyles()
+  const history = useHistory()
+  const routeOnClick = useCallback(() => history.push("/kunder/" + customerName, employees), [history]);
 
   return (
     <GridItem fullSize>
@@ -63,9 +87,21 @@ export default function CustomerDropdown({
             className={'openNewIconAccordion'}
             style={{ marginLeft: '15px' }}
             onClick={(e) => {
-              e.stopPropagation() /* todo show kundeflik */
+              e.stopPropagation()
+              routeOnClick()
             }}
           />
+          <Link
+            className={classes.openNewIcon}
+            to={{
+              pathname: '/kunder/' + customerName,
+              state: {
+                payload: 'lololol'
+              }
+            }}
+            target="_blank">
+            <OpenInNewStyled />
+          </Link>
         </AccordionSummary>
         <AccordionDetails className={classes.accordionDetails}>
           <SimpleDDItem
