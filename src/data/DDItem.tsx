@@ -19,6 +19,7 @@ interface DDErrorProps {
 
 function DDError({ error }: DDErrorProps) {
   // eslint-disable-next-line no-console
+  console.log(error)
   const [cookies] = useCookies()
   let errormessage = <p />
   if (cookies.refreshToken && !cookies.accessToken) {
