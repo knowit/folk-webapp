@@ -31,8 +31,7 @@ type EmployeeTable = {
   data: [
     EmployeeInformation[],
     EmployeeMotivationAndCompetence[],
-    JobRotation[],
-    EmployeeUBW[]
+    JobRotation[]
   ]
 }
 
@@ -66,27 +65,12 @@ const getStorageUrl = (key: string) => {
 
 const findProjectStatusForEmployee = (
   jobRotationEmployees: JobRotation[],
-  employeeUBWs: EmployeeUBW[],
   email: string
 ): string => {
-  const currentRegPeriod = parseInt(getYear() + getWeek(), 10)
-  const registeredHoursForEmployee = employeeUBWs.filter(
-    (UBWObject) => UBWObject.email === email
-  )
-  const latestRegPeriod = Math.max(
-    ...registeredHoursForEmployee.map((registeredHours: EmployeeUBW) => {
-      return registeredHours.reg_period
-    })
-  )
-
-  const [totalExternalProjectHours, totalLocalProjectHours]: TotalProjectHours =
-    countProjectHours(registeredHoursForEmployee, latestRegPeriod)
   const [wantNewProject, openForNewProject]: JobRotationStatus =
     jobRotationStatus(jobRotationEmployees, email)
 
-  const inProjectStatus =
-    currentRegPeriod - latestRegPeriod < 5 &&
-    totalExternalProjectHours > totalLocalProjectHours
+  const inProjectStatus = false
   const statusColor = statusColorCode(
     wantNewProject,
     openForNewProject,
@@ -147,7 +131,6 @@ export const employeeTableReports = [
   { reportName: 'employeeInformation' },
   { reportName: 'employeeMotivationAndCompetence' },
   { reportName: 'jobRotationInformation' },
-  { reportName: 'employeeDataUBW' },
 ]
 type JobRotation = {
   username: string
@@ -183,7 +166,7 @@ exports.employeeTable = async ({ data }) => {
 
 /**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
 export const employeeTable = async ({ data }: EmployeeTable) => {
-  const [allEmployees, motivationAndCompetence, jobRotation, employeeUBW] = data
+  const [allEmployees, motivationAndCompetence, jobRotation] = data
   const mergedEmployees = mergeEmployees(allEmployees)
   return mergedEmployees.map((employee) => ({
     rowId: uuid(),
@@ -200,7 +183,7 @@ export const employeeTable = async ({ data }: EmployeeTable) => {
         degree: employee.degree,
       },
       employee.title,
-      findProjectStatusForEmployee(jobRotation, employeeUBW, employee.email),
+      findProjectStatusForEmployee(jobRotation, employee.email),
       employee.customerArray.reduce((prevCustomer, thisCustomer) => {
         if (thisCustomer.weight < prevCustomer.weight) {
           return thisCustomer
