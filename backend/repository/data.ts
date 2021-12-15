@@ -70,7 +70,7 @@ const findProjectStatusForEmployee = (
   const [wantNewProject, openForNewProject]: JobRotationStatus =
     jobRotationStatus(jobRotationEmployees, email)
 
-  const inProjectStatus = false
+  const inProjectStatus = true
   const statusColor = statusColorCode(
     wantNewProject,
     openForNewProject,
