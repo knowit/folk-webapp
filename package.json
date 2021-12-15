@@ -31,6 +31,7 @@
     "@nivo/radar": "^0.67.0",
     "@nivo/sunburst": "^0.67.0",
     "ansi-html-community": "0.0.8",
+    "axios": "^0.24.0",
     "browserslist": "^4.18.1",
     "http-proxy-middleware": "^1.0.5",
     "react": "^17.0.1",
