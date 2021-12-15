@@ -1,10 +1,9 @@
-import React, { Dispatch, useState } from 'react';
+import React, { useState } from 'react';
 import { InputBase, InputAdornment, Theme, debounce } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import { Action, SearchableColumn } from '../data/DDTable';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -26,36 +25,28 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
+interface Props {
+  onSearch: (val: string) => void;
+  onClear: () => void;
+  placeholder: string;
+}
+
 export default function SearchInput({
-  dispatch,
-  allRows,
-  searchableColumns,
-}: {
-  dispatch: Dispatch<Action>;
-  allRows: any[];
-  searchableColumns: SearchableColumn[];
-}) {
+  onSearch,
+  onClear,
+  placeholder
+}: Props) {
   const classes = useStyles();
   const [searchValue, setSearchValue] = useState('');
 
   const clearInput = () => {
     setSearchValue('');
-    dispatch({
-      type: 'CHANGE_SEARCH_TERM',
-      searchTerm: '',
-      allRows,
-      searchableColumns,
-    });
+    onClear();
   };
 
   // This function is debounced, so that we wait a bit (250ms) between each search
   const triggerSearch = debounce((searchTerm) => {
-    dispatch({
-      type: 'CHANGE_SEARCH_TERM',
-      searchTerm,
-      allRows,
-      searchableColumns,
-    });
+    onSearch(searchTerm);
   }, 250);
 
   const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,7 +63,7 @@ export default function SearchInput({
         value={searchValue}
         type="text"
         name="search"
-        placeholder="Søk konsulent, kunde..."
+        placeholder={placeholder}
         endAdornment={
           <InputAdornment position="end">
             {searchValue === '' ? (

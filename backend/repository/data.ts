@@ -338,7 +338,7 @@ type AgeDistributionGroups = {
  */
 export const ageDistribution = async ({ data }: { data: [AgeDistribution[], AgeDistributionGroups[]] }) => {
   const [setAgeDist, setAgeDistGroup] = data
-
+  
   return {
     setNames: ['Aldersgrupper', 'Detaljert oversikt'],
     sets: {
