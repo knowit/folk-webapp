@@ -3,8 +3,6 @@ import {
   mergeEmployees,
   EmployeeInformation,
   sum,
-  getYear,
-  getWeek,
   statusColorCode,
 } from './util'
 import { v4 as uuid } from 'uuid'
@@ -79,7 +77,7 @@ const findProjectStatusForEmployee = (
 
   return statusColor
 }
-
+/*
 type TotalProjectHours = [
   ExternalProjectHours: number,
   LocalProjectHours: number
@@ -92,7 +90,7 @@ const countProjectHours = (
   let totalExternalProjectHours = 0
   let totalLocalProjectHours = 0
 
-  /**Kan hende project_type ikke kommer til å ha disse navnene og at de bare var placeholdere. Da må i så fall skillet mellom prosjektene fjernes også telles det bare vanlig opp */
+  Kan hende project_type ikke kommer til å ha disse navnene og at de bare var placeholdere. Da må i så fall skillet mellom prosjektene fjernes også telles det bare vanlig opp
   registeredHours.forEach((registeredHour: EmployeeUBW) => {
     if (registeredHour.reg_period === latestRegPeriod) {
       switch (registeredHour.project_type) {
@@ -107,7 +105,7 @@ const countProjectHours = (
   })
 
   return [totalExternalProjectHours, totalLocalProjectHours]
-}
+}*/
 
 type JobRotationStatus = [WantNewProject: number, OpenForNewProject: number]
 
@@ -142,7 +140,7 @@ type JobRotation = {
   text: string
   categoryid: string
 }
-
+/*
 type EmployeeUBW = {
   customer: string
   email: string
@@ -470,7 +468,7 @@ export const ageDistribution = async ({
   data: [AgeDistribution[], AgeDistributionGroups[]]
 }) => {
   const [setAgeDist, setAgeDistGroup] = data
-  
+
   return {
     setNames: ['Aldersgrupper', 'Detaljert oversikt'],
     sets: {

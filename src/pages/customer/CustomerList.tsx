@@ -36,7 +36,7 @@ export default function CustomerList() {
     if (Array.isArray(payload) && !pending) {
       payload.map((emp) => {
         if (emp.rowData[customerData].customer === undefined) {
-          emp.rowData[customerData] = { customer: 'Uten prosjekt' }
+          emp.rowData[customerData] = { customer: 'Ikke i prosjekt' }
         }
         emp.rowData.splice(statusIconData, 1)
       })

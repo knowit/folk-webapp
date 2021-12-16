@@ -43,9 +43,9 @@ export default function DDItem({
   fullSize = false,
   dataComponentProps = {},
 }: DDItemProps) {
-  console.log("Reload");
+  console.log('Reload')
   const [payload, pending, error] = useFetchedData<DDPayload>({ url })
-  console.log(pending || error || !payload);
+  console.log(pending || error || !payload)
   return (
     <GridItem fullSize={fullSize}>
       {pending || error || !payload ? (

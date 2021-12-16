@@ -1,8 +1,7 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import CloseIcon from '@material-ui/icons/Close';
-import { Mark, Slider } from '@material-ui/core';
-
+import { createStyles, makeStyles } from '@material-ui/core/styles'
+import React from 'react'
+import CloseIcon from '@material-ui/icons/Close'
+import { Mark, Slider } from '@material-ui/core'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -111,12 +110,12 @@ const RemoveAllTag = (onDelete: { onDelete: () => void }) => {
 }
 
 interface Props {
-  title: string;
-  filterList: string[];
-  filterThreshold: number;
-  onThresholdUpdate: (value: number) => void;
-  onSkillClick: (value: string[]) => void;
-  type: string;
+  title: string
+  filterList: string[]
+  filterThreshold: number
+  onThresholdUpdate: (value: number) => void
+  onSkillClick: (value: string[]) => void
+  type: string
 }
 
 export function FilterHeader({
@@ -126,11 +125,9 @@ export function FilterHeader({
   onThresholdUpdate,
   onSkillClick,
   type,
-  
 }: Props) {
-  const classes = useStyles();
+  const classes = useStyles()
   const threshold = Number.parseInt(filterThreshold.toString())
-
 
   function handleThresholdSliderChange(
     _event: React.ChangeEvent<unknown>,
@@ -140,7 +137,7 @@ export function FilterHeader({
       value = value?.[0]
     }
     if (value !== filterThreshold) {
-      onThresholdUpdate(value);
+      onThresholdUpdate(value)
     }
   }
 
@@ -154,28 +151,22 @@ export function FilterHeader({
 
   return (
     <div className={classes.filterHeaderRoot}>
-      <div className={classes.filterHeaderTitle}>
-        {title}
-      </div>
+      <div className={classes.filterHeaderTitle}>{title}</div>
       <div className={classes.filterTagsContainer}>
         {filterList.length > 1 && (
-          <RemoveAllTag
-            onDelete={() =>
-              onSkillClick([])
-            }
-          />
+          <RemoveAllTag onDelete={() => onSkillClick([])} />
         )}
         {filterList.map((skill) => (
           <Tag
             key={skill}
             label={skill}
             onDelete={() =>
-                onSkillClick(filterList.filter((item) => item !== skill))
+              onSkillClick(filterList.filter((item) => item !== skill))
             }
           />
         ))}
       </div>
-      { type != 'CUSTOMER' && 
+      {type != 'CUSTOMER' && (
         <div className={classes.filterThresholdContainer}>
           <label
             htmlFor={`${type}-threshold-slider`}
@@ -191,14 +182,15 @@ export function FilterHeader({
             valueLabelDisplay="auto"
             marks={thresholdLabels}
             valueLabelFormat={(value) =>
-              thresholdLabels.find((mark) => mark.value === value)?.label ?? value
+              thresholdLabels.find((mark) => mark.value === value)?.label ??
+              value
             }
             min={1}
             max={5}
             onChange={handleThresholdSliderChange}
           />
         </div>
-      }
+      )}
     </div>
   )
 }

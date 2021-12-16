@@ -1,12 +1,11 @@
-import React, { ChangeEvent } from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { useFetchedData } from '../hooks/service';
-import { makeStyles } from '@material-ui/core/styles';
-import { InputBase, withStyles } from '@material-ui/core';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import { DDPayload } from '../data/types';
-
+import React, { ChangeEvent } from 'react'
+import Checkbox from '@material-ui/core/Checkbox'
+import Autocomplete from '@material-ui/lab/Autocomplete'
+import { useFetchedData } from '../hooks/service'
+import { makeStyles } from '@material-ui/core/styles'
+import { InputBase, withStyles } from '@material-ui/core'
+import FilterListIcon from '@material-ui/icons/FilterList'
+import { DDPayload } from '../data/types'
 
 const StyledCheckBox = withStyles(() => ({
   root: {
@@ -31,11 +30,10 @@ export type CategoryWithGroup = {
   group: string
 }
 
-
 const useStyles = makeStyles({
   input: {
     height: '43px',
-    width: '260px',
+    width: '200px',
     fontSize: '16px',
     lineHeight: '18px',
     backgroundColor: 'white',
@@ -65,7 +63,7 @@ const useStyles = makeStyles({
 export function useCategories(): CategoryWithGroup[] {
   const [categories] = useFetchedData<CategoryList[]>({
     url: '/api/data/competenceFilter',
-  });
+  })
   return (categories ?? []).flatMap((mainCategory) =>
     mainCategory.subCategories.map((subCategory) => ({
       category: subCategory,
@@ -75,16 +73,23 @@ export function useCategories(): CategoryWithGroup[] {
 }
 
 export function useCustomer(): any {
-  const [employees] = useFetchedData<DDPayload>({ url: "/api/data/employeeTable" })
-  const customers = (employees)?.flatMap((workers: any) => [workers.rowData[3]["customer"] ?? 'Ikke i prosjekt'])
-  return Array.from(new Set(customers)).map(customer => ( {category: customer, group: "customer"}))
+  const [employees] = useFetchedData<DDPayload>({
+    url: '/api/data/employeeTable',
+  })
+  const customers = employees?.flatMap((workers: any) => [
+    workers.rowData[3]['customer'] ?? 'Ikke i prosjekt',
+  ])
+  return Array.from(new Set(customers)).map((customer) => ({
+    category: customer,
+    group: 'customer',
+  }))
 }
 
 interface Props {
-  filterList: string[];
-  placeholder: string;
-  onSelect: (value: string[]) => void;
-  fetchFilterCategories: () => CategoryWithGroup[];
+  filterList: string[]
+  placeholder: string
+  onSelect: (value: string[]) => void
+  fetchFilterCategories: () => CategoryWithGroup[]
 }
 
 export default function FilterInput({
@@ -93,11 +98,11 @@ export default function FilterInput({
   onSelect,
   fetchFilterCategories,
 }: Props) {
-  const categoriesWithGroup = fetchFilterCategories();
-  const classes = useStyles();
+  const categoriesWithGroup = fetchFilterCategories()
+  const classes = useStyles()
 
-  const activeCategories = categoriesWithGroup.filter((categoryWithGroup:any) =>
-    filterList.includes(categoryWithGroup.category)
+  const activeCategories = categoriesWithGroup.filter(
+    (categoryWithGroup: any) => filterList.includes(categoryWithGroup.category)
   )
 
   const handleCategoryChange = (
@@ -105,7 +110,7 @@ export default function FilterInput({
     values: CategoryWithGroup[]
   ) => {
     onSelect(values.map((categoriesWithGroup) => categoriesWithGroup.category))
-  };
+  }
 
   return (
     <Autocomplete

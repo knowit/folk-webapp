@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { InputBase, InputAdornment, Theme, debounce } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-import { makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-
+import React, { useState } from 'react'
+import { InputBase, InputAdornment, Theme, debounce } from '@material-ui/core'
+import SearchIcon from '@material-ui/icons/Search'
+import { makeStyles } from '@material-ui/core/styles'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -27,29 +26,24 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 interface Props {
-  onSearch: (val: string) => void;
-  onClear: () => void;
-  placeholder: string;
+  onSearch: (val: string) => void
+  onClear: () => void
+  placeholder: string
 }
 
-export default function SearchInput({
-  onSearch,
-  onClear,
-  placeholder
-}: Props) {
-  const classes = useStyles();
-  const [searchValue, setSearchValue] = useState('');
+export default function SearchInput({ onSearch, onClear, placeholder }: Props) {
+  const classes = useStyles()
+  const [searchValue, setSearchValue] = useState('')
 
   const clearInput = () => {
-    setSearchValue('');
-    onClear();
-  };
+    setSearchValue('')
+    onClear()
+  }
 
   // This function is debounced, so that we wait a bit (250ms) between each search
   const triggerSearch = debounce((searchTerm) => {
-    onSearch(searchTerm);
-  }, 250);
-
+    onSearch(searchTerm)
+  }, 250)
 
   const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()

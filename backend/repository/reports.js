@@ -1,4 +1,4 @@
-// this file is currently not used for anything other than supporting version control for the reports utilized in data.js.
+/* this file is currently not used for anything other than supporting version control for the reports utilized in data.js.
 const reports = [
   {
     name: 'employeeInformation',
@@ -235,3 +235,4 @@ const reports = [
     lastCacheUpdate: null,
   },
 ]
+*/
