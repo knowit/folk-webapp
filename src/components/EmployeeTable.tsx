@@ -15,7 +15,6 @@ export function EmployeeTable() {
   const TableSkeleton = () => (
     <Skeleton variant="rect" height={780} animation="wave" />
   )
-  console.log('I am reloading')
   /* Her er en event handler som reagerer når checkboxen trykkes */
   /* Den må kobles opp mot filtreringen i DDTable, men utsettes til DDTable har blitt oppdatert */
   const visKunLedigeFilter = (event: React.ChangeEvent<HTMLInputElement>) => {

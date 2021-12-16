@@ -17,15 +17,13 @@ import {
   searchAndFilter,
 } from '../components/FilterSearch'
 
+type GetSearchValueFn = (data: unknown) => string
 export interface Column {
   title: string
   expandable?: boolean
   searchable?: boolean
   getSearchValue?: GetSearchValueFn
 }
-
-type GetSearchValueFn = (data: unknown) => string
-
 export interface SearchableColumn {
   columnIndex: number
   getSearchValue: GetSearchValueFn
