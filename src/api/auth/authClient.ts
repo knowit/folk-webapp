@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { setAccessToken, setAccessTokenExpiresAt } from './authHelpers'
 import { RenewResponse } from './authApiTypes'
 
 const BASE_URL = '/auth'
@@ -21,4 +22,15 @@ export const renewAccessToken = async () => {
   })
 
   return { accessToken, accessTokenExpiresAt: expiresAt }
+}
+
+export const renewAuth = async () => {
+  const { accessToken, accessTokenExpiresAt } = await renewAccessToken()
+
+  // TODO: Imrove correct error handling
+  if (!(accessToken && accessTokenExpiresAt))
+    throw new Error('Unable to renew auth.')
+
+  setAccessToken(accessToken)
+  setAccessTokenExpiresAt(accessTokenExpiresAt)
 }
