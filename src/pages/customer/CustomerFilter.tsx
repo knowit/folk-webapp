@@ -43,7 +43,6 @@ export default function CustomerFilter({
   }
 
   const [state, setState] = useState<TableState>(initialState)
-  //const filteredRows = searchAndFilter(allRows, searchableColumns, state)
 
   useEffect(
     () => filter(searchAndFilter(allRows, searchableColumns, state)),
