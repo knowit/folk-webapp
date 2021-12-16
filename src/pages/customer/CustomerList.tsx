@@ -86,7 +86,7 @@ export default function CustomerList() {
     setDropdowns(dropdowns)
   }
 
-  const handleSearchAndFilter = (filtered: []) => {
+  const handleSearchAndFilter = (filtered: any[]) => {
     const expand = filtered.length === initialData.length
     const grouped = groupByCustomers(filtered, 2)
     createDropdowns(grouped, !expand)

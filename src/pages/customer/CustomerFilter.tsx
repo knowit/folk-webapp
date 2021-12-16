@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import FilterInput, {
   CategoryWithGroup,
   useCategories,
@@ -7,11 +7,15 @@ import { FilterHeader } from '../../components/FilterHeader'
 import { GridItemHeader } from '../../components/GridItem'
 import SearchInput from '../../components/SearchInput'
 import { SearchableColumn, TableState } from '../../data/DDTable'
-import { handleFilterChange, handleThresholdChange, searchAndFilter } from '../../components/FilterSearch'
+import {
+  handleFilterChange,
+  handleThresholdChange,
+  searchAndFilter,
+} from '../../components/FilterSearch'
 
 interface CustomerFilterProps {
   title: string
-  filter: (filter: any[]) => void;
+  filter: (filter: any[]) => void
   employees: any
   searchableColumns: SearchableColumn[]
   categories: CategoryWithGroup[]
@@ -38,36 +42,39 @@ export default function CustomerFilter({
     searchTerm: '',
   }
 
-  const [state, setState] = useState<TableState>(initialState);
-  
-  const filteredRows = searchAndFilter(allRows, searchableColumns, state);
-  //filter(filteredRows);
+  const [state, setState] = useState<TableState>(initialState)
+  //const filteredRows = searchAndFilter(allRows, searchableColumns, state)
+
+  useEffect(
+    () => filter(searchAndFilter(allRows, searchableColumns, state)),
+    [state]
+  )
 
   return (
     <>
       <GridItemHeader title={title} green>
         {state.filters.map(({ values, placeholder, datafetch }, index) => (
-            <FilterInput
-              key={placeholder}
-              filterList={values}
-              placeholder={placeholder}
-              onSelect={(filter) =>
-                setState((prevState) =>
-                  handleFilterChange(prevState, filter, index)
-                )
-              }
-              fetchFilterCategories={datafetch}
-            />
-          ))}
-        <SearchInput
-            placeholder={'Søk konsulent, kunde, etc...'}
-            onSearch={(searchTerm) => {
-              setState((prevState) => ({ ...prevState, searchTerm }))
-            }}
-            onClear={() =>
-              setState((prevState) => ({ ...prevState, searchTerm: '' }))
+          <FilterInput
+            key={placeholder}
+            filterList={values}
+            placeholder={placeholder}
+            onSelect={(value) =>
+              setState((prevState) =>
+                handleFilterChange(prevState, value, index)
+              )
             }
+            fetchFilterCategories={datafetch}
           />
+        ))}
+        <SearchInput
+          placeholder={'Søk konsulent, kunde, etc...'}
+          onSearch={(searchTerm) =>
+            setState((prevState) => ({ ...prevState, searchTerm }))
+          }
+          onClear={() =>
+            setState((prevState) => ({ ...prevState, searchTerm: '' }))
+          }
+        />
       </GridItemHeader>
       {state.filters.map(
         ({ values, threshold, name }, index) =>
@@ -77,16 +84,16 @@ export default function CustomerFilter({
               type={name}
               filterList={values}
               filterThreshold={threshold}
-              onThresholdUpdate={(value) => {
+              onThresholdUpdate={(value) =>
                 setState((prevState) =>
                   handleThresholdChange(prevState, value, index)
                 )
-              }}
-              onSkillClick={(value) => {
+              }
+              onSkillClick={(value) =>
                 setState((prevState) =>
                   handleFilterChange(prevState, value, index)
                 )
-              }}
+              }
             />
           )
       )}
