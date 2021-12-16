@@ -109,7 +109,7 @@ router.get('/userInfo', async function (req: Request, res: Response) {
 })
 
 router.post('/refresh', async function (req: Request, res: Response) {
-  const { refreshToken = null } = req.body
+  const refreshToken = req.cookies['refreshToken'] || null
 
   if (!refreshToken) {
     return (res.statusCode = 403)
@@ -123,6 +123,7 @@ router.post('/refresh', async function (req: Request, res: Response) {
     .then((tokens: TokenSet) =>
       res.send({
         accessToken: tokens.access_token,
+        expiresAt: tokens.expires_at,
         expiration: tokens.expires_in,
         sameSite: true,
         secure: true,
