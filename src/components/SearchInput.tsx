@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
+
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     backgroundColor: 'white',
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       backgroundColor: 'transparent',
     },
   },
-}));
+}))
 
 interface Props {
   onSearch: (val: string) => void;
@@ -49,11 +50,12 @@ export default function SearchInput({
     onSearch(searchTerm);
   }, 250);
 
+
   const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setSearchValue(event.target.value);
-    triggerSearch(event.target.value);
-  };
+    event.preventDefault()
+    setSearchValue(event.target.value)
+    triggerSearch(event.target.value)
+  }
 
   return (
     <>
@@ -83,5 +85,5 @@ export default function SearchInput({
         }
       />
     </>
-  );
+  )
 }

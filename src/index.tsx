@@ -1,12 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import LoginProvider from './LoginProvider';
-import App from './App';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter } from 'react-router-dom'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import { createTheme, ThemeProvider } from '@material-ui/core/styles'
+import LoginProvider from './LoginProvider'
+import App from './App'
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: '#707070',
@@ -30,7 +30,7 @@ const theme = createMuiTheme({
     fontFamily: 'Arial,Helvetica Neue,Helvetica,sans-serif',
     fontWeightRegular: 'normal',
   },
-});
+})
 
 ReactDOM.render(
   <>
@@ -44,4 +44,4 @@ ReactDOM.render(
     </ThemeProvider>
   </>,
   document.getElementById('root')
-);
+)

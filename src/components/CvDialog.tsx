@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Button from '@material-ui/core/Button';
-import CloseIcon from '@material-ui/icons/Close';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import Divider from '@material-ui/core/Divider/Divider';
+import React, { useEffect, useState } from 'react'
+import Dialog from '@material-ui/core/Dialog'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormControl from '@material-ui/core/FormControl'
+import Button from '@material-ui/core/Button'
+import CloseIcon from '@material-ui/icons/Close'
+import { withStyles, makeStyles } from '@material-ui/core/styles'
+import Card from '@material-ui/core/Card'
+import Divider from '@material-ui/core/Divider/Divider'
 
 interface CvCellData {
-  no_pdf: string;
-  int_pdf: string;
-  no_word: string;
-  int_word: string;
+  no_pdf: string
+  int_pdf: string
+  no_word: string
+  int_word: string
 }
 
 const DialogBox = withStyles(() => ({
@@ -27,7 +27,7 @@ const DialogBox = withStyles(() => ({
     alignItems: 'center',
     borderRadius: '0px',
   },
-}))(Dialog);
+}))(Dialog)
 
 const GreenButton = withStyles(() => ({
   root: {
@@ -45,7 +45,7 @@ const GreenButton = withStyles(() => ({
     textTransform: 'none',
     color: '#f1f0ed',
   },
-}))(Button);
+}))(Button)
 
 const GreyButton = withStyles(() => ({
   root: {
@@ -59,7 +59,7 @@ const GreyButton = withStyles(() => ({
     fontWeight: 'bold',
     textTransform: 'none',
   },
-}))(Button);
+}))(Button)
 
 const DialogCard = withStyles(() => ({
   root: {
@@ -74,7 +74,7 @@ const DialogCard = withStyles(() => ({
     border: 'solid 1px #e0ded7',
     padding: '21px',
   },
-}))(Card);
+}))(Card)
 
 const BlackRadio = withStyles(() => ({
   root: {
@@ -87,7 +87,7 @@ const BlackRadio = withStyles(() => ({
     },
   },
   checked: {},
-}))(Radio);
+}))(Radio)
 
 const FormControlLabelStyled = withStyles(() => ({
   label: {
@@ -95,7 +95,7 @@ const FormControlLabelStyled = withStyles(() => ({
     padding: '0px',
     fontSize: '14px',
   },
-}))(FormControlLabel);
+}))(FormControlLabel)
 
 const useDialogStyle = makeStyles({
   closeIcon: {
@@ -129,7 +129,7 @@ const useDialogStyle = makeStyles({
     width: '42.6%',
     margin: 'auto',
   },
-});
+})
 
 export default function CvDialog({
   onClose,
@@ -137,31 +137,31 @@ export default function CvDialog({
   name,
   open,
 }: {
-  data: CvCellData;
-  onClose: () => void;
-  name: string;
-  open: boolean;
+  data: CvCellData
+  onClose: () => void
+  name: string
+  open: boolean
 }) {
-  const [fileType, setFileType] = useState('.pdf');
-  const [language, setLanguage] = useState('Norsk');
-  const [downloadLink, setDownloadLink] = useState(data.int_pdf);
+  const [fileType, setFileType] = useState('.pdf')
+  const [language, setLanguage] = useState('Norsk')
+  const [downloadLink, setDownloadLink] = useState(data.int_pdf)
 
   useEffect(() => {
     if (fileType === '.pdf') {
-      if (language === 'Norsk') setDownloadLink(data.no_pdf);
-      else setDownloadLink(data.int_pdf);
-    } else if (language === 'Norsk') setDownloadLink(data.no_word);
-    else setDownloadLink(data.int_word);
-  }, [language, fileType, data]);
+      if (language === 'Norsk') setDownloadLink(data.no_pdf)
+      else setDownloadLink(data.int_pdf)
+    } else if (language === 'Norsk') setDownloadLink(data.no_word)
+    else setDownloadLink(data.int_word)
+  }, [language, fileType, data])
 
   const handleLanguageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLanguage(event.target.value);
-  };
+    setLanguage(event.target.value)
+  }
   const handleFileTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFileType(event.target.value);
-  };
+    setFileType(event.target.value)
+  }
 
-  const classes = useDialogStyle();
+  const classes = useDialogStyle()
   return (
     <DialogBox
       onClose={() => onClose()}
@@ -224,5 +224,5 @@ export default function CvDialog({
         </GreenButton>
       </div>
     </DialogBox>
-  );
+  )
 }

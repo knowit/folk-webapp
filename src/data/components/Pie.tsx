@@ -1,20 +1,20 @@
-import React from 'react';
-import { ResponsivePie } from '@nivo/pie';
-import { colors } from './common';
+import React from 'react'
+import { ResponsivePie } from '@nivo/pie'
+import { colors } from './common'
 
 type PieChartsData = {
-  [key: string]: string | number;
-};
+  [key: string]: string | number
+}
 
 interface PieChartsProps {
-  data: PieChartsData[];
-  groupKey: string;
-  valueKey: string;
-  big?: boolean;
+  data: PieChartsData[]
+  groupKey: string
+  valueKey: string
+  big?: boolean
 }
 
 export default function Pie({ data, groupKey, valueKey, big }: PieChartsProps) {
-  const height = big ? '400px' : '300px';
+  const height = big ? '400px' : '300px'
   return (
     <div style={{ height, width: '100%' }}>
       <ResponsivePie
@@ -35,5 +35,5 @@ export default function Pie({ data, groupKey, valueKey, big }: PieChartsProps) {
         legends={[]}
       />
     </div>
-  );
+  )
 }

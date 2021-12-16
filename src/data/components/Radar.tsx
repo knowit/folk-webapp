@@ -1,16 +1,16 @@
-import React from 'react';
-import { colors } from './common';
-import { ResponsiveRadar } from '@nivo/radar';
+import React from 'react'
+import { colors } from './common'
+import { ResponsiveRadar } from '@nivo/radar'
 
 type RadarChartsData = {
-  [key: string]: string | number;
-};
+  [key: string]: string | number
+}
 
 interface RadarChartsProps {
-  data: RadarChartsData[];
-  groupKey: string;
-  valueKey: string[];
-  big?: boolean;
+  data: RadarChartsData[]
+  groupKey: string
+  valueKey: string[]
+  big?: boolean
 }
 
 export default function Radar({
@@ -19,7 +19,7 @@ export default function Radar({
   valueKey,
   big,
 }: RadarChartsProps) {
-  const height = big ? '400px' : '300px';
+  const height = big ? '400px' : '300px'
   return (
     <div style={{ height, width: '100%' }}>
       <ResponsiveRadar
@@ -64,5 +64,5 @@ export default function Radar({
         ]}
       />
     </div>
-  );
+  )
 }

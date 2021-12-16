@@ -1,13 +1,13 @@
-import React from 'react';
-import { Grid } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
-import DDItem, { DDChart } from '../data/DDItem';
-import { EmployeeTable } from '../components/EmployeeTable';
+import React from 'react'
+import { Grid } from '@material-ui/core'
+import { Skeleton } from '@material-ui/lab'
+import DDItem, { DDChart } from '../data/DDItem'
+import { EmployeeTable } from '../components/EmployeeTable'
 
 export default function Competence() {
   const ChartSkeleton = () => (
     <Skeleton variant="rect" height={320} animation="wave" />
-  );
+  )
 
   return (
     <Grid container spacing={2}>
@@ -165,8 +165,8 @@ export default function Competence() {
             {
               type: 'Bar',
               props: {
-                dataKey: 'category',
                 yLabels: ['value'],
+                dataKey: 'category',
               },
             },
           ],
@@ -175,5 +175,5 @@ export default function Competence() {
 
       <EmployeeTable />
     </Grid>
-  );
+  )
 }

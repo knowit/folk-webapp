@@ -1,4 +1,4 @@
-import React, { Dispatch } from 'react';
+import React, { Dispatch } from 'react'
 import {
   Avatar,
   Button,
@@ -7,14 +7,14 @@ import {
   withStyles,
   Theme,
   createStyles,
-} from '@material-ui/core';
-import { ReactComponent as FallbackUserIcon } from '../../../../assets/fallback_user.svg';
-import CharacterLimitBox from '../../../../components/CharacterLimitBox';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import { OpenInNew } from '@material-ui/icons';
-import { Link } from 'react-router-dom';
-import { Action, RowStates } from '../DataTable';
+} from '@material-ui/core'
+import { ReactComponent as FallbackUserIcon } from '../../../../assets/fallback_user.svg'
+import CharacterLimitBox from '../../../../components/CharacterLimitBox'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ExpandLessIcon from '@material-ui/icons/ExpandLess'
+import { OpenInNew } from '@material-ui/icons'
+import { Link } from 'react-router-dom'
+import { Action, RowStates } from '../DataTable'
 
 const useCompetenceMappingStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -67,12 +67,12 @@ const useCompetenceMappingStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
     },
   })
-);
+)
 const TableCellNoBorders = withStyles({
   root: {
     borderBottom: '1px solid #F1F0ED',
   },
-})(TableCell);
+})(TableCell)
 
 const ExpandMoreIconWithStyles = withStyles({
   root: {
@@ -82,7 +82,7 @@ const ExpandMoreIconWithStyles = withStyles({
       color: '#333333',
     },
   },
-})(ExpandMoreIcon);
+})(ExpandMoreIcon)
 
 const ExpandLessIconWithStyles = withStyles({
   root: {
@@ -92,8 +92,9 @@ const ExpandLessIconWithStyles = withStyles({
       color: '#333333',
     },
   },
-})(ExpandLessIcon);
-const OpenInNewStyled = withStyles({
+})(ExpandLessIcon)
+
+export const OpenInNewStyled = withStyles({
   root: {
     color: '#707070',
     cursor: 'pointer',
@@ -101,29 +102,28 @@ const OpenInNewStyled = withStyles({
       color: '#333333',
     },
   },
-})(OpenInNew);
+})(OpenInNew)
 
 export default function ConsultantCell(cellData: {
-  data: { value: string; image: string | undefined };
-  email: string;
-  rowStates: RowStates;
-  dispatch: Dispatch<Action>;
-  id: string;
+  data: { value: string; image: string | undefined }
+  email: string
+  rowStates: RowStates
+  dispatch: Dispatch<Action>
+  id: string
 }) {
-  const { data } = cellData;
-  const rowStates = cellData.rowStates;
-  const id = cellData.id;
-  const classes = useCompetenceMappingStyles();
-  const isOpen = () =>
-    rowStates && rowStates[id] && rowStates[id].height !== 70;
+  const { data } = cellData
+  const rowStates = cellData.rowStates
+  const id = cellData.id
+  const classes = useCompetenceMappingStyles()
+  const isOpen = () => rowStates && rowStates[id] && rowStates[id].height !== 70
   const openClick = () => {
     cellData.dispatch({
       type: 'CHANGE_HEIGHT',
       id,
       height: isOpen() ? 70 : 280,
-    });
-  };
-  const openStyle = isOpen() ? classes.bolderText : '';
+    })
+  }
+  const openStyle = isOpen() ? classes.bolderText : ''
   return (
     <TableCellNoBorders
       component="div"
@@ -172,5 +172,5 @@ export default function ConsultantCell(cellData: {
         </div>
       </Button>
     </TableCellNoBorders>
-  );
+  )
 }

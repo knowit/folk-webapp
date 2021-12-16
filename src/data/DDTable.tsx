@@ -3,23 +3,25 @@ import { GridItemHeader } from '../components/GridItem';
 import { FilterHeader } from '../components/FilterHeader';
 import DataTable from './components/table/DataTable';
 import SearchInput from '../components/SearchInput';
-import FilterInput from '../components/FilterInput';
+import FilterInput, { useCategories, useCustomer
+} from '../components/FilterInput';
 import RowCount from '../components/RowCount';
 import { DDComponentProps } from './types';
 import { makeStyles } from '@material-ui/core/styles';
+import { FilterObject, handleFilterChange, handleThresholdChange, searchAndFilter } from '../components/FilterSearch';
 
-interface Column {
+export interface Column {
   title: string;
   expandable?: boolean;
   searchable?: boolean;
   getSearchValue?: GetSearchValueFn;
 }
 
-type GetSearchValueFn = (data: unknown) => string;
+type GetSearchValueFn = (data: unknown) => string
 
 export interface SearchableColumn {
-  columnIndex: number;
-  getSearchValue: GetSearchValueFn;
+  columnIndex: number
+  getSearchValue: GetSearchValueFn
 }
 
 const useStyles = makeStyles({
@@ -29,93 +31,23 @@ const useStyles = makeStyles({
     justifyContent: 'space-around',
     width: '900px',
   },
-});
+})
 
 export interface TableState {
   filters: FilterObject[];
   searchTerm: string;
 }
 
-export type FilterObject = {
-  name: FilterType;
-  values: string[];
-  threshold: number;
-  placeholder: string;
-}
-
-export type FilterType = 'COMPETENCE' | 'MOTIVATION' | 'CUSTOMER';
-
-const mapping: Record<FilterType,number> = {'MOTIVATION': 2, 'COMPETENCE': 1, 'CUSTOMER': 4}
-
-const searchRow = (
-  row: any,
-  searchableColumns: SearchableColumn[],
-  searchTerm: string
-) =>
-  searchableColumns
-    .map((column) =>
-      column
-        .getSearchValue(row.rowData[column.columnIndex])
-        .toLowerCase()
-        .trim()
-        .includes(searchTerm.toLowerCase().trim())
-    )
-    .reduce((a, b) => a || b, false);
-
-const filterRow = (
-  columnValue: { [key: string]: any },
-  filters: string[],
-  filterThreshold: number
-) =>
-  filters
-    .map((filterKey) => {
-      return columnValue?.[filterKey] >= filterThreshold;
-    })
-    .reduce((a, b) => a && b);
-
-const filterCustomerColumn = (columnValue: { [key: string]: any },
-  filters: string[]) => filters.map((filter) => columnValue?.["customer"] === filter).reduce((prev,curr) => prev && curr)
-
-const searchAndFilter = (rows: any, searchableColumns: SearchableColumn[], state: TableState) => {
-  
-  const hasSearchTerm = !!state.searchTerm && state.searchTerm.trim() !== '';
-  return rows.filter((row: any) => {
-    
-    const rowMatchesSearchTerm = hasSearchTerm
-      ? searchRow(row, searchableColumns, state.searchTerm)
-      : true;
-    
-    
-    let rowMatchesFilters = true;
-    state.filters.map((filter) => {
-      if (filter.values.length > 0) {
-        if (filter.name === 'CUSTOMER') {
-          rowMatchesFilters = rowMatchesFilters &&
-            (filterCustomerColumn(row.rowData[row.rowData.length - mapping[filter.name]], filter.values))
-        } else {
-          rowMatchesFilters = rowMatchesFilters &&
-            (filterRow(row.rowData[row.rowData.length - mapping[filter.name]], filter.values, filter.threshold));
-        }
-      }})
-  
-    
-    return (
-      rowMatchesSearchTerm &&
-      rowMatchesFilters
-    );
-  });
-};
-
-function handleFilterChange(prevState: TableState, newFilters: string[], index: number) {
-  const filters = prevState.filters;
-  filters[index].values = newFilters;
-  return ({...prevState, filters:[...prevState.filters]})
-}
-
-function handleThresholdChange(prevState: TableState, threshold: number, index: number) {
-  const filters = prevState.filters;
-  filters[index].threshold = threshold;
-  return ({...prevState, filters:[...prevState.filters]})
+export function getSearchableColumns(columns: Column[]): SearchableColumn[] {
+  return columns.reduce((result, column, index) => {
+    if (column.searchable && column.getSearchValue) {
+      result.push({
+        columnIndex: index,
+        getSearchValue: column.getSearchValue,
+      })
+    }
+    return result
+  }, [] as SearchableColumn[])
 }
 
 export default function DDTable({ payload, title, props }: DDComponentProps) {
@@ -125,50 +57,44 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
       name: "COMPETENCE",
       values: [],
       threshold: 3,
-      placeholder:"Filtrer på kompetanse..."
+      placeholder: "Filtrer på kompetanse...",
+      datafetch: useCategories,
     },
     {
       name: "MOTIVATION",
       values: [],
       threshold: 4,
-      placeholder:"Filtrer på motivasjon..."
+      placeholder: "Filtrer på motivasjon...",
+      datafetch: useCategories,
     },
     {
       name: "CUSTOMER",
       values: [],
-      threshold: 3,
-      placeholder: "Filtrer på kunder..."
+      placeholder: "Filtrer på kunder...",
+      threshold: 0,
+      datafetch: useCustomer,
     }],
     searchTerm: '',
   };
   const [state, setState] = useState<TableState>(initialState as TableState);
   
   const { columns } = props as { columns: Column[] };
-  const searchableColumns = columns.reduce((result, column, index) => {
-    if (column.searchable && column.getSearchValue) {
-      result.push({
-        columnIndex: index,
-        getSearchValue: column.getSearchValue,
-      });
-    }
-    return result;
-  }, [] as SearchableColumn[]);
-
+  const searchableColumns = getSearchableColumns(columns);
   const filteredRows = searchAndFilter(allRows, searchableColumns, state)
-  
 
   const classes = useStyles();
   return (
     <>
       <GridItemHeader title={title}>
         <div className={classes.searchBars}>
-          {state.filters.map(({values, placeholder}, index) =>
+          {state.filters.map(({values, placeholder, datafetch}, index) =>
             <FilterInput
               key={placeholder}
               filterList={values}
               placeholder={placeholder}
               onSelect={(filter) =>
                 setState(prevState => handleFilterChange(prevState, filter, index))}
+              fetchFilterCategories={datafetch}
             />)}
           <SearchInput
             placeholder={"Søk konsulent, kunde, etc..."}
@@ -198,5 +124,5 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
       </RowCount>
       <DataTable rows={filteredRows} columns={[]} {...props} />
     </>
-  );
+  )
 }

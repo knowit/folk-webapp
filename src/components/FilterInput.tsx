@@ -7,6 +7,7 @@ import { InputBase, withStyles } from '@material-ui/core';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { DDPayload } from '../data/types';
 
+
 const StyledCheckBox = withStyles(() => ({
   root: {
     height: '15px',
@@ -18,17 +19,17 @@ const StyledCheckBox = withStyles(() => ({
     },
   },
   checked: {},
-}))(Checkbox);
+}))(Checkbox)
 
 interface CategoryList {
-  category: string;
-  subCategories: string[];
+  category: string
+  subCategories: string[]
 }
 
-type CategoryWithGroup = {
-  category: string;
-  group: string;
-};
+export type CategoryWithGroup = {
+  category: string
+  group: string
+}
 
 
 const useStyles = makeStyles({
@@ -59,52 +60,45 @@ const useStyles = makeStyles({
   autocomplete: {
     paddingRight: '10px',
   },
-});
+})
 
-function useCategories(): CategoryWithGroup[] {
+export function useCategories(): CategoryWithGroup[] {
   const [categories] = useFetchedData<CategoryList[]>({
     url: '/api/data/competenceFilter',
   });
-  console.log((categories ?? []).flatMap((mainCategory) =>
-    mainCategory.subCategories.map((subCategory) => ({
-      category: subCategory,
-      group: mainCategory.category,
-    }))))
   return (categories ?? []).flatMap((mainCategory) =>
     mainCategory.subCategories.map((subCategory) => ({
       category: subCategory,
       group: mainCategory.category,
     }))
-  );
+  )
 }
 
-function useCustomer(): any {
+export function useCustomer(): any {
   const [employees] = useFetchedData<DDPayload>({ url: "/api/data/employeeTable" })
-  const customers = (employees)?.flatMap((workers: any) => [workers.rowData[3]["customer"] ?? 'Ikke i prosjekt']) 
-  return Array.from(new Set(customers)).map(workers => ( {category: workers, group: "customer"}))
+  const customers = (employees)?.flatMap((workers: any) => [workers.rowData[3]["customer"] ?? 'Ikke i prosjekt'])
+  return Array.from(new Set(customers)).map(customer => ( {category: customer, group: "customer"}))
 }
 
 interface Props {
   filterList: string[];
   placeholder: string;
   onSelect: (value: string[]) => void;
-  //fetchData: () => CategoryWithGroup | string
+  fetchFilterCategories: () => CategoryWithGroup[];
 }
 
 export default function FilterInput({
   filterList,
   placeholder,
   onSelect,
-  //fetchData,
+  fetchFilterCategories,
 }: Props) {
-  const categoriesWithGroup = useCustomer();
+  const categoriesWithGroup = fetchFilterCategories();
   const classes = useStyles();
 
   const activeCategories = categoriesWithGroup.filter((categoryWithGroup:any) =>
     filterList.includes(categoryWithGroup.category)
-  );
-
-  //console.log(useCustomer());
+  )
 
   const handleCategoryChange = (
     _event: ChangeEvent<unknown>,
@@ -146,5 +140,5 @@ export default function FilterInput({
         </div>
       )}
     />
-  );
+  )
 }

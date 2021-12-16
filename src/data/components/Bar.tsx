@@ -1,41 +1,47 @@
-import React from 'react';
-import { ResponsiveBar } from '@nivo/bar';
-import { colors } from './common';
+import React from 'react'
+import { ResponsiveBar } from '@nivo/bar'
+import { colors } from './common'
 
 type BarChartsData = { [chartLabel: string]: number | string } & {
-  x: number | string;
-};
+  x: number | string
+}
+
+export enum Layout {
+  VERTICAL = 'vertical',
+  HORIZONTAL = 'horizontal',
+}
 
 interface BarChartsProps {
-  yLabels: string[];
-  dataKey: string;
-  data: BarChartsData[];
-  big?: boolean;
-  maxValue: number | 'auto';
-  tooltipValues: string[];
+  yLabels: string[]
+  dataKey: string
+  data: BarChartsData[]
+  big?: boolean
+  maxValue: number | 'auto'
+  tooltipValues: string[]
+  layout: Layout | Layout.VERTICAL
 }
 
 const splitText = (longText: string | number) => {
-  const maxLength = 10;
-  const text = longText.toString();
-  const textList: string[] = [];
-  let start = 0;
+  const maxLength = 10
+  const text = longText.toString()
+  const textList: string[] = []
+  let start = 0
   while (start + maxLength < text.length) {
-    let index = text.lastIndexOf(' ', start + maxLength);
+    let index = text.lastIndexOf(' ', start + maxLength)
     if (index < start) {
-      index = text.indexOf(' ', start + maxLength);
-      if (index < start) break;
+      index = text.indexOf(' ', start + maxLength)
+      if (index < start) break
     }
-    textList.push(text.substring(start, index));
-    start = index + 1;
+    textList.push(text.substring(start, index))
+    start = index + 1
   }
-  textList.push(text.substring(start));
-  return textList;
-};
+  textList.push(text.substring(start))
+  return textList
+}
 
 const CustomTick = (tick: any) => {
-  const y = tick.tickIndex % 2 === 0 ? 10 : -15;
-  const values = splitText(tick.value);
+  const y = tick.tickIndex % 2 === 0 ? 10 : -15
+  const values = splitText(tick.value)
   return (
     <g transform={`translate(${tick.x},${tick.y + 22})`}>
       <line stroke="rgb(119,119,119)" strokeWidth={1.5} y1={-22} y2={y} />
@@ -53,12 +59,12 @@ const CustomTick = (tick: any) => {
             <tspan key={value + index} y={y + 5 + index * 8} x={0}>
               {value}
             </tspan>
-          );
+          )
         })}
       </text>
     </g>
-  );
-};
+  )
+}
 
 export default function Bar({
   data,
@@ -67,8 +73,9 @@ export default function Bar({
   big,
   maxValue,
   tooltipValues,
+  layout,
 }: BarChartsProps) {
-  const height = big ? '400px' : '300px';
+  const height = big ? '400px' : '300px'
   return (
     <div style={{ height, width: '100%' }}>
       <ResponsiveBar
@@ -83,6 +90,7 @@ export default function Bar({
         axisTop={null}
         axisRight={null}
         borderRadius={3}
+        layout={layout}
         axisBottom={{
           renderTick: CustomTick,
         }}
@@ -93,26 +101,34 @@ export default function Bar({
         }}
         groupMode="grouped"
         enableLabel={false}
-        tooltip={tooltipValues ? 
-          ({ indexValue, value, id }) => {
-            const motOrComp = id.toString().includes("motivation")? "motivation":"competence"
-            const numberId = motOrComp === "motivation"? tooltipValues[1]:tooltipValues[0]
-            const thisData = data.find(i => (i.category === indexValue))
-            const numberValue = thisData? thisData[numberId] : 0
-            return(<div>
-              <b>{indexValue}:</b>
-              <br /> <b>{motOrComp}</b>
-              <br /> Antall ansatte: {numberValue}
-              <br /> Andel: {value.toFixed(1)}% 
-            </div>
-          )}
-        :
-        ({ indexValue, value, id }) => (
-          <div>
-            <b>{indexValue}:</b>
-            <br /> {id}: {value.toFixed(1)}
-          </div>
-        )}
+        tooltip={
+          tooltipValues
+            ? ({ indexValue, value, id }) => {
+                const motOrComp = id.toString().includes('motivation')
+                  ? 'motivation'
+                  : 'competence'
+                const numberId =
+                  motOrComp === 'motivation'
+                    ? tooltipValues[1]
+                    : tooltipValues[0]
+                const thisData = data.find((i) => i.category === indexValue)
+                const numberValue = thisData ? thisData[numberId] : 0
+                return (
+                  <div>
+                    <b>{indexValue}:</b>
+                    <br /> <b>{motOrComp}</b>
+                    <br /> Antall ansatte: {numberValue}
+                    <br /> Andel: {value.toFixed(1)}%
+                  </div>
+                )
+              }
+            : ({ indexValue, value, id }) => (
+                <div>
+                  <b>{indexValue}:</b>
+                  <br /> {id}: {value.toFixed(1)}
+                </div>
+              )
+        }
         legends={
           yLabels.length > 1
             ? [
@@ -134,5 +150,5 @@ export default function Bar({
         }
       />
     </div>
-  );
+  )
 }

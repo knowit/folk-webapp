@@ -1,4 +1,12 @@
-import { range, mergeEmployees, EmployeeInformation } from './util'
+import {
+  range,
+  mergeEmployees,
+  EmployeeInformation,
+  sum,
+  getYear,
+  getWeek,
+  statusColorCode,
+} from './util'
 import { v4 as uuid } from 'uuid'
 
 /**
@@ -9,49 +17,158 @@ import { v4 as uuid } from 'uuid'
  * @return {object} All categories with scores for the employee
  */
 
+type EmployeeMotivationAndCompetence = {
+  email: string
+  motivation: number
+  competence: number
+  subCategory: string
+  category: string
+  categoryMotivationAvg: number
+  categoryCompetenceAvg: number
+}
+
+type EmployeeTable = {
+  data: [
+    EmployeeInformation[],
+    EmployeeMotivationAndCompetence[],
+    JobRotation[]
+  ]
+}
+
+type CategoryScores = [
+  Motivation: Record<string, number>,
+  Competence: Record<string, number>
+]
 const getCategoryScoresForEmployee = (
-  employeeEmail: string, 
-  categoryList: EmployeeMotivationAndCompetence[]) => {
-  const employeeCategories = categoryList.filter(categoryRow => categoryRow.email === employeeEmail)
+  employeeEmail: string,
+  categoryList: EmployeeMotivationAndCompetence[]
+): CategoryScores => {
+  const employeeCategories = categoryList.filter(
+    (categoryRow) => categoryRow.email === employeeEmail
+  )
   const employeeMotivation = {}
   const employeeCompetence = {}
-  employeeCategories.forEach(employeeRow => {
+  employeeCategories.forEach((employeeRow) => {
     employeeMotivation[employeeRow.subCategory] = employeeRow.motivation
     employeeCompetence[employeeRow.subCategory] = employeeRow.competence
   })
+
   return [employeeMotivation, employeeCompetence]
 }
 const getStorageUrl = (key: string) => {
   if (key !== undefined) {
     return `${process.env.STORAGE_URL}/${key}`
-  }
-  else {
+  } else {
     return undefined
   }
 }
 
-type EmployeeMotivationAndCompetence = {
-  email: string,
-  motivation: number,
-  competence: number,
-  subCategory: string,
-  category: string,
-  categoryMotivationAvg: number,
-  categoryCompetenceAvg: number
+const findProjectStatusForEmployee = (
+  jobRotationEmployees: JobRotation[],
+  email: string
+): string => {
+  const [wantNewProject, openForNewProject]: JobRotationStatus =
+    jobRotationStatus(jobRotationEmployees, email)
+
+  const inProjectStatus = false
+  const statusColor = statusColorCode(
+    wantNewProject,
+    openForNewProject,
+    inProjectStatus
+  )
+
+  return statusColor
 }
 
-type EmployeeTable ={
-  data : [EmployeeInformation[], EmployeeMotivationAndCompetence[]]
+type TotalProjectHours = [
+  ExternalProjectHours: number,
+  LocalProjectHours: number
+]
+
+const countProjectHours = (
+  registeredHours: EmployeeUBW[],
+  latestRegPeriod: number
+): TotalProjectHours => {
+  let totalExternalProjectHours = 0
+  let totalLocalProjectHours = 0
+
+  /**Kan hende project_type ikke kommer til å ha disse navnene og at de bare var placeholdere. Da må i så fall skillet mellom prosjektene fjernes også telles det bare vanlig opp */
+  registeredHours.forEach((registeredHour: EmployeeUBW) => {
+    if (registeredHour.reg_period === latestRegPeriod) {
+      switch (registeredHour.project_type) {
+        case 'External Projects':
+          totalExternalProjectHours += registeredHour.hours
+          break
+        case 'Local Projects':
+          totalLocalProjectHours += registeredHour.hours
+          break
+      }
+    }
+  })
+
+  return [totalExternalProjectHours, totalLocalProjectHours]
 }
+
+type JobRotationStatus = [WantNewProject: number, OpenForNewProject: number]
+
+const jobRotationStatus = (
+  jobRotations: JobRotation[],
+  email: string
+): JobRotationStatus => {
+  let wantNewProject, openForNewProject: number
+
+  jobRotations.forEach((employee) => {
+    if (employee.email == email) {
+      employee.index === 1 && (wantNewProject = employee.customscalevalue)
+      employee.index === 2 && (openForNewProject = employee.customscalevalue)
+    }
+  })
+
+  return [wantNewProject, openForNewProject]
+}
+
 export const employeeTableReports = [
   { reportName: 'employeeInformation' },
-  { reportName: 'employeeMotivationAndCompetence' }, 
+  { reportName: 'employeeMotivationAndCompetence' },
+  { reportName: 'jobRotationInformation' },
 ]
+type JobRotation = {
+  username: string
+  email: string
+  questionid: string
+  customscalevalue: number
+  guid: string
+  index: number
+  text: string
+  categoryid: string
+}
+
+type EmployeeUBW = {
+  customer: string
+  email: string
+  manager: string
+  guid: string
+  hours: number
+  timestamp: number
+  reg_period: number
+  project_type: string
+  work_order: string
+  work_order_description: string
+}
 /**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
-export const employeeTable = async ({data}: EmployeeTable ) => {
-  const [allEmployees, motivationAndCompetence] = data
+/*
+exports.employeeTable = async ({ data }) => {
+  console.log('HALLO', data)
+  const [allEmployees, motivationAndCompetence, jobRotation, employeeUBW] = data
+  { 'employeeMotivationAndCompetence' }
+}
+*/
+
+/**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
+export const employeeTable = async ({ data }: EmployeeTable) => {
+  const [allEmployees, motivationAndCompetence, jobRotation] = data
   const mergedEmployees = mergeEmployees(allEmployees)
-  return mergedEmployees.map(employee => ({
+  return mergedEmployees.map((employee) => ({
     rowId: uuid(),
     rowData: [
       {
@@ -66,12 +183,13 @@ export const employeeTable = async ({data}: EmployeeTable ) => {
         degree: employee.degree,
       },
       employee.title,
-      'red',
+      findProjectStatusForEmployee(jobRotation, employee.email),
       employee.customerArray.reduce((prevCustomer, thisCustomer) => {
         if (thisCustomer.weight < prevCustomer.weight) {
           return thisCustomer
+        } else {
+          return prevCustomer
         }
-        return prevCustomer
       }),
       Object.fromEntries(
         cvs.map(([lang, format]) => [
@@ -94,11 +212,13 @@ const cvs = [
 
 type ReportParams = {
   parameters: {
-    user_id?: string,
+    user_id?: string
     email?: string
   }
 }
-export const employeeExperienceReports = ({ parameters: { user_id } = {} }: ReportParams) => [
+export const employeeExperienceReports = ({
+  parameters: { user_id } = {},
+}: ReportParams) => [
   {
     reportName: 'projectExperience',
     filter: { user_id },
@@ -109,13 +229,13 @@ export const employeeExperienceReports = ({ parameters: { user_id } = {} }: Repo
  */
 type EmpExperience = {
   data: {
-    user_id: string,
-    navn: string, 
-    customer: string,
-    description: string,
-    year_from: number,
-    year_to: number,
-    month_from: number,
+    user_id: string
+    navn: string
+    customer: string
+    description: string
+    year_from: number
+    year_to: number
+    month_from: number
     month_to: number
   }[]
 }
@@ -138,7 +258,9 @@ export const employeeExperience = async ({ data }: EmpExperience) => {
   }
 }
 
-export const employeeCompetenceReports = ({ parameters: { email } = {} }: ReportParams) => [
+export const employeeCompetenceReports = ({
+  parameters: { email } = {},
+}: ReportParams) => [
   {
     reportName: 'employeeSkills',
     filter: { email },
@@ -153,24 +275,24 @@ export const employeeCompetenceReports = ({ parameters: { email } = {} }: Report
   },
 ]
 type EmployeeSkills = {
-  user_id: string,
-  email: string,
-  language: string,
-  skill: string,
+  user_id: string
+  email: string
+  language: string
+  skill: string
   role: string
 }
 type WorkExperience = {
-  user_id: string,
-  email: string,
-  employer: string,
-  month_from: number,
-  month_to: number,
-  year_from: number,
+  user_id: string
+  email: string
+  employer: string
+  month_from: number
+  month_to: number
+  year_from: number
   year_to: number
 }
 
 type EmployeeData = {
-  data:[EmployeeSkills[], WorkExperience[], EmployeeInformation[]]
+  data: [EmployeeSkills[], WorkExperience[], EmployeeInformation[]]
 }
 
 /** Dette endepunktet henter mer data om ansatte.
@@ -182,7 +304,8 @@ export const employeeCompetence = async ({ data }: EmployeeData) => {
   const mergedRes = mergeEmployees(resComp)
 
   const mapTags = (skills: EmployeeSkills[]) => {
-    const mappedSkills = skills && skills.length > 0 ? skills[0] : {} as EmployeeSkills
+    const mappedSkills =
+      skills && skills.length > 0 ? skills[0] : ({} as EmployeeSkills)
     return {
       languages: mappedSkills.language ? mappedSkills.language.split(';') : [],
       skills: mappedSkills.skill ? mappedSkills.skill.split(';') : [],
@@ -199,8 +322,8 @@ export const employeeCompetence = async ({ data }: EmployeeData) => {
 }
 
 type FagActivity = {
-  year: number,
-  week: number,
+  year: number
+  week: number
   used_hrs: number
 }
 
@@ -238,17 +361,21 @@ export const fagtimer = async ({ data }: { data: FagActivity[] }) => {
 }
 
 export const experienceDistributionReports = [
-  { reportName: 'yearsSinceSchoolDist' },
+  { reportName: 'workExperienceDistributedInYears' },
 ]
 
 type YearsSinceSchoolDist = {
-  years: number,
+  years_working: number
   count: number
 }
 /** Dette endepunktet henter ut erfarings-fordelingen blant de ansatte.
  * Det brukes for å lage stolpe- og kakediagram i Competence.tsx
  */
-export const experienceDistribution = async ({ data }:{ data: YearsSinceSchoolDist[] }) => {
+export const experienceDistribution = async ({
+  data,
+}: {
+  data: YearsSinceSchoolDist[]
+}) => {
   const setInGroups = (list: YearsSinceSchoolDist[]) => {
     const detailedGroupedList = [
       { years: 'Under 2 år', count: 0 },
@@ -259,25 +386,26 @@ export const experienceDistribution = async ({ data }:{ data: YearsSinceSchoolDi
       { years: '21 til 25 år', count: 0 },
       { years: '26 til 30 år', count: 0 },
       { years: 'over 31 år', count: 0 },
+      { years: 'Ukjent erfaring', count: 0 },
     ]
 
     const groupedList = [
-      { years: 'Under 1 år', count: 0 },
       { years: '1 til 2 år', count: 0 },
       { years: '3 til 5 år', count: 0 },
       { years: '6 til 10 år', count: 0 },
       { years: 'over 10 år', count: 0 },
+      { years: 'Ukjent erfaring', count: 0 },
     ]
 
     list.forEach((item) => {
-      const years = Number(item.years)
+      const years = Number(item.years_working)
       const count = Number(item.count)
       if (years === 0) {
-        detailedGroupedList[0].count += count
-        groupedList[0].count += count
+        detailedGroupedList[8].count += count
+        groupedList[4].count += count
       } else if (years === 1) {
         detailedGroupedList[0].count += count
-        groupedList[1].count += count
+        groupedList[0].count += count
       } else if (years === 2) {
         detailedGroupedList[1].count += count
         groupedList[1].count += count
@@ -325,18 +453,22 @@ export const ageDistributionReports = [
 ]
 
 type AgeDistribution = {
-  age: number,
+  age: number
   count: number
 }
 
 type AgeDistributionGroups = {
-  age_group: number,
+  age_group: number
   count: number
 }
 /** Dette endepunktet henter ut aldersfordelingen blant de ansatte.
  * Det brukes for å lage et stolpediagram i Competence.tsx
  */
-export const ageDistribution = async ({ data }: { data: [AgeDistribution[], AgeDistributionGroups[]] }) => {
+export const ageDistribution = async ({
+  data,
+}: {
+  data: [AgeDistribution[], AgeDistributionGroups[]]
+}) => {
   const [setAgeDist, setAgeDistGroup] = data
   
   return {
@@ -351,7 +483,7 @@ export const ageDistribution = async ({ data }: { data: [AgeDistribution[], AgeD
   }
 }
 
-function getEventSet(events: { time_from: string ,time_to: string }[]) {
+function getEventSet(events: { time_from: string; time_to: string }[]) {
   // Finds earliest and latest dates for creating a range of years
 
   const firstYear = new Date(
@@ -362,8 +494,7 @@ function getEventSet(events: { time_from: string ,time_to: string }[]) {
   ).getFullYear()
 
   const years: number[] = [] // Range of years in dataset, [2015, 2016, 2017, etc...]
-  for (let year = (firstYear); year <= (lastYear); year++)
-    years.push(year)
+  for (let year = firstYear; year <= lastYear; year++) years.push(year)
 
   const set = []
   years.map((year) =>
@@ -437,8 +568,8 @@ function dateRange(startDate: string, endDate: string) {
 }
 
 type FagEvent = {
-  event_summary: string, 
-  time_from: string,
+  event_summary: string
+  time_from: string
   time_to: string
 }
 export const fagEventsReports = [{ reportName: 'fagEvents' }]
@@ -456,7 +587,7 @@ export const fagEvents = async ({ data }: { data: FagEvent[] }) => {
   }
 }
 type DegreeDist = {
-  degree: string,
+  degree: string
   count: number
 }
 export const educationReports = [{ reportName: 'degreeDist' }]
@@ -472,19 +603,21 @@ export const education = async ({ data }: { data: DegreeDist }) => {
 }
 
 type NewCategories = {
-  category: string,
+  category: string
   subCategories: string
 }
 
 export const competenceFilterReports = [{ reportName: 'newCategories' }]
 export const competenceFilter = async ({ data }: { data: NewCategories[] }) => {
-  return data.map(e => ({ category: e.category, subCategories: JSON.parse(e.subCategories) }))
+  return data.map((e) => ({
+    category: e.category,
+    subCategories: JSON.parse(e.subCategories),
+  }))
 }
 
-
 type CompetenceAndMotivationAverage = {
-  value: number,
-  subCategory: string,
+  value: number
+  subCategory: string
   category: string
 }
 
@@ -493,27 +626,33 @@ export const competenceMappingReports = [
   { reportName: 'newMotivationAverage' },
 ]
 /** Dette endepunktet brukes i competence for å vise data fra kompteansekartleggingen som både sunburst-graf og stolpediagram */
-export const competenceMapping = async ({ data }: { data: CompetenceAndMotivationAverage[][] }) => {
+export const competenceMapping = async ({
+  data,
+}: {
+  data: CompetenceAndMotivationAverage[][]
+}) => {
   const [competence, motivation] = data
   const competenceCategories = (data: CompetenceAndMotivationAverage[]) => {
     const categoriesMap = {}
-    data.forEach(row => {
+    data.forEach((row) => {
       if (row.category in categoriesMap) {
-        categoriesMap[row.category].children.push({ category: `${row.category}: ${row.subCategory}`, value: row.value })
+        categoriesMap[row.category].children.push({
+          category: `${row.category}: ${row.subCategory}`,
+          value: row.value,
+        })
         categoriesMap[row.category].value += row.value
-      }
-      else {
+      } else {
         categoriesMap[row.category] = {
           category: row.category,
           children: [],
-          value: 0
+          value: 0,
         }
       }
     })
     for (const key of Object.keys(categoriesMap)) {
       const categoryObj = categoriesMap[key]
       const avg = categoryObj.value / categoryObj.children.length
-      categoryObj.children.forEach(child => {
+      categoryObj.children.forEach((child) => {
         child.size = (child.value / categoryObj.value) * avg
       })
       categoryObj.value = avg
@@ -530,8 +669,6 @@ export const competenceMapping = async ({ data }: { data: CompetenceAndMotivatio
   }
 }
 
-
-
 export const competenceAmountReports = [
   { reportName: 'employeeMotivationAndCompetence' },
 ]
@@ -539,22 +676,43 @@ export const competenceAmountReports = [
  * for de forskjellige kategoriene. Den regner også ut den prosentivse andelen som har svart 3 eller mer sammenlignet med alle om har svart.
  * Endepuktet brukes i Competence.tsx for å fremstille denne dataen som et stolpediagram.
  */
-export const competenceAmount = async ({ data }: { data: EmployeeMotivationAndCompetence[] }) => {
-  const THRESHOLD=3
+export const competenceAmount = async ({
+  data,
+}: {
+  data: EmployeeMotivationAndCompetence[]
+}) => {
+  const THRESHOLD = 3
   /*const motAndComp = data*/
-  const categoriesMap = {'mainCategories': {}}
+  const categoriesMap = { mainCategories: {} }
   // used to ensure that each participant is only counted once for each main category and to count the number of distinct participants
   const emailMap = {}
-  data.forEach(employeeRow => {
-    const { categoryMotivationAvg, categoryCompetenceAvg, category, subCategory, motivation, competence, email } = employeeRow
-    
+
+  data.forEach((employeeRow) => {
+    const {
+      categoryMotivationAvg,
+      categoryCompetenceAvg,
+      category,
+      subCategory,
+      motivation,
+      competence,
+      email,
+    } = employeeRow
+
     if (!(category in categoriesMap)) {
-      categoriesMap['mainCategories'][category] = {'competenceAmount': 0, 'motivationAmount': 0, category: category}
+      categoriesMap['mainCategories'][category] = {
+        competenceAmount: 0,
+        motivationAmount: 0,
+        category: category,
+      }
       categoriesMap[category] = {}
     }
-    
+
     if (!(subCategory in categoriesMap[category])) {
-      categoriesMap[category][subCategory] = {'competenceAmount': 0, 'motivationAmount': 0, category: subCategory}
+      categoriesMap[category][subCategory] = {
+        competenceAmount: 0,
+        motivationAmount: 0,
+        category: subCategory,
+      }
     }
 
     if (!(email in emailMap)) {
@@ -565,7 +723,7 @@ export const competenceAmount = async ({ data }: { data: EmployeeMotivationAndCo
       if (categoryMotivationAvg > THRESHOLD) {
         categoriesMap['mainCategories'][category].motivationAmount += 1
       }
-  
+
       if (categoryCompetenceAvg > THRESHOLD) {
         categoriesMap['mainCategories'][category].competenceAmount += 1
       }
@@ -586,9 +744,12 @@ export const competenceAmount = async ({ data }: { data: EmployeeMotivationAndCo
   const nParticipants = Object.keys(emailMap).length
   for (const category of Object.keys(categoriesMap)) {
     for (const subCategory of Object.keys(categoriesMap[category])) {
-      const { motivationAmount, competenceAmount } = categoriesMap[category][subCategory]
-      categoriesMap[category][subCategory]['motivationProportion'] = motivationAmount/nParticipants*100
-      categoriesMap[category][subCategory]['competenceProportion'] = competenceAmount/nParticipants*100
+      const { motivationAmount, competenceAmount } =
+        categoriesMap[category][subCategory]
+      categoriesMap[category][subCategory]['motivationProportion'] =
+        (motivationAmount / nParticipants) * 100
+      categoriesMap[category][subCategory]['competenceProportion'] =
+        (competenceAmount / nParticipants) * 100
     }
     output[category] = Object.values(categoriesMap[category])
   }
@@ -599,7 +760,9 @@ export const competenceAmount = async ({ data }: { data: EmployeeMotivationAndCo
   }
 }
 
-export const empDataReports = ({ parameters: { email } = {} }: ReportParams) => [
+export const empDataReports = ({
+  parameters: { email } = {},
+}: ReportParams) => [
   {
     reportName: 'employeeSkills',
     filter: { email },
@@ -637,25 +800,46 @@ export const empData = async ({ data }: EmployeeData) => {
   }
 }
 
-export const employeeRadarReports = ({ parameters: { email } = {} }: ReportParams) => [
+export const employeeRadarReports = ({
+  parameters: { email } = {},
+}: ReportParams) => [
   {
     reportName: 'employeeMotivationAndCompetence',
     filter: { email },
-  }
+  },
 ]
 /** Dette endepunktet hetner data om hvordan en konulent har scoret på de forskjellige kategoriene på kompetansekartleggingen
  *  Det brukes i EmployeeInfo (utvidet tabell), og EmployeeSite (siden for hver enkelt ansatt)
  */
-export const employeeRadar = async ({ data }:{ data: EmployeeMotivationAndCompetence[] }) => {
+export const employeeRadar = async ({
+  data,
+}: {
+  data: EmployeeMotivationAndCompetence[]
+}) => {
   const competenceAndMotivation = data
-  const categoriesMap = {'mainCategories': {}}
-  competenceAndMotivation.forEach(row => {
-    const { category, subCategory, categoryCompetenceAvg, categoryMotivationAvg, competence, motivation } = row
+  const categoriesMap = { mainCategories: {} }
+  competenceAndMotivation.forEach((row) => {
+    const {
+      category,
+      subCategory,
+      categoryCompetenceAvg,
+      categoryMotivationAvg,
+      competence,
+      motivation,
+    } = row
     if (!(category in categoriesMap)) {
       categoriesMap[category] = {}
     }
-    categoriesMap[category][subCategory] = {category: subCategory, motivation, competence}
-    categoriesMap['mainCategories'][category] = {category, motivation: categoryMotivationAvg, competence: categoryCompetenceAvg}
+    categoriesMap[category][subCategory] = {
+      category: subCategory,
+      motivation,
+      competence,
+    }
+    categoriesMap['mainCategories'][category] = {
+      category,
+      motivation: categoryMotivationAvg,
+      competence: categoryCompetenceAvg,
+    }
   })
   const output = {}
   for (const category of Object.keys(categoriesMap)) {
@@ -663,43 +847,62 @@ export const employeeRadar = async ({ data }:{ data: EmployeeMotivationAndCompet
   }
   return {
     setNames: Object.keys(output),
-    sets: output
+    sets: output,
   }
 }
-
 
 export const competenceAreasReports = [
   { reportName: 'newCompetenceAverage' },
   { reportName: 'newMotivationAverage' },
 ]
 
-export const competenceAreas = async ({ data }: { data: CompetenceAndMotivationAverage[][] }) => {
+export const competenceAreas = async ({
+  data,
+}: {
+  data: CompetenceAndMotivationAverage[][]
+}) => {
   const [competence, motivation] = data
 
-  const categoriesMap = {mainCategories: {}}
+  const categoriesMap = { mainCategories: {} }
 
-  competence.forEach(row => {
+  competence.forEach((row) => {
     const { category, subCategory } = row
     const competence = row.value || null
     if (!(category in categoriesMap)) {
       categoriesMap[category] = {}
-      categoriesMap['mainCategories'][category] = { category, motivation: 0, competence: 0 }
+      categoriesMap['mainCategories'][category] = {
+        category,
+        motivation: 0,
+        competence: 0,
+      }
     }
-    categoriesMap[category][subCategory] = { category: subCategory, competence, motivation: null }
+    categoriesMap[category][subCategory] = {
+      category: subCategory,
+      competence,
+      motivation: null,
+    }
     categoriesMap['mainCategories'][category].competence += competence
   })
 
-  motivation.forEach(row => {
+  motivation.forEach((row) => {
     const { category, subCategory } = row
     const motivation = row.value || null
     if (!(category in categoriesMap)) {
       categoriesMap[category] = {}
-      categoriesMap['mainCategories'][category] = { category, motivation: 0, competence: 0 }
+      categoriesMap['mainCategories'][category] = {
+        category,
+        motivation: 0,
+        competence: 0,
+      }
     }
     if (subCategory in categoriesMap[category]) {
       categoriesMap[category][subCategory].motivation = motivation
     } else {
-      categoriesMap[category][subCategory] = { category: subCategory, competence: null, motivation }
+      categoriesMap[category][subCategory] = {
+        category: subCategory,
+        competence: null,
+        motivation,
+      }
     }
     categoriesMap['mainCategories'][category].motivation += motivation
   })
@@ -707,15 +910,99 @@ export const competenceAreas = async ({ data }: { data: CompetenceAndMotivationA
   const output = {}
   for (const category of Object.keys(categoriesMap)) {
     if (category !== 'mainCategories') {
-      categoriesMap['mainCategories'][category].competence /= Object.keys(categoriesMap[category]).length
-      categoriesMap['mainCategories'][category].motivation /= Object.keys(categoriesMap[category]).length
+      categoriesMap['mainCategories'][category].competence /= Object.keys(
+        categoriesMap[category]
+      ).length
+      categoriesMap['mainCategories'][category].motivation /= Object.keys(
+        categoriesMap[category]
+      ).length
     }
     output[category] = Object.values(categoriesMap[category])
   }
   return {
     setNames: Object.keys(output),
-    sets: output
+    sets: output,
   }
-
 }
 
+export const hoursBilledPerCustomerReports = [{ reportName: 'perProject' }]
+
+export const hoursBilledPerCustomer = async ({ data }) => {
+  const groupByCustomer = {}
+
+  data.forEach((perProject) => {
+    const group = groupByCustomer[perProject.costumer] || []
+    group.push(perProject)
+    groupByCustomer[perProject.customer] = group
+  })
+
+  const customerHours = Object.keys(groupByCustomer).map(
+    (key) =>
+      (groupByCustomer[key] = {
+        kunde: key,
+        timer: sum(groupByCustomer[key], 'hours'),
+      })
+  )
+
+  return {
+    setNames: ['Customers'],
+    sets: {
+      Customers: customerHours,
+    },
+  }
+}
+
+export const hoursBilledPerWeekReports = [{ reportName: 'perProject' }]
+
+type LineGraphData = {
+  id: string
+  data: Array<any>
+}
+
+export const hoursBilledPerWeek = async ({ data }) => {
+  const groupedByCustomer = {}
+
+  data.forEach((elem) => {
+    const group = groupedByCustomer[elem.customer] || []
+    group.push(elem)
+    groupedByCustomer[elem.customer] = group
+  })
+
+  Object.keys(groupedByCustomer).forEach((key) => {
+    groupedByCustomer[key] = groupedByCustomer[key].map((data) => ({
+      x: data.reg_period,
+      y: data.hours,
+    }))
+  })
+
+  Object.keys(groupedByCustomer).forEach((key) => {
+    groupedByCustomer[key] = Array.from(
+      groupedByCustomer[key].reduce(
+        (m, { x, y }) => m.set(x, (m.get(x) || 0) + y),
+        new Map()
+      ),
+      ([x, y]) => ({ x, y })
+    ).sort((a, b) => b.x - a.x) // ascending sort of weeks
+  })
+
+  const lineGraphData = Object.entries(groupedByCustomer)
+    .map(
+      ([key, value]) =>
+        ({
+          id: key,
+          data: value,
+        } as LineGraphData)
+    )
+    .sort((a, b) => b.data.length - a.data.length) // ascending sort by number of week entries
+
+  return {
+    setNames: ['Lines'],
+    sets: {
+      Lines: lineGraphData,
+    },
+  }
+}
+
+export const customerCardsReports = [{ reportName: 'allProjectsOverview' }]
+
+export const customerCards = async ({ data }) => data
