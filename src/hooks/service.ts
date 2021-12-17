@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from 'react'
-import { useAPIToken } from '../authToken'
+import { getAccessToken } from '../api/auth/authHelpers'
 
 type AsyncFunction<T> = ((...args: any[]) => Promise<T>) | (() => Promise<T>)
 type AsyncData<T, K> = [(...args: any[]) => void, boolean, T | null, K | null]
@@ -50,7 +50,8 @@ export function useServiceCall<T>({
   url,
   method = 'GET',
 }: FetchData): ServiceCall<T> {
-  const token = useAPIToken()
+  // const token = useAPIToken()
+  const token = getAccessToken()
 
   const fetcher = useCallback(async () => {
     if (!token) return Promise.reject(new Error('Unauthorized'))

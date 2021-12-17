@@ -4,9 +4,9 @@ import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import { NavMenu, NavMenuItem } from './NavMenu'
 import { ReactComponent as KnowitLogo } from '../assets/logo.svg'
-import { useUserInfo } from '../LoginProvider'
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg'
 import { LoginLogoutButton } from './LoginLogoutButton'
+import { useUserInfo } from '../context/UserInfoContext'
 
 const useStyles = makeStyles(() =>
   createStyles({

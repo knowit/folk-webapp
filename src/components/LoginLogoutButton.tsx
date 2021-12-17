@@ -1,7 +1,7 @@
 import React from 'react'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { ButtonBase } from '@material-ui/core'
-import { useUserInfo } from '../LoginProvider'
+import { useUserInfo } from '../context/UserInfoContext'
 
 const useStyles = makeStyles(() =>
   createStyles({
