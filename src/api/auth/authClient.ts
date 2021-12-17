@@ -1,11 +1,21 @@
 import axios from 'axios'
-import { setAccessToken, setAccessTokenExpiresAt } from './authHelpers'
-import { RenewResponse } from './authApiTypes'
+import { RenewResponse, UserInfo } from './authApiTypes'
+import {
+  getAccessToken,
+  isAccessTokenValid,
+  setAccessToken,
+  setAccessTokenExpiresAt,
+} from './authHelpers'
 
 const BASE_URL = '/auth'
 
+const headers = {
+  'Content-Type': 'application/json',
+}
+
 const instance = axios.create({
   baseURL: BASE_URL,
+  headers,
 })
 
 /**
@@ -15,11 +25,7 @@ const instance = axios.create({
 export const renewAccessToken = async () => {
   const {
     data: { accessToken, expiresAt },
-  } = await instance.post<RenewResponse>('/refresh', {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
+  } = await instance.post<RenewResponse>('/refresh')
 
   return { accessToken, accessTokenExpiresAt: expiresAt }
 }
@@ -34,3 +40,34 @@ export const renewAuth = async () => {
   setAccessToken(accessToken)
   setAccessTokenExpiresAt(accessTokenExpiresAt)
 }
+
+/**
+ * Returns data at specific auth source.
+ *
+ * @param endpoint endpoint for data source
+ * @param options
+ * @returns the data at the endpoint
+ */
+export const getAtAuth = async <T>(
+  endpoint: string,
+  options?: {
+    forceAuth?: boolean
+  }
+) => {
+  if (options?.forceAuth || !isAccessTokenValid()) {
+    console.log('Renewing auth')
+    await renewAuth()
+  }
+
+  const accessToken = getAccessToken()
+  const res = await instance.get<T>(endpoint, {
+    headers: {
+      ...headers,
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+
+  return res.data
+}
+
+export const getUserInfo = () => getAtAuth<UserInfo>('/userInfo')
