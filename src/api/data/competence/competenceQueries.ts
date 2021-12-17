@@ -26,36 +26,37 @@ export const useCompetenceAmount = () => {
 }
 
 export const useCompetenceAreas = () =>
-  useSWR('/competenceAreas', getCompetenceAreas, {
+  useSWR('/competenceAreasCacheKey', getCompetenceAreas, {
     revalidateOnFocus: false,
   })
 
 export const useExperienceDistribution = () =>
-  useSWR('/experienceDistribution', getExperienceDistribution, {
+  useSWR('/experienceDistributionCacheKey', getExperienceDistribution, {
     revalidateOnFocus: false,
   })
 
 export const useAgeDistribution = () =>
-  useSWR('/ageDistribution', getAgeDistribution, {
+  useSWR('/ageDistributionCacheKey', getAgeDistribution, {
     revalidateOnFocus: false,
   })
 
 export const useFagtimer = () =>
-  useSWR('/fagtimer', getFagtimer, {
+  useSWR('/fagtimerCacheKey', getFagtimer, {
     revalidateOnFocus: false,
   })
 
 export const useFagEvents = () =>
-  useSWR('/competenceAreas', getFagEvents, {
+  useSWR('/competenceAreasCacheKey', getFagEvents, {
     revalidateOnFocus: false,
   })
 
 export const useEducation = () =>
-  useSWR('/education', getEducation, {
+  useSWR('/educationCacheKey', getEducation, {
     revalidateOnFocus: false,
   })
 
+// Denne funker feks
 export const useCompetenceMapping = () =>
-  useSWR('/competenceMapping', getCompetenceMapping, {
+  useSWR('/competenceMappingCacheKey', getCompetenceMapping, {
     revalidateOnFocus: false,
   })
