@@ -33,7 +33,7 @@ export type CategoryWithGroup = {
 const useStyles = makeStyles({
   input: {
     height: '43px',
-    width: '200px',
+    width: '210px',
     fontSize: '16px',
     lineHeight: '18px',
     backgroundColor: 'white',
@@ -72,16 +72,16 @@ export function useCategories(): CategoryWithGroup[] {
   )
 }
 
-export function useCustomer(): any {
+export function useCustomer(): CategoryWithGroup[] {
   const [employees] = useFetchedData<DDPayload>({
     url: '/api/data/employeeTable',
   })
-  const customers = employees?.flatMap((workers: any) => [
+  const customers: string[] = employees?.flatMap((workers: any) => [
     workers.rowData[3]['customer'] ?? 'Ikke i prosjekt',
   ])
-  return Array.from(new Set(customers)).map((customer) => ({
+  return Array.from(new Set(customers)).map((customer: string) => ({
     category: customer,
-    group: 'customer',
+    group: 'Kunde',
   }))
 }
 
@@ -102,7 +102,7 @@ export default function FilterInput({
   const classes = useStyles()
 
   const activeCategories = categoriesWithGroup.filter(
-    (categoryWithGroup: any) => filterList.includes(categoryWithGroup.category)
+    categoryWithGroup => filterList.includes(categoryWithGroup.category)
   )
 
   const handleCategoryChange = (
