@@ -33,7 +33,7 @@ function searchRow(
 }
 
 function filterRow(
-  columnValue: Record<string,number>,
+  columnValue: Record<string, number>,
   filters: string[],
   filterThreshold: number
 ) {
@@ -45,7 +45,7 @@ function filterRow(
 }
 
 const filterCustomerColumn = (
-  columnValue: Record<string,string>,
+  columnValue: Record<string, string>,
   filters: string[]
 ) =>
   filters

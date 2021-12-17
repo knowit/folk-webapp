@@ -101,8 +101,8 @@ export default function FilterInput({
   const categoriesWithGroup = fetchFilterCategories()
   const classes = useStyles()
 
-  const activeCategories = categoriesWithGroup.filter(
-    categoryWithGroup => filterList.includes(categoryWithGroup.category)
+  const activeCategories = categoriesWithGroup.filter((categoryWithGroup) =>
+    filterList.includes(categoryWithGroup.category)
   )
 
   const handleCategoryChange = (
