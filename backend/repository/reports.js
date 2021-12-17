@@ -76,12 +76,12 @@ const reports = [
   {
     name: 'ageDistributionGroups',
     queryString:
-      "SELECT CASE grouped_age WHEN 30 THEN 'under 30' WHEN 40 THEN 'under 40' WHEN 50 THEN 'under 50' ELSE 'over 50' END AS age_group, count(grouped_age) AS count FROM ( SELECT CASE WHEN age <= 30 THEN 30 WHEN age <= 40 THEN 40 WHEN age <= 50 THEN 50 ELSE 60 END AS grouped_age FROM (SELECT year(now()) - born_year AS age FROM cv_partner_employees WHERE born_year > 0) WHERE age > 10) GROUP BY  grouped_age ORDER BY  grouped_age ",
+      "SELECT CASE grouped_age WHEN 30 THEN 'under 30' WHEN 40 THEN 'under 40' WHEN 50 THEN 'under 50' WHEN 60 THEN 'over 50' ELSE 'Alder ikke kjent' END AS age_group, count(grouped_age) AS count FROM ( SELECT CASE WHEN age <= 30 THEN 30 WHEN age <= 40 THEN 40 WHEN age <= 50 THEN 50 WHEN age >= 60 AND age < 100 THEN 60 ELSE 99 END AS grouped_age FROM ( SELECT year(now()) - born_year AS age FROM dev_level_3_database.cv_partner_employees ) AS ages WHERE age > 10 ) AS age_groups GROUP BY  grouped_age ORDER BY  grouped_age",
     tables: ['cv_partner_employees'],
     dataProtection: 3,
-    created: '2021-07-28T10:30:06.240905',
+    created: '2021-12-17T10:00:22.370642',
     lastUsed: null,
-    lastCacheUpdate: '2021-07-28T10:30:07.701017',
+    lastCacheUpdate: '2021-12-17T10:00:24.298569',
   },
   {
     name: 'newCategories',
