@@ -1,3 +1,5 @@
+import { useUserInfo } from '../../context/UserInfoContext'
+
 // access_token
 export const setAccessToken = (token: string) =>
   localStorage.setItem('access_token', token)
@@ -15,4 +17,9 @@ export const getAccessTokenExpiresAt = () => {
 export const isAccessTokenValid = () => {
   // Devided by 1000 to remove milliseconds
   return new Date().getTime() / 1000 < getAccessTokenExpiresAt() - 10 // 10 second buffer
+}
+
+export const isLoggedIn = () => {
+  const user = useUserInfo()
+  return user && isAccessTokenValid()
 }

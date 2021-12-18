@@ -8,11 +8,11 @@ import React, {
 import { UserInfo } from '../api/auth/authApiTypes'
 import { getUserInfo } from '../api/auth/authClient'
 
-const UserContext = createContext<UserInfo>({})
+const UserContext = createContext<UserInfo | null>(null)
 export const useUserInfo = () => useContext(UserContext)
 
 export const UserInfoProvider = ({ children }: PropsWithChildren<any>) => {
-  const [fetchedUser, setFetchedUser] = useState<UserInfo>({} as UserInfo)
+  const [fetchedUser, setFetchedUser] = useState<UserInfo | null>(null)
 
   useEffect(() => {
     const fetchUser = async () => {

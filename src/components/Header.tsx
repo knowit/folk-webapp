@@ -60,8 +60,8 @@ export default function Header() {
           </NavMenu>
           <LoginLogoutButton />
           <Avatar
-            alt={userInfo.name}
-            src={userInfo.picture}
+            alt={userInfo?.name}
+            src={userInfo?.picture}
             className={classes.userAvatar}
           >
             <FallbackUserIcon />

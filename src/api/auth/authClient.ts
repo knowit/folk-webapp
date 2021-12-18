@@ -23,22 +23,31 @@ const instance = axios.create({
  * @returns the new accessToken and its expiration time
  */
 export const renewAccessToken = async () => {
-  const {
-    data: { accessToken, expiresAt },
-  } = await instance.post<RenewResponse>('/refresh')
+  try {
+    const {
+      data: { accessToken, expiresAt },
+    } = await instance.post<RenewResponse>('/refresh')
 
-  return { accessToken, accessTokenExpiresAt: expiresAt }
+    return { accessToken, accessTokenExpiresAt: expiresAt }
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log('Could not renew access token.')
+    }
+
+    return { accessToken: null, accessTokenExpiresAt: null }
+  }
 }
 
 export const renewAuth = async () => {
   const { accessToken, accessTokenExpiresAt } = await renewAccessToken()
 
-  // TODO: Imrove correct error handling
-  if (!(accessToken && accessTokenExpiresAt))
-    throw new Error('Unable to renew auth.')
+  // TODO: Improve correct error handling
+  if (!(accessToken && accessTokenExpiresAt)) return false
 
   setAccessToken(accessToken)
   setAccessTokenExpiresAt(accessTokenExpiresAt)
+
+  return true
 }
 
 /**
@@ -54,9 +63,14 @@ export const getAtAuth = async <T>(
     forceAuth?: boolean
   }
 ) => {
+  // Attempt to renew if a user is present and has a valid token/it is to be forced.
   if (options?.forceAuth || !isAccessTokenValid()) {
-    console.log('Renewing auth')
-    await renewAuth()
+    const renewed = await renewAuth()
+
+    if (!renewed) {
+      console.log('Request aborted due to not being able to renew token.')
+      return null
+    }
   }
 
   const accessToken = getAccessToken()
@@ -70,4 +84,4 @@ export const getAtAuth = async <T>(
   return res.data
 }
 
-export const getUserInfo = () => getAtAuth<UserInfo>('/userInfo')
+export const getUserInfo = () => getAtAuth<UserInfo | null>('/userInfo')

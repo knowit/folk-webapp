@@ -21,9 +21,14 @@ export const getDataAt = async <T>(
     forceAuth?: boolean
   }
 ) => {
+  // Attempt to renew if a user is present and has a valid token/it is to be forced.
   if (options?.forceAuth || !isAccessTokenValid()) {
-    console.log('Renewing auth')
-    await renewAuth()
+    const renewed = await renewAuth()
+
+    if (!renewed) {
+      console.log('Request aborted due to not being able to renew token.')
+      return null
+    }
   }
 
   const accessToken = getAccessToken()
