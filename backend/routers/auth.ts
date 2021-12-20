@@ -54,7 +54,6 @@ router.get('/logout', async function (req: Request, res: Response) {
     logout_uri: logoutUri,
   })
   res.clearCookie('refreshToken')
-  res.clearCookie('accessToken')
   res.redirect(logoutUrl)
 })
 
@@ -73,11 +72,6 @@ router.get('/callback', async function (req: Request, res: Response) {
     path: '/',
   }
 
-  res.cookie('accessToken', tokens.access_token, {
-    httpOnly: false,
-    maxAge: tokens.expires_in * 1000,
-    ...cookieSettings,
-  })
   res.cookie('refreshToken', tokens.refresh_token, {
     httpOnly: false,
     ...cookieSettings,
