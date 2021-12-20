@@ -10,7 +10,9 @@ export default function CustomerTable({
   const allRows = payload as { rowData: any[] }[]
 
   useEffect(() => {
-    callback(props.columns)
+    if (callback) {
+      callback(props.columns)
+    }
   }, [])
 
   return <DataTable rows={allRows} columns={[]} {...props} />

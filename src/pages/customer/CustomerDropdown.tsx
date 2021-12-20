@@ -5,7 +5,7 @@ import {
   AccordionSummary,
   AccordionDetails,
 } from '@material-ui/core'
-import { Minimize, Add, OpenInNew } from '@material-ui/icons'
+import { Minimize, Add } from '@material-ui/icons'
 import React, { useState } from 'react'
 import EmployeeInfo from '../../components/EmployeeInfo'
 import { GridItem } from '../../components/GridItem'
@@ -18,7 +18,8 @@ import {
 import { SimpleDDItem } from '../../data/SimpleDDItem'
 import CustomerTable from './CustomerTable'
 import { Link } from 'react-router-dom'
-import { OpenInNewStyled } from '../data/components/table/cells/ConsultantCell'
+import { OpenInNewStyled } from '../../data/components/table/cells/ConsultantCell'
+
 
 const useStyles = makeStyles(() =>
   createStyles({

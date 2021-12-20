@@ -4,7 +4,7 @@ import Employee from './pages/Employee'
 import Competence from './pages/Competence'
 import EmployeeSite from './pages/EmployeeSite'
 import Customer from './pages/customer/Customer'
-import CustomerSite from './pages/CustomerSite'
+import CustomerSite from './pages/customer/CustomerSite'
 
 export {
   NotFound,

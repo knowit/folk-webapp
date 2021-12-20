@@ -1,23 +1,24 @@
 import React, { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { ArrowBack } from '@material-ui/icons'
-import { SimpleDDItem } from '../data/SimpleDDItem'
-import CustomerTable from '../components/CustomerTable'
+import { SimpleDDItem } from '../../data/SimpleDDItem'
 import {
   CenteredHeaderCell,
   ConsultantCell,
   CvCell,
-} from '../data/components/table/DataCells'
-import EmployeeInfo from '../components/EmployeeInfo'
-import { Payload } from '../components/CustomerList'
-import { useFetchedData } from '../hooks/service'
+} from '../../data/components/table/DataCells'
+import EmployeeInfo from '../../components/EmployeeInfo'
+
+import { useFetchedData } from '../../hooks/service'
 import { Skeleton } from '@material-ui/lab'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
-import { CenteredDataCell } from '../data/components/table/cells/CenteredHeaderCell'
+import { CenteredDataCell } from '../../data/components/table/cells/CenteredHeaderCell'
 import { Grid } from '@material-ui/core'
-import { GridItem } from '../components/GridItem'
-import DDItem, { DDChart } from '../data/DDItem'
-import { ChartSkeleton } from './EmployeeSite'
+import { GridItem } from '../../components/GridItem'
+import DDItem, { DDChart } from '../../data/DDItem'
+import { ChartSkeleton } from '../EmployeeSite'
+import { Payload } from './CustomerList'
+import CustomerTable from './CustomerTable'
 
 const useStyles = makeStyles(() =>
   createStyles({
