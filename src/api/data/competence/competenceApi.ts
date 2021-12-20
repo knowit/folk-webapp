@@ -10,26 +10,26 @@ import {
   FagtimerResponse,
 } from './competenceApiTypes'
 
-export const getCompetenceAmount = async () =>
-  await getDataAt<CompetenceAmountResponse>('/competenceAmount')
+export const getCompetenceAmount = () =>
+  getDataAt<CompetenceAmountResponse>('/competenceAmount')
 
-export const getCompetenceAreas = async () =>
-  await getDataAt<CompetenceAreasResponse>('/competenceAreas')
+export const getCompetenceAreas = () =>
+  getDataAt<CompetenceAreasResponse>('/competenceAreas')
 
-export const getExperienceDistribution = async () =>
-  await getDataAt<ExperienceDistributionResponse>('/experienceDistribution')
+export const getExperienceDistribution = () =>
+  getDataAt<ExperienceDistributionResponse>('/experienceDistribution')
 
-export const getAgeDistribution = async () =>
-  await getDataAt<AgeDistributionResponse>('/ageDistribution')
+export const getAgeDistribution = () =>
+  getDataAt<AgeDistributionResponse>('/ageDistribution')
 
-export const getFagtimer = async () =>
-  await getDataAt<FagtimerResponse>('/fagtimer')
+export const getFagtimer = () => getDataAt<FagtimerResponse>('/fagtimer')
 
-export const getFagEvents = async () =>
-  await getDataAt<FagEventsResponse>('/fagEvents')
+export const getFagEvents = () => getDataAt<FagEventsResponse>('/fagEvents')
 
-export const getEducation = async () =>
-  await getDataAt<EducationResponse>('/education')
+export const getEducation = () => getDataAt<EducationResponse>('/education')
 
-export const getCompetenceMapping = async () =>
-  await getDataAt<CompetenceMappingResponse>('/competenceMapping')
+export const getCompetenceMapping = () =>
+  getDataAt<CompetenceMappingResponse>('/competenceMapping')
+
+// TODO: Fix type
+export const getCompetenceFilter = () => getDataAt<any>('/competenceFilter')

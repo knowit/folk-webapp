@@ -5,11 +5,11 @@ import {
   HoursBilledPerWeekResponse,
 } from './customerApiTypes'
 
-export const getCustomerCards = async () =>
-  await getDataAt<CustomerCardResponse>('/customerCards')
+export const getCustomerCards = () =>
+  getDataAt<CustomerCardResponse>('/customerCards')
 
-export const getHoursBilledPerCustomer = async () =>
-  await getDataAt<HoursBilledPerCustomerResponse>('/hoursBilledPerCustomer')
+export const getHoursBilledPerCustomer = () =>
+  getDataAt<HoursBilledPerCustomerResponse>('/hoursBilledPerCustomer')
 
-export const getHoursBilledPerWeek = async () =>
-  await getDataAt<HoursBilledPerWeekResponse>('/hoursBilledPerWeek')
+export const getHoursBilledPerWeek = () =>
+  getDataAt<HoursBilledPerWeekResponse>('/hoursBilledPerWeek')

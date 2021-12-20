@@ -1,16 +1,20 @@
 import { getDataAt } from '../dataClient'
 import { EmployeeTableResponse } from './employeeApiTypes'
 
-export const getEmployeeTable = async () =>
-  await getDataAt<EmployeeTableResponse>('/employeeTable')
+export const getEmployeeTable = () =>
+  getDataAt<EmployeeTableResponse>('/employeeTable')
 
 // TODO: Type correctly
-export const getEmployeeExperience = async (user_id: string) =>
-  await getDataAt<any>('/employeeExperience', { params: { user_id } })
+export const getEmployeeExperience = (url: string, user_id: string) =>
+  getDataAt<any>('/employeeExperience', { params: { user_id } })
 
 // TODO: Type correctly
-export const getEmpData = async (email: string) =>
-  await getDataAt<any>('/empData', {
+export const getEmployeeRadar = (url: string, email: string) =>
+  getDataAt<any>('/employeeRadar', { params: { email } })
+
+// TODO: Type correctly
+export const getEmpData = (url: string, email: string) =>
+  getDataAt<any>('/empData', {
     params: {
       email,
     },

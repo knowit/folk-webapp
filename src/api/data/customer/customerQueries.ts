@@ -6,16 +6,16 @@ import {
 } from './customerApi'
 
 export const useCustomerCards = () =>
-  useSWR('/customerCardCacheKey', getCustomerCards, {
+  useSWR('/customerCard', getCustomerCards, {
     revalidateOnFocus: false,
   })
 
 export const useHoursBilledPerCustomer = () =>
-  useSWR('/hoursBilledPerCustomerCacheKey', getHoursBilledPerCustomer, {
+  useSWR('/hoursBilledPerCustomer', getHoursBilledPerCustomer, {
     revalidateOnFocus: false,
   })
 
 export const useHoursBilledPerWeek = () =>
-  useSWR('/hoursBilledPerWeekCacheKey', getHoursBilledPerWeek, {
+  useSWR('/hoursBilledPerWeek', getHoursBilledPerWeek, {
     revalidateOnFocus: false,
   })
