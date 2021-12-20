@@ -3,7 +3,10 @@ import { useUserInfo } from '../../context/UserInfoContext'
 // access_token
 export const setAccessToken = (token: string) =>
   localStorage.setItem('access_token', token)
+
 export const getAccessToken = () => localStorage.getItem('access_token')
+
+export const removeAccessToken = () => localStorage.removeItem('access_token')
 
 // Expiration
 export const setAccessTokenExpiresAt = (expiresAt: number) =>
@@ -12,6 +15,15 @@ export const setAccessTokenExpiresAt = (expiresAt: number) =>
 export const getAccessTokenExpiresAt = () => {
   const expiresAt = localStorage.getItem('access_token_expires_at')
   return expiresAt ? JSON.parse(expiresAt) : 0
+}
+
+export const removeAccessTokenExpiresAt = () =>
+  localStorage.removeItem('access_token_expires_at')
+
+// Consider using localStorage.clear()
+export const clearLocalStorage = () => {
+  removeAccessToken()
+  removeAccessTokenExpiresAt()
 }
 
 export const isAccessTokenValid = () => {
