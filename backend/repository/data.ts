@@ -96,6 +96,7 @@ type ReportParams = {
   parameters: {
     user_id?: string,
     email?: string
+    customer?: string
   }
 }
 export const employeeExperienceReports = ({ parameters: { user_id } = {} }: ReportParams) => [
@@ -719,9 +720,9 @@ export const competenceAreas = async ({ data }: { data: CompetenceAndMotivationA
 
 }
 
-exports.hoursBilledPerCustomerReports = [{ reportName: 'perProject' }]
+export const hoursBilledPerCustomerReports = [{ reportName: 'perProject' }]
 
-exports.hoursBilledPerCustomer = async ({ data }) => {
+export const hoursBilledPerCustomer = async ({ data }) => {
   const groupByCustomer = {}
 
   data.forEach((perProject) => {
@@ -746,14 +747,14 @@ exports.hoursBilledPerCustomer = async ({ data }) => {
   }
 }
 
-exports.hoursBilledPerWeekReports = [{ reportName: 'perProject' }]
+export const hoursBilledPerWeekReports = [{ reportName: 'perProject' }]
 
 type LineGraphData = {
   id: string
   data: Array<any>
 }
 
-exports.hoursBilledPerWeek = async ({ data }) => {
+export const hoursBilledPerWeek = async ({ data }) => {
   const groupedByCustomer = {}
 
   data.forEach((elem) => {
@@ -797,14 +798,120 @@ exports.hoursBilledPerWeek = async ({ data }) => {
   }
 }
 
-exports.projectsOverviewReports =  [{ reportName: 'allProjectsOverview' }]
-
-exports.projectsOverview = async ({ data }) => {
-  return data
+type ProjectsCustomer = {
+  customer: string,
+  reg_period: number,
+  total_hours: number,
+  timestamp: number,
+  work_order: string,
+  work_order_description: string,
+  num_of_employees: number
 }
 
-exports.ubwEmployeeReports = [{reportName: 'employeeDataUBW'}]
+type ProjectCustomerResponse = {
+  data: ProjectsCustomer[],
+  parameters: { [key: string]: any }
+}
 
-exports.ubwEmployee = async ({ data }) => {
-  return data
+export const projectsCustomerReports = ({ parameters: { customer } = {} }: ReportParams) => [
+  {
+    reportName: 'customerProjects',
+    filter: { customer }
+  },
+]
+
+export const projectsCustomer = async (response: ProjectCustomerResponse) => {
+  const allTotalHours = response.data.reduce(
+    (m, {work_order, total_hours}) =>
+      m.set(work_order, (m.get(work_order) || 0) + total_hours), new Map)
+
+  return response.data.map(project => {
+    return {
+      rowId: uuid(),
+      rowData: [
+        project.work_order_description,
+        project.num_of_employees,
+        project.total_hours,
+        allTotalHours.get(project.work_order)
+      ]
+    }})
+}
+
+export const customerHoursBilledReports = ({ parameters: { customer } = {} }: ReportParams) => [
+  {
+    reportName: 'customerHoursBilled',
+    filter: { customer }
+  },
+]
+
+export const customerHoursBilled = async ({ data }) => {
+  return {
+    setNames: ['Timer'],
+    sets: {
+      Timer: data,
+    },
+  }
+}
+
+export const customerMotivationKnowledgeReports = ({ parameters: { customer } = {} }: ReportParams) => [
+  {
+    reportName: 'customerMotivationKnowledge',
+    filter: { customer }
+  },
+]
+
+export const customerMotivationKnowledge = async ({ data }) => {
+  return {
+    setNames: ['Motivation'],
+    sets: {
+      Motivation: data
+    }
+  }
+}
+
+
+export const customerSiteTableReports = ({ parameters: { customer } = {} }: ReportParams) => [
+  {
+    reportName: 'employeeInformation',
+    filter: {customer}
+  },
+  {
+    reportName: 'employeeMotivationAndCompetence',
+  },
+]
+export const customerSiteTable = async ({data}: EmployeeTable ) => {
+  const [allEmployees, motivationAndCompetence] = data
+  const mergedEmployees = mergeEmployees(allEmployees)
+  return mergedEmployees.map(employee => ({
+    rowId: uuid(),
+    rowData: [
+      {
+        value: employee.navn,
+        image: getStorageUrl(employee.image_key),
+        competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
+          employee.email
+        )}`,
+        email: employee.email,
+        email_id: employee.email,
+        user_id: employee.user_id,
+        degree: employee.degree,
+      },
+      employee.title,
+      employee.work_order_description,
+      employee.customerArray.reduce((prevCustomer, thisCustomer) => {
+        if (thisCustomer.weight < prevCustomer.weight) {
+          return thisCustomer
+        }
+        return prevCustomer
+      }),
+      Object.fromEntries(
+        cvs.map(([lang, format]) => [
+          `${lang}_${format}`,
+          employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
+        ])
+      ),
+      getCategoryScoresForEmployee(employee.email, motivationAndCompetence)[0],
+      getCategoryScoresForEmployee(employee.email, motivationAndCompetence)[1],
+    ],
+  }))
 }
