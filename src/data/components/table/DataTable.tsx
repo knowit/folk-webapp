@@ -8,6 +8,7 @@ import CharacterLimitBox from '../../../components/CharacterLimitBox';
 interface DataTableProps {
   columns: DataTableColumn[];
   rows: Omit<DataTableRow, 'columns'>[];
+  smallTable?: boolean
 }
 
 interface DataTableColumn {
@@ -329,11 +330,12 @@ function MuiVirtualizedTable({
   );
 }
 
-export default function DataTable({ columns, rows }: DataTableProps) {
+export default function DataTable({ columns, rows, smallTable }: DataTableProps) {
+  const height = (rows.length * 72) + 70
   return (
     <Paper
       style={{
-        height: 780,
+        height: smallTable ? height : 780,
         width: '100%',
         backgroundColor: 'white',
       }}
