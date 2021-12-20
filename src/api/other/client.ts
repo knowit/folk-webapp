@@ -2,20 +2,20 @@ import axios from 'axios'
 import { renewAuth } from '../auth/authClient'
 import { getAccessToken, isAccessTokenValid } from '../auth/authHelpers'
 
-const BASE_URL = '/api/data'
+const BASE_URL = '/api'
 
 const instance = axios.create({
   baseURL: BASE_URL,
 })
 
 /**
- * Returns data at specific data source.
+ * Returns data at generic endpoint
  *
- * @param endpoint endpoint for data source
+ * @param endpoint endpoint for source
  * @param options
  * @returns the data at the endpoint
  */
-export const getDataAt = async <T>(
+export const getAt = async <T>(
   endpoint: string,
   options?: {
     forceAuth?: boolean
@@ -43,3 +43,6 @@ export const getDataAt = async <T>(
 
   return res.data
 }
+
+export const getPrivacyPolicy = async () =>
+  await getAt<{ urlname: string }>('/privacyPolicy')
