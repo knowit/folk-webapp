@@ -1,9 +1,9 @@
-import React from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { ButtonBase } from '@material-ui/core';
-import { useUserInfo } from '../LoginProvider';
+import React from 'react'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { ButtonBase } from '@material-ui/core'
+import { useUserInfo } from '../LoginProvider'
 
-const useStyles = makeStyles( () =>
+const useStyles = makeStyles(() =>
   createStyles({
     buttonItem: {
       fontSize: '15px',
@@ -16,13 +16,13 @@ const useStyles = makeStyles( () =>
       height: 'inherit',
     },
   })
-);
+)
 
 export const LoginLogoutButton = () => {
-  const classes = useStyles();
-  const userInfo = useUserInfo();
+  const classes = useStyles()
+  const userInfo = useUserInfo()
 
-  let buttonText = '';
+  let buttonText = ''
   if (userInfo.email == undefined) {
     buttonText = 'Logg inn'
   } else {
@@ -31,20 +31,15 @@ export const LoginLogoutButton = () => {
 
   const handleClick = () => {
     if (userInfo.email == undefined) {
-      window.location.replace('/auth/login');
+      window.location.replace('/auth/login')
     } else {
-      window.location.replace('/auth/logout');
+      window.location.replace('/auth/logout')
     }
-  };
+  }
 
   return (
-    <ButtonBase
-      className={`${classes.buttonItem}`}
-      onClick={handleClick}
-    >
+    <ButtonBase className={`${classes.buttonItem}`} onClick={handleClick}>
       {buttonText}
     </ButtonBase>
-  );
-};
-
-
+  )
+}

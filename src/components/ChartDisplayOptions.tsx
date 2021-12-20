@@ -1,16 +1,16 @@
-import React from 'react';
-import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import { ChartComponentInfo, ChartVariant } from '../data/DDChart';
-import { BarChart, PieChart, ShowChart, DonutLarge } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
-import { createStyles, SvgIcon } from '@material-ui/core';
-import { ReactComponent as RadarLogo } from '../assets/RadarChart.svg';
+import React from 'react'
+import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab'
+import { ChartComponentInfo, ChartVariant } from '../data/DDChart'
+import { BarChart, PieChart, ShowChart, DonutLarge } from '@material-ui/icons'
+import { makeStyles } from '@material-ui/core/styles'
+import { createStyles, SvgIcon } from '@material-ui/core'
+import { ReactComponent as RadarLogo } from '../assets/RadarChart.svg'
 
 const chartVariantInfo: {
   [key in ChartVariant]: {
-    label: string;
-    icon: React.ReactNode;
-  };
+    label: string
+    icon: React.ReactNode
+  }
 } = {
   Line: { label: 'linjediagram', icon: <ShowChart /> },
   Bar: { label: 'stolpediagram', icon: <BarChart /> },
@@ -25,13 +25,13 @@ const chartVariantInfo: {
     ),
   },
   Sunburst: { label: 'sunburst-diagram', icon: <DonutLarge /> },
-};
+}
 
 interface ChartVariantToggleProps {
-  chartVariants: Array<ChartComponentInfo>;
-  selected: number;
-  onChange: (value: number) => void;
-  big?: boolean;
+  chartVariants: Array<ChartComponentInfo>
+  selected: number
+  onChange: (value: number) => void
+  big?: boolean
 }
 
 export function ChartVariantToggle({
@@ -45,9 +45,9 @@ export function ChartVariantToggle({
     newChartIndex: number | null
   ) => {
     if (typeof newChartIndex === 'number') {
-      onChange(newChartIndex);
+      onChange(newChartIndex)
     }
-  };
+  }
 
   return (
     <ToggleButtonGroup
@@ -57,8 +57,8 @@ export function ChartVariantToggle({
       size={big ? 'medium' : 'small'}
     >
       {chartVariants.map((chartVariant, chartIndex) => {
-        const { label, icon: ChartIcon } = chartVariantInfo[chartVariant.type];
-        const buttonLabel = `Vis som ${label}`;
+        const { label, icon: ChartIcon } = chartVariantInfo[chartVariant.type]
+        const buttonLabel = `Vis som ${label}`
 
         return (
           <ToggleButton
@@ -70,10 +70,10 @@ export function ChartVariantToggle({
           >
             {ChartIcon}
           </ToggleButton>
-        );
+        )
       })}
     </ToggleButtonGroup>
-  );
+  )
 }
 
 const useStyles = makeStyles(() =>
@@ -85,14 +85,14 @@ const useStyles = makeStyles(() =>
       alignItems: 'flex-start',
     },
   })
-);
+)
 
 interface ChartDisplayOptionsProps {
-  children: React.ReactNode | React.ReactNode[];
+  children: React.ReactNode | React.ReactNode[]
 }
 
 export function ChartDisplayOptions({ children }: ChartDisplayOptionsProps) {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  return <div className={classes.chartDisplayOptions}>{children}</div>;
+  return <div className={classes.chartDisplayOptions}>{children}</div>
 }

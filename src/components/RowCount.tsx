@@ -1,5 +1,5 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles({
   root: {
@@ -7,14 +7,14 @@ const useStyles = makeStyles({
     padding: '10px 15px',
     fontWeight: 'bold',
   },
-});
+})
 
 interface RowCountProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 const RowCount = ({ children }: RowCountProps) => {
-  const classes = useStyles();
-  return <div className={classes.root}>{children}</div>;
-};
+  const classes = useStyles()
+  return <div className={classes.root}>{children}</div>
+}
 
-export default RowCount;
+export default RowCount

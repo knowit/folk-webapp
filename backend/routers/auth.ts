@@ -1,4 +1,4 @@
-import express, { Request, Response} from 'express'
+import express, { Request, Response } from 'express'
 import { Issuer, TokenSet } from 'openid-client'
 import { URL } from 'url'
 import reporting from '../reporting'
@@ -28,6 +28,7 @@ const getOrigin = (url: string) => {
   const parsed = new URL(url)
   return `${parsed.protocol}//${parsed.host}`
 }
+
 const getPath = (url: string) => new URL(url).pathname
 
 router.get('/login', function (req: Request, res: Response) {
@@ -48,14 +49,17 @@ router.get('/login', function (req: Request, res: Response) {
 router.get('/logout', async function (req: Request, res: Response) {
   const { referer } = req.headers
   const logoutUri = `${getOrigin(referer)}/`
-  const logoutUrl = getClient().endSessionUrl({ client_id: clientId, logout_uri: logoutUri})
+  const logoutUrl = getClient().endSessionUrl({
+    client_id: clientId,
+    logout_uri: logoutUri,
+  })
   res.clearCookie('refreshToken')
   res.clearCookie('accessToken')
   res.redirect(logoutUrl)
 })
 
 router.get('/callback', async function (req: Request, res: Response) {
-  const { authReferer: referer }: { authReferer:string } = req.cookies
+  const { authReferer: referer }: { authReferer: string } = req.cookies
 
   const origin = getOrigin(referer)
 
@@ -83,16 +87,17 @@ router.get('/callback', async function (req: Request, res: Response) {
 })
 
 router.get('/userInfo', async function (req: Request, res: Response) {
-  const accessToken:string = req.headers.authorization
+  const accessToken: string = req.headers.authorization
     .split(/bearer/i)
     .pop()
     .trim()
 
-  const userInfo: any = await getClient().userinfo(accessToken)
-    .catch(err =>
+  const userInfo: any = await getClient()
+    .userinfo(accessToken)
+    .catch((err) =>
       reporting({
         message: 'Auth failed userInfo on /userInfo',
-        data: err
+        data: err,
       })
     )
 
@@ -107,23 +112,30 @@ router.post('/refresh', async function (req: Request, res: Response) {
   const { refreshToken = null } = req.body
 
   if (!refreshToken) {
-    return res.statusCode = 403
-
+    return (res.statusCode = 403)
   }
 
-  getClient().grant({
-    grant_type: 'refresh_token',
-    refresh_token: refreshToken,
-  }).then((tokens: TokenSet) => res.send({
-    accessToken: tokens.access_token,
-    expiration: tokens.expires_in,
-    sameSite: true,
-    secure: true
-  })).catch(err => res.send(reporting({
-    message: 'Auth failed grant on /refresh',
-    data: err
-  }))
-  )
+  getClient()
+    .grant({
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken,
+    })
+    .then((tokens: TokenSet) =>
+      res.send({
+        accessToken: tokens.access_token,
+        expiration: tokens.expires_in,
+        sameSite: true,
+        secure: true,
+      })
+    )
+    .catch((err) =>
+      res.send(
+        reporting({
+          message: 'Auth failed grant on /refresh',
+          data: err,
+        })
+      )
+    )
 })
 
 export default router

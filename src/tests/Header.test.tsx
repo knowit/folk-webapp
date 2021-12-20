@@ -1,26 +1,26 @@
-import Header from './Header';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
-import { useUserInfo } from '../LoginProvider';
+import Header from '../components/Header'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter } from 'react-router-dom'
+import { render, screen } from '@testing-library/react'
+import { useUserInfo } from '../LoginProvider'
 
-const loginProviderMock = require('../LoginProvider');
+const loginProviderMock = require('../LoginProvider')
 
-const fakeUser = { name: 'User Name', image: 'fallback_user.svg' };
+const fakeUser = { name: 'User Name', image: 'fallback_user.svg' }
 loginProviderMock.useUserInfo = jest.fn(() => {
-  return fakeUser;
-});
+  return fakeUser
+})
 
 it('renders without crashing', () => {
-  const div = document.createElement('div');
+  const div = document.createElement('div')
   ReactDOM.render(
     <BrowserRouter>
       <Header />
     </BrowserRouter>,
     div
-  );
-});
+  )
+})
 
 const links = [
   { text: 'Ansatte', location: '/ansatte' },
@@ -28,7 +28,7 @@ const links = [
   { text: 'Kompetanse', location: '/kompetanse' },
   { text: 'Arbeidsmiljø', location: '/arbeidsmiljo' },
   { text: 'Rekruttering', location: '/rekruttering' },
-];
+]
 
 // Use test.each to iterate the test cases above
 test.each(links)('Check if Nav Bar have %s link.', (link) => {
@@ -36,38 +36,38 @@ test.each(links)('Check if Nav Bar have %s link.', (link) => {
     <BrowserRouter>
       <Header />
     </BrowserRouter>
-  );
+  )
   // Ensure the text is in the dom, will throw error it can't find
-  const linkDom = screen.getByText(link.text);
+  const linkDom = screen.getByText(link.text)
 
   // use jest assertion to verify the link property
-  expect(linkDom).toHaveAttribute('href', link.location);
-});
+  expect(linkDom).toHaveAttribute('href', link.location)
+})
 
 test('Check if have logo and link to home page', () => {
   render(
     <BrowserRouter>
       <Header />
     </BrowserRouter>
-  );
+  )
   // get by TestId define in the navBar
-  const logoDom = screen.getByTestId(/knowit-logo/);
+  const logoDom = screen.getByTestId(/knowit-logo/)
   // check the link location
-  expect(logoDom).toHaveAttribute('href', '/');
+  expect(logoDom).toHaveAttribute('href', '/')
   // check the logo image
-  expect(screen.getByTitle(/knowit-logo/)).toBeInTheDocument();
-});
+  expect(screen.getByTitle(/knowit-logo/)).toBeInTheDocument()
+})
 
 describe('Header gets userInfo', () => {
   test('uses useUserInfo function', () => {
-    expect(useUserInfo).toHaveBeenCalled();
-  });
+    expect(useUserInfo).toHaveBeenCalled()
+  })
   test('Check that userinfo is rendered correctly', () => {
     render(
       <BrowserRouter>
         <Header />
       </BrowserRouter>
-    );
-    expect(screen.getByText(fakeUser.image)).toBeInTheDocument();
-  });
-});
+    )
+    expect(screen.getByText(fakeUser.image)).toBeInTheDocument()
+  })
+})

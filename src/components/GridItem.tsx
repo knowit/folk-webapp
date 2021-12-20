@@ -1,7 +1,7 @@
-import React from 'react';
-import { Grid } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import Info from './Info';
+import React from 'react'
+import { Grid } from '@material-ui/core'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
+import Info from './Info'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -48,16 +48,16 @@ const useStyles = makeStyles(() =>
       alignItems: 'center',
       justifyContent: 'space-between',
       margin: '0px',
-    }
+    },
   })
-);
+)
 
 interface GridItemHeaderProps {
-  title: string;
-  description?: string;
-  children?: React.ReactNode | React.ReactNode[];
-  big?: boolean;
-  green?: boolean;
+  title: string
+  description?: string
+  children?: React.ReactNode | React.ReactNode[]
+  big?: boolean
+  green?: boolean
 }
 
 export function GridItemHeader({
@@ -67,13 +67,15 @@ export function GridItemHeader({
   big,
   green = false,
 }: GridItemHeaderProps) {
-  const classes = useStyles();
-  const headerHeight = big ? classes.bigGridHeaderRoot : null;
-  const fontSize = big ? classes.BigGridHeaderTitle : null;
-  const knowitGreen = green ? classes.knowitGreen : null;
+  const classes = useStyles()
+  const headerHeight = big ? classes.bigGridHeaderRoot : null
+  const fontSize = big ? classes.BigGridHeaderTitle : null
+  const knowitGreen = green ? classes.knowitGreen : null
 
   return (
-    <div className={[classes.gridHeaderRoot, headerHeight, knowitGreen].join(' ')}>
+    <div
+      className={[classes.gridHeaderRoot, headerHeight, knowitGreen].join(' ')}
+    >
       <Grid container direction="row" alignItems="center">
         <h3 className={[classes.gridHeaderTitle, fontSize].join(' ')}>
           {title}
@@ -83,28 +85,28 @@ export function GridItemHeader({
       </Grid>
       {children}
     </div>
-  );
+  )
 }
 interface GridItemContentProps {
-  children: React.ReactNode | React.ReactNode[];
+  children: React.ReactNode | React.ReactNode[]
 }
 
 export function GridItemContent({ children }: GridItemContentProps) {
-  const classes = useStyles();
-  return <div className={classes.gridContentRoot}>{children}</div>;
+  const classes = useStyles()
+  return <div className={classes.gridContentRoot}>{children}</div>
 }
 
 interface GridItemProps {
-  fullSize?: boolean;
-  children: React.ReactNode | React.ReactNode[];
+  fullSize?: boolean
+  children: React.ReactNode | React.ReactNode[]
 }
 
 export function GridItem({ children, fullSize = false }: GridItemProps) {
-  const classes = useStyles();
+  const classes = useStyles()
 
   return (
     <Grid item xs={fullSize ? 12 : 6}>
       <div className={classes.gridRoot}>{children}</div>
     </Grid>
-  );
+  )
 }

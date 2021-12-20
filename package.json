@@ -64,10 +64,12 @@
     "deploy:prod": "aws s3 sync build s3://prod-folk-webapp-static-web",
     "postdeploy:dev": "aws cloudfront create-invalidation --distribution-id E215UYR726ILDS --paths /",
     "postdeploy:prod": "aws cloudfront create-invalidation --distribution-id E16SNX0CEZ21PY --paths /",
-    "format": "prettier --write ./src/**/*.{js,ts,tsx}",
+    "sls": "sls",
+    "prepare": "husky install",
+    "format": "prettier --write ./src",
+    "format:check": "prettier --check ./src",
     "lint": "eslint --quiet ./src/**/*.{ts,tsx}",
-    "lint:fix": "eslint --fix ./src/**/*.{ts,tsx}",
-    "sls": "sls"
+    "lint:fix": "eslint --fix ./src/**/*.{ts,tsx}"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -108,9 +110,10 @@
     "dotenv": "^8.2.0",
     "eslint": "^7.22.0",
     "eslint-plugin-react": "^7.21.5",
+    "husky": "^7.0.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "nodemon": "^2.0.6",
-    "prettier": "^2.2.1",
+    "prettier": "2.5.1",
     "serverless-plugin-typescript": "^2.1.0"
   }
 }

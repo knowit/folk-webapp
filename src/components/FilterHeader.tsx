@@ -1,8 +1,8 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { Dispatch } from 'react';
-import CloseIcon from '@material-ui/icons/Close';
-import { SearchableColumn } from '../data/DDTable';
-import { Mark, Slider } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core/styles'
+import React, { Dispatch } from 'react'
+import CloseIcon from '@material-ui/icons/Close'
+import { SearchableColumn } from '../data/DDTable'
+import { Mark, Slider } from '@material-ui/core'
 import { Action } from './FilterSearch'
 
 const useStyles = makeStyles(() =>
@@ -13,7 +13,7 @@ const useStyles = makeStyles(() =>
       padding: '0 15px',
       display: 'flex',
       justifyContent: 'flex-start',
-      width: '100%'
+      width: '100%',
     },
     filterHeaderTitle: {
       paddingTop: '20px',
@@ -75,10 +75,10 @@ const useStyles = makeStyles(() =>
     thresholdSlider: { minWidth: '150px' },
     thresholdInput: { display: 'none' },
   })
-);
+)
 
 const Tag = ({ label, onDelete }: { label: string; onDelete: () => void }) => {
-  const classes = useStyles();
+  const classes = useStyles()
   return (
     <div
       className={[classes.tag, classes.skillTag].join(' ')}
@@ -95,11 +95,11 @@ const Tag = ({ label, onDelete }: { label: string; onDelete: () => void }) => {
         }}
       />
     </div>
-  );
-};
+  )
+}
 
 const RemoveAllTag = (onDelete: { onDelete: () => void }) => {
-  const classes = useStyles();
+  const classes = useStyles()
   return (
     <div
       className={[classes.tag, classes.removeAllTag].join(' ')}
@@ -108,8 +108,8 @@ const RemoveAllTag = (onDelete: { onDelete: () => void }) => {
       <CloseIcon />
       <span>Fjern alle</span>
     </div>
-  );
-};
+  )
+}
 
 export function FilterHeader({
   filterList,
@@ -119,27 +119,27 @@ export function FilterHeader({
   searchableColumns,
   type,
 }: {
-  filterList: string[];
-  filterThreshold: number;
-  dispatch: Dispatch<Action>;
-  allRows: any[];
-  searchableColumns: SearchableColumn[];
-  type: 'COMPETENCE' | 'MOTIVATION';
+  filterList: string[]
+  filterThreshold: number
+  dispatch: Dispatch<Action>
+  allRows: any[]
+  searchableColumns: SearchableColumn[]
+  type: 'COMPETENCE' | 'MOTIVATION'
 }) {
-  const classes = useStyles();
+  const classes = useStyles()
 
   const dispatchRemove =
     type === 'COMPETENCE'
       ? 'REMOVE_FROM_COMPETENCE_FILTER'
-      : 'REMOVE_FROM_MOTIVATION_FILTER';
+      : 'REMOVE_FROM_MOTIVATION_FILTER'
   const dispatchClear =
     type === 'COMPETENCE'
       ? 'CLEAR_COMPETENCE_FILTER'
-      : 'CLEAR_MOTIVATION_FILTER';
+      : 'CLEAR_MOTIVATION_FILTER'
   const dispatchThresholdUpdate =
     type === 'COMPETENCE'
       ? 'UPDATE_COMPETENCE_THRESHOLD'
-      : 'UPDATE_MOTIVATION_THRESHOLD';
+      : 'UPDATE_MOTIVATION_THRESHOLD'
 
   function updateThresholdFilter(threshold: number) {
     dispatch({
@@ -147,7 +147,7 @@ export function FilterHeader({
       threshold,
       allRows,
       searchableColumns,
-    });
+    })
   }
 
   function handleThresholdSliderChange(
@@ -155,10 +155,10 @@ export function FilterHeader({
     value: number | number[]
   ) {
     if (Array.isArray(value)) {
-      value = value?.[0];
+      value = value?.[0]
     }
     if (value !== filterThreshold) {
-      updateThresholdFilter(value);
+      updateThresholdFilter(value)
     }
   }
 
@@ -168,7 +168,7 @@ export function FilterHeader({
     { value: 3, label: '3+' },
     { value: 4, label: '4+' },
     { value: 5, label: '5' },
-  ];
+  ]
 
   return (
     <div className={classes.filterHeaderRoot}>
@@ -221,5 +221,5 @@ export function FilterHeader({
         />
       </div>
     </div>
-  );
+  )
 }

@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
-import { GridItem } from './GridItem'
-import { Add, Minimize } from '@material-ui/icons'
 import {
+  makeStyles,
+  createStyles,
   Accordion,
-  AccordionDetails,
   AccordionSummary,
-} from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles'
-import { SimpleDDItem } from '../data/SimpleDDItem'
+  AccordionDetails,
+} from '@material-ui/core'
+import { Minimize, Add, OpenInNew } from '@material-ui/icons'
+import React, { useState } from 'react'
+import EmployeeInfo from '../../components/EmployeeInfo'
+import { GridItem } from '../../components/GridItem'
 import {
-  CenteredHeaderCell,
   ConsultantCell,
   CustomerStatusCell,
   CvCell,
-} from '../data/components/table/DataCells'
-import EmployeeInfo from './EmployeeInfo'
+  CenteredHeaderCell,
+} from '../../data/components/table/DataCells'
+import { SimpleDDItem } from '../../data/SimpleDDItem'
 import CustomerTable from './CustomerTable'
 import { Link } from 'react-router-dom'
 import { OpenInNewStyled } from '../data/components/table/cells/ConsultantCell'
@@ -35,7 +36,7 @@ const useStyles = makeStyles(() =>
       marginLeft: '15px',
       '&:hover': {
         color: '#333333',
-      }
+      },
     },
   })
 )
@@ -69,10 +70,11 @@ export default function CustomerDropdown({
           expandIcon={expanded ? <Minimize /> : <Add />}
         >
           {customerName}
-          {customerName != 'Uten prosjekt' &&
-          <Link to={'/kunder/' + customerName} target="_blank">
-            <OpenInNewStyled />
-          </Link>}
+          {customerName != 'Uten prosjekt' && (
+            <Link to={'/kunder/' + customerName} target="_blank">
+              <OpenInNewStyled />
+            </Link>
+          )}
         </AccordionSummary>
         <AccordionDetails className={classes.accordionDetails}>
           <SimpleDDItem

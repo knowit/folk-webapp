@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react'
-import DataTable from '../data/components/table/DataTable';
+import DataTable from '../data/components/table/DataTable'
 import { SimpleComponentProps } from '../data/SimpleDDItem'
 
-
-export default function CustomerTable({ payload, callback, props }: SimpleComponentProps) {
-  const allRows = payload as { rowData: any[] }[];
+export default function CustomerTable({
+  payload,
+  callback,
+  props,
+}: SimpleComponentProps) {
+  const allRows = payload as { rowData: any[] }[]
 
   useEffect(() => {
     if (callback) {
@@ -12,7 +15,5 @@ export default function CustomerTable({ payload, callback, props }: SimpleCompon
     }
   }, [])
 
-  return (
-    <DataTable rows={allRows} columns={[]} {...props} />
-  );
+  return <DataTable rows={allRows} columns={[]} {...props} />
 }
