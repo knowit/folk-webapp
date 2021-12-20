@@ -105,3 +105,9 @@ export interface CompetenceMappingResponse {
   setNames: string[]
   sets: Record<string, Competence[]>
 }
+
+// competenceFilter
+export interface CompetenceFilterResponse {
+  category: string
+  subCategories: string[]
+}

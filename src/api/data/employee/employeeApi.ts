@@ -1,20 +1,27 @@
+import { CompetenceAreasResponse } from '../competence/competenceApiTypes'
 import { getDataAt } from '../dataClient'
-import { EmployeeTableResponse } from './employeeApiTypes'
+import {
+  EmpDataResponse,
+  EmployeeExperienceResponse,
+  EmployeeTableResponse,
+} from './employeeApiTypes'
 
 export const getEmployeeTable = () =>
   getDataAt<EmployeeTableResponse>('/employeeTable')
 
-// TODO: Type correctly
+// ! This might not be typed correctly
 export const getEmployeeExperience = (url: string, user_id: string) =>
-  getDataAt<any>('/employeeExperience', { params: { user_id } })
+  getDataAt<EmployeeExperienceResponse>('/employeeExperience', {
+    params: { user_id },
+  })
 
-// TODO: Type correctly
+// ! This might not be typed correctly
 export const getEmployeeRadar = (url: string, email: string) =>
-  getDataAt<any>('/employeeRadar', { params: { email } })
+  getDataAt<CompetenceAreasResponse>('/employeeRadar', { params: { email } })
 
-// TODO: Type correctly
+// ! This might not be typed correctly
 export const getEmpData = (url: string, email: string) =>
-  getDataAt<any>('/empData', {
+  getDataAt<EmpDataResponse>('/empData', {
     params: {
       email,
     },

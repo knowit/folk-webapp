@@ -3,6 +3,7 @@ import {
   AgeDistributionResponse,
   CompetenceAmountResponse,
   CompetenceAreasResponse,
+  CompetenceFilterResponse,
   CompetenceMappingResponse,
   EducationResponse,
   ExperienceDistributionResponse,
@@ -31,5 +32,5 @@ export const getEducation = () => getDataAt<EducationResponse>('/education')
 export const getCompetenceMapping = () =>
   getDataAt<CompetenceMappingResponse>('/competenceMapping')
 
-// TODO: Fix type
-export const getCompetenceFilter = () => getDataAt<any>('/competenceFilter')
+export const getCompetenceFilter = () =>
+  getDataAt<CompetenceFilterResponse>('/competenceFilter')
