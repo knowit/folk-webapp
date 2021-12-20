@@ -20,7 +20,6 @@ import CustomerTable from './CustomerTable'
 import { Link } from 'react-router-dom'
 import { OpenInNewStyled } from '../../data/components/table/cells/ConsultantCell'
 
-
 const useStyles = makeStyles(() =>
   createStyles({
     accordionSummary: {
