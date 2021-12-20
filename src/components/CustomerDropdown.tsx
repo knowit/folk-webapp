@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { GridItem } from './GridItem'
-import { Add, Minimize, OpenInNew } from '@material-ui/icons'
+import { Add, Minimize } from '@material-ui/icons'
 import {
   Accordion,
   AccordionDetails,
-  AccordionSummary, withStyles,
+  AccordionSummary,
 } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { SimpleDDItem } from '../data/SimpleDDItem'
@@ -16,7 +16,8 @@ import {
 } from '../data/components/table/DataCells'
 import EmployeeInfo from './EmployeeInfo'
 import CustomerTable from './CustomerTable'
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom'
+import { OpenInNewStyled } from '../data/components/table/cells/ConsultantCell'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -46,19 +47,6 @@ interface CustomerDropdownProps {
   callback(columns: any[]): void
 }
 
-const OpenInNewStyled = withStyles({ // todo reuse
-  root: {
-    color: '#707070',
-    cursor: 'pointer',
-    '&:hover': {
-      color: '#333333',
-    },
-  },
-  openNewIcon: {
-
-  }
-})(OpenInNew);
-
 export default function CustomerDropdown({
   customerName,
   employees,
@@ -67,8 +55,6 @@ export default function CustomerDropdown({
 }: CustomerDropdownProps) {
   const [expanded, setExpanded] = useState(expand)
   const classes = useStyles()
-  const history = useHistory()
-  const routeOnClick = useCallback(() => history.push("/kunder/" + customerName, employees), [history]);
 
   return (
     <GridItem fullSize>
@@ -83,25 +69,10 @@ export default function CustomerDropdown({
           expandIcon={expanded ? <Minimize /> : <Add />}
         >
           {customerName}
-          <OpenInNew
-            className={'openNewIconAccordion'}
-            style={{ marginLeft: '15px' }}
-            onClick={(e) => {
-              e.stopPropagation()
-              routeOnClick()
-            }}
-          />
-          <Link
-            className={classes.openNewIcon}
-            to={{
-              pathname: '/kunder/' + customerName,
-              state: {
-                payload: 'lololol'
-              }
-            }}
-            target="_blank">
+          {customerName != 'Uten prosjekt' &&
+          <Link to={'/kunder/' + customerName} target="_blank">
             <OpenInNewStyled />
-          </Link>
+          </Link>}
         </AccordionSummary>
         <AccordionDetails className={classes.accordionDetails}>
           <SimpleDDItem
