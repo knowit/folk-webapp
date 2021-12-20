@@ -8,6 +8,7 @@ interface UserContextProps {
 }
 
 const UserContext = createContext<UserContextProps | null>(null)
+
 export const useUserInfo = () => {
   const userContext = useContext(UserContext)
 
