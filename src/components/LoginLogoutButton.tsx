@@ -23,14 +23,14 @@ export const LoginLogoutButton = () => {
   const userInfo = useUserInfo()
 
   let buttonText = ''
-  if (userInfo.email == undefined) {
+  if (!userInfo) {
     buttonText = 'Logg inn'
   } else {
     buttonText = 'Logg ut'
   }
 
   const handleClick = () => {
-    if (userInfo.email == undefined) {
+    if (!userInfo) {
       window.location.replace('/auth/login')
     } else {
       window.location.replace('/auth/logout')
