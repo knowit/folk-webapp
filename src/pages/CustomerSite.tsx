@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react'
 import {
-  Redirect,
   useHistory,
 } from 'react-router-dom'
 import { ArrowBack } from '@material-ui/icons'
