@@ -44,5 +44,6 @@ export const getAt = async <T>(
   return res.data
 }
 
+// /privacyPolicy
 export const getPrivacyPolicy = async () =>
   await getAt<{ urlname: string }>('/privacyPolicy')
