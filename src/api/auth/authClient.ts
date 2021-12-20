@@ -41,7 +41,6 @@ export const renewAccessToken = async () => {
 export const renewAuth = async () => {
   const { accessToken, accessTokenExpiresAt } = await renewAccessToken()
 
-  // TODO: Improve correct error handling
   if (!(accessToken && accessTokenExpiresAt)) return false
 
   setAccessToken(accessToken)
