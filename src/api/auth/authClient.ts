@@ -1,7 +1,8 @@
 import axios from 'axios'
-import { RenewResponse, UserInfo } from './authApiTypes'
+import { AuthError, RenewResponse, UserInfo } from './authApiTypes'
 import {
   getAccessToken,
+  getAccessTokenExpiresAt,
   isAccessTokenValid,
   setAccessToken,
   setAccessTokenExpiresAt,
@@ -62,13 +63,17 @@ export const getAtAuth = async <T>(
     forceAuth?: boolean
   }
 ) => {
+  const expiresAt = getAccessTokenExpiresAt()
   // Attempt to renew if a user is present and has a valid token/it is to be forced.
-  if (options?.forceAuth || !isAccessTokenValid()) {
+  if (options?.forceAuth || !isAccessTokenValid(expiresAt)) {
     const renewed = await renewAuth()
 
     if (!renewed) {
-      console.log('Request aborted due to not being able to renew token.')
-      return null
+      const error: AuthError = {
+        status: 401,
+        message: 'Unauthorized. Could not renew auth.',
+      }
+      Promise.reject(error)
     }
   }
 

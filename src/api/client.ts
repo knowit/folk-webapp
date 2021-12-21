@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { AuthError } from './auth/authApiTypes'
 import { renewAuth } from './auth/authClient'
 import {
   getAccessToken,
@@ -32,8 +33,11 @@ export const getAt = async <T>(
     const renewed = await renewAuth()
 
     if (!renewed) {
-      console.log('Request aborted due to not being able to renew token.')
-      return null
+      const error: AuthError = {
+        status: 401,
+        message: 'Unauthorized. Could not renew auth.',
+      }
+      Promise.reject(error)
     }
   }
 

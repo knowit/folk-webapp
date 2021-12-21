@@ -1,4 +1,4 @@
-export interface ApiError {
+export interface AuthError {
   status: number
   message: string
 }
