@@ -73,7 +73,7 @@ router.get('/callback', async function (req: Request, res: Response) {
   }
 
   res.cookie('refreshToken', tokens.refresh_token, {
-    httpOnly: false,
+    httpOnly: true,
     ...cookieSettings,
   })
   res.clearCookie('authReferer')
