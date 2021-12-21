@@ -17,6 +17,6 @@
     "checkJs": false,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "tsconfig.json", "src/api/data/.tsx"],
-  "exclude": ["node_modules", "backend", "backend/**/*.js"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "backend/**/*"]
 }

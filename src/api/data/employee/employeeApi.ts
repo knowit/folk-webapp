@@ -10,9 +10,9 @@ export const getEmployeeTable = () =>
   getDataAt<EmployeeTableResponse>('/employeeTable')
 
 // ! This might not be typed correctly
-export const getEmployeeExperience = (url: string, user_id: string) =>
+export const getEmployeeExperience = (url: string, userId: string) =>
   getDataAt<EmployeeExperienceResponse>('/employeeExperience', {
-    params: { user_id },
+    params: { user_id: userId },
   })
 
 // ! This might not be typed correctly

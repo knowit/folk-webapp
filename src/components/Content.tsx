@@ -1,6 +1,7 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { isLoggedIn } from '../api/auth/authHelpers'
+import { useUserInfo } from '../context/UserInfoContext'
 import {
   Competence,
   Customer,
@@ -12,7 +13,9 @@ import {
 import LoginPage from '../pages/login/LoginPage'
 
 export default function Content() {
-  if (!isLoggedIn()) {
+  const { user } = useUserInfo()
+
+  if (!isLoggedIn(user)) {
     return <LoginPage />
   }
 
