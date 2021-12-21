@@ -14,7 +14,7 @@ export const setAccessTokenExpiresAt = (expiresAt: number) =>
 
 export const getAccessTokenExpiresAt = () => {
   const expiresAt = localStorage.getItem('access_token_expires_at')
-  return expiresAt ? JSON.parse(expiresAt) : 0
+  return expiresAt ? +expiresAt : 0
 }
 
 export const removeAccessTokenExpiresAt = () =>
@@ -22,8 +22,7 @@ export const removeAccessTokenExpiresAt = () =>
 
 // Consider using localStorage.clear()
 export const clearLocalStorage = () => {
-  removeAccessToken()
-  removeAccessTokenExpiresAt()
+  localStorage.clear()
 }
 
 export const isAccessTokenValid = () => {
