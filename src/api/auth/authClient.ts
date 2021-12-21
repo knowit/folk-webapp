@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { AuthError, RenewResponse, UserInfo } from './authApiTypes'
+import { Error } from '../errorHandling'
+import { RenewResponse, UserInfo } from './authApiTypes'
 import {
   getAccessToken,
   getAccessTokenExpiresAt,
@@ -69,9 +70,9 @@ export const getAtAuth = async <T>(
     const renewed = await renewAuth()
 
     if (!renewed) {
-      const error: AuthError = {
-        status: 401,
+      const error: Error = {
         message: 'Unauthorized. Could not renew auth.',
+        errorType: 'AUTH',
       }
       Promise.reject(error)
     }
@@ -88,4 +89,4 @@ export const getAtAuth = async <T>(
   return res.data
 }
 
-export const getUserInfo = () => getAtAuth<UserInfo | null>('/userInfo')
+export const getUserInfo = async () => getAtAuth<UserInfo | null>('/userInfo')

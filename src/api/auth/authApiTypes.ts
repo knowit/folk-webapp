@@ -1,8 +1,3 @@
-export interface AuthError {
-  status: number
-  message: string
-}
-
 // refresh
 export interface RenewResponse {
   accessToken: string
