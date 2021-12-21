@@ -1,5 +1,5 @@
-import { getAt } from '../client'
+import { getAtApi } from '../client'
 
 // /privacyPolicy
 export const getPrivacyPolicy = async () =>
-  await getAt<{ urlname: string }>('/privacyPolicy')
+  await getAtApi<{ urlname: string }>('/privacyPolicy')

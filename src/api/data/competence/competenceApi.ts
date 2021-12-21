@@ -1,4 +1,4 @@
-import { getAt } from '../../client'
+import { getAtApi } from '../../client'
 import {
   AgeDistributionResponse,
   CompetenceAmountResponse,
@@ -12,25 +12,25 @@ import {
 } from './competenceApiTypes'
 
 export const getCompetenceAmount = () =>
-  getAt<CompetenceAmountResponse>('/data/competenceAmount')
+  getAtApi<CompetenceAmountResponse>('/data/competenceAmount')
 
 export const getCompetenceAreas = () =>
-  getAt<CompetenceAreasResponse>('/data/competenceAreas')
+  getAtApi<CompetenceAreasResponse>('/data/competenceAreas')
 
 export const getExperienceDistribution = () =>
-  getAt<ExperienceDistributionResponse>('/data/experienceDistribution')
+  getAtApi<ExperienceDistributionResponse>('/data/experienceDistribution')
 
 export const getAgeDistribution = () =>
-  getAt<AgeDistributionResponse>('/data/ageDistribution')
+  getAtApi<AgeDistributionResponse>('/data/ageDistribution')
 
-export const getFagtimer = () => getAt<FagtimerResponse>('/data/fagtimer')
+export const getFagtimer = () => getAtApi<FagtimerResponse>('/data/fagtimer')
 
-export const getFagEvents = () => getAt<FagEventsResponse>('/data/fagEvents')
+export const getFagEvents = () => getAtApi<FagEventsResponse>('/data/fagEvents')
 
-export const getEducation = () => getAt<EducationResponse>('/data/education')
+export const getEducation = () => getAtApi<EducationResponse>('/data/education')
 
 export const getCompetenceMapping = () =>
-  getAt<CompetenceMappingResponse>('/data/competenceMapping')
+  getAtApi<CompetenceMappingResponse>('/data/competenceMapping')
 
 export const getCompetenceFilter = () =>
-  getAt<CompetenceFilterResponse>('/data/competenceFilter')
+  getAtApi<CompetenceFilterResponse>('/data/competenceFilter')

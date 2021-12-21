@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { UserInfo } from '../api/auth/authApiTypes'
-import { getUserInfo } from '../api/auth/authClient'
+import { getUserInfo } from '../api/data/user/userApi'
+
+import { isError } from '../api/errorHandling'
 
 interface UserContextProps {
   user: UserInfo | null
@@ -24,9 +26,15 @@ export const UserInfoProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const user = await getUserInfo()
+      try {
+        const user = await getUserInfo()
 
-      setFetchedUser(user)
+        setFetchedUser(user)
+      } catch (error) {
+        if (isError(error)) {
+          setFetchedUser(null)
+        }
+      }
     }
     fetchUser()
   }, [])
