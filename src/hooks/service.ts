@@ -50,7 +50,6 @@ export function useServiceCall<T>({
   url,
   method = 'GET',
 }: FetchData): ServiceCall<T> {
-  // const token = useAPIToken()
   const token = getAccessToken()
 
   const fetcher = useCallback(async () => {
