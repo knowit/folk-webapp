@@ -37,7 +37,6 @@ export default function Content() {
         <EmployeeSite />
       </Route>
       <Route exact path="/">
-        {/* <ApiDebugger /> */}
         <Redirect to="/ansatte" />
       </Route>
       <Route>
