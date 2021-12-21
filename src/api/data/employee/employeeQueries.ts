@@ -16,7 +16,6 @@ export const useEmployeeExperience = (user_id: string) =>
     revalidateOnFocus: false,
   })
 
-// https://stackoverflow.com/questions/54938236/can-you-early-return-with-react-hooks/56976469#56976469
 export const useEmpData = (email: string) =>
   useSWR(['/empData', email], getEmpData, {
     revalidateOnFocus: false,

@@ -1,4 +1,4 @@
-import { getDataAt } from '../dataClient'
+import { getAt } from '../../client'
 import {
   CustomerCardResponse,
   HoursBilledPerCustomerResponse,
@@ -6,10 +6,10 @@ import {
 } from './customerApiTypes'
 
 export const getCustomerCards = () =>
-  getDataAt<CustomerCardResponse>('/customerCards')
+  getAt<CustomerCardResponse>('/data/customerCards')
 
 export const getHoursBilledPerCustomer = () =>
-  getDataAt<HoursBilledPerCustomerResponse>('/hoursBilledPerCustomer')
+  getAt<HoursBilledPerCustomerResponse>('/data/hoursBilledPerCustomer')
 
 export const getHoursBilledPerWeek = () =>
-  getDataAt<HoursBilledPerWeekResponse>('/hoursBilledPerWeek')
+  getAt<HoursBilledPerWeekResponse>('/data/hoursBilledPerWeek')

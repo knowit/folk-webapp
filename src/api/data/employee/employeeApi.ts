@@ -1,5 +1,5 @@
 import { CompetenceAreasResponse } from '../competence/competenceApiTypes'
-import { getDataAt } from '../dataClient'
+import { getAt } from '../../client'
 import {
   EmpDataResponse,
   EmployeeExperienceResponse,
@@ -7,21 +7,21 @@ import {
 } from './employeeApiTypes'
 
 export const getEmployeeTable = () =>
-  getDataAt<EmployeeTableResponse>('/employeeTable')
+  getAt<EmployeeTableResponse>('/data/employeeTable')
 
 // ! This might not be typed correctly
 export const getEmployeeExperience = (url: string, userId: string) =>
-  getDataAt<EmployeeExperienceResponse>('/employeeExperience', {
+  getAt<EmployeeExperienceResponse>('/data/employeeExperience', {
     params: { user_id: userId },
   })
 
 // ! This might not be typed correctly
 export const getEmployeeRadar = (url: string, email: string) =>
-  getDataAt<CompetenceAreasResponse>('/employeeRadar', { params: { email } })
+  getAt<CompetenceAreasResponse>('/data/employeeRadar', { params: { email } })
 
 // ! This might not be typed correctly
 export const getEmpData = (url: string, email: string) =>
-  getDataAt<EmpDataResponse>('/empData', {
+  getAt<EmpDataResponse>('/data/empData', {
     params: {
       email,
     },

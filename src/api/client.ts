@@ -1,6 +1,10 @@
 import axios from 'axios'
-import { renewAuth } from '../auth/authClient'
-import { getAccessToken, isAccessTokenValid } from '../auth/authHelpers'
+import { renewAuth } from './auth/authClient'
+import {
+  getAccessToken,
+  getAccessTokenExpiresAt,
+  isAccessTokenValid,
+} from './auth/authHelpers'
 
 const BASE_URL = '/api'
 
@@ -9,9 +13,9 @@ const instance = axios.create({
 })
 
 /**
- * Returns data at generic endpoint
+ * Returns data at specific data source.
  *
- * @param endpoint endpoint for source
+ * @param endpoint endpoint for data source
  * @param options
  * @returns the data at the endpoint
  */
@@ -22,8 +26,9 @@ export const getAt = async <T>(
     params?: any
   }
 ) => {
+  const expiresAt = getAccessTokenExpiresAt()
   // Attempt to renew if a user is present and has a valid token/it is to be forced.
-  if (options?.forceAuth || !isAccessTokenValid()) {
+  if (options?.forceAuth || !isAccessTokenValid(expiresAt)) {
     const renewed = await renewAuth()
 
     if (!renewed) {
@@ -43,7 +48,3 @@ export const getAt = async <T>(
 
   return res.data
 }
-
-// /privacyPolicy
-export const getPrivacyPolicy = async () =>
-  await getAt<{ urlname: string }>('/privacyPolicy')
