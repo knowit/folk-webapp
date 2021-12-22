@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { createTheme, ThemeProvider } from '@material-ui/core/styles'
-import LoginProvider from './LoginProvider'
 import App from './App'
+import { UserInfoProvider } from './context/UserInfoContext'
 
 const theme = createTheme({
   palette: {
@@ -37,9 +37,9 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <LoginProvider>
+        <UserInfoProvider>
           <App />
-        </LoginProvider>
+        </UserInfoProvider>
       </BrowserRouter>
     </ThemeProvider>
   </>,

@@ -1,7 +1,8 @@
-import React from 'react'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { ButtonBase } from '@material-ui/core'
-import { useUserInfo } from '../LoginProvider'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
+import React from 'react'
+import { clearLocalStorage } from '../api/auth/authHelpers'
+import { useUserInfo } from '../context/UserInfoContext'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -19,21 +20,23 @@ const useStyles = makeStyles(() =>
 )
 
 export const LoginLogoutButton = () => {
+  const { user, logout } = useUserInfo()
   const classes = useStyles()
-  const userInfo = useUserInfo()
 
   let buttonText = ''
-  if (userInfo.email == undefined) {
+  if (!user) {
     buttonText = 'Logg inn'
   } else {
     buttonText = 'Logg ut'
   }
 
   const handleClick = () => {
-    if (userInfo.email == undefined) {
+    if (!user) {
       window.location.replace('/auth/login')
     } else {
       window.location.replace('/auth/logout')
+      clearLocalStorage()
+      logout()
     }
   }
 
