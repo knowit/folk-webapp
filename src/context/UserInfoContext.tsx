@@ -18,7 +18,10 @@ export const useUserInfo = () => {
     throw Error('UserInfoProvider not existing')
   }
 
-  return userContext
+  const { user, setUser } = userContext
+  const logout = () => setUser(null)
+
+  return { user, logout }
 }
 
 export const UserInfoProvider: React.FC = ({ children }) => {

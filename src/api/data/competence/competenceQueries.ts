@@ -13,18 +13,10 @@ import {
 
 // ? Maybe one can revalidate on focus? look at network and traffic
 
-export const useCompetenceAmount = () => {
-  const { data, error } = useSWR('/competenceAmount', getCompetenceAmount, {
+export const useCompetenceAmount = () =>
+  useSWR('/competenceAmount', getCompetenceAmount, {
     revalidateOnFocus: false,
   })
-
-  // Example of how to implement loading-state
-  return {
-    data,
-    isLoading: !error && !data,
-    error,
-  }
-}
 
 export const useCompetenceAreas = () =>
   useSWR('/competenceAreas', getCompetenceAreas, {

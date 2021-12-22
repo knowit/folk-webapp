@@ -20,7 +20,7 @@ const useStyles = makeStyles(() =>
 )
 
 export const LoginLogoutButton = () => {
-  const { user, setUser } = useUserInfo()
+  const { user, logout } = useUserInfo()
   const classes = useStyles()
 
   let buttonText = ''
@@ -36,7 +36,7 @@ export const LoginLogoutButton = () => {
     } else {
       window.location.replace('/auth/logout')
       clearLocalStorage()
-      setUser(null)
+      logout()
     }
   }
 
