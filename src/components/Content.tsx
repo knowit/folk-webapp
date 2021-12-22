@@ -5,7 +5,7 @@ import { useUserInfo } from '../context/UserInfoContext'
 import {
   Competence,
   Customer,
-  Employee,
+  EmployeePage,
   EmployeeSite,
   NotFound,
   UnderConstruction,
@@ -22,7 +22,7 @@ export default function Content() {
   return (
     <Switch>
       <Route path="/ansatte">
-        <Employee />
+        <EmployeePage />
       </Route>
       <Route path="/kunder">
         <Customer />
