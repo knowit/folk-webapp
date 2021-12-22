@@ -49,8 +49,8 @@ export const tableStyles = makeStyles((theme: Theme) =>
       paddingLeft: '15px',
     },
     centeredHeader: {
-        textAlign: 'center',
-        justifyContent: 'center',
+      textAlign: 'center',
+      justifyContent: 'center',
     },
     flexContainer: {
       display: 'flex',
@@ -253,8 +253,14 @@ function MuiVirtualizedTable({
     )
   }
 
-  function headerRenderer(title: string, centeredHeader?: boolean, HeaderRenderCell?: JSX.Element) {
-    const headerClass = centeredHeader ? [classes.tableHead, classes.centeredHeader].join(' ') : classes.tableHead
+  function headerRenderer(
+    title: string,
+    centeredHeader?: boolean,
+    HeaderRenderCell?: JSX.Element
+  ) {
+    const headerClass = centeredHeader
+      ? [classes.tableHead, classes.centeredHeader].join(' ')
+      : classes.tableHead
     return HeaderRenderCell ? (
       HeaderRenderCell
     ) : (
@@ -306,7 +312,9 @@ function MuiVirtualizedTable({
             return (
               <Column
                 key={title}
-                headerRenderer={() => headerRenderer(title, centeredHeader, headerRenderCell)}
+                headerRenderer={() =>
+                  headerRenderer(title, centeredHeader, headerRenderCell)
+                }
                 className={classes.flexContainer}
                 dataKey={String(index)}
                 width={widthList[index]}

@@ -2,10 +2,7 @@ import React, { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { ArrowBack } from '@material-ui/icons'
 import { SimpleDDItem } from '../../data/SimpleDDItem'
-import {
-  ConsultantCell,
-  CvCell,
-} from '../../data/components/table/DataCells'
+import { ConsultantCell, CvCell } from '../../data/components/table/DataCells'
 import EmployeeInfo from '../../components/EmployeeInfo'
 
 import { useFetchedData } from '../../hooks/service'
