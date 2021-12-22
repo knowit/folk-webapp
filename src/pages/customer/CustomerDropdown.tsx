@@ -13,7 +13,6 @@ import {
   ConsultantCell,
   CustomerStatusCell,
   CvCell,
-  CenteredHeaderCell,
 } from '../../data/components/table/DataCells'
 import { SimpleDDItem } from '../../data/SimpleDDItem'
 import CustomerTable from './CustomerTable'
@@ -101,8 +100,8 @@ export default function CustomerDropdown({
                 },
                 {
                   title: 'CV',
+                  centeredHeader: true,
                   renderCell: CvCell,
-                  headerRenderCell: CenteredHeaderCell,
                 },
               ],
             }}

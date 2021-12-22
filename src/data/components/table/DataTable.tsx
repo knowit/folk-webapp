@@ -15,6 +15,7 @@ export interface DataTableColumn {
   title: string
   expandable?: boolean
   searchable?: boolean
+  centeredHeader?: boolean
   renderCell?: (props: { data: any; rowData: any[] }) => JSX.Element
   renderExpanded?: (data: any) => JSX.Element
   headerRenderCell?: JSX.Element
@@ -46,6 +47,10 @@ export const tableStyles = makeStyles((theme: Theme) =>
       padding: 0,
       paddingRight: '15px',
       paddingLeft: '15px',
+    },
+    centeredHeader: {
+        textAlign: 'center',
+        justifyContent: 'center',
     },
     flexContainer: {
       display: 'flex',
@@ -248,15 +253,16 @@ function MuiVirtualizedTable({
     )
   }
 
-  function headerRenderer(title: string, HeaderRenderCell?: JSX.Element) {
+  function headerRenderer(title: string, centeredHeader?: boolean, HeaderRenderCell?: JSX.Element) {
+    const headerClass = centeredHeader ? [classes.tableHead, classes.centeredHeader].join(' ') : classes.tableHead
     return HeaderRenderCell ? (
       HeaderRenderCell
     ) : (
       <TableCell
         component="div"
-        className={classes.tableHead}
+        className={headerClass}
         variant="head"
-        align="left"
+        align={centeredHeader ? 'center' : 'left'}
       >
         {title}
       </TableCell>
@@ -296,11 +302,11 @@ function MuiVirtualizedTable({
           noRowsRenderer={emptyRow}
           gridClassName={classes.noFocus}
         >
-          {columns.map(({ title, headerRenderCell }, index) => {
+          {columns.map(({ title, centeredHeader, headerRenderCell }, index) => {
             return (
               <Column
                 key={title}
-                headerRenderer={() => headerRenderer(title, headerRenderCell)}
+                headerRenderer={() => headerRenderer(title, centeredHeader, headerRenderCell)}
                 className={classes.flexContainer}
                 dataKey={String(index)}
                 width={widthList[index]}

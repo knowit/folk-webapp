@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom'
 import { ArrowBack } from '@material-ui/icons'
 import { SimpleDDItem } from '../../data/SimpleDDItem'
 import {
-  CenteredHeaderCell,
   ConsultantCell,
   CvCell,
 } from '../../data/components/table/DataCells'
@@ -12,7 +11,7 @@ import EmployeeInfo from '../../components/EmployeeInfo'
 import { useFetchedData } from '../../hooks/service'
 import { Skeleton } from '@material-ui/lab'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
-import { CenteredDataCell } from '../../data/components/table/cells/CenteredHeaderCell'
+import CenteredDataCell from '../../data/components/table/cells/CenteredDataCell'
 import { Grid } from '@material-ui/core'
 import { GridItem } from '../../components/GridItem'
 import DDItem, { DDChart } from '../../data/DDItem'
@@ -100,8 +99,8 @@ export default function CustomerSite() {
                 { title: 'Prosjekt' },
                 {
                   title: 'CV',
+                  centeredHeader: true,
                   renderCell: CvCell,
-                  headerRenderCell: CenteredHeaderCell,
                 },
               ],
             }}
@@ -119,17 +118,17 @@ export default function CustomerSite() {
               { title: 'Prosjekt' },
               {
                 title: 'Antall konsulenter på prosjekt',
-                headerRenderCell: CenteredHeaderCell,
+                centeredHeader: true,
                 renderCell: CenteredDataCell,
               },
               {
                 title: 'Antall timer siste perioden',
-                headerRenderCell: CenteredHeaderCell,
+                centeredHeader: true,
                 renderCell: CenteredDataCell,
               },
               {
                 title: 'Antall timer totalt',
-                headerRenderCell: CenteredHeaderCell,
+                centeredHeader: true,
                 renderCell: CenteredDataCell,
               },
             ],
