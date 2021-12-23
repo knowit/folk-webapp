@@ -1,4 +1,4 @@
-import { SearchableColumn, TableState } from '../data/DDTable'
+import { SearchableColumn } from '../data/DDTable'
 import { CategoryWithGroup } from './FilterInput'
 
 export type FilterObject = {
@@ -57,17 +57,18 @@ const filterCustomerColumn = (
 export const searchAndFilter = (
   rows: any,
   searchableColumns: SearchableColumn[],
-  state: TableState
+  filters: FilterObject[],
+  searchTerm: string
 ) => {
-  const hasSearchTerm = !!state.searchTerm && state.searchTerm.trim() !== ''
+  const hasSearchTerm = !!searchTerm && searchTerm.trim() !== ''
   return rows.filter((row: any) => {
     const rowMatchesSearchTerm = hasSearchTerm
-      ? searchRow(row, searchableColumns, state.searchTerm)
+      ? searchRow(row, searchableColumns, searchTerm)
       : true
 
     let rowMatchesFilters = true
 
-    state.filters.map((filter) => {
+    filters.map((filter) => {
       if (filter.values.length > 0) {
         rowMatchesFilters =
           rowMatchesFilters &&
@@ -89,21 +90,19 @@ export const searchAndFilter = (
 }
 
 export function handleFilterChange(
-  prevState: TableState,
+  prevFilters: FilterObject[],
   newFilterValues: string[],
   index: number
 ) {
-  const filters = prevState.filters
-  filters[index].values = newFilterValues
-  return { ...prevState, filters: [...prevState.filters] }
+  prevFilters[index].values = newFilterValues
+  return [...prevFilters]
 }
 
 export function handleThresholdChange(
-  prevState: TableState,
+  prevFilters: FilterObject[],
   threshold: number,
   index: number
 ) {
-  const filters = prevState.filters
-  filters[index].threshold = threshold
-  return { ...prevState, filters: [...prevState.filters] }
+  prevFilters[index].threshold = threshold
+  return [...prevFilters]
 }

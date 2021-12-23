@@ -52,7 +52,7 @@ export function EmployeeTable() {
             renderCell: CustomerStatusCell,
             searchable: true,
             getSearchValue: (customer: CustomerStatusData) => {
-              return `${customer.customer} ${customer.workOrderDescription}`
+              return customer.customer ? `${customer.customer} ${customer.workOrderDescription}` : 'Ikke i prosjekt'
             },
           },
           { title: 'CV', renderCell: CvCell },
