@@ -3,9 +3,8 @@ import {
   mergeEmployees,
   EmployeeInformation,
   sum,
-  getYear,
-  getWeek,
   statusColorCode,
+  formatRegPeriod,
 } from './util'
 import { v4 as uuid } from 'uuid'
 
@@ -1058,6 +1057,10 @@ export const customerHoursBilledReports = ({
 ]
 
 export const customerHoursBilled = async ({ data }) => {
+  data.forEach((row) => {
+    row.reg_period = formatRegPeriod(row)
+  })
+
   return {
     setNames: ['Timer'],
     sets: {

@@ -91,3 +91,10 @@ export const sum = (data, property) => {
     return a + b[property]
   }, 0)
 }
+
+export const formatRegPeriod = (data) => {
+  const year = data.reg_period.toString().substring(0, 4)
+  const week = data.reg_period.toString().substring(4)
+
+  return `Uke ${week}, ${year}`
+}
