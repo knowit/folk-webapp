@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
+import { Redirect, useHistory } from 'react-router-dom'
 import { ArrowBack } from '@material-ui/icons'
 import { SimpleDDItem } from '../../data/SimpleDDItem'
 import { ConsultantCell, CvCell } from '../../data/components/table/DataCells'
@@ -64,6 +64,10 @@ export default function CustomerSite() {
   const [projects, projectsPending] = useFetchedData<Payload>({
     url: '/api/data/projectsCustomer?customer=' + customerName,
   })
+
+  if (!custEmpsPending && custEmps && custEmps.length == 0) {
+    return <Redirect to={{ pathname: '/404' }} />
+  }
 
   return (
     <div className={classes.container}>
