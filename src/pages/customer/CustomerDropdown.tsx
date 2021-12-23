@@ -4,8 +4,9 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  withStyles,
 } from '@material-ui/core'
-import { Minimize, Add } from '@material-ui/icons'
+import { Minimize, Add, Link as LinkIcon } from '@material-ui/icons'
 import React, { useState } from 'react'
 import EmployeeInfo from '../../components/EmployeeInfo'
 import { GridItem } from '../../components/GridItem'
@@ -17,7 +18,6 @@ import {
 import { SimpleDDItem } from '../../data/SimpleDDItem'
 import CustomerTable from './CustomerTable'
 import { Link } from 'react-router-dom'
-import { OpenInNewStyled } from '../../data/components/table/cells/ConsultantCell'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -39,6 +39,17 @@ const useStyles = makeStyles(() =>
     },
   })
 )
+
+const LinkStyled = withStyles({
+  root: {
+    marginLeft: '10px',
+    color: '#707070',
+    cursor: 'pointer',
+    '&:hover': {
+      color: '#333333',
+    },
+  },
+})(LinkIcon)
 
 interface CustomerDropdownProps {
   customerName: string
@@ -70,8 +81,8 @@ export default function CustomerDropdown({
         >
           {customerName}
           {customerName != 'Uten prosjekt' && (
-            <Link to={'/kunder/' + customerName} target="_blank">
-              <OpenInNewStyled />
+            <Link to={'/kunder/' + customerName}>
+              <LinkStyled />
             </Link>
           )}
         </AccordionSummary>
