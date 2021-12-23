@@ -22,7 +22,7 @@ export interface Column {
   title: string
   expandable?: boolean
   searchable?: boolean
-  getSearchValue?: GetSearchValueFn,
+  getSearchValue?: GetSearchValueFn
 }
 export interface SearchableColumn {
   columnIndex: number
@@ -91,7 +91,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
     searchableColumns,
     filters,
     searchTerm
-  );
+  )
 
   const classes = useStyles()
   return (

@@ -37,14 +37,15 @@ export default function CustomerFilter({
       placeholder: 'Filtrer på Motivasjon...',
       datafetch: useCategories,
     },
-  ];
+  ]
 
   const [filters, setFilters] = useState<FilterObject[]>(initialFilters)
   const [searchTerm, setSearchTerm] = useState<string>('')
 
   useEffect(
-    () => filter(searchAndFilter(allRows, searchableColumns, filters, searchTerm)),
-    [filters,searchTerm]
+    () =>
+      filter(searchAndFilter(allRows, searchableColumns, filters, searchTerm)),
+    [filters, searchTerm]
   )
 
   return (
@@ -65,12 +66,8 @@ export default function CustomerFilter({
         ))}
         <SearchInput
           placeholder={'Søk konsulent, kunde, etc...'}
-          onSearch={(searchTerm) =>
-            setSearchTerm( searchTerm )
-          }
-          onClear={() =>
-            setSearchTerm('')
-          }
+          onSearch={(searchTerm) => setSearchTerm(searchTerm)}
+          onClear={() => setSearchTerm('')}
         />
       </GridItemHeader>
       {filters.map(
