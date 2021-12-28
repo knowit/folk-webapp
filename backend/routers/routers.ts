@@ -1,6 +1,6 @@
 import express from 'express'
 import dataplattform from '../middlewares/dataplattform'
-import { competenceRouter } from './competenceRouter'
+import { competenceRouter } from './competence/competenceRouter'
 import { customerRouter } from './customerRouter'
 import { employeeRouter } from './employeeRouter'
 import handler from './handler'
