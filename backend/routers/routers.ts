@@ -1,8 +1,8 @@
 import express from 'express'
 import dataplattform from '../middlewares/dataplattform'
 import { competenceRouter } from './competence/competenceRouter'
-import { customerRouter } from './customerRouter'
-import { employeeRouter } from './employeeRouter'
+import { customerRouter } from './customer/customerRouter'
+import { employeeRouter } from './employee/employeeRouter'
 import handler from './handler'
 
 const apiRouter = express.Router()
