@@ -1,4 +1,3 @@
-import { AnyRecord } from 'dns'
 import express from 'express'
 import { getReport } from '../../dataplattform/client'
 import {
