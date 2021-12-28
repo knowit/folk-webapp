@@ -26,8 +26,8 @@ apiRouter.get('/privacyPolicy', async (req, res) => {
 const apiRouterV2 = express.Router()
 
 apiRouterV2.use(dataplattform())
-apiRouterV2.use('/customer', customerRouter)
 apiRouterV2.use('/competence', competenceRouter)
+apiRouterV2.use('/customer', customerRouter)
 apiRouterV2.use('/employee', employeeRouter)
 
 export { apiRouter, apiRouterV2 }

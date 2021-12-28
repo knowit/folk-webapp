@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }))
 
 // Register routers
 app.use('/auth', authRouter)
-app.use('/api/v2/', apiRouterV2)
+app.use('/api/v2', apiRouterV2)
 app.use('/api', apiRouter)
 
 export default app
