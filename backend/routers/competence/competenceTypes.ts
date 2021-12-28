@@ -18,3 +18,20 @@ export interface AreaAverageValue {
   subCategory: string
   category: string
 }
+
+export interface AgeDistribution {
+  age: number
+  count: number
+}
+
+export interface AgeGroupDistribution {
+  age_group: number
+  count: number
+}
+
+// TODO: Should be translated
+export interface FagtimeStats {
+  year: number
+  week: number
+  used_hrs: number
+}

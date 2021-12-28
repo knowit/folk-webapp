@@ -1,6 +1,8 @@
+import { range } from '../../repository/util'
 import {
   AreaAverageValue,
   EmployeeCompetenceAndMotivation,
+  FagtimeStats,
   YearsWorkingDistributionCount,
 } from './competenceTypes'
 
@@ -227,5 +229,36 @@ export const AggregateCompetenceAreas = (
   return {
     setNames: Object.keys(output),
     sets: output,
+  }
+}
+
+// /fagTimer
+export const AggregateFagtimer = (data: FagtimeStats[]) => {
+  const makeFagTimerDataForNivo = (data: FagtimeStats[]) => {
+    const setData = range(2018, new Date().getFullYear()).map((year) => ({
+      id: year.toString(),
+      data: range(1, 53).map((i) => {
+        const currentYear = data.filter((dataItem) => dataItem.year === year)
+        const currentWeekData = currentYear.find(
+          (dataItem) => dataItem.week === i
+        )
+        return {
+          x: i,
+          y:
+            currentWeekData && currentWeekData.used_hrs
+              ? currentWeekData.used_hrs
+              : 0,
+        }
+      }),
+    }))
+    return setData
+  }
+
+  return {
+    componentType: 'Line',
+    setNames: ['Fagtimer'],
+    sets: {
+      Fagtimer: makeFagTimerDataForNivo(data),
+    },
   }
 }
