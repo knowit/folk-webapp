@@ -1,3 +1,4 @@
+// ? Burde denne filen ligge her? Nei? Ja?
 import axios from 'axios'
 import { ReportParams } from './clientTypes'
 
@@ -13,9 +14,11 @@ export const getReport = async <T>({
 }: ReportParams) => {
   try {
     // Attempt to fetch report with params
-    const queryString = formatParamsAsEncodedURIComponent(queryParams)
+    const params = formatParamsAsEncodedURIComponent(queryParams)
+    const filterString = params ? `?filter=${params}` : ''
+
     const response = await instance.get<T>(
-      `/data/query/report/${reportName}?filter=${queryString}`,
+      `/data/query/report/${reportName}${filterString}`,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
       }
@@ -35,10 +38,12 @@ export const getReport = async <T>({
   }
 }
 
-const formatParamsAsEncodedURIComponent = (params: Record<string, string>) =>
-  Object.entries(params)
+const formatParamsAsEncodedURIComponent = (params: Record<string, string>) => {
+  if (!params) return ''
+  return Object.entries(params)
     .map(([key, value]) => {
       const val = typeof value === 'string' ? `'${value}'` : value
       return `${encodeURIComponent(key)}:${encodeURIComponent(val)}`
     })
     .join('&')
+}
