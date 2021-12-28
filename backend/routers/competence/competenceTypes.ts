@@ -13,7 +13,7 @@ export interface EmployeeCompetenceAndMotivation {
   categoryCompetenceAvg: number
 }
 
-export interface AreaAverageValue {
+export interface CategoryAverage {
   value: number
   subCategory: string
   category: string
@@ -34,4 +34,15 @@ export interface FagtimeStats {
   year: number
   week: number
   used_hrs: number
+}
+
+export interface FagEventData {
+  event_summary: string
+  time_from: string
+  time_to: string
+}
+
+export interface DegreeDistribution {
+  degree: string
+  count: number
 }

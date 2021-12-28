@@ -1,12 +1,14 @@
-import { range } from '../../repository/util'
+import { getEventSet, range } from '../../repository/util'
 import {
-  AreaAverageValue,
+  CategoryAverage,
   EmployeeCompetenceAndMotivation,
+  FagEventData,
   FagtimeStats,
   YearsWorkingDistributionCount,
 } from './competenceTypes'
 
-// * Could probably be done cleaner. Just copy pasted what had been done earlier.
+// * Everything in this file ould probably be done cleaner. Just copy pasted what had been done earlier.
+
 // /experienceDistribution
 export const AggregateExperienceDistribution = (
   data: YearsWorkingDistributionCount[]
@@ -76,10 +78,8 @@ export const AggregateExperienceDistribution = (
   }
 }
 
-// * Could probably be done cleaner. Just copy pasted what had been done earlier.
-// /competenceAmount
-
 /**
+ * /competenceAmount
  * Dette endepunktet henter antall ansatte i knowit som har svart 3 eller over på kompetanse og/eller motivasjon på kompetansekartleggingen
  * for de forskjellige kategoriene. Den regner også ut den prosentivse andelen som har svart 3 eller mer sammenlignet med alle om har svart.
  */
@@ -167,8 +167,8 @@ export const AggregateCompetenceAmount = (
 
 // /competenceAreas
 export const AggregateCompetenceAreas = (
-  competence: AreaAverageValue[],
-  motivation: AreaAverageValue[]
+  competence: CategoryAverage[],
+  motivation: CategoryAverage[]
 ) => {
   const categoriesMap = { mainCategories: {} }
 
@@ -259,6 +259,58 @@ export const AggregateFagtimer = (data: FagtimeStats[]) => {
     setNames: ['Fagtimer'],
     sets: {
       Fagtimer: makeFagTimerDataForNivo(data),
+    },
+  }
+}
+
+export const AggregateFagEvents = (data: FagEventData[]) => {
+  const eventSet = getEventSet(data)
+
+  return {
+    setNames: ['Fag og hendelser'],
+    sets: {
+      'Fag og hendelser': eventSet,
+    },
+  }
+}
+
+export const AggregateCompetenceMapping = (
+  competence: CategoryAverage[],
+  motivation: CategoryAverage[]
+) => {
+  const competenceCategories = (data: CategoryAverage[]) => {
+    const categoriesMap = {}
+    data.forEach((row) => {
+      if (row.category in categoriesMap) {
+        categoriesMap[row.category].children.push({
+          category: `${row.category}: ${row.subCategory}`,
+          value: row.value,
+        })
+        categoriesMap[row.category].value += row.value
+      } else {
+        categoriesMap[row.category] = {
+          category: row.category,
+          children: [],
+          value: 0,
+        }
+      }
+    })
+    for (const key of Object.keys(categoriesMap)) {
+      const categoryObj = categoriesMap[key]
+      const avg = categoryObj.value / categoryObj.children.length
+      categoryObj.children.forEach((child) => {
+        child.size = (child.value / categoryObj.value) * avg
+      })
+      categoryObj.value = avg
+    }
+    return Object.values(categoriesMap)
+  }
+
+  return {
+    setNames: ['Motivation', 'Competence'],
+    sets: {
+      Competence: competenceCategories(competence),
+      Motivation: competenceCategories(motivation),
     },
   }
 }

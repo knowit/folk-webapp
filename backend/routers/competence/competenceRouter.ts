@@ -1,15 +1,20 @@
+import { AnyRecord } from 'dns'
 import express from 'express'
 import { getReport } from '../../dataplattform/client'
 import {
   AggregateCompetenceAmount,
   AggregateCompetenceAreas,
+  AggregateCompetenceMapping,
   AggregateExperienceDistribution,
+  AggregateFagEvents,
   AggregateFagtimer,
 } from './competenceAggregation'
 import {
   AgeDistribution,
   AgeGroupDistribution,
-  AreaAverageValue,
+  CategoryAverage,
+  DegreeDistribution,
+  FagEventData,
   FagtimeStats,
   YearsWorkingDistributionCount,
 } from './competenceTypes'
@@ -43,11 +48,11 @@ router.get('/competenceAmount', async (req, res) => {
 // /competenceAreas
 router.get('/competenceAreas', async (req, res) => {
   const [competence, motivation] = await Promise.all([
-    getReport<AreaAverageValue[]>({
+    getReport<CategoryAverage[]>({
       accessToken: req.accessToken,
       reportName: 'newCompetenceAverage',
     }),
-    getReport<AreaAverageValue[]>({
+    getReport<CategoryAverage[]>({
       accessToken: req.accessToken,
       reportName: 'newMotivationAverage',
     }),
@@ -90,6 +95,49 @@ router.get('/fagtimer', async (req, res) => {
   })
 
   const aggregatedData = AggregateFagtimer(data)
+  res.send(aggregatedData)
+})
+
+// /fagEvents
+router.get('/fagEvents', async (req, res) => {
+  const data = await getReport<FagEventData[]>({
+    accessToken: req.accessToken,
+    reportName: 'fagEvents',
+  })
+
+  const aggregatedData = AggregateFagEvents(data)
+  res.send(aggregatedData)
+})
+
+// /education
+router.get('/education', async (req, res) => {
+  const data = await getReport<DegreeDistribution[]>({
+    accessToken: req.accessToken,
+    reportName: 'degreeDist',
+  })
+
+  res.send({
+    setNames: ['Utdanning'],
+    sets: {
+      Utdanning: data,
+    },
+  })
+})
+
+// /competenceMapping
+router.get('/competenceMapping', async (req, res) => {
+  const [competence, motivation] = await Promise.all([
+    getReport<CategoryAverage[]>({
+      accessToken: req.accessToken,
+      reportName: 'newCompetenceAverage',
+    }),
+    getReport<CategoryAverage[]>({
+      accessToken: req.accessToken,
+      reportName: 'newMotivationAverage',
+    }),
+  ])
+
+  const aggregatedData = AggregateCompetenceMapping(competence, motivation)
   res.send(aggregatedData)
 })
 
