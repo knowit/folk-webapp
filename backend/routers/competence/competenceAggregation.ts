@@ -1,4 +1,8 @@
-import { YearsWorkingDistributionCount } from './competenceTypes'
+import {
+  AreaAverageValue,
+  EmployeeCompetenceAndMotivation,
+  YearsWorkingDistributionCount,
+} from './competenceTypes'
 
 // * Could probably be done cleaner. Just copy pasted what had been done earlier.
 // /experienceDistribution
@@ -67,5 +71,161 @@ export const AggregateExperienceDistribution = (
       Erfaring: groupedList,
       'Detaljert oversikt': detailedGroupedList,
     },
+  }
+}
+
+// * Could probably be done cleaner. Just copy pasted what had been done earlier.
+// /competenceAmount
+
+/**
+ * Dette endepunktet henter antall ansatte i knowit som har svart 3 eller over på kompetanse og/eller motivasjon på kompetansekartleggingen
+ * for de forskjellige kategoriene. Den regner også ut den prosentivse andelen som har svart 3 eller mer sammenlignet med alle om har svart.
+ */
+export const AggregateCompetenceAmount = (
+  data: EmployeeCompetenceAndMotivation[]
+) => {
+  const THRESHOLD = 3
+  /*const motAndComp = data*/
+  const categoriesMap = { mainCategories: {} }
+  // used to ensure that each participant is only counted once for each main category and to count the number of distinct participants
+  const emailMap = {}
+
+  data.forEach((employeeRow) => {
+    const {
+      categoryMotivationAvg,
+      categoryCompetenceAvg,
+      category,
+      subCategory,
+      motivation,
+      competence,
+      email,
+    } = employeeRow
+
+    if (!(category in categoriesMap)) {
+      categoriesMap['mainCategories'][category] = {
+        competenceAmount: 0,
+        motivationAmount: 0,
+        category: category,
+      }
+      categoriesMap[category] = {}
+    }
+
+    if (!(subCategory in categoriesMap[category])) {
+      categoriesMap[category][subCategory] = {
+        competenceAmount: 0,
+        motivationAmount: 0,
+        category: subCategory,
+      }
+    }
+
+    if (!(email in emailMap)) {
+      emailMap[email] = []
+    }
+
+    if (!emailMap[email].includes(category)) {
+      if (categoryMotivationAvg > THRESHOLD) {
+        categoriesMap['mainCategories'][category].motivationAmount += 1
+      }
+
+      if (categoryCompetenceAvg > THRESHOLD) {
+        categoriesMap['mainCategories'][category].competenceAmount += 1
+      }
+
+      emailMap[email].push(category)
+    }
+
+    if (motivation > THRESHOLD) {
+      categoriesMap[category][subCategory].motivationAmount += 1
+    }
+
+    if (competence > THRESHOLD) {
+      categoriesMap[category][subCategory].competenceAmount += 1
+    }
+  })
+
+  const output = {}
+  const nParticipants = Object.keys(emailMap).length
+  for (const category of Object.keys(categoriesMap)) {
+    for (const subCategory of Object.keys(categoriesMap[category])) {
+      const { motivationAmount, competenceAmount } =
+        categoriesMap[category][subCategory]
+      categoriesMap[category][subCategory]['motivationProportion'] =
+        (motivationAmount / nParticipants) * 100
+      categoriesMap[category][subCategory]['competenceProportion'] =
+        (competenceAmount / nParticipants) * 100
+    }
+    output[category] = Object.values(categoriesMap[category])
+  }
+
+  return {
+    setNames: Object.keys(output),
+    sets: output,
+  }
+}
+
+// /competenceAreas
+export const AggregateCompetenceAreas = (
+  competence: AreaAverageValue[],
+  motivation: AreaAverageValue[]
+) => {
+  const categoriesMap = { mainCategories: {} }
+
+  competence.forEach((row) => {
+    const { category, subCategory } = row
+    const competence = row.value || null
+    if (!(category in categoriesMap)) {
+      categoriesMap[category] = {}
+      categoriesMap['mainCategories'][category] = {
+        category,
+        motivation: 0,
+        competence: 0,
+      }
+    }
+    categoriesMap[category][subCategory] = {
+      category: subCategory,
+      competence,
+      motivation: null,
+    }
+    categoriesMap['mainCategories'][category].competence += competence
+  })
+
+  motivation.forEach((row) => {
+    const { category, subCategory } = row
+    const motivation = row.value || null
+    if (!(category in categoriesMap)) {
+      categoriesMap[category] = {}
+      categoriesMap['mainCategories'][category] = {
+        category,
+        motivation: 0,
+        competence: 0,
+      }
+    }
+    if (subCategory in categoriesMap[category]) {
+      categoriesMap[category][subCategory].motivation = motivation
+    } else {
+      categoriesMap[category][subCategory] = {
+        category: subCategory,
+        competence: null,
+        motivation,
+      }
+    }
+    categoriesMap['mainCategories'][category].motivation += motivation
+  })
+
+  const output = {}
+  for (const category of Object.keys(categoriesMap)) {
+    if (category !== 'mainCategories') {
+      categoriesMap['mainCategories'][category].competence /= Object.keys(
+        categoriesMap[category]
+      ).length
+      categoriesMap['mainCategories'][category].motivation /= Object.keys(
+        categoriesMap[category]
+      ).length
+    }
+    output[category] = Object.values(categoriesMap[category])
+  }
+  return {
+    setNames: Object.keys(output),
+    sets: output,
   }
 }
