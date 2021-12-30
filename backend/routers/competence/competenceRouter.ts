@@ -13,6 +13,7 @@ import {
   AgeGroupDistribution,
   CategoryAverage,
   DegreeDistribution,
+  EmployeeCompetenceAndMotivation,
   FagEventData,
   FagtimeStats,
   YearsWorkingDistributionCount,
@@ -38,7 +39,7 @@ router.get('/experienceDistribution', async (req, res, next) => {
 // /competenceAmount
 router.get('/competenceAmount', async (req, res, next) => {
   try {
-    const data = await getReport<any>({
+    const data = await getReport<EmployeeCompetenceAndMotivation[]>({
       accessToken: req.accessToken,
       reportName: 'employeeMotivationAndCompetence',
     })
