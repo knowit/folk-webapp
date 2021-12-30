@@ -92,8 +92,6 @@ export const sum = (data, property) => {
   }, 0)
 }
 
-// Just moved from data.ts
-
 export function getEventSet(events: { time_from: string; time_to: string }[]) {
   // Finds earliest and latest dates for creating a range of years
 
@@ -158,7 +156,7 @@ export function getEventSet(events: { time_from: string; time_to: string }[]) {
   return set
 }
 
-export function dateRange(startDate: string, endDate: string) {
+function dateRange(startDate: string, endDate: string) {
   const start = startDate.split('-')
   const end = endDate.split('-')
   const startYear = parseInt(start[0])

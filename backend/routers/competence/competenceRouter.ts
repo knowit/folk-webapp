@@ -1,12 +1,12 @@
 import express from 'express'
 import { getReport } from '../../dataplattform/client'
 import {
-  AggregateCompetenceAmount,
-  AggregateCompetenceAreas,
-  AggregateCompetenceMapping,
-  AggregateExperienceDistribution,
-  AggregateFagEvents,
-  AggregateFagtimer,
+  aggregateCompetenceAmount,
+  aggregateCompetenceAreas,
+  aggregateCompetenceMapping,
+  aggregateExperienceDistribution,
+  aggregateFagEvents,
+  aggregateFagtimer,
 } from './competenceAggregation'
 import {
   AgeDistribution,
@@ -29,7 +29,7 @@ router.get('/experienceDistribution', async (req, res) => {
     reportName: 'workExperienceDistributedInYears',
   })
 
-  const aggregatedData = AggregateExperienceDistribution(data)
+  const aggregatedData = aggregateExperienceDistribution(data)
   res.send(aggregatedData)
 })
 
@@ -40,7 +40,7 @@ router.get('/competenceAmount', async (req, res) => {
     reportName: 'employeeMotivationAndCompetence',
   })
 
-  const aggregatedData = AggregateCompetenceAmount(data)
+  const aggregatedData = aggregateCompetenceAmount(data)
   res.send(aggregatedData)
 })
 
@@ -57,7 +57,7 @@ router.get('/competenceAreas', async (req, res) => {
     }),
   ])
 
-  const aggregatedData = AggregateCompetenceAreas(competence, motivation)
+  const aggregatedData = aggregateCompetenceAreas(competence, motivation)
   res.send(aggregatedData)
 })
 
@@ -93,7 +93,7 @@ router.get('/fagtimer', async (req, res) => {
     reportName: 'fagActivity',
   })
 
-  const aggregatedData = AggregateFagtimer(data)
+  const aggregatedData = aggregateFagtimer(data)
   res.send(aggregatedData)
 })
 
@@ -104,7 +104,7 @@ router.get('/fagEvents', async (req, res) => {
     reportName: 'fagEvents',
   })
 
-  const aggregatedData = AggregateFagEvents(data)
+  const aggregatedData = aggregateFagEvents(data)
   res.send(aggregatedData)
 })
 
@@ -136,7 +136,7 @@ router.get('/competenceMapping', async (req, res) => {
     }),
   ])
 
-  const aggregatedData = AggregateCompetenceMapping(competence, motivation)
+  const aggregatedData = aggregateCompetenceMapping(competence, motivation)
   res.send(aggregatedData)
 })
 

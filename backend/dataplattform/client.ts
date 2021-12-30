@@ -1,6 +1,11 @@
 // ? Burde denne filen ligge her? Nei? Ja?
 import axios from 'axios'
-import { ReportParams } from './clientTypes'
+
+export interface ReportParams {
+  accessToken: string
+  reportName: string
+  queryParams?: Record<string, any>
+}
 
 const BASE_URL =
   process.env.API_URL || 'https://api.new-dev.dataplattform.knowit.no'

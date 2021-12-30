@@ -10,7 +10,7 @@ import {
 // * Everything in this file ould probably be done cleaner. Just copy pasted what had been done earlier.
 
 // /experienceDistribution
-export const AggregateExperienceDistribution = (
+export const aggregateExperienceDistribution = (
   data: YearsWorkingDistributionCount[]
 ) => {
   const groupedList = [
@@ -83,7 +83,7 @@ export const AggregateExperienceDistribution = (
  * Dette endepunktet henter antall ansatte i knowit som har svart 3 eller over på kompetanse og/eller motivasjon på kompetansekartleggingen
  * for de forskjellige kategoriene. Den regner også ut den prosentivse andelen som har svart 3 eller mer sammenlignet med alle om har svart.
  */
-export const AggregateCompetenceAmount = (
+export const aggregateCompetenceAmount = (
   data: EmployeeCompetenceAndMotivation[]
 ) => {
   const THRESHOLD = 3
@@ -166,7 +166,7 @@ export const AggregateCompetenceAmount = (
 }
 
 // /competenceAreas
-export const AggregateCompetenceAreas = (
+export const aggregateCompetenceAreas = (
   competence: CategoryAverage[],
   motivation: CategoryAverage[]
 ) => {
@@ -233,7 +233,7 @@ export const AggregateCompetenceAreas = (
 }
 
 // /fagTimer
-export const AggregateFagtimer = (data: FagtimeStats[]) => {
+export const aggregateFagtimer = (data: FagtimeStats[]) => {
   const makeFagTimerDataForNivo = (data: FagtimeStats[]) => {
     const setData = range(2018, new Date().getFullYear()).map((year) => ({
       id: year.toString(),
@@ -263,7 +263,7 @@ export const AggregateFagtimer = (data: FagtimeStats[]) => {
   }
 }
 
-export const AggregateFagEvents = (data: FagEventData[]) => {
+export const aggregateFagEvents = (data: FagEventData[]) => {
   const eventSet = getEventSet(data)
 
   return {
@@ -274,7 +274,7 @@ export const AggregateFagEvents = (data: FagEventData[]) => {
   }
 }
 
-export const AggregateCompetenceMapping = (
+export const aggregateCompetenceMapping = (
   competence: CategoryAverage[],
   motivation: CategoryAverage[]
 ) => {
