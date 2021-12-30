@@ -1,10 +1,10 @@
-// ? Burde denne filen ligge her? Nei? Ja?
 import axios from 'axios'
 
+type QueryParams = Record<string, any>
 export interface ReportParams {
   accessToken: string
   reportName: string
-  queryParams?: Record<string, any>
+  queryParams?: QueryParams
 }
 
 const BASE_URL =
@@ -32,7 +32,6 @@ export const getReport = async <T>({
     return response.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      // TODO: Fix types
       const err = {
         status: e.response?.status ?? 400,
         message: e.message,
@@ -43,7 +42,7 @@ export const getReport = async <T>({
   }
 }
 
-const formatParamsAsEncodedURIComponent = (params: Record<string, string>) => {
+const formatParamsAsEncodedURIComponent = (params: QueryParams) => {
   if (!params) return ''
   return Object.entries(params)
     .map(([key, value]) => {

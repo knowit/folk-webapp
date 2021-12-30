@@ -1,8 +1,6 @@
 import express from 'express'
 import dataplattform from '../middlewares/dataplattform'
 import { competenceRouter } from './competence/competenceRouter'
-import { customerRouter } from './customer/customerRouter'
-import { employeeRouter } from './employee/employeeRouter'
 import handler from './handler'
 
 const apiRouter = express.Router()
@@ -27,7 +25,5 @@ const apiRouterV2 = express.Router()
 
 apiRouterV2.use(dataplattform())
 apiRouterV2.use('/competence', competenceRouter)
-apiRouterV2.use('/customer', customerRouter)
-apiRouterV2.use('/employee', employeeRouter)
 
 export { apiRouter, apiRouterV2 }

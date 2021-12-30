@@ -17,4 +17,13 @@ app.use('/auth', authRouter)
 app.use('/api/v2', apiRouterV2)
 app.use('/api', apiRouter)
 
+// Error Handling
+app.use((err, req, res, next) => {
+  console.log('Something broke!')
+  console.log('Path: ', req.path)
+  console.error('Error: ', err)
+
+  res.status(500).send('Something broke!')
+})
+
 export default app
