@@ -1,9 +1,8 @@
-import React, { Dispatch, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Skeleton } from '@material-ui/lab'
 import { useFetchedData } from '../hooks/service'
 import { NoData } from './ErrorText'
-import { RowStates, Action } from '../data/components/table/DataTable'
 import {
   ChartSkeleton,
   ExperienceData,
@@ -133,11 +132,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default function EmployeeInfo({
-  data,
-  id,
-  dispatch,
-}: {
+interface Props {
   data: {
     competenceUrl: string
     user_id: string
@@ -145,9 +140,16 @@ export default function EmployeeInfo({
     degree: string
   }
   id: string
-  rowStates: RowStates
-  dispatch: Dispatch<Action>
-}) {
+  onHeightChange: (id: string, height: number) => void
+  onExpand: (id: string, data: any) => void
+}
+
+export default function EmployeeInfo({
+  data,
+  id,
+  onHeightChange,
+  onExpand,
+}: Props) {
   let targetRef: any
   function setRef(ref: any) {
     targetRef = ref
@@ -177,11 +179,11 @@ export default function EmployeeInfo({
 
   useEffect(() => {
     if (!pending && targetRef) {
-      const dataHeight = getOffsetHeight(targetRef)
-      dispatch({ type: 'CHANGE_HEIGHT', id, height: dataHeight + 72 })
-      dispatch({ type: 'SET_EXPANDED_DATA', id, expandedData: empData })
+      const newHeight = getOffsetHeight(targetRef) + 72
+      onHeightChange(id, newHeight)
+      onExpand(id, empData)
     }
-  }, [pending, empData, targetRef, id, dispatch])
+  }, [pending, empData, targetRef, id])
 
   return (
     <div ref={setRef} className={classes.root}>

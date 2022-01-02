@@ -1,4 +1,4 @@
-import React, { Dispatch } from 'react'
+import React from 'react'
 import {
   Avatar,
   Button,
@@ -14,7 +14,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import { OpenInNew } from '@material-ui/icons'
 import { Link } from 'react-router-dom'
-import { Action, RowStates } from '../DataTable'
 
 const useCompetenceMappingStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -104,26 +103,25 @@ export const OpenInNewStyled = withStyles({
   },
 })(OpenInNew)
 
-export default function ConsultantCell(cellData: {
-  data: { value: string; image: string | undefined }
+interface ConsultantCellProps {
   email: string
-  rowStates: RowStates
-  dispatch: Dispatch<Action>
+  data: { value: string; image?: string }
   id: string
-}) {
-  const { data } = cellData
-  const rowStates = cellData.rowStates
-  const id = cellData.id
+  isExpanded: boolean
+  onExpand: (id: string) => void
+}
+
+export default function ConsultantCell({
+  email,
+  data,
+  id,
+  isExpanded,
+  onExpand,
+}: ConsultantCellProps) {
+  console.log('HELLO')
   const classes = useCompetenceMappingStyles()
-  const isOpen = () => rowStates && rowStates[id] && rowStates[id].height !== 70
-  const openClick = () => {
-    cellData.dispatch({
-      type: 'CHANGE_HEIGHT',
-      id,
-      height: isOpen() ? 70 : 280,
-    })
-  }
-  const openStyle = isOpen() ? classes.bolderText : ''
+
+  const openStyle = isExpanded ? classes.bolderText : ''
   return (
     <TableCellNoBorders
       component="div"
@@ -142,7 +140,7 @@ export default function ConsultantCell(cellData: {
           classes.flexContainer,
           classes.spread,
         ].join(' ')}
-        onClick={() => openClick()}
+        onClick={() => onExpand(id)}
       >
         <div className={classes.root}>
           {data.image ? (
@@ -161,12 +159,12 @@ export default function ConsultantCell(cellData: {
           </span>
         </div>
         <div className={classes.root}>
-          {isOpen() ? (
+          {isExpanded ? (
             <ExpandLessIconWithStyles />
           ) : (
             <ExpandMoreIconWithStyles />
           )}
-          <Link to={'/ansatt/' + cellData.email} target="_blank">
+          <Link to={'/ansatt/' + email} target="_blank">
             <OpenInNewStyled />
           </Link>
         </div>

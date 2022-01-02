@@ -16,6 +16,7 @@ import {
   handleThresholdChange,
   searchAndFilter,
 } from '../components/FilterSearch'
+import { SortOrder } from './components/table/cells/SortableHeaderCell'
 
 type GetSearchValueFn = (data: unknown) => string
 export interface Column {
@@ -41,6 +42,25 @@ const useStyles = makeStyles({
 export interface TableState {
   filters: FilterObject[]
   searchTerm: string
+}
+
+const sortColumnStringValue = (
+  rows: any[],
+  sortOrder: SortOrder,
+  columnIndex: number
+) => {
+  switch (sortOrder) {
+    case 'ascending':
+      return rows.sort((a, b) =>
+        a.rowData[columnIndex].localeCompare(b.rowData[columnIndex])
+      )
+    case 'descending':
+      return rows.sort((a, b) =>
+        b.rowData[columnIndex].localeCompare(a.rowData[columnIndex])
+      )
+    default:
+      return rows
+  }
 }
 
 export function getSearchableColumns(columns: Column[]): SearchableColumn[] {
@@ -92,6 +112,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
     filters,
     searchTerm
   )
+  const sortedRows = sortColumnStringValue(filteredRows, 'none', 4)
 
   const classes = useStyles()
   return (
@@ -142,9 +163,9 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
           )
       )}
       <RowCount>
-        {filteredRows.length} av {allRows.length}
+        {sortedRows.length} av {allRows.length}
       </RowCount>
-      <DataTable rows={filteredRows} columns={[]} {...props} />
+      <DataTable rows={sortedRows} columns={[]} {...props} />
     </>
   )
 }

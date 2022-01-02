@@ -1,8 +1,14 @@
-import React, { Dispatch, useEffect, useReducer } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { TableCell, withStyles } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper'
-import { AutoSizer, Column, Table, TableRowRenderer } from 'react-virtualized'
+import {
+  AutoSizer,
+  Column,
+  Table,
+  TableRowProps,
+  TableRowRenderer,
+} from 'react-virtualized'
 import CharacterLimitBox from '../../../components/CharacterLimitBox'
 
 interface DataTableProps {
@@ -14,7 +20,7 @@ export interface DataTableColumn {
   title: string
   expandable?: boolean
   searchable?: boolean
-  renderCell?: (props: { data: any; rowData: any[] }) => JSX.Element
+  renderCell?: (props: { data: any }) => JSX.Element
   renderExpanded?: (data: any) => JSX.Element
   headerRenderCell?: JSX.Element
   checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -79,15 +85,13 @@ export const tableStyles = makeStyles((theme: Theme) =>
   })
 )
 
-type createCellFunction = (props: {
+type CellTypeProps = (props: {
   data: any
-  rowData: any[]
   email?: string
-  rowStates?: RowStates
-  dispatch?: Dispatch<Action>
   id?: string
+  rowData: any[]
+  onExpand?: (id: string) => void
 }) => JSX.Element
-type renderExpandedCell = (data: any, callBack: () => void) => JSX.Element
 
 interface MuiVirtualizedTableProps {
   columns: DataTableColumn[]
@@ -96,36 +100,28 @@ interface MuiVirtualizedTableProps {
   rows: any[]
 }
 
-function GetCell({
-  RenderCell,
-  expandable,
-  cellData,
-  id,
-  rowData,
-  rowStates,
-  dispatch,
-}: {
-  RenderCell: createCellFunction | undefined
-  expandable: boolean | undefined
-  cellData: any
+interface CellProps {
+  CellType?: CellTypeProps
+  isExpandable?: boolean
+  onExpand: (id: string) => void
+  data: any[]
   id: string
-  rowData: any[]
-  rowStates: RowStates
-  dispatch: Dispatch<Action>
-}): JSX.Element {
+  index: number
+}
+
+function GetCell({
+  isExpandable,
+  data,
+  id,
+  onExpand,
+  index,
+  CellType,
+}: CellProps): JSX.Element {
   const classes = tableStyles()
-  const data = cellData !== null ? cellData : '-'
-  if (expandable && RenderCell) {
-    return (
-      <RenderCell
-        data={cellData}
-        rowData={[]}
-        email={cellData.email}
-        rowStates={rowStates}
-        dispatch={dispatch}
-        id={id}
-      />
-    )
+  const cellData = data[index]
+
+  if (isExpandable && CellType) {
+    return <CellType data={cellData} rowData={[]} id={id} onExpand={onExpand} />
   }
   return (
     <TableCellNoBorders
@@ -134,53 +130,16 @@ function GetCell({
       align="left"
     >
       <div className={[classes.standardSize, classes.borders].join(' ')}>
-        {RenderCell !== undefined ? (
-          <RenderCell data={data} rowData={rowData} />
+        {CellType ? (
+          <CellType data={cellData} rowData={data} />
         ) : (
-          <CharacterLimitBox text={data} />
+          <CharacterLimitBox text={cellData ?? '-'} />
         )}
       </div>
     </TableCellNoBorders>
   )
 }
 
-const initialState: RowStates = {}
-
-export interface RowStates {
-  [id: string]: {
-    height: number
-    expandedData: null | any
-  }
-}
-
-export type Action =
-  | { type: 'CHANGE_HEIGHT'; id: string; height: number }
-  | { type: 'SET_EXPANDED_DATA'; id: string; expandedData: any }
-
-function reducer(currentState: RowStates, action: Action) {
-  switch (action.type) {
-    case 'CHANGE_HEIGHT':
-      return {
-        ...currentState,
-        [action.id]: {
-          height: action.height,
-          expandedData: currentState[action.id]
-            ? currentState[action.id].expandedData
-            : null,
-        },
-      }
-    case 'SET_EXPANDED_DATA':
-      return {
-        ...currentState,
-        [action.id]: {
-          height: currentState[action.id] ? currentState[action.id].height : 70,
-          expandedData: action.expandedData,
-        },
-      }
-    default:
-      return currentState
-  }
-}
 function MuiVirtualizedTable({
   columns,
   rowCount,
@@ -188,7 +147,16 @@ function MuiVirtualizedTable({
   rows,
 }: MuiVirtualizedTableProps) {
   const classes = tableStyles()
-  const [state, dispatch] = useReducer(reducer, initialState)
+
+  const [rowsExpanded, setRowsExpanded] = useState<string[]>([])
+
+  function onExpand(id: string) {
+    if (rowsExpanded.includes(id)) {
+      setRowsExpanded([...rowsExpanded.filter((row: string) => row !== id)])
+    } else {
+      setRowsExpanded([...rowsExpanded, id])
+    }
+  }
 
   let ArrayRef: any
   function setRef(ref: any) {
@@ -198,20 +166,22 @@ function MuiVirtualizedTable({
   useEffect(() => {
     ArrayRef.recomputeRowHeights()
     ArrayRef.forceUpdate()
-  }, [state, ArrayRef])
+  }, [ArrayRef])
 
   const widthList = [385, 222, 143, 337, 53]
 
-  const rowRenderer: TableRowRenderer = ({
+  const PerRowRender: TableRowRenderer = ({
     className,
     index,
     key,
     rowData,
     style,
-  }) => {
+  }: TableRowProps) => {
+    console.log('Definitive failure')
     const id = rows[index].rowId
-    const RenderExpanded: renderExpandedCell | undefined =
-      columns[0].renderExpanded
+    console.log('faile?')
+    const RenderExpanded = columns[0]?.renderExpanded
+    console.log('fail?')
     return (
       <div key={key} className={classes.column} style={style}>
         <div className={className}>
@@ -219,19 +189,18 @@ function MuiVirtualizedTable({
             return (
               <div key={i} style={{ width: widthList[i] }}>
                 <GetCell
-                  RenderCell={column.renderCell}
-                  expandable={column.expandable}
-                  cellData={rowData[i]}
+                  CellType={column.renderCell}
+                  isExpandable={column.expandable}
                   id={id}
-                  rowData={rowData}
-                  rowStates={state}
-                  dispatch={dispatch}
+                  data={rowData}
+                  index={i}
+                  onExpand={onExpand}
                 />
               </div>
             )
           })}
         </div>
-        {state[id] && state[id].height !== 70 && RenderExpanded && (
+        {rowsExpanded.includes(id) && RenderExpanded && (
           <RenderExpanded
             data={rowData[0]}
             callBack={() => {
@@ -239,17 +208,27 @@ function MuiVirtualizedTable({
               ArrayRef.forceUpdate()
             }}
             id={id}
-            dispatch={dispatch}
-            rowStates={state}
           />
         )}
       </div>
     )
   }
 
-  function headerRenderer(title: string, HeaderRenderCell?: JSX.Element) {
+  function headerRenderer(
+    title: string,
+    index: number,
+    checkBoxChangeHandler?: (
+      event: React.ChangeEvent<HTMLInputElement>
+    ) => void,
+    HeaderRenderCell?: any
+  ) {
     return HeaderRenderCell ? (
-      HeaderRenderCell
+      <HeaderRenderCell
+        title={title}
+        checkBoxLabel="Se kun ledige"
+        checkBoxChangeHandler={checkBoxChangeHandler}
+        index={index}
+      />
     ) : (
       <TableCell
         component="div"
@@ -263,7 +242,7 @@ function MuiVirtualizedTable({
   }
 
   const getRowHeight = ({ index }: { index: number }) => {
-    return state[rows[index].rowId] ? state[rows[index].rowId].height : 70
+    return 70
   }
 
   function emptyRow() {
@@ -283,7 +262,7 @@ function MuiVirtualizedTable({
     <AutoSizer>
       {({ height, width }) => (
         <Table
-          rowRenderer={rowRenderer}
+          rowRenderer={PerRowRender}
           ref={setRef}
           height={height}
           width={width}
@@ -295,17 +274,26 @@ function MuiVirtualizedTable({
           noRowsRenderer={emptyRow}
           gridClassName={classes.noFocus}
         >
-          {columns.map(({ title, headerRenderCell }, index) => {
-            return (
-              <Column
-                key={title}
-                headerRenderer={() => headerRenderer(title, headerRenderCell)}
-                className={classes.flexContainer}
-                dataKey={String(index)}
-                width={widthList[index]}
-              />
-            )
-          })}
+          {columns.map(
+            ({ title, headerRenderCell, checkBoxChangeHandler }, index) => {
+              return (
+                <Column
+                  key={title}
+                  headerRenderer={() =>
+                    headerRenderer(
+                      title,
+                      index,
+                      checkBoxChangeHandler,
+                      headerRenderCell
+                    )
+                  }
+                  className={classes.flexContainer}
+                  dataKey={String(index)}
+                  width={widthList[index]}
+                />
+              )
+            }
+          )}
         </Table>
       )}
     </AutoSizer>

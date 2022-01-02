@@ -70,15 +70,13 @@ export const searchAndFilter = (
 
     filters.map((filter) => {
       if (filter.values.length > 0) {
+        const rowDataIndex = row.rowData.length - ColumnMapping[filter.name]
         rowMatchesFilters =
           rowMatchesFilters &&
           (filter.name === 'CUSTOMER'
-            ? filterCustomerColumn(
-                row.rowData[row.rowData.length - ColumnMapping[filter.name]],
-                filter.values
-              )
+            ? filterCustomerColumn(row.rowData[rowDataIndex], filter.values)
             : filterRow(
-                row.rowData[row.rowData.length - ColumnMapping[filter.name]],
+                row.rowData[rowDataIndex],
                 filter.values,
                 filter.threshold
               ))
