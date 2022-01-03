@@ -50,11 +50,11 @@ const sortColumnStringValue = (
   columnIndex: number
 ) => {
   switch (sortOrder) {
-    case 'ascending':
+    case 'ASC':
       return rows.sort((a, b) =>
         a.rowData[columnIndex].localeCompare(b.rowData[columnIndex])
       )
-    case 'descending':
+    case 'DESC':
       return rows.sort((a, b) =>
         b.rowData[columnIndex].localeCompare(a.rowData[columnIndex])
       )
@@ -92,13 +92,6 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
       placeholder: 'Filtrer på motivasjon...',
       datafetch: useCategories,
     },
-    {
-      name: 'CUSTOMER',
-      values: [],
-      placeholder: 'Filtrer på kunder...',
-      threshold: 0,
-      datafetch: useCustomer,
-    },
   ]
 
   const [filters, setFilters] = useState<FilterObject[]>(initialFilters)
@@ -112,7 +105,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
     filters,
     searchTerm
   )
-  const sortedRows = sortColumnStringValue(filteredRows, 'none', 4)
+  const sortedRows = sortColumnStringValue(filteredRows, 'NONE', 4)
 
   const classes = useStyles()
   return (

@@ -3,7 +3,7 @@ import { ArrowDownward, ArrowUpward } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import { createStyles, Theme } from '@material-ui/core'
 
-export type SortOrder = 'none' | 'ascending' | 'descending'
+export type SortOrder = 'NONE' | 'ASC' | 'DESC'
 
 const useSortableHeaderStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,31 +25,25 @@ const useSortableHeaderStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default function SortableHeaderCell(cellData: {
+interface SortableHeaderCellProps {
   title: string
-  index: number
-}) {
-  const [currentOrder, setCurrentOrder] = useState<SortOrder>('none')
+}
+
+export default function SortableHeaderCell({ title }: SortableHeaderCellProps) {
+  const [currentOrder, setCurrentOrder] = useState<SortOrder>('NONE')
   const classes = useSortableHeaderStyles()
 
   const sortClick = () => {
-    setCurrentOrder(currentOrder === 'ascending' ? 'descending' : 'ascending')
+    setCurrentOrder(currentOrder === 'ASC' ? 'DESC' : 'ASC')
   }
-
-  useEffect(() => {
-    const t = {
-      columnIndex: cellData.index,
-      sortOrder: currentOrder,
-    }
-  }, [currentOrder])
 
   const sortIcon = () => {
     switch (currentOrder) {
-      case 'ascending':
+      case 'ASC':
         return <ArrowUpward />
-      case 'descending':
+      case 'DESC':
         return <ArrowDownward />
-      case 'none':
+      case 'NONE':
       default:
         return null
     }
@@ -62,7 +56,7 @@ export default function SortableHeaderCell(cellData: {
         sortClick()
       }}
     >
-      {cellData.title}
+      {title}
       {sortIcon()}
     </div>
   )

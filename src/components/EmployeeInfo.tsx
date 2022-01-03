@@ -140,16 +140,10 @@ interface Props {
     degree: string
   }
   id: string
-  onHeightChange: (id: string, height: number) => void
-  onExpand: (id: string, data: any) => void
+  setHeight: (id: string, height: number) => void
 }
 
-export default function EmployeeInfo({
-  data,
-  id,
-  onHeightChange,
-  onExpand,
-}: Props) {
+export default function EmployeeInfo({ data, id, setHeight }: Props) {
   let targetRef: any
   function setRef(ref: any) {
     targetRef = ref
@@ -180,10 +174,9 @@ export default function EmployeeInfo({
   useEffect(() => {
     if (!pending && targetRef) {
       const newHeight = getOffsetHeight(targetRef) + 72
-      onHeightChange(id, newHeight)
-      onExpand(id, empData)
+      setHeight(id, newHeight)
     }
-  }, [pending, empData, targetRef, id])
+  }, [pending, targetRef, id])
 
   return (
     <div ref={setRef} className={classes.root}>

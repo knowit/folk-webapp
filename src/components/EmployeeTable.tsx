@@ -48,7 +48,7 @@ export function EmployeeTable() {
           },
           {
             title: 'Tittel',
-            headerRenderCell: SortableHeaderCell,
+            headerRenderCell: SortableHeaderCell({ title: 'Tittel' }),
           },
           { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
           {
@@ -60,6 +60,7 @@ export function EmployeeTable() {
                 ? `${customer.customer} ${customer.workOrderDescription}`
                 : 'Ikke i prosjekt'
             },
+            headerRenderCell: SortableHeaderCell({ title: 'Kunde' }),
           },
           { title: 'CV', renderCell: CvCell },
         ],

@@ -108,7 +108,7 @@ interface ConsultantCellProps {
   data: { value: string; image?: string }
   id: string
   isExpanded: boolean
-  onExpand: (id: string) => void
+  toggleExpand: (id: string) => void
 }
 
 export default function ConsultantCell({
@@ -116,9 +116,8 @@ export default function ConsultantCell({
   data,
   id,
   isExpanded,
-  onExpand,
+  toggleExpand,
 }: ConsultantCellProps) {
-  console.log('HELLO')
   const classes = useCompetenceMappingStyles()
 
   const openStyle = isExpanded ? classes.bolderText : ''
@@ -140,7 +139,7 @@ export default function ConsultantCell({
           classes.flexContainer,
           classes.spread,
         ].join(' ')}
-        onClick={() => onExpand(id)}
+        onClick={() => toggleExpand(id)}
       >
         <div className={classes.root}>
           {data.image ? (
