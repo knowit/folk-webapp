@@ -10,10 +10,12 @@ import {
   TableRowRenderer,
 } from 'react-virtualized'
 import CharacterLimitBox from '../../../components/CharacterLimitBox'
+import { ColumnSort } from '../../DDTable'
 
 interface DataTableProps {
   columns: DataTableColumn[]
   rows: Omit<DataTableRow, 'columns'>[]
+  setSort?: (CurrentSort: ColumnSort) => void
 }
 
 export interface DataTableColumn {
@@ -99,6 +101,7 @@ interface MuiVirtualizedTableProps {
   rowCount: number
   rowGetter: (row: { index: number }) => any
   rows: any[]
+  setSort?: (CurrentSort: ColumnSort) => void
 }
 
 interface CellProps {
@@ -115,22 +118,19 @@ interface ExpandedRows {
   height: number
 }
 
-interface SortedColumn {
-  sortBy: string
-  sortDirection: 'ASC' | 'DESC'
-}
-
 function MuiVirtualizedTable({
   columns,
   rowCount,
   rowGetter,
   rows,
+  setSort,
 }: MuiVirtualizedTableProps) {
   const classes = tableStyles()
   const [expandedRows, setExpandedRows] = useState<string[]>([])
   const [expandedRowsHeights, setExpandedRowsHeights] = useState<
     ExpandedRows[]
   >([])
+  const [currentSort, setCurrentSort] = useState<ColumnSort>()
 
   let ArrayRef: any
   function setRef(ref: any) {
@@ -252,9 +252,25 @@ function MuiVirtualizedTable({
     )
   }
 
-  function headerCellRenderer(title: string, HeaderRenderCell?: any) {
+  function onSortChange(sorting: ColumnSort) {
+    //setCurrentSort(sorting);
+  }
+
+  function headerCellRenderer(
+    title: string,
+    HeaderRenderCell?: any | null,
+    checkBoxChangeHandler?:
+      | (event: React.ChangeEvent<HTMLInputElement>) => void,
+    index?: number
+  ) {
     return HeaderRenderCell ? (
-      HeaderRenderCell
+      <HeaderRenderCell
+        title={title}
+        checkBoxLabel="Se kun ledige"
+        checkBoxChangeHandler={checkBoxChangeHandler}
+        columnIndex={index}
+        onOrderChange={onSortChange}
+      />
     ) : (
       <TableCell
         component="div"
@@ -287,6 +303,12 @@ function MuiVirtualizedTable({
       </TableCell>
     )
   }
+
+  useEffect(() => {
+    if (setSort && currentSort) {
+      setSort(currentSort)
+    }
+  }, [currentSort])
 
   return (
     <AutoSizer>
@@ -324,7 +346,7 @@ function MuiVirtualizedTable({
   )
 }
 
-export default function DataTable({ columns, rows }: DataTableProps) {
+export default function DataTable({ columns, rows, setSort }: DataTableProps) {
   return (
     <Paper
       style={{
@@ -338,6 +360,7 @@ export default function DataTable({ columns, rows }: DataTableProps) {
         rowGetter={({ index }) => rows[index].rowData}
         columns={columns}
         rows={rows}
+        setSort={setSort}
       />
     </Paper>
   )

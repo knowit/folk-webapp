@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { ArrowDownward, ArrowUpward } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import { createStyles, Theme } from '@material-ui/core'
+import { ColumnSort } from '../../../DDTable'
 
 export type SortOrder = 'NONE' | 'ASC' | 'DESC'
 
@@ -27,15 +28,25 @@ const useSortableHeaderStyles = makeStyles((theme: Theme) =>
 
 interface SortableHeaderCellProps {
   title: string
+  onOrderChange: (newOrder: ColumnSort) => void
+  columnIndex: number
 }
 
-export default function SortableHeaderCell({ title }: SortableHeaderCellProps) {
+export default function SortableHeaderCell({
+  title,
+  onOrderChange,
+  columnIndex,
+}: SortableHeaderCellProps) {
   const [currentOrder, setCurrentOrder] = useState<SortOrder>('NONE')
   const classes = useSortableHeaderStyles()
 
   const sortClick = () => {
     setCurrentOrder(currentOrder === 'ASC' ? 'DESC' : 'ASC')
   }
+
+  useEffect(() => {
+    onOrderChange({ sortOrder: currentOrder, columnIndex: columnIndex })
+  })
 
   const sortIcon = () => {
     switch (currentOrder) {

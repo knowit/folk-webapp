@@ -39,16 +39,12 @@ export function EmployeeTable() {
             },
             renderCell: ConsultantCell,
             renderExpanded: EmployeeInfo,
-            headerRenderCell: CheckBoxHeaderCell({
-              title: 'Konsulent',
-              checkBoxLabel: 'Vis kun ledige',
-              checkBoxChangeHandler: visKunLedigeFilter,
-            }),
+            headerRenderCell: CheckBoxHeaderCell,
             checkBoxLabel: 'Vis kun ledige',
           },
           {
             title: 'Tittel',
-            headerRenderCell: SortableHeaderCell({ title: 'Tittel' }),
+            headerRenderCell: SortableHeaderCell,
           },
           { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
           {
@@ -60,7 +56,7 @@ export function EmployeeTable() {
                 ? `${customer.customer} ${customer.workOrderDescription}`
                 : 'Ikke i prosjekt'
             },
-            headerRenderCell: SortableHeaderCell({ title: 'Kunde' }),
+            headerRenderCell: SortableHeaderCell,
           },
           { title: 'CV', renderCell: CvCell },
         ],

@@ -30,6 +30,11 @@ export interface SearchableColumn {
   getSearchValue: GetSearchValueFn
 }
 
+export interface ColumnSort {
+  columnIndex: number
+  sortOrder: SortOrder
+}
+
 const useStyles = makeStyles({
   searchBars: {
     flexDirection: 'row',
@@ -44,19 +49,19 @@ export interface TableState {
   searchTerm: string
 }
 
-const sortColumnStringValue = (
-  rows: any[],
-  sortOrder: SortOrder,
-  columnIndex: number
-) => {
-  switch (sortOrder) {
+const sortColumnValue = (rows: any[], currentSort: ColumnSort) => {
+  switch (currentSort.sortOrder) {
     case 'ASC':
       return rows.sort((a, b) =>
-        a.rowData[columnIndex].localeCompare(b.rowData[columnIndex])
+        a.rowData[currentSort.columnIndex].localeCompare(
+          b.rowData[currentSort.columnIndex]
+        )
       )
     case 'DESC':
       return rows.sort((a, b) =>
-        b.rowData[columnIndex].localeCompare(a.rowData[columnIndex])
+        b.rowData[currentSort.columnIndex].localeCompare(
+          a.rowData[currentSort.columnIndex]
+        )
       )
     default:
       return rows
@@ -96,8 +101,13 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
 
   const [filters, setFilters] = useState<FilterObject[]>(initialFilters)
   const [searchTerm, setSearchTerm] = useState<string>('')
+  const [sorting, setSorting] = useState<ColumnSort>({
+    columnIndex: 0,
+    sortOrder: 'NONE',
+  })
 
   const { columns } = props as { columns: Column[] }
+
   const searchableColumns = getSearchableColumns(columns)
   const filteredRows = searchAndFilter(
     allRows,
@@ -105,9 +115,10 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
     filters,
     searchTerm
   )
-  const sortedRows = sortColumnStringValue(filteredRows, 'NONE', 4)
+  const sortedRows = sortColumnValue(filteredRows, sorting)
 
   const classes = useStyles()
+
   return (
     <>
       <GridItemHeader title={title}>
@@ -158,7 +169,12 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
       <RowCount>
         {sortedRows.length} av {allRows.length}
       </RowCount>
-      <DataTable rows={sortedRows} columns={[]} {...props} />
+      <DataTable
+        setSort={setSorting}
+        rows={sortedRows}
+        columns={[]}
+        {...props}
+      />
     </>
   )
 }
