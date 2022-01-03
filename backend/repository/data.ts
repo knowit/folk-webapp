@@ -376,65 +376,44 @@ export const experienceDistribution = async ({
 }: {
   data: YearsSinceSchoolDist[]
 }) => {
-  console.log(data)
+  const getCount = (list: YearsSinceSchoolDist[], range: number[]) => {
+    return list
+      .filter(
+        (item) =>
+          item.years_working >= range[0] && item.years_working <= range[1]
+      )
+      .reduce((sum, item) => sum + item.count, 0)
+  }
+
   const setInGroups = (list: YearsSinceSchoolDist[]) => {
-    const detailedGroupedList = [
-      { years: 'Under 2 år', count: 0 },
-      { years: '2 til 5 år', count: 0 },
-      { years: '6 til 10 år', count: 0 },
-      { years: '11 til 15 år', count: 0 },
-      { years: '16 til 20 år', count: 0 },
-      { years: '21 til 25 år', count: 0 },
-      { years: '26 til 30 år', count: 0 },
-      { years: 'over 31 år', count: 0 },
-      { years: 'Ukjent erfaring', count: 0 },
-    ]
-
     const groupedList = [
-      { years: '1 til 2 år', count: 0 },
-      { years: '3 til 5 år', count: 0 },
-      { years: '6 til 10 år', count: 0 },
-      { years: 'over 10 år', count: 0 },
-      { years: 'Ukjent erfaring', count: 0 },
+      { years: 'Under 2 år', range: [1, 1] },
+      { years: '2 til 5 år', range: [2, 5] },
+      { years: '6 til 10 år', range: [6, 10] },
+      { years: 'over 10 år', range: [11, 99] },
+      { years: 'Ukjent erfaring', range: [0, 0] },
     ]
 
-    list.forEach((item) => {
-      const years = Number(item.years_working)
-      const count = Number(item.count)
-      if (years === 0) {
-        detailedGroupedList[8].count += count
-        groupedList[4].count += count
-      } else if (years === 1) {
-        detailedGroupedList[0].count += count
-        groupedList[0].count += count
-      } else if (years === 2) {
-        detailedGroupedList[1].count += count
-        groupedList[0].count += count
-      } else if (years > 2 && years < 6) {
-        detailedGroupedList[1].count += count
-        groupedList[1].count += count
-      } else if (years > 5 && years < 11) {
-        detailedGroupedList[2].count += count
-        groupedList[2].count += count
-      } else if (years > 10 && years < 16) {
-        detailedGroupedList[3].count += count
-        groupedList[3].count += count
-      } else if (years > 15 && years < 21) {
-        detailedGroupedList[4].count += count
-        groupedList[3].count += count
-      } else if (years > 20 && years < 26) {
-        detailedGroupedList[5].count += count
-        groupedList[3].count += count
-      } else if (years > 25 && years < 31) {
-        detailedGroupedList[6].count += count
-        groupedList[3].count += count
-      } else if (years > 30) {
-        detailedGroupedList[7].count += count
-        groupedList[3].count += count
-      }
-    })
+    const detailedGroupedList = [
+      ...groupedList.slice(0, 3),
+      { years: '11 til 15 år', range: [11, 15] },
+      { years: '16 til 20 år', range: [16, 20] },
+      { years: '21 til 25 år', range: [21, 25] },
+      { years: '26 til 30 år', range: [26, 30] },
+      { years: 'over 31 år', range: [31, 99] },
+      { years: 'Ukjent erfaring', range: [0, 0] },
+    ]
 
-    return [groupedList, detailedGroupedList]
+    return [
+      groupedList.map((group) => ({
+        years: group.years,
+        count: getCount(list, group.range),
+      })),
+      detailedGroupedList.map((group) => ({
+        years: group.years,
+        count: getCount(list, group.range),
+      })),
+    ]
   }
 
   const experience = data
