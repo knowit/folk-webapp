@@ -31,6 +31,7 @@
     "@nivo/radar": "^0.67.0",
     "@nivo/sunburst": "^0.67.0",
     "ansi-html-community": "0.0.8",
+    "axios": "^0.24.0",
     "browserslist": "^4.18.1",
     "http-proxy-middleware": "^1.0.5",
     "react": "^17.0.1",
@@ -39,6 +40,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
     "react-virtualized": "^9.22.2",
+    "swr": "^1.1.2-beta.0",
     "typescript": "^4.4.4"
   },
   "resolutions": {
@@ -113,7 +115,8 @@
     "husky": "^7.0.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "nodemon": "^2.0.6",
-    "prettier": "2.5.1",
+    "prettier": "^2.5.1",
+    "pretty-quick": "^3.1.2",
     "serverless-plugin-typescript": "^2.1.0"
   }
 }

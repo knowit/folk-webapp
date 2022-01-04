@@ -4,9 +4,9 @@ import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import { NavMenu, NavMenuItem } from './NavMenu'
 import { ReactComponent as KnowitLogo } from '../assets/logo.svg'
-import { useUserInfo } from '../LoginProvider'
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg'
 import { LoginLogoutButton } from './LoginLogoutButton'
+import { useUserInfo } from '../context/UserInfoContext'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -42,7 +42,7 @@ const useStyles = makeStyles(() =>
 
 export default function Header() {
   const classes = useStyles()
-  const userInfo = useUserInfo()
+  const { user } = useUserInfo()
 
   return (
     <div className={classes.root}>
@@ -60,8 +60,8 @@ export default function Header() {
           </NavMenu>
           <LoginLogoutButton />
           <Avatar
-            alt={userInfo.name}
-            src={userInfo.picture}
+            alt={user?.name}
+            src={user?.picture}
             className={classes.userAvatar}
           >
             <FallbackUserIcon />

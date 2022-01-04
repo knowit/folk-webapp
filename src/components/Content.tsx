@@ -1,16 +1,25 @@
 import React from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
+import { isLoggedIn } from '../api/auth/authHelpers'
+import { useUserInfo } from '../context/UserInfoContext'
 import {
-  NotFound,
-  UnderConstruction,
-  Employee,
   Competence,
-  EmployeeSite,
   Customer,
   CustomerSite,
+  Employee,
+  EmployeeSite,
+  NotFound,
+  UnderConstruction,
 } from '../pages'
+import LoginPage from '../pages/login/LoginPage'
 
 export default function Content() {
+  const { user } = useUserInfo()
+
+  if (!isLoggedIn(user)) {
+    return <LoginPage />
+  }
+
   return (
     <Switch>
       <Route path="/ansatte">
@@ -34,7 +43,6 @@ export default function Content() {
       <Route path="/ansatt/:id">
         <EmployeeSite />
       </Route>
-
       <Route exact path="/">
         <Redirect to="/ansatte" />
       </Route>

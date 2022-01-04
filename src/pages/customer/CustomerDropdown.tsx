@@ -17,6 +17,7 @@ import {
 } from '../../data/components/table/DataCells'
 import { SimpleDDItem } from '../../data/SimpleDDItem'
 import CustomerTable from './CustomerTable'
+import { CustomerStatusData } from '../../data/components/table/cells/CustomerStatusCell'
 import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles(() =>
@@ -108,6 +109,10 @@ export default function CustomerDropdown({
                 {
                   title: 'Kunde',
                   renderCell: CustomerStatusCell,
+                  searchable: true,
+                  getSearchValue: (customer: CustomerStatusData) => {
+                    return `${customer.customer} ${customer.workOrderDescription}`
+                  },
                 },
                 {
                   title: 'CV',
