@@ -8,6 +8,7 @@ import RowCount from '../components/RowCount'
 import { DDComponentProps } from './types'
 import { makeStyles } from '@material-ui/core/styles'
 import {
+  filterNonCustomer,
   FilterObject,
   handleFilterChange,
   handleThresholdChange,
@@ -110,6 +111,11 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
     columnIndex: 0,
     sortOrder: 'NONE',
   })
+  const [displayNonProject, setDisplayNonProject] = useState(false)
+
+  function toggleDisplayNonProject() {
+    setDisplayNonProject(!displayNonProject)
+  }
 
   const { columns } = props as { columns: Column[] }
 
@@ -120,7 +126,12 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
     filters,
     searchTerm
   )
-  const sortedRows = sortColumn(filteredRows, sorting)
+
+  const NonProject = displayNonProject
+    ? filterNonCustomer(filteredRows)
+    : filteredRows
+
+  const sortedRows = sortColumn(NonProject, sorting)
 
   const classes = useStyles()
 
@@ -176,6 +187,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
       </RowCount>
       <DataTable
         setSort={setSorting}
+        checkBoxChangeHandler={toggleDisplayNonProject}
         rows={sortedRows}
         columns={[]}
         {...props}

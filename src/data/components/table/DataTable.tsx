@@ -16,6 +16,7 @@ interface DataTableProps {
   columns: DataTableColumn[]
   rows: Omit<DataTableRow, 'columns'>[]
   setSort?: (CurrentSort: ColumnSort) => void
+  checkBoxChangeHandler?: () => void
 }
 
 export interface DataTableColumn {
@@ -102,6 +103,7 @@ interface MuiVirtualizedTableProps {
   rowGetter: (row: { index: number }) => any
   rows: any[]
   setSort?: (CurrentSort: ColumnSort) => void
+  checkBoxChangeHandler?: () => void
 }
 
 interface CellProps {
@@ -124,6 +126,7 @@ function MuiVirtualizedTable({
   rowGetter,
   rows,
   setSort,
+  checkBoxChangeHandler,
 }: MuiVirtualizedTableProps) {
   const classes = tableStyles()
   const [expandedRows, setExpandedRows] = useState<string[]>([])
@@ -325,7 +328,12 @@ function MuiVirtualizedTable({
               <Column
                 key={title}
                 headerRenderer={() =>
-                  headerCellRenderer(title, index, headerRenderCell)
+                  headerCellRenderer(
+                    title,
+                    index,
+                    headerRenderCell,
+                    checkBoxChangeHandler
+                  )
                 }
                 className={classes.flexContainer}
                 dataKey={String(index)}
@@ -339,7 +347,12 @@ function MuiVirtualizedTable({
   )
 }
 
-export default function DataTable({ columns, rows, setSort }: DataTableProps) {
+export default function DataTable({
+  columns,
+  rows,
+  setSort,
+  checkBoxChangeHandler,
+}: DataTableProps) {
   return (
     <Paper
       style={{
@@ -354,6 +367,7 @@ export default function DataTable({ columns, rows, setSort }: DataTableProps) {
         columns={columns}
         rows={rows}
         setSort={setSort}
+        checkBoxChangeHandler={checkBoxChangeHandler}
       />
     </Paper>
   )

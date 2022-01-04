@@ -87,6 +87,13 @@ export const searchAndFilter = (
   })
 }
 
+export function filterNonCustomer(rows: any[]) {
+  return rows.filter((row: any) => {
+    const rowDataIndex = row.rowData.length - ColumnMapping['CUSTOMER']
+    return Object.keys(row.rowData[rowDataIndex]).length === 0
+  })
+}
+
 export function handleFilterChange(
   prevFilters: FilterObject[],
   newFilterValues: string[],
