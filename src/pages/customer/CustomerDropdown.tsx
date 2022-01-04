@@ -17,6 +17,7 @@ import {
 } from '../../data/components/table/DataCells'
 import { SimpleDDItem } from '../../data/SimpleDDItem'
 import CustomerTable from './CustomerTable'
+import { CustomerStatusData } from '../../data/components/table/cells/CustomerStatusCell'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -90,6 +91,10 @@ export default function CustomerDropdown({
                 {
                   title: 'Kunde',
                   renderCell: CustomerStatusCell,
+                  searchable: true,
+                  getSearchValue: (customer: CustomerStatusData) => {
+                    return `${customer.customer} ${customer.workOrderDescription}`
+                  },
                 },
                 {
                   title: 'CV',
