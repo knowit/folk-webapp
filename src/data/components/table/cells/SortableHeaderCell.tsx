@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { ArrowDownward, ArrowUpward } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import { createStyles, Theme } from '@material-ui/core'
@@ -41,12 +41,10 @@ export default function SortableHeaderCell({
   const classes = useSortableHeaderStyles()
 
   const sortClick = () => {
-    setCurrentOrder(currentOrder === 'ASC' ? 'DESC' : 'ASC')
+    const newOrder = currentOrder === 'ASC' ? 'DESC' : 'ASC'
+    setCurrentOrder(newOrder)
+    onOrderChange({ sortOrder: newOrder, columnIndex: columnIndex })
   }
-
-  useEffect(() => {
-    onOrderChange({ sortOrder: currentOrder, columnIndex: columnIndex })
-  })
 
   const sortIcon = () => {
     switch (currentOrder) {
@@ -61,12 +59,7 @@ export default function SortableHeaderCell({
   }
 
   return (
-    <div
-      className={classes.position}
-      onClick={() => {
-        sortClick()
-      }}
-    >
+    <div className={classes.position} onClick={sortClick}>
       {title}
       {sortIcon()}
     </div>

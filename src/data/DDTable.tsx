@@ -3,10 +3,7 @@ import { GridItemHeader } from '../components/GridItem'
 import { FilterHeader } from '../components/FilterHeader'
 import DataTable from './components/table/DataTable'
 import SearchInput from '../components/SearchInput'
-import FilterInput, {
-  useCategories,
-  useCustomer,
-} from '../components/FilterInput'
+import FilterInput, { useCategories } from '../components/FilterInput'
 import RowCount from '../components/RowCount'
 import { DDComponentProps } from './types'
 import { makeStyles } from '@material-ui/core/styles'
@@ -49,20 +46,28 @@ export interface TableState {
   searchTerm: string
 }
 
-const sortColumnValue = (rows: any[], currentSort: ColumnSort) => {
+const sortColumn = (rows: any[], currentSort: ColumnSort) => {
+  // Work around grunnet at sortering er blandet mellom en fast string eller et objekt
+  const compare = (a: any, b: any) => {
+    if (Object.keys(a.rowData[currentSort.columnIndex]).length === 0) return -1
+    if (
+      a.rowData[currentSort.columnIndex] > b.rowData[currentSort.columnIndex]
+    ) {
+      return 1
+    } else if (
+      a.rowData[currentSort.columnIndex] < b.rowData[currentSort.columnIndex]
+    ) {
+      return -1
+    }
+    return 0
+  }
+
+  if (!currentSort) return rows
   switch (currentSort.sortOrder) {
     case 'ASC':
-      return rows.sort((a, b) =>
-        a.rowData[currentSort.columnIndex].localeCompare(
-          b.rowData[currentSort.columnIndex]
-        )
-      )
+      return rows.sort(compare)
     case 'DESC':
-      return rows.sort((a, b) =>
-        b.rowData[currentSort.columnIndex].localeCompare(
-          a.rowData[currentSort.columnIndex]
-        )
-      )
+      return rows.sort(compare).reverse()
     default:
       return rows
   }
@@ -115,7 +120,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
     filters,
     searchTerm
   )
-  const sortedRows = sortColumnValue(filteredRows, sorting)
+  const sortedRows = sortColumn(filteredRows, sorting)
 
   const classes = useStyles()
 

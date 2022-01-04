@@ -130,7 +130,6 @@ function MuiVirtualizedTable({
   const [expandedRowsHeights, setExpandedRowsHeights] = useState<
     ExpandedRows[]
   >([])
-  const [currentSort, setCurrentSort] = useState<ColumnSort>()
 
   let ArrayRef: any
   function setRef(ref: any) {
@@ -253,15 +252,16 @@ function MuiVirtualizedTable({
   }
 
   function onSortChange(sorting: ColumnSort) {
-    //setCurrentSort(sorting);
+    if (setSort) {
+      setSort(sorting)
+    }
   }
 
   function headerCellRenderer(
     title: string,
+    index: number,
     HeaderRenderCell?: any | null,
-    checkBoxChangeHandler?:
-      | (event: React.ChangeEvent<HTMLInputElement>) => void,
-    index?: number
+    checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void
   ) {
     return HeaderRenderCell ? (
       <HeaderRenderCell
@@ -304,12 +304,6 @@ function MuiVirtualizedTable({
     )
   }
 
-  useEffect(() => {
-    if (setSort && currentSort) {
-      setSort(currentSort)
-    }
-  }, [currentSort])
-
   return (
     <AutoSizer>
       {({ height, width }) => (
@@ -325,14 +319,13 @@ function MuiVirtualizedTable({
           rowClassName={classes.flexContainer}
           noRowsRenderer={emptyRow}
           gridClassName={classes.noFocus}
-          //sort={(info) => setSortedColumn(info) }
         >
           {columns.map(({ title, headerRenderCell }, index) => {
             return (
               <Column
                 key={title}
                 headerRenderer={() =>
-                  headerCellRenderer(title, headerRenderCell)
+                  headerCellRenderer(title, index, headerRenderCell)
                 }
                 className={classes.flexContainer}
                 dataKey={String(index)}
