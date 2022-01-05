@@ -18,15 +18,14 @@ module.exports = {
     ecmaVersion: 13,
     sourceType: 'module',
   },
-  // plugins: ['react', 'react-hooks', '@typescript-eslint'],
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['react', 'react-hooks', '@typescript-eslint'],
   rules: {
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/no-var-requires': 0,
-    // 'react-hooks/rules-of-hooks': 'error',
-    // 'react-hooks/exhaustive-deps': 'warn',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
   },
   settings: {
     react: {
