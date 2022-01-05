@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { ArrowDownward, ArrowUpward } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import { createStyles, Theme } from '@material-ui/core'
@@ -30,19 +30,19 @@ interface SortableHeaderCellProps {
   title: string
   onOrderChange: (newOrder: ColumnSort) => void
   columnIndex: number
+  currentOrder: string
 }
 
 export default function SortableHeaderCell({
   title,
+  currentOrder,
   onOrderChange,
   columnIndex,
 }: SortableHeaderCellProps) {
-  const [currentOrder, setCurrentOrder] = useState<SortOrder>('NONE')
   const classes = useSortableHeaderStyles()
 
   const sortClick = () => {
     const newOrder = currentOrder === 'ASC' ? 'DESC' : 'ASC'
-    setCurrentOrder(newOrder)
     onOrderChange({ sortOrder: newOrder, columnIndex: columnIndex })
   }
 

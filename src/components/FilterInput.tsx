@@ -33,7 +33,7 @@ export type CategoryWithGroup = {
 const useStyles = makeStyles({
   input: {
     height: '43px',
-    width: '210px',
+    width: '260px',
     fontSize: '16px',
     lineHeight: '18px',
     backgroundColor: 'white',

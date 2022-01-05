@@ -127,7 +127,7 @@ export function FilterHeader({
   type,
 }: Props) {
   const classes = useStyles()
-  const threshold = Number.parseInt(filterThreshold.toString())
+  const threshold = filterThreshold
 
   function handleThresholdSliderChange(
     _event: React.ChangeEvent<unknown>,

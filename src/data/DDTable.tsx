@@ -38,14 +38,9 @@ const useStyles = makeStyles({
     flexDirection: 'row',
     display: 'flex',
     justifyContent: 'space-around',
-    width: '100%',
+    width: '900px',
   },
 })
-
-export interface TableState {
-  filters: FilterObject[]
-  searchTerm: string
-}
 
 const sortColumn = (rows: any[], currentSort: ColumnSort) => {
   // Work around grunnet at sortering er blandet mellom en fast string eller et objekt
@@ -107,7 +102,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
 
   const [filters, setFilters] = useState<FilterObject[]>(initialFilters)
   const [searchTerm, setSearchTerm] = useState<string>('')
-  const [sorting, setSorting] = useState<ColumnSort>({
+  const [columnSort, setcolumnSort] = useState<ColumnSort>({
     columnIndex: 0,
     sortOrder: 'NONE',
   })
@@ -131,7 +126,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
     ? filterNonCustomer(filteredRows)
     : filteredRows
 
-  const sortedRows = sortColumn(NonProject, sorting)
+  const sortedRows = sortColumn(NonProject, columnSort)
 
   const classes = useStyles()
 
@@ -186,7 +181,8 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
         {sortedRows.length} av {allRows.length}
       </RowCount>
       <DataTable
-        setSort={setSorting}
+        setcolumnSort={setcolumnSort}
+        currentColumnSort={columnSort}
         checkBoxChangeHandler={toggleDisplayNonProject}
         rows={sortedRows}
         columns={[]}
