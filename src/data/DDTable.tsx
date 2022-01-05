@@ -47,8 +47,6 @@ const sortColumn = (rows: any[], currentSort: ColumnSort) => {
   const compare = (a: any, b: any) => {
     if (Object.keys(a.rowData[currentSort.columnIndex]).length === 0) return 1
     if (Object.keys(b.rowData[currentSort.columnIndex]).length === 0) return -1
-    console.log(JSON.stringify(a.rowData[currentSort.columnIndex]))
-    console.log(JSON.stringify(b.rowData[currentSort.columnIndex]))
     if (
       JSON.stringify(a.rowData[currentSort.columnIndex]).localeCompare(
         JSON.stringify(b.rowData[currentSort.columnIndex])
