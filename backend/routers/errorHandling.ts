@@ -40,12 +40,12 @@ export const errorHandler = (err, req, res, next) => {
 
     // 404
   } else if (isFourOhFourError(err)) {
-    console.error('Error:', err.message)
+    console.error(err.message)
     res.status(404).send('Endpoint does not exist.')
 
     // Other
   } else {
-    console.error('Error: ', err)
+    console.error(err)
     res.status(500).send('Something broke!')
   }
 }
