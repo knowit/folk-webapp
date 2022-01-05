@@ -45,14 +45,17 @@ const useStyles = makeStyles({
 const sortColumn = (rows: any[], currentSort: ColumnSort) => {
   // Work around grunnet at sortering er blandet mellom en fast string eller et objekt
   const compare = (a: any, b: any) => {
-    if (Object.keys(a.rowData[currentSort.columnIndex]).length === 0) return -1
-    if (
-      a.rowData[currentSort.columnIndex] > b.rowData[currentSort.columnIndex]
-    ) {
+    if (Object.keys(a.rowData[currentSort.columnIndex]).length === 0) return 1
+    if (Object.keys(b.rowData[currentSort.columnIndex]).length === 0) return -1
+    const customerASearchString = `${
+      a.rowData[currentSort.columnIndex].customer
+    } ${a.rowData[currentSort.columnIndex].workOrderDescription}`
+    const customerBSearchString = `${
+      b.rowData[currentSort.columnIndex].customer
+    } ${b.rowData[currentSort.columnIndex].workOrderDescription}`
+    if (customerASearchString > customerBSearchString) {
       return 1
-    } else if (
-      a.rowData[currentSort.columnIndex] < b.rowData[currentSort.columnIndex]
-    ) {
+    } else if (customerASearchString < customerBSearchString) {
       return -1
     }
     return 0
