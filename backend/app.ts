@@ -1,7 +1,8 @@
-import express from 'express'
 import awsServerlessExpressMiddleware from 'aws-serverless-express/middleware'
 import cookieParser from 'cookie-parser'
+import express from 'express'
 import authRouter from './routers/authRouter'
+import { errorHandler, FourOhFourError } from './routers/errorHandling'
 import { apiRouter, apiRouterV2 } from './routers/routers'
 
 const app = express()
@@ -17,13 +18,16 @@ app.use('/auth', authRouter)
 app.use('/api/v2', apiRouterV2)
 app.use('/api', apiRouter)
 
-// Error Handling
-app.use((err, req, res, next) => {
-  console.log('Something broke!')
-  console.log('Path: ', req.path)
-  console.error('Error: ', err)
+// Error handling
+app.use((req, res, next) => {
+  const err: FourOhFourError = {
+    status: 404,
+    message: `Endpoint was not found.`,
+  }
 
-  res.status(500).send('Something broke!')
+  next(err)
 })
+
+app.use(errorHandler)
 
 export default app

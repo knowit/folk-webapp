@@ -32,7 +32,7 @@ router.get('/experienceDistribution', async (req, res, next) => {
     const aggregatedData = aggregateExperienceDistribution(data)
     res.send(aggregatedData)
   } catch (error) {
-    next({ message: 'Error occured at /experienceDistribution', error })
+    next(error)
   }
 })
 
@@ -47,7 +47,7 @@ router.get('/competenceAmount', async (req, res, next) => {
     const aggregatedData = aggregateCompetenceAmount(data)
     res.send(aggregatedData)
   } catch (error) {
-    next({ message: 'Error occured at /competenceAmount', error })
+    next(error)
   }
 })
 
@@ -72,7 +72,7 @@ router.get('/competenceAreas', async (req, res, next) => {
     const aggregatedData = aggregateCompetenceAreas(competence, motivation)
     res.send(aggregatedData)
   } catch (error) {
-    next({ message: 'Error occured at /competenceAreas', error })
+    next(error)
   }
 })
 
@@ -105,7 +105,7 @@ router.get('/ageDistribution', async (req, res, next) => {
       },
     })
   } catch (error) {
-    next({ message: 'Error occured at /ageDistribution', error })
+    next(error)
   }
 })
 
@@ -120,7 +120,7 @@ router.get('/fagtimer', async (req, res, next) => {
     const aggregatedData = aggregateFagtimer(data)
     res.send(aggregatedData)
   } catch (error) {
-    next({ message: 'Error occured at /fagtimer', error })
+    next(error)
   }
 })
 
@@ -135,7 +135,7 @@ router.get('/fagEvents', async (req, res, next) => {
     const aggregatedData = aggregateFagEvents(data)
     res.send(aggregatedData)
   } catch (error) {
-    next({ message: 'Error occured at /fagEvents', error })
+    next(error)
   }
 })
 
@@ -154,7 +154,7 @@ router.get('/education', async (req, res, next) => {
       },
     })
   } catch (error) {
-    next({ message: 'Error occured at /education', error })
+    next(error)
   }
 })
 
@@ -179,7 +179,7 @@ router.get('/competenceMapping', async (req, res, next) => {
     const aggregatedData = aggregateCompetenceMapping(competence, motivation)
     res.send(aggregatedData)
   } catch (error) {
-    next({ message: 'Error occured at /competenceMapping', error })
+    next(error)
   }
 })
 

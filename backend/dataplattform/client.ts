@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { ApiError } from '../routers/errorHandling'
 
 type QueryParams = Record<string, any>
 export interface ReportParams {
@@ -32,9 +33,11 @@ export const getReport = async <T>({
     return response.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      const err = {
+      const err: ApiError = {
         status: e.response?.status ?? 400,
-        message: e.message,
+        errorType: 'API',
+        error: e,
+        message: 'Could not fetch data.',
       }
       return Promise.reject(err)
     }
