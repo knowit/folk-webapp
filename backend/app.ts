@@ -1,8 +1,9 @@
-import express from 'express'
 import awsServerlessExpressMiddleware from 'aws-serverless-express/middleware'
 import cookieParser from 'cookie-parser'
-import authRouter from './routers/auth'
-import apiRouter from './routers/api'
+import express from 'express'
+import authRouter from './routers/authRouter'
+import { errorHandler, NotFoundError } from './routers/errorHandling'
+import { apiRouter, apiRouterV2 } from './routers/routers'
 
 const app = express()
 
@@ -12,8 +13,21 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// register routes
+// Register routers
 app.use('/auth', authRouter)
+app.use('/api/v2', apiRouterV2)
 app.use('/api', apiRouter)
+
+// Error handling
+app.use((req, res, next) => {
+  const err: NotFoundError = {
+    status: 404,
+    message: `Endpoint was not found.`,
+  }
+
+  next(err)
+})
+
+app.use(errorHandler)
 
 export default app
