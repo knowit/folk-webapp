@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios'
 
-export interface FourOhFourError {
+export interface NotFoundError {
   status: 404
   message: string
 }
@@ -25,8 +25,8 @@ const isAppError = (e: unknown): e is AppError => {
   return (e as AppError).errorType !== undefined
 }
 
-const isFourOhFourError = (e: unknown): e is FourOhFourError => {
-  return (e as FourOhFourError).status === 404
+const isNotFoundError = (e: unknown): e is NotFoundError => {
+  return (e as NotFoundError).status === 404
 }
 
 export const errorHandler = (err, req, res, next) => {
@@ -39,7 +39,7 @@ export const errorHandler = (err, req, res, next) => {
     res.status(err.status).send(err.message)
 
     // 404
-  } else if (isFourOhFourError(err)) {
+  } else if (isNotFoundError(err)) {
     console.error(err.message)
     res.status(404).send('Endpoint does not exist.')
 

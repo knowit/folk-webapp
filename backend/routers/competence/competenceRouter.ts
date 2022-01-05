@@ -21,7 +21,6 @@ import {
 
 const router = express.Router()
 
-// /experienceDistribution
 router.get('/experienceDistribution', async (req, res, next) => {
   try {
     const data = await getReport<YearsWorkingDistributionCount[]>({
@@ -36,7 +35,6 @@ router.get('/experienceDistribution', async (req, res, next) => {
   }
 })
 
-// /competenceAmount
 router.get('/competenceAmount', async (req, res, next) => {
   try {
     const data = await getReport<EmployeeCompetenceAndMotivation[]>({
@@ -51,7 +49,6 @@ router.get('/competenceAmount', async (req, res, next) => {
   }
 })
 
-// /competenceAreas
 router.get('/competenceAreas', async (req, res, next) => {
   try {
     const competencePromise = getReport<CategoryAverage[]>({
@@ -76,7 +73,6 @@ router.get('/competenceAreas', async (req, res, next) => {
   }
 })
 
-// /ageDistribution
 router.get('/ageDistribution', async (req, res, next) => {
   try {
     const ageDistributionPromise = getReport<AgeDistribution[]>({
@@ -109,7 +105,6 @@ router.get('/ageDistribution', async (req, res, next) => {
   }
 })
 
-// /fagtimer
 router.get('/fagtimer', async (req, res, next) => {
   try {
     const data = await getReport<FagtimeStats[]>({
@@ -124,7 +119,6 @@ router.get('/fagtimer', async (req, res, next) => {
   }
 })
 
-// /fagEvents
 router.get('/fagEvents', async (req, res, next) => {
   try {
     const data = await getReport<FagEventData[]>({
@@ -139,7 +133,6 @@ router.get('/fagEvents', async (req, res, next) => {
   }
 })
 
-// /education
 router.get('/education', async (req, res, next) => {
   try {
     const data = await getReport<DegreeDistribution[]>({
@@ -158,7 +151,6 @@ router.get('/education', async (req, res, next) => {
   }
 })
 
-// /competenceMapping
 router.get('/competenceMapping', async (req, res, next) => {
   try {
     const competencePromise = getReport<CategoryAverage[]>({
