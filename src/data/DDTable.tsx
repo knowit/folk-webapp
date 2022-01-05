@@ -47,16 +47,20 @@ const sortColumn = (rows: any[], currentSort: ColumnSort) => {
   const compare = (a: any, b: any) => {
     if (Object.keys(a.rowData[currentSort.columnIndex]).length === 0) return 1
     if (Object.keys(b.rowData[currentSort.columnIndex]).length === 0) return -1
-    const customerASearchString = `${
-      a.rowData[currentSort.columnIndex].customer
-    } ${a.rowData[currentSort.columnIndex].workOrderDescription}`
-    const customerBSearchString = `${
-      b.rowData[currentSort.columnIndex].customer
-    } ${b.rowData[currentSort.columnIndex].workOrderDescription}`
-    if (customerASearchString > customerBSearchString) {
-      return 1
-    } else if (customerASearchString < customerBSearchString) {
+    console.log(JSON.stringify(a.rowData[currentSort.columnIndex]))
+    console.log(JSON.stringify(b.rowData[currentSort.columnIndex]))
+    if (
+      JSON.stringify(a.rowData[currentSort.columnIndex]).localeCompare(
+        JSON.stringify(b.rowData[currentSort.columnIndex])
+      )
+    ) {
       return -1
+    } else if (
+      JSON.stringify(b.rowData[currentSort.columnIndex]).localeCompare(
+        JSON.stringify(a.rowData[currentSort.columnIndex])
+      )
+    ) {
+      return 1
     }
     return 0
   }
