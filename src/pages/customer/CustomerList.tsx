@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import React, { useEffect, useState } from 'react'
-import { useCategories } from '../../components/CompetenceFilterInput'
+import { useCategories } from '../../components/FilterInput'
 import { GridItem } from '../../components/GridItem'
 import {
   Column,
@@ -36,7 +36,7 @@ export default function CustomerList() {
     if (Array.isArray(payload) && !pending) {
       payload.map((emp) => {
         if (emp.rowData[customerData].customer === undefined) {
-          emp.rowData[customerData] = { customer: 'Uten prosjekt' }
+          emp.rowData[customerData] = { customer: 'Ikke i prosjekt' }
         }
         emp.rowData.splice(statusIconData, 1)
       })
@@ -86,7 +86,7 @@ export default function CustomerList() {
     setDropdowns(dropdowns)
   }
 
-  const handleSearchAndFilter = (filtered: []) => {
+  const handleSearchAndFilter = (filtered: any[]) => {
     const expand = filtered.length === initialData.length
     const grouped = groupByCustomers(filtered, 2)
     createDropdowns(grouped, !expand)
@@ -94,6 +94,7 @@ export default function CustomerList() {
 
   useEffect(() => {
     preparePayloadForTable()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [payload, pending])
 
   return (

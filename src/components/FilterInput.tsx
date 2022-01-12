@@ -1,12 +1,11 @@
-import { InputBase, withStyles } from '@material-ui/core'
+import React, { ChangeEvent } from 'react'
 import Checkbox from '@material-ui/core/Checkbox'
-import { makeStyles } from '@material-ui/core/styles'
-import FilterListIcon from '@material-ui/icons/FilterList'
 import Autocomplete from '@material-ui/lab/Autocomplete'
-import React, { ChangeEvent, Dispatch } from 'react'
-import { SearchableColumn } from '../data/DDTable'
 import { useFetchedData } from '../hooks/service'
-import { Action } from './FilterSearch'
+import { makeStyles } from '@material-ui/core/styles'
+import { InputBase, withStyles } from '@material-ui/core'
+import FilterListIcon from '@material-ui/icons/FilterList'
+import { DDPayload } from '../data/types'
 
 const StyledCheckBox = withStyles(() => ({
   root: {
@@ -73,22 +72,33 @@ export function useCategories(): CategoryWithGroup[] {
   )
 }
 
-export default function CompetenceFilterInput({
-  filterList,
-  dispatch,
-  allRows,
-  searchableColumns,
-  type,
-  categories,
-}: {
+export function useCustomer(): CategoryWithGroup[] {
+  const [employees] = useFetchedData<DDPayload>({
+    url: '/api/data/employeeTable',
+  })
+  const customers: string[] = employees?.flatMap((workers: any) => [
+    workers.rowData[3]['customer'] ?? 'Ikke i prosjekt',
+  ])
+  return Array.from(new Set(customers)).map((customer: string) => ({
+    category: customer,
+    group: 'Kunde',
+  }))
+}
+
+interface Props {
   filterList: string[]
-  dispatch: Dispatch<Action>
-  allRows: any[]
-  searchableColumns: SearchableColumn[]
-  type: 'COMPETENCE' | 'MOTIVATION'
-  categories?: CategoryWithGroup[]
-}) {
-  const categoriesWithGroup = categories ? categories : useCategories()
+  placeholder: string
+  onSelect: (value: string[]) => void
+  fetchFilterCategories: () => CategoryWithGroup[]
+}
+
+export default function FilterInput({
+  filterList,
+  placeholder,
+  onSelect,
+  fetchFilterCategories,
+}: Props) {
+  const categoriesWithGroup = fetchFilterCategories()
   const classes = useStyles()
 
   const activeCategories = categoriesWithGroup.filter((categoryWithGroup) =>
@@ -96,25 +106,15 @@ export default function CompetenceFilterInput({
   )
 
   const handleCategoryChange = (
-    event: ChangeEvent<unknown>,
+    _event: ChangeEvent<unknown>,
     values: CategoryWithGroup[]
   ) => {
-    const dispatchAction =
-      type === 'COMPETENCE'
-        ? 'UPDATE_COMPETENCE_FILTER'
-        : 'UPDATE_MOTIVATION_FILTER'
-
-    dispatch({
-      type: dispatchAction,
-      filterList: values.map((categoryWithGroup) => categoryWithGroup.category),
-      allRows,
-      searchableColumns,
-    })
+    onSelect(values.map((categoriesWithGroup) => categoriesWithGroup.category))
   }
 
   return (
     <Autocomplete
-      id={type}
+      id={placeholder}
       value={activeCategories}
       options={categoriesWithGroup}
       groupBy={(option) => option.group}
@@ -139,11 +139,7 @@ export default function CompetenceFilterInput({
             type="text"
             {...params.inputProps}
             className={classes.input}
-            placeholder={
-              type === 'COMPETENCE'
-                ? 'Filtrer på kompetanse...'
-                : 'Filtrer på motivasjon...'
-            }
+            placeholder={placeholder}
             endAdornment={<FilterListIcon />}
           />
         </div>

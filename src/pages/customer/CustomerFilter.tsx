@@ -1,16 +1,22 @@
-import React, { useEffect, useReducer } from 'react'
-import CompetenceFilterInput, {
+import React, { useState, useEffect } from 'react'
+import FilterInput, {
   CategoryWithGroup,
-} from '../../components/CompetenceFilterInput'
+  useCategories,
+} from '../../components/FilterInput'
 import { FilterHeader } from '../../components/FilterHeader'
-import { reducer } from '../../components/FilterSearch'
 import { GridItemHeader } from '../../components/GridItem'
 import SearchInput from '../../components/SearchInput'
-import { SearchableColumn, TableState } from '../../data/DDTable'
+import { SearchableColumn } from '../../data/DDTable'
+import {
+  FilterObject,
+  handleFilterChange,
+  handleThresholdChange,
+  searchAndFilter,
+} from '../../components/FilterSearch'
 
 interface CustomerFilterProps {
   title: string
-  filter: any
+  filter: (filter: any[]) => void
   employees: any
   searchableColumns: SearchableColumn[]
   categories: CategoryWithGroup[]
@@ -21,55 +27,70 @@ export default function CustomerFilter({
   filter,
   employees,
   searchableColumns,
-  categories,
 }: CustomerFilterProps) {
   const allRows = employees as { rowData: any[] }[]
+  const initialFilters: FilterObject[] = [
+    {
+      name: 'MOTIVATION',
+      values: [],
+      threshold: 3,
+      placeholder: 'Filtrer på Motivasjon...',
+      datafetch: useCategories,
+    },
+  ]
 
-  const initialState: TableState = {
-    rows: allRows,
-    motivationFilter: [],
-    motivationThreshold: 4,
-    competenceFilter: [],
-    competenceThreshold: 3,
-    searchTerm: '',
-  }
+  const [filters, setFilters] = useState<FilterObject[]>(initialFilters)
+  const [searchTerm, setSearchTerm] = useState<string>('')
 
-  const handleSearchAndFilter = (rows: any[]) => {
-    filter(rows)
-  }
-
-  const [state, dispatch] = useReducer(reducer, initialState)
-
-  useEffect(() => {
-    handleSearchAndFilter(state.rows)
-  }, [state.rows])
+  useEffect(
+    () =>
+      filter(searchAndFilter(allRows, searchableColumns, filters, searchTerm)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [filters, searchTerm]
+  )
 
   return (
     <>
       <GridItemHeader title={title} green>
-        <CompetenceFilterInput
-          filterList={state.competenceFilter}
-          dispatch={dispatch}
-          allRows={allRows}
-          searchableColumns={searchableColumns}
-          type="COMPETENCE"
-          categories={categories}
-        />
+        {filters.map(({ values, placeholder, datafetch }, index) => (
+          <FilterInput
+            key={placeholder}
+            filterList={values}
+            placeholder={placeholder}
+            onSelect={(value) =>
+              setFilters((prevFilters) =>
+                handleFilterChange(prevFilters, value, index)
+              )
+            }
+            fetchFilterCategories={datafetch}
+          />
+        ))}
         <SearchInput
-          dispatch={dispatch}
-          allRows={allRows}
-          searchableColumns={searchableColumns}
+          placeholder={'Søk konsulent, kunde, etc...'}
+          onSearch={(searchTerm) => setSearchTerm(searchTerm)}
+          onClear={() => setSearchTerm('')}
         />
       </GridItemHeader>
-      {state.competenceFilter.length > 0 && (
-        <FilterHeader
-          filterList={state.competenceFilter}
-          filterThreshold={state.competenceThreshold}
-          dispatch={dispatch}
-          allRows={allRows}
-          searchableColumns={searchableColumns}
-          type="COMPETENCE"
-        />
+      {filters.map(
+        ({ values, threshold, name }, index) =>
+          values.length > 0 && (
+            <FilterHeader
+              title={name}
+              type={name}
+              filterList={values}
+              filterThreshold={threshold}
+              onThresholdUpdate={(value) =>
+                setFilters((prevFilters) =>
+                  handleThresholdChange(prevFilters, value, index)
+                )
+              }
+              onSkillClick={(value) =>
+                setFilters((prevFilters) =>
+                  handleFilterChange(prevFilters, value, index)
+                )
+              }
+            />
+          )
       )}
     </>
   )

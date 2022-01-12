@@ -1,26 +1,36 @@
-import React, { useReducer } from 'react'
+import React, { useState } from 'react'
 import { GridItemHeader } from '../components/GridItem'
 import { FilterHeader } from '../components/FilterHeader'
 import DataTable from './components/table/DataTable'
 import SearchInput from '../components/SearchInput'
-import CompetenceFilterInput from '../components/CompetenceFilterInput'
+import FilterInput, { useCategories } from '../components/FilterInput'
 import RowCount from '../components/RowCount'
 import { DDComponentProps } from './types'
 import { makeStyles } from '@material-ui/core/styles'
-import { reducer } from '../components/FilterSearch'
+import {
+  filterNonCustomer,
+  FilterObject,
+  handleFilterChange,
+  handleThresholdChange,
+  searchAndFilter,
+} from '../components/FilterSearch'
+import { SortOrder } from './components/table/cells/SortableHeaderCell'
 
+type GetSearchValueFn = (data: unknown) => string
 export interface Column {
   title: string
   expandable?: boolean
   searchable?: boolean
   getSearchValue?: GetSearchValueFn
 }
-
-type GetSearchValueFn = (data: unknown) => string
-
 export interface SearchableColumn {
   columnIndex: number
   getSearchValue: GetSearchValueFn
+}
+
+export interface ColumnSort {
+  columnIndex: number
+  sortOrder: SortOrder
 }
 
 const useStyles = makeStyles({
@@ -32,13 +42,36 @@ const useStyles = makeStyles({
   },
 })
 
-export interface TableState {
-  rows: any[]
-  motivationFilter: string[]
-  motivationThreshold: number
-  competenceFilter: string[]
-  competenceThreshold: number
-  searchTerm: string
+const sortColumn = (rows: any[], currentSort: ColumnSort) => {
+  // Work around grunnet at sortering er blandet mellom en fast string eller et objekt
+  const compare = (a: any, b: any) => {
+    if (Object.keys(a.rowData[currentSort.columnIndex]).length === 0) return 1
+    if (Object.keys(b.rowData[currentSort.columnIndex]).length === 0) return -1
+    if (
+      JSON.stringify(a.rowData[currentSort.columnIndex]).localeCompare(
+        JSON.stringify(b.rowData[currentSort.columnIndex])
+      )
+    ) {
+      return -1
+    } else if (
+      JSON.stringify(b.rowData[currentSort.columnIndex]).localeCompare(
+        JSON.stringify(a.rowData[currentSort.columnIndex])
+      )
+    ) {
+      return 1
+    }
+    return 0
+  }
+
+  if (!currentSort) return rows
+  switch (currentSort.sortOrder) {
+    case 'ASC':
+      return rows.sort(compare)
+    case 'DESC':
+      return rows.sort(compare).reverse()
+    default:
+      return rows
+  }
 }
 
 export function getSearchableColumns(columns: Column[]): SearchableColumn[] {
@@ -55,70 +88,117 @@ export function getSearchableColumns(columns: Column[]): SearchableColumn[] {
 
 export default function DDTable({ payload, title, props }: DDComponentProps) {
   const allRows = payload as { rowData: any[] }[]
-  const initialState: TableState = {
-    rows: allRows,
-    motivationFilter: [],
-    motivationThreshold: 4,
-    competenceFilter: [],
-    competenceThreshold: 3,
-    searchTerm: '',
+  const initialFilters: FilterObject[] = [
+    {
+      name: 'COMPETENCE',
+      values: [],
+      threshold: 3,
+      placeholder: 'Filtrer på kompetanse...',
+      datafetch: useCategories,
+    },
+    {
+      name: 'MOTIVATION',
+      values: [],
+      threshold: 4,
+      placeholder: 'Filtrer på motivasjon...',
+      datafetch: useCategories,
+    },
+  ]
+
+  const [filters, setFilters] = useState<FilterObject[]>(initialFilters)
+  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [columnSort, setcolumnSort] = useState<ColumnSort>({
+    columnIndex: 0,
+    sortOrder: 'NONE',
+  })
+  const [displayNonProject, setDisplayNonProject] = useState(false)
+
+  function toggleDisplayNonProject() {
+    setDisplayNonProject(!displayNonProject)
   }
-  const [state, dispatch] = useReducer(reducer, initialState)
 
   const { columns } = props as { columns: Column[] }
+
   const searchableColumns = getSearchableColumns(columns)
+  const filteredRows = searchAndFilter(
+    allRows,
+    searchableColumns,
+    filters,
+    searchTerm
+  )
+
+  const NonProject = displayNonProject
+    ? filterNonCustomer(filteredRows)
+    : filteredRows
+
+  const sortedRows = sortColumn(NonProject, columnSort)
 
   const classes = useStyles()
+
+  const filterInputs = filters.map(
+    ({ values, placeholder, datafetch }, index) => (
+      <FilterInput
+        key={placeholder}
+        filterList={values}
+        placeholder={placeholder}
+        onSelect={(filter) =>
+          setFilters((prevFilters) =>
+            handleFilterChange(prevFilters, filter, index)
+          )
+        }
+        fetchFilterCategories={datafetch}
+      />
+    )
+  )
+
+  const filterHeaders = filters.map(
+    ({ values, threshold, name }, index) =>
+      values.length > 0 && (
+        <FilterHeader
+          title={name}
+          type={name}
+          filterList={values}
+          filterThreshold={threshold}
+          onThresholdUpdate={(value) => {
+            setFilters((prevFilters) =>
+              handleThresholdChange(prevFilters, value, index)
+            )
+          }}
+          onSkillClick={(value) => {
+            setFilters((prevFilters) =>
+              handleFilterChange(prevFilters, value, index)
+            )
+          }}
+        />
+      )
+  )
 
   return (
     <>
       <GridItemHeader title={title}>
         <div className={classes.searchBars}>
-          <CompetenceFilterInput
-            filterList={state.competenceFilter}
-            dispatch={dispatch}
-            allRows={allRows}
-            searchableColumns={searchableColumns}
-            type="COMPETENCE"
-          />
-          <CompetenceFilterInput
-            filterList={state.motivationFilter}
-            dispatch={dispatch}
-            allRows={allRows}
-            searchableColumns={searchableColumns}
-            type="MOTIVATION"
-          />
+          {filterInputs}
           <SearchInput
-            dispatch={dispatch}
-            allRows={allRows}
-            searchableColumns={searchableColumns}
+            placeholder={'Søk konsulent, kunde, etc...'}
+            onSearch={(searchTerm) => {
+              setSearchTerm(searchTerm)
+            }}
+            onClear={() => setSearchTerm('')}
           />
         </div>
       </GridItemHeader>
-      {state.competenceFilter.length > 0 && (
-        <FilterHeader
-          filterList={state.competenceFilter}
-          filterThreshold={state.competenceThreshold}
-          dispatch={dispatch}
-          allRows={allRows}
-          searchableColumns={searchableColumns}
-          type="COMPETENCE"
-        />
-      )}
-      {state.motivationFilter.length > 0 && (
-        <FilterHeader
-          filterList={state.motivationFilter}
-          filterThreshold={state.motivationThreshold}
-          dispatch={dispatch}
-          allRows={allRows}
-          searchableColumns={searchableColumns}
-          type="MOTIVATION"
-        />
-      )}
+      {filterHeaders}
       <RowCount>
-        {state.rows.length} av {allRows.length}
+        {sortedRows.length} av {allRows.length}
       </RowCount>
-      <DataTable rows={state.rows} columns={[]} {...props} />
+      <DataTable
+        setcolumnSort={setcolumnSort}
+        currentColumnSort={columnSort}
+        checkBoxChangeHandler={toggleDisplayNonProject}
+        rows={sortedRows}
+        columns={[]}
+        {...props}
+      />
     </>
   )
 }

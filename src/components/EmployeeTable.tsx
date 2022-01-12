@@ -5,6 +5,7 @@ import {
   CustomerStatusCell,
   CvCell,
   ProjectStatusCell,
+  SortableHeaderCell,
 } from '../data/components/table/DataCells'
 import EmployeeInfo from './EmployeeInfo'
 import { CustomerStatusData } from '../data/components/table/cells/CustomerStatusCell'
@@ -15,13 +16,6 @@ export function EmployeeTable() {
   const TableSkeleton = () => (
     <Skeleton variant="rect" height={780} animation="wave" />
   )
-
-  /* Her er en event handler som reagerer når checkboxen trykkes */
-  /* Den må kobles opp mot filtreringen i DDTable, men utsettes til DDTable har blitt oppdatert */
-  const visKunLedigeFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('Clicked', event)
-  }
-
   return (
     <DDItem
       url="/api/data/employeeTable"
@@ -39,22 +33,24 @@ export function EmployeeTable() {
             },
             renderCell: ConsultantCell,
             renderExpanded: EmployeeInfo,
-            headerRenderCell: CheckBoxHeaderCell({
-              title: 'Konsulent',
-              checkBoxLabel: 'Vis kun ledige',
-              checkBoxChangeHandler: visKunLedigeFilter,
-            }),
+            headerRenderCell: CheckBoxHeaderCell,
             checkBoxLabel: 'Vis kun ledige',
           },
-          { title: 'Tittel' },
+          {
+            title: 'Tittel',
+            headerRenderCell: SortableHeaderCell,
+          },
           { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
           {
             title: 'Kunde',
             renderCell: CustomerStatusCell,
             searchable: true,
             getSearchValue: (customer: CustomerStatusData) => {
-              return `${customer.customer} ${customer.workOrderDescription}`
+              return customer.customer
+                ? `${customer.customer} ${customer.workOrderDescription}`
+                : 'Ikke i prosjekt'
             },
+            headerRenderCell: SortableHeaderCell,
           },
           { title: 'CV', renderCell: CvCell },
         ],

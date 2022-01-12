@@ -141,7 +141,6 @@ type JobRotation = {
   text: string
   categoryid: string
 }
-
 type EmployeeUBW = {
   customer: string
   email: string
