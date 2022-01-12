@@ -245,7 +245,7 @@ function MuiVirtualizedTable({
           RenderExpanded && (
             <RenderExpanded
               data={rowData[0]}
-              setHeight={setExpandedRowHeight}
+              setRowHeight={setExpandedRowHeight}
               callBack={() => {
                 ArrayRef.recomputeRowHeights()
                 ArrayRef.forceUpdate()
