@@ -103,6 +103,7 @@ export default function Competence() {
         url="/api/data/fagtimer"
         title="Aktivitet faggrupper"
         Component={DDChart}
+        description="Hver vertikal akse viser antall unike fag aktiviteter per uke, ulike linjene representerer de ulike årene"
         SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
           chartVariants: [
