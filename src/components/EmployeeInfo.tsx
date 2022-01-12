@@ -176,7 +176,9 @@ export default function EmployeeInfo({ data, id, setRowHeight }: Props) {
       const newHeight = getOffsetHeight(targetRef) + 72
       setRowHeight(id, newHeight)
     }
-  }, [pending, targetRef, id, setRowHeight])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pending, targetRef, id])
 
   return (
     <div ref={setRef} className={classes.root}>
