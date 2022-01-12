@@ -11,9 +11,9 @@ export type FilterObject = {
 export type FilterType = 'COMPETENCE' | 'MOTIVATION' | 'CUSTOMER'
 
 const ColumnMapping: Record<FilterType, number> = {
-  MOTIVATION: 2,
-  COMPETENCE: 1,
-  CUSTOMER: 4,
+  MOTIVATION: 4,
+  COMPETENCE: 5,
+  CUSTOMER: 2,
 }
 
 function searchRow(
@@ -44,16 +44,6 @@ function filterRow(
     .reduce((a, b) => a && b)
 }
 
-const filterCustomerColumn = (
-  columnValue: Record<string, string>,
-  filters: string[]
-) =>
-  filters
-    .map(
-      (filter) => (columnValue?.['customer'] ?? 'Ikke i prosjekt') === filter
-    )
-    .reduce((prev, curr) => prev || curr)
-
 export const searchAndFilter = (
   rows: any,
   searchableColumns: SearchableColumn[],
@@ -70,16 +60,10 @@ export const searchAndFilter = (
 
     filters.map((filter) => {
       if (filter.values.length > 0) {
-        const rowDataIndex = row.rowData.length - ColumnMapping[filter.name]
+        const rowDataIndex = ColumnMapping[filter.name]
         rowMatchesFilters =
           rowMatchesFilters &&
-          (filter.name === 'CUSTOMER'
-            ? filterCustomerColumn(row.rowData[rowDataIndex], filter.values)
-            : filterRow(
-                row.rowData[rowDataIndex],
-                filter.values,
-                filter.threshold
-              ))
+          filterRow(row.rowData[rowDataIndex], filter.values, filter.threshold)
       }
     })
 

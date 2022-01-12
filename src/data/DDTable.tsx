@@ -135,23 +135,49 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
 
   const classes = useStyles()
 
+  const filterInputs = filters.map(
+    ({ values, placeholder, datafetch }, index) => (
+      <FilterInput
+        key={placeholder}
+        filterList={values}
+        placeholder={placeholder}
+        onSelect={(filter) =>
+          setFilters((prevFilters) =>
+            handleFilterChange(prevFilters, filter, index)
+          )
+        }
+        fetchFilterCategories={datafetch}
+      />
+    )
+  )
+
+  const filterHeaders = filters.map(
+    ({ values, threshold, name }, index) =>
+      values.length > 0 && (
+        <FilterHeader
+          title={name}
+          type={name}
+          filterList={values}
+          filterThreshold={threshold}
+          onThresholdUpdate={(value) => {
+            setFilters((prevFilters) =>
+              handleThresholdChange(prevFilters, value, index)
+            )
+          }}
+          onSkillClick={(value) => {
+            setFilters((prevFilters) =>
+              handleFilterChange(prevFilters, value, index)
+            )
+          }}
+        />
+      )
+  )
+
   return (
     <>
       <GridItemHeader title={title}>
         <div className={classes.searchBars}>
-          {filters.map(({ values, placeholder, datafetch }, index) => (
-            <FilterInput
-              key={placeholder}
-              filterList={values}
-              placeholder={placeholder}
-              onSelect={(filter) =>
-                setFilters((prevFilters) =>
-                  handleFilterChange(prevFilters, filter, index)
-                )
-              }
-              fetchFilterCategories={datafetch}
-            />
-          ))}
+          {filterInputs}
           <SearchInput
             placeholder={'Søk konsulent, kunde, etc...'}
             onSearch={(searchTerm) => {
@@ -161,27 +187,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
           />
         </div>
       </GridItemHeader>
-      {filters.map(
-        ({ values, threshold, name }, index) =>
-          values.length > 0 && (
-            <FilterHeader
-              title={name}
-              type={name}
-              filterList={values}
-              filterThreshold={threshold}
-              onThresholdUpdate={(value) => {
-                setFilters((prevFilters) =>
-                  handleThresholdChange(prevFilters, value, index)
-                )
-              }}
-              onSkillClick={(value) => {
-                setFilters((prevFilters) =>
-                  handleFilterChange(prevFilters, value, index)
-                )
-              }}
-            />
-          )
-      )}
+      {filterHeaders}
       <RowCount>
         {sortedRows.length} av {allRows.length}
       </RowCount>
