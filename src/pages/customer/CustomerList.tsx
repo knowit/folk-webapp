@@ -94,6 +94,7 @@ export default function CustomerList() {
 
   useEffect(() => {
     preparePayloadForTable()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [payload, pending])
 
   return (

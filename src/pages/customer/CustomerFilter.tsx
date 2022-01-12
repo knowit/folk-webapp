@@ -45,6 +45,7 @@ export default function CustomerFilter({
   useEffect(
     () =>
       filter(searchAndFilter(allRows, searchableColumns, filters, searchTerm)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [filters, searchTerm]
   )
 
