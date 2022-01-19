@@ -131,17 +131,14 @@ const useDialogStyle = makeStyles({
   },
 })
 
-export default function CvDialog({
-  onClose,
-  data,
-  name,
-  open,
-}: {
+interface CVDialogProps {
   data: CvCellData
   onClose: () => void
-  name: string
   open: boolean
-}) {
+  name?: string
+}
+
+export default function CvDialog({ onClose, data, open, name }: CVDialogProps) {
   const [fileType, setFileType] = useState('.pdf')
   const [language, setLanguage] = useState('Norsk')
   const [downloadLink, setDownloadLink] = useState(data.int_pdf)

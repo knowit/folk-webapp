@@ -7,12 +7,14 @@ export default function CustomerTable({
   callback,
   props,
 }: SimpleComponentProps) {
-  const allRows = payload as { rowData: any[] }[]
-
+  const allRows = payload
+  console.log(payload)
   useEffect(() => {
-    callback(props.columns)
+    if (props.columns) {
+      callback(props.columns)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return <DataTable rows={allRows} columns={[]} {...props} />
+  return <DataTable rows={allRows} columns={props.columns} />
 }

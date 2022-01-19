@@ -3,11 +3,8 @@ import { Skeleton } from '@material-ui/lab'
 import React, { useEffect, useState } from 'react'
 import { useCategories } from '../../components/FilterInput'
 import { GridItem } from '../../components/GridItem'
-import {
-  Column,
-  getSearchableColumns,
-  SearchableColumn,
-} from '../../data/DDTable'
+import { getSearchableColumns, SearchableColumn } from '../../data/DDTable'
+import { Columns } from '../../data/types'
 import { useFetchedData } from '../../hooks/service'
 import CustomerDropdown from './CustomerDropdown'
 import CustomerFilter from './CustomerFilter'
@@ -47,7 +44,7 @@ export default function CustomerList() {
     }
   }
 
-  function handleColumns(columns: Column[]) {
+  function handleColumns(columns: Columns[]) {
     setSearchableColumns(getSearchableColumns(columns))
   }
 
@@ -106,9 +103,7 @@ export default function CustomerList() {
           title="Filtre"
           filter={handleSearchAndFilter}
           employees={initialData}
-          searchableColumns={
-            searchableColumns ? searchableColumns : ([] as SearchableColumn[])
-          }
+          searchableColumns={searchableColumns ?? []}
           categories={categories}
         />
       )}

@@ -1,20 +1,19 @@
-import { DDPassProps, DDPayload } from './types'
-import { Column } from './DDTable'
+import { Columns, DDPassProps, DDPayload } from './types'
 import { GridItem } from '../components/GridItem'
 import React from 'react'
 
 export interface SimpleComponentProps {
   payload: DDPayload
   props: DDPassProps
-  callback(columns: Column[]): void
+  callback: (columns: Columns[]) => void
 }
 
 export interface SimpleItemProps {
+  payload: DDPayload
+  Component: (props: SimpleComponentProps) => JSX.Element
+  callback: (columns: Columns[]) => void
   fullSize?: boolean
   dataComponentProps?: DDPassProps
-  Component: (props: SimpleComponentProps) => JSX.Element
-  payload: DDPayload
-  callback(columns: Column[]): void
 }
 
 export function SimpleDDItem({

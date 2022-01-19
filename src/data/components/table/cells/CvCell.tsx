@@ -46,7 +46,6 @@ export default function CvCell({
   rowData: rowDataArray
 }) {
   const [open, setOpen] = useState(false)
-
   const handleClickOpen = () => {
     setOpen(true)
   }

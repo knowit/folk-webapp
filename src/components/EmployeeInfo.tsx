@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Skeleton } from '@material-ui/lab'
 import { useFetchedData } from '../hooks/service'
@@ -17,6 +17,7 @@ type Experience = {
   month_to: number
   year_to: number
 }
+
 type Date = { year: number; month: number } | { year: number }
 type MotivationMap = {
   [category: string]: number
@@ -143,12 +144,7 @@ interface Props {
   setRowHeight: (id: string, height: number) => void
 }
 
-export default function EmployeeInfo({ data, id, setRowHeight }: Props) {
-  let targetRef: any
-  function setRef(ref: any) {
-    targetRef = ref
-  }
-  const getOffsetHeight = (thisTargetRef: any) => thisTargetRef.offsetHeight
+export default function EmployeeInfo({ data }: Props) {
   const classes = useStyles()
   const url = data.competenceUrl
   const [empData, pending] = useFetchedData<EmployeeInfoData>({ url })
@@ -171,17 +167,8 @@ export default function EmployeeInfo({ data, id, setRowHeight }: Props) {
     )
   }
 
-  useEffect(() => {
-    if (!pending && targetRef) {
-      const newHeight = getOffsetHeight(targetRef) + 72
-      setRowHeight(id, newHeight)
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pending, targetRef, id])
-
   return (
-    <div ref={setRef} className={classes.root}>
+    <div className={classes.root}>
       <div className={classes.info}>
         <div className={classes.cell}>
           <b>Utdanning: </b>

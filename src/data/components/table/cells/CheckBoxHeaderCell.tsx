@@ -13,7 +13,6 @@ const BlackCheckBox = withStyles({
       backgroundColor: 'transparent',
     },
   },
-  checked: {},
 })((props: CheckboxProps) => (
   <Checkbox color="default" disableRipple {...props} />
 ))

@@ -36,7 +36,7 @@ interface CustomerDropdownProps {
   customerName: string
   employees: { [key: string]: any }
   expand?: boolean
-  callback(columns: any[]): void
+  callback: (columns: any[]) => void
 }
 
 export default function CustomerDropdown({
@@ -80,7 +80,7 @@ export default function CustomerDropdown({
                 {
                   title: 'Konsulent',
                   searchable: true,
-                  expandable: true,
+                  isExpandable: true,
                   getSearchValue: (consultant: { value: string }) => {
                     return consultant.value
                   },
@@ -99,7 +99,7 @@ export default function CustomerDropdown({
                 {
                   title: 'CV',
                   renderCell: CvCell,
-                  headerRenderCell: CenteredHeaderCell,
+                  headerCell: CenteredHeaderCell,
                 },
               ],
             }}

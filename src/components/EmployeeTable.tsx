@@ -26,19 +26,19 @@ export function EmployeeTable() {
         columns: [
           {
             title: 'Konsulent',
-            expandable: true,
+            isExpandable: true,
             searchable: true,
             getSearchValue: (consultant: { value: string }) => {
               return consultant.value
             },
             renderCell: ConsultantCell,
             renderExpanded: EmployeeInfo,
-            headerRenderCell: CheckBoxHeaderCell,
+            headerCell: CheckBoxHeaderCell,
             checkBoxLabel: 'Vis kun ledige',
           },
           {
             title: 'Tittel',
-            headerRenderCell: SortableHeaderCell,
+            headerCell: SortableHeaderCell,
           },
           { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
           {
@@ -50,7 +50,7 @@ export function EmployeeTable() {
                 ? `${customer.customer} ${customer.workOrderDescription}`
                 : 'Ikke i prosjekt'
             },
-            headerRenderCell: SortableHeaderCell,
+            headerCell: SortableHeaderCell,
           },
           { title: 'CV', renderCell: CvCell },
         ],
