@@ -1,8 +1,16 @@
 import { Grid } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import React, { useEffect, useState } from 'react'
+import EmployeeInfo from '../../components/EmployeeInfo'
 import { useCategories } from '../../components/FilterInput'
 import { GridItem } from '../../components/GridItem'
+import { CustomerStatusData } from '../../data/components/table/cells/CustomerStatusCell'
+import {
+  CenteredHeaderCell,
+  ConsultantCell,
+  CustomerStatusCell,
+  CvCell,
+} from '../../data/components/table/DataCells'
 import { getSearchableColumns, SearchableColumn } from '../../data/DDTable'
 import { Columns } from '../../data/types'
 import { useFetchedData } from '../../hooks/service'
@@ -63,6 +71,33 @@ export default function CustomerList() {
     )
   }
 
+  const CustomerColumns = [
+    {
+      title: 'Konsulent',
+      searchable: true,
+      isExpandable: true,
+      getSearchValue: (consultant: { value: string }) => {
+        return consultant.value
+      },
+      renderCell: ConsultantCell,
+      renderExpanded: EmployeeInfo,
+    },
+    { title: 'Tittel' },
+    {
+      title: 'Kunde',
+      renderCell: CustomerStatusCell,
+      searchable: true,
+      getSearchValue: (customer: CustomerStatusData) => {
+        return `${customer.customer} ${customer.workOrderDescription}`
+      },
+    },
+    {
+      title: 'CV',
+      renderCell: CvCell,
+      headerCell: CenteredHeaderCell,
+    },
+  ]
+
   function createDropdowns(customers: Customers, expand?: boolean) {
     const dropdowns: any[] = []
     !pending &&
@@ -76,7 +111,7 @@ export default function CustomerList() {
               customerName={customer}
               employees={customers[customer]}
               expand={expand}
-              callback={handleColumns}
+              columns={CustomerColumns}
             />
           )
         )

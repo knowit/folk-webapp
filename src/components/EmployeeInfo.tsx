@@ -3,12 +3,9 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Skeleton } from '@material-ui/lab'
 import { useFetchedData } from '../hooks/service'
 import { NoData } from './ErrorText'
-import {
-  ChartSkeleton,
-  ExperienceData,
-  ProjectExperience,
-} from '../pages/EmployeeSite'
-import DDItem, { DDChart } from '../data/DDItem'
+import { ExperienceData, ProjectExperience } from '../pages/EmployeeSite'
+import { DDChart } from '../data/DDItem'
+import { useEmployeeRadar } from '../api/data/employee/employeeQueries'
 
 type Experience = {
   employer: string
@@ -148,10 +145,12 @@ export default function EmployeeInfo({ data }: Props) {
   const classes = useStyles()
   const url = data.competenceUrl
   const [empData, pending] = useFetchedData<EmployeeInfoData>({ url })
-  const user_id = data ? data.user_id : null
+  const user_id = data?.user_id
   const [expData, expPending] = useFetchedData<ExperienceData>({
     url: `/api/data/employeeExperience?user_id=${user_id}`,
   })
+
+  const employeeChartData = useEmployeeRadar(data.email_id).data
 
   const getStringFromList = (
     list: string[] | null | undefined,
@@ -250,33 +249,35 @@ export default function EmployeeInfo({ data }: Props) {
         )}
       </div>
       <div className={classes.oversikt}>
-        <DDItem
-          url={'/api/data/employeeRadar?email=' + data.email_id}
-          title="Motivasjon"
-          Component={DDChart}
-          SkeletonComponent={ChartSkeleton}
-          fullSize
-          dataComponentProps={{
-            chartVariants: [
-              {
-                type: 'Bar',
-                props: {
-                  dataKey: 'category',
-                  yLabels: ['motivation', 'competence'],
-                  maxValue: 5,
+        {employeeChartData ? (
+          <DDChart
+            payload={employeeChartData}
+            title="Motivasjon"
+            props={{
+              chartVariants: [
+                {
+                  type: 'Bar',
+                  props: {
+                    dataKey: 'category',
+                    yLabels: ['motivation', 'competence'],
+                    maxValue: 5,
+                  },
                 },
-              },
-              {
-                type: 'Radar',
-                props: {
-                  groupKey: 'category',
-                  valueKey: ['motivation', 'competence'],
-                  maxValue: 5,
+                {
+                  type: 'Radar',
+                  props: {
+                    groupKey: 'category',
+                    valueKey: ['motivation', 'competence'],
+                    maxValue: 5,
+                  },
                 },
-              },
-            ],
-          }}
-        />
+              ],
+            }}
+            fullsize={true}
+          />
+        ) : (
+          <Skeleton variant="rect" height={320} width={400} animation="wave" />
+        )}
       </div>
     </div>
   )

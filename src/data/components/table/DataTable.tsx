@@ -14,7 +14,7 @@ import { ColumnSort } from '../../DDTable'
 import { Columns } from '../../types'
 
 interface DataTableProps {
-  columns?: Columns[]
+  columns: Columns[]
   rows: any //Omit<DataTableRow, 'columns'>[]
   setColumnSort?: (CurrentSort: ColumnSort) => void
   checkBoxChangeHandler?: () => void
@@ -22,17 +22,11 @@ interface DataTableProps {
   columnsWidth?: number[]
 }
 
-interface DataTableRow {
-  rowData: any[]
-  columns: Columns[]
-  rowId: string
-}
-
 type CellTypeProps = (props: {
   data: any
   email?: string
   id?: string
-  rowData?: any[]
+  name?: string
   isExpandable?: boolean
   toggleExpand?: (id: string) => void
   isExpanded?: boolean
@@ -42,15 +36,17 @@ interface CellProps {
   CellType?: CellTypeProps
   isExpandable?: boolean
   toggleExpand?: (id: string) => void
-  data: any[]
+  cellData: any[]
   id: string
-  index: number
+  name: string
 }
 
 interface ExpandedRows {
   id: string
   height: number
 }
+
+type RowHeight = { index: number }
 
 const TableCellNoBorders = withStyles({
   root: {
@@ -107,7 +103,7 @@ export const tableStyles = makeStyles((theme: Theme) =>
 )
 
 export default function DataTable({
-  columns = [],
+  columns,
   rows,
   setColumnSort,
   checkBoxChangeHandler,
@@ -145,14 +141,13 @@ export default function DataTable({
   }, [ArrayRef])
 
   function prepareCell({
-    data,
+    cellData,
     id,
     toggleExpand,
     isExpandable,
-    index,
+    name,
     CellType,
   }: CellProps): JSX.Element {
-    const cellData = data[index]
     const isExpanded =
       expandedRows.filter((expandedRow) => expandedRow.id === id).length > 0
     if (isExpandable && CellType) {
@@ -173,9 +168,9 @@ export default function DataTable({
       >
         <div className={[classes.standardSize, classes.borders].join(' ')}>
           {CellType ? (
-            <CellType data={cellData} rowData={data} />
+            <CellType data={cellData} name={name} />
           ) : (
-            <CharacterLimitBox text={cellData ?? '-'} />
+            <CharacterLimitBox text={`${cellData}` ?? '-'} />
           )}
         </div>
       </TableCellNoBorders>
@@ -203,8 +198,8 @@ export default function DataTable({
                 {prepareCell({
                   CellType: column.renderCell,
                   id: id,
-                  data: rowData,
-                  index: columnIndex,
+                  cellData: rowData[columnIndex],
+                  name: rowData[0].value,
                   isExpandable: column.isExpandable,
                   toggleExpand: toggleExpand,
                 })}
@@ -263,8 +258,9 @@ export default function DataTable({
     )
   }
 
-  const getRowHeight = ({ index }: { index: number }) => {
-    const id = rows[index].rowId
+  const getRowHeight = ({ index }: RowHeight) => {
+    const rowIndex = index
+    const id = rows[rowIndex].rowId
     return (
       expandedRows.find((expandedRow) => expandedRow.id === id)?.height ??
       DEFAULT_CELL_HEIGHT

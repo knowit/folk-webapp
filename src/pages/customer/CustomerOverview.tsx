@@ -1,7 +1,10 @@
 import { Grid } from '@material-ui/core'
 import React from 'react'
-import DDItem, { DDChart } from '../../data/DDItem'
-import { ChartSkeleton } from '../EmployeeSite'
+import {
+  useHoursBilledPerCustomer,
+  useHoursBilledPerWeek,
+} from '../../api/data/customer/customerQueries'
+import DDItem from '../../data/DDItem'
 import CustomerCardList from './CustomerCardList'
 
 export const CustomerOverview = () => {
@@ -11,10 +14,8 @@ export const CustomerOverview = () => {
   return (
     <Grid container spacing={2}>
       <DDItem
-        url={'/api/data/hoursBilledPerCustomer'}
+        fetchHook={useHoursBilledPerCustomer}
         title="Timer brukt per kunde"
-        Component={DDChart}
-        SkeletonComponent={ChartSkeleton}
         description={ubwMessage}
         dataComponentProps={{
           chartVariants: [
@@ -31,10 +32,8 @@ export const CustomerOverview = () => {
       />
 
       <DDItem
-        url={'/api/data/hoursBilledPerWeek'}
+        fetchHook={useHoursBilledPerWeek}
         title="Timer brukt per uke"
-        Component={DDChart}
-        SkeletonComponent={ChartSkeleton}
         description={ubwMessage}
         dataComponentProps={{
           chartVariants: [

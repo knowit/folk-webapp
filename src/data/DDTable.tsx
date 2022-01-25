@@ -5,7 +5,7 @@ import DataTable from './components/table/DataTable'
 import SearchInput from '../components/SearchInput'
 import FilterInput, { useCategories } from '../components/FilterInput'
 import RowCount from '../components/RowCount'
-import { Columns, DDComponentProps } from './types'
+import { Columns, DDTableProps } from './types'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   filterNonCustomer,
@@ -83,7 +83,7 @@ export function getSearchableColumns(columns?: Columns[]): SearchableColumn[] {
   }, [] as SearchableColumn[])
 }
 
-export default function DDTable({ payload, title, props }: DDComponentProps) {
+export default function DDTable({ payload, title, props }: DDTableProps) {
   const allRows = payload as { rowData: any[] }[]
   const initialFilters: FilterObject[] = [
     {

@@ -2,7 +2,7 @@ import React from 'react'
 import { Redirect, useLocation } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
-import DDItem, { DDChart } from '../data/DDItem'
+import { DDChart } from '../data/DDItem'
 import { useFetchedData } from '../hooks/service'
 import {
   GetProjects,
@@ -12,6 +12,7 @@ import {
 } from '../components/EmployeeInfo'
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg'
 import { CustomerStatusData } from '../data/components/table/cells/CustomerStatusCell'
+import { useEmployeeRadar } from '../api/data/employee/employeeQueries'
 
 type WorkExperience = {
   employer: string
@@ -123,6 +124,7 @@ export default function EmployeeSite() {
   const [expData, expPending] = useFetchedData<ExperienceData>({
     url: `/api/data/employeeExperience?user_id=${user_id}`,
   })
+  const employeeChartData = useEmployeeRadar(email).data
   if (!email.match(idRegex)) {
     return <Redirect to={{ pathname: '/404' }} />
   }
@@ -262,16 +264,11 @@ export default function EmployeeSite() {
           <p>
             <b>Kompetansekartlegging</b>
           </p>
-          {pending ? (
-            <ChartSkeleton />
-          ) : (
-            <DDItem
-              url={'/api/data/employeeRadar?email=' + email_id}
+          {employeeChartData ? (
+            <DDChart
+              payload={employeeChartData}
               title="Motivasjon"
-              Component={DDChart}
-              SkeletonComponent={ChartSkeleton}
-              fullSize
-              dataComponentProps={{
+              props={{
                 chartVariants: [
                   {
                     type: 'Bar',
@@ -292,6 +289,8 @@ export default function EmployeeSite() {
                 ],
               }}
             />
+          ) : (
+            <ChartSkeleton />
           )}
         </div>
       </div>

@@ -13,7 +13,7 @@ export type FilterType = 'COMPETENCE' | 'MOTIVATION' | 'CUSTOMER'
 const ColumnMapping: Record<FilterType, number> = {
   MOTIVATION: 4,
   COMPETENCE: 5,
-  CUSTOMER: 2,
+  CUSTOMER: 3,
 }
 
 function searchRow(
@@ -73,7 +73,8 @@ export const searchAndFilter = (
 
 export function filterNonCustomer(rows: any[]) {
   return rows.filter((row: any) => {
-    const rowDataIndex = row.rowData.length - ColumnMapping['CUSTOMER']
+    const rowDataIndex = ColumnMapping['CUSTOMER']
+    console.log(row.rowData[rowDataIndex])
     return Object.keys(row.rowData[rowDataIndex]).length === 0
   })
 }

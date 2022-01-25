@@ -104,22 +104,26 @@ export const OpenInNewStyled = withStyles({
 })(OpenInNew)
 
 interface ConsultantCellProps {
-  email: string
-  data: { value: string; image?: string }
+  data: {
+    value: string
+    image?: string
+    email: string
+    email_id: string
+    user_id: string
+    competenceUrl: string
+  }
   id: string
   isExpanded: boolean
   toggleExpand: (id: string) => void
 }
 
 export default function ConsultantCell({
-  email,
   data,
   id,
   isExpanded,
   toggleExpand,
 }: ConsultantCellProps) {
   const classes = useCompetenceMappingStyles()
-
   const openStyle = isExpanded ? classes.bolderText : ''
   return (
     <TableCellNoBorders
@@ -163,7 +167,7 @@ export default function ConsultantCell({
           ) : (
             <ExpandMoreIconWithStyles />
           )}
-          <Link to={'/ansatt/' + email} target="_blank">
+          <Link to={'/ansatt/' + data.email} target="_blank">
             <OpenInNewStyled />
           </Link>
         </div>

@@ -12,14 +12,6 @@ interface CvCellData {
   int_word: string
 }
 
-interface ConsultantType {
-  value: string
-  image: string | null
-  competenceUrl: string
-}
-
-type rowDataArray = [ConsultantType, string, string, string, CvCellData]
-
 const useStyles = makeStyles({
   root: {
     width: '100%',
@@ -38,13 +30,12 @@ const DownloadIcon = withStyles({
   },
 })(GetApp)
 
-export default function CvCell({
-  data,
-  rowData,
-}: {
+interface CVCellProps {
   data: CvCellData
-  rowData: rowDataArray
-}) {
+  name: string
+}
+
+export default function CvCell({ data, name }: CVCellProps) {
   const [open, setOpen] = useState(false)
   const handleClickOpen = () => {
     setOpen(true)
@@ -55,15 +46,10 @@ export default function CvCell({
   const classes = useStyles()
   return data ? (
     <>
-      <div className={classes.root} title="last ned CV">
+      <div className={classes.root} title="Last ned CV">
         <DownloadIcon onClick={handleClickOpen} />
       </div>
-      <CvDialog
-        open={open}
-        onClose={handleClose}
-        name={rowData[0].value}
-        data={data}
-      />
+      <CvDialog open={open} onClose={handleClose} name={name} data={data} />
     </>
   ) : (
     <NoData />

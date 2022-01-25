@@ -1,8 +1,6 @@
+import { SWRResponse } from 'swr'
+
 export type DDPayload = { [key: string]: any }
-export type DDPassProps = {
-  columns?: Columns[]
-  chartVariants?: ChartVariant[]
-}
 
 export type ChartVariant = {
   type: 'Bar' | 'Line' | 'Pie' | 'Radar' | 'Sunburst'
@@ -30,19 +28,30 @@ export type Columns = {
 }
 
 export interface DDComponentProps {
-  payload: DDPayload
+  payload: any
   title: string
   description?: string
-  props: DDPassProps
+  fullsize?: boolean
+}
+
+export interface DDTableProps extends DDComponentProps {
+  props: {
+    columns: Columns[]
+  }
+}
+
+export interface DDChartProps extends DDComponentProps {
+  props: {
+    chartVariants: ChartVariant[]
+  }
 }
 
 export interface DDItemProps {
-  url: string
-  fullSize?: boolean
+  fetchHook: () => SWRResponse
   title: string
+  dataComponentProps: {
+    chartVariants: ChartVariant[]
+  }
   description?: string
-  dataComponentProps?: DDPassProps
-  Component: (props: DDComponentProps) => JSX.Element
-  SkeletonComponent: () => JSX.Element
-  HeaderSkeletonComponent?: () => JSX.Element
+  fullSize?: boolean
 }

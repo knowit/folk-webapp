@@ -1,15 +1,9 @@
 import React from 'react'
 import { Skeleton } from '@material-ui/lab'
-import { useFetchedData } from '../hooks/service'
-import {
-  GridItem,
-  GridItemHeader,
-  GridItemContent,
-} from '../components/GridItem'
+import { GridItem } from '../components/GridItem'
 import DDTable from './DDTable'
 import DDChart from './DDChart'
 import { ErrorText, LoggedOutErrorText } from '../components/ErrorText'
-import { DDPayload } from './types'
 import { DDItemProps } from './types'
 import { useCookies } from 'react-cookie'
 
@@ -19,7 +13,6 @@ interface DDErrorProps {
 
 function DDError({ error }: DDErrorProps) {
   // eslint-disable-next-line no-console
-  console.log(error)
   const [cookies] = useCookies()
   let errormessage = <p />
   if (cookies.refreshToken && !cookies.accessToken) {
@@ -32,37 +25,28 @@ function DDError({ error }: DDErrorProps) {
 }
 
 export default function DDItem({
-  url,
+  fetchHook,
   title,
   description,
-  Component,
-  SkeletonComponent,
-  HeaderSkeletonComponent = () => (
-    <Skeleton variant="rect" height={43} width={120} animation="wave" />
-  ),
+  dataComponentProps,
   fullSize = false,
-  dataComponentProps = {},
 }: DDItemProps) {
-  const [payload, pending, error] = useFetchedData<DDPayload>({ url })
+  const data = fetchHook().data
+
+  console.log(data, title)
+
   return (
     <GridItem fullSize={fullSize}>
-      {pending || error || !payload ? (
-        <>
-          <GridItemHeader title={title}>
-            {pending && !error ? <HeaderSkeletonComponent /> : null}
-          </GridItemHeader>
-          <GridItemContent>
-            {error && <DDError error={error} />}
-            {pending && !error && <SkeletonComponent />}
-          </GridItemContent>
-        </>
-      ) : (
-        <Component
-          payload={payload}
+      {data ? (
+        <DDChart
+          payload={data}
           title={title}
           description={description}
           props={dataComponentProps}
+          fullsize={true}
         />
+      ) : (
+        <Skeleton variant="rect" height={320} width={400} animation="wave" />
       )}
     </GridItem>
   )

@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
-import { GridItemHeader, GridItemContent } from '../components/GridItem'
+import {
+  GridItemHeader,
+  GridItemContent,
+  GridItem,
+} from '../components/GridItem'
 import DropdownPicker from '../components/DropdownPicker'
 import Line from './components/Line'
 import Bar from './components/Bar'
@@ -8,7 +12,7 @@ import BigChart from '../components/BigChart'
 import { ErrorText } from '../components/ErrorText'
 import Sunburst from './components/Sunburst'
 import Radar from './components/Radar'
-import { DDComponentProps, DDPassProps } from './types'
+import { DDChartProps } from './types'
 import {
   ChartDisplayOptions,
   ChartVariantToggle,
@@ -19,7 +23,7 @@ export type ChartVariant = 'Line' | 'Bar' | 'Pie' | 'Radar' | 'Sunburst'
 
 export interface ChartComponentInfo {
   type: ChartVariant
-  props: DDPassProps
+  props: DDChartProps
 }
 
 const chartComponents: {
@@ -34,10 +38,11 @@ const chartComponents: {
 
 export default function DDChart({
   payload,
+  fullsize,
   title,
   description,
   props,
-}: DDComponentProps) {
+}: DDChartProps) {
   const { setNames, sets } = payload as {
     setNames: string[]
     sets: { [key: string]: any }
@@ -96,11 +101,11 @@ export default function DDChart({
   )
 
   return (
-    <>
+    <GridItem fullSize={fullsize}>
       <ChartGridItem />
       <BigChart open={bigChartOpen} onClose={() => setBigChartOpen(false)}>
         <ChartGridItem isBig />
       </BigChart>
-    </>
+    </GridItem>
   )
 }
