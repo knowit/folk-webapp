@@ -5,11 +5,11 @@ import {
   GridItem,
 } from '../../../components/GridItem'
 import DropdownPicker from '../../../components/DropdownPicker'
-import Line from './charts/Line'
-import Bar from './charts/Bar'
-import Pie from './charts/Pie'
-import Sunburst from './charts/Sunburst'
-import Radar from './charts/Radar'
+import Line from './Charts/Line'
+import Bar from './Charts/Bar'
+import Pie from './Charts/Pie'
+import Sunburst from './Charts/Sunburst'
+import Radar from './Charts/Radar'
 import BigChart from '../../../components/BigChart'
 import { ErrorText } from '../../../components/ErrorText'
 import { ChartType, ChartVariant, DDChartProps } from '../../types'
@@ -52,7 +52,7 @@ export default function Chart({
 
   const { type: chartVariantToRender, props: chartProps } =
     props.chartVariants[chartVariantIdx]
-  console.log(payload, chartVariantToRender, title)
+
   const ChartComponent = chartComponents[chartVariantToRender]
 
   const setNamesLength = payload.setNames ? payload.setNames.length : 0

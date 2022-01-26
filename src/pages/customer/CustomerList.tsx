@@ -1,6 +1,6 @@
 import { Grid } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import EmployeeInfo from '../../components/EmployeeInfo'
 import { useCategories } from '../../components/FilterInput'
 import { GridItem } from '../../components/GridItem'
@@ -11,8 +11,7 @@ import {
   CustomerStatusCell,
   CvCell,
 } from '../../data/components/table/DataCells'
-import { getSearchableColumns, SearchableColumn } from '../../data/DDTable'
-import { Columns } from '../../data/types'
+import { getSearchableColumns } from '../../data/DDTable'
 import { useFetchedData } from '../../hooks/service'
 import CustomerDropdown from './CustomerDropdown'
 import CustomerFilter from './CustomerFilter'
@@ -22,39 +21,41 @@ interface Customers {
 
 export type Payload = { [key: string]: any }
 
+const CustomerColumns = [
+  {
+    title: 'Konsulent',
+    searchable: true,
+    isExpandable: true,
+    getSearchValue: (consultant: { value: string }) => {
+      return consultant.value
+    },
+    renderCell: ConsultantCell,
+    renderExpanded: EmployeeInfo,
+  },
+  { title: 'Tittel' },
+  {
+    title: 'Kunde',
+    renderCell: CustomerStatusCell,
+    searchable: true,
+    getSearchValue: (customer: CustomerStatusData) => {
+      return `${customer.customer} ${customer.workOrderDescription}`
+    },
+  },
+  {
+    title: 'CV',
+    renderCell: CvCell,
+    headerCell: CenteredHeaderCell,
+  },
+]
+
 export default function CustomerList() {
   const [initialData, setInitialData] = useState<Payload>([])
-  const [dropdowns, setDropdowns] = useState<any[]>([])
-  const [searchableColumns, setSearchableColumns] =
-    useState<SearchableColumn[]>()
-
+  const [dropdowns, setDropdowns] = useState<JSX.Element[]>([])
   const [payload, pending] = useFetchedData<Payload>({
     url: '/api/data/employeeTable',
   })
 
   const categories = useCategories()
-
-  function preparePayloadForTable() {
-    const statusIconData = 2
-    const customerData = 3
-
-    if (Array.isArray(payload) && !pending) {
-      payload.map((emp) => {
-        if (emp.rowData[customerData].customer === undefined) {
-          emp.rowData[customerData] = { customer: 'Ikke i prosjekt' }
-        }
-        emp.rowData.splice(statusIconData, 1)
-      })
-      setInitialData(payload)
-
-      const groups = groupByCustomers(payload, 2) // customerIndex changes after splice
-      createDropdowns(groups)
-    }
-  }
-
-  function handleColumns(columns: Columns[]) {
-    setSearchableColumns(getSearchableColumns(columns))
-  }
 
   function groupByCustomers(payload: Payload, customerDataIndex: number) {
     return payload.reduce(
@@ -71,63 +72,55 @@ export default function CustomerList() {
     )
   }
 
-  const CustomerColumns = [
-    {
-      title: 'Konsulent',
-      searchable: true,
-      isExpandable: true,
-      getSearchValue: (consultant: { value: string }) => {
-        return consultant.value
-      },
-      renderCell: ConsultantCell,
-      renderExpanded: EmployeeInfo,
-    },
-    { title: 'Tittel' },
-    {
-      title: 'Kunde',
-      renderCell: CustomerStatusCell,
-      searchable: true,
-      getSearchValue: (customer: CustomerStatusData) => {
-        return `${customer.customer} ${customer.workOrderDescription}`
-      },
-    },
-    {
-      title: 'CV',
-      renderCell: CvCell,
-      headerCell: CenteredHeaderCell,
-    },
-  ]
-
-  function createDropdowns(customers: Customers, expand?: boolean) {
-    const dropdowns: any[] = []
-    !pending &&
-      customers &&
-      Object.keys(customers)
-        .sort()
-        .forEach((customer) =>
-          dropdowns.push(
-            <CustomerDropdown
-              key={`${customer}`}
-              customerName={customer}
-              employees={customers[customer]}
-              expand={expand}
-              columns={CustomerColumns}
-            />
+  const createDropwDowns = useCallback(
+    (customers: Customers, expand?: boolean) => {
+      const dropdowns: any[] = []
+      !pending &&
+        customers &&
+        Object.keys(customers)
+          .sort()
+          .forEach((customer) =>
+            dropdowns.push(
+              <CustomerDropdown
+                key={`${customer}`}
+                customerName={customer}
+                employees={customers[customer]}
+                expand={expand}
+                columns={CustomerColumns}
+              />
+            )
           )
-        )
-    setDropdowns(dropdowns)
-  }
+      setDropdowns(dropdowns)
+    },
+    [pending]
+  )
 
   const handleSearchAndFilter = (filtered: any[]) => {
     const expand = filtered.length === initialData.length
     const grouped = groupByCustomers(filtered, 2)
-    createDropdowns(grouped, !expand)
+    createDropwDowns(grouped, !expand)
   }
 
+  const prepareTablePayLoad = useCallback(() => {
+    const statusIconData = 2
+    const customerData = 3
+
+    if (Array.isArray(payload) && !pending) {
+      payload.map((emp) => {
+        if (emp.rowData[customerData].customer === undefined) {
+          emp.rowData[customerData] = { customer: 'Ikke i prosjekt' }
+        }
+        emp.rowData.splice(statusIconData, 1)
+      })
+      setInitialData(payload)
+      const groups = groupByCustomers(payload, 2) // customerIndex changes after splice
+      createDropwDowns(groups)
+    }
+  }, [createDropwDowns, payload, pending])
+
   useEffect(() => {
-    preparePayloadForTable()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [payload, pending])
+    prepareTablePayLoad()
+  }, [prepareTablePayLoad])
 
   return (
     <Grid container>
@@ -138,7 +131,7 @@ export default function CustomerList() {
           title="Filtre"
           filter={handleSearchAndFilter}
           employees={initialData}
-          searchableColumns={searchableColumns ?? []}
+          searchableColumns={getSearchableColumns(CustomerColumns)}
           categories={categories}
         />
       )}
