@@ -110,8 +110,6 @@ const findProjectStatusForEmployee = (
     inProjectStatus
   )
 
-  console.log(work)
-
   return statusColor
 }
 
@@ -374,7 +372,6 @@ export const experienceDistribution = async ({
 }: {
   data: YearsSinceSchoolDist[]
 }) => {
-  console.log(data)
   const setInGroups = (list: YearsSinceSchoolDist[]) => {
     const detailedGroupedList = [
       { years: 'Under 2 år', count: 0 },
