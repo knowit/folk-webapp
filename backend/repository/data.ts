@@ -71,19 +71,14 @@ const getEmployeeWork = (
 ): EmployeeWorkStatus | undefined => {
   const work = employeeWorkStatus.filter((work) => work.guid === guid)
 
-  let primaryWork: EmployeeWorkStatus | undefined = undefined
+  if (work.length === 0) return undefined
 
-  if (work.length > 0)
-    primaryWork = work.reduce(
-      (prev: EmployeeWorkStatus, curr: EmployeeWorkStatus) => {
-        if (prev.weight_sum === curr.weight_sum) {
-          return prev.last_reg_period > curr.last_reg_period ? prev : curr
-        }
-        return prev.weight_sum < curr.weight_sum ? prev : curr
-      }
-    )
-
-  return primaryWork
+  return work.reduce((prev: EmployeeWorkStatus, curr: EmployeeWorkStatus) => {
+    if (prev.weight_sum === curr.weight_sum) {
+      return prev.last_reg_period > curr.last_reg_period ? prev : curr
+    }
+    return prev.weight_sum < curr.weight_sum ? prev : curr
+  })
 }
 
 const findProjectStatusForEmployee = (
