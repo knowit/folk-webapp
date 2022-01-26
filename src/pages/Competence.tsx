@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
-import DDItem from '../data/DDItem'
+import DDChart from '../data/DDChart'
 import {
   useCompetenceAmount,
   useCompetenceAreas,
@@ -15,7 +15,7 @@ import {
 export default function Competence() {
   return (
     <Grid container spacing={2}>
-      <DDItem
+      <DDChart
         fetchHook={useCompetenceAmount}
         title="Kompetansemengde"
         description="Andel ansatte som har svart 3 eller mer på kompetansekartleggingen"
@@ -34,7 +34,7 @@ export default function Competence() {
         }}
       />
 
-      <DDItem
+      <DDChart
         fetchHook={useCompetenceAreas}
         title="Kompetanseområder"
         dataComponentProps={{
@@ -57,7 +57,7 @@ export default function Competence() {
         }}
       />
 
-      <DDItem
+      <DDChart
         fetchHook={useExperienceDistribution}
         title="Erfaring"
         dataComponentProps={{
@@ -80,7 +80,7 @@ export default function Competence() {
         }}
       />
 
-      <DDItem
+      <DDChart
         fetchHook={useAgeDistribution}
         title="Alder"
         dataComponentProps={{
@@ -96,10 +96,10 @@ export default function Competence() {
         }}
       />
 
-      <DDItem
+      <DDChart
         fetchHook={useFagtimer}
         title="Aktivitet faggrupper"
-        description="Hver vertikal akse viser antall unike fag aktiviteter per uke, ulike linjene representerer de ulike årene"
+        description="Hver vertikal akse viser antall unike fag aktiviteter per uke, deulike linjene representerer de ulike årene"
         dataComponentProps={{
           chartVariants: [
             {
@@ -109,7 +109,7 @@ export default function Competence() {
         }}
       />
 
-      {/*<DDItem
+      <DDChart
         fetchHook={useFagEvents}
         title="Fag og hendelser"
         description="Hver vertikal akse viser antall unike hendelser per måned fra Google kalenderne Knowit Events og Knowit Fagkalender."
@@ -122,7 +122,7 @@ export default function Competence() {
         }}
       />
 
-      <DDItem
+      <DDChart
         title="Utdannelse"
         fetchHook={useEducation}
         dataComponentProps={{
@@ -136,9 +136,9 @@ export default function Competence() {
             },
           ],
         }}
-      />*/}
+      />
 
-      <DDItem
+      <DDChart
         fetchHook={useCompetenceMapping}
         title="Kompetansekartlegging"
         description="Grafen viser gjennomsnittlig score på kompetanse/motivasjon innenfor hver av hovedkategoriene. I tillegg vises gjennomsnittlig score for hver underkategori og forholdet mellom underkategoriene i samme hovedkategori."

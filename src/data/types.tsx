@@ -2,8 +2,9 @@ import { SWRResponse } from 'swr'
 
 export type DDPayload = { [key: string]: any }
 
+export type ChartType = 'Line' | 'Bar' | 'Pie' | 'Radar' | 'Sunburst'
 export type ChartVariant = {
-  type: 'Bar' | 'Line' | 'Pie' | 'Radar' | 'Sunburst'
+  type: ChartType
   props?: {
     maxValue?: string | number
     yLabels?: string[]

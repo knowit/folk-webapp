@@ -4,7 +4,7 @@ import { Skeleton } from '@material-ui/lab'
 import { useFetchedData } from '../hooks/service'
 import { NoData } from './ErrorText'
 import { ExperienceData, ProjectExperience } from '../pages/EmployeeSite'
-import { DDChart } from '../data/DDItem'
+import Chart from '../data/components/chart/Chart'
 import { useEmployeeRadar } from '../api/data/employee/employeeQueries'
 
 type Experience = {
@@ -145,7 +145,7 @@ export default function EmployeeInfo({ data }: Props) {
   const classes = useStyles()
   const url = data.competenceUrl
   const [empData, pending] = useFetchedData<EmployeeInfoData>({ url })
-  const user_id = data?.user_id
+  const user_id = data.user_id
   const [expData, expPending] = useFetchedData<ExperienceData>({
     url: `/api/data/employeeExperience?user_id=${user_id}`,
   })
@@ -250,7 +250,7 @@ export default function EmployeeInfo({ data }: Props) {
       </div>
       <div className={classes.oversikt}>
         {employeeChartData ? (
-          <DDChart
+          <Chart
             payload={employeeChartData}
             title="Motivasjon"
             props={{

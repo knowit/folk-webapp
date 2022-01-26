@@ -1,4 +1,4 @@
-import DDItem, { DDTable } from '../data/DDItem'
+import DDTable from '../data/DDTable'
 import {
   CheckBoxHeaderCell,
   ConsultantCell,
@@ -62,7 +62,7 @@ export function EmployeeTable() {
           }}
         />
       ) : (
-        <Skeleton variant="rect" height={780} animation="wave" />
+        <TableSkeleton />
       )}
     </GridItem>
   )

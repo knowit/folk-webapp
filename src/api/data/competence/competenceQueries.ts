@@ -39,7 +39,7 @@ export const useFagtimer = () =>
   })
 
 export const useFagEvents = () =>
-  useSWR('/competenceAreas', getFagEvents, {
+  useSWR('/getFagEvents', getFagEvents, {
     revalidateOnFocus: false,
   })
 

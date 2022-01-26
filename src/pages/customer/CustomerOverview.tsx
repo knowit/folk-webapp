@@ -4,7 +4,7 @@ import {
   useHoursBilledPerCustomer,
   useHoursBilledPerWeek,
 } from '../../api/data/customer/customerQueries'
-import DDItem from '../../data/DDItem'
+import DDChart from '../../data/DDChart'
 import CustomerCardList from './CustomerCardList'
 
 export const CustomerOverview = () => {
@@ -13,7 +13,7 @@ export const CustomerOverview = () => {
 
   return (
     <Grid container spacing={2}>
-      <DDItem
+      <DDChart
         fetchHook={useHoursBilledPerCustomer}
         title="Timer brukt per kunde"
         description={ubwMessage}
@@ -31,7 +31,7 @@ export const CustomerOverview = () => {
         }}
       />
 
-      <DDItem
+      <DDChart
         fetchHook={useHoursBilledPerWeek}
         title="Timer brukt per uke"
         description={ubwMessage}

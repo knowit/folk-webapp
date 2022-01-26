@@ -1,13 +1,13 @@
 import React from 'react'
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab'
-import { ChartComponentInfo, ChartVariant } from '../data/DDChart'
 import { BarChart, PieChart, ShowChart, DonutLarge } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import { createStyles, SvgIcon } from '@material-ui/core'
 import { ReactComponent as RadarLogo } from '../assets/RadarChart.svg'
+import { ChartType, ChartVariant } from '../data/types'
 
 const chartVariantInfo: {
-  [key in ChartVariant]: {
+  [key in ChartType]: {
     label: string
     icon: React.ReactNode
   }
@@ -28,7 +28,7 @@ const chartVariantInfo: {
 }
 
 interface ChartVariantToggleProps {
-  chartVariants: Array<ChartComponentInfo>
+  chartVariants: ChartVariant[]
   selected: number
   onChange: (value: number) => void
   big?: boolean

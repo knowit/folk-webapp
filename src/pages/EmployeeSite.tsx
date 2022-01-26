@@ -2,7 +2,7 @@ import React from 'react'
 import { Redirect, useLocation } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
-import { DDChart } from '../data/DDItem'
+import Chart from '../data/components/chart/Chart'
 import { useFetchedData } from '../hooks/service'
 import {
   GetProjects,
@@ -117,7 +117,6 @@ export default function EmployeeSite() {
 
   const classes = useStyles()
 
-  const email_id = data ? data.email_id : null
   const user_id = data ? data.user_id : null
   const emp = data ? data.employee : null
   const tags = data ? data.tags : null
@@ -265,7 +264,7 @@ export default function EmployeeSite() {
             <b>Kompetansekartlegging</b>
           </p>
           {employeeChartData ? (
-            <DDChart
+            <Chart
               payload={employeeChartData}
               title="Motivasjon"
               props={{
@@ -330,9 +329,7 @@ export default function EmployeeSite() {
   )
 }
 
-const PrintCustomers = (data: {
-  customerArray: CustomerStatusData[] | undefined
-}) => {
+const PrintCustomers = (data: { customerArray?: CustomerStatusData[] }) => {
   if (!data.customerArray || !data.customerArray[0].customer)
     return <div>-</div>
   data.customerArray.sort(
