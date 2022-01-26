@@ -54,9 +54,9 @@ const applyTitle = (status?: { data: string }): string => {
       return 'Er åpen for å bytte prosjekt'
     case 'yellow':
       return 'Ønsker å bytte prosjekt'
-    case 'red':
-      return 'Jeg er opptatt i prosjekt'
     case 'green':
+      return 'Jeg er opptatt i prosjekt'
+    case 'red':
       return 'Jeg er ikke i prosjekt'
   }
 
