@@ -79,7 +79,7 @@
   "jest": {
     "resetMocks": false
   },
-  "proxy": "https://ew7i722sxi.execute-api.eu-central-1.amazonaws.com/",
+  "proxy": "https://dev.folk.knowit.no/",
   "browserslist": {
     "production": [
       ">0.2%",
