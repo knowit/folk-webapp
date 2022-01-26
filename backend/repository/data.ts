@@ -2,6 +2,8 @@ import { v4 as uuid } from 'uuid'
 import {
   EmployeeInformation,
   getEventSet,
+  getWeek,
+  getYear,
   mergeEmployees,
   range,
   statusColorCode,
@@ -30,7 +32,8 @@ type EmployeeTable = {
   data: [
     EmployeeInformation[],
     EmployeeMotivationAndCompetence[],
-    JobRotation[]
+    JobRotation[],
+    EmployeeWorkStatus[]
   ]
 }
 
@@ -62,62 +65,66 @@ const getStorageUrl = (key: string) => {
   }
 }
 
+const getEmployeeWork = (
+  employeeWorkStatus: EmployeeWorkStatus[],
+  guid: string
+): EmployeeWorkStatus | undefined => {
+  const work = employeeWorkStatus.filter((work) => work.guid === guid)
+
+  let primaryWork: EmployeeWorkStatus | undefined = undefined
+
+  if (work.length > 0)
+    primaryWork = work.reduce(
+      (prev: EmployeeWorkStatus, curr: EmployeeWorkStatus) => {
+        if (prev.weight_sum === curr.weight_sum) {
+          return prev.last_reg_period > curr.last_reg_period ? prev : curr
+        }
+        return prev.weight_sum < curr.weight_sum ? prev : curr
+      }
+    )
+
+  return primaryWork
+}
+
 const findProjectStatusForEmployee = (
   jobRotationEmployees: JobRotation[],
-  email: string
+  employeeWorkStatus: EmployeeWorkStatus[],
+  guid: string
 ): string => {
-  const [wantNewProject, openForNewProject]: JobRotationStatus =
-    jobRotationStatus(jobRotationEmployees, email)
+  const currentRegPeriod = parseInt(getYear() + getWeek(), 10)
 
-  const inProjectStatus = false
+  const work = getEmployeeWork(employeeWorkStatus, guid)
+
+  const [wantNewProject, openForNewProject]: JobRotationStatus =
+    jobRotationStatus(jobRotationEmployees, guid)
+
+  let inProjectStatus = false
+  if (work)
+    inProjectStatus =
+      work.project_type === 'External Projects' &&
+      currentRegPeriod - work.last_reg_period < 5
+
   const statusColor = statusColorCode(
     wantNewProject,
     openForNewProject,
     inProjectStatus
   )
 
+  console.log(work)
+
   return statusColor
-}
-
-type TotalProjectHours = [
-  ExternalProjectHours: number,
-  LocalProjectHours: number
-]
-
-const countProjectHours = (
-  registeredHours: EmployeeUBW[],
-  latestRegPeriod: number
-): TotalProjectHours => {
-  let totalExternalProjectHours = 0
-  let totalLocalProjectHours = 0
-
-  /**Kan hende project_type ikke kommer til å ha disse navnene og at de bare var placeholdere. Da må i så fall skillet mellom prosjektene fjernes også telles det bare vanlig opp */
-  registeredHours.forEach((registeredHour: EmployeeUBW) => {
-    if (registeredHour.reg_period === latestRegPeriod) {
-      switch (registeredHour.project_type) {
-        case 'External Projects':
-          totalExternalProjectHours += registeredHour.hours
-          break
-        case 'Local Projects':
-          totalLocalProjectHours += registeredHour.hours
-          break
-      }
-    }
-  })
-
-  return [totalExternalProjectHours, totalLocalProjectHours]
 }
 
 type JobRotationStatus = [WantNewProject: number, OpenForNewProject: number]
 
 const jobRotationStatus = (
   jobRotations: JobRotation[],
-  email: string
+  guid: string
 ): JobRotationStatus => {
   let wantNewProject, openForNewProject: number
 
   jobRotations.forEach((employee) => {
-    if (employee.email == email) {
+    if (employee.guid == guid) {
       employee.index === 1 && (wantNewProject = employee.customscalevalue)
       employee.index === 2 && (openForNewProject = employee.customscalevalue)
     }
@@ -130,6 +137,7 @@ export const employeeTableReports = [
   { reportName: 'employeeInformation' },
   { reportName: 'employeeMotivationAndCompetence' },
   { reportName: 'jobRotationInformation' },
+  { reportName: 'employeeWorkStatus' },
 ]
 type JobRotation = {
   username: string
@@ -141,31 +149,22 @@ type JobRotation = {
   text: string
   categoryid: string
 }
-type EmployeeUBW = {
-  customer: string
-  email: string
-  manager: string
+
+type EmployeeWorkStatus = {
+  alias: string
   guid: string
-  hours: number
-  timestamp: number
-  reg_period: number
+  customer: string
   project_type: string
-  work_order: string
-  work_order_description: string
+  last_reg_period: number
+  weight_sum: number
 }
-/**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
-/*
-exports.employeeTable = async ({ data }) => {
-  console.log('HALLO', data)
-  const [allEmployees, motivationAndCompetence, jobRotation, employeeUBW] = data
-  { 'employeeMotivationAndCompetence' }
-}
-*/
 
 /**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
 export const employeeTable = async ({ data }: EmployeeTable) => {
-  const [allEmployees, motivationAndCompetence, jobRotation] = data
+  const [allEmployees, motivationAndCompetence, jobRotation, employeeStatus] =
+    data
   const mergedEmployees = mergeEmployees(allEmployees)
+
   return mergedEmployees.map((employee) => ({
     rowId: uuid(),
     rowData: [
@@ -181,7 +180,8 @@ export const employeeTable = async ({ data }: EmployeeTable) => {
         degree: employee.degree,
       },
       employee.title,
-      findProjectStatusForEmployee(jobRotation, employee.email),
+
+      findProjectStatusForEmployee(jobRotation, employeeStatus, employee.guid),
       employee.customerArray.reduce((prevCustomer, thisCustomer) => {
         if (thisCustomer.weight < prevCustomer.weight) {
           return thisCustomer
