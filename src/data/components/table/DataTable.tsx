@@ -12,10 +12,11 @@ import {
 import CharacterLimitBox from '../../../components/CharacterLimitBox'
 import { ColumnSort } from '../../DDTable'
 import { Columns } from '../../types'
+import { EmployeeTableResponse } from '../../../api/data/employee/employeeApiTypes'
 
 interface DataTableProps {
   columns: Columns[]
-  rows: any //Omit<DataTableRow, 'columns'>[]
+  rows: EmployeeTableResponse[]
   setColumnSort?: (CurrentSort: ColumnSort) => void
   checkBoxChangeHandler?: () => void
   currentColumnSort?: ColumnSort
@@ -46,7 +47,7 @@ interface ExpandedRows {
   height: number
 }
 
-type RowHeight = { index: number }
+type RowIndex = { index: number }
 
 const TableCellNoBorders = withStyles({
   root: {
@@ -258,7 +259,7 @@ export default function DataTable({
     )
   }
 
-  const getRowHeight = ({ index }: RowHeight) => {
+  const getRowHeight = ({ index }: RowIndex) => {
     const rowIndex = index
     const id = rows[rowIndex].rowId
     return (

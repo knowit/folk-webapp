@@ -8,7 +8,6 @@ interface LineChartsProps {
 }
 
 const lineChartColors = colors.filter((_: any, k: number) => k !== 1)
-console.log(lineChartColors)
 
 export default function Line({ data, big }: LineChartsProps) {
   const height = big ? '400px' : '280px'

@@ -1,6 +1,8 @@
 import { Grid } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import React, { useEffect, useState, useCallback } from 'react'
+import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
+import { useEmployeeTable } from '../../api/data/employee/employeeQueries'
 import EmployeeInfo from '../../components/EmployeeInfo'
 import { useCategories } from '../../components/FilterInput'
 import { GridItem } from '../../components/GridItem'
@@ -12,14 +14,8 @@ import {
   CvCell,
 } from '../../data/components/table/DataCells'
 import { getSearchableColumns } from '../../data/DDTable'
-import { useFetchedData } from '../../hooks/service'
 import CustomerDropdown from './CustomerDropdown'
 import CustomerFilter from './CustomerFilter'
-interface Customers {
-  [key: string]: []
-}
-
-export type Payload = { [key: string]: any }
 
 const CustomerColumns = [
   {
@@ -48,24 +44,25 @@ const CustomerColumns = [
   },
 ]
 
+type EmployeeGroupedCustomers = Record<string, EmployeeTableResponse[]>
 export default function CustomerList() {
-  const [initialData, setInitialData] = useState<Payload>([])
+  const [initialData, setInitialData] = useState<EmployeeTableResponse[]>([])
   const [dropdowns, setDropdowns] = useState<JSX.Element[]>([])
-  const [payload, pending] = useFetchedData<Payload>({
-    url: '/api/data/employeeTable',
-  })
+  const { data: employeeData } = useEmployeeTable()
 
   const categories = useCategories()
 
-  function groupByCustomers(payload: Payload, customerDataIndex: number) {
-    return payload.reduce(
-      (
-        groups: { [x: string]: any },
-        employee: { rowData: { customer: string | number }[] }
-      ) => {
-        const group = groups[employee.rowData[customerDataIndex].customer] || []
+  const pending = employeeData === undefined
+
+  function groupByCustomers(
+    employees: EmployeeTableResponse[],
+    columnIndex: number
+  ) {
+    return employees.reduce(
+      (groups: EmployeeGroupedCustomers, employee: EmployeeTableResponse) => {
+        const group = groups[employee.rowData[columnIndex].customer] || []
         group.push(employee)
-        groups[employee.rowData[customerDataIndex].customer] = group
+        groups[employee.rowData[columnIndex].customer] = group
         return groups
       },
       {}
@@ -73,8 +70,8 @@ export default function CustomerList() {
   }
 
   const createDropwDowns = useCallback(
-    (customers: Customers, expand?: boolean) => {
-      const dropdowns: any[] = []
+    (customers: EmployeeGroupedCustomers, expand?: boolean) => {
+      const dropdowns: JSX.Element[] = []
       !pending &&
         customers &&
         Object.keys(customers)
@@ -95,7 +92,7 @@ export default function CustomerList() {
     [pending]
   )
 
-  const handleSearchAndFilter = (filtered: any[]) => {
+  const handleSearchAndFilter = (filtered: EmployeeTableResponse[]) => {
     const expand = filtered.length === initialData.length
     const grouped = groupByCustomers(filtered, 2)
     createDropwDowns(grouped, !expand)
@@ -105,22 +102,24 @@ export default function CustomerList() {
     const statusIconData = 2
     const customerData = 3
 
-    if (Array.isArray(payload) && !pending) {
-      payload.map((emp) => {
-        if (emp.rowData[customerData].customer === undefined) {
-          emp.rowData[customerData] = { customer: 'Ikke i prosjekt' }
+    if (employeeData && !pending) {
+      employeeData.map((employee) => {
+        if (!employee.rowData[customerData].customer) {
+          employee.rowData[customerData] = { customer: 'Ikke i prosjekt' }
         }
-        emp.rowData.splice(statusIconData, 1)
+        employee.rowData.splice(statusIconData, 1)
       })
-      setInitialData(payload)
-      const groups = groupByCustomers(payload, 2) // customerIndex changes after splice
+      setInitialData(employeeData)
+      const groups = groupByCustomers(employeeData, 2) // customerIndex changes after splice
       createDropwDowns(groups)
     }
-  }, [createDropwDowns, payload, pending])
+  }, [createDropwDowns, employeeData, pending])
 
   useEffect(() => {
-    prepareTablePayLoad()
-  }, [prepareTablePayLoad])
+    if (employeeData) {
+      prepareTablePayLoad()
+    }
+  }, [employeeData, prepareTablePayLoad])
 
   return (
     <Grid container>

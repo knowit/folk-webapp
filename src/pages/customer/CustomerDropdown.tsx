@@ -7,9 +7,11 @@ import {
 } from '@material-ui/core'
 import { Minimize, Add, OpenInNew } from '@material-ui/icons'
 import React, { useState } from 'react'
+import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
 import { GridItem } from '../../components/GridItem'
 
 import DataTable from '../../data/components/table/DataTable'
+import { Columns } from '../../data/types'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -26,9 +28,9 @@ const useStyles = makeStyles(() =>
 
 interface CustomerDropdownProps {
   customerName: string
-  employees: { [key: string]: any }
+  employees: EmployeeTableResponse[]
   expand?: boolean
-  columns: any[]
+  columns: Columns[]
 }
 
 export default function CustomerDropdown({

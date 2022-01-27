@@ -84,7 +84,7 @@ export function getSearchableColumns(columns?: Columns[]): SearchableColumn[] {
 }
 
 export default function DDTable({ payload, title, props }: DDTableProps) {
-  const allRows = payload as { rowData: any[] }[]
+  const allRows = payload
   const initialFilters: FilterObject[] = [
     {
       name: 'COMPETENCE',

@@ -13,11 +13,12 @@ import {
   handleThresholdChange,
   searchAndFilter,
 } from '../../components/FilterSearch'
+import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
 
 interface CustomerFilterProps {
   title: string
   filter: (filter: any[]) => void
-  employees: any
+  employees: EmployeeTableResponse[]
   searchableColumns: SearchableColumn[]
   categories: CategoryWithGroup[]
 }
@@ -28,7 +29,7 @@ export default function CustomerFilter({
   employees,
   searchableColumns,
 }: CustomerFilterProps) {
-  const allRows = employees as { rowData: any[] }[]
+  const allRows = employees
   const initialFilters: FilterObject[] = [
     {
       name: 'MOTIVATION',
