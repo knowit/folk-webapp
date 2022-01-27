@@ -189,6 +189,7 @@ export default function DDTable({ payload, title, props }: DDTableProps) {
       <DataTable
         setColumnSort={setColumnSort}
         currentColumnSort={columnSort}
+        checked={displayNonProject}
         checkBoxChangeHandler={toggleDisplayNonProject}
         rows={sortedRows}
         columns={props.columns}

@@ -19,6 +19,7 @@ interface DataTableProps {
   rows: EmployeeTableResponse[]
   setColumnSort?: (CurrentSort: ColumnSort) => void
   checkBoxChangeHandler?: () => void
+  checked?: boolean
   currentColumnSort?: ColumnSort
   columnsWidth?: number[]
 }
@@ -110,6 +111,7 @@ export default function DataTable({
   checkBoxChangeHandler,
   currentColumnSort,
   columnsWidth = [385, 222, 143, 337, 53],
+  checked,
 }: DataTableProps) {
   const classes = tableStyles()
   const [expandedRows, setExpandedRowsHeights] = useState<ExpandedRows[]>([])
@@ -246,6 +248,7 @@ export default function DataTable({
         currentOrder={
           currentOrder?.columnIndex === index ? currentOrder.sortOrder : 'NONE'
         }
+        checked={checked}
       />
     ) : (
       <TableCell
