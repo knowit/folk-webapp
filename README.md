@@ -8,19 +8,23 @@ the "Dataplattform" project.
 
 The web application is composed of two parts, both residing in this repository:
 
-- a React SPA (single page application) frontend that fetches and presents data from the Node/Express backend (see
-  below). The code for this frontend is located in the root folder of the project. The frontend is bootstrapped and
-  built using [Create React App](https://create-react-app.dev/).
-- a Node/Express backend-for-frontend that fetches and processes/aggregates data from the "Dataplattform" API. The code
-  for this backend is located in the `/backend` folder of the project. Read more
-  about [how the backend fetches and serves data](https://github.com/knowit/folk-webapp/wiki/Endpoints).
+- a [React](https://reactjs.org/) SPA (single page application) frontend that fetches and presents data from the
+  Node/Express backend (see below). The code for this frontend is located in the root folder of the project. The
+  frontend is bootstrapped and built using [Create React App](https://create-react-app.dev/).
+- a [Node.js](https://nodejs.org/en/) and [Express](https://expressjs.com/) backend-for-frontend that fetches and
+  aggregates data from the "Dataplattform" API. The code for this backend is located in the `/backend` folder of the
+  project. [Read more about how the backend fetches and serves data.](#Backend-Data-Fetching)
 
 ## Requirements
 
-- **[Node.js](https://nodejs.org/en/)** – a version compatible with what is listed in the `engines.node` field
-  in [`package.json`](package.json). It is recommended to use a version manager
-  like [`nvm`](https://github.com/nvm-sh/nvm) if you need to use multiple versions of Node on your computer.
-- **[Yarn Classic](https://classic.yarnpkg.com/lang/en/)** – a version compatible with what is listed in
+- **[Node.js](https://nodejs.org/en/)** – a
+  version [compatible](https://docs.npmjs.com/cli/v8/configuring-npm/package-json#dependencies) with what is listed in
+  the `engines.node` field in [`package.json`](package.json).
+
+> It is recommended to use [a version manager like `nvm`](https://github.com/nvm-sh/nvm) if you need to use multiple versions of Node on your computer.
+
+- **[Yarn Classic](https://classic.yarnpkg.com/lang/en/)** – a
+  version [compatible](https://docs.npmjs.com/cli/v8/configuring-npm/package-json#dependencies) with what is listed in
   the `engines.yarn` field in [`package.json`](package.json).
 
 ## Running locally
@@ -30,32 +34,39 @@ Before first launch, or whenever dependencies are changed, run the `yarn install
 - the root folder of the project (frontend)
 - the `/backend` folder
 
-When developing locally, there are two options on how to run the application.
-
 > See the [Available Scripts](#Available-Scripts) section for descriptions of the mentioned `yarn` commands.
 
----
+When developing locally, there are two options on how to run the application:
 
-### Option A: running frontend locally, using backend running in [the development environment](#Environments)
+### Option A: running both backend and frontend locally
 
-You can use this option if you don't need to make changes to the backend part of the application. The frontend will
-fetch data from the `proxy` URL set in [`package.json`](package.json).
-
-1. To start the frontend, run `yarn start` in the root folder of the project.
-
----
-
-### Option B: running both backend and frontend locally
-
-Use this option if you need to make changes to the backend part of the application. The frontend will fetch data from
-the locally running backend.
+This option allows you to work on both the frontend and backend part of the application. The frontend will fetch data
+from the locally running backend.
 
 1. For the backend to be able to connect and fetch data from the Dataplattform API, it's necessary to add the correct
    credentials. [Follow these instructions on how to set this up in an `.env` file for the backend.](https://github.com/knowit/folk-webapp/wiki/Backend)
 2. **Either:** run `yarn start:local` in both the `/backend` and the root folder of the project.
    <br />**Or:** run `yarn start:screen` to start both backend and frontend with a single command.
 
-> **Proxies**: When running locally, Create React App uses a proxy URL to redirect requests from the frontend to the backend. See [`src/setupProxy.js`](src/setupProxy.js) and [this guide](https://create-react-app.dev/docs/proxying-api-requests-in-development) for details.
+### Option B: running frontend locally, using backend running in [the development environment](#Environments)
+
+You can use this option if you don't need to make changes to the backend part of the application. The frontend will
+fetch data from the `proxy` URL set in [`package.json`](package.json).
+
+1. To start the frontend, run `yarn start` in the root folder of the project.
+
+### Authorization
+
+To begin with, your account is not authorized to fetch data. No data will appear on the page, and you may
+see `internal server error` or `unauthorized` errors in the
+console. [To fix this, do as described here](https://github.com/knowit/Dataplattform-issues/wiki/%5BFolk-webapp%5D-Authorization-to-Dev-Environment)
+.
+
+### Proxies
+
+When running locally, Create React App uses a proxy URL to redirect requests from the frontend to the backend.
+See [`src/setupProxy.js`](src/setupProxy.js)
+and [this guide](https://create-react-app.dev/docs/proxying-api-requests-in-development) for details.
 
 ## Environments
 
@@ -75,8 +86,8 @@ feature branch (or other type of working branch).
 
 ### Deployment to production environment
 
-Runs automatically when a new GitHub release is created. Please refer to this guide
-on [how to create a new release.](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository#creating-a-release)
+Runs automatically when a new GitHub release is
+created. [Please refer to this guide on how to create a new release.](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository#creating-a-release)
 
 ### Manual commands
 
@@ -100,6 +111,13 @@ and [Prettier](https://prettier.io/) is used.
 There is a _pre-commit_ hook running (using [husky](https://typicode.github.io/husky/#/)) before code can be committed,
 and it will not allow commits with convention/format/code style-breaking code. This ensures that no pull requests are
 cluttered with significant amounts of whitespace-changes, line breaks and so forth.
+
+## Backend Data Fetching
+
+When the frontend requests data from the backend, the backend connects to the Dataplattform API and fetches data from
+so-called "reports"
+. [You can read more about reports here, including how you can create your own.](https://github.com/knowit/Dataplattform-issues/wiki/Reports)
+The backend then aggregates the data from the report(s) before it is sent as a response to the frontend.
 
 ## Available Scripts
 
