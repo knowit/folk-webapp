@@ -75,7 +75,6 @@
     "@nivo/pie": "^0.67.0",
     "@nivo/radar": "^0.67.0",
     "@nivo/sunburst": "^0.67.0",
-    "ansi-html-community": "0.0.8",
     "axios": "^0.25.0",
     "browserslist": "^4.18.1",
     "http-proxy-middleware": "^1.0.5",
@@ -92,7 +91,6 @@
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@types/jest": "^27.4.0",
-    "@types/node": "14.14.35",
     "@types/react": "17.0.3",
     "@types/react-dom": "17.0.2",
     "@types/react-router-dom": "^5.1.6",
@@ -104,18 +102,14 @@
     "eslint": "^8.8.0",
     "eslint-plugin-react": "^7.28.0",
     "husky": "^7.0.0",
-    "nodemon": "^2.0.6",
     "prettier": "^2.5.1",
     "pretty-quick": "^3.1.2",
     "serverless-plugin-typescript": "^2.1.0"
   },
   "resolutions": {
-    "node-notifier": "^8.0.2",
-    "node-fetch": "^2.6.1",
-    "is-svg": "^4.3.1",
-    "ssri": "^8.0.1",
-    "coa": "2.0.2",
-    "rc": "1.2.8",
-    "immer": "9.0.6"
+    "node-fetch": ">=2.6.7",
+    "immer": ">=9.0.12",
+    "postcss": ">=8.2.13",
+    "nth-check": ">=2.0.1"
   }
 }
