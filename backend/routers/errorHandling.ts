@@ -5,6 +5,11 @@ export interface NotFoundError {
   message: string
 }
 
+export interface ParamError {
+  status: 400
+  message: string
+}
+
 export interface ApiError {
   errorType: 'API'
   status: number
@@ -29,6 +34,10 @@ const isNotFoundError = (e: unknown): e is NotFoundError => {
   return (e as NotFoundError).status === 404
 }
 
+const isParamError = (e: unknown): e is ParamError => {
+  return (e as ParamError).status === 400
+}
+
 export const errorHandler = (err, req, res, next) => {
   console.log('An error has occured!')
   console.log('Path: ', req.path)
@@ -37,6 +46,11 @@ export const errorHandler = (err, req, res, next) => {
   if (isAppError(err)) {
     console.error(err.error.response.data)
     res.status(err.status).send(err.message)
+
+    // Parameter missing
+  } else if (isParamError(err)) {
+    console.error(err.message)
+    res.status(400).send('Missing parameters.')
 
     // 404
   } else if (isNotFoundError(err)) {
