@@ -1,5 +1,5 @@
 import React from 'react'
-import { Redirect, useLocation } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import DDItem, { DDChart } from '../data/DDItem'
@@ -110,7 +110,7 @@ export const ChartSkeleton = () => (
 export default function EmployeeSite() {
   const location = useLocation()
   const email = location.pathname.split('/')[2]
-  const idRegex = /(\w+\.?)*@knowit.no/
+  const idRegex = /^(\w+\.?)*@knowit.no$/
   const url = '/api/data/empData?email=' + email
   const [data, pending] = useFetchedData<EmpSiteData>({ url })
 
@@ -124,7 +124,7 @@ export default function EmployeeSite() {
     url: `/api/data/employeeExperience?user_id=${user_id}`,
   })
   if (!email.match(idRegex)) {
-    return <Redirect to={{ pathname: '/404' }} />
+    return <Navigate replace to={{ pathname: '/404' }} />
   }
 
   return (
