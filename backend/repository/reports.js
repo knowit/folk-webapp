@@ -306,7 +306,8 @@ const reports = [
   },
   {
     name: 'perProject',
-    queryString: 'SELECT * from dev_level_3_database.ubw_per_project_data',
+    queryString:
+      'SELECT * FROM ubw_per_project_data WHERE customer in (SELECT customer from ubw_per_project_data GROUP BY customer, reg_period) AND reg_period in (SELECT reg_period from ubw_per_project_data GROUP BY customer, reg_period) AND timestamp in (SELECT MAX(timestamp) as timestamp from ubw_per_project_data GROUP BY customer, reg_period)',
     tables: ['ubw_per_project_data'],
     dataProtection: 3,
     created: '2021-08-23T11:59:50.601305',
