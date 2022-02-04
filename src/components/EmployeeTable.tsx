@@ -19,14 +19,14 @@ export function EmployeeTable() {
     <Skeleton variant="rect" height={780} animation="wave" />
   )
 
-  const employeeData = useEmployeeTable()
+  const { data: employeeData } = useEmployeeTable()
 
   return (
     <GridItem fullSize={true}>
-      {employeeData.data ? (
+      {employeeData ? (
         <DDTable
           title="Prosjektstatus"
-          payload={employeeData.data}
+          payload={employeeData}
           props={{
             columns: [
               {

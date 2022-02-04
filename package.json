@@ -20,38 +20,6 @@
       "email": "pernillej11@gmail.com"
     }
   ],
-  "dependencies": {
-    "@material-ui/core": "^4.11.0",
-    "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.56",
-    "@nivo/bar": "^0.67.0",
-    "@nivo/core": "^0.67.0",
-    "@nivo/line": "^0.67.0",
-    "@nivo/pie": "^0.67.0",
-    "@nivo/radar": "^0.67.0",
-    "@nivo/sunburst": "^0.67.0",
-    "ansi-html-community": "0.0.8",
-    "axios": "^0.24.0",
-    "browserslist": "^4.18.1",
-    "http-proxy-middleware": "^1.0.5",
-    "react": "^17.0.1",
-    "react-cookie": "^4.0.3",
-    "react-dom": "^17.0.1",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "^4.0.3",
-    "react-virtualized": "^9.22.2",
-    "swr": "^1.1.2-beta.0",
-    "typescript": "^4.4.4"
-  },
-  "resolutions": {
-    "node-notifier": "^8.0.2",
-    "node-fetch": "^2.6.1",
-    "is-svg": "^4.3.1",
-    "ssri": "^8.0.1",
-    "coa": "2.0.2",
-    "rc": "1.2.8",
-    "immer": "9.0.6"
-  },
   "scripts": {
     "start": "react-scripts start",
     "start:local": "cross-env PROXY_URL=http://localhost:3010 react-scripts start",
@@ -79,7 +47,7 @@
   "jest": {
     "resetMocks": false
   },
-  "proxy": "https://ew7i722sxi.execute-api.eu-central-1.amazonaws.com/",
+  "proxy": "https://dev.folk.knowit.no/",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -96,6 +64,38 @@
     "node": "^14.4.0",
     "npm": "please-use-yarn",
     "yarn": "^1.22.5"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
+    "@nivo/bar": "^0.67.0",
+    "@nivo/core": "^0.67.0",
+    "@nivo/line": "^0.67.0",
+    "@nivo/pie": "^0.67.0",
+    "@nivo/radar": "^0.67.0",
+    "@nivo/sunburst": "^0.67.0",
+    "ansi-html-community": "0.0.8",
+    "axios": "^0.25.0",
+    "browserslist": "^4.18.1",
+    "http-proxy-middleware": "^1.0.5",
+    "react": "^17.0.1",
+    "react-cookie": "^4.0.3",
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^4.0.3",
+    "react-virtualized": "^9.22.2",
+    "swr": "^1.1.2-beta.0",
+    "typescript": "^4.4.4"
+  },
+  "resolutions": {
+    "node-notifier": "^8.0.2",
+    "node-fetch": "^2.6.1",
+    "is-svg": "^4.3.1",
+    "ssri": "^8.0.1",
+    "coa": "2.0.2",
+    "rc": "1.2.8",
+    "immer": "9.0.6"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.6",

@@ -3,7 +3,6 @@ import { Skeleton } from '@material-ui/lab'
 import { GridItem } from '../components/GridItem'
 import Chart from './components/chart/Chart'
 import { DDItemProps } from './types'
-import { DDError } from './DDError'
 
 export default function DDChart({
   fetchHook,
@@ -12,11 +11,7 @@ export default function DDChart({
   dataComponentProps,
   fullSize = false,
 }: DDItemProps) {
-  const { data, error } = fetchHook()
-
-  if (error) {
-    return <DDError />
-  }
+  const { data } = fetchHook()
 
   return (
     <GridItem fullSize={fullSize}>

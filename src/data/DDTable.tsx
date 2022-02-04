@@ -68,19 +68,17 @@ const sortColumn = (rows: any[], currentSort: ColumnSort) => {
   }
 }
 
-export function getSearchableColumns(columns?: Columns[]): SearchableColumn[] {
-  if (!columns) {
-    return []
-  }
-  return columns.reduce((result, column, index) => {
+export function getSearchableColumns(columns: Columns[]): SearchableColumn[] {
+  const result: SearchableColumn[] = []
+  columns.forEach((column, index) => {
     if (column.getSearchValue) {
       result.push({
         columnIndex: index,
         getSearchValue: column.getSearchValue,
       })
     }
-    return result
-  }, [] as SearchableColumn[])
+  })
+  return result
 }
 
 export default function DDTable({ payload, title, props }: DDTableProps) {

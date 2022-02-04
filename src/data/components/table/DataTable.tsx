@@ -48,7 +48,9 @@ interface ExpandedRows {
   height: number
 }
 
-type RowIndex = { index: number }
+interface RowIndex {
+  index: number
+}
 
 const TableCellNoBorders = withStyles({
   root: {

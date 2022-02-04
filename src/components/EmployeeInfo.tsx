@@ -7,7 +7,7 @@ import { ExperienceData, ProjectExperience } from '../pages/EmployeeSite'
 import Chart from '../data/components/chart/Chart'
 import { useEmployeeRadar } from '../api/data/employee/employeeQueries'
 
-type Experience = {
+interface Experience {
   employer: string
   month_from: number
   year_from: number
@@ -15,8 +15,11 @@ type Experience = {
   year_to: number
 }
 
-type Date = { year: number; month: number } | { year: number }
-type MotivationMap = {
+interface Date {
+  year: number
+  month?: number
+}
+interface MotivationMap {
   [category: string]: number
 }
 
@@ -130,7 +133,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-interface Props {
+interface EmployeeInfoProps {
   data: {
     competenceUrl: string
     user_id: string
@@ -141,7 +144,7 @@ interface Props {
   setRowHeight: (id: string, height: number) => void
 }
 
-export default function EmployeeInfo({ data }: Props) {
+export default function EmployeeInfo({ data }: EmployeeInfoProps) {
   const classes = useStyles()
   const url = data.competenceUrl
   const [empData, pending] = useFetchedData<EmployeeInfoData>({ url })
@@ -150,7 +153,7 @@ export default function EmployeeInfo({ data }: Props) {
     url: `/api/data/employeeExperience?user_id=${user_id}`,
   })
 
-  const employeeChartData = useEmployeeRadar(data.email_id).data
+  const { data: employeeChartData } = useEmployeeRadar(data.email_id)
 
   const getStringFromList = (
     list: string[] | null | undefined,

@@ -5,11 +5,7 @@ import {
   GridItem,
 } from '../../../components/GridItem'
 import DropdownPicker from '../../../components/DropdownPicker'
-import Line from './charts/Line'
-import Bar from './charts/Bar'
-import Pie from './charts/Pie'
-import Sunburst from './charts/Sunburst'
-import Radar from './charts/Radar'
+import { Line, Bar, Pie, Sunburst, Radar } from './charts'
 import BigChart from '../../../components/BigChart'
 import { ErrorText } from '../../../components/ErrorText'
 import { ChartType, ChartVariant, DDChartProps } from '../../types'
@@ -34,6 +30,11 @@ const chartComponents: {
   Sunburst: Sunburst,
 }
 
+interface ChartProps {
+  setNames: string[]
+  sets: { [key: string]: number }
+}
+
 export default function Chart({
   payload,
   fullsize,
@@ -41,10 +42,7 @@ export default function Chart({
   description,
   props,
 }: DDChartProps) {
-  const { setNames, sets } = payload as {
-    setNames: string[]
-    sets: { [key: string]: any }
-  }
+  const { setNames, sets }: ChartProps = payload
 
   const [set, setSet] = useState<string>(setNames?.[0] ?? '')
   const [bigChartOpen, setBigChartOpen] = useState<boolean>(false)
@@ -55,7 +53,7 @@ export default function Chart({
 
   const ChartComponent = chartComponents[chartVariantToRender]
 
-  const setNamesLength = payload.setNames ? payload.setNames.length : 0
+  const setNamesLength = payload.setNames.length ?? 0
 
   const handleSetChange = (setName: string) => {
     setSet(setName)

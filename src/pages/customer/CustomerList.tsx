@@ -48,11 +48,11 @@ type EmployeeGroupedCustomers = Record<string, EmployeeTableResponse[]>
 export default function CustomerList() {
   const [initialData, setInitialData] = useState<EmployeeTableResponse[]>([])
   const [dropdowns, setDropdowns] = useState<JSX.Element[]>([])
-  const { data: employeeData } = useEmployeeTable()
+  const { data: employeeData, error } = useEmployeeTable()
 
   const categories = useCategories()
 
-  const pending = employeeData === undefined
+  const pending = !employeeData && error
 
   function groupByCustomers(
     employees: EmployeeTableResponse[],
@@ -69,7 +69,7 @@ export default function CustomerList() {
     )
   }
 
-  const createDropwDowns = useCallback(
+  const createDropDowns = useCallback(
     (customers: EmployeeGroupedCustomers, expand?: boolean) => {
       const dropdowns: JSX.Element[] = []
       !pending &&
@@ -95,7 +95,7 @@ export default function CustomerList() {
   const handleSearchAndFilter = (filtered: EmployeeTableResponse[]) => {
     const expand = filtered.length === initialData.length
     const grouped = groupByCustomers(filtered, 2)
-    createDropwDowns(grouped, !expand)
+    createDropDowns(grouped, !expand)
   }
 
   const prepareTablePayLoad = useCallback(() => {
@@ -111,9 +111,9 @@ export default function CustomerList() {
       })
       setInitialData(employeeData)
       const groups = groupByCustomers(employeeData, 2) // customerIndex changes after splice
-      createDropwDowns(groups)
+      createDropDowns(groups)
     }
-  }, [createDropwDowns, employeeData, pending])
+  }, [createDropDowns, employeeData, pending])
 
   useEffect(() => {
     if (employeeData) {
