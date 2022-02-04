@@ -59,7 +59,7 @@ fetch data from the `proxy` URL set in [`package.json`](package.json).
 
 To begin with, your account is not authorized to fetch data. No data will appear on the page, and you may
 see `internal server error` or `unauthorized` errors in the
-console. [To fix this, do as described here](https://github.com/knowit/Dataplattform-issues/wiki/%5BFolk-webapp%5D-Authorization-to-Dev-Environment)
+console. [To fix this, do as described here](https://github.com/knowit/Dataplattform-issues/wiki/Folk-webapp:-Authorization-to-Dev-Environment)
 .
 
 ### Proxies
@@ -116,7 +116,7 @@ cluttered with significant amounts of whitespace-changes, line breaks and so for
 
 When the frontend requests data from the backend, the backend connects to the Dataplattform API and fetches data from
 so-called "reports"
-. [You can read more about reports here, including how you can create your own.](https://github.com/knowit/Dataplattform-issues/wiki/Reports)
+. [You can read more about reports here, including how you can create your own.](https://github.com/knowit/Dataplattform-issues/wiki/Dataplattform:-Reports)
 The backend then aggregates the data from the report(s) before it is sent as a response to the frontend.
 
 ## Available Scripts
