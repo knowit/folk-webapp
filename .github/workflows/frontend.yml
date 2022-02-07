@@ -6,8 +6,8 @@ defaults:
 
 on:
   pull_request:
-    paths:
-      - '*/**'
+    paths-ignore:
+      - 'backend/**'
 
 jobs:
   # test:
