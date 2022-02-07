@@ -1,4 +1,3 @@
-import awsServerlessExpressMiddleware from 'aws-serverless-express/middleware'
 import cookieParser from 'cookie-parser'
 import express from 'express'
 import authRouter from './routers/authRouter'
@@ -8,7 +7,6 @@ import { apiRouter, apiRouterV2 } from './routers/routers'
 const app = express()
 
 // Register middleware
-app.use(awsServerlessExpressMiddleware.eventContext())
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
