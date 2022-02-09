@@ -12,15 +12,18 @@ const useStyles = makeStyles(() =>
     },
     menuItem: {
       display: 'inline-flex',
-      textDecoration: 'none',
-      alignItems: 'center',
-      padding: '0 13.75px',
       margin: '0 13.75px',
       fontSize: '21px',
+    },
+    menuItemLink: {
+      padding: '0 13.75px',
+      display: 'flex',
+      alignItems: 'center',
+      textDecoration: 'none',
       borderBottom: '1px solid transparent',
       color: '#F1F0ED',
     },
-    activeItem: {
+    activeItemLink: {
       fontWeight: 'bold',
       borderBottomColor: '#FAC0B1',
       color: '#FAC0B1',
@@ -32,19 +35,21 @@ export function NavMenuItem({ label, to }: { label: string; to: string }) {
   const classes = useStyles()
 
   return (
-    <NavLink
-      to={to}
-      className={({ isActive }) =>
-        classes.menuItem + (isActive ? ` ${classes.activeItem}` : '')
-      }
-    >
-      {label}
-    </NavLink>
+    <li className={classes.menuItem}>
+      <NavLink
+        to={to}
+        className={({ isActive }) =>
+          classes.menuItemLink + (isActive ? ` ${classes.activeItemLink}` : '')
+        }
+      >
+        {label}
+      </NavLink>
+    </li>
   )
 }
 
 export function NavMenu({ children }: { children: React.ReactNode }) {
   const classes = useStyles()
 
-  return <div className={classes.root}>{children}</div>
+  return <ul className={classes.root}>{children}</ul>
 }
