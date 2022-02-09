@@ -1,10 +1,7 @@
 // employeeTable
-interface EmployeeTableEntry {
+export interface EmployeeTableResponse {
   rowId: string
   rowData: any[]
-}
-export interface EmployeeTableResponse {
-  data: EmployeeTableEntry[]
 }
 
 // employeeRadar has same response as CompetenceAreasResponse

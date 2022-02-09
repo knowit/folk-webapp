@@ -1,20 +1,23 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
-import { Skeleton } from '@material-ui/lab'
-import DDItem, { DDChart } from '../data/DDItem'
+import DDChart from '../data/DDChart'
+import {
+  useCompetenceAmount,
+  useCompetenceAreas,
+  useExperienceDistribution,
+  useAgeDistribution,
+  useFagtimer,
+  useFagEvents,
+  useEducation,
+  useCompetenceMapping,
+} from '../api/data/competence/competenceQueries'
 
 export default function Competence() {
-  const ChartSkeleton = () => (
-    <Skeleton variant="rect" height={320} animation="wave" />
-  )
-
   return (
     <Grid container spacing={2}>
-      <DDItem
-        url="/api/data/competenceAmount"
+      <DDChart
+        fetchHook={useCompetenceAmount}
         title="Kompetansemengde"
-        Component={DDChart}
-        SkeletonComponent={ChartSkeleton}
         description="Andel ansatte som har svart 3 eller mer på kompetansekartleggingen"
         dataComponentProps={{
           chartVariants: [
@@ -31,11 +34,9 @@ export default function Competence() {
         }}
       />
 
-      <DDItem
-        url="/api/data/competenceAreas"
+      <DDChart
+        fetchHook={useCompetenceAreas}
         title="Kompetanseområder"
-        Component={DDChart}
-        SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
           chartVariants: [
             {
@@ -56,11 +57,9 @@ export default function Competence() {
         }}
       />
 
-      <DDItem
-        url="/api/data/experienceDistribution"
+      <DDChart
+        fetchHook={useExperienceDistribution}
         title="Erfaring"
-        Component={DDChart}
-        SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
           chartVariants: [
             {
@@ -81,11 +80,9 @@ export default function Competence() {
         }}
       />
 
-      <DDItem
-        url="/api/data/ageDistribution"
+      <DDChart
+        fetchHook={useAgeDistribution}
         title="Alder"
-        Component={DDChart}
-        SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
           chartVariants: [
             {
@@ -99,12 +96,10 @@ export default function Competence() {
         }}
       />
 
-      <DDItem
-        url="/api/data/fagtimer"
+      <DDChart
+        fetchHook={useFagtimer}
         title="Aktivitet faggrupper"
-        Component={DDChart}
-        description="Hver vertikal akse viser antall unike fag aktiviteter per uke, ulike linjene representerer de ulike årene"
-        SkeletonComponent={ChartSkeleton}
+        description="Hver vertikal akse viser antall unike fag aktiviteter per uke, deulike linjene representerer de ulike årene"
         dataComponentProps={{
           chartVariants: [
             {
@@ -114,12 +109,10 @@ export default function Competence() {
         }}
       />
 
-      <DDItem
-        url="/api/data/fagEvents"
+      <DDChart
+        fetchHook={useFagEvents}
         title="Fag og hendelser"
         description="Hver vertikal akse viser antall unike hendelser per måned fra Google kalenderne Knowit Events og Knowit Fagkalender."
-        Component={DDChart}
-        SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
           chartVariants: [
             {
@@ -129,11 +122,9 @@ export default function Competence() {
         }}
       />
 
-      <DDItem
-        url="/api/data/education"
+      <DDChart
         title="Utdannelse"
-        Component={DDChart}
-        SkeletonComponent={ChartSkeleton}
+        fetchHook={useEducation}
         dataComponentProps={{
           chartVariants: [
             {
@@ -147,12 +138,10 @@ export default function Competence() {
         }}
       />
 
-      <DDItem
-        url="/api/data/competenceMapping"
+      <DDChart
+        fetchHook={useCompetenceMapping}
         title="Kompetansekartlegging"
         description="Grafen viser gjennomsnittlig score på kompetanse/motivasjon innenfor hver av hovedkategoriene. I tillegg vises gjennomsnittlig score for hver underkategori og forholdet mellom underkategoriene i samme hovedkategori."
-        Component={DDChart}
-        SkeletonComponent={ChartSkeleton}
         dataComponentProps={{
           chartVariants: [
             {

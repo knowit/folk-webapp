@@ -1,13 +1,13 @@
 import React from 'react'
 
-import { ResponsiveLine } from '@nivo/line'
+import { ResponsiveLine, Serie } from '@nivo/line'
 import { colors } from './common'
 interface LineChartsProps {
-  data: any
+  data: Serie[]
   big?: boolean
 }
 
-const lineChartColors = colors.filter((_, k) => k !== 1)
+const lineChartColors = colors.filter((_, k: number) => k !== 1)
 
 export default function Line({ data, big }: LineChartsProps) {
   const height = big ? '400px' : '280px'

@@ -1,3 +1,4 @@
+import { EmployeeTableResponse } from '../api/data/employee/employeeApiTypes'
 import { SearchableColumn } from '../data/DDTable'
 import { CategoryWithGroup } from './FilterInput'
 
@@ -13,11 +14,11 @@ export type FilterType = 'COMPETENCE' | 'MOTIVATION' | 'CUSTOMER'
 const ColumnMapping: Record<FilterType, number> = {
   MOTIVATION: 4,
   COMPETENCE: 5,
-  CUSTOMER: 2,
+  CUSTOMER: 3,
 }
 
 function searchRow(
-  row: any,
+  row: EmployeeTableResponse,
   searchableColumns: SearchableColumn[],
   searchTerm: string
 ) {
@@ -45,13 +46,13 @@ function filterRow(
 }
 
 export const searchAndFilter = (
-  rows: any,
+  rows: EmployeeTableResponse[],
   searchableColumns: SearchableColumn[],
   filters: FilterObject[],
   searchTerm: string
 ) => {
   const hasSearchTerm = !!searchTerm && searchTerm.trim() !== ''
-  return rows.filter((row: any) => {
+  return rows.filter((row: EmployeeTableResponse) => {
     const rowMatchesSearchTerm = hasSearchTerm
       ? searchRow(row, searchableColumns, searchTerm)
       : true
@@ -71,9 +72,9 @@ export const searchAndFilter = (
   })
 }
 
-export function filterNonCustomer(rows: any[]) {
-  return rows.filter((row: any) => {
-    const rowDataIndex = row.rowData.length - ColumnMapping['CUSTOMER']
+export function filterNonCustomer(rows: EmployeeTableResponse[]) {
+  return rows.filter((row: EmployeeTableResponse) => {
+    const rowDataIndex = ColumnMapping['CUSTOMER']
     return Object.keys(row.rowData[rowDataIndex]).length === 0
   })
 }

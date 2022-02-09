@@ -11,28 +11,45 @@ import {
 } from 'react-virtualized'
 import CharacterLimitBox from '../../../components/CharacterLimitBox'
 import { ColumnSort } from '../../DDTable'
+import { Columns } from '../../types'
+import { EmployeeTableResponse } from '../../../api/data/employee/employeeApiTypes'
 
 interface DataTableProps {
-  columns: DataTableColumn[]
-  rows: Omit<DataTableRow, 'columns'>[]
-  setcolumnSort?: (CurrentSort: ColumnSort) => void
+  columns: Columns[]
+  rows: EmployeeTableResponse[]
+  setColumnSort?: (CurrentSort: ColumnSort) => void
   checkBoxChangeHandler?: () => void
+  checked?: boolean
   currentColumnSort?: ColumnSort
+  columnsWidth?: number[]
 }
 
-export interface DataTableColumn {
-  title: string
-  expandable?: boolean
-  searchable?: boolean
-  renderCell?: (props: { data: any }) => JSX.Element
-  renderExpanded?: (data: any) => JSX.Element
-  headerRenderCell?: JSX.Element
-  checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void
+type CellTypeProps = (props: {
+  data: any
+  email?: string
+  id?: string
+  name?: string
+  isExpandable?: boolean
+  toggleExpand?: (id: string) => void
+  isExpanded?: boolean
+}) => JSX.Element
+
+interface CellProps {
+  CellType?: CellTypeProps
+  isExpandable?: boolean
+  toggleExpand?: (id: string) => void
+  cellData: any[]
+  id: string
+  name: string
 }
 
-interface DataTableRow {
-  rowData: any[]
-  columns: DataTableColumn[]
+interface ExpandedRows {
+  id: string
+  height: number
+}
+
+interface RowIndex {
+  index: number
 }
 
 const TableCellNoBorders = withStyles({
@@ -89,53 +106,20 @@ export const tableStyles = makeStyles((theme: Theme) =>
   })
 )
 
-type CellTypeProps = (props: {
-  data: any
-  email?: string
-  id?: string
-  rowData: any[]
-  toggleExpand?: (id: string) => void
-  isExpanded?: boolean
-}) => JSX.Element
-
-interface MuiVirtualizedTableProps {
-  columns: DataTableColumn[]
-  rowCount: number
-  rowGetter: (row: { index: number }) => any
-  rows: any[]
-  setcolumnSort?: (CurrentSort: ColumnSort) => void
-  checkBoxChangeHandler?: () => void
-  currentColumnSort?: ColumnSort
-}
-
-interface CellProps {
-  CellType?: CellTypeProps
-  isExpandable?: boolean
-  toggleExpand: (id: string) => void
-  data: any[]
-  id: string
-  index: number
-}
-
-interface ExpandedRows {
-  id: string
-  height: number
-}
-
-function MuiVirtualizedTable({
+export default function DataTable({
   columns,
-  rowCount,
-  rowGetter,
   rows,
-  setcolumnSort,
+  setColumnSort,
   checkBoxChangeHandler,
   currentColumnSort,
-}: MuiVirtualizedTableProps) {
+  columnsWidth = [385, 222, 143, 337, 53],
+  checked,
+}: DataTableProps) {
   const classes = tableStyles()
-  const [expandedRows, setExpandedRows] = useState<string[]>([])
-  const [expandedRowsHeights, setExpandedRowsHeights] = useState<
-    ExpandedRows[]
-  >([])
+  const [expandedRows, setExpandedRowsHeights] = useState<ExpandedRows[]>([])
+
+  const DEFAULT_CELL_HEIGHT = 70
+  const EXPANDED_CELL_HEIGHT = 522
 
   let ArrayRef: any
   function setRef(ref: any) {
@@ -143,25 +127,15 @@ function MuiVirtualizedTable({
   }
 
   function toggleExpand(id: string) {
-    const isActive = expandedRows.find((expandedId) => expandedId === id)
+    const isActive = expandedRows.find((expandedRow) => expandedRow.id === id)
     if (isActive) {
-      setExpandedRows([
-        ...expandedRows.filter((expandedRow) => expandedRow !== id),
-      ])
       setExpandedRowsHeights([
-        ...expandedRowsHeights.filter((expandedRow) => expandedRow.id !== id),
+        ...expandedRows.filter((expandedRow) => expandedRow.id !== id),
       ])
     } else {
-      setExpandedRows([...expandedRows, id])
-    }
-  }
-
-  function setExpandedRowHeight(id: string, newHeight: number) {
-    const isActive = expandedRows.find((expandedRowId) => expandedRowId === id)
-    if (isActive) {
       setExpandedRowsHeights([
-        ...expandedRowsHeights,
-        { id: id, height: newHeight },
+        ...expandedRows,
+        { id: id, height: EXPANDED_CELL_HEIGHT }, //TODO: FETCH HEIGHT FROM COLUMN
       ])
     }
   }
@@ -169,28 +143,22 @@ function MuiVirtualizedTable({
   useEffect(() => {
     ArrayRef.recomputeRowHeights()
     ArrayRef.forceUpdate()
-  }, [ArrayRef, expandedRowsHeights])
+  }, [ArrayRef])
 
-  const widthList = [385, 222, 143, 337, 53]
-
-  function GetCell({
-    isExpandable,
-    data,
+  function prepareCell({
+    cellData,
     id,
     toggleExpand,
-    index,
+    isExpandable,
+    name,
     CellType,
   }: CellProps): JSX.Element {
-    const classes = tableStyles()
-    const cellData = data[index]
     const isExpanded =
-      expandedRows.filter((expandedRow) => expandedRow === id).length > 0
-
+      expandedRows.filter((expandedRow) => expandedRow.id === id).length > 0
     if (isExpandable && CellType) {
       return (
         <CellType
           data={cellData}
-          rowData={[]}
           id={id}
           toggleExpand={toggleExpand}
           isExpanded={isExpanded}
@@ -205,9 +173,9 @@ function MuiVirtualizedTable({
       >
         <div className={[classes.standardSize, classes.borders].join(' ')}>
           {CellType ? (
-            <CellType data={cellData} rowData={data} />
+            <CellType data={cellData} name={name} />
           ) : (
-            <CharacterLimitBox text={cellData ?? '-'} />
+            <CharacterLimitBox text={`${cellData}` ?? '-'} />
           )}
         </div>
       </TableCellNoBorders>
@@ -226,26 +194,28 @@ function MuiVirtualizedTable({
     return (
       <div key={key} className={classes.column} style={style}>
         <div className={className}>
-          {columns.map((column, i) => {
+          {columns.map((column, columnIndex) => {
             return (
-              <div key={i} style={{ width: widthList[i] }}>
-                <GetCell
-                  CellType={column.renderCell}
-                  isExpandable={column.expandable}
-                  id={id}
-                  data={rowData}
-                  index={i}
-                  toggleExpand={toggleExpand}
-                />
+              <div
+                key={columnIndex}
+                style={{ width: columnsWidth[columnIndex] }}
+              >
+                {prepareCell({
+                  CellType: column.renderCell,
+                  id: id,
+                  cellData: rowData[columnIndex],
+                  name: rowData[0].value,
+                  isExpandable: column.isExpandable,
+                  toggleExpand: toggleExpand,
+                })}
               </div>
             )
           })}
         </div>
-        {expandedRows.find((expandedRow) => expandedRow === id) &&
+        {expandedRows.find((expandedRow) => expandedRow.id === id) &&
           RenderExpanded && (
             <RenderExpanded
               data={rowData[0]}
-              setRowHeight={setExpandedRowHeight}
               callBack={() => {
                 ArrayRef.recomputeRowHeights()
                 ArrayRef.forceUpdate()
@@ -258,22 +228,20 @@ function MuiVirtualizedTable({
   }
 
   function onSortChange(columnSort: ColumnSort) {
-    if (setcolumnSort) {
-      setcolumnSort(columnSort)
+    if (setColumnSort) {
+      setColumnSort(columnSort)
     }
   }
 
   function headerCellRenderer(
     title: string,
     index: number,
-    HeaderRenderCell?: any | null,
-    checkBoxChangeHandler?: (
-      event: React.ChangeEvent<HTMLInputElement>
-    ) => void,
-    currentOrder?: ColumnSort
+    currentOrder?: ColumnSort,
+    HeaderCell?: (props: any) => JSX.Element,
+    checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void
   ) {
-    return HeaderRenderCell ? (
-      <HeaderRenderCell
+    return HeaderCell ? (
+      <HeaderCell
         title={title}
         checkBoxLabel="Se kun ledige"
         checkBoxChangeHandler={checkBoxChangeHandler}
@@ -282,6 +250,7 @@ function MuiVirtualizedTable({
         currentOrder={
           currentOrder?.columnIndex === index ? currentOrder.sortOrder : 'NONE'
         }
+        checked={checked}
       />
     ) : (
       <TableCell
@@ -295,11 +264,12 @@ function MuiVirtualizedTable({
     )
   }
 
-  const getRowHeight = ({ index }: { index: number }) => {
-    const id = rows[index].rowId
+  const getRowHeight = ({ index }: RowIndex) => {
+    const rowIndex = index
+    const id = rows[rowIndex].rowId
     return (
-      expandedRowsHeights.find((expandedRow) => expandedRow.id === id)
-        ?.height ?? 70
+      expandedRows.find((expandedRow) => expandedRow.id === id)?.height ??
+      DEFAULT_CELL_HEIGHT
     )
   }
 
@@ -316,7 +286,7 @@ function MuiVirtualizedTable({
     )
   }
 
-  return (
+  const VirtualizedTable = () => (
     <AutoSizer>
       {({ height, width }) => (
         <Table
@@ -325,14 +295,14 @@ function MuiVirtualizedTable({
           height={height}
           width={width}
           rowHeight={getRowHeight}
-          headerHeight={70}
-          rowCount={rowCount}
-          rowGetter={rowGetter}
+          headerHeight={DEFAULT_CELL_HEIGHT}
+          rowCount={rows.length}
+          rowGetter={({ index }) => rows[index].rowData}
           rowClassName={classes.flexContainer}
           noRowsRenderer={emptyRow}
           gridClassName={classes.noFocus}
         >
-          {columns.map(({ title, headerRenderCell }, index) => {
+          {columns.map(({ title, headerCell }, index) => {
             return (
               <Column
                 key={title}
@@ -340,14 +310,14 @@ function MuiVirtualizedTable({
                   headerCellRenderer(
                     title,
                     index,
-                    headerRenderCell,
-                    checkBoxChangeHandler,
-                    currentColumnSort
+                    currentColumnSort,
+                    headerCell,
+                    checkBoxChangeHandler
                   )
                 }
                 className={classes.flexContainer}
                 dataKey={String(index)}
-                width={widthList[index]}
+                width={columnsWidth[index]}
               />
             )
           })}
@@ -355,15 +325,7 @@ function MuiVirtualizedTable({
       )}
     </AutoSizer>
   )
-}
 
-export default function DataTable({
-  columns,
-  rows,
-  setcolumnSort,
-  checkBoxChangeHandler,
-  currentColumnSort,
-}: DataTableProps) {
   return (
     <Paper
       style={{
@@ -372,15 +334,7 @@ export default function DataTable({
         backgroundColor: 'white',
       }}
     >
-      <MuiVirtualizedTable
-        rowCount={rows.length}
-        rowGetter={({ index }) => rows[index].rowData}
-        columns={columns}
-        rows={rows}
-        setcolumnSort={setcolumnSort}
-        currentColumnSort={currentColumnSort}
-        checkBoxChangeHandler={checkBoxChangeHandler}
-      />
+      <VirtualizedTable />
     </Paper>
   )
 }
