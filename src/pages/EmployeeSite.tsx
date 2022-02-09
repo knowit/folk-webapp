@@ -267,6 +267,7 @@ export default function EmployeeSite() {
             <Chart
               payload={employeeChartData}
               title="Motivasjon"
+              fullsize={true}
               props={{
                 chartVariants: [
                   {
