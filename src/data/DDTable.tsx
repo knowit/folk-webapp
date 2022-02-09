@@ -5,7 +5,7 @@ import DataTable from './components/table/DataTable'
 import SearchInput from '../components/SearchInput'
 import FilterInput, { useCategories } from '../components/FilterInput'
 import RowCount from '../components/RowCount'
-import { DDComponentProps } from './types'
+import { Columns, DDTableProps } from './types'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   filterNonCustomer,
@@ -17,12 +17,6 @@ import {
 import { SortOrder } from './components/table/cells/SortableHeaderCell'
 
 type GetSearchValueFn = (data: unknown) => string
-export interface Column {
-  title: string
-  expandable?: boolean
-  searchable?: boolean
-  getSearchValue?: GetSearchValueFn
-}
 export interface SearchableColumn {
   columnIndex: number
   getSearchValue: GetSearchValueFn
@@ -74,20 +68,21 @@ const sortColumn = (rows: any[], currentSort: ColumnSort) => {
   }
 }
 
-export function getSearchableColumns(columns: Column[]): SearchableColumn[] {
-  return columns.reduce((result, column, index) => {
-    if (column.searchable && column.getSearchValue) {
+export function getSearchableColumns(columns: Columns[]): SearchableColumn[] {
+  const result: SearchableColumn[] = []
+  columns.forEach((column, index) => {
+    if (column.getSearchValue) {
       result.push({
         columnIndex: index,
         getSearchValue: column.getSearchValue,
       })
     }
-    return result
-  }, [] as SearchableColumn[])
+  })
+  return result
 }
 
-export default function DDTable({ payload, title, props }: DDComponentProps) {
-  const allRows = payload as { rowData: any[] }[]
+export default function DDTable({ payload, title, props }: DDTableProps) {
+  const allRows = payload
   const initialFilters: FilterObject[] = [
     {
       name: 'COMPETENCE',
@@ -107,7 +102,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
 
   const [filters, setFilters] = useState<FilterObject[]>(initialFilters)
   const [searchTerm, setSearchTerm] = useState<string>('')
-  const [columnSort, setcolumnSort] = useState<ColumnSort>({
+  const [columnSort, setColumnSort] = useState<ColumnSort>({
     columnIndex: 0,
     sortOrder: 'NONE',
   })
@@ -117,9 +112,7 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
     setDisplayNonProject(!displayNonProject)
   }
 
-  const { columns } = props as { columns: Column[] }
-
-  const searchableColumns = getSearchableColumns(columns)
+  const searchableColumns = getSearchableColumns(props.columns)
   const filteredRows = searchAndFilter(
     allRows,
     searchableColumns,
@@ -192,12 +185,12 @@ export default function DDTable({ payload, title, props }: DDComponentProps) {
         {sortedRows.length} av {allRows.length}
       </RowCount>
       <DataTable
-        setcolumnSort={setcolumnSort}
+        setColumnSort={setColumnSort}
         currentColumnSort={columnSort}
+        checked={displayNonProject}
         checkBoxChangeHandler={toggleDisplayNonProject}
         rows={sortedRows}
-        columns={[]}
-        {...props}
+        columns={props.columns}
       />
     </>
   )

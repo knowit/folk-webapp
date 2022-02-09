@@ -13,7 +13,6 @@ const BlackCheckBox = withStyles({
       backgroundColor: 'transparent',
     },
   },
-  checked: {},
 })((props: CheckboxProps) => (
   <Checkbox color="default" disableRipple {...props} />
 ))
@@ -43,12 +42,14 @@ export interface CheckBoxHeaderCellProps {
   title: string
   checkBoxLabel: string
   checkBoxChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
+  checked: boolean
 }
 
 export default function CheckBoxHeaderCell({
   title,
   checkBoxLabel,
   checkBoxChangeHandler,
+  checked,
 }: CheckBoxHeaderCellProps) {
   const classes = useCheckBoxStyles()
   return (
@@ -58,6 +59,7 @@ export default function CheckBoxHeaderCell({
         className={classes.label}
         control={<BlackCheckBox onChange={checkBoxChangeHandler} />}
         label={checkBoxLabel}
+        checked={checked}
       />
     </div>
   )

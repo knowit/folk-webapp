@@ -2,7 +2,7 @@ import React from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
-import DDItem, { DDChart } from '../data/DDItem'
+import Chart from '../data/components/chart/Chart'
 import { useFetchedData } from '../hooks/service'
 import {
   GetProjects,
@@ -12,6 +12,7 @@ import {
 } from '../components/EmployeeInfo'
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg'
 import { CustomerStatusData } from '../data/components/table/cells/CustomerStatusCell'
+import { useEmployeeRadar } from '../api/data/employee/employeeQueries'
 
 type WorkExperience = {
   employer: string
@@ -116,13 +117,13 @@ export default function EmployeeSite() {
 
   const classes = useStyles()
 
-  const email_id = data ? data.email_id : null
   const user_id = data ? data.user_id : null
   const emp = data ? data.employee : null
   const tags = data ? data.tags : null
   const [expData, expPending] = useFetchedData<ExperienceData>({
     url: `/api/data/employeeExperience?user_id=${user_id}`,
   })
+  const employeeChartData = useEmployeeRadar(email).data
   if (!email.match(idRegex)) {
     return <Navigate replace to={{ pathname: '/404' }} />
   }
@@ -262,16 +263,12 @@ export default function EmployeeSite() {
           <p>
             <b>Kompetansekartlegging</b>
           </p>
-          {pending ? (
-            <ChartSkeleton />
-          ) : (
-            <DDItem
-              url={'/api/data/employeeRadar?email=' + email_id}
+          {employeeChartData ? (
+            <Chart
+              payload={employeeChartData}
               title="Motivasjon"
-              Component={DDChart}
-              SkeletonComponent={ChartSkeleton}
-              fullSize
-              dataComponentProps={{
+              fullsize={true}
+              props={{
                 chartVariants: [
                   {
                     type: 'Bar',
@@ -292,6 +289,8 @@ export default function EmployeeSite() {
                 ],
               }}
             />
+          ) : (
+            <ChartSkeleton />
           )}
         </div>
       </div>
@@ -331,9 +330,7 @@ export default function EmployeeSite() {
   )
 }
 
-const PrintCustomers = (data: {
-  customerArray: CustomerStatusData[] | undefined
-}) => {
+const PrintCustomers = (data: { customerArray?: CustomerStatusData[] }) => {
   if (!data.customerArray || !data.customerArray[0].customer)
     return <div>-</div>
   data.customerArray.sort(

@@ -12,6 +12,7 @@ import {
   AgeDistribution,
   AgeGroupDistribution,
   CategoryAverage,
+  CompetenceFilterRawData,
   DegreeDistribution,
   EmployeeCompetenceAndMotivation,
   FagEventData,
@@ -169,6 +170,24 @@ router.get('/competenceMapping', async (req, res, next) => {
     ])
 
     const aggregatedData = aggregateCompetenceMapping(competence, motivation)
+    res.send(aggregatedData)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/competenceFilter', async (req, res, next) => {
+  try {
+    const data = await getReport<CompetenceFilterRawData[]>({
+      accessToken: req.accessToken,
+      reportName: 'newCategories',
+    })
+
+    const aggregatedData = data.map((e) => ({
+      category: e.category,
+      subCategories: JSON.parse(e.subCategories),
+    }))
+
     res.send(aggregatedData)
   } catch (error) {
     next(error)

@@ -1,24 +1,25 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Skeleton } from '@material-ui/lab'
 import { useFetchedData } from '../hooks/service'
 import { NoData } from './ErrorText'
-import {
-  ChartSkeleton,
-  ExperienceData,
-  ProjectExperience,
-} from '../pages/EmployeeSite'
-import DDItem, { DDChart } from '../data/DDItem'
+import { ExperienceData, ProjectExperience } from '../pages/EmployeeSite'
+import Chart from '../data/components/chart/Chart'
+import { useEmployeeRadar } from '../api/data/employee/employeeQueries'
 
-type Experience = {
+interface Experience {
   employer: string
   month_from: number
   year_from: number
   month_to: number
   year_to: number
 }
-type Date = { year: number; month: number } | { year: number }
-type MotivationMap = {
+
+interface Date {
+  year: number
+  month?: number
+}
+interface MotivationMap {
   [category: string]: number
 }
 
@@ -132,7 +133,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-interface Props {
+interface EmployeeInfoProps {
   data: {
     competenceUrl: string
     user_id: string
@@ -143,19 +144,16 @@ interface Props {
   setRowHeight: (id: string, height: number) => void
 }
 
-export default function EmployeeInfo({ data, id, setRowHeight }: Props) {
-  let targetRef: any
-  function setRef(ref: any) {
-    targetRef = ref
-  }
-  const getOffsetHeight = (thisTargetRef: any) => thisTargetRef.offsetHeight
+export default function EmployeeInfo({ data }: EmployeeInfoProps) {
   const classes = useStyles()
   const url = data.competenceUrl
   const [empData, pending] = useFetchedData<EmployeeInfoData>({ url })
-  const user_id = data ? data.user_id : null
+  const user_id = data.user_id
   const [expData, expPending] = useFetchedData<ExperienceData>({
     url: `/api/data/employeeExperience?user_id=${user_id}`,
   })
+
+  const { data: employeeChartData } = useEmployeeRadar(data.email_id)
 
   const getStringFromList = (
     list: string[] | null | undefined,
@@ -171,17 +169,8 @@ export default function EmployeeInfo({ data, id, setRowHeight }: Props) {
     )
   }
 
-  useEffect(() => {
-    if (!pending && targetRef) {
-      const newHeight = getOffsetHeight(targetRef) + 72
-      setRowHeight(id, newHeight)
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pending, targetRef, id])
-
   return (
-    <div ref={setRef} className={classes.root}>
+    <div className={classes.root}>
       <div className={classes.info}>
         <div className={classes.cell}>
           <b>Utdanning: </b>
@@ -263,33 +252,35 @@ export default function EmployeeInfo({ data, id, setRowHeight }: Props) {
         )}
       </div>
       <div className={classes.oversikt}>
-        <DDItem
-          url={'/api/data/employeeRadar?email=' + data.email_id}
-          title="Motivasjon"
-          Component={DDChart}
-          SkeletonComponent={ChartSkeleton}
-          fullSize
-          dataComponentProps={{
-            chartVariants: [
-              {
-                type: 'Bar',
-                props: {
-                  dataKey: 'category',
-                  yLabels: ['motivation', 'competence'],
-                  maxValue: 5,
+        {employeeChartData ? (
+          <Chart
+            payload={employeeChartData}
+            title="Motivasjon"
+            props={{
+              chartVariants: [
+                {
+                  type: 'Bar',
+                  props: {
+                    dataKey: 'category',
+                    yLabels: ['motivation', 'competence'],
+                    maxValue: 5,
+                  },
                 },
-              },
-              {
-                type: 'Radar',
-                props: {
-                  groupKey: 'category',
-                  valueKey: ['motivation', 'competence'],
-                  maxValue: 5,
+                {
+                  type: 'Radar',
+                  props: {
+                    groupKey: 'category',
+                    valueKey: ['motivation', 'competence'],
+                    maxValue: 5,
+                  },
                 },
-              },
-            ],
-          }}
-        />
+              ],
+            }}
+            fullsize={true}
+          />
+        ) : (
+          <Skeleton variant="rect" height={320} width={400} animation="wave" />
+        )}
       </div>
     </div>
   )
