@@ -33,4 +33,4 @@ export const getCompetenceMapping = () =>
   getAtApi<CompetenceMappingResponse>('/data/competenceMapping')
 
 export const getCompetenceFilter = () =>
-  getAtApi<CompetenceFilterResponse>('/data/competenceFilter')
+  getAtApi<CompetenceFilterResponse[]>('/data/competenceFilter')

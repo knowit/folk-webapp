@@ -1,8 +1,13 @@
+import { useCompetenceFilter } from '../api/data/competence/competenceQueries'
 import { EmployeeTableResponse } from '../api/data/employee/employeeApiTypes'
 import { SearchableColumn } from '../data/DDTable'
-import { CategoryWithGroup } from './FilterInput'
 
-export type FilterObject = {
+export interface CategoryWithGroup {
+  category: string
+  group: string
+}
+
+export interface FilterObject {
   name: FilterType
   values: string[]
   threshold: number
@@ -95,4 +100,14 @@ export function handleThresholdChange(
 ) {
   prevFilters[index].threshold = threshold
   return [...prevFilters]
+}
+
+export function useCategories(): CategoryWithGroup[] {
+  const { data: categories } = useCompetenceFilter()
+  return (categories ?? []).flatMap((mainCategory) =>
+    mainCategory.subCategories.map((subCategory) => ({
+      category: subCategory,
+      group: mainCategory.category,
+    }))
+  )
 }

@@ -1,11 +1,10 @@
 import React, { ChangeEvent } from 'react'
 import Checkbox from '@material-ui/core/Checkbox'
 import Autocomplete from '@material-ui/lab/Autocomplete'
-import { useFetchedData } from '../hooks/service'
 import { makeStyles } from '@material-ui/core/styles'
 import { InputBase, withStyles } from '@material-ui/core'
 import FilterListIcon from '@material-ui/icons/FilterList'
-import { DDPayload } from '../data/types'
+import { CategoryWithGroup } from './FilterUtil'
 
 const StyledCheckBox = withStyles(() => ({
   root: {
@@ -19,16 +18,6 @@ const StyledCheckBox = withStyles(() => ({
   },
   checked: {},
 }))(Checkbox)
-
-interface CategoryList {
-  category: string
-  subCategories: string[]
-}
-
-export type CategoryWithGroup = {
-  category: string
-  group: string
-}
 
 const useStyles = makeStyles({
   input: {
@@ -59,31 +48,6 @@ const useStyles = makeStyles({
     paddingRight: '10px',
   },
 })
-
-export function useCategories(): CategoryWithGroup[] {
-  const [categories] = useFetchedData<CategoryList[]>({
-    url: '/api/data/competenceFilter',
-  })
-  return (categories ?? []).flatMap((mainCategory) =>
-    mainCategory.subCategories.map((subCategory) => ({
-      category: subCategory,
-      group: mainCategory.category,
-    }))
-  )
-}
-
-export function useCustomer(): CategoryWithGroup[] {
-  const [employees] = useFetchedData<DDPayload>({
-    url: '/api/data/employeeTable',
-  })
-  const customers: string[] = employees?.flatMap((workers: any) => [
-    workers.rowData[3]['customer'] ?? 'Ikke i prosjekt',
-  ])
-  return Array.from(new Set(customers)).map((customer: string) => ({
-    category: customer,
-    group: 'Kunde',
-  }))
-}
 
 interface Props {
   filterList: string[]

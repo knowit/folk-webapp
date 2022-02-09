@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
 import { useEmployeeTable } from '../../api/data/employee/employeeQueries'
 import EmployeeInfo from '../../components/EmployeeInfo'
-import { useCategories } from '../../components/FilterInput'
+import { useCategories } from '../../components/FilterUtil'
 import { GridItem } from '../../components/GridItem'
 import { CustomerStatusData } from '../../data/components/table/cells/CustomerStatusCell'
 import {
