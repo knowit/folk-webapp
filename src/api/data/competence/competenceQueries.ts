@@ -54,6 +54,6 @@ export const useCompetenceMapping = () =>
   })
 
 export const useCompetenceFilter = () =>
-  useSWR('/getCompetence', getCompetenceFilter, {
+  useSWR('/competenceFilter', getCompetenceFilter, {
     revalidateOnFocus: false,
   })

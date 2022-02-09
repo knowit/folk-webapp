@@ -22,6 +22,25 @@ import {
 
 const router = express.Router()
 
+router.get('/experienceDistribution/bar', async (req, res, next) => {
+  try {
+    // TODO: Create aggregation and return correct format
+    res.send('BarChart for experienceDistribution')
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/experienceDistribution/pie', async (req, res, next) => {
+  try {
+    // TODO: Create aggregation and return correct format
+    res.send('PieChart for experienceDistribution')
+  } catch (error) {
+    next(error)
+  }
+})
+
+// To be deleted
 router.get('/experienceDistribution', async (req, res, next) => {
   try {
     const data = await getReport<YearsWorkingDistributionCount[]>({
@@ -36,6 +55,16 @@ router.get('/experienceDistribution', async (req, res, next) => {
   }
 })
 
+router.get('/competenceAmount/bar', async (req, res, next) => {
+  try {
+    // TODO: Create aggregation and return correct format
+    res.send('BarChart for competenceAmount')
+  } catch (error) {
+    next(error)
+  }
+})
+
+// To be deleted
 router.get('/competenceAmount', async (req, res, next) => {
   try {
     const data = await getReport<EmployeeCompetenceAndMotivation[]>({
@@ -50,6 +79,25 @@ router.get('/competenceAmount', async (req, res, next) => {
   }
 })
 
+router.get('/competenceAreas/bar', async (req, res, next) => {
+  try {
+    // TODO: Create aggregation and return correct format
+    res.send('BarChart for competenceAreas')
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/competenceAreas/radar', async (req, res, next) => {
+  try {
+    // TODO: Create aggregation and return correct format
+    res.send('RadarChart for competenceAreas')
+  } catch (error) {
+    next(error)
+  }
+})
+
+// To be deleted
 router.get('/competenceAreas', async (req, res, next) => {
   try {
     const competencePromise = getReport<CategoryAverage[]>({
@@ -74,6 +122,16 @@ router.get('/competenceAreas', async (req, res, next) => {
   }
 })
 
+router.get('/ageDistribution/bar', async (req, res, next) => {
+  try {
+    // TODO: Create aggregation and return correct format
+    res.send('BarChart for ageDistribution')
+  } catch (error) {
+    next(error)
+  }
+})
+
+// To be deleted
 router.get('/ageDistribution', async (req, res, next) => {
   try {
     const ageDistributionPromise = getReport<AgeDistribution[]>({
@@ -106,6 +164,16 @@ router.get('/ageDistribution', async (req, res, next) => {
   }
 })
 
+router.get('/fagtimer/line', async (req, res, next) => {
+  try {
+    // TODO: Create aggregation and return correct format
+    res.send('LineChart for fagTimer')
+  } catch (error) {
+    next(error)
+  }
+})
+
+// To be deleted
 router.get('/fagtimer', async (req, res, next) => {
   try {
     const data = await getReport<FagtimeStats[]>({
@@ -120,6 +188,16 @@ router.get('/fagtimer', async (req, res, next) => {
   }
 })
 
+router.get('/fagEvents/line', async (req, res, next) => {
+  try {
+    // TODO: Create aggregation and return correct format
+    res.send('LineChart for fagEvents')
+  } catch (error) {
+    next(error)
+  }
+})
+
+// To be deleted
 router.get('/fagEvents', async (req, res, next) => {
   try {
     const data = await getReport<FagEventData[]>({
@@ -134,6 +212,16 @@ router.get('/fagEvents', async (req, res, next) => {
   }
 })
 
+router.get('/education/pie', async (req, res, next) => {
+  try {
+    // TODO: Create aggregation and return correct format
+    res.send('PieChart for education')
+  } catch (error) {
+    next(error)
+  }
+})
+
+// To be deleted
 router.get('/education', async (req, res, next) => {
   try {
     const data = await getReport<DegreeDistribution[]>({
@@ -152,6 +240,25 @@ router.get('/education', async (req, res, next) => {
   }
 })
 
+router.get('/competenceMapping/bar', async (req, res, next) => {
+  try {
+    // TODO: Create aggregation and return correct format
+    res.send('BarChart for competenceMapping')
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/competenceMapping/sunburst', async (req, res, next) => {
+  try {
+    // TODO: Create aggregation and return correct format
+    res.send('SunburstChart for competenceMapping')
+  } catch (error) {
+    next(error)
+  }
+})
+
+// To be deleted
 router.get('/competenceMapping', async (req, res, next) => {
   try {
     const competencePromise = getReport<CategoryAverage[]>({
