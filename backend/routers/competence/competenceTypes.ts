@@ -46,3 +46,8 @@ export interface DegreeDistribution {
   degree: string
   count: number
 }
+
+export interface CompetenceFilterRawData {
+  category: string
+  subCategories: string
+}
