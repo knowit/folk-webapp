@@ -52,7 +52,7 @@ const getAt = async <T>(endpoint: string, options?: GetOptions) => {
     if (axios.isAxiosError(e)) {
       const err: ApiError = {
         status: e.response?.status ?? 400,
-        message: e.message,
+        message: e.response?.data,
         errorType: 'API',
       }
       return Promise.reject(err)
@@ -67,3 +67,7 @@ export const getAtApi = <T>(endpoint: string, options?: GetOptions) =>
 
 export const getAtAuth = <T>(endpoint: string, options?: GetOptions) =>
   getAt<T>(`/auth${endpoint}`, options)
+
+// For testing only
+export const getTestV2 = <T>(endpoint: string, options?: GetOptions) =>
+  getAt<T>(`/api/v2${endpoint}`, options)
