@@ -10,6 +10,7 @@ import {
   NotFound,
   UnderConstruction,
 } from '../pages'
+import Debug from '../pages/Debug'
 import LoginPage from '../pages/login/LoginPage'
 
 export default function Content() {
@@ -38,6 +39,9 @@ export default function Content() {
       </Route>
       <Route path="/ansatt/:id">
         <EmployeeSite />
+      </Route>
+      <Route path="/debug">
+        <Debug />
       </Route>
       <Route exact path="/">
         <Redirect to="/ansatte" />
