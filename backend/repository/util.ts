@@ -22,8 +22,8 @@ export type EmployeeInformation = {
   work_order_description: string
 }
 
-type MergeEmployees = EmployeeInformation & {
-  customerArray: {
+type EmployeeWithMergedCustomers = EmployeeInformation & {
+  customers: {
     customer: string
     wordOrderDescription: string
     weight: number
@@ -50,12 +50,14 @@ export const getWeek = (): string => {
   return currentWeekNumber.toString()
 }
 
-export const mergeEmployees = (
-  allEmployees: EmployeeInformation[]
-): MergeEmployees[] => {
+export const mergeEmployeesByCustomers = (
+  employees: EmployeeInformation[]
+): EmployeeWithMergedCustomers[] => {
   const mergedEmployees = {}
 
-  allEmployees.forEach((employee) => {
+  const employeesWithMergedCustomers = {}
+
+  employees.forEach((employee) => {
     const thisCustomer = {
       customer: employee.customer,
       workOrderDescription: employee.work_order_description,
@@ -63,14 +65,14 @@ export const mergeEmployees = (
     }
 
     const employeeToMerge = mergedEmployees[employee.guid] ?? employee
-    const customersForEmployee = employeeToMerge.customerArray ?? []
+    const customersForEmployee = employeeToMerge.customers ?? []
 
-    mergedEmployees[employee.guid] = {
+    employeesWithMergedCustomers[employee.guid] = {
       ...employeeToMerge,
-      customerArray: [thisCustomer, ...customersForEmployee],
+      customers: [thisCustomer, ...customersForEmployee],
     }
   })
-  return Object.values(mergedEmployees)
+  return Object.values(employeesWithMergedCustomers)
 }
 
 export const statusColorCode = (

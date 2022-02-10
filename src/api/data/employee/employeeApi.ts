@@ -1,7 +1,7 @@
 import { CompetenceAreasResponse } from '../competence/competenceApiTypes'
 import { getAtApi } from '../../client'
 import {
-  EmpDataResponse,
+  EmployeeProfileResponse,
   EmployeeExperienceResponse,
   EmployeeTableResponse,
 } from './employeeApiTypes'
@@ -21,10 +21,7 @@ export const getEmployeeRadar = (url: string, email: string) =>
     params: { email },
   })
 
-// ! This might not be typed correctly
-export const getEmpData = (url: string, email: string) =>
-  getAtApi<EmpDataResponse>('/data/empData', {
-    params: {
-      email,
-    },
+export const getEmployeeProfile = (url: string, email: string) =>
+  getAtApi<EmployeeProfileResponse>('/data/employeeProfile', {
+    params: { email },
   })

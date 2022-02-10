@@ -13,6 +13,7 @@ import {
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg'
 import { CustomerStatusData } from '../data/components/table/cells/CustomerStatusCell'
 import { useEmployeeRadar } from '../api/data/employee/employeeQueries'
+import { EmployeeProfileResponse } from '../api/data/employee/employeeApiTypes'
 
 type WorkExperience = {
   employer: string
@@ -20,12 +21,6 @@ type WorkExperience = {
   year_from: number
   month_to: number
   year_to: number
-}
-type EmpData = {
-  email: string
-  navn: string
-  title: string
-  user_id: string
 }
 
 export interface ProjectExperience {
@@ -38,29 +33,6 @@ export interface ProjectExperience {
 export interface ExperienceData {
   name: string
   experience: ProjectExperience[]
-}
-
-type EmpSiteData = {
-  email_id: string
-  user_id: string
-  employee: EmpData
-  image: string
-  tags: {
-    skill: string
-    role: string
-    language: string
-  }
-  workExperience: WorkExperience[]
-  degree: string
-  manager: string
-  guid: string
-  links: {
-    no_pdf: string
-    int_pdf: string
-    no_word: string
-    int_word: string
-  }
-  customerArray: CustomerStatusData[]
 }
 
 const useStyles = makeStyles({
@@ -117,7 +89,7 @@ export default function EmployeeSite() {
 
   const classes = useStyles()
 
-  const user_id = data ? data.user_id : null
+  const user_id = data ? data.employee.user_id : null
   const emp = data ? data.employee : null
   const tags = data ? data.tags : null
   const [expData, expPending] = useFetchedData<ExperienceData>({
@@ -238,7 +210,7 @@ export default function EmployeeSite() {
               ) : (
                 <>
                   <b>Utdanning: </b>
-                  {data && data?.degree}
+                  {data && data.employee.degree}
                 </>
               )}
             </div>
@@ -253,7 +225,7 @@ export default function EmployeeSite() {
               ) : (
                 <>
                   <b>Nærmeste leder: </b>
-                  {data && data?.manager}
+                  {data && data.employee.manager}
                 </>
               )}
             </div>
@@ -299,7 +271,7 @@ export default function EmployeeSite() {
         {pending ? (
           <p>loading....</p>
         ) : (
-          <PrintCustomers customerArray={data?.customerArray} />
+          <PrintCustomers customerArray={data?.employee.customers} />
         )}
         <h2>Arbeidserfaring</h2>
         {pending ? (

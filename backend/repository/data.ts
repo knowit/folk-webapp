@@ -4,7 +4,7 @@ import {
   getEventSet,
   getWeek,
   getYear,
-  mergeEmployees,
+  mergeEmployeesByCustomers,
   range,
   statusColorCode,
   sum,
@@ -156,9 +156,9 @@ type EmployeeWorkStatus = {
 export const employeeTable = async ({ data }: EmployeeTable) => {
   const [allEmployees, motivationAndCompetence, jobRotation, employeeStatus] =
     data
-  const mergedEmployees = mergeEmployees(allEmployees)
+  const employeesWithMergedCustomers = mergeEmployeesByCustomers(allEmployees)
 
-  return mergedEmployees.map((employee) => ({
+  return employeesWithMergedCustomers.map((employee) => ({
     rowId: uuid(),
     rowData: [
       {
@@ -175,7 +175,7 @@ export const employeeTable = async ({ data }: EmployeeTable) => {
       employee.title,
 
       findProjectStatusForEmployee(jobRotation, employeeStatus, employee.guid),
-      employee.customerArray.reduce((prevCustomer, thisCustomer) => {
+      employee.customers.reduce((prevCustomer, thisCustomer) => {
         if (thisCustomer.weight < prevCustomer.weight) {
           return thisCustomer
         } else {
@@ -292,7 +292,7 @@ type EmployeeData = {
  */
 export const employeeCompetence = async ({ data }: EmployeeData) => {
   const [resSkills, resEmp, resComp] = data
-  const mergedRes = mergeEmployees(resComp)
+  const mergedRes = mergeEmployeesByCustomers(resComp)
 
   const mapTags = (skills: EmployeeSkills[]) => {
     const mappedSkills =
@@ -668,7 +668,7 @@ export const competenceAmount = async ({
   }
 }
 
-export const empDataReports = ({
+export const employeeProfileReports = ({
   parameters: { email } = {},
 }: ReportParams) => [
   {
@@ -685,26 +685,21 @@ export const empDataReports = ({
   },
 ]
 /** Dette endepunktet henter data om en enkelt person for å fylle opp sidene for hver enkelt ansatt.  */
-export const empData = async ({ data }: EmployeeData) => {
-  const [resSkills, resWork, resComp] = data
-  const emp = mergeEmployees(resComp)[0]
+export const employeeProfile = async ({ data }: EmployeeData) => {
+  const [employeeSkills, workExperience, employeeInformation] = data
+  const employee = mergeEmployeesByCustomers(employeeInformation)[0]
 
   return {
-    email_id: emp.email,
-    user_id: emp.user_id,
-    employee: emp,
-    image: getStorageUrl(emp.image_key),
-    workExperience: resWork,
-    tags: resSkills[0],
-    degree: resComp[0].degree,
-    manager: resComp[0].manager,
+    employee,
+    image: getStorageUrl(employee.image_key),
+    workExperience,
+    tags: employeeSkills[0],
     links: Object.fromEntries(
       cvs.map(([lang, format]) => [
         `${lang}_${format}`,
-        emp.link.replace('{LANG}', lang).replace('{FORMAT}', format),
+        employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
       ])
     ),
-    customerArray: emp.customerArray,
   }
 }
 
