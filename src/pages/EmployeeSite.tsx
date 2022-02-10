@@ -15,14 +15,6 @@ import { CustomerStatusData } from '../data/components/table/cells/CustomerStatu
 import { useEmployeeRadar } from '../api/data/employee/employeeQueries'
 import { EmployeeProfileResponse } from '../api/data/employee/employeeApiTypes'
 
-type WorkExperience = {
-  employer: string
-  month_from: number
-  year_from: number
-  month_to: number
-  year_to: number
-}
-
 export interface ProjectExperience {
   customer: string
   project: string
@@ -89,8 +81,8 @@ export default function EmployeeSite() {
 
   const classes = useStyles()
 
-  const user_id = data ? data.employee.user_id : null
-  const emp = data ? data.employee : null
+  const user_id = data ? data.user_id : null
+  const emp = data ?? null
   const tags = data ? data.tags : null
   const [expData, expPending] = useFetchedData<ExperienceData>({
     url: `/api/data/employeeExperience?user_id=${user_id}`,
@@ -135,7 +127,7 @@ export default function EmployeeSite() {
               ) : (
                 <>
                   <b>Hovedkompetanse: </b>
-                  {tags?.skill.replace(/;/g, ', ')}
+                  {tags?.skills.join(', ')}
                 </>
               )}
             </div>
@@ -150,7 +142,7 @@ export default function EmployeeSite() {
               ) : (
                 <>
                   <b>Roller: </b>
-                  {tags?.role.replace(/;/g, ', ')}
+                  {tags?.roles.join(', ')}
                 </>
               )}
             </div>
@@ -195,7 +187,7 @@ export default function EmployeeSite() {
               ) : (
                 <>
                   <b>Språk: </b>
-                  {tags?.language.replace(/;/g, ', ')}
+                  {tags?.languages.join(', ')}
                 </>
               )}
             </div>
@@ -210,7 +202,7 @@ export default function EmployeeSite() {
               ) : (
                 <>
                   <b>Utdanning: </b>
-                  {data && data.employee.degree}
+                  {data?.degree}
                 </>
               )}
             </div>
@@ -225,7 +217,7 @@ export default function EmployeeSite() {
               ) : (
                 <>
                   <b>Nærmeste leder: </b>
-                  {data && data.employee.manager}
+                  {data?.manager}
                 </>
               )}
             </div>
@@ -271,7 +263,7 @@ export default function EmployeeSite() {
         {pending ? (
           <p>loading....</p>
         ) : (
-          <PrintCustomers customerArray={data?.employee.customers} />
+          <PrintCustomers customerArray={data?.customers} />
         )}
         <h2>Arbeidserfaring</h2>
         {pending ? (

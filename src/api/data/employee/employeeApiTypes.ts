@@ -35,15 +35,13 @@ interface Tags {
  * EmployeeProfile
  */
 
-export interface EmployeeProfileResponse {
-  employee: Employee
+export interface EmployeeProfileResponse extends Employee {
   image?: string
   workExperience: WorkExperience[]
   tags: {
-    // TODO does not match `Tags` type above, and can be undefined from backend?
-    skill: string
-    role: string
-    language: string
+    skills: string[]
+    languages: string[]
+    roles: string[]
   }
   links: Links
 }

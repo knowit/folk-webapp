@@ -24,15 +24,13 @@ export type Customer = {
   weight: number
 }
 
-export type EmployeeProfile = {
-  employee: EmployeeWithMergedCustomers
+export type EmployeeProfile = EmployeeWithMergedCustomers & {
   image: string
   workExperience: EmployeeExperience[]
   tags: {
-    // TODO: verify that the tag types reflects what is actually extracted from the report
-    language: string // Semicolon-separated list (?)
-    skills: string // Semicolon-separated list (?)
-    role: string // Semicolon-separated list (?)
+    languages: string[]
+    skills: string[]
+    roles: string[]
   }
   links: {
     no_pdf: string
@@ -40,6 +38,14 @@ export type EmployeeProfile = {
     no_word: string
     int_word: string
   }
+}
+
+export type EmployeeSkills = {
+  user_id: string
+  email: string
+  language: string // Semi-colon separated list
+  skill: string // Semi-colon separated list
+  role: string // Semi-colon separated list
 }
 
 export type JobRotation = {

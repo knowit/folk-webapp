@@ -688,12 +688,17 @@ export const employeeProfileReports = ({
 export const employeeProfile = async ({ data }: EmployeeData) => {
   const [employeeSkills, workExperience, employeeInformation] = data
   const employee = mergeEmployeesByCustomers(employeeInformation)[0]
+  const { skill, language, role } = employeeSkills[0] ?? {}
 
   return {
-    employee,
+    ...employee,
     image: getStorageUrl(employee.image_key),
     workExperience,
-    tags: employeeSkills[0],
+    tags: {
+      skills: skill?.split(';') ?? [],
+      languages: language?.split(';') ?? [],
+      roles: role?.split(';') ?? [],
+    },
     links: Object.fromEntries(
       cvs.map(([lang, format]) => [
         `${lang}_${format}`,

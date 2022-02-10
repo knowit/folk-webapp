@@ -113,7 +113,7 @@ export const getCategoryScoresForEmployee = (
 export const makeCvLink = (
   lang: string,
   format: string,
-  linkTemplate: string
+  linkTemplate?: string
 ) => {
   return linkTemplate.replace('{LANG}', lang).replace('{FORMAT}', format)
 }
