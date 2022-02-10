@@ -2,7 +2,7 @@ import express from 'express'
 import { getReport } from '../../dataplattform/client'
 import { ParamError } from '../errorHandling'
 import {
-  aggregateEmpData,
+  aggregateEmployeeProfile,
   aggregateEmployeeExperience,
   aggregateEmployeeRadar,
   aggregateEmployeeTable,
@@ -140,7 +140,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
 )
 
 router.get<unknown, unknown, unknown, EmailParam>(
-  '/empData',
+  '/employeeProfile',
   async (req, res, next) => {
     try {
       if (!req.query.email) {
@@ -183,7 +183,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
           employeeInformationPromise,
         ])
 
-      const aggregatedData = aggregateEmpData(
+      const aggregatedData = aggregateEmployeeProfile(
         employeeSkills,
         workExperience,
         employeeInformation

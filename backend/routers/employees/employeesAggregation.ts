@@ -4,17 +4,19 @@ import {
   findProjectStatusForEmployee,
   getCategoryScoresForEmployee,
   getStorageUrl,
-  mergeEmployees,
+  makeCvLink,
+  mergeEmployeesByCustomers,
 } from './aggregationHelpers'
-import { EmployeeExperience } from './employeesTypes'
+import { EmployeeExperience, EmployeeProfile } from './employeesTypes'
 
 export const aggregateEmployeeTable = (
   employeeInformation,
   employeeMotivationAndCompetence,
   jobRotationInformation
 ) => {
-  const mergedEmployees = mergeEmployees(employeeInformation)
-  return mergedEmployees.map((employee) => ({
+  const employeesWithMergedCustomers =
+    mergeEmployeesByCustomers(employeeInformation)
+  return employeesWithMergedCustomers.map((employee) => ({
     rowId: uuid(),
     rowData: [
       {
@@ -30,7 +32,7 @@ export const aggregateEmployeeTable = (
       },
       employee.title,
       findProjectStatusForEmployee(jobRotationInformation, employee.email),
-      employee.customerArray.reduce((prevCustomer, thisCustomer) => {
+      employee.customers.reduce((prevCustomer, thisCustomer) => {
         if (thisCustomer.weight < prevCustomer.weight) {
           return thisCustomer
         } else {
@@ -108,28 +110,21 @@ export const aggregateEmployeeRadar = (data: any) => {
   }
 }
 
-export const aggregateEmpData = (
+export const aggregateEmployeeProfile = (
   employeeSkills,
   workExperience,
   employeeInformation
-) => {
-  const emp = mergeEmployees(employeeInformation)[0]
-
+): EmployeeProfile => {
   return {
-    email_id: emp.email,
-    user_id: emp.user_id,
-    employee: emp,
-    image: getStorageUrl(emp.image_key),
-    workExperience: workExperience,
+    employee: mergeEmployeesByCustomers(employeeInformation)[0],
+    image: getStorageUrl(employeeInformation.image_key),
+    workExperience,
     tags: employeeSkills[0],
-    degree: employeeInformation[0].degree,
-    manager: employeeInformation[0].manager,
-    links: Object.fromEntries(
-      cvs.map(([lang, format]) => [
-        `${lang}_${format}`,
-        emp.link.replace('{LANG}', lang).replace('{FORMAT}', format),
-      ])
-    ),
-    customerArray: emp.customerArray,
+    links: {
+      no_pdf: makeCvLink('no', 'pdf', employeeInformation.link),
+      int_pdf: makeCvLink('int', 'pdf', employeeInformation.link),
+      no_word: makeCvLink('no', 'word', employeeInformation.link),
+      int_word: makeCvLink('int', 'word', employeeInformation.link),
+    },
   }
 }
