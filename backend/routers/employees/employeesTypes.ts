@@ -24,20 +24,27 @@ export type Customer = {
   weight: number
 }
 
-export type EmployeeProfile = EmployeeWithMergedCustomers & {
+export type EmployeeProfile = Omit<
+  EmployeeWithMergedCustomers,
+  'customer' | 'weight' | 'work_order_description' | 'image_key' | 'link'
+> & {
   image: string
   workExperience: EmployeeExperience[]
-  tags: {
-    languages: string[]
-    skills: string[]
-    roles: string[]
-  }
-  links: {
-    no_pdf: string
-    int_pdf: string
-    no_word: string
-    int_word: string
-  }
+  tags: Tags
+  links: Links
+}
+
+type Tags = {
+  languages: string[]
+  skills: string[]
+  roles: string[]
+}
+
+type Links = {
+  no_pdf: string
+  int_pdf: string
+  no_word: string
+  int_word: string
 }
 
 export type EmployeeSkills = {

@@ -122,11 +122,17 @@ export const aggregateEmployeeProfile = (
 ): EmployeeProfile => {
   const employee = mergeEmployeesByCustomers(employeeInformation)[0]
   const { skill, language, role } = employeeSkills[0] ?? {}
-  const { link: cvLinkTemplate, image_key } = employeeInformation[0]
 
   return {
-    ...employee,
-    image: getStorageUrl(image_key),
+    user_id: employee?.user_id,
+    guid: employee?.guid,
+    navn: employee?.navn,
+    manager: employee?.manager,
+    title: employee?.title,
+    degree: employee?.degree,
+    email: employee?.email,
+    image: getStorageUrl(employee?.image_key),
+    customers: employee?.customers,
     workExperience,
     tags: {
       skills: skill?.split(';') ?? [],
@@ -134,10 +140,10 @@ export const aggregateEmployeeProfile = (
       roles: role?.split(';') ?? [],
     },
     links: {
-      no_pdf: makeCvLink('no', 'pdf', cvLinkTemplate),
-      int_pdf: makeCvLink('int', 'pdf', cvLinkTemplate),
-      no_word: makeCvLink('no', 'word', cvLinkTemplate),
-      int_word: makeCvLink('int', 'word', cvLinkTemplate),
+      no_pdf: makeCvLink('no', 'pdf', employee?.link),
+      int_pdf: makeCvLink('int', 'pdf', employee?.link),
+      no_word: makeCvLink('no', 'word', employee?.link),
+      int_word: makeCvLink('int', 'word', employee?.link),
     },
   }
 }

@@ -7,7 +7,12 @@ import {
   aggregateEmployeeRadar,
   aggregateEmployeeTable,
 } from './employeesAggregation'
-import { CompetenceAreasResponse, EmployeeExperience } from './employeesTypes'
+import {
+  CompetenceAreasResponse,
+  EmployeeExperience,
+  EmployeeInformation,
+  EmployeeSkills,
+} from './employeesTypes'
 
 const router = express.Router()
 
@@ -152,7 +157,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         throw err
       }
 
-      const employeeSkillsPromise = getReport<any[]>({
+      const employeeSkillsPromise = getReport<EmployeeSkills[]>({
         accessToken: req.accessToken,
         reportName: 'employeeSkills',
         queryParams: {
@@ -160,7 +165,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      const workExperiencePromise = getReport<any[]>({
+      const workExperiencePromise = getReport<EmployeeExperience[]>({
         accessToken: req.accessToken,
         reportName: 'workExperience',
         queryParams: {
@@ -168,7 +173,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      const employeeInformationPromise = getReport<any[]>({
+      const employeeInformationPromise = getReport<EmployeeInformation[]>({
         accessToken: req.accessToken,
         reportName: 'employeeInformation',
         queryParams: {
@@ -182,6 +187,8 @@ router.get<unknown, unknown, unknown, EmailParam>(
           workExperiencePromise,
           employeeInformationPromise,
         ])
+
+      // TODO: Should probably return 404/Not found if employeeInformation is empty?
 
       const aggregatedData = aggregateEmployeeProfile(
         employeeSkills,

@@ -77,7 +77,7 @@ export default function EmployeeSite() {
   const email = location.pathname.split('/')[2]
   const idRegex = /^(\w+\.?)*@knowit.no$/
   const url = '/api/data/empData?email=' + email
-  const [data, pending] = useFetchedData<EmpSiteData>({ url })
+  const [data, pending] = useFetchedData<EmployeeProfileResponse>({ url })
 
   const classes = useStyles()
 

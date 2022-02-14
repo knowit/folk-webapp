@@ -115,5 +115,5 @@ export const makeCvLink = (
   format: string,
   linkTemplate?: string
 ) => {
-  return linkTemplate.replace('{LANG}', lang).replace('{FORMAT}', format)
+  return linkTemplate?.replace('{LANG}', lang).replace('{FORMAT}', format)
 }

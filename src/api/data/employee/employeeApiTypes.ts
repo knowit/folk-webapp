@@ -38,11 +38,7 @@ interface Tags {
 export interface EmployeeProfileResponse extends Employee {
   image?: string
   workExperience: WorkExperience[]
-  tags: {
-    skills: string[]
-    languages: string[]
-    roles: string[]
-  }
+  tags: Tags
   links: Links
 }
 
@@ -52,7 +48,6 @@ interface Employee {
   navn: string
   manager: string
   title: string
-  link: string
   degree?: string
   email: string
   customers: Customer[]
@@ -62,6 +57,12 @@ export interface Customer {
   customer: string
   workOrderDescription: string
   weight: number
+}
+
+interface Tags {
+  skills: string[]
+  languages: string[]
+  roles: string[]
 }
 
 interface Links {

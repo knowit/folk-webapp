@@ -53,8 +53,6 @@ export const getWeek = (): string => {
 export const mergeEmployeesByCustomers = (
   employees: EmployeeInformation[]
 ): EmployeeWithMergedCustomers[] => {
-  const mergedEmployees = {}
-
   const employeesWithMergedCustomers = {}
 
   employees.forEach((employee) => {
@@ -64,7 +62,8 @@ export const mergeEmployeesByCustomers = (
       weight: employee.weight,
     }
 
-    const employeeToMerge = mergedEmployees[employee.guid] ?? employee
+    const employeeToMerge =
+      employeesWithMergedCustomers[employee.guid] ?? employee
     const customersForEmployee = employeeToMerge.customers ?? []
 
     employeesWithMergedCustomers[employee.guid] = {
@@ -72,6 +71,7 @@ export const mergeEmployeesByCustomers = (
       customers: [thisCustomer, ...customersForEmployee],
     }
   })
+
   return Object.values(employeesWithMergedCustomers)
 }
 

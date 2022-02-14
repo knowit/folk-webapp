@@ -687,12 +687,24 @@ export const employeeProfileReports = ({
 /** Dette endepunktet henter data om en enkelt person for å fylle opp sidene for hver enkelt ansatt.  */
 export const employeeProfile = async ({ data }: EmployeeData) => {
   const [employeeSkills, workExperience, employeeInformation] = data
+
+  // TODO: we should probably send a proper response to the frontend if there is no employee with the given email
+  // if (!employeeInformation || employeeInformation.length === 0) {
+  //   throw reporting({ status: 404, message: 'No employee information found' })
+  // }
+
   const employee = mergeEmployeesByCustomers(employeeInformation)[0]
   const { skill, language, role } = employeeSkills[0] ?? {}
 
   return {
-    ...employee,
-    image: getStorageUrl(employee.image_key),
+    user_id: employee?.user_id,
+    guid: employee?.guid,
+    navn: employee?.navn,
+    manager: employee?.manager,
+    title: employee?.title,
+    degree: employee?.degree,
+    email: employee?.email,
+    image: getStorageUrl(employee?.image_key),
     workExperience,
     tags: {
       skills: skill?.split(';') ?? [],
@@ -702,7 +714,7 @@ export const employeeProfile = async ({ data }: EmployeeData) => {
     links: Object.fromEntries(
       cvs.map(([lang, format]) => [
         `${lang}_${format}`,
-        employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
+        employee?.link?.replace('{LANG}', lang).replace('{FORMAT}', format),
       ])
     ),
   }
