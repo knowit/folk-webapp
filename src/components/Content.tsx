@@ -6,7 +6,7 @@ import {
   Competence,
   Customer,
   EmployeePage,
-  EmployeeSite,
+  EmployeeProfile,
   NotFound,
   UnderConstruction,
 } from '../pages'
@@ -28,7 +28,7 @@ export default function Content() {
       <Route path="/kompetanse" element={<Competence />} />
       <Route path="/arbeidsmiljo" element={<UnderConstruction />} />
       <Route path="/rekruttering" element={<UnderConstruction />} />
-      <Route path="/ansatt/:id" element={<EmployeeSite />} />
+      <Route path="/ansatt/:id" element={<EmployeeProfile />} />
       <Route path="/debug" element={<Debug />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

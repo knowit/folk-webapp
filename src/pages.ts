@@ -2,7 +2,7 @@ import NotFound from './pages/NotFound'
 import UnderConstruction from './pages/UnderConstruction'
 import EmployeePage from './pages/EmployeePage'
 import Competence from './pages/Competence'
-import EmployeeSite from './pages/EmployeeSite'
+import EmployeeProfile from './pages/EmployeeProfile'
 import Customer from './pages/customer/Customer'
 
 export {
@@ -10,6 +10,6 @@ export {
   UnderConstruction,
   EmployeePage,
   Competence,
-  EmployeeSite,
+  EmployeeProfile,
   Customer,
 }

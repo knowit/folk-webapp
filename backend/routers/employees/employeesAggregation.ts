@@ -4,17 +4,25 @@ import {
   findProjectStatusForEmployee,
   getCategoryScoresForEmployee,
   getStorageUrl,
-  mergeEmployees,
+  makeCvLink,
+  mergeCustomersForEmployees,
 } from './aggregationHelpers'
-import { EmployeeExperience } from './employeesTypes'
+import {
+  EmployeeExperience,
+  EmployeeInformation,
+  EmployeeProfile,
+  EmployeeSkills,
+  WorkExperience,
+} from './employeesTypes'
 
 export const aggregateEmployeeTable = (
   employeeInformation,
   employeeMotivationAndCompetence,
   jobRotationInformation
 ) => {
-  const mergedEmployees = mergeEmployees(employeeInformation)
-  return mergedEmployees.map((employee) => ({
+  const employeesWithMergedCustomers =
+    mergeCustomersForEmployees(employeeInformation)
+  return employeesWithMergedCustomers.map((employee) => ({
     rowId: uuid(),
     rowData: [
       {
@@ -30,7 +38,7 @@ export const aggregateEmployeeTable = (
       },
       employee.title,
       findProjectStatusForEmployee(jobRotationInformation, employee.email),
-      employee.customerArray.reduce((prevCustomer, thisCustomer) => {
+      employee.customers.reduce((prevCustomer, thisCustomer) => {
         if (thisCustomer.weight < prevCustomer.weight) {
           return thisCustomer
         } else {
@@ -108,28 +116,39 @@ export const aggregateEmployeeRadar = (data: any) => {
   }
 }
 
-export const aggregateEmpData = (
-  employeeSkills,
-  workExperience,
-  employeeInformation
-) => {
-  const emp = mergeEmployees(employeeInformation)[0]
+export const aggregateEmployeeProfile = (
+  employeeSkills: EmployeeSkills[],
+  workExperience: WorkExperience[],
+  employeeInformation: EmployeeInformation[]
+): EmployeeProfile => {
+  if (employeeInformation.length === 0) {
+    return
+  }
+
+  const employee = mergeCustomersForEmployees(employeeInformation)[0]
+  const { skill, language, role } = employeeSkills[0] ?? {}
 
   return {
-    email_id: emp.email,
-    user_id: emp.user_id,
-    employee: emp,
-    image: getStorageUrl(emp.image_key),
-    workExperience: workExperience,
-    tags: employeeSkills[0],
-    degree: employeeInformation[0].degree,
-    manager: employeeInformation[0].manager,
-    links: Object.fromEntries(
-      cvs.map(([lang, format]) => [
-        `${lang}_${format}`,
-        emp.link.replace('{LANG}', lang).replace('{FORMAT}', format),
-      ])
-    ),
-    customerArray: emp.customerArray,
+    user_id: employee.user_id,
+    guid: employee.guid,
+    navn: employee.navn,
+    manager: employee.manager,
+    title: employee.title,
+    degree: employee.degree,
+    email: employee.email,
+    image: getStorageUrl(employee.image_key),
+    customers: employee.customers,
+    workExperience,
+    tags: {
+      skills: skill?.split(';') ?? [],
+      languages: language?.split(';') ?? [],
+      roles: role?.split(';') ?? [],
+    },
+    links: {
+      no_pdf: makeCvLink('no', 'pdf', employee.link),
+      int_pdf: makeCvLink('int', 'pdf', employee.link),
+      no_word: makeCvLink('no', 'word', employee.link),
+      int_word: makeCvLink('int', 'word', employee.link),
+    },
   }
 }

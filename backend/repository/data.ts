@@ -4,7 +4,7 @@ import {
   getEventSet,
   getWeek,
   getYear,
-  mergeEmployees,
+  mergeCustomersForEmployees,
   range,
   statusColorCode,
   sum,
@@ -156,9 +156,9 @@ type EmployeeWorkStatus = {
 export const employeeTable = async ({ data }: EmployeeTable) => {
   const [allEmployees, motivationAndCompetence, jobRotation, employeeStatus] =
     data
-  const mergedEmployees = mergeEmployees(allEmployees)
+  const employeesWithMergedCustomers = mergeCustomersForEmployees(allEmployees)
 
-  return mergedEmployees.map((employee) => ({
+  return employeesWithMergedCustomers.map((employee) => ({
     rowId: uuid(),
     rowData: [
       {
@@ -175,7 +175,7 @@ export const employeeTable = async ({ data }: EmployeeTable) => {
       employee.title,
 
       findProjectStatusForEmployee(jobRotation, employeeStatus, employee.guid),
-      employee.customerArray.reduce((prevCustomer, thisCustomer) => {
+      employee.customers.reduce((prevCustomer, thisCustomer) => {
         if (thisCustomer.weight < prevCustomer.weight) {
           return thisCustomer
         } else {
@@ -286,13 +286,14 @@ type EmployeeData = {
   data: [EmployeeSkills[], WorkExperience[], EmployeeInformation[]]
 }
 
-/** Dette endepunktet henter mer data om ansatte.
- *  Arbeidserfaring, ferdigheter, språk,  utdanning og roller fra CV-partner og nærmeste leder fra AD,
- *  Brukes i EmployeeInfo.tsx (utvidet tabell) og EmployeeSite.tsx
+/**
+ * Dette endepunktet henter mer data om ansatte. Arbeidserfaring, ferdigheter,
+ * språk,  utdanning og roller fra CV-partner og nærmeste leder fra AD.
+ * Brukes i EmployeeInfo.tsx (utvidet tabell).
  */
 export const employeeCompetence = async ({ data }: EmployeeData) => {
   const [resSkills, resEmp, resComp] = data
-  const mergedRes = mergeEmployees(resComp)
+  const mergedRes = mergeCustomersForEmployees(resComp)
 
   const mapTags = (skills: EmployeeSkills[]) => {
     const mappedSkills =
@@ -668,7 +669,7 @@ export const competenceAmount = async ({
   }
 }
 
-export const empDataReports = ({
+export const employeeProfileReports = ({
   parameters: { email } = {},
 }: ReportParams) => [
   {
@@ -684,27 +685,42 @@ export const empDataReports = ({
     filter: { email },
   },
 ]
-/** Dette endepunktet henter data om en enkelt person for å fylle opp sidene for hver enkelt ansatt.  */
-export const empData = async ({ data }: EmployeeData) => {
-  const [resSkills, resWork, resComp] = data
-  const emp = mergeEmployees(resComp)[0]
+
+/**
+ * Dette endepunktet henter data om en enkelt person for å fylle opp sidene for hver enkelt ansatt.
+ */
+export const employeeProfile = async ({ data }: EmployeeData) => {
+  const [employeeSkills, workExperience, employeeInformation] = data
+
+  if (!employeeInformation || employeeInformation.length === 0) {
+    return
+  }
+
+  const employee = mergeCustomersForEmployees(employeeInformation)[0]
+  const { skill, language, role } = employeeSkills[0] ?? {}
 
   return {
-    email_id: emp.email,
-    user_id: emp.user_id,
-    employee: emp,
-    image: getStorageUrl(emp.image_key),
-    workExperience: resWork,
-    tags: resSkills[0],
-    degree: resComp[0].degree,
-    manager: resComp[0].manager,
+    user_id: employee.user_id,
+    guid: employee.guid,
+    navn: employee.navn,
+    manager: employee.manager,
+    title: employee.title,
+    degree: employee.degree,
+    email: employee.email,
+    image: getStorageUrl(employee.image_key),
+    customers: employee.customers,
+    workExperience,
+    tags: {
+      skills: skill?.split(';') ?? [],
+      languages: language?.split(';') ?? [],
+      roles: role?.split(';') ?? [],
+    },
     links: Object.fromEntries(
       cvs.map(([lang, format]) => [
         `${lang}_${format}`,
-        emp.link.replace('{LANG}', lang).replace('{FORMAT}', format),
+        employee.link?.replace('{LANG}', lang).replace('{FORMAT}', format),
       ])
     ),
-    customerArray: emp.customerArray,
   }
 }
 

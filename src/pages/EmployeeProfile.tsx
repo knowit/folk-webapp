@@ -13,20 +13,7 @@ import {
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg'
 import { CustomerStatusData } from '../data/components/table/cells/CustomerStatusCell'
 import { useEmployeeRadar } from '../api/data/employee/employeeQueries'
-
-type WorkExperience = {
-  employer: string
-  month_from: number
-  year_from: number
-  month_to: number
-  year_to: number
-}
-type EmpData = {
-  email: string
-  navn: string
-  title: string
-  user_id: string
-}
+import { EmployeeProfileResponse } from '../api/data/employee/employeeApiTypes'
 
 export interface ProjectExperience {
   customer: string
@@ -38,29 +25,6 @@ export interface ProjectExperience {
 export interface ExperienceData {
   name: string
   experience: ProjectExperience[]
-}
-
-type EmpSiteData = {
-  email_id: string
-  user_id: string
-  employee: EmpData
-  image: string
-  tags: {
-    skill: string
-    role: string
-    language: string
-  }
-  workExperience: WorkExperience[]
-  degree: string
-  manager: string
-  guid: string
-  links: {
-    no_pdf: string
-    int_pdf: string
-    no_word: string
-    int_word: string
-  }
-  customerArray: CustomerStatusData[]
 }
 
 const useStyles = makeStyles({
@@ -108,17 +72,17 @@ export const ChartSkeleton = () => (
   <Skeleton variant="rect" height={320} width={400} animation="wave" />
 )
 
-export default function EmployeeSite() {
+export default function EmployeeProfile() {
   const location = useLocation()
   const email = location.pathname.split('/')[2]
   const idRegex = /^(\w+\.?)*@knowit.no$/
-  const url = '/api/data/empData?email=' + email
-  const [data, pending] = useFetchedData<EmpSiteData>({ url })
+  const url = '/api/data/employeeProfile?email=' + email
+  const [data, pending] = useFetchedData<EmployeeProfileResponse>({ url })
 
   const classes = useStyles()
 
   const user_id = data ? data.user_id : null
-  const emp = data ? data.employee : null
+  const emp = data ?? null
   const tags = data ? data.tags : null
   const [expData, expPending] = useFetchedData<ExperienceData>({
     url: `/api/data/employeeExperience?user_id=${user_id}`,
@@ -163,7 +127,7 @@ export default function EmployeeSite() {
               ) : (
                 <>
                   <b>Hovedkompetanse: </b>
-                  {tags?.skill.replace(/;/g, ', ')}
+                  {tags?.skills.join(', ')}
                 </>
               )}
             </div>
@@ -178,7 +142,7 @@ export default function EmployeeSite() {
               ) : (
                 <>
                   <b>Roller: </b>
-                  {tags?.role.replace(/;/g, ', ')}
+                  {tags?.roles.join(', ')}
                 </>
               )}
             </div>
@@ -223,7 +187,7 @@ export default function EmployeeSite() {
               ) : (
                 <>
                   <b>Språk: </b>
-                  {tags?.language.replace(/;/g, ', ')}
+                  {tags?.languages.join(', ')}
                 </>
               )}
             </div>
@@ -238,7 +202,7 @@ export default function EmployeeSite() {
               ) : (
                 <>
                   <b>Utdanning: </b>
-                  {data && data?.degree}
+                  {data?.degree}
                 </>
               )}
             </div>
@@ -253,7 +217,7 @@ export default function EmployeeSite() {
               ) : (
                 <>
                   <b>Nærmeste leder: </b>
-                  {data && data?.manager}
+                  {data?.manager}
                 </>
               )}
             </div>
@@ -299,7 +263,7 @@ export default function EmployeeSite() {
         {pending ? (
           <p>loading....</p>
         ) : (
-          <PrintCustomers customerArray={data?.customerArray} />
+          <PrintCustomers customerArray={data?.customers} />
         )}
         <h2>Arbeidserfaring</h2>
         {pending ? (

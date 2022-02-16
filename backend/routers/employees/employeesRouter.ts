@@ -1,13 +1,19 @@
 import express from 'express'
 import { getReport } from '../../dataplattform/client'
-import { ParamError } from '../errorHandling'
+import { NotFoundError, ParamError } from '../errorHandling'
 import {
-  aggregateEmpData,
+  aggregateEmployeeProfile,
   aggregateEmployeeExperience,
   aggregateEmployeeRadar,
   aggregateEmployeeTable,
 } from './employeesAggregation'
-import { CompetenceAreasResponse, EmployeeExperience } from './employeesTypes'
+import {
+  CompetenceAreasResponse,
+  EmployeeExperience,
+  EmployeeInformation,
+  EmployeeSkills,
+  WorkExperience,
+} from './employeesTypes'
 
 const router = express.Router()
 
@@ -140,7 +146,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
 )
 
 router.get<unknown, unknown, unknown, EmailParam>(
-  '/empData',
+  '/employeeProfile',
   async (req, res, next) => {
     try {
       if (!req.query.email) {
@@ -152,7 +158,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         throw err
       }
 
-      const employeeSkillsPromise = getReport<any[]>({
+      const employeeSkillsPromise = getReport<EmployeeSkills[]>({
         accessToken: req.accessToken,
         reportName: 'employeeSkills',
         queryParams: {
@@ -160,7 +166,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      const workExperiencePromise = getReport<any[]>({
+      const workExperiencePromise = getReport<WorkExperience[]>({
         accessToken: req.accessToken,
         reportName: 'workExperience',
         queryParams: {
@@ -168,7 +174,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      const employeeInformationPromise = getReport<any[]>({
+      const employeeInformationPromise = getReport<EmployeeInformation[]>({
         accessToken: req.accessToken,
         reportName: 'employeeInformation',
         queryParams: {
@@ -183,7 +189,16 @@ router.get<unknown, unknown, unknown, EmailParam>(
           employeeInformationPromise,
         ])
 
-      const aggregatedData = aggregateEmpData(
+      if (!employeeInformation || employeeInformation.length === 0) {
+        const err: NotFoundError = {
+          status: 404,
+          message: "Employee with email '" + req.query.email + "' not found.",
+        }
+
+        throw err
+      }
+
+      const aggregatedData = aggregateEmployeeProfile(
         employeeSkills,
         workExperience,
         employeeInformation

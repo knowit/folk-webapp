@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 import {
-  getEmpData,
+  getEmployeeProfile,
   getEmployeeExperience,
   getEmployeeRadar,
   getEmployeeTable,
@@ -16,12 +16,12 @@ export const useEmployeeExperience = (user_id: string) =>
     revalidateOnFocus: false,
   })
 
-export const useEmpData = (email: string) =>
-  useSWR(['/empData', email], getEmpData, {
+export const useEmployeeProfile = (email: string) =>
+  useSWR(['/employeeProfile', email], getEmployeeProfile, {
     revalidateOnFocus: false,
   })
 
 export const useEmployeeRadar = (email: string) =>
-  useSWR(['/empData', email], getEmployeeRadar, {
+  useSWR(['/employeeRadar', email], getEmployeeRadar, {
     revalidateOnFocus: false,
   })

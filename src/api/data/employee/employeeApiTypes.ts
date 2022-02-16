@@ -8,6 +8,13 @@ export interface EmployeeTableResponse {
 
 // employeeExperience
 
+export interface EmployeeExperienceResponse {
+  workExperience: WorkExperience[]
+  tags: Tags
+  manager: string
+  guid: string
+}
+
 interface WorkExperience {
   user_id: string
   email: string
@@ -24,50 +31,43 @@ interface Tags {
   roles: string[]
 }
 
-export interface EmployeeExperienceResponse {
+/**
+ * EmployeeProfile
+ */
+
+export interface EmployeeProfileResponse extends Employee {
+  image?: string
   workExperience: WorkExperience[]
   tags: Tags
-  manager: string
-  guid: string
+  links: Links
 }
 
-// empData
-
-export interface CustomerArray {
-  customer: string
-  workOrderDescription: string
-  weight: number
-}
-
-export interface Employee {
+interface Employee {
   user_id: string
   guid: string
   navn: string
   manager: string
   title: string
-  link: string
-  degree: string
+  degree?: string
   email: string
-  customer: string
-  weight: number
-  work_order_description: string
-  customerArray: CustomerArray[]
+  customers: Customer[]
 }
 
-export interface Links {
+export interface Customer {
+  customer: string
+  workOrderDescription: string
+  weight: number
+}
+
+interface Tags {
+  skills: string[]
+  languages: string[]
+  roles: string[]
+}
+
+interface Links {
   no_pdf: string
   int_pdf: string
   no_word: string
   int_word: string
-}
-
-export interface EmpDataResponse {
-  email_id: string
-  user_id: string
-  employee: Employee
-  workExperience: WorkExperience[]
-  degree: string
-  manager: string
-  links: Links
-  customerArray: CustomerArray[]
 }

@@ -14,12 +14,55 @@ export type EmployeeInformation = {
   work_order_description?: string
 }
 
-export type MergeEmployees = EmployeeInformation & {
-  customerArray: {
-    customer: string
-    wordOrderDescription: string
-    weight: number
-  }[]
+export type EmployeeWithMergedCustomers = EmployeeInformation & {
+  customers: Customer[]
+}
+
+export type Customer = {
+  customer: string
+  workOrderDescription: string
+  weight: number
+}
+
+export type EmployeeProfile = Omit<
+  EmployeeWithMergedCustomers,
+  'customer' | 'weight' | 'work_order_description' | 'image_key' | 'link'
+> & {
+  image: string
+  workExperience: WorkExperience[]
+  tags: Tags
+  links: Links
+}
+
+export type WorkExperience = {
+  user_id: string
+  email: string
+  employer: string
+  month_from: number
+  month_to: number
+  year_from: number
+  year_to: number
+}
+
+type Tags = {
+  languages: string[]
+  skills: string[]
+  roles: string[]
+}
+
+type Links = {
+  no_pdf: string
+  int_pdf: string
+  no_word: string
+  int_word: string
+}
+
+export type EmployeeSkills = {
+  user_id: string
+  email: string
+  language: string // Semi-colon separated list
+  skill: string // Semi-colon separated list
+  role: string // Semi-colon separated list
 }
 
 export type JobRotation = {

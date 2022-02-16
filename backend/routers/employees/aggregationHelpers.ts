@@ -1,10 +1,11 @@
 import {
   CategoryScores,
+  Customer,
   EmployeeInformation,
   EmployeeMotivationAndCompetence,
+  EmployeeWithMergedCustomers,
   JobRotation,
   JobRotationStatus,
-  MergeEmployees,
 } from './employeesTypes'
 
 export const cvs = [
@@ -22,27 +23,34 @@ export const getStorageUrl = (key: string) => {
   }
 }
 
-export const mergeEmployees = (
-  allEmployees: EmployeeInformation[]
-): MergeEmployees[] => {
-  const mergedEmployees = {}
+/**
+ * Receives a list of employees, where each employee is listed once for each
+ * customer it is related to. This means that an employee might be listed more
+ * than once. The function merges the received employees and returns a list of
+ * distinct employees, each with a merged list of their related customers.
+ */
+export const mergeCustomersForEmployees = (
+  employees: EmployeeInformation[]
+): EmployeeWithMergedCustomers[] => {
+  const employeesWithMergedCustomers = {}
 
-  allEmployees.forEach((employee) => {
-    const thisCustomer = {
+  employees.forEach((employee) => {
+    const thisCustomer: Customer = {
       customer: employee.customer,
       workOrderDescription: employee.work_order_description,
       weight: employee.weight,
     }
 
-    const employeeToMerge = mergedEmployees[employee.guid] ?? employee
-    const customersForEmployee = employeeToMerge.customerArray ?? []
+    const employeeToMerge: EmployeeWithMergedCustomers =
+      employeesWithMergedCustomers[employee.guid] ?? employee
+    const customersForEmployee = employeeToMerge.customers ?? []
 
-    mergedEmployees[employee.guid] = {
+    employeesWithMergedCustomers[employee.guid] = {
       ...employeeToMerge,
-      customerArray: [thisCustomer, ...customersForEmployee],
+      customers: [thisCustomer, ...customersForEmployee],
     }
   })
-  return Object.values(mergedEmployees)
+  return Object.values(employeesWithMergedCustomers)
 }
 
 export const findProjectStatusForEmployee = (
@@ -106,4 +114,12 @@ export const getCategoryScoresForEmployee = (
   })
 
   return [employeeMotivation, employeeCompetence]
+}
+
+export const makeCvLink = (
+  lang: string,
+  format: string,
+  linkTemplate?: string
+) => {
+  return linkTemplate?.replace('{LANG}', lang).replace('{FORMAT}', format)
 }
