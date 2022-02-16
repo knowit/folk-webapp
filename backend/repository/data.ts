@@ -692,24 +692,23 @@ export const employeeProfileReports = ({
 export const employeeProfile = async ({ data }: EmployeeData) => {
   const [employeeSkills, workExperience, employeeInformation] = data
 
-  // TODO: we should probably send a proper response to the frontend if there is no employee with the given email
-  // if (!employeeInformation || employeeInformation.length === 0) {
-  //   throw reporting({ status: 404, message: 'No employee information found' })
-  // }
+  if (!employeeInformation || employeeInformation.length === 0) {
+    return
+  }
 
   const employee = mergeCustomersForEmployees(employeeInformation)[0]
   const { skill, language, role } = employeeSkills[0] ?? {}
 
   return {
-    user_id: employee?.user_id,
-    guid: employee?.guid,
-    navn: employee?.navn,
-    manager: employee?.manager,
-    title: employee?.title,
-    degree: employee?.degree,
-    email: employee?.email,
-    image: getStorageUrl(employee?.image_key),
-    customers: employee?.customers,
+    user_id: employee.user_id,
+    guid: employee.guid,
+    navn: employee.navn,
+    manager: employee.manager,
+    title: employee.title,
+    degree: employee.degree,
+    email: employee.email,
+    image: getStorageUrl(employee.image_key),
+    customers: employee.customers,
     workExperience,
     tags: {
       skills: skill?.split(';') ?? [],
@@ -719,7 +718,7 @@ export const employeeProfile = async ({ data }: EmployeeData) => {
     links: Object.fromEntries(
       cvs.map(([lang, format]) => [
         `${lang}_${format}`,
-        employee?.link?.replace('{LANG}', lang).replace('{FORMAT}', format),
+        employee.link?.replace('{LANG}', lang).replace('{FORMAT}', format),
       ])
     ),
   }

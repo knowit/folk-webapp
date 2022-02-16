@@ -29,9 +29,19 @@ export type EmployeeProfile = Omit<
   'customer' | 'weight' | 'work_order_description' | 'image_key' | 'link'
 > & {
   image: string
-  workExperience: EmployeeExperience[]
+  workExperience: WorkExperience[]
   tags: Tags
   links: Links
+}
+
+export type WorkExperience = {
+  user_id: string
+  email: string
+  employer: string
+  month_from: number
+  month_to: number
+  year_from: number
+  year_to: number
 }
 
 type Tags = {

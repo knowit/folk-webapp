@@ -12,6 +12,7 @@ import {
   EmployeeInformation,
   EmployeeProfile,
   EmployeeSkills,
+  WorkExperience,
 } from './employeesTypes'
 
 export const aggregateEmployeeTable = (
@@ -117,22 +118,26 @@ export const aggregateEmployeeRadar = (data: any) => {
 
 export const aggregateEmployeeProfile = (
   employeeSkills: EmployeeSkills[],
-  workExperience: EmployeeExperience[],
+  workExperience: WorkExperience[],
   employeeInformation: EmployeeInformation[]
 ): EmployeeProfile => {
+  if (employeeInformation.length === 0) {
+    return
+  }
+
   const employee = mergeCustomersForEmployees(employeeInformation)[0]
   const { skill, language, role } = employeeSkills[0] ?? {}
 
   return {
-    user_id: employee?.user_id,
-    guid: employee?.guid,
-    navn: employee?.navn,
-    manager: employee?.manager,
-    title: employee?.title,
-    degree: employee?.degree,
-    email: employee?.email,
-    image: getStorageUrl(employee?.image_key),
-    customers: employee?.customers,
+    user_id: employee.user_id,
+    guid: employee.guid,
+    navn: employee.navn,
+    manager: employee.manager,
+    title: employee.title,
+    degree: employee.degree,
+    email: employee.email,
+    image: getStorageUrl(employee.image_key),
+    customers: employee.customers,
     workExperience,
     tags: {
       skills: skill?.split(';') ?? [],
@@ -140,10 +145,10 @@ export const aggregateEmployeeProfile = (
       roles: role?.split(';') ?? [],
     },
     links: {
-      no_pdf: makeCvLink('no', 'pdf', employee?.link),
-      int_pdf: makeCvLink('int', 'pdf', employee?.link),
-      no_word: makeCvLink('no', 'word', employee?.link),
-      int_word: makeCvLink('int', 'word', employee?.link),
+      no_pdf: makeCvLink('no', 'pdf', employee.link),
+      int_pdf: makeCvLink('int', 'pdf', employee.link),
+      no_word: makeCvLink('no', 'word', employee.link),
+      int_word: makeCvLink('int', 'word', employee.link),
     },
   }
 }

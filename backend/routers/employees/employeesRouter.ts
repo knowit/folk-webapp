@@ -1,6 +1,6 @@
 import express from 'express'
 import { getReport } from '../../dataplattform/client'
-import { ParamError } from '../errorHandling'
+import { NotFoundError, ParamError } from '../errorHandling'
 import {
   aggregateEmployeeProfile,
   aggregateEmployeeExperience,
@@ -12,6 +12,7 @@ import {
   EmployeeExperience,
   EmployeeInformation,
   EmployeeSkills,
+  WorkExperience,
 } from './employeesTypes'
 
 const router = express.Router()
@@ -165,7 +166,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      const workExperiencePromise = getReport<EmployeeExperience[]>({
+      const workExperiencePromise = getReport<WorkExperience[]>({
         accessToken: req.accessToken,
         reportName: 'workExperience',
         queryParams: {
@@ -188,7 +189,14 @@ router.get<unknown, unknown, unknown, EmailParam>(
           employeeInformationPromise,
         ])
 
-      // TODO: Should probably return 404/Not found if employeeInformation is empty?
+      if (!employeeInformation || employeeInformation.length === 0) {
+        const err: NotFoundError = {
+          status: 404,
+          message: "Employee with email '" + req.query.email + "' not found.",
+        }
+
+        throw err
+      }
 
       const aggregatedData = aggregateEmployeeProfile(
         employeeSkills,
