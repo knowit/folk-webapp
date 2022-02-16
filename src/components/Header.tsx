@@ -47,7 +47,7 @@ export default function Header() {
   return (
     <div className={classes.root}>
       <AppBar className={classes.appbar} position="relative">
-        <Toolbar className={classes.toolbar}>
+        <Toolbar component={'nav'} className={classes.toolbar}>
           <Link data-testid="knowit-logo" to="/">
             <KnowitLogo title="knowit-logo" className={classes.logo} />
           </Link>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Redirect, Route, Switch } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { isLoggedIn } from '../api/auth/authHelpers'
 import { useUserInfo } from '../context/UserInfoContext'
 import {
@@ -21,34 +21,16 @@ export default function Content() {
   }
 
   return (
-    <Switch>
-      <Route path="/ansatte">
-        <EmployeePage />
-      </Route>
-      <Route path="/kunder">
-        <Customer />
-      </Route>
-      <Route path="/kompetanse">
-        <Competence />
-      </Route>
-      <Route path="/arbeidsmiljo">
-        <UnderConstruction />
-      </Route>
-      <Route path="/rekruttering">
-        <UnderConstruction />
-      </Route>
-      <Route path="/ansatt/:id">
-        <EmployeeSite />
-      </Route>
-      <Route path="/debug">
-        <Debug />
-      </Route>
-      <Route exact path="/">
-        <Redirect to="/ansatte" />
-      </Route>
-      <Route>
-        <NotFound />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path="/" element={<Navigate replace to="/ansatte" />} />
+      <Route path="/ansatte" element={EmployeePage} />
+      <Route path="/kunder" element={Customer} />
+      <Route path="/kompetanse" element={Competence} />
+      <Route path="/arbeidsmiljo" element={UnderConstruction} />
+      <Route path="/rekruttering" element={UnderConstruction} />
+      <Route path="/ansatt/:id" element={EmployeeSite} />
+      <Route path="/debug" element={Debug} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   )
 }
