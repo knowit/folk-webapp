@@ -3,7 +3,7 @@ import { GridItemHeader } from '../components/GridItem'
 import { FilterHeader } from '../components/FilterHeader'
 import DataTable from './components/table/DataTable'
 import SearchInput from '../components/SearchInput'
-import FilterInput, { useCategories } from '../components/FilterInput'
+import FilterInput from '../components/FilterInput'
 import RowCount from '../components/RowCount'
 import { Columns, DDTableProps } from './types'
 import { makeStyles } from '@material-ui/core/styles'
@@ -13,7 +13,7 @@ import {
   handleFilterChange,
   handleThresholdChange,
   searchAndFilter,
-} from '../components/FilterSearch'
+} from '../components/FilterUtil'
 import { SortOrder } from './components/table/cells/SortableHeaderCell'
 
 type GetSearchValueFn = (data: unknown) => string
@@ -81,25 +81,13 @@ export function getSearchableColumns(columns: Columns[]): SearchableColumn[] {
   return result
 }
 
-export default function DDTable({ payload, title, props }: DDTableProps) {
+export default function DDTable({
+  payload,
+  title,
+  initialFilters,
+  props,
+}: DDTableProps) {
   const allRows = payload
-  const initialFilters: FilterObject[] = [
-    {
-      name: 'COMPETENCE',
-      values: [],
-      threshold: 3,
-      placeholder: 'Filtrer på kompetanse...',
-      datafetch: useCategories,
-    },
-    {
-      name: 'MOTIVATION',
-      values: [],
-      threshold: 4,
-      placeholder: 'Filtrer på motivasjon...',
-      datafetch: useCategories,
-    },
-  ]
-
   const [filters, setFilters] = useState<FilterObject[]>(initialFilters)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [columnSort, setColumnSort] = useState<ColumnSort>({

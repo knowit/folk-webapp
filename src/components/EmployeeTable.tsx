@@ -1,3 +1,4 @@
+import React from 'react'
 import DDTable from '../data/DDTable'
 import {
   CheckBoxHeaderCell,
@@ -9,10 +10,10 @@ import {
 } from '../data/components/table/DataCells'
 import EmployeeInfo from './EmployeeInfo'
 import { CustomerStatusData } from '../data/components/table/cells/CustomerStatusCell'
-import React from 'react'
 import { Skeleton } from '@material-ui/lab'
 import { useEmployeeTable } from '../api/data/employee/employeeQueries'
 import { GridItem } from './GridItem'
+import { useCategories } from './FilterUtil'
 
 export function EmployeeTable() {
   const TableSkeleton = () => (
@@ -60,6 +61,22 @@ export function EmployeeTable() {
               { title: 'CV', renderCell: CvCell },
             ],
           }}
+          initialFilters={[
+            {
+              name: 'COMPETENCE',
+              values: [],
+              threshold: 3,
+              placeholder: 'Filtrer på kompetanse...',
+              datafetch: useCategories,
+            },
+            {
+              name: 'MOTIVATION',
+              values: [],
+              threshold: 4,
+              placeholder: 'Filtrer på motivasjon...',
+              datafetch: useCategories,
+            },
+          ]}
         />
       ) : (
         <TableSkeleton />

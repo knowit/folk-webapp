@@ -1,4 +1,5 @@
 import { SWRResponse } from 'swr'
+import { FilterObject } from '../components/FilterUtil'
 
 export type DDPayload = { [key: string]: any }
 
@@ -39,6 +40,7 @@ export interface DDTableProps extends DDComponentProps {
   props: {
     columns: Columns[]
   }
+  initialFilters: FilterObject[]
 }
 
 export interface DDChartProps extends DDComponentProps {

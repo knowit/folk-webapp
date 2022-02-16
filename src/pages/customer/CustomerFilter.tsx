@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import FilterInput, {
-  CategoryWithGroup,
-  useCategories,
-} from '../../components/FilterInput'
+import FilterInput from '../../components/FilterInput'
 import { FilterHeader } from '../../components/FilterHeader'
 import { GridItemHeader } from '../../components/GridItem'
 import SearchInput from '../../components/SearchInput'
 import { SearchableColumn } from '../../data/DDTable'
 import {
+  CategoryWithGroup,
   FilterObject,
   handleFilterChange,
   handleThresholdChange,
   searchAndFilter,
-} from '../../components/FilterSearch'
+  useCategories,
+} from '../../components/FilterUtil'
 import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
 
 interface CustomerFilterProps {
