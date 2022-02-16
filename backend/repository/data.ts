@@ -709,6 +709,7 @@ export const employeeProfile = async ({ data }: EmployeeData) => {
     degree: employee?.degree,
     email: employee?.email,
     image: getStorageUrl(employee?.image_key),
+    customers: employee?.customers,
     workExperience,
     tags: {
       skills: skill?.split(';') ?? [],
