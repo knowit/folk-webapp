@@ -50,7 +50,13 @@ export const getWeek = (): string => {
   return currentWeekNumber.toString()
 }
 
-export const mergeEmployeesByCustomers = (
+/**
+ * Receives a list of employees, where each employee is listed once for each
+ * customer it is related to. This means that an employee might be listed more
+ * than once. The function merges the received employees and returns a list of
+ * distinct employees, each with a merged list of their related customers.
+ */
+export const mergeCustomersForEmployees = (
   employees: EmployeeInformation[]
 ): EmployeeWithMergedCustomers[] => {
   const employeesWithMergedCustomers = {}

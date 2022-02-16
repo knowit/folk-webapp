@@ -5,7 +5,7 @@ import {
   getCategoryScoresForEmployee,
   getStorageUrl,
   makeCvLink,
-  mergeEmployeesByCustomers,
+  mergeCustomersForEmployees,
 } from './aggregationHelpers'
 import {
   EmployeeExperience,
@@ -20,7 +20,7 @@ export const aggregateEmployeeTable = (
   jobRotationInformation
 ) => {
   const employeesWithMergedCustomers =
-    mergeEmployeesByCustomers(employeeInformation)
+    mergeCustomersForEmployees(employeeInformation)
   return employeesWithMergedCustomers.map((employee) => ({
     rowId: uuid(),
     rowData: [
@@ -120,7 +120,7 @@ export const aggregateEmployeeProfile = (
   workExperience: EmployeeExperience[],
   employeeInformation: EmployeeInformation[]
 ): EmployeeProfile => {
-  const employee = mergeEmployeesByCustomers(employeeInformation)[0]
+  const employee = mergeCustomersForEmployees(employeeInformation)[0]
   const { skill, language, role } = employeeSkills[0] ?? {}
 
   return {

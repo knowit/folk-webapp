@@ -4,7 +4,7 @@ import {
   getEventSet,
   getWeek,
   getYear,
-  mergeEmployeesByCustomers,
+  mergeCustomersForEmployees,
   range,
   statusColorCode,
   sum,
@@ -156,7 +156,7 @@ type EmployeeWorkStatus = {
 export const employeeTable = async ({ data }: EmployeeTable) => {
   const [allEmployees, motivationAndCompetence, jobRotation, employeeStatus] =
     data
-  const employeesWithMergedCustomers = mergeEmployeesByCustomers(allEmployees)
+  const employeesWithMergedCustomers = mergeCustomersForEmployees(allEmployees)
 
   return employeesWithMergedCustomers.map((employee) => ({
     rowId: uuid(),
@@ -286,13 +286,14 @@ type EmployeeData = {
   data: [EmployeeSkills[], WorkExperience[], EmployeeInformation[]]
 }
 
-/** Dette endepunktet henter mer data om ansatte.
- *  Arbeidserfaring, ferdigheter, språk,  utdanning og roller fra CV-partner og nærmeste leder fra AD,
- *  Brukes i EmployeeInfo.tsx (utvidet tabell) og EmployeeSite.tsx
+/**
+ * Dette endepunktet henter mer data om ansatte. Arbeidserfaring, ferdigheter,
+ * språk,  utdanning og roller fra CV-partner og nærmeste leder fra AD.
+ * Brukes i EmployeeInfo.tsx (utvidet tabell).
  */
 export const employeeCompetence = async ({ data }: EmployeeData) => {
   const [resSkills, resEmp, resComp] = data
-  const mergedRes = mergeEmployeesByCustomers(resComp)
+  const mergedRes = mergeCustomersForEmployees(resComp)
 
   const mapTags = (skills: EmployeeSkills[]) => {
     const mappedSkills =
@@ -684,7 +685,10 @@ export const employeeProfileReports = ({
     filter: { email },
   },
 ]
-/** Dette endepunktet henter data om en enkelt person for å fylle opp sidene for hver enkelt ansatt.  */
+
+/**
+ * Dette endepunktet henter data om en enkelt person for å fylle opp sidene for hver enkelt ansatt.
+ */
 export const employeeProfile = async ({ data }: EmployeeData) => {
   const [employeeSkills, workExperience, employeeInformation] = data
 
@@ -693,7 +697,7 @@ export const employeeProfile = async ({ data }: EmployeeData) => {
   //   throw reporting({ status: 404, message: 'No employee information found' })
   // }
 
-  const employee = mergeEmployeesByCustomers(employeeInformation)[0]
+  const employee = mergeCustomersForEmployees(employeeInformation)[0]
   const { skill, language, role } = employeeSkills[0] ?? {}
 
   return {
