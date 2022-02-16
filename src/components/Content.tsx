@@ -10,6 +10,7 @@ import {
   NotFound,
   UnderConstruction,
 } from '../pages'
+import Debug from '../pages/Debug'
 import LoginPage from '../pages/login/LoginPage'
 
 export default function Content() {
@@ -28,6 +29,7 @@ export default function Content() {
       <Route path="/arbeidsmiljo" element={<UnderConstruction />} />
       <Route path="/rekruttering" element={<UnderConstruction />} />
       <Route path="/ansatt/:id" element={<EmployeeSite />} />
+      <Route path="/debug" element={<Debug />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

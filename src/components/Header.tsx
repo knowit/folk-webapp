@@ -48,7 +48,10 @@ export default function Header() {
     <div className={classes.root}>
       <AppBar className={classes.appbar} position="relative">
         <Toolbar component={'nav'} className={classes.toolbar}>
-          <Link data-testid="knowit-logo" to="/">
+          <Link
+            data-testid="knowit-logo"
+            to={process.env.NODE_ENV === 'development' ? '/debug' : '/'}
+          >
             <KnowitLogo title="knowit-logo" className={classes.logo} />
           </Link>
           <NavMenu>

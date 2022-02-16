@@ -88,6 +88,29 @@ interface EmailParam {
 }
 
 router.get<unknown, unknown, unknown, EmailParam>(
+  '/employeeRadar/bar',
+  async (req, res, next) => {
+    try {
+      res.send('BarChart for employeeRadar')
+    } catch (error) {
+      next(error)
+    }
+  }
+)
+
+router.get<unknown, unknown, unknown, EmailParam>(
+  '/employeeRadar/radar',
+  async (req, res, next) => {
+    try {
+      res.send('RadarChart for employeeRadar')
+    } catch (error) {
+      next(error)
+    }
+  }
+)
+
+// To be deleted
+router.get<unknown, unknown, unknown, EmailParam>(
   '/employeeRadar',
   async (req, res, next) => {
     try {
