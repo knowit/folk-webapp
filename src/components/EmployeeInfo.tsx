@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Skeleton } from '@material-ui/lab'
 import { useFetchedData } from '../hooks/service'
 import { NoData } from './ErrorText'
-import { ExperienceData, ProjectExperience } from '../pages/EmployeeSite'
+import { ExperienceData, ProjectExperience } from '../pages/EmployeeProfile'
 import Chart from '../data/components/chart/Chart'
 import { useEmployeeRadar } from '../api/data/employee/employeeQueries'
 

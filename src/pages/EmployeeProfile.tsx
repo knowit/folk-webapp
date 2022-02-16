@@ -72,7 +72,7 @@ export const ChartSkeleton = () => (
   <Skeleton variant="rect" height={320} width={400} animation="wave" />
 )
 
-export default function EmployeeSite() {
+export default function EmployeeProfile() {
   const location = useLocation()
   const email = location.pathname.split('/')[2]
   const idRegex = /^(\w+\.?)*@knowit.no$/
