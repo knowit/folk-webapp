@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid'
 import {
   cvs,
+  findCustomerWithHighestWeight,
   findProjectStatusForEmployee,
   getCategoryScoresForEmployee,
   getStorageUrl,
@@ -38,13 +39,7 @@ export const aggregateEmployeeTable = (
       },
       employee.title,
       findProjectStatusForEmployee(jobRotationInformation, employee.email),
-      employee.customers.reduce((prevCustomer, thisCustomer) => {
-        if (thisCustomer.weight < prevCustomer.weight) {
-          return thisCustomer
-        } else {
-          return prevCustomer
-        }
-      }),
+      findCustomerWithHighestWeight(employee.customers),
       Object.fromEntries(
         cvs.map(([lang, format]) => [
           `${lang}_${format}`,

@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid'
 import {
   EmployeeInformation,
+  findCustomerWithHighestWeight,
   getEventSet,
   getWeek,
   getYear,
@@ -174,15 +175,8 @@ export const employeeTable = async ({ data }: EmployeeTable) => {
         degree: employee.degree,
       },
       employee.title,
-
       findProjectStatusForEmployee(jobRotation, employeeStatus, employee.guid),
-      employee.customers.reduce((prevCustomer, thisCustomer) => {
-        if (thisCustomer.weight < prevCustomer.weight) {
-          return thisCustomer
-        } else {
-          return prevCustomer
-        }
-      }),
+      findCustomerWithHighestWeight(employee.customers),
       Object.fromEntries(
         cvs.map(([lang, format]) => [
           `${lang}_${format}`,

@@ -23,11 +23,13 @@ export type EmployeeInformation = {
 }
 
 type EmployeeWithMergedCustomers = EmployeeInformation & {
-  customers: {
-    customer: string
-    wordOrderDescription: string
-    weight: number
-  }[]
+  customers: Customer[]
+}
+
+type Customer = {
+  customer: string
+  workOrderDescription: string
+  weight: number
 }
 
 export const getYear = (): number => {
@@ -82,6 +84,20 @@ export const mergeCustomersForEmployees = (
   })
 
   return Object.values(employeesWithMergedCustomers)
+}
+
+export function findCustomerWithHighestWeight(customers: Customer[]) {
+  if (!customers || customers.length === 0) {
+    return {}
+  }
+
+  return customers.reduce((prevCustomer, thisCustomer) => {
+    if (thisCustomer.weight < prevCustomer.weight) {
+      return thisCustomer
+    } else {
+      return prevCustomer
+    }
+  })
 }
 
 export const statusColorCode = (
