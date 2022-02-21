@@ -263,7 +263,7 @@ export default function EmployeeProfile() {
         {pending ? (
           <p>loading....</p>
         ) : (
-          <PrintCustomers customerArray={data?.customers} />
+          <PrintCustomers customers={data?.customers} />
         )}
         <h2>Arbeidserfaring</h2>
         {pending ? (
@@ -294,15 +294,14 @@ export default function EmployeeProfile() {
   )
 }
 
-const PrintCustomers = (data: { customerArray?: CustomerStatusData[] }) => {
-  if (!data.customerArray || !data.customerArray[0].customer)
-    return <div>-</div>
-  data.customerArray.sort(
+const PrintCustomers = (props: { customers?: CustomerStatusData[] }) => {
+  if (!props.customers || props.customers.length === 0) return <div>-</div>
+  props.customers.sort(
     (customerA, customerB) => customerA.weight - customerB.weight
   )
   return (
     <>
-      {data.customerArray.map((customer, index) => {
+      {props.customers.map((customer, index) => {
         return (
           <div key={index}>
             <b>{customer.customer}: </b>
