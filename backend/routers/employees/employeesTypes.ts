@@ -44,7 +44,7 @@ export type WorkExperience = {
   year_to: number
 }
 
-type Tags = {
+export type Tags = {
   languages: string[]
   skills: string[]
   roles: string[]

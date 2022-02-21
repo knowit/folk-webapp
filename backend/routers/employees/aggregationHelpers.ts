@@ -3,9 +3,11 @@ import {
   Customer,
   EmployeeInformation,
   EmployeeMotivationAndCompetence,
+  EmployeeSkills,
   EmployeeWithMergedCustomers,
   JobRotation,
   JobRotationStatus,
+  Tags,
 } from './employeesTypes'
 
 export const cvs = [
@@ -69,6 +71,16 @@ export function findCustomerWithHighestWeight(customers: Customer[]) {
       return prevCustomer
     }
   })
+}
+
+export function mapEmployeeTags(employeeSkills?: EmployeeSkills): Tags {
+  const { skill, language, role } = employeeSkills ?? {}
+
+  return {
+    skills: skill?.split(';') ?? [],
+    languages: language?.split(';') ?? [],
+    roles: role?.split(';') ?? [],
+  }
 }
 
 export const findProjectStatusForEmployee = (

@@ -1,5 +1,6 @@
 import { v4 as uuid } from 'uuid'
 import {
+  mapEmployeeTags,
   cvs,
   findCustomerWithHighestWeight,
   findProjectStatusForEmployee,
@@ -121,7 +122,6 @@ export const aggregateEmployeeProfile = (
   }
 
   const employee = mergeCustomersForEmployees(employeeInformation)[0]
-  const { skill, language, role } = employeeSkills[0] ?? {}
 
   return {
     user_id: employee.user_id,
@@ -134,11 +134,7 @@ export const aggregateEmployeeProfile = (
     image: getStorageUrl(employee.image_key),
     customers: employee.customers,
     workExperience,
-    tags: {
-      skills: skill?.split(';') ?? [],
-      languages: language?.split(';') ?? [],
-      roles: role?.split(';') ?? [],
-    },
+    tags: mapEmployeeTags(employeeSkills[0]),
     links: {
       no_pdf: makeCvLink('no', 'pdf', employee.link),
       int_pdf: makeCvLink('int', 'pdf', employee.link),

@@ -1,3 +1,4 @@
+import { EmployeeInformation, EmployeeSkills } from './data'
 import AWS from 'aws-sdk'
 AWS.config.update({ region: 'eu-central-1' })
 
@@ -7,20 +8,6 @@ export const range = (x: number, y: number) =>
       while (x <= y) yield x++
     })()
   )
-export type EmployeeInformation = {
-  user_id: string
-  guid: string
-  navn: string
-  manager: string
-  title: string
-  link: string
-  degree: string
-  image_key: string
-  email: string
-  customer: string
-  weight: number
-  work_order_description: string
-}
 
 type EmployeeWithMergedCustomers = EmployeeInformation & {
   customers: Customer[]
@@ -98,6 +85,16 @@ export function findCustomerWithHighestWeight(customers: Customer[]) {
       return prevCustomer
     }
   })
+}
+
+export function mapEmployeeTags(employeeSkills?: EmployeeSkills) {
+  const { skill, language, role } = employeeSkills ?? {}
+
+  return {
+    skills: skill?.split(';') ?? [],
+    languages: language?.split(';') ?? [],
+    roles: role?.split(';') ?? [],
+  }
 }
 
 export const statusColorCode = (
