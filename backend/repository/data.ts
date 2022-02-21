@@ -9,6 +9,7 @@ import {
   statusColorCode,
   sum,
 } from './util'
+import Reporting from '../reporting'
 
 /**
  *
@@ -693,7 +694,7 @@ export const employeeProfile = async ({ data }: EmployeeData) => {
   const [employeeSkills, workExperience, employeeInformation] = data
 
   if (!employeeInformation || employeeInformation.length === 0) {
-    return
+    throw Reporting({ status: 404, message: 'No employee information found' })
   }
 
   const employee = mergeCustomersForEmployees(employeeInformation)[0]
