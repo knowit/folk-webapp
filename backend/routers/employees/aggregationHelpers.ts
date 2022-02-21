@@ -35,21 +35,25 @@ export const mergeCustomersForEmployees = (
   const employeesWithMergedCustomers = {}
 
   employees.forEach((employee) => {
-    const thisCustomer: Customer = {
-      customer: employee.customer,
-      workOrderDescription: employee.work_order_description,
-      weight: employee.weight,
-    }
-
     const employeeToMerge: EmployeeWithMergedCustomers =
       employeesWithMergedCustomers[employee.guid] ?? employee
     const customersForEmployee = employeeToMerge.customers ?? []
 
+    if (employee.customer) {
+      const thisCustomer = {
+        customer: employee.customer,
+        workOrderDescription: employee.work_order_description,
+        weight: employee.weight,
+      }
+      customersForEmployee.push(thisCustomer)
+    }
+
     employeesWithMergedCustomers[employee.guid] = {
       ...employeeToMerge,
-      customers: [thisCustomer, ...customersForEmployee],
+      customers: customersForEmployee,
     }
   })
+
   return Object.values(employeesWithMergedCustomers)
 }
 
