@@ -34,7 +34,7 @@ provider:
   region: eu-central-1
   runtime: nodejs14.x
   stackName: ${self:custom.service}
-  timeout: 25
+  timeout: 50
   httpApi:
     name: ${self:custom.service}-api
     payload: "2.0"
