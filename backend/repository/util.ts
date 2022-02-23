@@ -1,3 +1,4 @@
+import { EmployeeInformation, EmployeeSkills } from './data'
 import AWS from 'aws-sdk'
 AWS.config.update({ region: 'eu-central-1' })
 
@@ -7,27 +8,15 @@ export const range = (x: number, y: number) =>
       while (x <= y) yield x++
     })()
   )
-export type EmployeeInformation = {
-  user_id: string
-  guid: string
-  navn: string
-  manager: string
-  title: string
-  link: string
-  degree: string
-  image_key: string
-  email: string
-  customer: string
-  weight: number
-  work_order_description: string
-}
 
 type EmployeeWithMergedCustomers = EmployeeInformation & {
-  customers: {
-    customer: string
-    wordOrderDescription: string
-    weight: number
-  }[]
+  customers: Customer[]
+}
+
+type Customer = {
+  customer: string
+  workOrderDescription: string
+  weight: number
 }
 
 export const getYear = (): number => {
@@ -62,23 +51,50 @@ export const mergeCustomersForEmployees = (
   const employeesWithMergedCustomers = {}
 
   employees.forEach((employee) => {
-    const thisCustomer = {
-      customer: employee.customer,
-      workOrderDescription: employee.work_order_description,
-      weight: employee.weight,
-    }
-
     const employeeToMerge =
       employeesWithMergedCustomers[employee.guid] ?? employee
     const customersForEmployee = employeeToMerge.customers ?? []
 
+    if (employee.customer) {
+      const thisCustomer = {
+        customer: employee.customer,
+        workOrderDescription: employee.work_order_description,
+        weight: employee.weight,
+      }
+      customersForEmployee.push(thisCustomer)
+    }
+
     employeesWithMergedCustomers[employee.guid] = {
       ...employeeToMerge,
-      customers: [thisCustomer, ...customersForEmployee],
+      customers: customersForEmployee,
     }
   })
 
   return Object.values(employeesWithMergedCustomers)
+}
+
+export function findCustomerWithHighestWeight(customers: Customer[]) {
+  if (!customers || customers.length === 0) {
+    return {}
+  }
+
+  return customers.reduce((prevCustomer, thisCustomer) => {
+    if (thisCustomer.weight < prevCustomer.weight) {
+      return thisCustomer
+    } else {
+      return prevCustomer
+    }
+  })
+}
+
+export function mapEmployeeTags(employeeSkills?: EmployeeSkills) {
+  const { skill, language, role } = employeeSkills ?? {}
+
+  return {
+    skills: skill?.split(';') ?? [],
+    languages: language?.split(';') ?? [],
+    roles: role?.split(';') ?? [],
+  }
 }
 
 export const statusColorCode = (

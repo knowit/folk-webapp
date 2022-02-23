@@ -9,7 +9,7 @@ import {
   TableRowProps,
   TableRowRenderer,
 } from 'react-virtualized'
-import CharacterLimitBox from '../../../components/CharacterLimitBox'
+import CharacterLimitBox from './components/CharacterLimitBox'
 import { ColumnSort } from '../../DDTable'
 import { Columns } from '../../types'
 import { EmployeeTableResponse } from '../../../api/data/employee/employeeApiTypes'

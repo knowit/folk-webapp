@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { GridItemHeader } from '../components/GridItem'
-import { FilterHeader } from '../components/FilterHeader'
+import GridItemHeader from '../components/gridItem/GridItemHeader'
+import { FilterHeader } from '../components/filter/FilterHeader'
 import DataTable from './components/table/DataTable'
 import SearchInput from '../components/SearchInput'
-import FilterInput from '../components/FilterInput'
-import RowCount from '../components/RowCount'
+import FilterInput from '../components/filter/FilterInput'
+import RowCount from './components/RowCount'
 import { Columns, DDTableProps } from './types'
 import { makeStyles } from '@material-ui/core/styles'
 import {
@@ -13,7 +13,7 @@ import {
   handleFilterChange,
   handleThresholdChange,
   searchAndFilter,
-} from '../components/FilterUtil'
+} from '../components/filter/FilterUtil'
 import { SortOrder } from './components/table/cells/SortableHeaderCell'
 
 type GetSearchValueFn = (data: unknown) => string
@@ -37,24 +37,12 @@ const useStyles = makeStyles({
 })
 
 const sortColumn = (rows: any[], currentSort: ColumnSort) => {
-  // Work around grunnet at sortering er blandet mellom en fast string eller et objekt
   const compare = (a: any, b: any) => {
-    if (Object.keys(a.rowData[currentSort.columnIndex]).length === 0) return 1
-    if (Object.keys(b.rowData[currentSort.columnIndex]).length === 0) return -1
-    if (
-      JSON.stringify(a.rowData[currentSort.columnIndex]).localeCompare(
-        JSON.stringify(b.rowData[currentSort.columnIndex])
+    return JSON.stringify(a.rowData[currentSort.columnIndex])
+      .toLowerCase()
+      .localeCompare(
+        JSON.stringify(b.rowData[currentSort.columnIndex]).toLowerCase()
       )
-    ) {
-      return -1
-    } else if (
-      JSON.stringify(b.rowData[currentSort.columnIndex]).localeCompare(
-        JSON.stringify(a.rowData[currentSort.columnIndex])
-      )
-    ) {
-      return 1
-    }
-    return 0
   }
 
   if (!currentSort) return rows

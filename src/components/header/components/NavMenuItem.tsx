@@ -1,15 +1,9 @@
+import { makeStyles, createStyles } from '@material-ui/core'
 import React from 'react'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { NavLink } from 'react-router-dom'
 
 const useStyles = makeStyles(() =>
   createStyles({
-    root: {
-      display: 'flex',
-      margin: '0 auto',
-      height: '100%',
-      overflow: 'hidden',
-    },
     menuItem: {
       display: 'inline-flex',
       margin: '0 13.75px',
@@ -31,7 +25,11 @@ const useStyles = makeStyles(() =>
   })
 )
 
-export function NavMenuItem({ label, to }: { label: string; to: string }) {
+interface NavMenuItemProps {
+  label: string
+  to: string
+}
+export default function NavMenuItem({ label, to }: NavMenuItemProps) {
   const classes = useStyles()
 
   return (
@@ -46,10 +44,4 @@ export function NavMenuItem({ label, to }: { label: string; to: string }) {
       </NavLink>
     </li>
   )
-}
-
-export function NavMenu({ children }: { children: React.ReactNode }) {
-  const classes = useStyles()
-
-  return <ul className={classes.root}>{children}</ul>
 }

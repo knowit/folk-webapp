@@ -1,11 +1,9 @@
 import { Box } from '@material-ui/core'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import {
-  GridItem,
-  GridItemContent,
-  GridItemHeader,
-} from '../../components/GridItem'
+import GridItem from '../../components/gridItem/GridItem'
+import GridItemContent from '../../components/gridItem/GridItemContent'
+import GridItemHeader from '../../components/gridItem/GridItemHeader'
 import { OpenInNewStyled } from '../../data/components/table/cells/ConsultantCell'
 
 export type CustomerData = {

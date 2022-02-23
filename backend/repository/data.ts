@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid'
 import {
-  EmployeeInformation,
+  mapEmployeeTags,
+  findCustomerWithHighestWeight,
   getEventSet,
   getWeek,
   getYear,
@@ -9,6 +10,7 @@ import {
   statusColorCode,
   sum,
 } from './util'
+import Reporting from '../reporting'
 
 /**
  *
@@ -173,15 +175,8 @@ export const employeeTable = async ({ data }: EmployeeTable) => {
         degree: employee.degree,
       },
       employee.title,
-
       findProjectStatusForEmployee(jobRotation, employeeStatus, employee.guid),
-      employee.customers.reduce((prevCustomer, thisCustomer) => {
-        if (thisCustomer.weight < prevCustomer.weight) {
-          return thisCustomer
-        } else {
-          return prevCustomer
-        }
-      }),
+      findCustomerWithHighestWeight(employee.customers),
       Object.fromEntries(
         cvs.map(([lang, format]) => [
           `${lang}_${format}`,
@@ -249,6 +244,43 @@ export const employeeExperience = async ({ data }: EmpExperience) => {
   }
 }
 
+export type EmployeeInformation = {
+  user_id: string
+  guid: string
+  navn: string
+  manager: string
+  title: string
+  link: string
+  degree: string
+  image_key: string
+  email: string
+  customer: string
+  weight: number
+  work_order_description: string
+}
+
+export type EmployeeSkills = {
+  user_id: string
+  email: string
+  language: string
+  skill: string
+  role: string
+}
+
+type WorkExperience = {
+  user_id: string
+  email: string
+  employer: string
+  month_from: number
+  month_to: number
+  year_from: number
+  year_to: number
+}
+
+type EmployeeData = {
+  data: [EmployeeSkills[], WorkExperience[], EmployeeInformation[]]
+}
+
 export const employeeCompetenceReports = ({
   parameters: { email } = {},
 }: ReportParams) => [
@@ -265,51 +297,19 @@ export const employeeCompetenceReports = ({
     filter: { email },
   },
 ]
-type EmployeeSkills = {
-  user_id: string
-  email: string
-  language: string
-  skill: string
-  role: string
-}
-type WorkExperience = {
-  user_id: string
-  email: string
-  employer: string
-  month_from: number
-  month_to: number
-  year_from: number
-  year_to: number
-}
-
-type EmployeeData = {
-  data: [EmployeeSkills[], WorkExperience[], EmployeeInformation[]]
-}
-
 /**
  * Dette endepunktet henter mer data om ansatte. Arbeidserfaring, ferdigheter,
  * språk,  utdanning og roller fra CV-partner og nærmeste leder fra AD.
  * Brukes i EmployeeInfo.tsx (utvidet tabell).
  */
 export const employeeCompetence = async ({ data }: EmployeeData) => {
-  const [resSkills, resEmp, resComp] = data
-  const mergedRes = mergeCustomersForEmployees(resComp)
-
-  const mapTags = (skills: EmployeeSkills[]) => {
-    const mappedSkills =
-      skills && skills.length > 0 ? skills[0] : ({} as EmployeeSkills)
-    return {
-      languages: mappedSkills.language ? mappedSkills.language.split(';') : [],
-      skills: mappedSkills.skill ? mappedSkills.skill.split(';') : [],
-      roles: mappedSkills.role ? mappedSkills.role.split(';') : [],
-    }
-  }
+  const [employeeSkills, workExperience, employeeInformation] = data
 
   return {
-    workExperience: resEmp,
-    tags: mapTags(resSkills),
-    manager: mergedRes[0].manager,
-    guid: mergedRes[0].guid,
+    workExperience,
+    tags: mapEmployeeTags(employeeSkills[0]),
+    manager: employeeInformation[0].manager,
+    guid: employeeInformation[0].guid,
   }
 }
 
@@ -693,11 +693,10 @@ export const employeeProfile = async ({ data }: EmployeeData) => {
   const [employeeSkills, workExperience, employeeInformation] = data
 
   if (!employeeInformation || employeeInformation.length === 0) {
-    return
+    throw Reporting({ status: 404, message: 'No employee information found' })
   }
 
   const employee = mergeCustomersForEmployees(employeeInformation)[0]
-  const { skill, language, role } = employeeSkills[0] ?? {}
 
   return {
     user_id: employee.user_id,
@@ -710,11 +709,7 @@ export const employeeProfile = async ({ data }: EmployeeData) => {
     image: getStorageUrl(employee.image_key),
     customers: employee.customers,
     workExperience,
-    tags: {
-      skills: skill?.split(';') ?? [],
-      languages: language?.split(';') ?? [],
-      roles: role?.split(';') ?? [],
-    },
+    tags: mapEmployeeTags(employeeSkills[0]),
     links: Object.fromEntries(
       cvs.map(([lang, format]) => [
         `${lang}_${format}`,

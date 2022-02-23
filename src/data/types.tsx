@@ -1,5 +1,5 @@
 import { SWRResponse } from 'swr'
-import { FilterObject } from '../components/FilterUtil'
+import { FilterObject } from '../components/filter/FilterUtil'
 
 export type DDPayload = { [key: string]: any }
 

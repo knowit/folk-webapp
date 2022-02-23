@@ -1,5 +1,5 @@
 import React from 'react'
-import CharacterLimitBox from '../../../components/CharacterLimitBox'
+import CharacterLimitBox from './components/CharacterLimitBox'
 import ConsultantCell from './cells/ConsultantCell'
 import CvCell from './cells/CvCell'
 import ProjectStatusCell from './cells/ProjectStatusCell'

@@ -2,6 +2,7 @@ import reports from '../dataplattform/lib'
 import * as aggregation from '../repository/data'
 import reporting from '../reporting'
 import { Request } from 'express'
+import Reporting from '../reporting'
 
 async function handler(req: Request) {
   // Request data
@@ -45,11 +46,15 @@ async function handler(req: Request) {
 
   // Run data aggregation for endpoint
   const result = await endpointHandler({ data, parameters }).catch(
-    (err: string) => {
-      throw reporting({
-        message: err,
-        external: false,
-      })
+    (err: string | typeof Reporting) => {
+      if (typeof err === 'string') {
+        throw reporting({
+          status: 500,
+          message: err,
+        })
+      } else {
+        throw err
+      }
     }
   )
 
