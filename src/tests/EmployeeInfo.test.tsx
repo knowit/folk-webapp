@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import EmployeeInfo from '../components/EmployeeInfo'
+import EmployeeInfo from '../pages/employee/components/EmployeeInfo'
 import { useFetchedData } from '../hooks/service' // component to test
 
 const fakeUser = {

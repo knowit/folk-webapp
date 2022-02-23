@@ -1,19 +1,17 @@
 import React, { useState } from 'react'
-import {
-  GridItemHeader,
-  GridItemContent,
-  GridItem,
-} from '../../../components/GridItem'
-import DropdownPicker from '../../../components/DropdownPicker'
+import DropdownPicker from './components/DropdownPicker'
 import { Line, Bar, Pie, Sunburst, Radar } from './charts'
-import BigChart from '../../../components/BigChart'
+import BigChart from './components/BigChart'
 import { ErrorText } from '../../../components/ErrorText'
 import { ChartType, ChartVariant, DDChartProps } from '../../types'
+import { ToggleBigChartButton } from './components/ToggleBigChartButton'
+import { GridItemContent } from '../../../components/gridItem/GridItemContent'
+import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
 import {
   ChartDisplayOptions,
   ChartVariantToggle,
-} from '../../../components/ChartDisplayOptions'
-import { ToggleBigChartButton } from '../../../components/ToggleBigChartButton'
+} from './components/ChartDisplayOptions'
+import { GridItem } from '../../../components/gridItem/GridItem'
 
 interface ChartGridItemProps {
   isBig?: boolean
