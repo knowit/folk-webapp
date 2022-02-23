@@ -1,6 +1,6 @@
-import { useCompetenceFilter } from '../api/data/competence/competenceQueries'
-import { EmployeeTableResponse } from '../api/data/employee/employeeApiTypes'
-import { SearchableColumn } from '../data/DDTable'
+import { useCompetenceFilter } from '../../api/data/competence/competenceQueries'
+import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
+import { SearchableColumn } from '../../data/DDTable'
 
 export interface CategoryWithGroup {
   category: string
