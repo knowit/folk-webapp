@@ -3,9 +3,11 @@ import {
   Customer,
   EmployeeInformation,
   EmployeeMotivationAndCompetence,
+  EmployeeSkills,
   EmployeeWithMergedCustomers,
   JobRotation,
   JobRotationStatus,
+  Tags,
 } from './employeesTypes'
 
 export const cvs = [
@@ -35,22 +37,50 @@ export const mergeCustomersForEmployees = (
   const employeesWithMergedCustomers = {}
 
   employees.forEach((employee) => {
-    const thisCustomer: Customer = {
-      customer: employee.customer,
-      workOrderDescription: employee.work_order_description,
-      weight: employee.weight,
-    }
-
     const employeeToMerge: EmployeeWithMergedCustomers =
       employeesWithMergedCustomers[employee.guid] ?? employee
     const customersForEmployee = employeeToMerge.customers ?? []
 
+    if (employee.customer) {
+      const thisCustomer = {
+        customer: employee.customer,
+        workOrderDescription: employee.work_order_description,
+        weight: employee.weight,
+      }
+      customersForEmployee.push(thisCustomer)
+    }
+
     employeesWithMergedCustomers[employee.guid] = {
       ...employeeToMerge,
-      customers: [thisCustomer, ...customersForEmployee],
+      customers: customersForEmployee,
     }
   })
+
   return Object.values(employeesWithMergedCustomers)
+}
+
+export function findCustomerWithHighestWeight(customers: Customer[]) {
+  if (!customers || customers.length === 0) {
+    return {}
+  }
+
+  return customers.reduce((prevCustomer, thisCustomer) => {
+    if (thisCustomer.weight < prevCustomer.weight) {
+      return thisCustomer
+    } else {
+      return prevCustomer
+    }
+  })
+}
+
+export function mapEmployeeTags(employeeSkills?: EmployeeSkills): Tags {
+  const { skill, language, role } = employeeSkills ?? {}
+
+  return {
+    skills: skill?.split(';') ?? [],
+    languages: language?.split(';') ?? [],
+    roles: role?.split(';') ?? [],
+  }
 }
 
 export const findProjectStatusForEmployee = (
