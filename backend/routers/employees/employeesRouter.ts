@@ -6,12 +6,11 @@ import {
   employeeMotivationAndCompetenceRadar,
 } from './employeeChartConversion'
 import {
-  aggregateEmployeeProfile,
   aggregateEmployeeExperience,
+  aggregateEmployeeProfile,
   aggregateEmployeeTable,
 } from './employeesAggregation'
 import {
-  CompetenceAreasResponse,
   EmployeeExperience,
   EmployeeInformation,
   EmployeeMotivationAndCompetence,
