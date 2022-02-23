@@ -2,15 +2,18 @@ import express from 'express'
 import { getReport } from '../../dataplattform/client'
 import { NotFoundError, ParamError } from '../errorHandling'
 import {
-  aggregateEmployeeProfile,
+  employeeMotivationAndCompetenceBar,
+  employeeMotivationAndCompetenceRadar,
+} from './employeeChartConversion'
+import {
   aggregateEmployeeExperience,
-  aggregateEmployeeRadar,
+  aggregateEmployeeProfile,
   aggregateEmployeeTable,
 } from './employeesAggregation'
 import {
-  CompetenceAreasResponse,
   EmployeeExperience,
   EmployeeInformation,
+  EmployeeMotivationAndCompetence,
   EmployeeSkills,
   WorkExperience,
 } from './employeesTypes'
@@ -94,42 +97,17 @@ interface EmailParam {
 }
 
 router.get<unknown, unknown, unknown, EmailParam>(
-  '/employeeRadar/bar',
-  async (req, res, next) => {
-    try {
-      res.send('BarChart for employeeRadar')
-    } catch (error) {
-      next(error)
-    }
-  }
-)
-
-router.get<unknown, unknown, unknown, EmailParam>(
-  '/employeeRadar/radar',
-  async (req, res, next) => {
-    try {
-      res.send('RadarChart for employeeRadar')
-    } catch (error) {
-      next(error)
-    }
-  }
-)
-
-// To be deleted
-router.get<unknown, unknown, unknown, EmailParam>(
-  '/employeeRadar',
+  '/employeeMotivationAndCompetence/bar',
   async (req, res, next) => {
     try {
       if (!req.query.email) {
-        const err: ParamError = {
+        throw {
           status: 400,
           message: "Param 'email' is missing.",
-        }
-
-        throw err
+        } as ParamError
       }
 
-      const data = await getReport<CompetenceAreasResponse[]>({
+      const data = await getReport<EmployeeMotivationAndCompetence[]>({
         accessToken: req.accessToken,
         reportName: 'employeeMotivationAndCompetence',
         queryParams: {
@@ -137,7 +115,36 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      const aggregatedData = aggregateEmployeeRadar(data)
+      const aggregatedData = employeeMotivationAndCompetenceBar(data)
+
+      res.send(aggregatedData)
+    } catch (error) {
+      next(error)
+    }
+  }
+)
+
+router.get<unknown, unknown, unknown, EmailParam>(
+  '/employeeMotivationAndCompetence/radar',
+  async (req, res, next) => {
+    try {
+      if (!req.query.email) {
+        throw {
+          status: 400,
+          message: "Param 'email' is missing.",
+        } as ParamError
+      }
+
+      const data = await getReport<EmployeeMotivationAndCompetence[]>({
+        accessToken: req.accessToken,
+        reportName: 'employeeMotivationAndCompetence',
+        queryParams: {
+          email: req.query.email,
+        },
+      })
+
+      const aggregatedData = employeeMotivationAndCompetenceRadar(data)
+
       res.send(aggregatedData)
     } catch (error) {
       next(error)

@@ -12,6 +12,7 @@ import {
 import {
   EmployeeExperience,
   EmployeeInformation,
+  EmployeeMotivationAndCompetence,
   EmployeeProfile,
   EmployeeSkills,
   WorkExperience,
@@ -77,39 +78,44 @@ export const aggregateEmployeeExperience = (data: EmployeeExperience[]) => {
   }
 }
 
-export const aggregateEmployeeRadar = (data: any) => {
+export const aggregateEmployeeCompetenceAndMotivation = (
+  data: EmployeeMotivationAndCompetence[]
+) => {
   const categoriesMap = { mainCategories: {} }
+
   data.forEach((row) => {
     const {
       category,
       subCategory,
       categoryCompetenceAvg,
       categoryMotivationAvg,
-      competence,
-      motivation,
+      competence: subCategoryCompetence,
+      motivation: subCategoryMotivation,
     } = row
+
     if (!(category in categoriesMap)) {
       categoriesMap[category] = {}
     }
+
     categoriesMap[category][subCategory] = {
       category: subCategory,
-      motivation,
-      competence,
+      motivation: subCategoryMotivation,
+      competence: subCategoryCompetence,
     }
+
     categoriesMap['mainCategories'][category] = {
       category,
       motivation: categoryMotivationAvg,
       competence: categoryCompetenceAvg,
     }
   })
+
   const output = {}
   for (const category of Object.keys(categoriesMap)) {
     output[category] = Object.values(categoriesMap[category])
   }
-  return {
-    setNames: Object.keys(output),
-    sets: output,
-  }
+
+  return output
 }
 
 export const aggregateEmployeeProfile = (
