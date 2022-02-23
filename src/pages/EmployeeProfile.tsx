@@ -4,16 +4,13 @@ import { makeStyles } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import Chart from '../data/components/chart/Chart'
 import { useFetchedData } from '../hooks/service'
-import {
-  GetProjects,
-  GetWorkExperience,
-  startedInKnowit,
-  totalExperience,
-} from '../components/EmployeeInfo'
+import { GetProjects, GetWorkExperience } from '../components/EmployeeInfo'
 import { ReactComponent as FallbackUserIcon } from '../assets/fallback_user.svg'
 import { CustomerStatusData } from '../data/components/table/cells/CustomerStatusCell'
 import { useEmployeeRadar } from '../api/data/employee/employeeQueries'
 import { EmployeeProfileResponse } from '../api/data/employee/employeeApiTypes'
+import { getStartedInKnowit } from '../utils/getStartedInKnowit'
+import { getTotalWorkExperience } from '../utils/getTotalWorkExperience'
 
 export interface ProjectExperience {
   customer: string
@@ -157,7 +154,7 @@ export default function EmployeeProfile() {
               ) : (
                 <>
                   <b>Startet i Knowit: </b>{' '}
-                  {startedInKnowit(data?.workExperience)}
+                  {getStartedInKnowit(data?.workExperience)}
                 </>
               )}
             </div>
@@ -172,7 +169,7 @@ export default function EmployeeProfile() {
               ) : (
                 <div title="Beregnet ut i fra første jobb på CV">
                   <b>Beregnet arbeidserfaring: </b>
-                  {totalExperience(data?.workExperience)}
+                  {getTotalWorkExperience(data?.workExperience)}
                 </div>
               )}
             </div>

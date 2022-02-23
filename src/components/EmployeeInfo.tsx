@@ -6,19 +6,11 @@ import { NoData } from './ErrorText'
 import { ExperienceData, ProjectExperience } from '../pages/EmployeeProfile'
 import Chart from '../data/components/chart/Chart'
 import { useEmployeeRadar } from '../api/data/employee/employeeQueries'
+import { formatMonthYearRange } from '../utils/formatMonthYearRange'
+import { WorkExperience } from '../api/data/employee/employeeApiTypes'
+import { getStartedInKnowit } from '../utils/getStartedInKnowit'
+import { getTotalWorkExperience } from '../utils/getTotalWorkExperience'
 
-interface Experience {
-  employer: string
-  month_from: number
-  year_from: number
-  month_to: number
-  year_to: number
-}
-
-interface Date {
-  year: number
-  month?: number
-}
 interface MotivationMap {
   [category: string]: number
 }
@@ -30,7 +22,7 @@ interface EmployeeInfoData {
     skills: string[]
     roles: string[]
   }
-  workExperience: Experience[]
+  workExperience: WorkExperience[]
   manager: string
   guid: string
 }
@@ -49,49 +41,6 @@ export const months = [
   'November',
   'Desember',
 ]
-
-export const startedInKnowit = (allExperience: Experience[] | undefined) => {
-  if (!allExperience) {
-    return <NoData />
-  }
-  const knowit = allExperience?.find((x) =>
-    x.employer
-      ? x.employer.toLowerCase().includes('knowit') ||
-        x.employer.toLowerCase().includes('objectnet') ||
-        x.employer.toLowerCase().includes('know it')
-      : null
-  )
-
-  const monthFrom =
-    knowit && knowit?.month_from < 10
-      ? `0${knowit?.month_from}`
-      : knowit?.month_from
-
-  return knowit === undefined || knowit === null || knowit.year_from < 0 ? (
-    <NoData />
-  ) : (
-    `${[monthFrom, knowit?.year_from].join('/')}.`
-  )
-}
-
-export const totalExperience = (allExperience: Experience[] | undefined) => {
-  if (!allExperience) {
-    return <NoData />
-  }
-  const dates: Date[] = []
-  allExperience &&
-    allExperience.forEach((job) => {
-      job.year_from !== -1 && dates.push({ year: job.year_from })
-      job.year_to !== -1 && dates.push({ year: job.year_to })
-    })
-  const firstJob = dates?.sort((dateA, dateB) => dateA.year - dateB.year)[0]
-
-  return firstJob?.year === undefined || firstJob?.year < 0 ? (
-    <NoData />
-  ) : (
-    `${new Date().getFullYear() - firstJob?.year} år.`
-  )
-}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -202,7 +151,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
           ) : (
             <>
               <b>Startet i Knowit:</b>{' '}
-              {startedInKnowit(empData?.workExperience)}
+              {getStartedInKnowit(empData?.workExperience)}
             </>
           )}
         </div>
@@ -212,7 +161,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
           ) : (
             <div title="Beregnet ut i fra første jobb på CV">
               <b>Beregnet arbeidserfaring: </b>
-              {totalExperience(empData?.workExperience)}
+              {getTotalWorkExperience(empData?.workExperience)}
             </div>
           )}
         </div>
@@ -285,38 +234,29 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
     </div>
   )
 }
-const yearAndMonthToNumber = (year: number, month: number) => {
-  let stringMonth
-  if (month < 10) {
-    stringMonth = '0' + month
-  } else if (month > 9) {
-    stringMonth = String(month)
-  } else {
-    stringMonth = '00'
-  }
-  return Number(year + stringMonth)
-}
 
 export const GetWorkExperience = (workExp: {
-  workExp: Experience[] | undefined
+  workExp: WorkExperience[] | undefined
 }) => {
   if (!workExp.workExp) return <div> Fant ingen arbeidserfaring </div>
 
-  workExp.workExp.sort(
-    (expA, expB) =>
-      yearAndMonthToNumber(expB.year_from, expB.month_from) -
-      yearAndMonthToNumber(expA.year_from, expA.month_from)
-  )
+  workExp.workExp.sort((jobA, jobB) => {
+    const dateA = new Date(jobB.year_from, jobB.month_from)
+    const dateB = new Date(jobA.year_from, jobA.month_from)
+    return dateA.valueOf() - dateB.valueOf()
+  })
+
   return (
     <>
       {workExp.workExp.map((exp, index) => (
         <div key={index}>
-          {getPrettyDates(
+          {formatMonthYearRange(
             exp.month_from,
             exp.year_from,
             exp.month_to,
             exp.year_to
           )}
+          {': '}
           {exp.employer}
         </div>
       ))}
@@ -324,68 +264,35 @@ export const GetWorkExperience = (workExp: {
   )
 }
 
-const timeToNumber = (time: string) => {
-  const [year, month] = time.split('/')
-  return yearAndMonthToNumber(Number(year), Number(month))
-}
-
-function compare(a: ProjectExperience, b: ProjectExperience) {
-  const aTime = a.time_from ? a.time_from : a.time_to
-  const bTime = b.time_from ? b.time_from : b.time_to
-  if (timeToNumber(aTime) < timeToNumber(bTime)) {
-    return 1
-  }
-  if (timeToNumber(aTime) > timeToNumber(bTime)) {
-    return -1
-  }
-  return 0
-}
-
 export const GetProjects = (expData: { expData: ExperienceData | null }) => {
   const classes = useStyles()
   if (!expData || !expData.expData || !expData.expData.experience)
     return <div> Fant ingen prosjekter </div>
-  expData.expData.experience.sort(compare)
+  expData.expData.experience.sort(compareProjectDates)
   return (
     <>
       {expData.expData.experience.map((exp, index) => (
         <div className={classes.prosjektliste} key={index}>
-          {prettyDates(exp.time_from, exp.time_to)}
+          {formatDateRange(exp.time_from, exp.time_to)}
+          {': '}
           {exp.customer} - <i>{exp.project}</i>
         </div>
       ))}
     </>
   )
 }
-const prettyDates = (date1: string, date2: string) => {
-  const [fromYear, fromMonth] = date1.split('/')
-  const [toYear, toMonth] = date2.split('/')
-  return getPrettyDates(
-    Number(fromMonth),
-    Number(fromYear),
-    Number(toMonth),
-    Number(toYear)
-  )
+
+function compareProjectDates(
+  projectA: ProjectExperience,
+  projectB: ProjectExperience
+) {
+  const aDate = new Date(projectA.time_from || projectA.time_to)
+  const bDate = new Date(projectB.time_from || projectB.time_to)
+  return aDate.valueOf() - bDate.valueOf()
 }
-const getPrettyDates = (
-  fromMonth: number,
-  fromYear: number,
-  toMonth: number,
-  toYear: number
-) => {
-  const prettyFromMonth =
-    fromMonth && fromMonth !== -1 ? months[fromMonth - 1] + ' ' : ''
-  const prettyFromYear = fromYear && fromYear !== -1 ? fromYear : ''
-  const prettyToMonth =
-    toMonth && toMonth !== -1 ? months[toMonth - 1] + ' ' : ''
-  const prettyToYear = toYear && toYear !== -1 ? toYear : ''
-  const bothYears = prettyFromYear && prettyToYear ? ' - ' : ''
-  return (
-    prettyFromMonth +
-    prettyFromYear +
-    bothYears +
-    prettyToMonth +
-    prettyToYear +
-    ': '
-  )
+
+function formatDateRange(fromDate: string, toDate: string) {
+  const [fromYear, fromMonth] = fromDate.split('/').map(Number)
+  const [toYear, toMonth] = toDate.split('/').map(Number)
+  return formatMonthYearRange(fromMonth, fromYear, toMonth, toYear)
 }

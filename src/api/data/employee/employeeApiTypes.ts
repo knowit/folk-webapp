@@ -15,7 +15,7 @@ export interface EmployeeExperienceResponse {
   guid: string
 }
 
-interface WorkExperience {
+export interface WorkExperience {
   user_id: string
   email: string
   employer: string
