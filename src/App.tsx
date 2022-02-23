@@ -1,6 +1,6 @@
 import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import Header from './components/Header'
+import Header from './components/header/Header'
 import Content from './components/Content'
 import Footer from './components/Footer'
 
