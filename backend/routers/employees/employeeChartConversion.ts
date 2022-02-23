@@ -1,6 +1,6 @@
 import { BarChartFormat, RadarChartFormat } from '../chartTypes'
 import { aggregateEmployeeCompetenceAndMotivation } from './employeesAggregation'
-import { CompetenceAreasResponse } from './employeesTypes'
+import { EmployeeMotivationAndCompetence } from './employeesTypes'
 
 /**
  * Aggregation function that formats data from AWS to fit a Nivo Bar chart.
@@ -9,7 +9,7 @@ import { CompetenceAreasResponse } from './employeesTypes'
  * @returns data fitting a Nivo Bar component
  */
 export const employeeMotivationAndCompetenceBar = (
-  data: CompetenceAreasResponse[]
+  data: EmployeeMotivationAndCompetence[]
 ) => {
   const aggregatedData = aggregateEmployeeCompetenceAndMotivation(data)
 
@@ -33,7 +33,7 @@ export const employeeMotivationAndCompetenceBar = (
  * @returns data fitting a Nivo Radar component
  */
 export const employeeMotivationAndCompetenceRadar = (
-  data: CompetenceAreasResponse[]
+  data: EmployeeMotivationAndCompetence[]
 ) => {
   const aggregatedData = aggregateEmployeeCompetenceAndMotivation(data)
 

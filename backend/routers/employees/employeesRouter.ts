@@ -14,6 +14,7 @@ import {
   CompetenceAreasResponse,
   EmployeeExperience,
   EmployeeInformation,
+  EmployeeMotivationAndCompetence,
   EmployeeSkills,
   WorkExperience,
 } from './employeesTypes'
@@ -107,13 +108,15 @@ router.get<unknown, unknown, unknown, EmailParam>(
         } as ParamError
       }
 
-      const data = await getReport<CompetenceAreasResponse[]>({
+      const data = await getReport<EmployeeMotivationAndCompetence[]>({
         accessToken: req.accessToken,
         reportName: 'employeeMotivationAndCompetence',
         queryParams: {
           email: req.query.email,
         },
       })
+
+      console.log(data)
 
       const aggregatedData = employeeMotivationAndCompetenceBar(data)
 
@@ -135,7 +138,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         } as ParamError
       }
 
-      const data = await getReport<CompetenceAreasResponse[]>({
+      const data = await getReport<EmployeeMotivationAndCompetence[]>({
         accessToken: req.accessToken,
         reportName: 'employeeMotivationAndCompetence',
         queryParams: {
