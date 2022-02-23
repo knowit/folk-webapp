@@ -22,6 +22,6 @@ export const useEmpData = (email: string) =>
   })
 
 export const useEmployeeRadar = (email: string) =>
-  useSWR(['/empData', email], getEmployeeRadar, {
+  useSWR(['/employeeRadar', email], getEmployeeRadar, {
     revalidateOnFocus: false,
   })
