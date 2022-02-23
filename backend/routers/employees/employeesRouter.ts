@@ -116,8 +116,6 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      console.log(data)
-
       const aggregatedData = employeeMotivationAndCompetenceBar(data)
 
       res.send(aggregatedData)
