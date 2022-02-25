@@ -2,10 +2,7 @@ import * as React from 'react'
 import { Skeleton } from '@material-ui/lab'
 import { SkeletonTypeMap } from '@material-ui/lab/Skeleton/Skeleton'
 
-export interface SkeletonProps {
-  height?: number | string
-  width?: number | string
-}
+export type SkeletonProps = Pick<SkeletonTypeMap['props'], 'width' | 'height'>
 
 interface BaseSkeletonProps extends SkeletonProps {
   variant?: SkeletonTypeMap['props']['variant']
