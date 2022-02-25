@@ -9,19 +9,18 @@ import {
 export const getEmployeeTable = () =>
   getAtApi<EmployeeTableResponse[]>('/data/employeeTable')
 
-// ! This might not be typed correctly
-export const getEmployeeExperience = (url: string, userId: string) =>
-  getAtApi<EmployeeExperienceResponse>('/data/employeeExperience', {
-    params: { user_id: userId },
-  })
-
-// ! This might not be typed correctly
-export const getEmployeeRadar = (url: string, email: string) =>
-  getAtApi<CompetenceAreasResponse>('/data/employeeRadar', {
+export const getEmployeeProfile = (endpoint: string, email: string) =>
+  getAtApi<EmployeeProfileResponse>(`/data${endpoint}`, {
     params: { email },
   })
 
-export const getEmployeeProfile = (url: string, email: string) =>
-  getAtApi<EmployeeProfileResponse>('/data/employeeProfile', {
+export const getEmployeeExperience = (endpoint: string, user_id: string) =>
+  getAtApi<EmployeeExperienceResponse>(`/data${endpoint}`, {
+    params: { user_id },
+  })
+
+// ! This might not be typed correctly
+export const getEmployeeRadar = (endpoint: string, email: string) =>
+  getAtApi<CompetenceAreasResponse>(`/data${endpoint}`, {
     params: { email },
   })

@@ -1,4 +1,5 @@
 // employeeTable
+
 export interface EmployeeTableResponse {
   rowId: string
   rowData: any[]
@@ -6,41 +7,25 @@ export interface EmployeeTableResponse {
 
 // employeeRadar has same response as CompetenceAreasResponse
 
-// employeeExperience
+/**
+ * EmployeeExperience (= project experience for employee)
+ */
 
 export interface EmployeeExperienceResponse {
-  workExperience: WorkExperience[]
-  tags: Tags
-  manager: string
-  guid: string
+  name: string
+  experience?: ProjectExperience[]
 }
 
-export interface WorkExperience {
-  user_id: string
-  email: string
-  employer: string
-  month_from: number
-  year_from: number
-  month_to: number
-  year_to: number
-}
-
-interface Tags {
-  languages: string[]
-  skills: string[]
-  roles: string[]
+export interface ProjectExperience {
+  customer: string
+  project: string
+  time_to: string
+  time_from: string
 }
 
 /**
  * EmployeeProfile
  */
-
-export interface EmployeeProfileResponse extends Employee {
-  image?: string
-  workExperience: WorkExperience[]
-  tags: Tags
-  links: Links
-}
 
 interface Employee {
   user_id: string
@@ -53,19 +38,36 @@ interface Employee {
   customers: Customer[]
 }
 
+export interface EmployeeProfileResponse extends Employee {
+  image?: string
+  workExperience: WorkExperience[]
+  tags: Tags
+  links: Links
+}
+
 export interface Customer {
   customer: string
   workOrderDescription: string
   weight: number
 }
 
-interface Tags {
+export interface WorkExperience {
+  user_id: string
+  email: string
+  employer: string
+  month_from: number
+  year_from: number
+  month_to: number
+  year_to: number
+}
+
+export interface Tags {
   skills: string[]
   languages: string[]
   roles: string[]
 }
 
-interface Links {
+export interface Links {
   no_pdf: string
   int_pdf: string
   no_word: string
