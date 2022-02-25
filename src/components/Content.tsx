@@ -24,11 +24,11 @@ export default function Content() {
     <Routes>
       <Route path="/" element={<Navigate replace to="/ansatte" />} />
       <Route path="/ansatte" element={<EmployeePage />} />
+      <Route path="/ansatt/:id" element={<EmployeeProfile />} />
       <Route path="/kunder" element={<Customer />} />
       <Route path="/kompetanse" element={<Competence />} />
       <Route path="/arbeidsmiljo" element={<UnderConstruction />} />
       <Route path="/rekruttering" element={<UnderConstruction />} />
-      <Route path="/ansatt/:id" element={<EmployeeProfile />} />
       <Route path="/debug" element={<Debug />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
