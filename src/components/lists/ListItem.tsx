@@ -8,7 +8,7 @@ const useStyles = makeStyles({
 })
 
 interface Props {
-  children?: React.ReactNode
+  children: React.ReactNode
 }
 
 export function ListItem({ children }: Props) {

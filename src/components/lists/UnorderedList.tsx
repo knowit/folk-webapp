@@ -10,7 +10,7 @@ const useStyles = makeStyles({
 })
 
 interface Props {
-  children?: React.ReactNode
+  children: React.ReactNode
 }
 
 export function UnorderedList({ children }: Props) {
