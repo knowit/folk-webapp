@@ -3,8 +3,8 @@ import { Customer } from '../../../api/data/employee/employeeApiTypes'
 import { makeStyles } from '@material-ui/core/styles'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { FallbackMessage } from './FallbackMessage'
-import { UnorderedList } from '../../../components/lists/UnorderedList'
-import { ListItem } from '../../../components/lists/ListItem'
+import { ExperienceList } from './ExperienceList'
+import { ExperienceListItem } from './ExperienceListItem'
 
 const useStyles = makeStyles({
   customerName: {
@@ -25,7 +25,6 @@ export function CustomersForEmployee({ customers, isLoading }: Props) {
   }
 
   if (!customers || customers.length === 0) {
-    // TODO: make better fallback component
     return <FallbackMessage message="Fant ingen kunder å vise." />
   }
 
@@ -34,13 +33,13 @@ export function CustomersForEmployee({ customers, isLoading }: Props) {
   )
 
   return (
-    <UnorderedList>
+    <ExperienceList>
       {customersSortedByWeight.map((customer) => (
-        <ListItem key={customer.customer + customer.weight}>
+        <ExperienceListItem key={customer.customer + customer.weight}>
           <span className={classes.customerName}>{customer.customer}: </span>
           {customer.workOrderDescription}
-        </ListItem>
+        </ExperienceListItem>
       ))}
-    </UnorderedList>
+    </ExperienceList>
   )
 }

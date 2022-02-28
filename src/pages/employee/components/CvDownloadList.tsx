@@ -5,8 +5,8 @@ import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkelet
 import { mapLinkKeyToLabel } from '../../../utils/cvLinkHelpers'
 import GetApp from '@material-ui/icons/GetApp'
 import { FallbackMessage } from './FallbackMessage'
-import { UnorderedList } from '../../../components/lists/UnorderedList'
-import { ListItem } from '../../../components/lists/ListItem'
+import { ExperienceList } from './ExperienceList'
+import { ExperienceListItem } from './ExperienceListItem'
 import { withStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
@@ -45,17 +45,17 @@ export function CvDownloadList({ links, isLoading }: Props) {
   }
 
   return (
-    <UnorderedList>
+    <ExperienceList>
       {downloadLinks.map(([linkKey, linkUrl]) => (
-        <ListItem key={linkKey}>
+        <ExperienceListItem key={linkKey}>
           <a href={linkUrl} download className={classes.link}>
             <DownloadIcon />
             <span className={classes.linkText}>
               {mapLinkKeyToLabel(linkKey)}
             </span>
           </a>
-        </ListItem>
+        </ExperienceListItem>
       ))}
-    </UnorderedList>
+    </ExperienceList>
   )
 }

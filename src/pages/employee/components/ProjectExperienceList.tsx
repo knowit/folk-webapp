@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useEmployeeExperience } from '../../../api/data/employee/employeeQueries'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { FallbackMessage } from './FallbackMessage'
-import { UnorderedList } from '../../../components/lists/UnorderedList'
-import { ListItem } from '../../../components/lists/ListItem'
+import { ExperienceList } from './ExperienceList'
+import { ExperienceListItem } from './ExperienceListItem'
 
 const useStyles = makeStyles({
   timeRange: {
@@ -47,9 +47,9 @@ export function ProjectExperienceList({ user_id }: Props) {
   })
 
   return (
-    <UnorderedList>
+    <ExperienceList>
       {sortedProjects.map(({ project, customer, time_from, time_to }) => (
-        <ListItem key={project + time_from}>
+        <ExperienceListItem key={project + time_from}>
           <time className={classes.timeRange}>
             {formatTimeRange(time_from, time_to)}
           </time>
@@ -57,9 +57,9 @@ export function ProjectExperienceList({ user_id }: Props) {
           {customer}
           {' – '}
           <span className={classes.projectTitle}>{project}</span>
-        </ListItem>
+        </ExperienceListItem>
       ))}
-    </UnorderedList>
+    </ExperienceList>
   )
 }
 

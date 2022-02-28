@@ -4,8 +4,8 @@ import { formatMonthYearRange } from '../../../utils/formatMonthYearRange'
 import { makeStyles } from '@material-ui/core/styles'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { FallbackMessage } from './FallbackMessage'
-import { UnorderedList } from '../../../components/lists/UnorderedList'
-import { ListItem } from '../../../components/lists/ListItem'
+import { ExperienceList } from './ExperienceList'
+import { ExperienceListItem } from './ExperienceListItem'
 
 const useStyles = makeStyles({
   timeRange: {
@@ -36,7 +36,7 @@ export function WorkExperienceList({ workExperience, isLoading }: Props) {
   })
 
   return (
-    <UnorderedList>
+    <ExperienceList>
       {jobsSortedByDate.map((job) => {
         const timeRange = formatMonthYearRange(
           job.month_from,
@@ -46,13 +46,13 @@ export function WorkExperienceList({ workExperience, isLoading }: Props) {
         )
 
         return (
-          <ListItem key={job.employer + job.year_from}>
+          <ExperienceListItem key={job.employer + job.year_from}>
             <time className={classes.timeRange}>{timeRange}</time>
             {': '}
             {job.employer}
-          </ListItem>
+          </ExperienceListItem>
         )
       })}
-    </UnorderedList>
+    </ExperienceList>
   )
 }

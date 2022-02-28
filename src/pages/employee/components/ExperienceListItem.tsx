@@ -2,10 +2,8 @@ import * as React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles({
-  list: {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
+  listItem: {
+    paddingBottom: '0.25em',
   },
 })
 
@@ -13,8 +11,8 @@ interface Props {
   children: React.ReactNode
 }
 
-export function UnorderedList({ children }: Props) {
+export function ExperienceListItem({ children }: Props) {
   const classes = useStyles()
 
-  return <ul className={classes.list}>{children}</ul>
+  return <li className={classes.listItem}>{children}</li>
 }
