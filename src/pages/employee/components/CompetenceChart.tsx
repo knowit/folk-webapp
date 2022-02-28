@@ -1,7 +1,11 @@
 import * as React from 'react'
 import { useEmployeeRadar } from '../../../api/data/employee/employeeQueries'
-import Chart from '../../../data/components/chart/Chart'
 import { ChartSkeleton } from '../../../components/skeletons/ChartSkeleton'
+import Chart from '../../../data/components/chart/Chart'
+import { GridItem } from '../../../components/gridItem/GridItem'
+import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
+import { GridItemContent } from '../../../components/gridItem/GridItemContent'
+import { FallbackMessage } from './FallbackMessage'
 
 interface Props {
   employeeEmail?: string
@@ -9,14 +13,19 @@ interface Props {
 
 export function CompetenceChart({ employeeEmail }: Props) {
   const { data, error } = useEmployeeRadar(employeeEmail)
-  const isLoading = !data
 
   if (error) {
-    //TODO: show error message
-    console.error(error)
+    return (
+      <GridItem fullSize>
+        <GridItemHeader title="Kompetansekartlegging" />
+        <GridItemContent>
+          <FallbackMessage message="Noe gikk galt ved henting av data." />
+        </GridItemContent>
+      </GridItem>
+    )
   }
 
-  if (isLoading) {
+  if (!data) {
     return <ChartSkeleton />
   }
 
@@ -24,7 +33,7 @@ export function CompetenceChart({ employeeEmail }: Props) {
     <Chart
       payload={data}
       title="Kompetansekartlegging"
-      fullsize={true}
+      fullsize
       props={{
         chartVariants: [
           {

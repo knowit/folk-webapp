@@ -5,6 +5,7 @@ import { getStartedInKnowit } from '../../../utils/getStartedInKnowit'
 import { getTotalWorkExperience } from '../../../utils/getTotalWorkExperience'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { CompetenceSummaryItem } from './CompetenceSummaryItem'
+import { FallbackMessage } from './FallbackMessage'
 
 const useStyles = makeStyles({
   root: {
@@ -16,10 +17,20 @@ const useStyles = makeStyles({
 interface Props {
   employee?: EmployeeProfileResponse
   isLoading?: boolean
+  isError?: boolean
 }
 
-export function CompetenceSummary({ employee, isLoading }: Props) {
+export function CompetenceSummary({ employee, isLoading, isError }: Props) {
   const classes = useStyles()
+
+  if (isError) {
+    return (
+      <FallbackMessage
+        isError
+        message="Noe gikk galt ved henting av informasjon for ansatt."
+      />
+    )
+  }
 
   if (isLoading) {
     return <MultiLineSkeleton lines={7} />

@@ -9,6 +9,8 @@ import { CompetenceChart } from './CompetenceChart'
 import { EmployeeByline } from './EmployeeByline'
 import { CvDownloadList } from './CvDownloadList'
 import { EmployeeAvatar } from './EmployeeAvatar'
+import { EmployeeNotFound } from './EmployeeNotFound'
+import { FallbackMessage } from './FallbackMessage'
 
 const useStyles = makeStyles({
   root: {
@@ -39,8 +41,8 @@ const useStyles = makeStyles({
     flexGrow: 1,
     flexBasis: '50%',
     maxWidth: '50%', // Chart does not honor flexBasis
-    '&:first-child': {
-      marginRight: '25px',
+    '&:not(:first-child)': {
+      marginLeft: '25px',
     },
   },
 })
@@ -56,18 +58,16 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
   const isLoading = !employee
 
   if (error && error.status === 404) {
-    // TODO: improve error message
-    return (
-      <>
-        <h1>Fant ingen ansatte med oppgitt ID ({employeeEmail})</h1>
-        <p>Vennligst kontrollér ID-en som er oppgitt i adressefeltet.</p>
-      </>
-    )
+    return <EmployeeNotFound employeeId={employeeEmail} />
   }
 
   if (error) {
-    // TODO: improve error message
-    return <p>Error occurred in backend</p>
+    return (
+      <FallbackMessage
+        isError
+        message="Noe gikk galt ved henting av informasjon for ansatt."
+      />
+    )
   }
 
   return (

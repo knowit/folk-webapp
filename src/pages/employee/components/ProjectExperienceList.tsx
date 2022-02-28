@@ -26,8 +26,12 @@ export function ProjectExperienceList({ user_id }: Props) {
   const { data, error } = useEmployeeExperience(user_id)
 
   if (error) {
-    // TODO: show error message
-    console.error(error)
+    return (
+      <FallbackMessage
+        isError
+        message="Noe gikk galt ved henting av prosjekter."
+      />
+    )
   }
 
   if (!data) {

@@ -16,10 +16,24 @@ const useStyles = makeStyles({
 interface Props {
   workExperience?: WorkExperience[]
   isLoading?: boolean
+  isError?: boolean
 }
 
-export function WorkExperienceList({ workExperience, isLoading }: Props) {
+export function WorkExperienceList({
+  workExperience,
+  isLoading,
+  isError,
+}: Props) {
   const classes = useStyles()
+
+  if (isError) {
+    return (
+      <FallbackMessage
+        isError
+        message="Noe gikk galt ved henting av arbeidserfaring."
+      />
+    )
+  }
 
   if (isLoading) {
     return <MultiLineSkeleton />

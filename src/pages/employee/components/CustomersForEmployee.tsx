@@ -15,10 +15,17 @@ const useStyles = makeStyles({
 interface Props {
   customers?: Customer[]
   isLoading?: boolean
+  isError?: boolean
 }
 
-export function CustomersForEmployee({ customers, isLoading }: Props) {
+export function CustomersForEmployee({ customers, isLoading, isError }: Props) {
   const classes = useStyles()
+
+  if (isError) {
+    return (
+      <FallbackMessage isError message="Noe gikk galt ved henting av kunder." />
+    )
+  }
 
   if (isLoading) {
     return <MultiLineSkeleton />
