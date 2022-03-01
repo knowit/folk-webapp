@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
+import * as React from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { TableCell, withStyles } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper'

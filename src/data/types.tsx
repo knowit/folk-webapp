@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { SWRResponse } from 'swr'
 import { FilterObject } from '../components/FilterUtil'
 
