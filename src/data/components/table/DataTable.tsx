@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { TableCell, withStyles } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper'
@@ -21,7 +21,6 @@ interface DataTableProps {
   checkBoxChangeHandler?: () => void
   checked?: boolean
   currentColumnSort?: ColumnSort
-  columnsWidth?: number[]
 }
 
 type CellTypeProps = (props: {
@@ -106,25 +105,22 @@ export const tableStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default function DataTable({
+const DEFAULT_CELL_HEIGHT = 70
+const EXPANDED_CELL_HEIGHT = 522
+const COLUMNS_WIDTH = [385, 222, 143, 337, 53]
+
+function VirtualizedTable({
   columns,
   rows,
   setColumnSort,
   checkBoxChangeHandler,
   currentColumnSort,
-  columnsWidth = [385, 222, 143, 337, 53],
   checked,
 }: DataTableProps) {
   const classes = tableStyles()
   const [expandedRows, setExpandedRowsHeights] = useState<ExpandedRows[]>([])
 
-  const DEFAULT_CELL_HEIGHT = 70
-  const EXPANDED_CELL_HEIGHT = 522
-
-  let ArrayRef: any
-  function setRef(ref: any) {
-    ArrayRef = ref
-  }
+  const tableRef = useRef<Table>(null)
 
   function toggleExpand(id: string) {
     const isActive = expandedRows.find((expandedRow) => expandedRow.id === id)
@@ -141,9 +137,8 @@ export default function DataTable({
   }
 
   useEffect(() => {
-    ArrayRef.recomputeRowHeights()
-    ArrayRef.forceUpdate()
-  }, [ArrayRef])
+    tableRef.current?.recomputeRowHeights()
+  }, [tableRef.current, expandedRows])
 
   function prepareCell({
     cellData,
@@ -198,7 +193,7 @@ export default function DataTable({
             return (
               <div
                 key={columnIndex}
-                style={{ width: columnsWidth[columnIndex] }}
+                style={{ width: COLUMNS_WIDTH[columnIndex] }}
               >
                 {prepareCell({
                   CellType: column.renderCell,
@@ -213,16 +208,7 @@ export default function DataTable({
           })}
         </div>
         {expandedRows.find((expandedRow) => expandedRow.id === id) &&
-          RenderExpanded && (
-            <RenderExpanded
-              data={rowData[0]}
-              callBack={() => {
-                ArrayRef.recomputeRowHeights()
-                ArrayRef.forceUpdate()
-              }}
-              id={id}
-            />
-          )}
+          RenderExpanded && <RenderExpanded data={rowData[0]} id={id} />}
       </div>
     )
   }
@@ -286,12 +272,12 @@ export default function DataTable({
     )
   }
 
-  const VirtualizedTable = () => (
+  return (
     <AutoSizer>
       {({ height, width }) => (
         <Table
           rowRenderer={PerRowRender}
-          ref={setRef}
+          ref={tableRef}
           height={height}
           width={width}
           rowHeight={getRowHeight}
@@ -317,7 +303,7 @@ export default function DataTable({
                 }
                 className={classes.flexContainer}
                 dataKey={String(index)}
-                width={columnsWidth[index]}
+                width={COLUMNS_WIDTH[index]}
               />
             )
           })}
@@ -325,7 +311,9 @@ export default function DataTable({
       )}
     </AutoSizer>
   )
+}
 
+export default function DataTable(props: DataTableProps) {
   return (
     <Paper
       style={{
@@ -334,7 +322,7 @@ export default function DataTable({
         backgroundColor: 'white',
       }}
     >
-      <VirtualizedTable />
+      <VirtualizedTable {...props} />
     </Paper>
   )
 }
