@@ -15,7 +15,7 @@ import { FallbackMessage } from './FallbackMessage'
 const useStyles = makeStyles({
   root: {
     display: 'flex',
-    lineHeight: '1.2em',
+    lineHeight: '1.25em',
     fontSize: '16px',
     flexDirection: 'column',
     padding: '10px',
@@ -42,7 +42,7 @@ const useStyles = makeStyles({
     flexBasis: '50%',
     maxWidth: '50%', // Chart does not honor flexBasis
     '&:not(:first-child)': {
-      marginLeft: '25px',
+      marginLeft: '50px',
     },
   },
 })

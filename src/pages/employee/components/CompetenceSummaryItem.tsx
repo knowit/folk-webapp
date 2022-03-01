@@ -4,19 +4,20 @@ import { InfoTooltip } from '../../../components/InfoTooltip'
 
 const useStyles = makeStyles({
   item: {
-    display: 'flex',
     paddingBottom: '0.8em',
   },
   itemLabel: {
-    fontWeight: 'bold',
     display: 'inline-flex',
     alignItems: 'center',
+    fontWeight: 'bold',
     '&:after': {
       content: "':'",
+      marginRight: '0.3em',
     },
   },
   itemValue: {
-    marginLeft: '0.3em',
+    display: 'inline',
+    margin: 0,
   },
   fallbackMessage: {
     fontStyle: 'italic',
