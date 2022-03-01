@@ -5,9 +5,9 @@ import Paper from '@material-ui/core/Paper'
 import {
   AutoSizer,
   Column,
+  Index,
   Table,
   TableRowProps,
-  TableRowRenderer,
 } from 'react-virtualized'
 import CharacterLimitBox from '../../../components/CharacterLimitBox'
 import { ColumnSort } from '../../DDTable'
@@ -38,17 +38,8 @@ interface CellProps {
   isExpandable?: boolean
   toggleExpand?: (id: string) => void
   cellData: any[]
-  id: string
+  rowId: string
   name: string
-}
-
-interface ExpandedRows {
-  id: string
-  height: number
-}
-
-interface RowIndex {
-  index: number
 }
 
 const TableCellNoBorders = withStyles({
@@ -118,45 +109,60 @@ function VirtualizedTable({
   checked,
 }: DataTableProps) {
   const classes = tableStyles()
-  const [expandedRows, setExpandedRowsHeights] = useState<ExpandedRows[]>([])
-
   const tableRef = useRef<Table>(null)
+  const [expandedRowIds, setExpandedRowIds] = useState<string[]>([])
 
-  function toggleExpand(id: string) {
-    const isActive = expandedRows.find((expandedRow) => expandedRow.id === id)
-    if (isActive) {
-      setExpandedRowsHeights([
-        ...expandedRows.filter((expandedRow) => expandedRow.id !== id),
+  useEffect(() => {
+    // We need to alert the react-virtualized table that the height of a
+    // row has changed, so that it can recalculate total height and reposition
+    // rows. This runs when a row is expanded/collapsed:
+    tableRef.current?.recomputeRowHeights()
+  }, [tableRef, expandedRowIds])
+
+  function rowIsExpanded(rowId: string) {
+    return expandedRowIds.includes(rowId)
+  }
+
+  function toggleExpand(rowId: string) {
+    if (rowIsExpanded(rowId)) {
+      setExpandedRowIds((prevState) => [
+        ...prevState.filter((expandedRowId) => expandedRowId !== rowId),
       ])
     } else {
-      setExpandedRowsHeights([
-        ...expandedRows,
-        { id: id, height: EXPANDED_CELL_HEIGHT }, //TODO: FETCH HEIGHT FROM COLUMN
-      ])
+      setExpandedRowIds((prevState) => [...prevState, rowId])
     }
   }
 
-  useEffect(() => {
-    tableRef.current?.recomputeRowHeights()
-  }, [tableRef.current, expandedRows])
+  function getRowHeight({ index }: Index) {
+    const rowId = rows[index].rowId
+    return rowIsExpanded(rowId) ? EXPANDED_CELL_HEIGHT : DEFAULT_CELL_HEIGHT
+  }
 
-  function prepareCell({
+  function getRowData({ index }: Index) {
+    return rows[index].rowData
+  }
+
+  function onSortChange(columnSort: ColumnSort) {
+    if (setColumnSort) {
+      setColumnSort(columnSort)
+    }
+  }
+
+  function Cell({
     cellData,
-    id,
+    rowId,
     toggleExpand,
     isExpandable,
     name,
     CellType,
-  }: CellProps): JSX.Element {
-    const isExpanded =
-      expandedRows.filter((expandedRow) => expandedRow.id === id).length > 0
+  }: CellProps) {
     if (isExpandable && CellType) {
       return (
         <CellType
           data={cellData}
-          id={id}
+          id={rowId}
           toggleExpand={toggleExpand}
-          isExpanded={isExpanded}
+          isExpanded={rowIsExpanded(rowId)}
         />
       )
     }
@@ -177,68 +183,61 @@ function VirtualizedTable({
     )
   }
 
-  const PerRowRender: TableRowRenderer = ({
-    className,
-    index,
-    key,
-    rowData,
-    style,
-  }: TableRowProps) => {
-    const id = rows[index].rowId
-    const RenderExpanded = columns[0]?.renderExpanded
+  function Row({ className, index, key, rowData, style }: TableRowProps) {
+    const rowId = rows[index].rowId
+    const ExpandedRowComponent = columns[0]?.renderExpanded
     return (
       <div key={key} className={classes.column} style={style}>
         <div className={className}>
-          {columns.map((column, columnIndex) => {
-            return (
-              <div
-                key={columnIndex}
-                style={{ width: COLUMNS_WIDTH[columnIndex] }}
-              >
-                {prepareCell({
-                  CellType: column.renderCell,
-                  id: id,
-                  cellData: rowData[columnIndex],
-                  name: rowData[0].value,
-                  isExpandable: column.isExpandable,
-                  toggleExpand: toggleExpand,
-                })}
-              </div>
-            )
-          })}
+          {columns.map((column, columnIndex) => (
+            <div
+              key={columnIndex}
+              style={{ width: COLUMNS_WIDTH[columnIndex] }}
+            >
+              <Cell
+                CellType={column.renderCell}
+                rowId={rowId}
+                cellData={rowData[columnIndex]}
+                name={rowData[0].value}
+                isExpandable={column.isExpandable}
+                toggleExpand={toggleExpand}
+              />
+            </div>
+          ))}
         </div>
-        {expandedRows.find((expandedRow) => expandedRow.id === id) &&
-          RenderExpanded && <RenderExpanded data={rowData[0]} id={id} />}
+        {rowIsExpanded(rowId) && ExpandedRowComponent ? (
+          <ExpandedRowComponent data={rowData[0]} id={rowId} />
+        ) : null}
       </div>
     )
   }
 
-  function onSortChange(columnSort: ColumnSort) {
-    if (setColumnSort) {
-      setColumnSort(columnSort)
-    }
-  }
-
-  function headerCellRenderer(
+  function renderHeaderCell(
     title: string,
     index: number,
     currentOrder?: ColumnSort,
     HeaderCell?: (props: any) => JSX.Element,
     checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void
   ) {
-    return HeaderCell ? (
-      <HeaderCell
-        title={title}
-        checkBoxLabel="Se kun ledige"
-        checkBoxChangeHandler={checkBoxChangeHandler}
-        columnIndex={index}
-        onOrderChange={onSortChange}
-        currentOrder={
-          currentOrder?.columnIndex === index ? currentOrder.sortOrder : 'NONE'
-        }
-        checked={checked}
-      />
-    ) : (
+    if (HeaderCell) {
+      return (
+        <HeaderCell
+          title={title}
+          checkBoxLabel="Se kun ledige"
+          checkBoxChangeHandler={checkBoxChangeHandler}
+          columnIndex={index}
+          onOrderChange={onSortChange}
+          currentOrder={
+            currentOrder?.columnIndex === index
+              ? currentOrder.sortOrder
+              : 'NONE'
+          }
+          checked={checked}
+        />
+      )
+    }
+
+    return (
       <TableCell
         component="div"
         className={classes.tableHead}
@@ -250,16 +249,7 @@ function VirtualizedTable({
     )
   }
 
-  const getRowHeight = ({ index }: RowIndex) => {
-    const rowIndex = index
-    const id = rows[rowIndex].rowId
-    return (
-      expandedRows.find((expandedRow) => expandedRow.id === id)?.height ??
-      DEFAULT_CELL_HEIGHT
-    )
-  }
-
-  function emptyRow() {
+  function EmptyRow() {
     return (
       <TableCell
         className={classes.emptyTable}
@@ -276,37 +266,35 @@ function VirtualizedTable({
     <AutoSizer>
       {({ height, width }) => (
         <Table
-          rowRenderer={PerRowRender}
+          rowRenderer={Row}
           ref={tableRef}
           height={height}
           width={width}
           rowHeight={getRowHeight}
           headerHeight={DEFAULT_CELL_HEIGHT}
           rowCount={rows.length}
-          rowGetter={({ index }) => rows[index].rowData}
+          rowGetter={getRowData}
           rowClassName={classes.flexContainer}
-          noRowsRenderer={emptyRow}
+          noRowsRenderer={EmptyRow}
           gridClassName={classes.noFocus}
         >
-          {columns.map(({ title, headerCell }, index) => {
-            return (
-              <Column
-                key={title}
-                headerRenderer={() =>
-                  headerCellRenderer(
-                    title,
-                    index,
-                    currentColumnSort,
-                    headerCell,
-                    checkBoxChangeHandler
-                  )
-                }
-                className={classes.flexContainer}
-                dataKey={String(index)}
-                width={COLUMNS_WIDTH[index]}
-              />
-            )
-          })}
+          {columns.map(({ title, headerCell }, index) => (
+            <Column
+              key={title}
+              headerRenderer={() =>
+                renderHeaderCell(
+                  title,
+                  index,
+                  currentColumnSort,
+                  headerCell,
+                  checkBoxChangeHandler
+                )
+              }
+              className={classes.flexContainer}
+              dataKey={String(index)}
+              width={COLUMNS_WIDTH[index]}
+            />
+          ))}
         </Table>
       )}
     </AutoSizer>
