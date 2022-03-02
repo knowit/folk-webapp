@@ -9,7 +9,7 @@ import {
   createStyles,
 } from '@material-ui/core'
 import { ReactComponent as FallbackUserIcon } from '../../../../assets/fallback_user.svg'
-import CharacterLimitBox from '../../../../components/CharacterLimitBox'
+import CharacterLimitBox from '../components/CharacterLimitBox'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import { OpenInNew } from '@material-ui/icons'

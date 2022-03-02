@@ -1,7 +1,6 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
-import Info from './Info'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -51,50 +50,6 @@ const useStyles = makeStyles(() =>
     },
   })
 )
-
-interface GridItemHeaderProps {
-  title: string
-  description?: string
-  children?: React.ReactNode | React.ReactNode[]
-  big?: boolean
-  green?: boolean
-}
-
-export function GridItemHeader({
-  title,
-  description,
-  children = null,
-  big,
-  green = false,
-}: GridItemHeaderProps) {
-  const classes = useStyles()
-  const headerHeight = big ? classes.bigGridHeaderRoot : null
-  const fontSize = big ? classes.BigGridHeaderTitle : null
-  const knowitGreen = green ? classes.knowitGreen : null
-
-  return (
-    <div
-      className={[classes.gridHeaderRoot, headerHeight, knowitGreen].join(' ')}
-    >
-      <Grid container direction="row" alignItems="center">
-        <h3 className={[classes.gridHeaderTitle, fontSize].join(' ')}>
-          {title}
-          {big}
-        </h3>
-        <Info description={description} />
-      </Grid>
-      {children}
-    </div>
-  )
-}
-interface GridItemContentProps {
-  children: React.ReactNode | React.ReactNode[]
-}
-
-export function GridItemContent({ children }: GridItemContentProps) {
-  const classes = useStyles()
-  return <div className={classes.gridContentRoot}>{children}</div>
-}
 
 interface GridItemProps {
   fullSize?: boolean

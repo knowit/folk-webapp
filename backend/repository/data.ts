@@ -99,7 +99,7 @@ const findProjectStatusForEmployee = (
   let inProjectStatus = false
   if (work)
     inProjectStatus =
-      work.project_type === 'External Projects' &&
+      work.project_type.toLowerCase().includes('external') &&
       currentRegPeriod - work.last_reg_period < 5
 
   const statusColor = statusColorCode(

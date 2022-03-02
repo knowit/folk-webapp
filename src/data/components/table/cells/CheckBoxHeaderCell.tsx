@@ -6,9 +6,6 @@ import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox'
 const BlackCheckBox = withStyles({
   root: {
     color: '#333333',
-    '&$checked': {
-      color: '#333333',
-    },
     '&:hover': {
       backgroundColor: 'transparent',
     },

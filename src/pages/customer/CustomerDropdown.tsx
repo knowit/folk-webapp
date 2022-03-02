@@ -8,8 +8,7 @@ import {
 import { Minimize, Add, OpenInNew } from '@material-ui/icons'
 import React, { useState } from 'react'
 import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
-import { GridItem } from '../../components/GridItem'
-
+import { GridItem } from '../../components/gridItem/GridItem'
 import DataTable from '../../data/components/table/DataTable'
 import { Columns } from '../../data/types'
 

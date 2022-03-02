@@ -33,7 +33,7 @@ const useStyles = makeStyles(() =>
       display: 'none',
     },
     root: {
-      marginTop: '-78px',
+      marginTop: '-10px',
       marginBottom: '20px',
     },
   })

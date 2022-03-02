@@ -3,9 +3,9 @@ import { Skeleton } from '@material-ui/lab'
 import React, { useEffect, useState, useCallback } from 'react'
 import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
 import { useEmployeeTable } from '../../api/data/employee/employeeQueries'
-import EmployeeInfo from '../../components/EmployeeInfo'
-import { useCategories } from '../../components/FilterUtil'
-import { GridItem } from '../../components/GridItem'
+import EmployeeInfo from '../employee/components/EmployeeInfo'
+import { useCategories } from '../../components/filter/FilterUtil'
+import { GridItem } from '../../components/gridItem/GridItem'
 import { CustomerStatusData } from '../../data/components/table/cells/CustomerStatusCell'
 import {
   CenteredHeaderCell,

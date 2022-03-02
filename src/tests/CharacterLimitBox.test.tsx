@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import CharacterLimitBox from '../components/CharacterLimitBox'
+import CharacterLimitBox from '../data/components/table/components/CharacterLimitBox'
 
 describe('<CharacterLimitBox/>', () => {
   it("returns an element with title 'Data ikke tilgjengelig' text when given '-'", async () => {
