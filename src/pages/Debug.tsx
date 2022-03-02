@@ -1,9 +1,8 @@
+import { Grid } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import { getTestV2 } from '../api/client'
-import { GridItem } from '../components/GridItem'
-import { Grid } from '@material-ui/core'
-import { useEmployeeProfile } from '../api/data/employee/employeeQueries'
 import { useHoursBilledPerWeek } from '../api/data/customer/customerQueries'
+import { GridItem } from '../components/GridItem'
 
 const Debug = () => {
   const [data, setData] = useState<any>()
