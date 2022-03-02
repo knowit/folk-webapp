@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import * as React from 'react'
 import SearchInput from '../../components/SearchInput'
 import { SearchableColumn } from '../../data/DDTable'
 import {
@@ -22,28 +22,21 @@ export default function CustomerFilter({
   employees,
   searchableColumns,
 }: CustomerFilterProps) {
-  const allRows = employees
-  const [searchTerm, setSearchTerm] = useState<string>('')
-
-  useEffect(
-    () => {
-      const filteredRows = searchAndFilter(
-        allRows,
-        searchableColumns,
-        searchTerm
-      )
-      onFilter(filteredRows)
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [searchTerm]
-  )
+  const handleSearchChange = (searchTerm: string) => {
+    const filteredRows = searchAndFilter(
+      employees,
+      searchableColumns,
+      searchTerm
+    )
+    onFilter(filteredRows)
+  }
 
   return (
     <GridItemHeader title={title} green>
       <SearchInput
         placeholder={'Søk på konsulentnavn eller kunde'}
-        onSearch={(searchTerm) => setSearchTerm(searchTerm)}
-        onClear={() => setSearchTerm('')}
+        onSearch={(searchTerm) => handleSearchChange(searchTerm)}
+        onClear={() => onFilter(employees)}
       />
     </GridItemHeader>
   )
