@@ -20,7 +20,6 @@ import CustomerFilter from './CustomerFilter'
 const CustomerColumns = [
   {
     title: 'Konsulent',
-    searchable: true,
     isExpandable: true,
     getSearchValue: (consultant: { value: string }) => {
       return consultant.value
@@ -32,7 +31,6 @@ const CustomerColumns = [
   {
     title: 'Kunde',
     renderCell: CustomerStatusCell,
-    searchable: true,
     getSearchValue: (customer: CustomerStatusData) => {
       return `${customer.customer} ${customer.workOrderDescription}`
     },

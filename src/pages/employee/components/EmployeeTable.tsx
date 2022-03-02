@@ -33,7 +33,6 @@ export function EmployeeTable() {
               {
                 title: 'Konsulent',
                 isExpandable: true,
-                searchable: true,
                 getSearchValue: (consultant: { value: string }) => {
                   return consultant.value
                 },
@@ -53,7 +52,6 @@ export function EmployeeTable() {
               {
                 title: 'Kunde',
                 renderCell: CustomerStatusCell,
-                searchable: true,
                 getSearchValue: (customer: CustomerStatusData) => {
                   return customer.customer
                     ? `${customer.customer} ${customer.workOrderDescription}`

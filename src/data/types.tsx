@@ -21,7 +21,6 @@ export type ChartVariant = {
 export type Columns = {
   title: string
   isExpandable?: boolean
-  searchable?: boolean
   checkBoxLabel?: string
   getSearchValue?: (props: any) => string
   renderCell?: (props: any) => JSX.Element
