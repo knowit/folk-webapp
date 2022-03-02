@@ -44,8 +44,8 @@ export function EmployeeTable() {
               {
                 title: 'Tittel',
                 headerCell: SortableHeaderCell,
-                getSearchValue: (jobTitle?: string | null) => {
-                  return jobTitle ?? ''
+                getSearchValue: (jobTitle: string | undefined | null) => {
+                  return jobTitle
                 },
               },
               { title: 'Prosjektstatus', renderCell: ProjectStatusCell },

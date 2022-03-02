@@ -22,12 +22,14 @@ export type Columns = {
   title: string
   isExpandable?: boolean
   checkBoxLabel?: string
-  getSearchValue?: (props: any) => string
+  getSearchValue?: GetSearchValueFn
   renderCell?: (props: any) => JSX.Element
   renderExpanded?: (props: any) => JSX.Element
   headerCell?: (props: any) => JSX.Element
   checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
+
+export type GetSearchValueFn = (data: any) => string | number | undefined | null
 
 export interface DDComponentProps {
   payload: any
