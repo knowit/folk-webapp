@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { getTestV2 } from '../api/client'
 import { useHoursBilledPerWeek } from '../api/data/customer/customerQueries'
 import { GridItem } from '../components/gridItem/GridItem'
-import { Grid } from '@material-ui/core'
 
 const Debug = () => {
   const [data, setData] = useState<any>()
