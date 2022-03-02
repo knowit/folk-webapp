@@ -1,6 +1,7 @@
-import { makeStyles, createStyles, Grid } from '@material-ui/core'
-import React from 'react'
-import Info from './Info'
+import * as React from 'react'
+import { Grid } from '@material-ui/core'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { InfoTooltip } from '../InfoTooltip'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -64,9 +65,10 @@ export function GridItemHeader({
       <Grid container direction="row" alignItems="center">
         <h3 className={[classes.gridHeaderTitle, fontSize].join(' ')}>
           {title}
-          {big}
         </h3>
-        <Info description={description} />
+        {description ? (
+          <InfoTooltip description={description} placement="right" />
+        ) : null}
       </Grid>
       {children}
     </div>

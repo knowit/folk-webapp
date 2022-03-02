@@ -8,13 +8,9 @@ interface PrivacyPolicy {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      width: '100%',
-    },
     footer: {
-      marginTop: '40px',
-      marginBottom: '30px',
-      paddingBottom: '70px',
+      width: '100%',
+      paddingTop: '40px',
       textAlign: 'center',
       fontSize: '12px',
       color: theme.palette.text.primary,
@@ -41,28 +37,26 @@ export default function Footer() {
   })[0]?.urlname
 
   return (
-    <div className={classes.root}>
-      <footer className={classes.footer}>
-        <p>
-          Knowit Folk. Lakkegata 53, 0178 Oslo &ensp;|&ensp; Tlf. 02486 &ensp;|
-          &ensp;
-          <a className={classes.link} href={improvementsHref}>
-            Kontakt og tilbakemeldinger
-          </a>
-          &ensp; | &ensp;
-          <a className={classes.link} href={correctionHref}>
-            Meld om datafeil
-          </a>
-          {privacyPolicyHref && (
-            <>
-              &ensp; | &ensp;
-              <a className={classes.link} href={privacyPolicyHref} download>
-                Personvernserklæring
-              </a>
-            </>
-          )}
-        </p>
-      </footer>
-    </div>
+    <footer className={classes.footer}>
+      <p>
+        Knowit Folk. Lakkegata 53, 0178 Oslo &ensp;|&ensp; Tlf. 02486 &ensp;|
+        &ensp;
+        <a className={classes.link} href={improvementsHref}>
+          Kontakt og tilbakemeldinger
+        </a>
+        &ensp; | &ensp;
+        <a className={classes.link} href={correctionHref}>
+          Meld om datafeil
+        </a>
+        {privacyPolicyHref && (
+          <>
+            &ensp; | &ensp;
+            <a className={classes.link} href={privacyPolicyHref} download>
+              Personvernserklæring
+            </a>
+          </>
+        )}
+      </p>
+    </footer>
   )
 }

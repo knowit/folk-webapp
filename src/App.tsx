@@ -10,14 +10,22 @@ const useStyles = makeStyles((theme: Theme) =>
       minHeight: '100vh',
       width: '1215px',
       margin: 'auto',
+      paddingBottom: '30px',
+      display: 'flex',
+      flexDirection: 'column',
     },
     contentContainer: {
-      paddingTop: '78px',
-      paddingLeft: '30px',
-      paddingRight: '30px',
+      padding: '30px',
       backgroundColor: theme.palette.background.paper,
-      minHeight: 'calc(100vh - 139px)',
       borderRadius: '0px 0px 10px 10px',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      flexGrow: 1,
+    },
+    mainContent: {
+      width: '100%',
+      height: '100%',
     },
   })
 )
@@ -28,7 +36,9 @@ export default function App() {
     <div className={classes.container}>
       <Header />
       <div className={classes.contentContainer}>
-        <Content />
+        <main className={classes.mainContent}>
+          <Content />
+        </main>
         <Footer />
       </div>
     </div>

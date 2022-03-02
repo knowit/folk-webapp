@@ -1,13 +1,16 @@
-import React from 'react'
+import * as React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Skeleton } from '@material-ui/lab'
 import { useFetchedData } from '../../../hooks/service'
 import { NoData } from '../../../components/ErrorText'
-import { ExperienceData, ProjectExperience } from '../EmployeeProfile'
 import Chart from '../../../data/components/chart/Chart'
 import { useEmployeeRadar } from '../../../api/data/employee/employeeQueries'
 import { formatMonthYearRange } from '../../../utils/formatMonthYearRange'
-import { WorkExperience } from '../../../api/data/employee/employeeApiTypes'
+import {
+  EmployeeExperienceResponse,
+  ProjectExperience,
+  WorkExperience,
+} from '../../../api/data/employee/employeeApiTypes'
 import { getStartedInKnowit } from '../../../utils/getStartedInKnowit'
 import { getTotalWorkExperience } from '../../../utils/getTotalWorkExperience'
 
@@ -93,30 +96,23 @@ interface EmployeeInfoProps {
   setRowHeight: (id: string, height: number) => void
 }
 
+function getStringFromList(list: string[] | undefined) {
+  if (!list || list.length === 0) return <NoData />
+  return Array.from(new Set(list))
+    .filter((item) => Boolean(item))
+    .join(', ')
+}
+
 export default function EmployeeInfo({ data }: EmployeeInfoProps) {
   const classes = useStyles()
   const url = data.competenceUrl
   const [empData, pending] = useFetchedData<EmployeeInfoData>({ url })
   const user_id = data.user_id
-  const [expData, expPending] = useFetchedData<ExperienceData>({
+  const [expData, expPending] = useFetchedData<EmployeeExperienceResponse>({
     url: `/api/data/employeeExperience?user_id=${user_id}`,
   })
 
   const { data: employeeChartData } = useEmployeeRadar(data.email_id)
-
-  const getStringFromList = (
-    list: string[] | null | undefined,
-    listName: 'skills' | 'roles' | 'languages'
-  ) => {
-    if (!list) return <NoData />
-    return list.length > 0 ? (
-      `${Array.from(new Set(empData?.tags[listName]))
-        .filter((x) => x)
-        .join(', ')}.`
-    ) : (
-      <NoData />
-    )
-  }
 
   return (
     <div className={classes.root}>
@@ -131,7 +127,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
           ) : (
             <>
               <b>Hovedkompetanse: </b>
-              {getStringFromList(empData?.tags.skills, 'skills')}
+              {getStringFromList(empData?.tags.skills)}
             </>
           )}
         </div>
@@ -141,7 +137,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
           ) : (
             <>
               <b>Roller: </b>
-              {getStringFromList(empData?.tags.roles, 'roles')}
+              {getStringFromList(empData?.tags.roles)}
             </>
           )}
         </div>
@@ -171,7 +167,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
           ) : (
             <>
               <b>Språk: </b>
-              {getStringFromList(empData?.tags.languages, 'languages')}
+              {getStringFromList(empData?.tags.languages)}
             </>
           )}
         </div>
@@ -264,7 +260,9 @@ export const GetWorkExperience = (workExp: {
   )
 }
 
-export const GetProjects = (expData: { expData: ExperienceData | null }) => {
+export const GetProjects = (expData: {
+  expData: EmployeeExperienceResponse | null
+}) => {
   const classes = useStyles()
   if (!expData || !expData.expData || !expData.expData.experience)
     return <div> Fant ingen prosjekter </div>
