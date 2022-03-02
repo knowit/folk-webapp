@@ -1,22 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import FilterInput from '../../components/filter/FilterInput'
-import { FilterHeader } from '../../components/filter/FilterHeader'
+import * as React from 'react'
 import SearchInput from '../../components/SearchInput'
 import { SearchableColumn } from '../../data/DDTable'
 import {
   CategoryWithGroup,
-  FilterObject,
-  handleFilterChange,
-  handleThresholdChange,
   searchAndFilter,
-  useCategories,
 } from '../../components/filter/FilterUtil'
 import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
 import { GridItemHeader } from '../../components/gridItem/GridItemHeader'
 
 interface CustomerFilterProps {
   title: string
-  filter: (filter: any[]) => void
+  onFilter: (filteredRows: EmployeeTableResponse[]) => void
   employees: EmployeeTableResponse[]
   searchableColumns: SearchableColumn[]
   categories: CategoryWithGroup[]
@@ -24,74 +18,26 @@ interface CustomerFilterProps {
 
 export default function CustomerFilter({
   title,
-  filter,
+  onFilter,
   employees,
   searchableColumns,
 }: CustomerFilterProps) {
-  const allRows = employees
-  const initialFilters: FilterObject[] = [
-    {
-      name: 'MOTIVATION',
-      values: [],
-      threshold: 3,
-      placeholder: 'Filtrer på Motivasjon...',
-      datafetch: useCategories,
-    },
-  ]
-
-  const [filters, setFilters] = useState<FilterObject[]>(initialFilters)
-  const [searchTerm, setSearchTerm] = useState<string>('')
-
-  useEffect(
-    () =>
-      filter(searchAndFilter(allRows, searchableColumns, filters, searchTerm)),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filters, searchTerm]
-  )
+  const handleSearchChange = (searchTerm: string) => {
+    const filteredRows = searchAndFilter(
+      employees,
+      searchableColumns,
+      searchTerm
+    )
+    onFilter(filteredRows)
+  }
 
   return (
-    <>
-      <GridItemHeader title={title} green>
-        {filters.map(({ values, placeholder, datafetch }, index) => (
-          <FilterInput
-            key={placeholder}
-            filterList={values}
-            placeholder={placeholder}
-            onSelect={(value) =>
-              setFilters((prevFilters) =>
-                handleFilterChange(prevFilters, value, index)
-              )
-            }
-            fetchFilterCategories={datafetch}
-          />
-        ))}
-        <SearchInput
-          placeholder={'Søk konsulent, kunde, etc...'}
-          onSearch={(searchTerm) => setSearchTerm(searchTerm)}
-          onClear={() => setSearchTerm('')}
-        />
-      </GridItemHeader>
-      {filters.map(
-        ({ values, threshold, name }, index) =>
-          values.length > 0 && (
-            <FilterHeader
-              title={name}
-              type={name}
-              filterList={values}
-              filterThreshold={threshold}
-              onThresholdUpdate={(value) =>
-                setFilters((prevFilters) =>
-                  handleThresholdChange(prevFilters, value, index)
-                )
-              }
-              onSkillClick={(value) =>
-                setFilters((prevFilters) =>
-                  handleFilterChange(prevFilters, value, index)
-                )
-              }
-            />
-          )
-      )}
-    </>
+    <GridItemHeader title={title} green>
+      <SearchInput
+        placeholder={'Søk på konsulentnavn eller kunde'}
+        onSearch={(searchTerm) => handleSearchChange(searchTerm)}
+        onClear={() => onFilter(employees)}
+      />
+    </GridItemHeader>
   )
 }
