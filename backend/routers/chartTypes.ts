@@ -11,6 +11,9 @@ export interface RadarChartData {
 }
 
 export type LineChartData = {
-  id: string
-  data: any[]
+  id: string | number
+  data: Array<{
+    x: number | string | Date
+    y: number | string | Date
+  }>
 }
