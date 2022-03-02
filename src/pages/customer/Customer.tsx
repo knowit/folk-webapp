@@ -1,5 +1,5 @@
 import React from 'react'
-import NavTab from '../../components/NavTab'
+import NavTab from '../../components/header/NavTab'
 import CustomerList from './CustomerList'
 import { CustomerOverview } from './CustomerOverview'
 

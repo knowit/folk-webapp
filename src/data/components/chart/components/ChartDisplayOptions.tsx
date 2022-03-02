@@ -3,8 +3,8 @@ import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab'
 import { BarChart, PieChart, ShowChart, DonutLarge } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import { createStyles, SvgIcon } from '@material-ui/core'
-import { ReactComponent as RadarLogo } from '../assets/RadarChart.svg'
-import { ChartType, ChartVariant } from '../data/types'
+import { ReactComponent as RadarLogo } from '../../../../assets/RadarChart.svg'
+import { ChartType, ChartVariant } from '../../../types'
 
 const chartVariantInfo: {
   [key in ChartType]: {

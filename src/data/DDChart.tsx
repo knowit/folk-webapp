@@ -1,6 +1,6 @@
 import React from 'react'
 import { Skeleton } from '@material-ui/lab'
-import { GridItem } from '../components/GridItem'
+import { GridItem } from '../components/gridItem/GridItem'
 import Chart from './components/chart/Chart'
 import { DDItemProps } from './types'
 

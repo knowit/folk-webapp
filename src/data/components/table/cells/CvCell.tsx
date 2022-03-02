@@ -3,7 +3,7 @@ import GetApp from '@material-ui/icons/GetApp'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { withStyles } from '@material-ui/core'
 import { NoData } from '../../../../components/ErrorText'
-import CvDialog from '../../../../components/CvDialog'
+import CvDialog from '../components/CvDialog'
 
 interface CvCellData {
   no_pdf: string

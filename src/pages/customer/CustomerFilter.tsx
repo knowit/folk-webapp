@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import FilterInput from '../../components/FilterInput'
-import { FilterHeader } from '../../components/FilterHeader'
-import { GridItemHeader } from '../../components/GridItem'
+import FilterInput from '../../components/filter/FilterInput'
+import { FilterHeader } from '../../components/filter/FilterHeader'
 import SearchInput from '../../components/SearchInput'
 import { SearchableColumn } from '../../data/DDTable'
 import {
@@ -11,8 +10,9 @@ import {
   handleThresholdChange,
   searchAndFilter,
   useCategories,
-} from '../../components/FilterUtil'
+} from '../../components/filter/FilterUtil'
 import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
+import { GridItemHeader } from '../../components/gridItem/GridItemHeader'
 
 interface CustomerFilterProps {
   title: string

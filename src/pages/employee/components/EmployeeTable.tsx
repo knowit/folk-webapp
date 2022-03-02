@@ -1,5 +1,5 @@
 import React from 'react'
-import DDTable from '../data/DDTable'
+import DDTable from '../../../data/DDTable'
 import {
   CheckBoxHeaderCell,
   ConsultantCell,
@@ -7,13 +7,13 @@ import {
   CvCell,
   ProjectStatusCell,
   SortableHeaderCell,
-} from '../data/components/table/DataCells'
+} from '../../../data/components/table/DataCells'
 import EmployeeInfo from './EmployeeInfo'
-import { CustomerStatusData } from '../data/components/table/cells/CustomerStatusCell'
+import { CustomerStatusData } from '../../../data/components/table/cells/CustomerStatusCell'
 import { Skeleton } from '@material-ui/lab'
-import { useEmployeeTable } from '../api/data/employee/employeeQueries'
-import { GridItem } from './GridItem'
-import { useCategories } from './FilterUtil'
+import { useEmployeeTable } from '../../../api/data/employee/employeeQueries'
+import { useCategories } from '../../../components/filter/FilterUtil'
+import { GridItem } from '../../../components/gridItem/GridItem'
 
 export function EmployeeTable() {
   const TableSkeleton = () => (

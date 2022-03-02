@@ -1,7 +1,8 @@
 import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
-import { NavMenu, NavMenuItem } from '../components/NavMenu'
 import { render, screen } from '@testing-library/react'
+import { NavMenu } from '../components/header/NavMenu'
+import { NavMenuItem } from '../components/header/NavMenuItem'
 
 describe('NavMenuItem', () => {
   it('renders link with correct label to correct href', () => {

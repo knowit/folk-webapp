@@ -1,8 +1,8 @@
 import NotFound from './pages/NotFound'
 import UnderConstruction from './pages/UnderConstruction'
-import EmployeePage from './pages/EmployeePage'
+import EmployeePage from './pages/employee/EmployeePage'
 import Competence from './pages/Competence'
-import EmployeeProfile from './pages/EmployeeProfile'
+import EmployeeProfile from './pages/employee/EmployeeProfile'
 import Customer from './pages/customer/Customer'
 
 export {

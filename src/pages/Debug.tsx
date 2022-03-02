@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getTestV2 } from '../api/client'
-import { GridItem } from '../components/GridItem'
+import { GridItem } from '../components/gridItem/GridItem'
 import { Grid } from '@material-ui/core'
 import { useEmployeeProfile } from '../api/data/employee/employeeQueries'
 
