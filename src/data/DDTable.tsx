@@ -92,8 +92,8 @@ export default function DDTable({
   const filteredRows = searchAndFilter(
     allRows,
     searchableColumns,
-    filters,
-    searchTerm
+    searchTerm,
+    filters
   )
 
   const NonProject = displayNonProject

@@ -128,7 +128,7 @@ export default function CustomerList() {
       ) : (
         <CustomerFilter
           title="Filtre"
-          filter={handleSearchAndFilter}
+          onFilter={handleSearchAndFilter}
           employees={initialData}
           searchableColumns={getSearchableColumns(CustomerColumns)}
           categories={categories}

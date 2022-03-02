@@ -53,8 +53,8 @@ function filterRow(
 export const searchAndFilter = (
   rows: EmployeeTableResponse[],
   searchableColumns: SearchableColumn[],
-  filters: FilterObject[],
-  searchTerm: string
+  searchTerm: string,
+  filters: FilterObject[] = []
 ) => {
   const hasSearchTerm = !!searchTerm && searchTerm.trim() !== ''
   return rows.filter((row: EmployeeTableResponse) => {
@@ -64,7 +64,7 @@ export const searchAndFilter = (
 
     let rowMatchesFilters = true
 
-    filters.map((filter) => {
+    filters.forEach((filter) => {
       if (filter.values.length > 0) {
         const rowDataIndex = ColumnMapping[filter.name]
         rowMatchesFilters =
