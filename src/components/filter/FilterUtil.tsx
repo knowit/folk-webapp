@@ -27,15 +27,35 @@ function searchRow(
   searchableColumns: SearchableColumn[],
   searchTerm: string
 ) {
-  return searchableColumns
-    .map((column) =>
-      column
-        .getSearchValue(row.rowData[column.columnIndex])
-        .toLowerCase()
-        .trim()
-        .includes(searchTerm.toLowerCase().trim())
+  const wordsInSearchTerm = searchTerm
+    .split(' ')
+    .map(normalizeWord)
+    .filter(Boolean)
+
+  const searchableColumnWords = searchableColumns
+    .flatMap((column) => {
+      const columnValue = column.getSearchValue(row.rowData[column.columnIndex])
+      if (typeof columnValue === 'string') {
+        return columnValue.split(' ').map(normalizeWord)
+      }
+      if (typeof columnValue === 'number') {
+        return String(columnValue)
+      }
+      return []
+    })
+    .filter(Boolean)
+
+  return wordsInSearchTerm.every((searchWord) =>
+    searchableColumnWords.reduce(
+      (foundWordMatch: boolean, columnWord) =>
+        foundWordMatch || columnWord.includes(searchWord),
+      false
     )
-    .reduce((a, b) => a || b, false)
+  )
+}
+
+function normalizeWord(word: string) {
+  return word.toLowerCase().trim()
 }
 
 function filterRow(

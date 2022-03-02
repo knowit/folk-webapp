@@ -5,7 +5,7 @@ import DataTable from './components/table/DataTable'
 import SearchInput from '../components/SearchInput'
 import FilterInput from '../components/filter/FilterInput'
 import RowCount from './components/RowCount'
-import { Columns, DDTableProps } from './types'
+import { Columns, DDTableProps, GetSearchValueFn } from './types'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   filterNonCustomer,
@@ -16,7 +16,6 @@ import {
 } from '../components/filter/FilterUtil'
 import { SortOrder } from './components/table/cells/SortableHeaderCell'
 
-type GetSearchValueFn = (data: unknown) => string
 export interface SearchableColumn {
   columnIndex: number
   getSearchValue: GetSearchValueFn
