@@ -1,4 +1,4 @@
-import { BarChartFormat, RadarChartFormat } from '../chartTypes'
+import { BarChartData, RadarChartData } from '../chartTypes'
 import { aggregateEmployeeCompetenceAndMotivation } from './employeesAggregation'
 import { EmployeeMotivationAndCompetence } from './employeesTypes'
 
@@ -13,7 +13,7 @@ export const employeeMotivationAndCompetenceBar = (
 ) => {
   const aggregatedData = aggregateEmployeeCompetenceAndMotivation(data)
 
-  const output: Record<string, BarChartFormat> = {}
+  const output: Record<string, BarChartData> = {}
 
   for (const [key, value] of Object.entries(aggregatedData)) {
     output[key] = {
@@ -37,7 +37,7 @@ export const employeeMotivationAndCompetenceRadar = (
 ) => {
   const aggregatedData = aggregateEmployeeCompetenceAndMotivation(data)
 
-  const output: Record<string, RadarChartFormat> = {}
+  const output: Record<string, RadarChartData> = {}
 
   for (const [key, value] of Object.entries(aggregatedData)) {
     output[key] = {

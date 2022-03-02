@@ -11,6 +11,7 @@ import {
   sum,
 } from './util'
 import Reporting from '../reporting'
+import { LineChartData } from '../routers/chartTypes'
 
 /**
  *
@@ -873,11 +874,6 @@ export const hoursBilledPerCustomer = async ({ data }) => {
 
 export const hoursBilledPerWeekReports = [{ reportName: 'perProject' }]
 
-type LineGraphData = {
-  id: string
-  data: Array<any>
-}
-
 export const hoursBilledPerWeek = async ({ data }) => {
   const groupedByCustomer = {}
 
@@ -910,7 +906,7 @@ export const hoursBilledPerWeek = async ({ data }) => {
         ({
           id: key,
           data: value,
-        } as LineGraphData)
+        } as LineChartData)
     )
     .sort((a, b) => b.data.length - a.data.length) // ascending sort by number of week entries
 

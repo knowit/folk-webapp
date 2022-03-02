@@ -1,23 +1,26 @@
+import { Grid } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import { getTestV2 } from '../api/client'
+import { useHoursBilledPerWeek } from '../api/data/customer/customerQueries'
 import { GridItem } from '../components/gridItem/GridItem'
-import { Grid } from '@material-ui/core'
-import { useEmployeeProfile } from '../api/data/employee/employeeQueries'
 
 const Debug = () => {
   const [data, setData] = useState<any>()
 
   // Old api may use hooks to fetch data
-  const { data: dt } = useEmployeeProfile('einar.halvorsen@knowit.no')
+  const { data: dt } = useHoursBilledPerWeek()
 
   // New api uses getTestV2 as of now to compare output
   useEffect(() => {
     const fetch = async () => {
-      const res = await getTestV2<any>('/employees/employeeProfile', {
-        params: {
-          email: 'einar.halvorsen@knowit.no',
-        },
-      })
+      const res = await getTestV2<any>(
+        '/customer/hoursBilledPerWeek/line'
+        // {
+        //   params: {
+        //     email: 'fredrik.arnesen@knowit.no',
+        //   },
+        // }
+      )
 
       setData(res)
     }
