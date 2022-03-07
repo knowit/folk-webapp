@@ -851,7 +851,7 @@ export const hoursBilledPerCustomer = async ({ data }) => {
   const groupByCustomer = {}
 
   data.forEach((perProject) => {
-    const group = groupByCustomer[perProject.costumer] || []
+    const group = groupByCustomer[perProject.customer] || []
     group.push(perProject)
     groupByCustomer[perProject.customer] = group
   })
