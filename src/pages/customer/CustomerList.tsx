@@ -24,7 +24,7 @@ import { getSearchableColumns } from '../../data/DDTable'
 import CustomerAccordion from './CustomerAccordion'
 import SearchInput from '../../components/SearchInput'
 import { GridItemHeader } from '../../components/gridItem/GridItemHeader'
-import { FallbackMessage } from '../employee/components/FallbackMessage'
+import { FallbackMessage } from '../../components/FallbackMessage'
 
 type EmployeeGroupedCustomers = Record<string, EmployeeForCustomerList[]>
 

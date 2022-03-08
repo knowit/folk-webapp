@@ -10,7 +10,7 @@ import { EmployeeByline } from './EmployeeByline'
 import { CvDownloadList } from './CvDownloadList'
 import { EmployeeAvatar } from './EmployeeAvatar'
 import { EmployeeNotFound } from './EmployeeNotFound'
-import { FallbackMessage } from './FallbackMessage'
+import { FallbackMessage } from '../../../components/FallbackMessage'
 
 const useStyles = makeStyles({
   root: {

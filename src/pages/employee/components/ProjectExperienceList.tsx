@@ -3,7 +3,7 @@ import { formatMonthYearRange } from '../../../utils/formatMonthYearRange'
 import { makeStyles } from '@material-ui/core/styles'
 import { useEmployeeExperience } from '../../../api/data/employee/employeeQueries'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
-import { FallbackMessage } from './FallbackMessage'
+import { FallbackMessage } from '../../../components/FallbackMessage'
 import { ExperienceList } from './ExperienceList'
 import { ExperienceListItem } from './ExperienceListItem'
 

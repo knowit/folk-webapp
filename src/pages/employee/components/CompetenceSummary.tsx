@@ -5,7 +5,7 @@ import { getStartedInKnowit } from '../../../utils/getStartedInKnowit'
 import { getTotalWorkExperience } from '../../../utils/getTotalWorkExperience'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { CompetenceSummaryItem } from './CompetenceSummaryItem'
-import { FallbackMessage } from './FallbackMessage'
+import { FallbackMessage } from '../../../components/FallbackMessage'
 
 const useStyles = makeStyles({
   root: {

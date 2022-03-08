@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Customer } from '../../../api/data/employee/employeeApiTypes'
 import { makeStyles } from '@material-ui/core/styles'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
-import { FallbackMessage } from './FallbackMessage'
+import { FallbackMessage } from '../../../components/FallbackMessage'
 import { ExperienceList } from './ExperienceList'
 import { ExperienceListItem } from './ExperienceListItem'
 

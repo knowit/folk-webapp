@@ -5,7 +5,7 @@ import Chart from '../../../data/components/chart/Chart'
 import { GridItem } from '../../../components/gridItem/GridItem'
 import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
-import { FallbackMessage } from './FallbackMessage'
+import { FallbackMessage } from '../../../components/FallbackMessage'
 
 interface Props {
   employeeEmail?: string
