@@ -46,9 +46,8 @@ const fakeUser = {
 }
 
 const mockData = {
-  competenceUrl: '/404',
   user_id: '123',
-  email_id: '123',
+  email: '123',
   degree: 'some degree',
 }
 

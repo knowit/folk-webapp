@@ -87,9 +87,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface EmployeeInfoProps {
   data: {
-    competenceUrl: string
     user_id: string
-    email_id: string
+    email: string
     degree: string
   }
   id: string
@@ -105,14 +104,14 @@ function getStringFromList(list: string[] | undefined) {
 
 export default function EmployeeInfo({ data }: EmployeeInfoProps) {
   const classes = useStyles()
-  const url = data.competenceUrl
-  const [empData, pending] = useFetchedData<EmployeeInfoData>({ url })
-  const user_id = data.user_id
+  const [empData, pending] = useFetchedData<EmployeeInfoData>({
+    url: `/api/data/employeeCompetence?email=${data.email}`,
+  })
   const [expData, expPending] = useFetchedData<EmployeeExperienceResponse>({
-    url: `/api/data/employeeExperience?user_id=${user_id}`,
+    url: `/api/data/employeeExperience?user_id=${data.user_id}`,
   })
 
-  const { data: employeeChartData } = useEmployeeRadar(data.email_id)
+  const { data: employeeChartData } = useEmployeeRadar(data.email)
 
   return (
     <div className={classes.root}>

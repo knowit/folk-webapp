@@ -7,9 +7,7 @@ interface EmployeeTableRow {
     employeeInfo: {
       value: string // employee name
       image?: string
-      competenceUrl: string
       email: string
-      email_id: string
       user_id: string
       degree?: string
     },

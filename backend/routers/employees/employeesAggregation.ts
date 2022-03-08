@@ -35,11 +35,7 @@ export const aggregateEmployeeTable = (
         {
           value: employee.navn,
           image: getStorageUrl(employee.image_key),
-          competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
-            employee.email
-          )}`,
           email: employee.email,
-          email_id: employee.email,
           user_id: employee.user_id,
           degree: employee.degree,
         },
