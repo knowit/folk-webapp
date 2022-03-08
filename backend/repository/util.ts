@@ -13,11 +13,13 @@ type EmployeeWithMergedCustomers = EmployeeInformation & {
   customers: Customer[]
 }
 
-type Customer = {
+export type Customer = {
   customer: string
   workOrderDescription: string
   weight: number
 }
+
+export type ProjectStatus = 'red' | 'green' | 'yellow' | 'orange'
 
 export const getYear = (): number => {
   const currentDate = new Date()
@@ -73,9 +75,9 @@ export const mergeCustomersForEmployees = (
   return Object.values(employeesWithMergedCustomers)
 }
 
-export function findCustomerWithHighestWeight(customers: Customer[]) {
+export function findPrimaryCustomerForEmployee(customers: Customer[]) {
   if (!customers || customers.length === 0) {
-    return {}
+    return
   }
 
   return customers.reduce((prevCustomer, thisCustomer) => {
@@ -101,7 +103,7 @@ export const statusColorCode = (
   wantNewProject: number,
   openForNewProject: number,
   inProject: boolean
-): string => {
+): ProjectStatus => {
   const projectStatus = inProject ? 'green' : 'red'
   const color = wantNewProject > openForNewProject ? 'yellow' : 'orange'
   const statusColor =

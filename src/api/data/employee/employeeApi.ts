@@ -7,7 +7,7 @@ import {
 } from './employeeApiTypes'
 
 export const getEmployeeTable = () =>
-  getAtApi<EmployeeTableResponse[]>('/data/employeeTable')
+  getAtApi<EmployeeTableResponse>('/data/employeeTable')
 
 export const getEmployeeProfile = (url: string, email: string) =>
   getAtApi<EmployeeProfileResponse>(`/data/employeeProfile`, {

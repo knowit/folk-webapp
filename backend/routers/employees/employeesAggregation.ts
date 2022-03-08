@@ -1,13 +1,11 @@
-import { v4 as uuid } from 'uuid'
 import {
   mapEmployeeTags,
-  cvs,
-  findCustomerWithHighestWeight,
+  findPrimaryCustomerForEmployee,
   findProjectStatusForEmployee,
   getCategoryScoresForEmployee,
   getStorageUrl,
-  makeCvLink,
   mergeCustomersForEmployees,
+  createCvLinks,
 } from './aggregationHelpers'
 import {
   EmployeeExperience,
@@ -15,6 +13,7 @@ import {
   EmployeeMotivationAndCompetence,
   EmployeeProfile,
   EmployeeSkills,
+  EmployeeTable,
   WorkExperience,
 } from './employeesTypes'
 
@@ -22,42 +21,37 @@ export const aggregateEmployeeTable = (
   employeeInformation,
   employeeMotivationAndCompetence,
   jobRotationInformation
-) => {
+): EmployeeTable => {
   const employeesWithMergedCustomers =
     mergeCustomersForEmployees(employeeInformation)
-  return employeesWithMergedCustomers.map((employee) => ({
-    rowId: uuid(),
-    rowData: [
-      {
-        value: employee.navn,
-        image: getStorageUrl(employee.image_key),
-        competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
-          employee.email
-        )}`,
-        email: employee.email,
-        email_id: employee.email,
-        user_id: employee.user_id,
-        degree: employee.degree,
-      },
-      employee.title,
-      findProjectStatusForEmployee(jobRotationInformation, employee.email),
-      findCustomerWithHighestWeight(employee.customers),
-      Object.fromEntries(
-        cvs.map(([lang, format]) => [
-          `${lang}_${format}`,
-          employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
-        ])
-      ),
-      getCategoryScoresForEmployee(
-        employee.email,
-        employeeMotivationAndCompetence
-      )[0],
-      getCategoryScoresForEmployee(
-        employee.email,
-        employeeMotivationAndCompetence
-      )[1],
-    ],
-  }))
+  return employeesWithMergedCustomers.map((employee) => {
+    const [motivationScores, competenceScores] = getCategoryScoresForEmployee(
+      employee.email,
+      employeeMotivationAndCompetence
+    )
+    return {
+      rowId: employee.email,
+      rowData: [
+        {
+          value: employee.navn,
+          image: getStorageUrl(employee.image_key),
+          competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
+            employee.email
+          )}`,
+          email: employee.email,
+          email_id: employee.email,
+          user_id: employee.user_id,
+          degree: employee.degree,
+        },
+        employee.title,
+        findProjectStatusForEmployee(jobRotationInformation, employee.email),
+        findPrimaryCustomerForEmployee(employee.customers),
+        createCvLinks(employee.link),
+        motivationScores,
+        competenceScores,
+      ],
+    }
+  })
 }
 
 export const aggregateEmployeeExperience = (data: EmployeeExperience[]) => {
@@ -141,11 +135,6 @@ export const aggregateEmployeeProfile = (
     customers: employee.customers,
     workExperience,
     tags: mapEmployeeTags(employeeSkills[0]),
-    links: {
-      no_pdf: makeCvLink('no', 'pdf', employee.link),
-      int_pdf: makeCvLink('int', 'pdf', employee.link),
-      no_word: makeCvLink('no', 'word', employee.link),
-      int_word: makeCvLink('int', 'word', employee.link),
-    },
+    links: createCvLinks(employee.link),
   }
 }

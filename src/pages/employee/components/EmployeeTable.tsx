@@ -1,6 +1,7 @@
-import React from 'react'
+import * as React from 'react'
 import DDTable from '../../../data/DDTable'
 import {
+  CenteredHeaderCell,
   CheckBoxHeaderCell,
   ConsultantCell,
   CustomerStatusCell,
@@ -9,7 +10,7 @@ import {
   SortableHeaderCell,
 } from '../../../data/components/table/DataCells'
 import EmployeeInfo from './EmployeeInfo'
-import { CustomerStatusData } from '../../../data/components/table/cells/CustomerStatusCell'
+import { Customer } from '../../../api/data/employee/employeeApiTypes'
 import { Skeleton } from '@material-ui/lab'
 import { useEmployeeTable } from '../../../api/data/employee/employeeQueries'
 import { useCategories } from '../../../components/filter/FilterUtil'
@@ -52,14 +53,18 @@ export function EmployeeTable() {
               {
                 title: 'Kunde',
                 renderCell: CustomerStatusCell,
-                getSearchValue: (customer: CustomerStatusData) => {
-                  return customer.customer
+                getSearchValue: (customer: Customer | null) => {
+                  return customer
                     ? `${customer.customer} ${customer.workOrderDescription}`
                     : 'Ikke i prosjekt'
                 },
                 headerCell: SortableHeaderCell,
               },
-              { title: 'CV', renderCell: CvCell },
+              {
+                title: 'CV',
+                renderCell: CvCell,
+                headerCell: CenteredHeaderCell,
+              },
             ],
           }}
           initialFilters={[

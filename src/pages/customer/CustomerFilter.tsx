@@ -3,27 +3,27 @@ import SearchInput from '../../components/SearchInput'
 import { SearchableColumn } from '../../data/DDTable'
 import {
   CategoryWithGroup,
-  searchAndFilter,
+  searchEmployeesByCustomer,
 } from '../../components/filter/FilterUtil'
-import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
+import { EmployeeForCustomerList } from './CustomerList'
 import { GridItemHeader } from '../../components/gridItem/GridItemHeader'
 
 interface CustomerFilterProps {
   title: string
-  onFilter: (filteredRows: EmployeeTableResponse[]) => void
-  employees: EmployeeTableResponse[]
+  onFilter: (filteredRows: EmployeeForCustomerList[]) => void
+  employees: EmployeeForCustomerList[]
   searchableColumns: SearchableColumn[]
   categories: CategoryWithGroup[]
 }
 
-export default function CustomerFilter({
+export function CustomerFilter({
   title,
   onFilter,
   employees,
   searchableColumns,
 }: CustomerFilterProps) {
   const handleSearchChange = (searchTerm: string) => {
-    const filteredRows = searchAndFilter(
+    const filteredRows = searchEmployeesByCustomer(
       employees,
       searchableColumns,
       searchTerm

@@ -1,9 +1,28 @@
 // employeeTable
+export type EmployeeTableResponse = EmployeeTableRow[]
 
-export interface EmployeeTableResponse {
+export interface EmployeeTableRow {
   rowId: string
-  rowData: any[]
+  rowData: [
+    employeeInfo: {
+      value: string // employee name
+      image?: string
+      competenceUrl: string
+      email: string
+      email_id: string
+      user_id: string
+      degree?: string
+    },
+    jobTitle: string | undefined,
+    projectStatus: ProjectStatus,
+    customer: Customer | undefined,
+    cvLinks: CvLinks | undefined,
+    motivationScores: Record<string, number>,
+    competenceScores: Record<string, number>
+  ]
 }
+
+type ProjectStatus = 'red' | 'green' | 'yellow' | 'orange'
 
 // employeeRadar has same response as CompetenceAreasResponse
 
@@ -42,7 +61,7 @@ export interface EmployeeProfileResponse extends Employee {
   image?: string
   workExperience: WorkExperience[]
   tags: Tags
-  links: Links
+  links: CvLinks
 }
 
 export interface Customer {
@@ -67,7 +86,7 @@ export interface Tags {
   roles: string[]
 }
 
-export interface Links {
+export interface CvLinks {
   no_pdf: string
   int_pdf: string
   no_word: string

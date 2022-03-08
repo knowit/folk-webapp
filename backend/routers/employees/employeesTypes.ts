@@ -1,4 +1,27 @@
 // employeeTable
+export type EmployeeTable = EmployeeTableRow[]
+
+interface EmployeeTableRow {
+  rowId: string
+  rowData: [
+    employeeInfo: {
+      value: string // employee name
+      image?: string
+      competenceUrl: string
+      email: string
+      email_id: string
+      user_id: string
+      degree?: string
+    },
+    jobTitle: string | undefined,
+    projectStatus: ProjectStatus,
+    customer: Customer | undefined,
+    cvLinks: CvLinks | undefined,
+    motivationScores: Record<string, number>,
+    competenceScores: Record<string, number>
+  ]
+}
+
 export type EmployeeInformation = {
   user_id: string
   guid: string
@@ -31,7 +54,7 @@ export type EmployeeProfile = Omit<
   image: string
   workExperience: WorkExperience[]
   tags: Tags
-  links: Links
+  links: CvLinks
 }
 
 export type WorkExperience = {
@@ -44,13 +67,15 @@ export type WorkExperience = {
   year_to: number
 }
 
+export type ProjectStatus = 'red' | 'green' | 'yellow' | 'orange'
+
 export type Tags = {
   languages: string[]
   skills: string[]
   roles: string[]
 }
 
-type Links = {
+export type CvLinks = {
   no_pdf: string
   int_pdf: string
   no_word: string

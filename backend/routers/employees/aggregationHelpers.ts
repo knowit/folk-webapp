@@ -1,28 +1,22 @@
 import {
   CategoryScores,
   Customer,
+  CvLinks,
   EmployeeInformation,
   EmployeeMotivationAndCompetence,
   EmployeeSkills,
   EmployeeWithMergedCustomers,
   JobRotation,
   JobRotationStatus,
+  ProjectStatus,
   Tags,
 } from './employeesTypes'
 
-export const cvs = [
-  ['no', 'pdf'],
-  ['int', 'pdf'],
-  ['no', 'word'],
-  ['int', 'word'],
-]
-
-export const getStorageUrl = (key: string) => {
-  if (key !== undefined) {
-    return `${process.env.STORAGE_URL}/${key}`
-  } else {
-    return undefined
+export const getStorageUrl = (key?: string) => {
+  if (!key) {
+    return
   }
+  return `${process.env.STORAGE_URL}/${key}`
 }
 
 /**
@@ -59,9 +53,9 @@ export const mergeCustomersForEmployees = (
   return Object.values(employeesWithMergedCustomers)
 }
 
-export function findCustomerWithHighestWeight(customers: Customer[]) {
+export function findPrimaryCustomerForEmployee(customers: Customer[]) {
   if (!customers || customers.length === 0) {
-    return {}
+    return
   }
 
   return customers.reduce((prevCustomer, thisCustomer) => {
@@ -86,7 +80,7 @@ export function mapEmployeeTags(employeeSkills?: EmployeeSkills): Tags {
 export const findProjectStatusForEmployee = (
   jobRotationEmployees: JobRotation[],
   email: string
-): string => {
+): ProjectStatus => {
   const [wantNewProject, openForNewProject]: JobRotationStatus =
     jobRotationStatus(jobRotationEmployees, email)
 
@@ -120,7 +114,7 @@ const statusColorCode = (
   wantNewProject: number,
   openForNewProject: number,
   inProject: boolean
-): string => {
+): ProjectStatus => {
   const projectStatus = inProject ? 'red' : 'green'
   const color = wantNewProject > openForNewProject ? 'yellow' : 'orange'
   const statusColor =
@@ -146,10 +140,18 @@ export const getCategoryScoresForEmployee = (
   return [employeeMotivation, employeeCompetence]
 }
 
-export const makeCvLink = (
-  lang: string,
-  format: string,
-  linkTemplate?: string
-) => {
-  return linkTemplate?.replace('{LANG}', lang).replace('{FORMAT}', format)
+export function createCvLinks(linkTemplate?: string): CvLinks | undefined {
+  if (!linkTemplate) {
+    return
+  }
+  return {
+    no_pdf: createCvLink('no', 'pdf', linkTemplate),
+    int_pdf: createCvLink('int', 'pdf', linkTemplate),
+    no_word: createCvLink('no', 'word', linkTemplate),
+    int_word: createCvLink('int', 'word', linkTemplate),
+  }
+}
+
+function createCvLink(language: string, format: string, linkTemplate: string) {
+  return linkTemplate.replace('{LANG}', language).replace('{FORMAT}', format)
 }

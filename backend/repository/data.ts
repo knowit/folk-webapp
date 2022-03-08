@@ -1,7 +1,6 @@
-import { v4 as uuid } from 'uuid'
 import {
   mapEmployeeTags,
-  findCustomerWithHighestWeight,
+  findPrimaryCustomerForEmployee,
   getEventSet,
   getWeek,
   getYear,
@@ -9,17 +8,13 @@ import {
   range,
   statusColorCode,
   sum,
+  ProjectStatus,
+  Customer,
 } from './util'
 import Reporting from '../reporting'
 import { LineChartData } from '../routers/chartTypes'
-
-/**
- *
- * @param {string} employeeUuid  Uuid that identifies the employee.
- * @param {object} categoryList  List of categories. Each category has a list of UUIDs, mapped to a score.
- *
- * @return {object} All categories with scores for the employee
- */
+import { createCvLinks } from '../routers/employees/aggregationHelpers'
+import { CvLinks } from '../routers/employees/employeesTypes'
 
 type EmployeeMotivationAndCompetence = {
   email: string
@@ -31,19 +26,18 @@ type EmployeeMotivationAndCompetence = {
   categoryCompetenceAvg: number
 }
 
-type EmployeeTable = {
-  data: [
-    EmployeeInformation[],
-    EmployeeMotivationAndCompetence[],
-    JobRotation[],
-    EmployeeWorkStatus[]
-  ]
-}
-
 type CategoryScores = [
   Motivation: Record<string, number>,
   Competence: Record<string, number>
 ]
+
+/**
+ *
+ * @param {string} employeeEmail  Email that identifies the employee.
+ * @param {object} categoryList  List of categories. Each category has a list of UUIDs, mapped to a score.
+ *
+ * @return {object} All categories with scores for the employee
+ */
 const getCategoryScoresForEmployee = (
   employeeEmail: string,
   categoryList: EmployeeMotivationAndCompetence[]
@@ -60,12 +54,12 @@ const getCategoryScoresForEmployee = (
 
   return [employeeMotivation, employeeCompetence]
 }
-const getStorageUrl = (key: string) => {
-  if (key !== undefined) {
-    return `${process.env.STORAGE_URL}/${key}`
-  } else {
-    return undefined
+
+const getStorageUrl = (key?: string) => {
+  if (!key) {
+    return
   }
+  return `${process.env.STORAGE_URL}/${key}`
 }
 
 const getEmployeeWork = (
@@ -88,7 +82,7 @@ const findProjectStatusForEmployee = (
   jobRotationEmployees: JobRotation[],
   employeeWorkStatus: EmployeeWorkStatus[],
   guid: string
-): string => {
+): ProjectStatus => {
   const currentRegPeriod = parseInt(getYear() + getWeek(), 10)
 
   const work = getEmployeeWork(employeeWorkStatus, guid)
@@ -129,12 +123,15 @@ const jobRotationStatus = (
   return [wantNewProject, openForNewProject]
 }
 
-export const employeeTableReports = [
-  { reportName: 'employeeInformation' },
-  { reportName: 'employeeMotivationAndCompetence' },
-  { reportName: 'jobRotationInformation' },
-  { reportName: 'employeeWorkStatus' },
-]
+type EmployeeTable = {
+  data: [
+    EmployeeInformation[],
+    EmployeeMotivationAndCompetence[],
+    JobRotation[],
+    EmployeeWorkStatus[]
+  ]
+}
+
 type JobRotation = {
   username: string
   email: string
@@ -155,47 +152,75 @@ type EmployeeWorkStatus = {
   weight_sum: number
 }
 
+interface EmployeeTableRow {
+  rowId: string
+  rowData: [
+    employeeInfo: {
+      value: string // employee name
+      image?: string
+      competenceUrl: string
+      email: string
+      email_id: string
+      user_id: string
+      degree?: string
+    },
+    jobTitle: string | undefined,
+    projectStatus: ProjectStatus,
+    customer: Customer | undefined,
+    cvLinks: CvLinks | undefined,
+    motivationScores: Record<string, number>,
+    competenceScores: Record<string, number>
+  ]
+}
+
+export const employeeTableReports = [
+  { reportName: 'employeeInformation' },
+  { reportName: 'employeeMotivationAndCompetence' },
+  { reportName: 'jobRotationInformation' },
+  { reportName: 'employeeWorkStatus' },
+]
+
 /**Dette endepunktet henter dataen til ansatttabellene i Competence.tsx og Employee.tsx*/
-export const employeeTable = async ({ data }: EmployeeTable) => {
+export const employeeTable = async ({
+  data,
+}: EmployeeTable): Promise<EmployeeTableRow[]> => {
   const [allEmployees, motivationAndCompetence, jobRotation, employeeStatus] =
     data
   const employeesWithMergedCustomers = mergeCustomersForEmployees(allEmployees)
 
-  return employeesWithMergedCustomers.map((employee) => ({
-    rowId: uuid(),
-    rowData: [
-      {
-        value: employee.navn,
-        image: getStorageUrl(employee.image_key),
-        competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
-          employee.email
-        )}`,
-        email: employee.email,
-        email_id: employee.email,
-        user_id: employee.user_id,
-        degree: employee.degree,
-      },
-      employee.title,
-      findProjectStatusForEmployee(jobRotation, employeeStatus, employee.guid),
-      findCustomerWithHighestWeight(employee.customers),
-      Object.fromEntries(
-        cvs.map(([lang, format]) => [
-          `${lang}_${format}`,
-          employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
-        ])
-      ),
-      getCategoryScoresForEmployee(employee.email, motivationAndCompetence)[0],
-      getCategoryScoresForEmployee(employee.email, motivationAndCompetence)[1],
-    ],
-  }))
+  return employeesWithMergedCustomers.map((employee) => {
+    const [motivationScores, competenceScores] = getCategoryScoresForEmployee(
+      employee.email,
+      motivationAndCompetence
+    )
+    return {
+      rowId: employee.email,
+      rowData: [
+        {
+          value: employee.navn,
+          image: getStorageUrl(employee.image_key),
+          competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
+            employee.email
+          )}`,
+          email: employee.email,
+          email_id: employee.email,
+          user_id: employee.user_id,
+          degree: employee.degree,
+        },
+        employee.title,
+        findProjectStatusForEmployee(
+          jobRotation,
+          employeeStatus,
+          employee.guid
+        ),
+        findPrimaryCustomerForEmployee(employee.customers),
+        createCvLinks(employee.link),
+        motivationScores,
+        competenceScores,
+      ],
+    }
+  })
 }
-
-const cvs = [
-  ['no', 'pdf'],
-  ['int', 'pdf'],
-  ['no', 'word'],
-  ['int', 'word'],
-]
 
 type ReportParams = {
   parameters: {
@@ -250,14 +275,14 @@ export type EmployeeInformation = {
   guid: string
   navn: string
   manager: string
-  title: string
+  title?: string
   link: string
-  degree: string
-  image_key: string
+  degree?: string
+  image_key?: string
   email: string
-  customer: string
-  weight: number
-  work_order_description: string
+  customer?: string
+  weight?: number
+  work_order_description?: string
 }
 
 export type EmployeeSkills = {
@@ -711,12 +736,7 @@ export const employeeProfile = async ({ data }: EmployeeData) => {
     customers: employee.customers,
     workExperience,
     tags: mapEmployeeTags(employeeSkills[0]),
-    links: Object.fromEntries(
-      cvs.map(([lang, format]) => [
-        `${lang}_${format}`,
-        employee.link?.replace('{LANG}', lang).replace('{FORMAT}', format),
-      ])
-    ),
+    links: createCvLinks(employee.link),
   }
 }
 

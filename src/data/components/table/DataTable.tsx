@@ -13,15 +13,17 @@ import {
 import CharacterLimitBox from './components/CharacterLimitBox'
 import { ColumnSort } from '../../DDTable'
 import { Columns } from '../../types'
-import { EmployeeTableResponse } from '../../../api/data/employee/employeeApiTypes'
+import { EmployeeTableRow } from '../../../api/data/employee/employeeApiTypes'
+import { EmployeeForCustomerList } from '../../../pages/customer/CustomerList'
 
 interface DataTableProps {
   columns: Columns[]
-  rows: EmployeeTableResponse[]
+  rows: EmployeeTableRow[] | EmployeeForCustomerList[]
   setColumnSort?: (CurrentSort: ColumnSort) => void
   checkBoxChangeHandler?: () => void
   checked?: boolean
   currentColumnSort?: ColumnSort
+  columnWidths: number[]
 }
 
 type CellTypeProps = (props: {
@@ -99,7 +101,6 @@ export const tableStyles = makeStyles((theme: Theme) =>
 
 const DEFAULT_CELL_HEIGHT = 70
 const EXPANDED_CELL_HEIGHT = 522
-const COLUMNS_WIDTH = [385, 222, 143, 337, 53]
 
 function VirtualizedTable({
   columns,
@@ -108,6 +109,7 @@ function VirtualizedTable({
   checkBoxChangeHandler,
   currentColumnSort,
   checked,
+  columnWidths,
 }: DataTableProps) {
   const classes = tableStyles()
   const tableRef = useRef<Table>(null)
@@ -116,9 +118,9 @@ function VirtualizedTable({
   useEffect(() => {
     // We need to alert the react-virtualized table that the height of a
     // row has changed, so that it can recalculate total height and reposition
-    // rows. This runs when a row is expanded/collapsed:
+    // rows. This runs when a row is expanded/collapsed and when sorting is changed:
     tableRef.current?.recomputeRowHeights()
-  }, [tableRef, expandedRowIds])
+  }, [tableRef, expandedRowIds, currentColumnSort])
 
   function rowIsExpanded(rowId: string) {
     return expandedRowIds.includes(rowId)
@@ -191,10 +193,7 @@ function VirtualizedTable({
       <div key={key} className={classes.column} style={style}>
         <div className={className}>
           {columns.map((column, columnIndex) => (
-            <div
-              key={columnIndex}
-              style={{ width: COLUMNS_WIDTH[columnIndex] }}
-            >
+            <div key={columnIndex} style={{ width: columnWidths[columnIndex] }}>
               <Cell
                 CellType={column.renderCell}
                 rowId={rowId}
@@ -293,7 +292,7 @@ function VirtualizedTable({
               }
               className={classes.flexContainer}
               dataKey={String(index)}
-              width={COLUMNS_WIDTH[index]}
+              width={columnWidths[index]}
             />
           ))}
         </Table>

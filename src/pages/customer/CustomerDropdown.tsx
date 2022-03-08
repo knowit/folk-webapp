@@ -1,3 +1,4 @@
+import * as React from 'react'
 import {
   makeStyles,
   createStyles,
@@ -6,11 +7,11 @@ import {
   AccordionDetails,
 } from '@material-ui/core'
 import { Minimize, Add, OpenInNew } from '@material-ui/icons'
-import React, { useState } from 'react'
-import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
+import { useState } from 'react'
 import { GridItem } from '../../components/gridItem/GridItem'
 import DataTable from '../../data/components/table/DataTable'
 import { Columns } from '../../data/types'
+import { EmployeeForCustomerList } from './CustomerList'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -27,7 +28,7 @@ const useStyles = makeStyles(() =>
 
 interface CustomerDropdownProps {
   customerName: string
-  employees: EmployeeTableResponse[]
+  employees: EmployeeForCustomerList[]
   expand?: boolean
   columns: Columns[]
 }
@@ -64,7 +65,11 @@ export default function CustomerDropdown({
         </AccordionSummary>
         <AccordionDetails className={classes.accordionDetails}>
           <GridItem fullSize={true}>
-            <DataTable rows={employees} columns={columns} />
+            <DataTable
+              rows={employees}
+              columns={columns}
+              columnWidths={[385, 222, 480, 68]}
+            />
           </GridItem>
         </AccordionDetails>
       </Accordion>
