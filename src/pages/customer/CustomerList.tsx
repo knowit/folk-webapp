@@ -1,15 +1,19 @@
 import * as React from 'react'
 import { Grid } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { useEmployeeTable } from '../../api/data/employee/employeeQueries'
 import EmployeeInfo from '../employee/components/EmployeeInfo'
 import {
   EmployeeTableColumnMapping,
-  useCategories,
+  searchEmployeesByCustomer,
 } from '../../components/filter/FilterUtil'
 import { GridItem } from '../../components/gridItem/GridItem'
-import { Customer, CvLinks } from '../../api/data/employee/employeeApiTypes'
+import {
+  Customer,
+  CvLinks,
+  EmployeeTableRow,
+} from '../../api/data/employee/employeeApiTypes'
 import {
   CenteredHeaderCell,
   ConsultantCell,
@@ -17,9 +21,30 @@ import {
   CvCell,
 } from '../../data/components/table/DataCells'
 import { getSearchableColumns } from '../../data/DDTable'
-import CustomerDropdown from './CustomerDropdown'
-import { CustomerFilter } from './CustomerFilter'
+import CustomerAccordion from './CustomerAccordion'
+import SearchInput from '../../components/SearchInput'
+import { GridItemHeader } from '../../components/gridItem/GridItemHeader'
+import { FallbackMessage } from '../employee/components/FallbackMessage'
 
+type EmployeeGroupedCustomers = Record<string, EmployeeForCustomerList[]>
+
+export interface EmployeeForCustomerList {
+  rowId: string
+  rowData: [
+    employeeInfo: {
+      value: string // employee name
+      image?: string
+      email: string
+      user_id: string
+      degree?: string
+    },
+    jobTitle: string | undefined | null,
+    customer: Customer | undefined | null,
+    cvLinks: CvLinks | undefined | null
+  ]
+}
+
+const customerColumnIdx = 2
 const customerColumns = [
   {
     title: 'Konsulent',
@@ -47,139 +72,106 @@ const customerColumns = [
   },
 ]
 
-const customerColumnIdx = 2
+function hasCustomer(employee: EmployeeTableRow) {
+  return Boolean(employee.rowData[EmployeeTableColumnMapping['CUSTOMER']])
+}
 
-type EmployeeGroupedCustomers = Record<string, EmployeeForCustomerList[]>
+function transformDataForCustomerList(
+  employee: EmployeeTableRow
+): EmployeeForCustomerList {
+  return {
+    ...employee,
+    // Picking only relevant columns
+    rowData: [
+      employee.rowData[0],
+      employee.rowData[1],
+      employee.rowData[3],
+      employee.rowData[4],
+    ],
+  }
+}
 
-export interface EmployeeForCustomerList {
-  rowId: string
-  rowData: [
-    employeeInfo: {
-      value: string // employee name
-      image?: string
-      email: string
-      user_id: string
-      degree?: string
-    },
-    jobTitle: string | undefined | null,
-    customer: Customer | undefined | null,
-    cvLinks: CvLinks | undefined | null
-  ]
+function groupByCustomers(employees: EmployeeForCustomerList[]) {
+  return employees.reduce((groups, employee) => {
+    const customerName = employee.rowData[customerColumnIdx]?.customer
+    if (customerName) {
+      const group = groups[customerName] || []
+      group.push(employee)
+      groups[customerName] = group
+    }
+    return groups
+  }, {} as EmployeeGroupedCustomers)
 }
 
 export default function CustomerList() {
-  const [dropdowns, setDropdowns] = useState<JSX.Element[]>([])
+  const [searchTerm, setSearchTerm] = useState('')
   const { data, error } = useEmployeeTable()
+  const isLoading = !data
 
-  const categories = useCategories()
-
-  const pending = !data
-
-  const transformedEmployeeData: EmployeeForCustomerList[] = useMemo(() => {
-    return (data ?? [])
-      .filter((employee) => {
-        const hasCustomer = Boolean(
-          employee.rowData[EmployeeTableColumnMapping['CUSTOMER']]
-        )
-        return hasCustomer
-      })
-      .map((employee) => ({
-        ...employee,
-        // Picking only relevant columns
-        rowData: [
-          employee.rowData[0],
-          employee.rowData[1],
-          employee.rowData[3],
-          employee.rowData[4],
-        ],
-      }))
+  // We memoize the data transformation to avoid this happening on each render
+  const transformedEmployeeData = useMemo(() => {
+    return (data ?? []).filter(hasCustomer).map(transformDataForCustomerList)
   }, [data])
 
-  const createDropDowns = useCallback(
-    (customers: EmployeeGroupedCustomers) => {
-      const dropdowns: JSX.Element[] = []
-      if (!pending && customers) {
-        Object.keys(customers)
-          .sort((aCustomerName, bCustomerName) =>
-            String(aCustomerName).localeCompare(bCustomerName)
-          )
-          .forEach((customer) =>
-            dropdowns.push(
-              <CustomerDropdown
-                key={`${customer}`}
-                customerName={customer}
-                employees={customers[customer]}
-                columns={customerColumns}
-              />
-            )
-          )
-      }
-      setDropdowns(dropdowns)
-    },
-    [pending, setDropdowns]
-  )
-
-  useEffect(() => {
-    const employeeGroups = groupByCustomers(transformedEmployeeData)
-    createDropDowns(employeeGroups)
-  }, [transformedEmployeeData, createDropDowns])
-
-  function groupByCustomers(employees: EmployeeForCustomerList[]) {
-    return employees.reduce((groups, employee) => {
-      const customerName = employee.rowData[customerColumnIdx]?.customer
-      if (customerName) {
-        const group = groups[customerName] || []
-        group.push(employee)
-        groups[customerName] = group
-      }
-      return groups
-    }, {} as EmployeeGroupedCustomers)
-  }
-
-  const handleSearchAndFilter = (filtered: EmployeeForCustomerList[]) => {
-    const grouped = groupByCustomers(filtered)
-    createDropDowns(grouped)
-  }
-
-  const getFallbackMessage = (message: string) => {
+  if (error) {
     return (
-      <GridItem fullSize>
-        <div style={{ padding: '5px' }}>{message}</div>
-      </GridItem>
+      <FallbackMessage
+        isError
+        message="Det oppstod en feil ved henting av data."
+      />
     )
   }
 
-  const getCustomerDropdowns = () => {
-    if (error) {
-      return getFallbackMessage('Det oppstod en feil ved henting av data.')
-    }
+  const filteredEmployeeData = searchEmployeesByCustomer(
+    transformedEmployeeData,
+    getSearchableColumns(customerColumns),
+    searchTerm
+  )
 
-    if (pending) {
+  const getCustomerAccordions = () => {
+    if (isLoading) {
       return <Skeleton width={'100%'} animation="wave" />
     }
 
-    if (dropdowns.length === 0) {
-      return getFallbackMessage('Ingen treff.')
+    if (filteredEmployeeData.length === 0) {
+      return (
+        <GridItem fullSize>
+          <div style={{ padding: '5px' }}>Ingen treff.</div>
+        </GridItem>
+      )
     }
 
-    return dropdowns
+    const customerGroups = groupByCustomers(filteredEmployeeData)
+
+    return Object.entries(customerGroups)
+      .sort(([aCustomerName], [bCustomerName]) =>
+        String(aCustomerName).localeCompare(bCustomerName)
+      )
+      .map(([customerName, employees]) => (
+        <CustomerAccordion
+          key={customerName}
+          customerName={customerName}
+          employees={employees}
+          columns={customerColumns}
+        />
+      ))
   }
 
   return (
     <Grid container>
-      {pending ? (
+      {isLoading ? (
         <Skeleton width={'100%'} animation="wave" />
       ) : (
-        <CustomerFilter
-          title="Filtre"
-          onFilter={handleSearchAndFilter}
-          employees={transformedEmployeeData}
-          searchableColumns={getSearchableColumns(customerColumns)}
-          categories={categories}
-        />
+        <GridItemHeader title="Filtre" green>
+          <SearchInput
+            placeholder={'Søk på konsulentnavn eller kunde'}
+            onSearch={setSearchTerm}
+            onClear={() => setSearchTerm('')}
+          />
+        </GridItemHeader>
       )}
 
-      {getCustomerDropdowns()}
+      {getCustomerAccordions()}
     </Grid>
   )
 }
