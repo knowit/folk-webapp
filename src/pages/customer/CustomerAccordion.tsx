@@ -68,7 +68,7 @@ export default function CustomerAccordion({
             <DataTable
               rows={employees}
               columns={columns}
-              columnWidths={[385, 222, 480, 68]}
+              columnWidths={[385, 222, 480, 53]}
             />
           </GridItem>
         </AccordionDetails>

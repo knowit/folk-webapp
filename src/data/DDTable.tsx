@@ -166,7 +166,7 @@ export default function DDTable({
         checkBoxChangeHandler={toggleDisplayNonProject}
         rows={sortedRows}
         columns={props.columns}
-        columnWidths={[385, 222, 143, 337, 68]}
+        columnWidths={[385, 222, 143, 337, 53]}
       />
     </>
   )
