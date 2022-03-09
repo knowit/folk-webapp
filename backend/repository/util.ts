@@ -103,7 +103,7 @@ export const statusColorCode = (
   inProject: boolean
 ): string => {
   const projectStatus = inProject ? 'green' : 'red'
-  const color = wantNewProject > openForNewProject ? 'yellow' : 'orange'
+  const color = wantNewProject > openForNewProject ? 'orange' : 'yellow'
   const statusColor =
     (wantNewProject || openForNewProject) > 0 ? color : projectStatus
 
