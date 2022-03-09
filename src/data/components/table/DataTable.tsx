@@ -218,11 +218,15 @@ function VirtualizedTable({
     checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void
   ) {
     if (HeaderCell) {
+      const checkBox = {
+        label: 'Se kun ledige',
+        changeHandler: checkBoxChangeHandler,
+        checked: checked,
+      }
       return (
         <HeaderCell
           title={title}
-          checkBoxLabel="Se kun ledige"
-          checkBoxChangeHandler={checkBoxChangeHandler}
+          checkBox={index == 0 ? checkBox : undefined}
           columnIndex={index}
           onOrderChange={onSortChange}
           currentOrder={
@@ -230,7 +234,6 @@ function VirtualizedTable({
               ? currentOrder.sortOrder
               : 'NONE'
           }
-          checked={checked}
         />
       )
     }

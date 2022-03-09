@@ -36,20 +36,23 @@ const useStyles = makeStyles({
 })
 
 const sortColumn = (rows: any[], currentSort: ColumnSort) => {
-  const compare = (a: any, b: any) => {
-    return JSON.stringify(a.rowData[currentSort.columnIndex])
+  const compare = (a: any, b: any, reverse = false) => {
+    const first = reverse ? b : a
+    const second = reverse ? a : b
+
+    return JSON.stringify(first.rowData[currentSort.columnIndex])
       .toLowerCase()
       .localeCompare(
-        JSON.stringify(b.rowData[currentSort.columnIndex]).toLowerCase()
+        JSON.stringify(second.rowData[currentSort.columnIndex]).toLowerCase()
       )
   }
 
   if (!currentSort) return rows
   switch (currentSort.sortOrder) {
     case 'ASC':
-      return rows.sort(compare)
+      return rows.sort((a, b) => compare(a, b))
     case 'DESC':
-      return rows.sort(compare).reverse()
+      return rows.sort((a, b) => compare(a, b, true))
     default:
       return rows
   }

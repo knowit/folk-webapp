@@ -1,7 +1,6 @@
 import React from 'react'
 import DDTable from '../../../data/DDTable'
 import {
-  CheckBoxHeaderCell,
   ConsultantCell,
   CustomerStatusCell,
   CvCell,
@@ -45,7 +44,7 @@ export function EmployeeTable() {
                 },
                 renderCell: ConsultantCell,
                 renderExpanded: EmployeeInfo,
-                headerCell: CheckBoxHeaderCell,
+                headerCell: SortableHeaderCell,
                 checkBoxLabel: 'Vis kun ledige',
               },
               {
