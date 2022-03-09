@@ -1,19 +1,23 @@
-import { getEventSet, range } from '../../repository/util'
 import {
+  AgeDistribution,
+  AgeDistributionData,
+  AgeGroupDistribution,
+  CategoryAmountData,
+  CategoryAreaData,
   CategoryAverage,
-  EmployeeCompetenceAndMotivation,
-  FagEventData,
-  FagtimeStats,
+  CategoryMapData,
+  CompetenceAmount,
+  ExperienceDistributionData,
   YearsWorkingDistributionCount,
 } from './competenceTypes'
+import { AggregatedData } from '../datatypes/typeData'
 
 // * Everything in this file ould probably be done cleaner. Just copy pasted what had been done earlier.
 
-// /experienceDistribution
-export const aggregateExperienceDistribution = (
+export const aggregateExperienceData = (
   data: YearsWorkingDistributionCount[]
-) => {
-  const groupedList = [
+): AggregatedData<ExperienceDistributionData[]> => {
+  const groupedListData = [
     { years: '1 til 2 år', count: 0 },
     { years: '3 til 5 år', count: 0 },
     { years: '6 til 10 år', count: 0 },
@@ -21,7 +25,7 @@ export const aggregateExperienceDistribution = (
     { years: 'Ukjent erfaring', count: 0 },
   ]
 
-  const detailedGroupedList = [
+  const detailedGroupedListData = [
     { years: 'Under 2 år', count: 0 },
     { years: '2 til 5 år', count: 0 },
     { years: '6 til 10 år', count: 0 },
@@ -36,281 +40,179 @@ export const aggregateExperienceDistribution = (
   data.forEach((entry) => {
     const years = +entry.years_working
     const count = +entry.count
-    if (years === 0) {
-      detailedGroupedList[8].count += count
-      groupedList[4].count += count
-    } else if (years === 1) {
-      detailedGroupedList[0].count += count
-      groupedList[0].count += count
-    } else if (years === 2) {
-      detailedGroupedList[1].count += count
-      groupedList[0].count += count
-    } else if (years > 2 && years < 6) {
-      detailedGroupedList[1].count += count
-      groupedList[1].count += count
-    } else if (years > 5 && years < 11) {
-      detailedGroupedList[2].count += count
-      groupedList[2].count += count
-    } else if (years > 10 && years < 16) {
-      detailedGroupedList[3].count += count
-      groupedList[3].count += count
-    } else if (years > 15 && years < 21) {
-      detailedGroupedList[4].count += count
-      groupedList[3].count += count
-    } else if (years > 20 && years < 26) {
-      detailedGroupedList[5].count += count
-      groupedList[3].count += count
-    } else if (years > 25 && years < 31) {
-      detailedGroupedList[6].count += count
-      groupedList[3].count += count
-    } else if (years > 30) {
-      detailedGroupedList[7].count += count
-      groupedList[3].count += count
-    }
+    let indexes = [0, 0]
+    if (years === 0) indexes = [8, 4]
+    else if (years === 1) indexes = [0, 0]
+    else if (years === 2) indexes = [1, 0]
+    else if (years > 2 && years < 6) indexes = [1, 1]
+    else if (years > 5 && years < 11) indexes = [2, 2]
+    else if (years > 10 && years < 16) indexes = [3, 3]
+    else if (years > 15 && years < 21) indexes = [4, 3]
+    else if (years > 20 && years < 26) indexes = [5, 3]
+    else if (years > 25 && years < 31) indexes = [6, 3]
+    else if (years > 30) indexes = [7, 3]
+
+    detailedGroupedListData[indexes[0]].count += count
+    groupedListData[indexes[1]].count += count
   })
 
   return {
-    setNames: ['Erfaring', 'Detaljert oversikt'],
-    sets: {
-      Erfaring: groupedList,
-      'Detaljert oversikt': detailedGroupedList,
-    },
+    regular: { data: groupedListData },
+    detailed: { data: detailedGroupedListData },
   }
 }
 
-/**
- * /competenceAmount
- * Dette endepunktet henter antall ansatte i knowit som har svart 3 eller over på kompetanse og/eller motivasjon på kompetansekartleggingen
- * for de forskjellige kategoriene. Den regner også ut den prosentivse andelen som har svart 3 eller mer sammenlignet med alle om har svart.
- */
 export const aggregateCompetenceAmount = (
-  data: EmployeeCompetenceAndMotivation[]
-) => {
-  const THRESHOLD = 3
-  /*const motAndComp = data*/
-  const categoriesMap = { mainCategories: {} }
-  // used to ensure that each participant is only counted once for each main category and to count the number of distinct participants
-  const emailMap = {}
+  data: CompetenceAmount[]
+): AggregatedData<CategoryAmountData[]> => {
+  const result: AggregatedData<CategoryAmountData[]> = {
+    MainCategories: { data: [] },
+  }
 
-  data.forEach((employeeRow) => {
-    const {
-      categoryMotivationAvg,
-      categoryCompetenceAvg,
-      category,
-      subCategory,
-      motivation,
-      competence,
-      email,
-    } = employeeRow
+  const addMainCategory = (row: CompetenceAmount) => {
+    result.MainCategories.data.push({
+      category: row.category,
+      competenceAmount: row.competenceAmount,
+      motivationAmount: row.motivationAmount,
+      competenceProportion: row.competencePropotion,
+      motivationProportion: row.motivationPropotion,
+    })
+    result[row.category] = { data: [] }
+  }
 
-    if (!(category in categoriesMap)) {
-      categoriesMap['mainCategories'][category] = {
-        competenceAmount: 0,
-        motivationAmount: 0,
-        category: category,
-      }
-      categoriesMap[category] = {}
-    }
+  const addSubCategory = (row: CompetenceAmount) => {
+    result[row.category].data.push({
+      category: row.subCategory,
+      competenceAmount: row.subCompetenceAmount,
+      motivationAmount: row.subMotivationAmount,
+      competenceProportion: row.subCompetencePropotion,
+      motivationProportion: row.subMotivationPropotion,
+    })
+  }
 
-    if (!(subCategory in categoriesMap[category])) {
-      categoriesMap[category][subCategory] = {
-        competenceAmount: 0,
-        motivationAmount: 0,
-        category: subCategory,
-      }
-    }
-
-    if (!(email in emailMap)) {
-      emailMap[email] = []
-    }
-
-    if (!emailMap[email].includes(category)) {
-      if (categoryMotivationAvg > THRESHOLD) {
-        categoriesMap['mainCategories'][category].motivationAmount += 1
-      }
-
-      if (categoryCompetenceAvg > THRESHOLD) {
-        categoriesMap['mainCategories'][category].competenceAmount += 1
-      }
-
-      emailMap[email].push(category)
-    }
-
-    if (motivation > THRESHOLD) {
-      categoriesMap[category][subCategory].motivationAmount += 1
-    }
-
-    if (competence > THRESHOLD) {
-      categoriesMap[category][subCategory].competenceAmount += 1
-    }
+  data.forEach((row) => {
+    if (!(row.category in result)) addMainCategory(row)
+    addSubCategory(row)
   })
 
-  const output = {}
-  const nParticipants = Object.keys(emailMap).length
-  for (const category of Object.keys(categoriesMap)) {
-    for (const subCategory of Object.keys(categoriesMap[category])) {
-      const { motivationAmount, competenceAmount } =
-        categoriesMap[category][subCategory]
-      categoriesMap[category][subCategory]['motivationProportion'] =
-        (motivationAmount / nParticipants) * 100
-      categoriesMap[category][subCategory]['competenceProportion'] =
-        (competenceAmount / nParticipants) * 100
-    }
-    output[category] = Object.values(categoriesMap[category])
-  }
-
-  return {
-    setNames: Object.keys(output),
-    sets: output,
-  }
+  return result
 }
 
 // /competenceAreas
 export const aggregateCompetenceAreas = (
-  competence: CategoryAverage[],
-  motivation: CategoryAverage[]
-) => {
-  const categoriesMap = { mainCategories: {} }
+  data: CategoryAverage[]
+): AggregatedData<CategoryAreaData[]> => {
+  const result: AggregatedData<CategoryAreaData[]> = {
+    MainCategories: { data: [] },
+  }
 
-  competence.forEach((row) => {
-    const { category, subCategory } = row
-    const competence = row.value || null
-    if (!(category in categoriesMap)) {
-      categoriesMap[category] = {}
-      categoriesMap['mainCategories'][category] = {
-        category,
+  const addMainCategory = (data: CategoryAverage) => {
+    let category = result.MainCategories.data.find(
+      (c) => c.category === data.category
+    )
+
+    if (!category) {
+      category = {
+        category: data.category,
         motivation: 0,
         competence: 0,
       }
+
+      result[data.category] = { data: [] }
+      result.MainCategories.data.push(category)
     }
-    categoriesMap[category][subCategory] = {
-      category: subCategory,
-      competence,
-      motivation: null,
-    }
-    categoriesMap['mainCategories'][category].competence += competence
+
+    category.motivation += data.motivation
+    category.competence += data.competence
+  }
+
+  const addSubCategory = (data: CategoryAverage) => {
+    result[data.category].data.push({
+      category: data.subCategory,
+      motivation: data.motivation,
+      competence: data.competence,
+    })
+  }
+
+  data.forEach((row) => {
+    addMainCategory(row)
+    addSubCategory(row)
   })
 
-  motivation.forEach((row) => {
-    const { category, subCategory } = row
-    const motivation = row.value || null
-    if (!(category in categoriesMap)) {
-      categoriesMap[category] = {}
-      categoriesMap['mainCategories'][category] = {
-        category,
-        motivation: 0,
-        competence: 0,
-      }
-    }
-    if (subCategory in categoriesMap[category]) {
-      categoriesMap[category][subCategory].motivation = motivation
-    } else {
-      categoriesMap[category][subCategory] = {
-        category: subCategory,
-        competence: null,
-        motivation,
-      }
-    }
-    categoriesMap['mainCategories'][category].motivation += motivation
+  result.MainCategories.data.forEach((c) => {
+    c.motivation /= result[c.category].data.length
+    c.competence /= result[c.category].data.length
   })
 
-  const output = {}
-  for (const category of Object.keys(categoriesMap)) {
-    if (category !== 'mainCategories') {
-      categoriesMap['mainCategories'][category].competence /= Object.keys(
-        categoriesMap[category]
-      ).length
-      categoriesMap['mainCategories'][category].motivation /= Object.keys(
-        categoriesMap[category]
-      ).length
-    }
-    output[category] = Object.values(categoriesMap[category])
-  }
-  return {
-    setNames: Object.keys(output),
-    sets: output,
-  }
-}
-
-// /fagTimer
-export const aggregateFagtimer = (data: FagtimeStats[]) => {
-  const makeFagTimerDataForNivo = (data: FagtimeStats[]) => {
-    const setData = range(2018, new Date().getFullYear()).map((year) => ({
-      id: year.toString(),
-      data: range(1, 53).map((i) => {
-        const currentYear = data.filter((dataItem) => dataItem.year === year)
-        const currentWeekData = currentYear.find(
-          (dataItem) => dataItem.week === i
-        )
-        return {
-          x: i,
-          y:
-            currentWeekData && currentWeekData.used_hrs
-              ? currentWeekData.used_hrs
-              : 0,
-        }
-      }),
-    }))
-    return setData
-  }
-
-  return {
-    componentType: 'Line',
-    setNames: ['Fagtimer'],
-    sets: {
-      Fagtimer: makeFagTimerDataForNivo(data),
-    },
-  }
-}
-
-export const aggregateFagEvents = (data: FagEventData[]) => {
-  const eventSet = getEventSet(data)
-
-  return {
-    setNames: ['Fag og hendelser'],
-    sets: {
-      'Fag og hendelser': eventSet,
-    },
-  }
+  return result
 }
 
 export const aggregateCompetenceMapping = (
-  competence: CategoryAverage[],
-  motivation: CategoryAverage[]
-) => {
-  const competenceCategories = (data: CategoryAverage[]) => {
-    const categoriesMap = {}
+  data: CategoryAverage[]
+): AggregatedData<CategoryMapData[]> => {
+  const aggregate = () => {
+    const categoriesMap: Record<string, CategoryMapData> = {}
     data.forEach((row) => {
       if (row.category in categoriesMap) {
-        categoriesMap[row.category].children.push({
+        categoriesMap[row.category].subcategories.push({
           category: `${row.category}: ${row.subCategory}`,
-          value: row.value,
+          motivation: row.motivation,
+          competence: row.competence,
+          competenceSize: 0,
+          motivationSize: 0,
         })
-        categoriesMap[row.category].value += row.value
+        categoriesMap[row.category].motivation += row.motivation
+        categoriesMap[row.category].competence += row.competence
       } else {
         categoriesMap[row.category] = {
           category: row.category,
-          children: [],
-          value: 0,
+          subcategories: [],
+          motivation: 0,
+          competence: 0,
         }
       }
     })
+
     for (const key of Object.keys(categoriesMap)) {
       const categoryObj = categoriesMap[key]
-      const avg = categoryObj.value / categoryObj.children.length
-      categoryObj.children.forEach((child) => {
-        child.size = (child.value / categoryObj.value) * avg
+      const avgMotivation =
+        categoryObj.motivation / categoryObj.subcategories.length
+      const avgCompetence =
+        categoryObj.competence / categoryObj.subcategories.length
+      categoryObj.subcategories.forEach((child) => {
+        child.motivationSize =
+          (child.motivation / categoryObj.motivation) * avgMotivation
+        child.competenceSize =
+          (child.competence / categoryObj.competence) * avgCompetence
       })
-      categoryObj.value = avg
+      categoryObj.motivation = avgMotivation
+      categoryObj.competence = avgCompetence
     }
-    return Object.values(categoriesMap)
+    return categoriesMap
   }
 
-  return {
-    setNames: ['Motivation', 'Competence'],
-    sets: {
-      Competence: competenceCategories(competence),
-      Motivation: competenceCategories(motivation),
-    },
+  const result: AggregatedData<CategoryMapData[]> = {
+    MotivationAndCompetence: { data: [] },
   }
+
+  Object.values(aggregate()).forEach((category) => {
+    result.Competence.data.push(category)
+    result.Motivation.data.push(category)
+  })
+
+  return result
+}
+
+export const aggregateAgeDistribution = (
+  data: AgeDistribution[]
+): AgeDistributionData[] => {
+  return data
+}
+
+export const aggregateAgeGroupDistribution = (
+  data: AgeGroupDistribution[]
+): AgeDistributionData[] => {
+  return data.map((row) => {
+    return { age: row.age_group, count: row.count }
+  })
 }

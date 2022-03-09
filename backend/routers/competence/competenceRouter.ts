@@ -1,20 +1,26 @@
 import express from 'express'
 import { getReport } from '../../dataplattform/client'
+import { aggregateCompetenceMapping } from './competenceAggregation'
 import {
-  aggregateCompetenceAmount,
-  aggregateCompetenceAreas,
-  aggregateCompetenceMapping,
-  aggregateExperienceDistribution,
-  aggregateFagEvents,
-  aggregateFagtimer,
-} from './competenceAggregation'
+  ageDistributionBar,
+  competenceAmountBar,
+  competenceAreasBar,
+  competenceAreasRadar,
+  competenceMappingBar,
+  competenceMappingSunburst,
+  educationPie,
+  experienceDistributionBar,
+  experienceDistributionPie,
+  fagEventsLine,
+  fagtimerLine,
+} from './competenceChartConversion'
 import {
   AgeDistribution,
   AgeGroupDistribution,
   CategoryAverage,
+  CompetenceAmount,
   CompetenceFilterRawData,
   DegreeDistribution,
-  EmployeeCompetenceAndMotivation,
   FagEventData,
   FagtimeStats,
   YearsWorkingDistributionCount,
@@ -24,8 +30,12 @@ const router = express.Router()
 
 router.get('/experienceDistribution/bar', async (req, res, next) => {
   try {
-    // TODO: Create aggregation and return correct format
-    res.send('BarChart for experienceDistribution')
+    const data = await getReport<YearsWorkingDistributionCount[]>({
+      accessToken: req.accessToken,
+      reportName: 'workExperienceDistributedInYears',
+    })
+    const aggregatedData = experienceDistributionBar(data)
+    res.send(aggregatedData)
   } catch (error) {
     next(error)
   }
@@ -33,22 +43,11 @@ router.get('/experienceDistribution/bar', async (req, res, next) => {
 
 router.get('/experienceDistribution/pie', async (req, res, next) => {
   try {
-    // TODO: Create aggregation and return correct format
-    res.send('PieChart for experienceDistribution')
-  } catch (error) {
-    next(error)
-  }
-})
-
-// To be deleted
-router.get('/experienceDistribution', async (req, res, next) => {
-  try {
     const data = await getReport<YearsWorkingDistributionCount[]>({
       accessToken: req.accessToken,
       reportName: 'workExperienceDistributedInYears',
     })
-
-    const aggregatedData = aggregateExperienceDistribution(data)
+    const aggregatedData = experienceDistributionPie(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)
@@ -57,22 +56,11 @@ router.get('/experienceDistribution', async (req, res, next) => {
 
 router.get('/competenceAmount/bar', async (req, res, next) => {
   try {
-    // TODO: Create aggregation and return correct format
-    res.send('BarChart for competenceAmount')
-  } catch (error) {
-    next(error)
-  }
-})
-
-// To be deleted
-router.get('/competenceAmount', async (req, res, next) => {
-  try {
-    const data = await getReport<EmployeeCompetenceAndMotivation[]>({
+    const data = await getReport<CompetenceAmount[]>({
       accessToken: req.accessToken,
-      reportName: 'employeeMotivationAndCompetence',
+      reportName: 'competenceAmountAggregated',
     })
-
-    const aggregatedData = aggregateCompetenceAmount(data)
+    const aggregatedData = competenceAmountBar(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)
@@ -81,8 +69,12 @@ router.get('/competenceAmount', async (req, res, next) => {
 
 router.get('/competenceAreas/bar', async (req, res, next) => {
   try {
-    // TODO: Create aggregation and return correct format
-    res.send('BarChart for competenceAreas')
+    const data = await getReport<CategoryAverage[]>({
+      accessToken: req.accessToken,
+      reportName: 'averageCompetenceAndMotivation',
+    })
+    const aggregatedData = competenceAreasBar(data)
+    res.send(aggregatedData)
   } catch (error) {
     next(error)
   }
@@ -90,32 +82,11 @@ router.get('/competenceAreas/bar', async (req, res, next) => {
 
 router.get('/competenceAreas/radar', async (req, res, next) => {
   try {
-    // TODO: Create aggregation and return correct format
-    res.send('RadarChart for competenceAreas')
-  } catch (error) {
-    next(error)
-  }
-})
-
-// To be deleted
-router.get('/competenceAreas', async (req, res, next) => {
-  try {
-    const competencePromise = getReport<CategoryAverage[]>({
+    const data = await getReport<CategoryAverage[]>({
       accessToken: req.accessToken,
-      reportName: 'newCompetenceAverage',
+      reportName: 'averageCompetenceAndMotivation',
     })
-
-    const motivationPromise = getReport<CategoryAverage[]>({
-      accessToken: req.accessToken,
-      reportName: 'newMotivationAverage',
-    })
-
-    const [competence, motivation] = await Promise.all([
-      competencePromise,
-      motivationPromise,
-    ])
-
-    const aggregatedData = aggregateCompetenceAreas(competence, motivation)
+    const aggregatedData = competenceAreasRadar(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)
@@ -123,16 +94,6 @@ router.get('/competenceAreas', async (req, res, next) => {
 })
 
 router.get('/ageDistribution/bar', async (req, res, next) => {
-  try {
-    // TODO: Create aggregation and return correct format
-    res.send('BarChart for ageDistribution')
-  } catch (error) {
-    next(error)
-  }
-})
-
-// To be deleted
-router.get('/ageDistribution', async (req, res, next) => {
   try {
     const ageDistributionPromise = getReport<AgeDistribution[]>({
       accessToken: req.accessToken,
@@ -149,16 +110,12 @@ router.get('/ageDistribution', async (req, res, next) => {
       ageDistributionGroupsPromise,
     ])
 
-    res.send({
-      setNames: ['Aldersgrupper', 'Detaljert oversikt'],
-      sets: {
-        Aldersgrupper: ageDistributionGroups.map(({ age_group, count }) => ({
-          age: age_group,
-          count,
-        })),
-        'Detaljert oversikt': ageDistribution,
-      },
-    })
+    const aggregatedData = ageDistributionBar([
+      ageDistribution,
+      ageDistributionGroups,
+    ])
+
+    res.send(aggregatedData)
   } catch (error) {
     next(error)
   }
@@ -166,22 +123,12 @@ router.get('/ageDistribution', async (req, res, next) => {
 
 router.get('/fagtimer/line', async (req, res, next) => {
   try {
-    // TODO: Create aggregation and return correct format
-    res.send('LineChart for fagTimer')
-  } catch (error) {
-    next(error)
-  }
-})
-
-// To be deleted
-router.get('/fagtimer', async (req, res, next) => {
-  try {
     const data = await getReport<FagtimeStats[]>({
       accessToken: req.accessToken,
       reportName: 'fagActivity',
     })
 
-    const aggregatedData = aggregateFagtimer(data)
+    const aggregatedData = fagtimerLine(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)
@@ -190,22 +137,12 @@ router.get('/fagtimer', async (req, res, next) => {
 
 router.get('/fagEvents/line', async (req, res, next) => {
   try {
-    // TODO: Create aggregation and return correct format
-    res.send('LineChart for fagEvents')
-  } catch (error) {
-    next(error)
-  }
-})
-
-// To be deleted
-router.get('/fagEvents', async (req, res, next) => {
-  try {
     const data = await getReport<FagEventData[]>({
       accessToken: req.accessToken,
       reportName: 'fagEvents',
     })
 
-    const aggregatedData = aggregateFagEvents(data)
+    const aggregatedData = fagEventsLine(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)
@@ -214,27 +151,13 @@ router.get('/fagEvents', async (req, res, next) => {
 
 router.get('/education/pie', async (req, res, next) => {
   try {
-    // TODO: Create aggregation and return correct format
-    res.send('PieChart for education')
-  } catch (error) {
-    next(error)
-  }
-})
-
-// To be deleted
-router.get('/education', async (req, res, next) => {
-  try {
     const data = await getReport<DegreeDistribution[]>({
       accessToken: req.accessToken,
       reportName: 'degreeDist',
     })
 
-    res.send({
-      setNames: ['Utdanning'],
-      sets: {
-        Utdanning: data,
-      },
-    })
+    const aggregatedData = educationPie(data)
+    res.send(aggregatedData)
   } catch (error) {
     next(error)
   }
@@ -242,8 +165,13 @@ router.get('/education', async (req, res, next) => {
 
 router.get('/competenceMapping/bar', async (req, res, next) => {
   try {
-    // TODO: Create aggregation and return correct format
-    res.send('BarChart for competenceMapping')
+    const data = await getReport<CategoryAverage[]>({
+      accessToken: req.accessToken,
+      reportName: 'newCompetenceMotivationAverages',
+    })
+
+    const aggregatedData = competenceMappingBar(data)
+    res.send(aggregatedData)
   } catch (error) {
     next(error)
   }
@@ -251,32 +179,12 @@ router.get('/competenceMapping/bar', async (req, res, next) => {
 
 router.get('/competenceMapping/sunburst', async (req, res, next) => {
   try {
-    // TODO: Create aggregation and return correct format
-    res.send('SunburstChart for competenceMapping')
-  } catch (error) {
-    next(error)
-  }
-})
-
-// To be deleted
-router.get('/competenceMapping', async (req, res, next) => {
-  try {
-    const competencePromise = getReport<CategoryAverage[]>({
+    const data = await getReport<CategoryAverage[]>({
       accessToken: req.accessToken,
-      reportName: 'newCompetenceAverage',
+      reportName: 'newCompetenceMotivationAverages',
     })
 
-    const motivationPromise = getReport<CategoryAverage[]>({
-      accessToken: req.accessToken,
-      reportName: 'newMotivationAverage',
-    })
-
-    const [competence, motivation] = await Promise.all([
-      competencePromise,
-      motivationPromise,
-    ])
-
-    const aggregatedData = aggregateCompetenceMapping(competence, motivation)
+    const aggregatedData = competenceMappingSunburst(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)
