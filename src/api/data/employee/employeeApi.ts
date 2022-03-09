@@ -1,5 +1,9 @@
-import { getAtApi } from '../../client'
-import { BarChartDataResponse, RadarChartDataResponse } from '../chartResponses'
+import { getAtApi, getAtApiV2 } from '../../client'
+import {
+  BarChartData,
+  MultipleChartResponse,
+  RadarChartData,
+} from '../chartResponses'
 import { CompetenceAreasResponse } from '../competence/competenceApiTypes'
 import {
   EmployeeExperienceResponse,
@@ -31,8 +35,8 @@ export const getEmployeeMotivationAndCompetenceBar = (
   url: string,
   email: string
 ) =>
-  getAtApi<BarChartDataResponse>(
-    '/v2/employees/employeeMotivationAndCompetence/bar',
+  getAtApiV2<MultipleChartResponse<BarChartData>>(
+    '/employees/employeeMotivationAndCompetence/bar',
     {
       params: { email },
     }
@@ -42,8 +46,8 @@ export const getEmployeeMotivationAndCompetenceRadar = (
   url: string,
   email: string
 ) =>
-  getAtApi<RadarChartDataResponse>(
-    '/v2/employees/employeeMotivationAndCompetence/radar',
+  getAtApiV2<MultipleChartResponse<RadarChartData>>(
+    '/employees/employeeMotivationAndCompetence/radar',
     {
       params: { email },
     }
