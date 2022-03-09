@@ -6,6 +6,7 @@ import {
 } from '@material-ui/core'
 import React from 'react'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import { ProjectStatus } from '../../../../api/data/employee/employeeApiTypes'
 
 const StatusCircle = ({ color }: { color: string }) => {
   const Circle = withStyles(() => ({
@@ -27,9 +28,7 @@ const useStyles = makeStyles({
   },
 })
 
-interface ColorMap {
-  [index: string]: string
-}
+type ColorMap = Record<ProjectStatus, string>
 
 const toolTipStyles = makeStyles((theme) => ({
   arrow: {
@@ -64,7 +63,7 @@ const applyTitle = (status?: { data: string }): string => {
 }
 
 interface ProjectStatusCellProps {
-  data: string
+  data: ProjectStatus
 }
 
 export default function ProjectStatusCell(props?: ProjectStatusCellProps) {

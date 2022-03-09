@@ -5,6 +5,7 @@ import { FilterObject } from '../components/filter/FilterUtil'
 export type DDPayload = { [key: string]: any }
 
 export type ChartType = 'Line' | 'Bar' | 'Pie' | 'Radar' | 'Sunburst'
+
 export type ChartVariant = {
   type: ChartType
   props?: {

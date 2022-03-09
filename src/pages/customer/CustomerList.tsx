@@ -12,6 +12,7 @@ import { GridItem } from '../../components/gridItem/GridItem'
 import {
   Customer,
   CvLinks,
+  EmployeeInfoCellData,
   EmployeeTableRow,
 } from '../../api/data/employee/employeeApiTypes'
 import {
@@ -31,13 +32,7 @@ type EmployeeGroupedCustomers = Record<string, EmployeeForCustomerList[]>
 export interface EmployeeForCustomerList {
   rowId: string
   rowData: [
-    employeeInfo: {
-      value: string // employee name
-      image?: string | null
-      email: string
-      user_id: string
-      degree?: string | null
-    },
+    employeeInfo: EmployeeInfoCellData,
     jobTitle: string | undefined | null,
     customer: Customer | undefined | null,
     cvLinks: CvLinks | undefined | null

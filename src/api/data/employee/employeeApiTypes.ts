@@ -4,13 +4,7 @@ export type EmployeeTableResponse = EmployeeTableRow[]
 export interface EmployeeTableRow {
   rowId: string
   rowData: [
-    employeeInfo: {
-      value: string // employee name
-      image?: string | null
-      email: string
-      user_id: string
-      degree?: string | null
-    },
+    employeeInfo: EmployeeInfoCellData,
     jobTitle: string | null | undefined,
     projectStatus: ProjectStatus,
     customer: Customer | null | undefined,
@@ -20,7 +14,15 @@ export interface EmployeeTableRow {
   ]
 }
 
-type ProjectStatus = 'red' | 'green' | 'yellow' | 'orange'
+export interface EmployeeInfoCellData {
+  value: string // employee name
+  image?: string | null
+  email: string
+  user_id: string
+  degree?: string | null
+}
+
+export type ProjectStatus = 'red' | 'green' | 'yellow' | 'orange'
 
 // employeeRadar has same response as CompetenceAreasResponse
 
