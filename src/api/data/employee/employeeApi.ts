@@ -1,8 +1,13 @@
-import { CompetenceAreasResponse } from '../competence/competenceApiTypes'
-import { getAtApi } from '../../client'
+import { getAtApi, getAtApiV2 } from '../../client'
 import {
-  EmployeeProfileResponse,
+  BarChartData,
+  MultipleChartResponse,
+  RadarChartData,
+} from '../chartResponses'
+import { CompetenceAreasResponse } from '../competence/competenceApiTypes'
+import {
   EmployeeExperienceResponse,
+  EmployeeProfileResponse,
   EmployeeTableResponse,
 } from './employeeApiTypes'
 
@@ -24,3 +29,26 @@ export const getEmployeeRadar = (url: string, email: string) =>
   getAtApi<CompetenceAreasResponse>(`/data/employeeRadar`, {
     params: { email },
   })
+
+// API V2
+export const getEmployeeMotivationAndCompetenceBar = (
+  url: string,
+  email: string
+) =>
+  getAtApiV2<MultipleChartResponse<BarChartData>>(
+    '/employees/employeeMotivationAndCompetence/bar',
+    {
+      params: { email },
+    }
+  )
+
+export const getEmployeeMotivationAndCompetenceRadar = (
+  url: string,
+  email: string
+) =>
+  getAtApiV2<MultipleChartResponse<RadarChartData>>(
+    '/employees/employeeMotivationAndCompetence/radar',
+    {
+      params: { email },
+    }
+  )

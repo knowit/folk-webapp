@@ -2,7 +2,9 @@ import useSWR from 'swr'
 import {
   getCustomerCards,
   getHoursBilledPerCustomer,
+  getHoursBilledPerCustomerBar,
   getHoursBilledPerWeek,
+  getHoursBilledPerWeekLine,
 } from './customerApi'
 
 export const useCustomerCards = () =>
@@ -17,5 +19,16 @@ export const useHoursBilledPerCustomer = () =>
 
 export const useHoursBilledPerWeek = () =>
   useSWR('/hoursBilledPerWeek', getHoursBilledPerWeek, {
+    revalidateOnFocus: false,
+  })
+
+// API V2
+export const useHoursBilledPerCustomerBar = () =>
+  useSWR('/hoursBilledPerCustomerBar', getHoursBilledPerCustomerBar, {
+    revalidateOnFocus: false,
+  })
+
+export const useHoursBilledPerWeekLine = () =>
+  useSWR('/hoursBilledPerWeekLine', getHoursBilledPerWeekLine, {
     revalidateOnFocus: false,
   })

@@ -65,6 +65,9 @@ const getAt = async <T>(endpoint: string, options?: GetOptions) => {
 export const getAtApi = <T>(endpoint: string, options?: GetOptions) =>
   getAt<T>(`/api${endpoint}`, options)
 
+export const getAtApiV2 = <T>(endpoint: string, options?: GetOptions) =>
+  getAt<T>(`/api/v2${endpoint}`, options)
+
 export const getAtAuth = <T>(endpoint: string, options?: GetOptions) =>
   getAt<T>(`/auth${endpoint}`, options)
 

@@ -15,14 +15,14 @@ import {
   experienceMapping,
 } from './competenceAggregation'
 import {
-  CategoryAverage,
-  CompetenceAmount,
-  YearsWorkingDistributionCount,
   AgeDistribution,
   AgeGroupDistribution,
-  FagtimeStats,
-  FagEventData,
+  CategoryAverage,
+  CompetenceAmount,
   DegreeDistribution,
+  FagEventData,
+  FagtimeStats,
+  YearsWorkingDistributionCount,
 } from './competenceTypes'
 
 // /experienceDistribution
@@ -144,9 +144,7 @@ export const ageDistributionBar = (
   }
 }
 
-export const fagtimerLine = (
-  data: FagtimeStats[]
-): Record<string, LineChartData[]> => {
+export const fagtimerLine = (data: FagtimeStats[]): LineChartData[] => {
   const toLineData = (data: FagtimeStats[]): LineChartData[] => {
     const setData = range(2018, new Date().getFullYear()).map((year) => ({
       id: year.toString(),
@@ -167,25 +165,19 @@ export const fagtimerLine = (
     return setData
   }
 
-  return { FagTimer: toLineData(data) }
+  return toLineData(data)
 }
 
-export const fagEventsLine = (
-  data: FagEventData[]
-): Record<string, LineChartData[]> => {
+export const fagEventsLine = (data: FagEventData[]): LineChartData[] => {
   const aggregatedData = getEventSet(data)
-  return {
-    'Fag og hendelser': aggregatedData,
-  }
+  return aggregatedData
 }
 
-export const educationPie = (
-  data: DegreeDistribution[]
-): Record<string, PieChartData> => {
+export const educationPie = (data: DegreeDistribution[]): PieChartData => {
   const id = 'degree'
   const value = 'count'
 
-  return { Utdanning: { id, value, data } }
+  return { id, value, data }
 }
 
 export const competenceMappingBar = (data: CategoryAverage[]) => {
@@ -197,12 +189,12 @@ export const competenceMappingBar = (data: CategoryAverage[]) => {
     Competence: {
       indexBy,
       keys: ['competence'],
-      data: aggregatedData.Competence.data,
+      data: aggregatedData.MotivationAndCompetence.data,
     },
     Motivation: {
       indexBy,
       keys: ['motivation'],
-      data: aggregatedData.Motivation.data,
+      data: aggregatedData.MotivationAndCompetence.data,
     },
   }
 }

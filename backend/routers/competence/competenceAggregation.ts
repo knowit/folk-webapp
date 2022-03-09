@@ -196,8 +196,7 @@ export const competenceMapping = (
   }
 
   Object.values(aggregate()).forEach((category) => {
-    result.Competence.data.push(category)
-    result.Motivation.data.push(category)
+    result.MotivationAndCompetence.data.push(category)
   })
 
   return result
