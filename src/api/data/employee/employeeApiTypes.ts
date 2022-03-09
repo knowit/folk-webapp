@@ -6,15 +6,15 @@ export interface EmployeeTableRow {
   rowData: [
     employeeInfo: {
       value: string // employee name
-      image?: string
+      image?: string | null
       email: string
       user_id: string
-      degree?: string
+      degree?: string | null
     },
-    jobTitle: string | undefined,
+    jobTitle: string | null | undefined,
     projectStatus: ProjectStatus,
-    customer: Customer | undefined,
-    cvLinks: CvLinks | undefined,
+    customer: Customer | null | undefined,
+    cvLinks: CvLinks | null | undefined,
     motivationScores: Record<string, number>,
     competenceScores: Record<string, number>
   ]

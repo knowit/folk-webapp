@@ -33,10 +33,10 @@ export interface EmployeeForCustomerList {
   rowData: [
     employeeInfo: {
       value: string // employee name
-      image?: string
+      image?: string | null
       email: string
       user_id: string
-      degree?: string
+      degree?: string | null
     },
     jobTitle: string | undefined | null,
     customer: Customer | undefined | null,

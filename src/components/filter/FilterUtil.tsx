@@ -9,14 +9,14 @@ export interface CategoryWithGroup {
 }
 
 export interface FilterObject {
-  name: DynamicFilter
+  name: DynamicFilterType
   values: string[]
   threshold: number
   placeholder: string
   datafetch: () => CategoryWithGroup[]
 }
 
-export type DynamicFilter = 'COMPETENCE' | 'MOTIVATION'
+export type DynamicFilterType = 'COMPETENCE' | 'MOTIVATION'
 
 export enum EmployeeTableColumnMapping {
   CUSTOMER = 3,
