@@ -13,14 +13,11 @@ const Debug = () => {
   // New api uses getTestV2 as of now to compare output
   useEffect(() => {
     const fetch = async () => {
-      const res = await getTestV2<any>(
-        '/customer/hoursBilledPerWeek/line'
-        // {
-        //   params: {
-        //     email: 'fredrik.arnesen@knowit.no',
-        //   },
-        // }
-      )
+      const res = await getTestV2<any>('/employees/employeeProfile', {
+        params: {
+          email: 'einar.halvorsen@knowit.no',
+        },
+      })
 
       setData(res)
     }
