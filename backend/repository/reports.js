@@ -7,6 +7,7 @@ const reports = [
       'active_directory',
       'cv_partner_education',
       'cv_partner_employees',
+      'test_test_no_kundemapping_test',
       'ubw_customer_per_resource',
     ],
     dataProtection: 3,
@@ -120,8 +121,8 @@ const reports = [
   {
     name: 'allProjectsOverview',
     queryString:
-      'SELECT d1.customer, consultants, billedLastPeriod, billedTotal, null AS customerSince FROM ( (SELECT customer, sum(hours) as billedTotal FROM dev_level_3_database.ubw_per_project_data d1 WHERE timestamp = (SELECT MAX(timestamp) FROM dev_level_3_database.ubw_per_project_data d2 WHERE d1.customer = d2.customer AND d1.reg_period = d2.reg_period) GROUP BY customer, employees ) d1 JOIN (SELECT customer, hours as billedLastPeriod FROM dev_level_3_database.ubw_per_project_data d1 WHERE reg_period = (SELECT MAX(reg_period) FROM dev_level_3_database.ubw_per_project_data d2 WHERE d1.customer = d2.customer) group by customer, hours) d4 ON d1.customer = d4.customer JOIN (SELECT customer, MAX(employees) as consultants FROM ( SELECT *, RANK() OVER (PARTITION BY customer ORDER BY reg_period DESC) AS row_number FROM ( SELECT customer, employees, reg_period FROM dev_level_3_database.ubw_per_project_data d1 WHERE timestamp = (SELECT MAX(timestamp) FROM dev_level_3_database.ubw_per_project_data d2 WHERE d1.customer = d2.customer AND d1.reg_period = d2.reg_period) ORDER BY customer DESC, reg_period DESC ) ) WHERE row_number <= 5 GROUP BY customer) d5 ON d1.customer = d5.customer )',
-    tables: ['ubw_per_project_data'],
+      'SELECT customer, SUM(billedTotal) as billedTotal, SUM(billedLastPeriod) as billedLastPeriod, SUM(consultants) as consultants FROM (SELECT CASE WHEN total.customer = "dagens ubw prosjekt" THEN kunde ELSE total.customer END AS customer, total.work_order, billedTotal, billedLastPeriod, consultants FROM ((SELECT customer, work_order, sum(hours) as billedTotal FROM ubw_per_project_data d1 WHERE timestamp = (SELECT MAX(timestamp) FROM ubw_per_project_data d2 WHERE d1.customer = d2.customer AND d1.reg_period = d2.reg_period) GROUP BY customer, employees, work_order ) total JOIN (SELECT customer, work_order,hours as billedLastPeriod FROM ubw_per_project_data d1 WHERE reg_period = (SELECT MAX(reg_period) FROM ubw_per_project_data d2 WHERE d1.customer = d2.customer AND d1.work_order = d2.work_order) group by customer, hours, work_order) lastPeriod ON total.customer = lastPeriod.customer AND total.work_order = lastPeriod.work_order JOIN (SELECT customer, work_order, MAX(employees) as consultants FROM ( SELECT *, RANK() OVER (PARTITION BY customer ORDER BY reg_period DESC) AS row_number FROM ( SELECT customer, employees, reg_period, work_order FROM ubw_per_project_data d1 WHERE timestamp = (SELECT MAX(timestamp) FROM ubw_per_project_data d2 WHERE d1.customer = d2.customer AND d1.reg_period = d2.reg_period AND d1.work_order = d2.work_order) ORDER BY customer DESC, reg_period DESC ) ) WHERE row_number <= 5 GROUP BY customer, work_order) numConsul ON total.customer = numConsul.customer AND total.work_order = numConsul.work_order LEFT JOIN test_test_no_kundemapping_test ON total.customer = "dagens ubw prosjekt" AND total.work_order = arbeids_ordre) ) GROUP BY customer',
+    tables: ['ubw_per_project_data', 'test_test_no_kundemapping_test'],
     dataProtection: 3,
     created: '2021-12-08T16:30:51.129847',
     lastUsed: null,
@@ -307,8 +308,8 @@ const reports = [
   {
     name: 'perProject',
     queryString:
-      'SELECT * FROM ubw_per_project_data WHERE customer in (SELECT customer from ubw_per_project_data GROUP BY customer, reg_period) AND reg_period in (SELECT reg_period from ubw_per_project_data GROUP BY customer, reg_period) AND timestamp in (SELECT MAX(timestamp) as timestamp from ubw_per_project_data GROUP BY customer, reg_period)',
-    tables: ['ubw_per_project_data'],
+      'SELECT employees, hours, reg_period, timestamp, work_order, CASE WHEN customer = "dagens ubw prosjekt" THEN kunde ELSE customer END AS customer FROM (SELECT ubw_per_project_data.customer, employees, hours, ubw_per_project_data.reg_period, ubw_per_project_data.timestamp, work_order FROM dev_level_3_database.ubw_per_project_data INNER JOIN (SELECT customer, reg_period, Max(timestamp) as timestamp from ubw_per_project_data GROUP BY customer, reg_period ) as distinct_values ON ubw_per_project_data.customer = distinct_values.customer AND ubw_per_project_data.timestamp=distinct_values.timestamp AND ubw_per_project_data.reg_period = distinct_values.reg_period) LEFT JOIN test_test_no_kundemapping_test ON customer = "dagens ubw prosjekt" AND work_order=arbeids_ordre',
+    tables: ['ubw_per_project_data', 'test_test_no_kundemapping_test'],
     dataProtection: 3,
     created: '2021-08-23T11:59:50.601305',
     lastUsed: null,

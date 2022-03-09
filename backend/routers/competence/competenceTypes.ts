@@ -3,6 +3,24 @@ export interface YearsWorkingDistributionCount {
   count: number
 }
 
+export interface CategoryAmountData {
+  category: string
+  competenceAmount: number
+  motivationAmount: number
+  motivationProportion: number
+  competenceProportion: number
+}
+
+export interface CategoriesMap {
+  MainCategories: Record<string, CategoryAmountData>
+  [key: string]: Record<string, CategoryAmountData>
+}
+
+export interface ExperienceDistributionData {
+  years: string
+  count: number
+}
+
 export interface EmployeeCompetenceAndMotivation {
   email: string
   motivation: number
@@ -13,10 +31,50 @@ export interface EmployeeCompetenceAndMotivation {
   categoryCompetenceAvg: number
 }
 
+export interface CompetenceAmount {
+  subCategory: string
+  subMotivationAmount: number
+  subMotivationPropotion: number
+  subCompetenceAmount: number
+  subCompetencePropotion: number
+  category: string
+  motivationAmount: number
+  motivationPropotion: number
+  competenceAmount: number
+  competencePropotion: number
+}
+
+export interface CategoryMapData {
+  category: string
+  motivation: number
+  competence: number
+  subcategories: SubcategoryMapData[]
+}
+
+export interface SubcategoryMapData {
+  category: string
+  motivation: number
+  competence: number
+  motivationSize: number
+  competenceSize: number
+}
+
+export interface CategoryAreaData {
+  competence: number
+  motivation: number
+  category: string
+}
+
 export interface CategoryAverage {
-  value: number
+  competence: number
+  motivation: number
   subCategory: string
   category: string
+}
+
+export interface AgeDistributionData {
+  age: number
+  count: number
 }
 
 export interface AgeDistribution {
