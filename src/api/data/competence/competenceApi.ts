@@ -1,4 +1,12 @@
-import { getAtApi } from '../../client'
+import { getAtApi, getAtApiV2 } from '../../client'
+import {
+  BarChartData,
+  LineChartData,
+  MultipleChartResponse,
+  PieChartData,
+  RadarChartData,
+  SunburstChartData,
+} from '../chartResponses'
 import {
   AgeDistributionResponse,
   CompetenceAmountResponse,
@@ -34,3 +42,53 @@ export const getCompetenceMapping = () =>
 
 export const getCompetenceFilter = () =>
   getAtApi<CompetenceFilterResponse[]>('/data/competenceFilter')
+
+// API V2
+export const getExperienceDistributionBar = () =>
+  getAtApiV2<MultipleChartResponse<BarChartData>>(
+    '/competence/experienceDistribution/bar'
+  )
+
+export const getExperienceDistributionPie = () =>
+  getAtApiV2<MultipleChartResponse<PieChartData>>(
+    '/competence/experienceDistribution/pie'
+  )
+
+export const getCompetenceAmountBar = () =>
+  getAtApiV2<MultipleChartResponse<BarChartData>>(
+    '/competence/competenceAmount/bar'
+  )
+
+export const getCompetenceAreasBar = () =>
+  getAtApiV2<MultipleChartResponse<BarChartData>>(
+    '/competence/competenceAreas/bar'
+  )
+
+export const getCompetenceAreasRadar = () =>
+  getAtApiV2<MultipleChartResponse<RadarChartData>>(
+    '/competence/competenceAreas/radar'
+  )
+
+export const getAgeDistributionBar = () =>
+  getAtApiV2<MultipleChartResponse<BarChartData>>(
+    '/competence/ageDistribution/bar'
+  )
+
+export const getFagtimerLine = () =>
+  getAtApiV2<LineChartData>('/competence/fagtimer/line')
+
+export const getFagEventsLine = () =>
+  getAtApiV2<LineChartData>('/competence/fagEvents/line')
+
+export const getEducationPie = () =>
+  getAtApiV2<PieChartData>('/competence/education/pie')
+
+export const getCompetenceMappingBar = () =>
+  getAtApiV2<MultipleChartResponse<BarChartData>>(
+    '/competence/competenceMapping/bar'
+  )
+
+export const getCompetenceMappingSunburst = () =>
+  getAtApiV2<MultipleChartResponse<SunburstChartData>>(
+    '/competence/competenceMapping/sunburst'
+  )

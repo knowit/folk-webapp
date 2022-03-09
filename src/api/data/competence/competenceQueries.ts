@@ -1,14 +1,25 @@
 import useSWR from 'swr'
 import {
   getAgeDistribution,
+  getAgeDistributionBar,
   getCompetenceAmount,
+  getCompetenceAmountBar,
   getCompetenceAreas,
+  getCompetenceAreasBar,
+  getCompetenceAreasRadar,
   getCompetenceFilter,
   getCompetenceMapping,
+  getCompetenceMappingBar,
+  getCompetenceMappingSunburst,
   getEducation,
+  getEducationPie,
   getExperienceDistribution,
+  getExperienceDistributionBar,
+  getExperienceDistributionPie,
   getFagEvents,
+  getFagEventsLine,
   getFagtimer,
+  getFagtimerLine,
 } from './competenceApi'
 
 // ? Maybe one can revalidate on focus? look at network and traffic
@@ -55,5 +66,61 @@ export const useCompetenceMapping = () =>
 
 export const useCompetenceFilter = () =>
   useSWR('/competenceFilter', getCompetenceFilter, {
+    revalidateOnFocus: false,
+  })
+
+// API v2
+export const useExperienceDistributionBar = () =>
+  useSWR('/experienceDistributionBar', getExperienceDistributionBar, {
+    revalidateOnFocus: false,
+  })
+
+export const useExperienceDistributionPie = () =>
+  useSWR('/experienceDistributionPie', getExperienceDistributionPie, {
+    revalidateOnFocus: false,
+  })
+
+export const useCompetenceAmountBar = () =>
+  useSWR('/competenceAmountBar', getCompetenceAmountBar, {
+    revalidateOnFocus: false,
+  })
+
+export const useCompetenceAreasBar = () =>
+  useSWR('/competenceAreasBar', getCompetenceAreasBar, {
+    revalidateOnFocus: false,
+  })
+
+export const useCompetenceAreasRadar = () =>
+  useSWR('/competenceAreasRadar', getCompetenceAreasRadar, {
+    revalidateOnFocus: false,
+  })
+
+export const useAgeDistributionBar = () =>
+  useSWR('/ageDistributionBar', getAgeDistributionBar, {
+    revalidateOnFocus: false,
+  })
+
+export const useFagtimerLine = () =>
+  useSWR('/fagtimerLine', getFagtimerLine, {
+    revalidateOnFocus: false,
+  })
+
+export const useFagEventsLine = () =>
+  useSWR('/fagEventsLine', getFagEventsLine, {
+    revalidateOnFocus: false,
+  })
+
+export const useEducationPie = () =>
+  useSWR('/educationPie', getEducationPie, {
+    revalidateOnFocus: false,
+  })
+
+export const useCompetenceMappingBar = () =>
+  useSWR('/competenceMappingBar', getCompetenceMappingBar, {
+    revalidateOnFocus: false,
+  })
+
+export const useCompetenceMappingSunburst = () =>
+  useSWR('/competenceMappingSunburst', getCompetenceMappingSunburst, {
     revalidateOnFocus: false,
   })

@@ -1,14 +1,14 @@
 import { Grid } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import { getTestV2 } from '../api/client'
-import { useHoursBilledPerWeek } from '../api/data/customer/customerQueries'
+import { useCompetenceMappingSunburst } from '../api/data/competence/competenceQueries'
 import { GridItem } from '../components/gridItem/GridItem'
 
 const Debug = () => {
   const [data, setData] = useState<any>()
 
   // Old api may use hooks to fetch data
-  const { data: dt } = useHoursBilledPerWeek()
+  const { data: dt } = useCompetenceMappingSunburst()
 
   // New api uses getTestV2 as of now to compare output
   useEffect(() => {

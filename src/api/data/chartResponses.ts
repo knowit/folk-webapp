@@ -1,10 +1,10 @@
+export type MultipleChartResponse<T> = Record<string, T>
+
 export interface BarChartData {
   indexBy: string
   keys: string[]
   data: any[]
 }
-
-export type BarChartDataResponse = Record<string, BarChartData>
 
 export interface RadarChartData {
   indexBy: string
@@ -12,12 +12,22 @@ export interface RadarChartData {
   data: any[]
 }
 
-export type RadarChartDataResponse = Record<string, RadarChartData>
-
 export type LineChartData = {
   id: string | number
   data: Array<{
     x: number | string | Date
     y: number | string | Date
   }>
+}[]
+
+export interface PieChartData {
+  id: string
+  value: string
+  data: any[]
+}
+
+export interface SunburstChartData {
+  id: string
+  value: string
+  data: any[]
 }
