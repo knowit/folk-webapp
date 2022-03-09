@@ -14,7 +14,7 @@ import { AggregatedData } from '../datatypes/typeData'
 
 // * Everything in this file ould probably be done cleaner. Just copy pasted what had been done earlier.
 
-export const aggregateExperienceData = (
+export const experienceMapping = (
   data: YearsWorkingDistributionCount[]
 ): AggregatedData<ExperienceDistributionData[]> => {
   const groupedListData = [
@@ -62,7 +62,7 @@ export const aggregateExperienceData = (
   }
 }
 
-export const aggregateCompetenceAmount = (
+export const competenceAmountMapping = (
   data: CompetenceAmount[]
 ): AggregatedData<CategoryAmountData[]> => {
   const result: AggregatedData<CategoryAmountData[]> = {
@@ -99,7 +99,7 @@ export const aggregateCompetenceAmount = (
 }
 
 // /competenceAreas
-export const aggregateCompetenceAreas = (
+export const competenceAreasAggregated = (
   data: CategoryAverage[]
 ): AggregatedData<CategoryAreaData[]> => {
   const result: AggregatedData<CategoryAreaData[]> = {
@@ -147,7 +147,7 @@ export const aggregateCompetenceAreas = (
   return result
 }
 
-export const aggregateCompetenceMapping = (
+export const competenceMapping = (
   data: CategoryAverage[]
 ): AggregatedData<CategoryMapData[]> => {
   const aggregate = () => {
@@ -203,13 +203,13 @@ export const aggregateCompetenceMapping = (
   return result
 }
 
-export const aggregateAgeDistribution = (
+export const ageDistribution = (
   data: AgeDistribution[]
 ): AgeDistributionData[] => {
   return data
 }
 
-export const aggregateAgeGroupDistribution = (
+export const ageGroupDistribution = (
   data: AgeGroupDistribution[]
 ): AgeDistributionData[] => {
   return data.map((row) => {

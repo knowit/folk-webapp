@@ -1,6 +1,5 @@
 import express from 'express'
 import { getReport } from '../../dataplattform/client'
-import { aggregateCompetenceMapping } from './competenceAggregation'
 import {
   ageDistributionBar,
   competenceAmountBar,

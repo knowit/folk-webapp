@@ -7,12 +7,12 @@ import {
   SunburstChartData,
 } from '../chartTypes'
 import {
-  aggregateAgeDistribution,
-  aggregateAgeGroupDistribution,
-  aggregateCompetenceAmount,
-  aggregateCompetenceAreas,
-  aggregateCompetenceMapping,
-  aggregateExperienceData,
+  ageDistribution,
+  ageGroupDistribution,
+  competenceAmountMapping,
+  competenceAreasAggregated,
+  competenceMapping,
+  experienceMapping,
 } from './competenceAggregation'
 import {
   CategoryAverage,
@@ -32,7 +32,7 @@ export const experienceDistributionBar = (
   const indexBy = 'years'
   const keys = ['count']
 
-  const aggregatedData = aggregateExperienceData(data)
+  const aggregatedData = experienceMapping(data)
 
   const result: Record<string, BarChartData> = {}
 
@@ -53,7 +53,7 @@ export const experienceDistributionPie = (
   const id = 'years'
   const value = 'count'
 
-  const aggregatedData = aggregateExperienceData(data)
+  const aggregatedData = experienceMapping(data)
 
   const result: Record<string, PieChartData> = {}
 
@@ -75,7 +75,7 @@ export const competenceAmountBar = (
     'motivationPropotion',
   ]
 
-  const aggregatedData = aggregateCompetenceAmount(data)
+  const aggregatedData = competenceAmountMapping(data)
   const result: Record<string, BarChartData> = {}
 
   Object.keys(aggregatedData).forEach((key) => {
@@ -95,7 +95,7 @@ export const competenceAreasBar = (
   const indexBy = 'category'
   const keys = ['motivation', 'competence']
 
-  const aggregatedData = aggregateCompetenceAreas(data)
+  const aggregatedData = competenceAreasAggregated(data)
   const result: Record<string, BarChartData> = {}
 
   Object.keys(aggregatedData).forEach((key) => {
@@ -115,7 +115,7 @@ export const competenceAreasRadar = (
   const indexBy = 'category'
   const keys = ['motivation', 'competence']
 
-  const aggregatedData = aggregateCompetenceAreas(data)
+  const aggregatedData = competenceAreasAggregated(data)
   const result: Record<string, RadarChartData> = {}
 
   Object.keys(aggregatedData).forEach((key) => {
@@ -135,8 +135,8 @@ export const ageDistributionBar = (
   const indexBy = 'age'
   const keys = ['count']
 
-  const detailed = aggregateAgeDistribution(data[0])
-  const grouped = aggregateAgeGroupDistribution(data[1])
+  const detailed = ageDistribution(data[0])
+  const grouped = ageGroupDistribution(data[1])
 
   return {
     grouped: { indexBy, keys, data: grouped },
@@ -191,7 +191,7 @@ export const educationPie = (
 export const competenceMappingBar = (data: CategoryAverage[]) => {
   const indexBy = 'category'
 
-  const aggregatedData = aggregateCompetenceMapping(data)
+  const aggregatedData = competenceMapping(data)
 
   return {
     Competence: {
@@ -212,7 +212,7 @@ export const competenceMappingSunburst = (
 ): Record<string, SunburstChartData> => {
   const id = 'category'
 
-  const aggregatedData = aggregateCompetenceMapping(data)
+  const aggregatedData = competenceMapping(data)
 
   const competenceData: SunburstChartData = {
     id,
