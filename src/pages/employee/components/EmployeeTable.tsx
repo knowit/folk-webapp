@@ -65,6 +65,7 @@ export function EmployeeTable() {
           initialFilters={[
             {
               name: 'COMPETENCE',
+              label: 'Kompetanse',
               values: [],
               threshold: 3,
               placeholder: 'Filtrer på kompetanse...',
@@ -72,6 +73,7 @@ export function EmployeeTable() {
             },
             {
               name: 'MOTIVATION',
+              label: 'Motivasjon',
               values: [],
               threshold: 4,
               placeholder: 'Filtrer på motivasjon...',

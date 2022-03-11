@@ -120,10 +120,11 @@ export default function DDTable({
   )
 
   const filterHeaders = filters.map(
-    ({ values, threshold, name }, index) =>
+    ({ values, threshold, name, label }, index) =>
       values.length > 0 && (
         <FilterHeader
-          title={name}
+          key={name}
+          title={label}
           type={name}
           filterList={values}
           filterThreshold={threshold}

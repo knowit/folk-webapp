@@ -9,6 +9,7 @@ export interface CategoryWithGroup {
 
 export interface FilterObject {
   name: DynamicFilterType
+  label: string
   values: string[]
   threshold: number
   placeholder: string
