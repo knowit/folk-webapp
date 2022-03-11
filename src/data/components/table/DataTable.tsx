@@ -116,9 +116,9 @@ function VirtualizedTable({
   useEffect(() => {
     // We need to alert the react-virtualized table that the height of a
     // row has changed, so that it can recalculate total height and reposition
-    // rows. This runs when a row is expanded/collapsed:
+    // rows. This runs when a row is expanded/collapsed or when the sort order is changed:
     tableRef.current?.recomputeRowHeights()
-  }, [tableRef, expandedRowIds])
+  }, [tableRef, expandedRowIds, currentColumnSort])
 
   function rowIsExpanded(rowId: string) {
     return expandedRowIds.includes(rowId)
