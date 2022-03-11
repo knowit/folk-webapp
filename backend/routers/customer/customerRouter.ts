@@ -4,7 +4,10 @@ import {
   hoursBilledPerCustomerBar,
   hoursBilledPerWeekLine,
 } from './customerChartConversion'
-import { BilledCustomerHours } from './customerTypes'
+import {
+  BilledCustomerHours,
+  EmployeeWithPrimaryCustomer,
+} from './customerTypes'
 
 const router = express.Router()
 
@@ -39,6 +42,19 @@ router.get('/hoursBilledPerWeek/line', async (req, res, next) => {
 router.get('/customerCards', async (req, res, next) => {
   try {
     res.send('Customer cards')
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/employeesByCustomer', async (req, res, next) => {
+  try {
+    const data = await getReport<EmployeeWithPrimaryCustomer[]>({
+      accessToken: req.accessToken,
+      reportName: 'employeesWithPrimaryCustomer',
+    })
+
+    res.send(data)
   } catch (error) {
     next(error)
   }

@@ -16,6 +16,20 @@ const reports = [
     lastCacheUpdate: '2022-01-21T11:50:08.289427',
   },
   {
+    name: 'employeesWithPrimaryCustomer',
+    queryString:
+      'WITH primary_customer AS (SELECT guid, work_order_description, CASE WHEN customer = "dagens ubw prosjekt" THEN kunde ELSE customer END AS customer_name FROM (SELECT * FROM dev_level_3_database.ubw_customer_per_resource LEFT JOIN (SELECT DISTINCT "dagens ubw prosjekt", arbeids_ordre, kunde FROM dev_level_3_database.test_test_no_kundemapping_test) ON "dagens ubw prosjekt" = customer AND arbeids_ordre = work_order_description) WHERE weigth = 1) SELECT cvpartner.user_id, cvpartner.guid, navn, title, link, email, image_key, primary_customer.customer_name, primary_customer.work_order_description FROM dev_level_3_database.cv_partner_employees AS cvpartner INNER JOIN primary_customer ON cvpartner.guid = primary_customer.guid ORDER BY navn',
+    tables: [
+      'cv_partner_employees',
+      'test_test_no_kundemapping_test',
+      'ubw_customer_per_resource',
+    ],
+    dataProtection: 3,
+    created: '2022-03-07T11:06:31.072355',
+    lastUsed: null,
+    lastCacheUpdate: '2022-03-07T11:06:36.536322',
+  },
+  {
     name: 'competence',
     queryString:
       'WITH last_education AS (SELECT a.user_id, array_agg(a.degree)[1] AS degree, array_agg(a.year_to)[1] AS year_to FROM dev_level_3_database.cv_partner_education a INNER JOIN (SELECT user_id, max(year_to) AS year_to FROM dev_level_3_database.cv_partner_education GROUP BY  user_id ) b ON a.user_id = b.user_id AND a.year_to = b.year_to GROUP BY  a.user_id) SELECT emp.user_id, navn, title, link, degree, email, image_key\n FROM dev_level_3_database.cv_partner_employees AS emp LEFT OUTER JOIN last_education AS e ON e.user_id = emp.user_id order by navn',
