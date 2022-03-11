@@ -8,7 +8,7 @@ export interface CategoryWithGroup {
 }
 
 export interface FilterObject {
-  name: DynamicFilterType
+  column: EmployeeTableColumnMapping
   label: string
   values: string[]
   threshold: number
@@ -16,9 +16,7 @@ export interface FilterObject {
   datafetch: () => CategoryWithGroup[]
 }
 
-export type DynamicFilterType = 'COMPETENCE' | 'MOTIVATION'
-
-enum EmployeeTableColumnMapping {
+export enum EmployeeTableColumnMapping {
   CUSTOMER = 3,
   MOTIVATION = 5,
   COMPETENCE = 6,
@@ -88,10 +86,9 @@ export const searchAndFilter = (
 
     filters.forEach((filter) => {
       if (filter.values.length > 0) {
-        const rowDataIndex = EmployeeTableColumnMapping[filter.name]
         rowMatchesFilters =
           rowMatchesFilters &&
-          filterRow(row.rowData[rowDataIndex], filter.values, filter.threshold)
+          filterRow(row.rowData[filter.column], filter.values, filter.threshold)
       }
     })
 

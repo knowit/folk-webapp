@@ -2,6 +2,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles'
 import React from 'react'
 import CloseIcon from '@material-ui/icons/Close'
 import { Mark, Slider } from '@material-ui/core'
+import { EmployeeTableColumnMapping } from './FilterUtil'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -115,7 +116,7 @@ interface Props {
   filterThreshold: number
   onThresholdUpdate: (value: number) => void
   onSkillClick: (value: string[]) => void
-  type: string
+  type: EmployeeTableColumnMapping
 }
 
 export function FilterHeader({
@@ -166,7 +167,7 @@ export function FilterHeader({
           />
         ))}
       </div>
-      {type != 'CUSTOMER' && (
+      {type != EmployeeTableColumnMapping.CUSTOMER ? (
         <div className={classes.filterThresholdContainer}>
           <label
             htmlFor={`${type}-threshold-slider`}
@@ -190,7 +191,7 @@ export function FilterHeader({
             onChange={handleThresholdSliderChange}
           />
         </div>
-      )}
+      ) : null}
     </div>
   )
 }
