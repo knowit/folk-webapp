@@ -8,6 +8,7 @@ import {
   BilledCustomerHours,
   EmployeeWithPrimaryCustomer,
 } from './customerTypes'
+import { groupEmployeesByCustomer } from './customerAggregation'
 
 const router = express.Router()
 
@@ -54,7 +55,8 @@ router.get('/employeesByCustomer', async (req, res, next) => {
       reportName: 'employeesWithPrimaryCustomer',
     })
 
-    res.send(data)
+    const aggregatedData = groupEmployeesByCustomer(data)
+    res.send(aggregatedData)
   } catch (error) {
     next(error)
   }
