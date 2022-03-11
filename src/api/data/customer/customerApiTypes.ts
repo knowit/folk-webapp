@@ -23,8 +23,9 @@ export type EmployeeForCustomerList = {
   rowData: [
     info: {
       email: string
-      name: string
-      image_url?: string
+      value: string // Employee name
+      image?: string
+      user_id: string
     },
     jobTitle: string | null,
     customerAndProject: string,

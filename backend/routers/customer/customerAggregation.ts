@@ -34,9 +34,10 @@ function createEmployeeForCustomerList(
     rowId: employee.email,
     rowData: [
       {
-        name: employee.navn,
+        value: employee.navn,
         email: employee.email,
-        image_url: getStorageUrl(employee.image_key),
+        image: getStorageUrl(employee.image_key),
+        user_id: employee.user_id,
       },
       employee.title,
       `${employee.customer_name}: ${employee.work_order_description}`,
