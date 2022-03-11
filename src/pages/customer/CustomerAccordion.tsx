@@ -32,7 +32,7 @@ interface CustomerDropdownProps {
   columns: Columns[]
 }
 
-export default function CustomerAccordion({
+export function CustomerAccordion({
   customerName,
   employees,
   expand = false,

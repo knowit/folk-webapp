@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import EmployeeInfo from '../employee/components/EmployeeInfo'
@@ -10,8 +11,11 @@ import {
 } from '../../data/components/table/DataCells'
 import { FallbackMessage } from '../employee/components/FallbackMessage'
 import { useEmployeesByCustomer } from '../../api/data/customer/customerQueries'
-import CustomerAccordion from './CustomerAccordion'
+import { CustomerAccordion } from './CustomerAccordion'
 import { Columns } from '../../data/types'
+import { CustomerFilter } from './CustomerFilter'
+import { getSearchableColumns } from '../../data/DDTable'
+import { searchEmployeesByCustomer } from './util/searchEmployeesByCustomer'
 
 const customerColumns: Columns[] = [
   {
@@ -38,7 +42,7 @@ const customerColumns: Columns[] = [
 ]
 
 export default function CustomerList() {
-  // const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
   const { data, error } = useEmployeesByCustomer()
   const isLoading = !data
 
@@ -51,18 +55,20 @@ export default function CustomerList() {
     )
   }
 
-  // const filteredData = searchEmployeesByCustomer(
-  //   data,
-  //   getSearchableColumns(customerColumns),
-  //   searchTerm
-  // )
+  const filteredData = data
+    ? searchEmployeesByCustomer(
+        data,
+        getSearchableColumns(customerColumns),
+        searchTerm
+      )
+    : []
 
   const getCustomerAccordions = () => {
     if (isLoading) {
       return <Skeleton width={'100%'} animation="wave" />
     }
 
-    if (data.length === 0) {
+    if (filteredData.length === 0) {
       return (
         <GridItem fullSize>
           <div style={{ padding: '5px' }}>Ingen treff.</div>
@@ -70,7 +76,7 @@ export default function CustomerList() {
       )
     }
 
-    return data
+    return filteredData
       .sort(
         ({ customer_name: aCustomerName }, { customer_name: bCustomerName }) =>
           String(aCustomerName).localeCompare(bCustomerName)
@@ -87,11 +93,11 @@ export default function CustomerList() {
 
   return (
     <Grid container>
-      {/*isLoading ? (
+      {isLoading ? (
         <Skeleton width={'100%'} animation="wave" />
       ) : (
         <CustomerFilter onSearch={setSearchTerm} />
-      )*/}
+      )}
 
       {getCustomerAccordions()}
     </Grid>

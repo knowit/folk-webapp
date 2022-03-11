@@ -22,7 +22,7 @@ const ColumnMapping: Record<FilterType, number> = {
   CUSTOMER: 3,
 }
 
-function searchRow(
+export function searchRow(
   row: EmployeeTableResponse,
   searchableColumns: SearchableColumn[],
   searchTerm: string
