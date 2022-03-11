@@ -1,6 +1,7 @@
 import {
   CategoryScores,
   Customer,
+  CvLinks,
   EmployeeInformation,
   EmployeeMotivationAndCompetence,
   EmployeeSkills,
@@ -9,13 +10,6 @@ import {
   JobRotationStatus,
   Tags,
 } from './employeesTypes'
-
-export const cvs = [
-  ['no', 'pdf'],
-  ['int', 'pdf'],
-  ['no', 'word'],
-  ['int', 'word'],
-]
 
 export const getStorageUrl = (key: string) => {
   if (key !== undefined) {
@@ -146,10 +140,19 @@ export const getCategoryScoresForEmployee = (
   return [employeeMotivation, employeeCompetence]
 }
 
-export const makeCvLink = (
-  lang: string,
-  format: string,
-  linkTemplate?: string
-) => {
-  return linkTemplate?.replace('{LANG}', lang).replace('{FORMAT}', format)
+export function createCvLinks(linkTemplate: string): CvLinks {
+  if (!linkTemplate) {
+    // Just to be safe, should not happen
+    return
+  }
+  return {
+    no_pdf: createCvLink('no', 'pdf', linkTemplate),
+    int_pdf: createCvLink('int', 'pdf', linkTemplate),
+    no_word: createCvLink('no', 'word', linkTemplate),
+    int_word: createCvLink('int', 'word', linkTemplate),
+  }
+}
+
+function createCvLink(language: string, format: string, linkTemplate: string) {
+  return linkTemplate.replace('{LANG}', language).replace('{FORMAT}', format)
 }
