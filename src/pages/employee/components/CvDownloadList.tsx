@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Links } from '../../../api/data/employee/employeeApiTypes'
+import { CvLinks } from '../../../api/data/employee/employeeApiTypes'
 import { makeStyles } from '@material-ui/core/styles'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { mapLinkKeyToLabel } from '../../../utils/cvLinkHelpers'
@@ -27,7 +27,7 @@ const DownloadIcon = withStyles({
 })(GetApp)
 
 interface Props {
-  links?: Links
+  links?: CvLinks
   isLoading?: boolean
 }
 

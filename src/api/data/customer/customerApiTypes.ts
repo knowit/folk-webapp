@@ -1,3 +1,5 @@
+import { CvLinks } from '../employee/employeeApiTypes'
+
 // customerCards
 interface CustomerCardData {
   customer: string
@@ -7,6 +9,28 @@ interface CustomerCardData {
 }
 
 export type CustomerCardResponse = CustomerCardData[]
+
+// employeesByCustomer (for CustomerList)
+export type EmployeesByCustomerResponse = CustomerWithEmployees[]
+
+export interface CustomerWithEmployees {
+  customer_name: string
+  employees: EmployeeForCustomerList[]
+}
+
+export type EmployeeForCustomerList = {
+  rowId: string
+  rowData: [
+    info: {
+      email: string
+      name: string
+      image_url?: string
+    },
+    jobTitle: string | null,
+    customerAndProject: string,
+    cvLinks: CvLinks
+  ]
+}
 
 // hoursBilledPerCustomer
 interface BilledCustomer {

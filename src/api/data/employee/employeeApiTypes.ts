@@ -42,7 +42,7 @@ export interface EmployeeProfileResponse extends Employee {
   image?: string
   workExperience: WorkExperience[]
   tags: Tags
-  links: Links
+  links: CvLinks
 }
 
 export interface Customer {
@@ -67,7 +67,7 @@ export interface Tags {
   roles: string[]
 }
 
-export interface Links {
+export interface CvLinks {
   no_pdf: string
   int_pdf: string
   no_word: string
