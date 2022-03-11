@@ -2,12 +2,16 @@ import { getAtApi, getAtApiV2 } from '../../client'
 import { BarChartData, LineChartData } from '../chartResponses'
 import {
   CustomerCardResponse,
+  EmployeesByCustomerResponse,
   HoursBilledPerCustomerResponse,
   HoursBilledPerWeekResponse,
 } from './customerApiTypes'
 
 export const getCustomerCards = () =>
   getAtApi<CustomerCardResponse>('/data/customerCards')
+
+export const getEmployeesByCustomer = () =>
+  getAtApiV2<EmployeesByCustomerResponse>('/customer/employeesByCustomer')
 
 export const getHoursBilledPerCustomer = () =>
   getAtApi<HoursBilledPerCustomerResponse>('/data/hoursBilledPerCustomer')
