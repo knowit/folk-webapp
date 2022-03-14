@@ -4,7 +4,7 @@ import { FilterHeader } from '../components/filter/FilterHeader'
 import DataTable from './components/table/DataTable'
 import SearchInput from '../components/SearchInput'
 import FilterInput from '../components/filter/FilterInput'
-import RowCount from './components/RowCount'
+import { RowCount } from './components/RowCount'
 import { Column, DDTableProps, GetSearchValueFn } from './types'
 import { makeStyles } from '@material-ui/core/styles'
 import {
@@ -157,7 +157,7 @@ export default function DDTable({
       </GridItemHeader>
       {filterHeaders}
       <RowCount>
-        {sortedRows.length} av {allRows.length}
+        Viser {sortedRows.length} av {allRows.length} ansatte
       </RowCount>
       <DataTable
         setColumnSort={setColumnSort}

@@ -16,6 +16,7 @@ import { Column } from '../../data/types'
 import { CustomerFilter } from './CustomerFilter'
 import { getSearchableColumns } from '../../data/DDTable'
 import { searchEmployeesByCustomer } from './util/searchEmployeesByCustomer'
+import { RowCount } from '../../data/components/RowCount'
 
 const customerColumns: Column[] = [
   {
@@ -99,7 +100,12 @@ export default function CustomerList() {
       {isLoading ? (
         <Skeleton width={'100%'} animation="wave" />
       ) : (
-        <CustomerFilter onSearch={setSearchTerm} />
+        <>
+          <CustomerFilter onSearch={setSearchTerm} />
+          <RowCount>
+            Viser {filteredData.length} av {data.length} kunder
+          </RowCount>
+        </>
       )}
 
       {getCustomerAccordions()}
