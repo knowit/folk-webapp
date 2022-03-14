@@ -18,8 +18,9 @@ export type ChartVariant = {
   }
 }
 
-export type Columns = {
+export type Column = {
   title: string
+  width: number
   isExpandable?: boolean
   checkBoxLabel?: string
   getSearchValue?: GetSearchValueFn
@@ -40,7 +41,7 @@ export interface DDComponentProps {
 
 export interface DDTableProps extends DDComponentProps {
   props: {
-    columns: Columns[]
+    columns: Column[]
   }
   initialFilters: FilterObject[]
 }

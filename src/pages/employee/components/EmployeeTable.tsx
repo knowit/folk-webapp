@@ -32,6 +32,7 @@ export function EmployeeTable() {
             columns: [
               {
                 title: 'Konsulent',
+                width: 385,
                 isExpandable: true,
                 getSearchValue: (consultant: { value: string }) => {
                   return consultant.value
@@ -43,14 +44,20 @@ export function EmployeeTable() {
               },
               {
                 title: 'Tittel',
+                width: 222,
                 headerCell: SortableHeaderCell,
                 getSearchValue: (jobTitle: string | undefined | null) => {
                   return jobTitle
                 },
               },
-              { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
+              {
+                title: 'Prosjektstatus',
+                width: 143,
+                renderCell: ProjectStatusCell,
+              },
               {
                 title: 'Kunde',
+                width: 337,
                 renderCell: CustomerStatusCell,
                 getSearchValue: (customer: CustomerStatusData) => {
                   return customer.customer
@@ -59,7 +66,7 @@ export function EmployeeTable() {
                 },
                 headerCell: SortableHeaderCell,
               },
-              { title: 'CV', renderCell: CvCell },
+              { title: 'CV', width: 53, renderCell: CvCell },
             ],
           }}
           initialFilters={[

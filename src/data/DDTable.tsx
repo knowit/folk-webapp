@@ -5,7 +5,7 @@ import DataTable from './components/table/DataTable'
 import SearchInput from '../components/SearchInput'
 import FilterInput from '../components/filter/FilterInput'
 import RowCount from './components/RowCount'
-import { Columns, DDTableProps, GetSearchValueFn } from './types'
+import { Column, DDTableProps, GetSearchValueFn } from './types'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   filterNonCustomer,
@@ -55,7 +55,7 @@ const sortColumn = (rows: any[], currentSort: ColumnSort) => {
   }
 }
 
-export function getSearchableColumns(columns: Columns[]): SearchableColumn[] {
+export function getSearchableColumns(columns: Column[]): SearchableColumn[] {
   const result: SearchableColumn[] = []
   columns.forEach((column, index) => {
     if (column.getSearchValue) {

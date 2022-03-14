@@ -12,14 +12,15 @@ import {
 import { FallbackMessage } from '../employee/components/FallbackMessage'
 import { useEmployeesByCustomer } from '../../api/data/customer/customerQueries'
 import { CustomerAccordion } from './CustomerAccordion'
-import { Columns } from '../../data/types'
+import { Column } from '../../data/types'
 import { CustomerFilter } from './CustomerFilter'
 import { getSearchableColumns } from '../../data/DDTable'
 import { searchEmployeesByCustomer } from './util/searchEmployeesByCustomer'
 
-const customerColumns: Columns[] = [
+const customerColumns: Column[] = [
   {
     title: 'Konsulent',
+    width: 385,
     isExpandable: true,
     getSearchValue: (consultant: { value: string }) => {
       return consultant.value
@@ -27,15 +28,17 @@ const customerColumns: Columns[] = [
     renderCell: ConsultantCell,
     renderExpanded: EmployeeInfo,
   },
-  { title: 'Tittel' },
+  { title: 'Tittel', width: 222 },
   {
     title: 'Kunde',
+    width: 480,
     getSearchValue: (customerProject: string) => {
       return customerProject
     },
   },
   {
     title: 'CV',
+    width: 53,
     renderCell: CvCell,
     headerCell: CenteredHeaderCell,
   },
