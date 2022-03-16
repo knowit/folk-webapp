@@ -147,6 +147,7 @@ export default function Competence() {
             {
               type: 'Sunburst',
               props: {
+                maxValue: 5,
                 yLabels: ['value'],
                 groupKey: 'category',
               },
@@ -154,6 +155,7 @@ export default function Competence() {
             {
               type: 'Bar',
               props: {
+                maxValue: 5,
                 yLabels: ['value'],
                 dataKey: 'category',
               },
