@@ -1,39 +1,32 @@
 import { Grid } from '@material-ui/core'
-import React, { useEffect, useState } from 'react'
-import { getTestV2 } from '../api/client'
-import { useCompetenceMappingSunburst } from '../api/data/competence/competenceQueries'
+import { ResponsiveBar } from '@nivo/bar'
+import React from 'react'
+import { useExperienceDistributionBar } from '../api/data/competence/competenceQueries'
+import {
+  useEmployeeMotivationAndCompetenceBar,
+  useEmployeeMotivationAndCompetenceRadar,
+} from '../api/data/employee/employeeQueries'
 import { GridItem } from '../components/gridItem/GridItem'
+import { GridItemHeader } from '../components/gridItem/GridItemHeader'
+import BarChart from '../components/charts/BarChart'
 
 const Debug = () => {
-  const [data, setData] = useState<any>()
+  const { data, error } = useExperienceDistributionBar()
 
-  // Old api may use hooks to fetch data
-  const { data: dt } = useCompetenceMappingSunburst()
-
-  // New api uses getTestV2 as of now to compare output
-  useEffect(() => {
-    const fetch = async () => {
-      const res = await getTestV2<any>('/employees/employeeProfile', {
-        params: {
-          email: 'einar.halvorsen@knowit.no',
-        },
-      })
-
-      setData(res)
-    }
-
-    fetch()
-  }, [])
+  if (error) return <div>{error}</div>
+  if (!data) return <div>Loading...</div>
 
   return (
-    <Grid container spacing={2}>
+    <Grid container>
       <GridItem>
-        NEW: API V2
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <BarChart
+          indexBy={data.regular.indexBy}
+          keys={data.regular.keys}
+          data={data.regular.data}
+        />
       </GridItem>
       <GridItem>
-        OLD: API V1
-        <pre>{JSON.stringify(dt, null, 2)}</pre>
+        <pre>{JSON.stringify(data, null, 2)}</pre>
       </GridItem>
     </Grid>
   )
