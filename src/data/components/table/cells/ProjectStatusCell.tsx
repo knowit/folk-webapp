@@ -51,13 +51,13 @@ function StatusTooltip(props: TooltipProps) {
 const applyTitle = (status?: { data: string }): string => {
   switch (status?.data) {
     case 'orange':
-      return 'Ønsker å bytte prosjekt'
-    case 'yellow':
       return 'Er åpen for å bytte prosjekt'
+    case 'yellow':
+      return 'Ønsker å bytte prosjekt'
     case 'green':
-      return 'Jeg er opptatt i prosjekt'
-    case 'red':
       return 'Jeg er ikke i prosjekt'
+    case 'red':
+      return 'Jeg er opptatt i prosjekt'
   }
 
   return ''
