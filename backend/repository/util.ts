@@ -100,12 +100,28 @@ export function mapEmployeeTags(employeeSkills?: EmployeeSkills) {
 export const statusColorCode = (
   wantNewProject: number,
   openForNewProject: number,
-  inProject: boolean
+  inProject: boolean,
+  isInternal: boolean
 ): string => {
-  const projectStatus = inProject ? 'green' : 'red'
-  const color = wantNewProject > openForNewProject ? 'orange' : 'yellow'
-  const statusColor =
-    (wantNewProject || openForNewProject) > 0 ? color : projectStatus
+  const getProjectColor = (): string => {
+    if (!inProject) return 'red'
+    if (isInternal) return 'blue'
+    return 'green'
+  }
+  const getNewProjectColor = (): string => {
+    if (wantNewProject >= openForNewProject) return 'orange'
+    return 'yellow'
+  }
+
+  const getStatusColor = (projecStatus: string, newProject: string): string => {
+    if (projecStatus === 'red') return projecStatus
+    if (wantNewProject > 0 || openForNewProject > 0) return newProject
+    return projecStatus
+  }
+
+  const projectStatus = getProjectColor()
+  const newProject = getNewProjectColor()
+  const statusColor = getStatusColor(projectStatus, newProject)
 
   return statusColor
 }

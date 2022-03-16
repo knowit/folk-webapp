@@ -89,6 +89,7 @@ const findProjectStatusForEmployee = (
   employeeWorkStatus: EmployeeWorkStatus[],
   guid: string
 ): string => {
+  console.log(jobRotationStatus[0])
   const currentRegPeriod = parseInt(getYear() + getWeek(), 10)
 
   const work = getEmployeeWork(employeeWorkStatus, guid)
@@ -97,15 +98,21 @@ const findProjectStatusForEmployee = (
     jobRotationStatus(jobRotationEmployees, guid)
 
   let inProjectStatus = false
-  if (work)
-    inProjectStatus =
-      work.project_type.toLowerCase().includes('external') &&
-      currentRegPeriod - work.last_reg_period < 5
+  let isInternal = false
+  if (work) {
+    inProjectStatus = currentRegPeriod - work.last_reg_period < 5
+    //work.project_type.toLowerCase().includes('external') &&
+
+    isInternal =
+      work.project_type.toLowerCase().includes('internal') ||
+      work.project_type.toLowerCase().includes('knowit')
+  }
 
   const statusColor = statusColorCode(
     wantNewProject,
     openForNewProject,
-    inProjectStatus
+    inProjectStatus,
+    isInternal
   )
 
   return statusColor

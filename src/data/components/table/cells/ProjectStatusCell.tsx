@@ -54,8 +54,10 @@ const applyTitle = (status?: { data: string }): string => {
       return 'Ønsker å bytte prosjekt'
     case 'yellow':
       return 'Er åpen for å bytte prosjekt'
+    case 'blue':
+      return 'Jeg er opptatt i intern prosjekt'
     case 'green':
-      return 'Jeg er opptatt i prosjekt'
+      return 'Jeg er opptatt i ekstern prosjekt'
     case 'red':
       return 'Jeg er ikke i prosjekt'
   }
@@ -73,6 +75,7 @@ export default function ProjectStatusCell(props?: ProjectStatusCellProps) {
     green: '#4C8E00',
     yellow: '#ffd500',
     orange: '#ff8800',
+    blue: '#004C8E',
     red: '#D10000',
   }
   const color = props ? colors[props.data] : '#777777'
