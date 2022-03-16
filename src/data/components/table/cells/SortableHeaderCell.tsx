@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 import { ColumnSort } from '../../../DDTable'
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox'
+import { CheckBoxHeader } from '../DataTable'
 
 export type SortOrder = 'NONE' | 'ASC' | 'DESC'
 
@@ -57,11 +58,7 @@ interface SortableHeaderCellProps {
   onOrderChange: (newOrder: ColumnSort) => void
   columnIndex: number
   currentOrder: string
-  checkBox?: {
-    label: string
-    changeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
-    checked: boolean
-  }
+  checkBox: CheckBoxHeader
 }
 
 export default function SortableHeaderCell({
@@ -80,9 +77,9 @@ export default function SortableHeaderCell({
 
   const sortIcon = () => {
     switch (currentOrder) {
-      case 'ASC':
-        return <ArrowUpward />
       case 'DESC':
+        return <ArrowUpward />
+      case 'ASC':
         return <ArrowDownward />
       case 'NONE':
       default:
@@ -96,16 +93,16 @@ export default function SortableHeaderCell({
         {title}
         {sortIcon()}
       </div>
-      <div className={classes.checkBox}>
-        {checkBox && (
+      {columnIndex == 0 ? (
+        <div className={classes.checkBox}>
           <FormControlLabel
             className={classes.label}
             control={<BlackCheckBox onChange={checkBox.changeHandler} />}
             label={checkBox.label}
             checked={checkBox.checked}
           />
-        )}
-      </div>
+        </div>
+      ) : null}
     </div>
   )
 }

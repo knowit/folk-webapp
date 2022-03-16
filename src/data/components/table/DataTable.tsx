@@ -20,8 +20,7 @@ interface DataTableProps {
   columns: Column[]
   rows: EmployeeTableRow[] | EmployeeForCustomerList[]
   setColumnSort?: (CurrentSort: ColumnSort) => void
-  checkBoxChangeHandler?: () => void
-  checked?: boolean
+  checkBox?: CheckBoxHeader
   currentColumnSort?: ColumnSort
 }
 
@@ -42,6 +41,12 @@ interface CellProps {
   cellData: any[]
   rowId: string
   name: string
+}
+
+export interface CheckBoxHeader {
+  label: string
+  changeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
+  checked: boolean
 }
 
 const TableCellNoBorders = withStyles({
@@ -105,9 +110,8 @@ function VirtualizedTable({
   columns,
   rows,
   setColumnSort,
-  checkBoxChangeHandler,
   currentColumnSort,
-  checked,
+  checkBox,
 }: DataTableProps) {
   const classes = tableStyles()
   const tableRef = useRef<Table>(null)
@@ -215,18 +219,13 @@ function VirtualizedTable({
     index: number,
     currentOrder?: ColumnSort,
     HeaderCell?: (props: any) => JSX.Element,
-    checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void
+    checkBox?: CheckBoxHeader
   ) {
     if (HeaderCell) {
-      const checkBox = {
-        label: 'Se kun ledige',
-        changeHandler: checkBoxChangeHandler,
-        checked: checked,
-      }
       return (
         <HeaderCell
           title={title}
-          checkBox={index == 0 ? checkBox : undefined}
+          checkBox={checkBox}
           columnIndex={index}
           onOrderChange={onSortChange}
           currentOrder={
@@ -288,7 +287,7 @@ function VirtualizedTable({
                   index,
                   currentColumnSort,
                   column.headerCell,
-                  checkBoxChangeHandler
+                  checkBox
                 )
               }
               className={classes.flexContainer}

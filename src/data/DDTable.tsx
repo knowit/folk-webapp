@@ -36,14 +36,11 @@ const useStyles = makeStyles({
 })
 
 const sortColumn = (rows: any[], currentSort: ColumnSort) => {
-  const compare = (a: any, b: any, reverse = false) => {
-    const first = reverse ? b : a
-    const second = reverse ? a : b
-
-    return JSON.stringify(first.rowData[currentSort.columnIndex])
+  const compare = (a: any, b: any) => {
+    return JSON.stringify(a.rowData[currentSort.columnIndex])
       .toLowerCase()
       .localeCompare(
-        JSON.stringify(second.rowData[currentSort.columnIndex]).toLowerCase()
+        JSON.stringify(b.rowData[currentSort.columnIndex]).toLowerCase()
       )
   }
 
@@ -52,7 +49,7 @@ const sortColumn = (rows: any[], currentSort: ColumnSort) => {
     case 'ASC':
       return rows.sort((a, b) => compare(a, b))
     case 'DESC':
-      return rows.sort((a, b) => compare(a, b, true))
+      return rows.sort((a, b) => compare(b, a))
     default:
       return rows
   }
@@ -145,6 +142,12 @@ export default function DDTable({
       )
   )
 
+  const checkBox = {
+    label: 'Se kun ledige',
+    changeHandler: toggleDisplayNonProject,
+    checked: displayNonProject,
+  }
+
   return (
     <>
       <GridItemHeader title={title}>
@@ -166,8 +169,7 @@ export default function DDTable({
       <DataTable
         setColumnSort={setColumnSort}
         currentColumnSort={columnSort}
-        checked={displayNonProject}
-        checkBoxChangeHandler={toggleDisplayNonProject}
+        checkBox={checkBox}
         rows={sortedRows}
         columns={props.columns}
       />
