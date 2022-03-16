@@ -8,18 +8,18 @@ export interface CategoryWithGroup {
 }
 
 export interface FilterObject {
-  name: FilterType
+  column: EmployeeTableColumnMapping
+  label: string
   values: string[]
   threshold: number
   placeholder: string
   datafetch: () => CategoryWithGroup[]
 }
-export type FilterType = 'COMPETENCE' | 'MOTIVATION' | 'CUSTOMER'
 
-const ColumnMapping: Record<FilterType, number> = {
-  MOTIVATION: 4,
-  COMPETENCE: 5,
-  CUSTOMER: 3,
+export enum EmployeeTableColumnMapping {
+  CUSTOMER = 3,
+  MOTIVATION = 5,
+  COMPETENCE = 6,
 }
 
 function searchRow(
@@ -86,10 +86,9 @@ export const searchAndFilter = (
 
     filters.forEach((filter) => {
       if (filter.values.length > 0) {
-        const rowDataIndex = ColumnMapping[filter.name]
         rowMatchesFilters =
           rowMatchesFilters &&
-          filterRow(row.rowData[rowDataIndex], filter.values, filter.threshold)
+          filterRow(row.rowData[filter.column], filter.values, filter.threshold)
       }
     })
 
@@ -99,7 +98,7 @@ export const searchAndFilter = (
 
 export function filterNonCustomer(rows: EmployeeTableResponse[]) {
   return rows.filter((row: EmployeeTableResponse) => {
-    const rowDataIndex = ColumnMapping['CUSTOMER']
+    const rowDataIndex = EmployeeTableColumnMapping['CUSTOMER']
     return Object.keys(row.rowData[rowDataIndex]).length === 0
   })
 }
