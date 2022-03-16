@@ -21,7 +21,8 @@ import {
 export const aggregateEmployeeTable = (
   employeeInformation,
   employeeMotivationAndCompetence,
-  jobRotationInformation
+  jobRotationInformation,
+  employeeStatus
 ) => {
   const employeesWithMergedCustomers =
     mergeCustomersForEmployees(employeeInformation)
@@ -40,7 +41,11 @@ export const aggregateEmployeeTable = (
         degree: employee.degree,
       },
       employee.title,
-      findProjectStatusForEmployee(jobRotationInformation, employee.email),
+      findProjectStatusForEmployee(
+        jobRotationInformation,
+        employeeStatus,
+        employee.guid
+      ),
       findCustomerWithHighestWeight(employee.customers),
       Object.fromEntries(
         cvs.map(([lang, format]) => [

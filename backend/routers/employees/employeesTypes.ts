@@ -76,6 +76,15 @@ export type JobRotation = {
   categoryid: string
 }
 
+export type EmployeeWorkStatus = {
+  alias: string
+  guid: string
+  customer: string
+  project_type: string
+  last_reg_period: number
+  weight_sum: number
+}
+
 export type JobRotationStatus = [
   WantNewProject: number,
   OpenForNewProject: number
