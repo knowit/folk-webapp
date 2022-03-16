@@ -1,4 +1,4 @@
-export type MultipleChartResponse<T> = Record<string, T>
+export type MultipleChartResponse<K extends string, T> = Record<K, T>
 
 export interface BarChartData {
   indexBy: string

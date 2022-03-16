@@ -45,32 +45,32 @@ export const getCompetenceFilter = () =>
 
 // API V2
 export const getExperienceDistributionBar = () =>
-  getAtApiV2<MultipleChartResponse<BarChartData>>(
+  getAtApiV2<MultipleChartResponse<'regular' | 'detailed', BarChartData>>(
     '/competence/experienceDistribution/bar'
   )
 
 export const getExperienceDistributionPie = () =>
-  getAtApiV2<MultipleChartResponse<PieChartData>>(
+  getAtApiV2<MultipleChartResponse<'regular' | 'detailed', PieChartData>>(
     '/competence/experienceDistribution/pie'
   )
 
 export const getCompetenceAmountBar = () =>
-  getAtApiV2<MultipleChartResponse<BarChartData>>(
+  getAtApiV2<MultipleChartResponse<string, BarChartData>>(
     '/competence/competenceAmount/bar'
   )
 
 export const getCompetenceAreasBar = () =>
-  getAtApiV2<MultipleChartResponse<BarChartData>>(
+  getAtApiV2<MultipleChartResponse<string, BarChartData>>(
     '/competence/competenceAreas/bar'
   )
 
 export const getCompetenceAreasRadar = () =>
-  getAtApiV2<MultipleChartResponse<RadarChartData>>(
+  getAtApiV2<MultipleChartResponse<string, RadarChartData>>(
     '/competence/competenceAreas/radar'
   )
 
 export const getAgeDistributionBar = () =>
-  getAtApiV2<MultipleChartResponse<BarChartData>>(
+  getAtApiV2<MultipleChartResponse<'grouped' | 'detailed', BarChartData>>(
     '/competence/ageDistribution/bar'
   )
 
@@ -84,11 +84,11 @@ export const getEducationPie = () =>
   getAtApiV2<PieChartData>('/competence/education/pie')
 
 export const getCompetenceMappingBar = () =>
-  getAtApiV2<MultipleChartResponse<BarChartData>>(
+  getAtApiV2<MultipleChartResponse<'competence' | 'motivation', BarChartData>>(
     '/competence/competenceMapping/bar'
   )
 
 export const getCompetenceMappingSunburst = () =>
-  getAtApiV2<MultipleChartResponse<SunburstChartData>>(
-    '/competence/competenceMapping/sunburst'
-  )
+  getAtApiV2<
+    MultipleChartResponse<'competence' | 'motivation', SunburstChartData>
+  >('/competence/competenceMapping/sunburst')

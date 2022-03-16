@@ -35,7 +35,7 @@ export const getEmployeeMotivationAndCompetenceBar = (
   url: string,
   email: string
 ) =>
-  getAtApiV2<MultipleChartResponse<BarChartData>>(
+  getAtApiV2<MultipleChartResponse<string, BarChartData>>(
     '/employees/employeeMotivationAndCompetence/bar',
     {
       params: { email },
@@ -46,7 +46,7 @@ export const getEmployeeMotivationAndCompetenceRadar = (
   url: string,
   email: string
 ) =>
-  getAtApiV2<MultipleChartResponse<RadarChartData>>(
+  getAtApiV2<MultipleChartResponse<string, RadarChartData>>(
     '/employees/employeeMotivationAndCompetence/radar',
     {
       params: { email },
