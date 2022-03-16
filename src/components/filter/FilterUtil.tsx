@@ -22,7 +22,7 @@ export enum EmployeeTableColumnMapping {
   COMPETENCE = 6,
 }
 
-function searchRow(
+export function searchRow(
   row: EmployeeTableResponse,
   searchableColumns: SearchableColumn[],
   searchTerm: string

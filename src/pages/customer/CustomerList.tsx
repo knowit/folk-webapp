@@ -1,25 +1,27 @@
+import * as React from 'react'
+import { useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
-import React, { useEffect, useState, useCallback } from 'react'
-import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
-import { useEmployeeTable } from '../../api/data/employee/employeeQueries'
 import EmployeeInfo from '../employee/components/EmployeeInfo'
-import { useCategories } from '../../components/filter/FilterUtil'
 import { GridItem } from '../../components/gridItem/GridItem'
-import { CustomerStatusData } from '../../data/components/table/cells/CustomerStatusCell'
 import {
   CenteredHeaderCell,
   ConsultantCell,
-  CustomerStatusCell,
   CvCell,
 } from '../../data/components/table/DataCells'
+import { FallbackMessage } from '../employee/components/FallbackMessage'
+import { useEmployeesByCustomer } from '../../api/data/customer/customerQueries'
+import { CustomerAccordion } from './CustomerAccordion'
+import { Column } from '../../data/types'
+import { CustomerFilter } from './CustomerFilter'
 import { getSearchableColumns } from '../../data/DDTable'
-import CustomerDropdown from './CustomerDropdown'
-import CustomerFilter from './CustomerFilter'
+import { searchEmployeesByCustomer } from './util/searchEmployeesByCustomer'
+import { RowCount } from '../../data/components/RowCount'
 
-const CustomerColumns = [
+const customerColumns: Column[] = [
   {
     title: 'Konsulent',
+    width: 385,
     isExpandable: true,
     getSearchValue: (consultant: { value: string }) => {
       return consultant.value
@@ -27,121 +29,86 @@ const CustomerColumns = [
     renderCell: ConsultantCell,
     renderExpanded: EmployeeInfo,
   },
-  { title: 'Tittel' },
+  { title: 'Tittel', width: 222 },
   {
     title: 'Kunde',
-    renderCell: CustomerStatusCell,
-    getSearchValue: (customer: CustomerStatusData) => {
-      return `${customer.customer} ${customer.workOrderDescription}`
+    width: 480,
+    getSearchValue: (customerProject: string) => {
+      return customerProject
     },
   },
   {
     title: 'CV',
+    width: 53,
     renderCell: CvCell,
     headerCell: CenteredHeaderCell,
   },
 ]
 
-type EmployeeGroupedCustomers = Record<string, EmployeeTableResponse[]>
 export default function CustomerList() {
-  const [initialData, setInitialData] = useState<EmployeeTableResponse[]>([])
-  const [dropdowns, setDropdowns] = useState<JSX.Element[]>([])
-  const { data: employeeData, error } = useEmployeeTable()
+  const [searchTerm, setSearchTerm] = useState('')
+  const { data, error } = useEmployeesByCustomer()
+  const isLoading = !data
 
-  const categories = useCategories()
-
-  const pending = !employeeData && error
-
-  function groupByCustomers(
-    employees: EmployeeTableResponse[],
-    columnIndex: number
-  ) {
-    return employees.reduce(
-      (groups: EmployeeGroupedCustomers, employee: EmployeeTableResponse) => {
-        const group = groups[employee.rowData[columnIndex].customer] || []
-        group.push(employee)
-        groups[employee.rowData[columnIndex].customer] = group
-        return groups
-      },
-      {}
+  if (error) {
+    return (
+      <FallbackMessage
+        isError
+        message="Det oppstod en feil ved henting av data."
+      />
     )
   }
 
-  const createDropDowns = useCallback(
-    (customers: EmployeeGroupedCustomers, expand?: boolean) => {
-      const dropdowns: JSX.Element[] = []
-      !pending &&
-        customers &&
-        Object.keys(customers)
-          .sort()
-          .forEach((customer) =>
-            dropdowns.push(
-              <CustomerDropdown
-                key={`${customer}`}
-                customerName={customer}
-                employees={customers[customer]}
-                expand={expand}
-                columns={CustomerColumns}
-              />
-            )
-          )
-      setDropdowns(dropdowns)
-    },
-    [pending]
-  )
+  const filteredData = data
+    ? searchEmployeesByCustomer(
+        data,
+        getSearchableColumns(customerColumns),
+        searchTerm
+      )
+    : []
 
-  const handleSearchAndFilter = (filtered: EmployeeTableResponse[]) => {
-    const expand = filtered.length === initialData.length
-    const grouped = groupByCustomers(filtered, 2)
-    createDropDowns(grouped, !expand)
-  }
-
-  const prepareTablePayLoad = useCallback(() => {
-    const statusIconData = 2
-    const customerData = 3
-
-    if (employeeData && !pending) {
-      employeeData.map((employee) => {
-        if (!employee.rowData[customerData].customer) {
-          employee.rowData[customerData] = { customer: 'Ikke i prosjekt' }
-        }
-        employee.rowData.splice(statusIconData, 1)
-      })
-      setInitialData(employeeData)
-      const groups = groupByCustomers(employeeData, 2) // customerIndex changes after splice
-      createDropDowns(groups)
+  const getCustomerAccordions = () => {
+    if (isLoading) {
+      return <Skeleton width={'100%'} animation="wave" />
     }
-  }, [createDropDowns, employeeData, pending])
 
-  useEffect(() => {
-    if (employeeData) {
-      prepareTablePayLoad()
-    }
-  }, [employeeData, prepareTablePayLoad])
-
-  return (
-    <Grid container>
-      {pending ? (
-        <Skeleton width={'100%'} animation="wave" />
-      ) : (
-        <CustomerFilter
-          title="Filtre"
-          onFilter={handleSearchAndFilter}
-          employees={initialData}
-          searchableColumns={getSearchableColumns(CustomerColumns)}
-          categories={categories}
-        />
-      )}
-
-      {!dropdowns || pending ? (
-        <Skeleton width={'100%'} animation="wave" />
-      ) : dropdowns.length > 0 ? (
-        dropdowns
-      ) : (
+    if (filteredData.length === 0) {
+      return (
         <GridItem fullSize>
           <div style={{ padding: '5px' }}>Ingen treff.</div>
         </GridItem>
+      )
+    }
+
+    return filteredData
+      .sort(
+        ({ customer_name: aCustomerName }, { customer_name: bCustomerName }) =>
+          String(aCustomerName).localeCompare(bCustomerName)
+      )
+      .map(({ customer_name, employees }) => (
+        <CustomerAccordion
+          key={customer_name}
+          customerName={customer_name}
+          employees={employees}
+          columns={customerColumns}
+        />
+      ))
+  }
+
+  return (
+    <Grid container>
+      {isLoading ? (
+        <Skeleton width={'100%'} animation="wave" />
+      ) : (
+        <>
+          <CustomerFilter onSearch={setSearchTerm} />
+          <RowCount>
+            Viser {filteredData.length} av {data.length} kunder
+          </RowCount>
+        </>
       )}
+
+      {getCustomerAccordions()}
     </Grid>
   )
 }

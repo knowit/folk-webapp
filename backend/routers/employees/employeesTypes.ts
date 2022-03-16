@@ -31,7 +31,7 @@ export type EmployeeProfile = Omit<
   image: string
   workExperience: WorkExperience[]
   tags: Tags
-  links: Links
+  links: CvLinks
 }
 
 export type WorkExperience = {
@@ -50,7 +50,7 @@ export type Tags = {
   roles: string[]
 }
 
-type Links = {
+export type CvLinks = {
   no_pdf: string
   int_pdf: string
   no_word: string

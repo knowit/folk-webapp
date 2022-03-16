@@ -1,13 +1,12 @@
 import { v4 as uuid } from 'uuid'
 import {
   mapEmployeeTags,
-  cvs,
   findCustomerWithHighestWeight,
   findProjectStatusForEmployee,
   getCategoryScoresForEmployee,
   getStorageUrl,
-  makeCvLink,
   mergeCustomersForEmployees,
+  createCvLinks,
 } from './aggregationHelpers'
 import {
   EmployeeExperience,
@@ -42,12 +41,7 @@ export const aggregateEmployeeTable = (
       employee.title,
       findProjectStatusForEmployee(jobRotationInformation, employee.email),
       findCustomerWithHighestWeight(employee.customers),
-      Object.fromEntries(
-        cvs.map(([lang, format]) => [
-          `${lang}_${format}`,
-          employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
-        ])
-      ),
+      createCvLinks(employee.link),
       getCategoryScoresForEmployee(
         employee.email,
         employeeMotivationAndCompetence
@@ -141,11 +135,6 @@ export const aggregateEmployeeProfile = (
     customers: employee.customers,
     workExperience,
     tags: mapEmployeeTags(employeeSkills[0]),
-    links: {
-      no_pdf: makeCvLink('no', 'pdf', employee.link),
-      int_pdf: makeCvLink('int', 'pdf', employee.link),
-      no_word: makeCvLink('no', 'word', employee.link),
-      int_word: makeCvLink('int', 'word', employee.link),
-    },
+    links: createCvLinks(employee.link),
   }
 }

@@ -10,7 +10,7 @@ import React, { useState } from 'react'
 import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
 import { GridItem } from '../../components/gridItem/GridItem'
 import DataTable from '../../data/components/table/DataTable'
-import { Columns } from '../../data/types'
+import { Column } from '../../data/types'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -29,10 +29,10 @@ interface CustomerDropdownProps {
   customerName: string
   employees: EmployeeTableResponse[]
   expand?: boolean
-  columns: Columns[]
+  columns: Column[]
 }
 
-export default function CustomerDropdown({
+export function CustomerAccordion({
   customerName,
   employees,
   expand = false,
