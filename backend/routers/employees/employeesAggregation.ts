@@ -39,7 +39,7 @@ export const aggregateEmployeeTable = (
           user_id: employee.user_id,
           name: employee.navn,
           email: employee.email,
-          image: getStorageUrl(employee.image_key),
+          image_url: getStorageUrl(employee.image_key),
         },
         employee.title || null,
         findProjectStatusForEmployee(

@@ -13,12 +13,11 @@ import {
   Tags,
 } from './employeesTypes'
 
-export const getStorageUrl = (key: string) => {
-  if (key !== undefined) {
-    return `${process.env.STORAGE_URL}/${key}`
-  } else {
-    return undefined
+export const getStorageUrl = (key?: string) => {
+  if (!key) {
+    return
   }
+  return `${process.env.STORAGE_URL}/${key}`
 }
 
 /**
