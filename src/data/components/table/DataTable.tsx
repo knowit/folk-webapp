@@ -13,11 +13,12 @@ import {
 import CharacterLimitBox from './components/CharacterLimitBox'
 import { ColumnSort } from '../../DDTable'
 import { Column } from '../../types'
-import { EmployeeTableResponse } from '../../../api/data/employee/employeeApiTypes'
+import { EmployeeTableRow } from '../../../api/data/employee/employeeApiTypes'
+import { EmployeeForCustomerList } from '../../../api/data/customer/customerApiTypes'
 
 interface DataTableProps {
   columns: Column[]
-  rows: EmployeeTableResponse[]
+  rows: EmployeeTableRow[] | EmployeeForCustomerList[]
   setColumnSort?: (CurrentSort: ColumnSort) => void
   checkBoxChangeHandler?: () => void
   checked?: boolean

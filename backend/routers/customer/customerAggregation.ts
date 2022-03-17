@@ -37,12 +37,12 @@ function createEmployeeForCustomerList(
     rowId: employee.email,
     rowData: [
       {
-        value: employee.navn,
+        name: employee.navn,
         email: employee.email,
-        image: getStorageUrl(employee.image_key),
+        image_url: getStorageUrl(employee.image_key),
         user_id: employee.user_id,
       },
-      employee.title,
+      employee.title || null,
       `${employee.customer_name}: ${employee.work_order_description}`,
       createCvLinks(employee.link),
     ],

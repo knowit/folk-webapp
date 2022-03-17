@@ -1,11 +1,34 @@
-// employeeTable
+/**
+ * EmployeeTable
+ */
 
-export interface EmployeeTableResponse {
+export type EmployeeTableResponse = EmployeeTableRow[]
+
+export type EmployeeTableRow = TableRow<EmployeeTableRowData>
+
+export interface TableRow<TRowData> {
   rowId: string
-  rowData: any[]
+  rowData: TRowData
 }
 
-// employeeRadar has same response as CompetenceAreasResponse
+export type EmployeeTableRowData = [
+  employeeInfo: ConsultantInfo,
+  jobTitle: string | null,
+  projectStatus: ProjectStatus,
+  primaryCustomer: Customer | null,
+  cvLinks: CvLinks,
+  motivationScores: Record<string, number>,
+  competenceScores: Record<string, number>
+]
+
+export interface ConsultantInfo {
+  user_id: string
+  name: string
+  email: string
+  image_url?: string
+}
+
+export type ProjectStatus = 'red' | 'green' | 'yellow' | 'orange'
 
 /**
  * EmployeeExperience (= project experience for employee)
@@ -73,3 +96,5 @@ export interface CvLinks {
   no_word: string
   int_word: string
 }
+
+// employeeRadar has same response as CompetenceAreasResponse

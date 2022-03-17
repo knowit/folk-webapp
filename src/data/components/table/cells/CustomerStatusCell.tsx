@@ -1,11 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-
-export interface CustomerStatusData {
-  customer: string
-  workOrderDescription: string
-  weight: number
-}
+import { Customer } from '../../../../api/data/employee/employeeApiTypes'
 
 const useStyles = makeStyles({
   root: {
@@ -15,15 +10,17 @@ const useStyles = makeStyles({
   },
 })
 
-export default function CustomerStatusCell(customerData: {
-  data: CustomerStatusData
-}) {
+interface Props {
+  data: Customer | null
+}
+
+export default function CustomerStatusCell(customerData: Props) {
   const classes = useStyles()
   const { data } = customerData
 
   return (
     <div className={classes.root}>
-      {data.customer && data.workOrderDescription
+      {data?.customer && data.workOrderDescription
         ? `${data.customer}: ${data.workOrderDescription}`
         : 'Ikke i prosjekt'}
     </div>

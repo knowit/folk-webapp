@@ -14,6 +14,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import { OpenInNew } from '@material-ui/icons'
 import { Link } from 'react-router-dom'
+import { ConsultantInfo } from '../../../../api/data/employee/employeeApiTypes'
 
 const useCompetenceMappingStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -104,21 +105,14 @@ export const OpenInNewStyled = withStyles({
 })(OpenInNew)
 
 interface ConsultantCellProps {
-  data: {
-    value: string
-    image?: string
-    email: string
-    email_id: string
-    user_id: string
-    competenceUrl: string
-  }
+  data: ConsultantInfo
   id: string
   isExpanded: boolean
   toggleExpand: (id: string) => void
 }
 
 export default function ConsultantCell({
-  data,
+  data: consultant,
   id,
   isExpanded,
   toggleExpand,
@@ -146,19 +140,19 @@ export default function ConsultantCell({
         onClick={() => toggleExpand(id)}
       >
         <div className={classes.root}>
-          {data.image ? (
+          {consultant.image_url ? (
             <Avatar
-              alt={data.value}
+              alt={consultant.name}
               className={classes.image}
-              src={data.image}
+              src={consultant.image_url}
             />
           ) : (
-            <Avatar alt={data.value} className={classes.image}>
+            <Avatar alt={consultant.name} className={classes.image}>
               <FallbackUserIcon className={classes.image} />
             </Avatar>
           )}
           <span className={classes.text}>
-            <CharacterLimitBox text={data.value} />
+            <CharacterLimitBox text={consultant.name} />
           </span>
         </div>
         <div className={classes.root}>
@@ -167,7 +161,7 @@ export default function ConsultantCell({
           ) : (
             <ExpandMoreIconWithStyles />
           )}
-          <Link to={'/ansatt/' + data.email} target="_blank">
+          <Link to={'/ansatt/' + consultant.email} target="_blank">
             <OpenInNewStyled />
           </Link>
         </div>

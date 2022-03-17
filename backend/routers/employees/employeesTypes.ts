@@ -88,22 +88,29 @@ export type EmployeeExperience = {
  * Employee Table
  */
 export type EmployeeTableResponse = EmployeeTableRow[]
-export type EmployeeTableRow = {
+
+export type TableRow<TRowData> = {
   rowId: string
-  rowData: [
-    employeeInfo: {
-      user_id: string
-      name: string
-      email: string
-      image_url?: string
-    },
-    jobTitle: string | null,
-    projectStatus: ProjectStatus,
-    primaryCustomer: Customer | null,
-    cvLinks: CvLinks,
-    motivationScores: Record<string, number>,
-    competenceScores: Record<string, number>
-  ]
+  rowData: TRowData
+}
+
+export type EmployeeTableRow = TableRow<EmployeeTableRowData>
+
+export type EmployeeTableRowData = [
+  employeeInfo: EmployeeInfo,
+  jobTitle: string | null,
+  projectStatus: ProjectStatus,
+  primaryCustomer: Customer | null,
+  cvLinks: CvLinks,
+  motivationScores: Record<string, number>,
+  competenceScores: Record<string, number>
+]
+
+export type EmployeeInfo = {
+  user_id: string
+  name: string
+  email: string
+  image_url?: string
 }
 
 export type ProjectStatus = 'red' | 'green' | 'yellow' | 'orange'
