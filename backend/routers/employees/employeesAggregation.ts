@@ -12,7 +12,7 @@ import {
   EmployeeExperience,
   EmployeeInformation,
   EmployeeMotivationAndCompetence,
-  EmployeeProfile,
+  EmployeeProfileResponse,
   EmployeeSkills,
   WorkExperience,
 } from './employeesTypes'
@@ -116,7 +116,7 @@ export const aggregateEmployeeProfile = (
   employeeSkills: EmployeeSkills[],
   workExperience: WorkExperience[],
   employeeInformation: EmployeeInformation[]
-): EmployeeProfile => {
+): EmployeeProfileResponse => {
   if (employeeInformation.length === 0) {
     return
   }
