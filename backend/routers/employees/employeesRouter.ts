@@ -16,7 +16,7 @@ import {
   EmployeeMotivationAndCompetenceReport,
   EmployeeSkillsReport,
   EmployeeWorkStatusReport,
-  JobRotationReport,
+  JobRotationInformationReport,
   WorkExperienceReport,
 } from './employeesTypes'
 
@@ -35,10 +35,11 @@ router.get('/employeeTable', async (req, res, next) => {
         reportName: 'employeeMotivationAndCompetence',
       })
 
-    const jobRotationInformationPromise = getReport<JobRotationReport>({
-      accessToken: req.accessToken,
-      reportName: 'jobRotationInformation',
-    })
+    const jobRotationInformationPromise =
+      getReport<JobRotationInformationReport>({
+        accessToken: req.accessToken,
+        reportName: 'jobRotationInformation',
+      })
 
     const employeeWorkStatusPromise = getReport<EmployeeWorkStatusReport>({
       accessToken: req.accessToken,

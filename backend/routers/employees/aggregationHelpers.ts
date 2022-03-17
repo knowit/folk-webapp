@@ -7,7 +7,7 @@ import {
   EmployeeSkills,
   EmployeeWithMergedCustomers,
   EmployeeWorkStatus,
-  JobRotation,
+  JobRotationInformation,
   JobRotationStatus,
   ProjectStatus,
   Tags,
@@ -80,7 +80,7 @@ export function mapEmployeeTags(employeeSkills?: EmployeeSkills): Tags {
 }
 
 export const findProjectStatusForEmployee = (
-  jobRotation: JobRotation[],
+  jobRotationInformation: JobRotationInformation[],
   employeeWorkStatus: EmployeeWorkStatus[],
   guid: string
 ): ProjectStatus => {
@@ -89,17 +89,17 @@ export const findProjectStatusForEmployee = (
   const work = getEmployeeWork(employeeWorkStatus, guid)
 
   const [wantNewProject, openForNewProject] = jobRotationStatus(
-    jobRotation,
+    jobRotationInformation,
     guid
   )
 
-  let inProjectStatus = false
+  let inProject = false
   if (work)
-    inProjectStatus =
+    inProject =
       work.project_type.toLowerCase().includes('external') &&
       currentRegPeriod - work.last_reg_period < 5
 
-  return statusColorCode(wantNewProject, openForNewProject, inProjectStatus)
+  return getProjectStatus(wantNewProject, openForNewProject, inProject)
 }
 
 const getYear = (): number => {
@@ -139,13 +139,13 @@ const getEmployeeWork = (
 }
 
 const jobRotationStatus = (
-  jobRotations: JobRotation[],
-  email: string
+  jobRotationInformation: JobRotationInformation[],
+  guid: string
 ): JobRotationStatus => {
   let wantNewProject, openForNewProject: number
 
-  jobRotations.forEach((employee) => {
-    if (employee.email == email) {
+  jobRotationInformation.forEach((employee) => {
+    if (employee.guid == guid) {
       employee.index === 1 && (wantNewProject = employee.customscalevalue)
       employee.index === 2 && (openForNewProject = employee.customscalevalue)
     }
@@ -154,12 +154,12 @@ const jobRotationStatus = (
   return [wantNewProject, openForNewProject]
 }
 
-const statusColorCode = (
+const getProjectStatus = (
   wantNewProject: number,
   openForNewProject: number,
   inProject: boolean
 ): ProjectStatus => {
-  const projectStatus = inProject ? 'red' : 'green'
+  const projectStatus = inProject ? 'green' : 'red'
   const color = wantNewProject > openForNewProject ? 'orange' : 'yellow'
   const statusColor =
     (wantNewProject || openForNewProject) > 0 ? color : projectStatus

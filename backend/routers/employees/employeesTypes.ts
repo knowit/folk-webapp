@@ -20,8 +20,8 @@ export type EmployeeInformation = {
   work_order_description?: string
 }
 
-export type JobRotationReport = JobRotation[]
-export type JobRotation = {
+export type JobRotationInformationReport = JobRotationInformation[]
+export type JobRotationInformation = {
   username: string
   email: string
   questionid: string

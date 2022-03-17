@@ -15,14 +15,14 @@ import {
   EmployeeSkills,
   EmployeeTableResponse,
   EmployeeWorkStatus,
-  JobRotation,
+  JobRotationInformation,
   WorkExperience,
 } from './employeesTypes'
 
 export const aggregateEmployeeTable = (
   employeeInformation: EmployeeInformation[],
   employeeMotivationAndCompetence: EmployeeMotivationAndCompetence[],
-  jobRotation: JobRotation[],
+  jobRotationInformation: JobRotationInformation[],
   employeeWorkStatus: EmployeeWorkStatus[]
 ): EmployeeTableResponse => {
   const employeesWithMergedCustomers =
@@ -43,7 +43,7 @@ export const aggregateEmployeeTable = (
         },
         employee.title || null,
         findProjectStatusForEmployee(
-          jobRotation,
+          jobRotationInformation,
           employeeWorkStatus,
           employee.guid
         ),
