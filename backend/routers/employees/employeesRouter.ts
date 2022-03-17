@@ -40,20 +40,28 @@ router.get('/employeeTable', async (req, res, next) => {
       reportName: 'jobRotationInformation',
     })
 
+    const employeeWorkStatusPromise = getReport<EmployeeWorkStatusReport>({
+      accessToken: req.accessToken,
+      reportName: 'employeeWorkStatus',
+    })
+
     const [
       employeeInformation,
       employeeMotivationAndCompetence,
       jobRotationInformation,
+      employeeWorkStatus,
     ] = await Promise.all([
       employeeInformationPromise,
       employeeMotivationAndCompetencePromise,
       jobRotationInformationPromise,
+      employeeWorkStatusPromise,
     ])
 
     const aggregatedData = aggregateEmployeeTable(
       employeeInformation,
       employeeMotivationAndCompetence,
-      jobRotationInformation
+      jobRotationInformation,
+      employeeWorkStatus
     )
 
     res.send(aggregatedData)

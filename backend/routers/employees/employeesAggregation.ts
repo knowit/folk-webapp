@@ -14,13 +14,16 @@ import {
   EmployeeProfileResponse,
   EmployeeSkills,
   EmployeeTableResponse,
+  EmployeeWorkStatus,
+  JobRotation,
   WorkExperience,
 } from './employeesTypes'
 
 export const aggregateEmployeeTable = (
-  employeeInformation,
-  employeeMotivationAndCompetence,
-  jobRotationInformation
+  employeeInformation: EmployeeInformation[],
+  employeeMotivationAndCompetence: EmployeeMotivationAndCompetence[],
+  jobRotation: JobRotation[],
+  employeeWorkStatus: EmployeeWorkStatus[]
 ): EmployeeTableResponse => {
   const employeesWithMergedCustomers =
     mergeCustomersForEmployees(employeeInformation)
@@ -39,7 +42,11 @@ export const aggregateEmployeeTable = (
           image: getStorageUrl(employee.image_key),
         },
         employee.title || null,
-        findProjectStatusForEmployee(jobRotationInformation, employee.email),
+        findProjectStatusForEmployee(
+          jobRotation,
+          employeeWorkStatus,
+          employee.guid
+        ),
         findPrimaryCustomerForEmployee(employee.customers),
         createCvLinks(employee.link),
         motivationScores,

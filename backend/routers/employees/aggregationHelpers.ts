@@ -6,8 +6,10 @@ import {
   EmployeeMotivationAndCompetence,
   EmployeeSkills,
   EmployeeWithMergedCustomers,
+  EmployeeWorkStatus,
   JobRotation,
   JobRotationStatus,
+  ProjectStatus,
   Tags,
 } from './employeesTypes'
 
@@ -78,20 +80,62 @@ export function mapEmployeeTags(employeeSkills?: EmployeeSkills): Tags {
 }
 
 export const findProjectStatusForEmployee = (
-  jobRotationEmployees: JobRotation[],
-  email: string
-): string => {
-  const [wantNewProject, openForNewProject]: JobRotationStatus =
-    jobRotationStatus(jobRotationEmployees, email)
+  jobRotation: JobRotation[],
+  employeeWorkStatus: EmployeeWorkStatus[],
+  guid: string
+): ProjectStatus => {
+  const currentRegPeriod = parseInt(getYear() + getWeek(), 10)
 
-  const inProjectStatus = false
-  const statusColor = statusColorCode(
-    wantNewProject,
-    openForNewProject,
-    inProjectStatus
+  const work = getEmployeeWork(employeeWorkStatus, guid)
+
+  const [wantNewProject, openForNewProject] = jobRotationStatus(
+    jobRotation,
+    guid
   )
 
-  return statusColor
+  let inProjectStatus = false
+  if (work)
+    inProjectStatus =
+      work.project_type.toLowerCase().includes('external') &&
+      currentRegPeriod - work.last_reg_period < 5
+
+  return statusColorCode(wantNewProject, openForNewProject, inProjectStatus)
+}
+
+const getYear = (): number => {
+  const currentDate = new Date()
+  const currentYear = currentDate.getFullYear()
+
+  return Number(currentYear)
+}
+
+const getWeek = (): string => {
+  const currentDate = new Date()
+  const oneJan = new Date(getYear(), 0, 1)
+  const numberOfDays = Math.floor(
+    (Number(currentDate) - Number(oneJan)) / (24 * 60 * 60 * 1000)
+  )
+  const currentWeekNumber = Math.floor(
+    (currentDate.getDay() + 1 + numberOfDays) / 7
+  )
+
+  return currentWeekNumber.toString()
+}
+
+const getEmployeeWork = (
+  employeeWorkStatus: EmployeeWorkStatus[],
+  guid: string
+): EmployeeWorkStatus | undefined => {
+  const work = employeeWorkStatus.filter((work) => work.guid === guid)
+
+  if (work.length === 0) return undefined
+
+  return work.reduce((prev: EmployeeWorkStatus, curr: EmployeeWorkStatus) => {
+    if (prev.weight_sum === curr.weight_sum) {
+      return prev.last_reg_period > curr.last_reg_period ? prev : curr
+    }
+    return prev.weight_sum < curr.weight_sum ? prev : curr
+  })
 }
 
 const jobRotationStatus = (
@@ -114,7 +158,7 @@ const statusColorCode = (
   wantNewProject: number,
   openForNewProject: number,
   inProject: boolean
-): string => {
+): ProjectStatus => {
   const projectStatus = inProject ? 'red' : 'green'
   const color = wantNewProject > openForNewProject ? 'orange' : 'yellow'
   const statusColor =

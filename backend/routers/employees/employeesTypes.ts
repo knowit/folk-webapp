@@ -98,7 +98,7 @@ export type EmployeeTableRow = {
       image_url?: string
     },
     jobTitle: string | null,
-    projectStatus: string, // ProjectStatus,
+    projectStatus: ProjectStatus,
     primaryCustomer: Customer | null,
     cvLinks: CvLinks,
     motivationScores: Record<string, number>,
@@ -106,7 +106,7 @@ export type EmployeeTableRow = {
   ]
 }
 
-export type ProjectStatus = 'red' | 'green' | 'yellow' | 'orange' | 'blue'
+export type ProjectStatus = 'red' | 'green' | 'yellow' | 'orange'
 
 export type JobRotationStatus = [
   WantNewProject: number,
