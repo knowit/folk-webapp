@@ -7,6 +7,7 @@ import Chart from '../../../data/components/chart/Chart'
 import { useEmployeeRadar } from '../../../api/data/employee/employeeQueries'
 import { formatMonthYearRange } from '../../../utils/formatMonthYearRange'
 import {
+  ConsultantInfo,
   EmployeeExperienceResponse,
   ProjectExperience,
   WorkExperience,
@@ -87,10 +88,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface EmployeeInfoProps {
-  data: {
-    user_id: string
-    email: string
-  }
+  data: Pick<ConsultantInfo, 'email' | 'user_id'>
   id: string
   setRowHeight: (id: string, height: number) => void
 }

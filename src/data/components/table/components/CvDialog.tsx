@@ -9,13 +9,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import { withStyles, makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import Divider from '@material-ui/core/Divider/Divider'
-
-interface CvCellData {
-  no_pdf: string
-  int_pdf: string
-  no_word: string
-  int_word: string
-}
+import { CvLinks } from '../../../../api/data/employee/employeeApiTypes'
 
 const DialogBox = withStyles(() => ({
   paper: {
@@ -132,7 +126,7 @@ const useDialogStyle = makeStyles({
 })
 
 interface CVDialogProps {
-  data: CvCellData
+  data: CvLinks
   onClose: () => void
   open: boolean
   name?: string

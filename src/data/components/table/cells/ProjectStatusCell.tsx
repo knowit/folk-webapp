@@ -6,6 +6,7 @@ import {
 } from '@material-ui/core'
 import React from 'react'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import { ProjectStatus } from '../../../../api/data/employee/employeeApiTypes'
 
 const StatusCircle = ({ color }: { color: string }) => {
   const Circle = withStyles(() => ({
@@ -48,8 +49,8 @@ function StatusTooltip(props: TooltipProps) {
   return <Tooltip arrow classes={classes} {...props} />
 }
 
-const applyTitle = (status?: { data: string }): string => {
-  switch (status?.data) {
+const applyTitle = (status?: ProjectStatus): string => {
+  switch (status) {
     case 'orange':
       return 'Ønsker å bytte prosjekt'
     case 'yellow':
@@ -64,7 +65,7 @@ const applyTitle = (status?: { data: string }): string => {
 }
 
 interface ProjectStatusCellProps {
-  data: string
+  data: ProjectStatus
 }
 
 export default function ProjectStatusCell(props?: ProjectStatusCellProps) {
@@ -76,7 +77,7 @@ export default function ProjectStatusCell(props?: ProjectStatusCellProps) {
     red: '#D10000',
   }
   const color = props ? colors[props.data] : '#777777'
-  const toolTipTitle: string = applyTitle(props)
+  const toolTipTitle = applyTitle(props?.data)
 
   return (
     <div className={classes.root}>
