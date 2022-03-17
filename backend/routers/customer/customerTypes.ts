@@ -1,4 +1,5 @@
-import { CvLinks, EmployeeInfo, TableRow } from '../employees/employeesTypes'
+import { CvLinks, EmployeeInfo } from '../employees/employeesTypes'
+import { TableRow } from '../datatypes/typeData'
 
 export interface BilledCustomerHours {
   customer: string

@@ -1,3 +1,5 @@
+import { TableRow } from '../datatypes/typeData'
+
 /**
  * Employee Reports
  */
@@ -88,11 +90,6 @@ export type EmployeeExperience = {
  * Employee Table
  */
 export type EmployeeTableResponse = EmployeeTableRow[]
-
-export type TableRow<TRowData> = {
-  rowId: string
-  rowData: TRowData
-}
 
 export type EmployeeTableRow = TableRow<EmployeeTableRowData>
 

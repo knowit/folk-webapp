@@ -1,3 +1,5 @@
+import { TableRow } from '../tableResponses'
+
 /**
  * EmployeeTable
  */
@@ -5,11 +7,6 @@
 export type EmployeeTableResponse = EmployeeTableRow[]
 
 export type EmployeeTableRow = TableRow<EmployeeTableRowData>
-
-export interface TableRow<TRowData> {
-  rowId: string
-  rowData: TRowData
-}
 
 export type EmployeeTableRowData = [
   employeeInfo: ConsultantInfo,

@@ -1,4 +1,5 @@
-import { ConsultantInfo, CvLinks, TableRow } from '../employee/employeeApiTypes'
+import { ConsultantInfo, CvLinks } from '../employee/employeeApiTypes'
+import { TableRow } from '../tableResponses'
 
 // customerCards
 interface CustomerCardData {
