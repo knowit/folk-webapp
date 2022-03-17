@@ -53,9 +53,9 @@ export const mergeCustomersForEmployees = (
   return Object.values(employeesWithMergedCustomers)
 }
 
-export function findCustomerWithHighestWeight(customers: Customer[]) {
+export function findPrimaryCustomerForEmployee(customers: Customer[]) {
   if (!customers || customers.length === 0) {
-    return {}
+    return null
   }
 
   return customers.reduce((prevCustomer, thisCustomer) => {

@@ -88,7 +88,25 @@ export type EmployeeExperience = {
  * Employee Table
  */
 export type EmployeeTableResponse = EmployeeTableRow[]
-type EmployeeTableRow = any[]
+export type EmployeeTableRow = {
+  rowId: string
+  rowData: [
+    employeeInfo: {
+      user_id: string
+      name: string
+      email: string
+      image_url?: string
+    },
+    jobTitle: string | null,
+    projectStatus: string, // ProjectStatus,
+    primaryCustomer: Customer | null,
+    cvLinks: CvLinks,
+    motivationScores: Record<string, number>,
+    competenceScores: Record<string, number>
+  ]
+}
+
+export type ProjectStatus = 'red' | 'green' | 'yellow' | 'orange' | 'blue'
 
 export type JobRotationStatus = [
   WantNewProject: number,

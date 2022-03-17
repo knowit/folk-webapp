@@ -1,6 +1,6 @@
 import {
   mapEmployeeTags,
-  findCustomerWithHighestWeight,
+  findPrimaryCustomerForEmployee,
   findProjectStatusForEmployee,
   getCategoryScoresForEmployee,
   getStorageUrl,
@@ -13,6 +13,7 @@ import {
   EmployeeMotivationAndCompetence,
   EmployeeProfileResponse,
   EmployeeSkills,
+  EmployeeTableResponse,
   WorkExperience,
 } from './employeesTypes'
 
@@ -20,37 +21,32 @@ export const aggregateEmployeeTable = (
   employeeInformation,
   employeeMotivationAndCompetence,
   jobRotationInformation
-) => {
+): EmployeeTableResponse => {
   const employeesWithMergedCustomers =
     mergeCustomersForEmployees(employeeInformation)
-  return employeesWithMergedCustomers.map((employee) => ({
-    rowId: employee.email,
-    rowData: [
-      {
-        value: employee.navn,
-        image: getStorageUrl(employee.image_key),
-        competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
-          employee.email
-        )}`,
-        email: employee.email,
-        email_id: employee.email,
-        user_id: employee.user_id,
-        degree: employee.degree,
-      },
-      employee.title,
-      findProjectStatusForEmployee(jobRotationInformation, employee.email),
-      findCustomerWithHighestWeight(employee.customers),
-      createCvLinks(employee.link),
-      getCategoryScoresForEmployee(
-        employee.email,
-        employeeMotivationAndCompetence
-      )[0],
-      getCategoryScoresForEmployee(
-        employee.email,
-        employeeMotivationAndCompetence
-      )[1],
-    ],
-  }))
+  return employeesWithMergedCustomers.map((employee) => {
+    const [motivationScores, competenceScores] = getCategoryScoresForEmployee(
+      employee.email,
+      employeeMotivationAndCompetence
+    )
+    return {
+      rowId: employee.email,
+      rowData: [
+        {
+          user_id: employee.user_id,
+          name: employee.navn,
+          email: employee.email,
+          image: getStorageUrl(employee.image_key),
+        },
+        employee.title || null,
+        findProjectStatusForEmployee(jobRotationInformation, employee.email),
+        findPrimaryCustomerForEmployee(employee.customers),
+        createCvLinks(employee.link),
+        motivationScores,
+        competenceScores,
+      ],
+    }
+  })
 }
 
 export const aggregateEmployeeExperience = (data: EmployeeExperience[]) => {
