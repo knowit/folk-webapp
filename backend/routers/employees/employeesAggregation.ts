@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid'
 import {
   mapEmployeeTags,
   findCustomerWithHighestWeight,
@@ -25,7 +24,7 @@ export const aggregateEmployeeTable = (
   const employeesWithMergedCustomers =
     mergeCustomersForEmployees(employeeInformation)
   return employeesWithMergedCustomers.map((employee) => ({
-    rowId: uuid(),
+    rowId: employee.email,
     rowData: [
       {
         value: employee.navn,
