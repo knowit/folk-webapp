@@ -1,11 +1,11 @@
 import { Grid } from '@material-ui/core'
 import React from 'react'
-import { useExperienceDistributionPie } from '../api/data/competence/competenceQueries'
-import PieChart from '../components/charts/PieChart'
+import { useFagEventsLine } from '../api/data/competence/competenceQueries'
+import LineChart from '../components/charts/LineChart'
 import { GridItem } from '../components/gridItem/GridItem'
 
 const Debug = () => {
-  const { data, error } = useExperienceDistributionPie()
+  const { data, error } = useFagEventsLine()
 
   if (error) return <div>{error}</div>
   if (!data) return <div>Loading...</div>
@@ -13,11 +13,7 @@ const Debug = () => {
   return (
     <Grid container>
       <GridItem>
-        <PieChart
-          id={data.regular.id}
-          value={data.regular.value}
-          data={data.regular.data}
-        />
+        <LineChart data={data} />
       </GridItem>
       <GridItem>
         <pre>{JSON.stringify(data, null, 2)}</pre>
