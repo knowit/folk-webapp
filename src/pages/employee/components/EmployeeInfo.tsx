@@ -120,7 +120,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
           ) : (
             <>
               <b>Utdanning: </b>
-              {empData?.degree}
+              {empData?.degree ?? <NoData />}
             </>
           )}
         </div>

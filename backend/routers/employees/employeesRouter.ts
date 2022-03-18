@@ -11,6 +11,7 @@ import {
   aggregateEmployeeTable,
 } from './employeesAggregation'
 import {
+  BasicEmployeeInformationReport,
   EmployeeExperienceReport,
   EmployeeInformationReport,
   EmployeeMotivationAndCompetenceReport,
@@ -24,10 +25,11 @@ const router = express.Router()
 
 router.get('/employeeTable', async (req, res, next) => {
   try {
-    const employeeInformationPromise = getReport<EmployeeInformationReport>({
-      accessToken: req.accessToken,
-      reportName: 'employeeInformation',
-    })
+    const basicEmployeeInformationPromise =
+      getReport<BasicEmployeeInformationReport>({
+        accessToken: req.accessToken,
+        reportName: 'basicEmployeeInformation',
+      })
 
     const employeeMotivationAndCompetencePromise =
       getReport<EmployeeMotivationAndCompetenceReport>({
@@ -47,19 +49,19 @@ router.get('/employeeTable', async (req, res, next) => {
     })
 
     const [
-      employeeInformation,
+      basicEmployeeInformation,
       employeeMotivationAndCompetence,
       jobRotationInformation,
       employeeWorkStatus,
     ] = await Promise.all([
-      employeeInformationPromise,
+      basicEmployeeInformationPromise,
       employeeMotivationAndCompetencePromise,
       jobRotationInformationPromise,
       employeeWorkStatusPromise,
     ])
 
     const aggregatedData = aggregateEmployeeTable(
-      employeeInformation,
+      basicEmployeeInformation,
       employeeMotivationAndCompetence,
       jobRotationInformation,
       employeeWorkStatus

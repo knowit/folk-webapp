@@ -27,6 +27,18 @@ export interface ConsultantInfo {
 
 export type ProjectStatus = 'red' | 'green' | 'yellow' | 'orange'
 
+export interface Customer {
+  customer: string
+  workOrderDescription: string
+}
+
+export interface CvLinks {
+  no_pdf: string
+  int_pdf: string
+  no_word: string
+  int_word: string
+}
+
 /**
  * EmployeeExperience (= project experience for employee)
  */
@@ -55,7 +67,7 @@ interface Employee {
   title: string
   degree?: string
   email: string
-  customers: Customer[]
+  customers: CustomerWithWeight[]
 }
 
 export interface EmployeeProfileResponse extends Employee {
@@ -65,9 +77,7 @@ export interface EmployeeProfileResponse extends Employee {
   links: CvLinks
 }
 
-export interface Customer {
-  customer: string
-  workOrderDescription: string
+export interface CustomerWithWeight extends Customer {
   weight: number
 }
 
@@ -85,13 +95,6 @@ export interface Tags {
   skills: string[]
   languages: string[]
   roles: string[]
-}
-
-export interface CvLinks {
-  no_pdf: string
-  int_pdf: string
-  no_word: string
-  int_word: string
 }
 
 // employeeRadar has same response as CompetenceAreasResponse

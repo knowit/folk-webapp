@@ -54,20 +54,6 @@ export const mergeCustomersForEmployees = (
   return Object.values(employeesWithMergedCustomers)
 }
 
-export function findPrimaryCustomerForEmployee(customers: Customer[]) {
-  if (!customers || customers.length === 0) {
-    return null
-  }
-
-  return customers.reduce((prevCustomer, thisCustomer) => {
-    if (thisCustomer.weight < prevCustomer.weight) {
-      return thisCustomer
-    } else {
-      return prevCustomer
-    }
-  })
-}
-
 export function mapEmployeeTags(employeeSkills?: EmployeeSkills): Tags {
   const { skill, language, role } = employeeSkills ?? {}
 

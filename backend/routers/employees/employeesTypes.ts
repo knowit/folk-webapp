@@ -20,6 +20,19 @@ export type EmployeeInformation = {
   work_order_description?: string
 }
 
+export type BasicEmployeeInformationReport = BasicEmployeeInformation[]
+export type BasicEmployeeInformation = {
+  user_id: string
+  guid: string
+  email: string
+  name: string
+  title?: string
+  link: string
+  image_key?: string
+  primary_customer?: string
+  primary_work_order_description?: string
+}
+
 export type JobRotationInformationReport = JobRotationInformation[]
 export type JobRotationInformation = {
   username: string
@@ -97,7 +110,7 @@ export type EmployeeTableRowData = [
   employeeInfo: EmployeeInfo,
   jobTitle: string | null,
   projectStatus: ProjectStatus,
-  primaryCustomer: Customer | null,
+  primaryCustomer: Pick<Customer, 'customer' | 'workOrderDescription'> | null,
   cvLinks: CvLinks,
   motivationScores: Record<string, number>,
   competenceScores: Record<string, number>
@@ -111,6 +124,18 @@ export type EmployeeInfo = {
 }
 
 export type ProjectStatus = 'red' | 'green' | 'yellow' | 'orange'
+
+export type Customer = {
+  customer: string
+  workOrderDescription: string
+}
+
+export type CvLinks = {
+  no_pdf: string
+  int_pdf: string
+  no_word: string
+  int_word: string
+}
 
 export type JobRotationStatus = [
   WantNewProject: number,
@@ -136,14 +161,11 @@ export type EmployeeProfileResponse = Omit<
   links: CvLinks
 }
 
-// TODO: should be possible to remove
 export type EmployeeWithMergedCustomers = EmployeeInformation & {
-  customers: Customer[]
+  customers: CustomerWithWeight[]
 }
 
-export type Customer = {
-  customer: string
-  workOrderDescription: string
+export type CustomerWithWeight = Customer & {
   weight: number
 }
 
@@ -151,13 +173,6 @@ export type Tags = {
   languages: string[]
   skills: string[]
   roles: string[]
-}
-
-export type CvLinks = {
-  no_pdf: string
-  int_pdf: string
-  no_word: string
-  int_word: string
 }
 
 /**

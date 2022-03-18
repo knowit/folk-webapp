@@ -1,6 +1,5 @@
 import {
   mapEmployeeTags,
-  findPrimaryCustomerForEmployee,
   findProjectStatusForEmployee,
   getCategoryScoresForEmployee,
   getStorageUrl,
@@ -8,6 +7,7 @@ import {
   createCvLinks,
 } from './aggregationHelpers'
 import {
+  BasicEmployeeInformation,
   EmployeeExperience,
   EmployeeInformation,
   EmployeeMotivationAndCompetence,
@@ -20,14 +20,12 @@ import {
 } from './employeesTypes'
 
 export const aggregateEmployeeTable = (
-  employeeInformation: EmployeeInformation[],
+  basicEmployeeInformation: BasicEmployeeInformation[],
   employeeMotivationAndCompetence: EmployeeMotivationAndCompetence[],
   jobRotationInformation: JobRotationInformation[],
   employeeWorkStatus: EmployeeWorkStatus[]
 ): EmployeeTableResponse => {
-  const employeesWithMergedCustomers =
-    mergeCustomersForEmployees(employeeInformation)
-  return employeesWithMergedCustomers.map((employee) => {
+  return basicEmployeeInformation.map((employee) => {
     const [motivationScores, competenceScores] = getCategoryScoresForEmployee(
       employee.email,
       employeeMotivationAndCompetence
@@ -37,7 +35,7 @@ export const aggregateEmployeeTable = (
       rowData: [
         {
           user_id: employee.user_id,
-          name: employee.navn,
+          name: employee.name,
           email: employee.email,
           image_url: getStorageUrl(employee.image_key),
         },
@@ -47,7 +45,10 @@ export const aggregateEmployeeTable = (
           employeeWorkStatus,
           employee.guid
         ),
-        findPrimaryCustomerForEmployee(employee.customers),
+        {
+          customer: employee.primary_customer,
+          workOrderDescription: employee.primary_work_order_description,
+        },
         createCvLinks(employee.link),
         motivationScores,
         competenceScores,
