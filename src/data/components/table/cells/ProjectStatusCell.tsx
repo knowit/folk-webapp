@@ -1,10 +1,10 @@
+import * as React from 'react'
 import {
   makeStyles,
   Tooltip,
   TooltipProps,
   withStyles,
 } from '@material-ui/core'
-import React from 'react'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { ProjectStatus } from '../../../../api/data/employee/employeeApiTypes'
 
@@ -28,10 +28,6 @@ const useStyles = makeStyles({
   },
 })
 
-interface ColorMap {
-  [index: string]: string
-}
-
 const toolTipStyles = makeStyles((theme) => ({
   arrow: {
     color: '#F2F2F2',
@@ -49,41 +45,47 @@ function StatusTooltip(props: TooltipProps) {
   return <Tooltip arrow classes={classes} {...props} />
 }
 
-const applyTitle = (status?: ProjectStatus): string => {
-  switch (status) {
-    case 'orange':
-      return 'Ønsker å bytte prosjekt'
-    case 'yellow':
-      return 'Er åpen for å bytte prosjekt'
-    case 'green':
-      return 'Jeg er opptatt i prosjekt'
-    case 'red':
-      return 'Jeg er ikke i prosjekt'
+type StatusDisplayDetails = Record<
+  ProjectStatus,
+  {
+    color: string
+    label: string
   }
+>
 
-  return ''
+const statusDisplayDetails: StatusDisplayDetails = {
+  [ProjectStatus.ExternalProject]: {
+    color: '#4C8E00',
+    label: 'Opptatt i prosjekt',
+  },
+  [ProjectStatus.OpenForChange]: {
+    color: '#FFD500',
+    label: 'Åpen for å bytte prosjekt',
+  },
+  [ProjectStatus.WantChange]: {
+    color: '#FF8800',
+    label: 'Ønsker å bytte prosjekt',
+  },
+  [ProjectStatus.NoProject]: {
+    color: '#D10000',
+    label: 'Ikke i prosjekt',
+  },
 }
 
 interface ProjectStatusCellProps {
   data: ProjectStatus
 }
 
-export default function ProjectStatusCell(props?: ProjectStatusCellProps) {
+export default function ProjectStatusCell(props: ProjectStatusCellProps) {
   const classes = useStyles()
-  const colors: ColorMap = {
-    green: '#4C8E00',
-    yellow: '#ffd500',
-    orange: '#ff8800',
-    red: '#D10000',
-  }
-  const color = props ? colors[props.data] : '#777777'
-  const toolTipTitle = applyTitle(props?.data)
+
+  const displayProps = statusDisplayDetails[props.data]
 
   return (
     <div className={classes.root}>
-      <StatusTooltip arrow placement="bottom" title={toolTipTitle}>
+      <StatusTooltip arrow placement="bottom" title={displayProps?.label}>
         <div>
-          <StatusCircle color={color} />
+          <StatusCircle color={displayProps?.color} />
         </div>
       </StatusTooltip>
     </div>

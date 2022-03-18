@@ -1,6 +1,5 @@
 import {
   CategoryScores,
-  Customer,
   CvLinks,
   EmployeeInformation,
   EmployeeMotivationAndCompetence,
@@ -64,27 +63,33 @@ export function mapEmployeeTags(employeeSkills?: EmployeeSkills): Tags {
   }
 }
 
-export const findProjectStatusForEmployee = (
+export const getProjectStatusForEmployee = (
   jobRotationInformation: JobRotationInformation[],
   employeeWorkStatus: EmployeeWorkStatus[],
   guid: string
 ): ProjectStatus => {
-  const currentRegPeriod = parseInt(getYear() + getWeek(), 10)
-
-  const work = getEmployeeWork(employeeWorkStatus, guid)
-
   const [wantNewProject, openForNewProject] = jobRotationStatus(
     jobRotationInformation,
     guid
   )
 
+  if ((wantNewProject || openForNewProject) > 0) {
+    return wantNewProject > openForNewProject
+      ? ProjectStatus.WantChange
+      : ProjectStatus.OpenForChange
+  }
+
+  const currentRegPeriod = parseInt(getYear() + getWeek(), 10)
+  const work = getEmployeeWork(employeeWorkStatus, guid)
+
   let inProject = false
-  if (work)
+  if (work) {
     inProject =
       work.project_type.toLowerCase().includes('external') &&
       currentRegPeriod - work.last_reg_period < 5
+  }
 
-  return getProjectStatus(wantNewProject, openForNewProject, inProject)
+  return inProject ? ProjectStatus.ExternalProject : ProjectStatus.NoProject
 }
 
 const getYear = (): number => {
@@ -127,7 +132,8 @@ const jobRotationStatus = (
   jobRotationInformation: JobRotationInformation[],
   guid: string
 ): JobRotationStatus => {
-  let wantNewProject, openForNewProject: number
+  let wantNewProject,
+    openForNewProject = 0
 
   jobRotationInformation.forEach((employee) => {
     if (employee.guid == guid) {
@@ -137,19 +143,6 @@ const jobRotationStatus = (
   })
 
   return [wantNewProject, openForNewProject]
-}
-
-const getProjectStatus = (
-  wantNewProject: number,
-  openForNewProject: number,
-  inProject: boolean
-): ProjectStatus => {
-  const projectStatus = inProject ? 'green' : 'red'
-  const color = wantNewProject > openForNewProject ? 'orange' : 'yellow'
-  const statusColor =
-    (wantNewProject || openForNewProject) > 0 ? color : projectStatus
-
-  return statusColor
 }
 
 export const getCategoryScoresForEmployee = (

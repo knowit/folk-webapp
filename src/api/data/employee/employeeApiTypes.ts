@@ -25,7 +25,13 @@ export interface ConsultantInfo {
   image_url?: string
 }
 
-export type ProjectStatus = 'red' | 'green' | 'yellow' | 'orange'
+export enum ProjectStatus {
+  // InternalProject = 'INTERNAL',
+  ExternalProject = 'EXTERNAL',
+  NoProject = 'NO_PROJECT',
+  WantChange = 'WANT_CHANGE',
+  OpenForChange = 'OPEN_FOR_CHANGE',
+}
 
 export interface Customer {
   customer: string

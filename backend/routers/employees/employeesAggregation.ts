@@ -1,6 +1,6 @@
 import {
   mapEmployeeTags,
-  findProjectStatusForEmployee,
+  getProjectStatusForEmployee,
   getCategoryScoresForEmployee,
   getStorageUrl,
   mergeCustomersForEmployees,
@@ -40,7 +40,7 @@ export const aggregateEmployeeTable = (
           image_url: getStorageUrl(employee.image_key),
         },
         employee.title || null,
-        findProjectStatusForEmployee(
+        getProjectStatusForEmployee(
           jobRotationInformation,
           employeeWorkStatus,
           employee.guid
