@@ -8,14 +8,6 @@ import {
 import Reporting from '../reporting'
 import { LineChartData } from '../routers/chartTypes'
 
-/**
- *
- * @param {string} employeeUuid  Uuid that identifies the employee.
- * @param {object} categoryList  List of categories. Each category has a list of UUIDs, mapped to a score.
- *
- * @return {object} All categories with scores for the employee
- */
-
 type EmployeeMotivationAndCompetence = {
   email: string
   motivation: number
@@ -26,26 +18,6 @@ type EmployeeMotivationAndCompetence = {
   categoryCompetenceAvg: number
 }
 
-type CategoryScores = [
-  Motivation: Record<string, number>,
-  Competence: Record<string, number>
-]
-const getCategoryScoresForEmployee = (
-  employeeEmail: string,
-  categoryList: EmployeeMotivationAndCompetence[]
-): CategoryScores => {
-  const employeeCategories = categoryList.filter(
-    (categoryRow) => categoryRow.email === employeeEmail
-  )
-  const employeeMotivation = {}
-  const employeeCompetence = {}
-  employeeCategories.forEach((employeeRow) => {
-    employeeMotivation[employeeRow.subCategory] = employeeRow.motivation
-    employeeCompetence[employeeRow.subCategory] = employeeRow.competence
-  })
-
-  return [employeeMotivation, employeeCompetence]
-}
 const getStorageUrl = (key: string) => {
   if (key !== undefined) {
     return `${process.env.STORAGE_URL}/${key}`
