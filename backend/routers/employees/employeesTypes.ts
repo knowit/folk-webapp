@@ -110,7 +110,7 @@ export type EmployeeTableRowData = [
   employeeInfo: EmployeeInfo,
   jobTitle: string | null,
   projectStatus: ProjectStatus,
-  primaryCustomer: Pick<Customer, 'customer' | 'workOrderDescription'> | null,
+  primaryCustomer: Customer | null,
   cvLinks: CvLinks,
   motivationScores: Record<string, number>,
   competenceScores: Record<string, number>
