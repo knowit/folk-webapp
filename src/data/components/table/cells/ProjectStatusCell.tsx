@@ -79,13 +79,13 @@ interface ProjectStatusCellProps {
 export default function ProjectStatusCell(props: ProjectStatusCellProps) {
   const classes = useStyles()
 
-  const displayProps = statusDisplayDetails[props.data]
+  const statusDisplay = statusDisplayDetails[props.data]
 
   return (
     <div className={classes.root}>
-      <StatusTooltip arrow placement="bottom" title={displayProps?.label}>
+      <StatusTooltip arrow placement="bottom" title={statusDisplay.label}>
         <div>
-          <StatusCircle color={displayProps?.color} />
+          <StatusCircle color={statusDisplay.color} />
         </div>
       </StatusTooltip>
     </div>
