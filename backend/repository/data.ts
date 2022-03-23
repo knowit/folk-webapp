@@ -974,9 +974,9 @@ export const customerCards = async ({ data }: CustomerCardType) => {
 
   Object.keys(results).forEach((customer) => {
     let consultants = 0
-    const customers = employeesWithMergedCustomers.map((a) => a.customers)
-    customers.forEach((customerList) => {
-      if (customerList.find((el) => el.customer === customer)) {
+    const customerList = employeesWithMergedCustomers.map((a) => a.customers)
+    customerList.forEach((customers) => {
+      if (customers.find((el) => el.customer === customer)) {
         consultants = consultants + 1
       }
     })
