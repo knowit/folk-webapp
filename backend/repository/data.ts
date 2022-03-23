@@ -846,22 +846,9 @@ export const competenceAreas = async ({
   }
 }
 
-type PerProjectType = {
-  customer: string
-  employees: number
-  hours: number
-  reg_period: number
-  timestamp: number
-  work_order: string
-}
-
 export const hoursBilledPerCustomerReports = [{ reportName: 'perProject' }]
 
-export const hoursBilledPerCustomer = async ({
-  data,
-}: {
-  data: PerProjectType[]
-}) => {
+export const hoursBilledPerCustomer = async ({ data }) => {
   const groupByCustomer = {}
 
   data.forEach((perProject) => {
@@ -888,11 +875,7 @@ export const hoursBilledPerCustomer = async ({
 
 export const hoursBilledPerWeekReports = [{ reportName: 'perProject' }]
 
-export const hoursBilledPerWeek = async ({
-  data,
-}: {
-  data: PerProjectType[]
-}) => {
+export const hoursBilledPerWeek = async ({ data }) => {
   const groupedByCustomer = {}
 
   data.forEach((elem) => {
@@ -936,16 +919,12 @@ export const hoursBilledPerWeek = async ({
   }
 }
 
-type CustomerCardType = {
-  data: [PerProjectType[], EmployeeInformation[]]
-}
-
 export const customerCardsReports = [
   { reportName: 'perProject' },
   { reportName: 'employeeInformation' },
 ]
 
-export const customerCards = async ({ data }: CustomerCardType) => {
+export const customerCards = async ({ data }) => {
   const [perProject, allEmployees] = data
   const results = {}
   const employeesWithMergedCustomers = mergeCustomersForEmployees(allEmployees)
