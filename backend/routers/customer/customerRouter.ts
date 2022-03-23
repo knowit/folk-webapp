@@ -8,7 +8,11 @@ import {
   BilledCustomerHours,
   EmployeeWithPrimaryCustomer,
 } from './customerTypes'
-import { groupEmployeesByCustomer } from './customerAggregation'
+import {
+  groupEmployeesByCustomer,
+  createCustomerCardData,
+} from './customerAggregation'
+import { EmployeeInformation } from '../employees/employeesTypes'
 
 const router = express.Router()
 
@@ -42,7 +46,19 @@ router.get('/hoursBilledPerWeek/line', async (req, res, next) => {
 
 router.get('/customerCards', async (req, res, next) => {
   try {
-    res.send('Customer cards')
+    const perProject = await getReport<BilledCustomerHours[]>({
+      accessToken: req.accessToken,
+      reportName: 'perProject',
+    })
+    const employeeInformation = await getReport<EmployeeInformation[]>({
+      accessToken: req.accessToken,
+      reportName: 'employeeInformation',
+    })
+    const aggregatedData = createCustomerCardData(
+      perProject,
+      employeeInformation
+    )
+    res.send(aggregatedData)
   } catch (error) {
     next(error)
   }

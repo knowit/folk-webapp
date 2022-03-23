@@ -3,7 +3,11 @@ import {
   EmployeeForCustomerList,
   CustomerWithEmployees,
   EmployeeWithPrimaryCustomer,
+  CustomerCardsData,
+  BilledCustomerHours,
 } from './customerTypes'
+import { EmployeeInformation } from '../employees/employeesTypes'
+import { mergeCustomersForEmployees } from '../employees/aggregationHelpers'
 
 export function groupEmployeesByCustomer(
   employeesWithPrimaryCustomer: EmployeeWithPrimaryCustomer[]
@@ -44,4 +48,46 @@ function createEmployeeForCustomerList(
       createCvLinks(employee.link),
     ],
   }
+}
+
+export function createCustomerCardData(
+  projects: BilledCustomerHours[],
+  employees: EmployeeInformation[]
+): CustomerCardsData[] {
+  const results = {}
+
+  projects.forEach((elem) => {
+    const curr_el = results[elem.customer]
+    if (!curr_el) {
+      results[elem.customer] = {
+        customer: elem.customer,
+        billedLastPeriod: elem.hours,
+        billedTotal: elem.hours,
+        reg_period: elem.reg_period,
+      }
+    } else {
+      results[elem.customer]['billedTotal'] =
+        curr_el['billedTotal'] + elem.hours
+      if (elem.reg_period > curr_el['reg_period']) {
+        results[elem.customer]['billedLastPeriod'] = elem.hours
+        results[elem.customer]['reg_period'] = elem.reg_period
+      } else if (elem.reg_period === curr_el['reg_period']) {
+        results[elem.customer]['billedLastPeriod'] =
+          curr_el['billedLastPeriod'] + elem.hours
+      }
+    }
+  })
+
+  const employeesWithMergedCustomers = mergeCustomersForEmployees(employees)
+  Object.keys(results).forEach((customer) => {
+    let consultants = 0
+    const customerList = employeesWithMergedCustomers.map((a) => a.customers)
+    customerList.forEach((customers) => {
+      if (customers.find((el) => el.customer === customer)) {
+        consultants = consultants + 1
+      }
+    })
+    results[customer]['consultants'] = consultants
+  })
+  return Object.values(results)
 }

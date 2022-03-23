@@ -39,3 +39,10 @@ export type EmployeeForCustomerList = {
     cvLinks: CvLinks
   ]
 }
+
+export type CustomerCardsData = {
+  customer: string
+  consultants: number
+  billedLastPeriod: number
+  billedTotal: number
+}
