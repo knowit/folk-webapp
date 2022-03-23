@@ -846,9 +846,22 @@ export const competenceAreas = async ({
   }
 }
 
+type PerProjectType = {
+  customer: string
+  employees: number
+  hours: number
+  reg_period: number
+  timestamp: number
+  work_order: string
+}
+
 export const hoursBilledPerCustomerReports = [{ reportName: 'perProject' }]
 
-export const hoursBilledPerCustomer = async ({ data }) => {
+export const hoursBilledPerCustomer = async ({
+  data,
+}: {
+  data: PerProjectType[]
+}) => {
   const groupByCustomer = {}
 
   data.forEach((perProject) => {
@@ -875,7 +888,11 @@ export const hoursBilledPerCustomer = async ({ data }) => {
 
 export const hoursBilledPerWeekReports = [{ reportName: 'perProject' }]
 
-export const hoursBilledPerWeek = async ({ data }) => {
+export const hoursBilledPerWeek = async ({
+  data,
+}: {
+  data: PerProjectType[]
+}) => {
   const groupedByCustomer = {}
 
   data.forEach((elem) => {
@@ -919,6 +936,53 @@ export const hoursBilledPerWeek = async ({ data }) => {
   }
 }
 
-export const customerCardsReports = [{ reportName: 'allProjectsOverview' }]
+type CustomerCardType = {
+  data: [PerProjectType[], EmployeeInformation[]]
+}
 
-export const customerCards = async ({ data }) => data
+export const customerCardsReports = [
+  { reportName: 'perProject' },
+  { reportName: 'employeeInformation' },
+]
+
+export const customerCards = async ({ data }: CustomerCardType) => {
+  const [perProject, allEmployees] = data
+  const results = {}
+  const employeesWithMergedCustomers = mergeCustomersForEmployees(allEmployees)
+
+  perProject.forEach((elem) => {
+    const curr_el = results[elem.customer]
+    if (!curr_el) {
+      results[elem.customer] = {
+        customer: elem.customer,
+        billedLastPeriod: elem.hours,
+        billedTotal: elem.hours,
+        timestamp: elem.timestamp,
+        reg_period: elem.reg_period,
+      }
+    } else {
+      results[elem.customer]['billedTotal'] =
+        curr_el['billedTotal'] + elem.hours
+      if (elem.reg_period > curr_el['reg_period']) {
+        results[elem.customer]['billedLastPeriod'] = elem.hours
+        results[elem.customer]['reg_period'] = elem.reg_period
+        results[elem.customer]['timestamp'] = elem.timestamp
+      } else if (elem.reg_period === curr_el['reg_period']) {
+        results[elem.customer]['billedLastPeriod'] =
+          curr_el['billedLastPeriod'] + elem.hours
+      }
+    }
+  })
+
+  Object.keys(results).forEach((customer) => {
+    let consultants = 0
+    const customers = employeesWithMergedCustomers.map((a) => a.customers)
+    customers.forEach((customerList) => {
+      if (customerList.find((el) => el.customer === customer)) {
+        consultants = consultants + 1
+      }
+    })
+    results[customer]['consultants'] = consultants
+  })
+  return Object.values(results)
+}
