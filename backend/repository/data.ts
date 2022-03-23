@@ -957,7 +957,6 @@ export const customerCards = async ({ data }: CustomerCardType) => {
         customer: elem.customer,
         billedLastPeriod: elem.hours,
         billedTotal: elem.hours,
-        timestamp: elem.timestamp,
         reg_period: elem.reg_period,
       }
     } else {
@@ -966,7 +965,6 @@ export const customerCards = async ({ data }: CustomerCardType) => {
       if (elem.reg_period > curr_el['reg_period']) {
         results[elem.customer]['billedLastPeriod'] = elem.hours
         results[elem.customer]['reg_period'] = elem.reg_period
-        results[elem.customer]['timestamp'] = elem.timestamp
       } else if (elem.reg_period === curr_el['reg_period']) {
         results[elem.customer]['billedLastPeriod'] =
           curr_el['billedLastPeriod'] + elem.hours
