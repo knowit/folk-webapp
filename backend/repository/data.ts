@@ -921,6 +921,4 @@ export const hoursBilledPerWeek = async ({ data }) => {
 
 export const customerCardsReports = [{ reportName: 'allProjectsOverview' }]
 
-export const customerCards = async ({ data }) => {
-  return data
-}
+export const customerCards = async ({ data }) => data
