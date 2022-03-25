@@ -55,27 +55,32 @@ export function createCustomerCardData(
   employees: EmployeeInformation[]
 ): CustomerCardsData[] {
   const results = {}
+  const last_reg_period: number = Math.max.apply(
+    null,
+    projects.map(function (o) {
+      return o.reg_period
+    })
+  )
 
   projects.forEach((elem) => {
     const curr_el = results[elem.customer]
     if (!curr_el) {
       results[elem.customer] = {
         customer: elem.customer,
-        billedLastPeriod: elem.hours,
-        billedTotal: elem.hours,
-        reg_period: elem.reg_period,
-      }
-    } else {
-      results[elem.customer]['billedTotal'] =
-        curr_el['billedTotal'] + elem.hours
-      if (elem.reg_period > curr_el['reg_period']) {
-        results[elem.customer]['billedLastPeriod'] = elem.hours
-        results[elem.customer]['reg_period'] = elem.reg_period
-      } else if (elem.reg_period === curr_el['reg_period']) {
-        results[elem.customer]['billedLastPeriod'] =
-          curr_el['billedLastPeriod'] + elem.hours
+        billedLastPeriod: 0,
+        billedTotal: 0,
       }
     }
+    if (elem.reg_period === last_reg_period) {
+      results[elem.customer]['billedLastPeriod'] =
+        results[elem.customer]['billedLastPeriod'] != 0
+          ? curr_el['billedLastPeriod'] + elem.hours
+          : elem.hours
+    }
+    results[elem.customer]['billedTotal'] =
+      results[elem.customer]['billedLastPeriod'] != 0
+        ? curr_el['billedTotal'] + elem.hours
+        : elem.hours
   })
 
   const employeesWithMergedCustomers = mergeCustomersForEmployees(employees)
@@ -87,7 +92,8 @@ export function createCustomerCardData(
         consultants = consultants + 1
       }
     })
-    results[customer]['consultants'] = consultants
+    if (consultants === 0) delete results[customer]
+    else results[customer]['consultants'] = consultants
   })
   return Object.values(results)
 }
