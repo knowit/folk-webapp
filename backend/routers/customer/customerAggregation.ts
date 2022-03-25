@@ -79,9 +79,9 @@ export function createCustomerCardData(
   })
 
   const employeesWithMergedCustomers = mergeCustomersForEmployees(employees)
+  const customerList = employeesWithMergedCustomers.map((a) => a.customers)
   Object.keys(results).forEach((customer) => {
     let consultants = 0
-    const customerList = employeesWithMergedCustomers.map((a) => a.customers)
     customerList.forEach((customers) => {
       if (customers.find((el) => el.customer === customer)) {
         consultants = consultants + 1
