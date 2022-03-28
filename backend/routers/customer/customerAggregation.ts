@@ -78,7 +78,7 @@ export function createCustomerCardData(
           : elem.hours
     }
     results[elem.customer]['billedTotal'] =
-      results[elem.customer]['billedLastPeriod'] != 0
+      results[elem.customer]['billedTotal'] != 0
         ? curr_el['billedTotal'] + elem.hours
         : elem.hours
   })
