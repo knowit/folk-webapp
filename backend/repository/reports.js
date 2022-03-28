@@ -18,16 +18,16 @@ const reports = [
   {
     name: 'employeesWithPrimaryCustomer',
     queryString:
-      'WITH primary_customer AS (SELECT guid, work_order_description, CASE WHEN customer = "dagens ubw prosjekt" THEN kunde ELSE customer END AS customer_name FROM (SELECT * FROM dev_level_3_database.ubw_customer_per_resource LEFT JOIN (SELECT DISTINCT "dagens ubw prosjekt", arbeids_ordre, kunde FROM dev_level_3_database.test_test_no_kundemapping_test) ON "dagens ubw prosjekt" = customer AND arbeids_ordre = work_order_description) WHERE weigth = 1) SELECT cvpartner.user_id, cvpartner.guid, navn, title, link, email, image_key, primary_customer.customer_name, primary_customer.work_order_description FROM dev_level_3_database.cv_partner_employees AS cvpartner INNER JOIN primary_customer ON cvpartner.guid = primary_customer.guid ORDER BY navn',
+      'WITH primary_customer AS (SELECT guid, work_order_description, CASE WHEN customer = "dagens ubw prosjekt" THEN kunde ELSE customer END AS customer_name FROM (SELECT * FROM dev_level_3_database.ubw_customer_per_resource LEFT JOIN (SELECT DISTINCT "dagens ubw prosjekt", arbeids_ordre, kunde FROM dev_level_3_database.test_test_no_kundemapping_test) ON "dagens ubw prosjekt" = customer AND arbeids_ordre = work_order_description) ubw1 WHERE weigth = 1 AND time = (SELECT MAX(time) FROM dev_level_3_database.ubw_customer_per_resource ubw2 WHERE ubw2.guid = ubw1.guid)) SELECT cvpartner.user_id, cvpartner.guid, email, navn, title, link, image_key, primary_customer.customer_name, primary_customer.work_order_description FROM dev_level_3_database.cv_partner_employees AS cvpartner INNER JOIN primary_customer ON cvpartner.guid = primary_customer.guid ORDER BY navn',
     tables: [
       'cv_partner_employees',
       'test_test_no_kundemapping_test',
       'ubw_customer_per_resource',
     ],
     dataProtection: 3,
-    created: '2022-03-07T11:06:31.072355',
+    created: '2022-03-28T13:36:16.444827',
     lastUsed: null,
-    lastCacheUpdate: '2022-03-07T11:06:36.536322',
+    lastCacheUpdate: '2022-03-28T13:36:22.390506',
   },
   {
     name: 'competence',
