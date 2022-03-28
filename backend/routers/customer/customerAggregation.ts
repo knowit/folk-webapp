@@ -7,7 +7,6 @@ import {
   BilledCustomerHours,
   EmployeeCustomers,
 } from './customerTypes'
-import { mergeCustomersForEmployees } from '../employees/aggregationHelpers'
 
 export function groupEmployeesByCustomer(
   employeesWithPrimaryCustomer: EmployeeWithPrimaryCustomer[]
@@ -55,12 +54,16 @@ export function createCustomerCardData(
   employeesCustomer: EmployeeCustomers[]
 ): CustomerCardsData[] {
   const results = {}
-  const last_reg_period: number = Math.max.apply(
-    null,
-    projects.map(function (o) {
-      return o.reg_period
-    })
-  )
+
+  const last_reg_periods = [
+    ...new Set(
+      projects.map(function (o) {
+        return o.reg_period
+      })
+    ),
+  ]
+    .sort()
+    .slice(-3)
 
   projects.forEach((elem) => {
     const curr_el = results[elem.customer]
@@ -71,7 +74,7 @@ export function createCustomerCardData(
         billedTotal: 0,
       }
     }
-    if (elem.reg_period === last_reg_period) {
+    if (elem.reg_period == last_reg_periods[last_reg_periods.length - 1]) {
       results[elem.customer]['billedLastPeriod'] =
         results[elem.customer]['billedLastPeriod'] + elem.hours
     }
@@ -79,21 +82,21 @@ export function createCustomerCardData(
       results[elem.customer]['billedTotal'] + elem.hours
   })
 
-  const last_reg_periods = [
-    last_reg_period,
-    last_reg_period - 1,
-    last_reg_period - 2,
-  ]
-
   Object.keys(results).forEach((customer) => {
     let consultants = 0
     employeesCustomer.forEach((employeeCustomer) => {
+      const usr_ids = []
       if (employeeCustomer.customer == customer) {
         const reg_periods = employeeCustomer.reg_periods
           .split(';')
           .map((period) => Number(period))
-        if (last_reg_periods.some((p) => reg_periods.includes(p)))
+        if (
+          last_reg_periods.some((p) => reg_periods.includes(p)) &&
+          !usr_ids.includes(employeeCustomer.user_id)
+        ) {
+          usr_ids.push(employeeCustomer.user_id)
           consultants = consultants + 1
+        }
       }
     })
     if (consultants === 0) delete results[customer]
