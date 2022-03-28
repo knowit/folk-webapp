@@ -135,16 +135,16 @@ const reports = [
   {
     name: 'basicEmployeeInformation',
     queryString:
-      'WITH mapped_primary_customers AS (SELECT guid, work_order_description, CASE WHEN customer = "dagens ubw prosjekt" THEN kunde ELSE customer END AS customer FROM (SELECT guid, customer, work_order_description FROM dev_level_3_database.ubw_customer_per_resource WHERE weigth = 1) LEFT JOIN (SELECT DISTINCT "dagens ubw prosjekt", arbeids_ordre, kunde FROM dev_level_3_database.test_test_no_kundemapping_test) ON "dagens ubw prosjekt" = customer AND arbeids_ordre = work_order_description) SELECT cvpartner.user_id, cvpartner.guid, cvpartner.email, cvpartner.navn AS name, cvpartner.title, cvpartner.link, cvpartner.image_key, ubw.customer AS primary_customer, ubw.work_order_description AS primary_work_order_description FROM dev_level_3_database.cv_partner_employees AS cvpartner LEFT JOIN mapped_primary_customers AS ubw ON cvpartner.guid = ubw.guid ORDER BY name',
+      'WITH mapped_primary_customers AS (SELECT guid, work_order_description, CASE WHEN customer = "dagens ubw prosjekt" THEN kunde ELSE customer END AS customer FROM (SELECT guid, customer, work_order_description FROM dev_level_3_database.ubw_customer_per_resource ubw1 WHERE weigth = 1 AND time = (SELECT MAX(time) FROM dev_level_3_database.ubw_customer_per_resource ubw2 WHERE ubw2.guid = ubw1.guid)) LEFT JOIN (SELECT DISTINCT "dagens ubw prosjekt", arbeids_ordre, kunde FROM dev_level_3_database.test_test_no_kundemapping_test) ON "dagens ubw prosjekt" = customer AND arbeids_ordre = work_order_description) SELECT cvpartner.user_id, cvpartner.guid, cvpartner.email, cvpartner.navn AS name, cvpartner.title, cvpartner.link, cvpartner.image_key, ubw.customer AS primary_customer, ubw.work_order_description AS primary_work_order_description FROM dev_level_3_database.cv_partner_employees AS cvpartner LEFT JOIN mapped_primary_customers AS ubw ON cvpartner.guid = ubw.guid ORDER BY name',
     tables: [
       'cv_partner_employees',
       'test_test_no_kundemapping_test',
       'ubw_customer_per_resource',
     ],
     dataProtection: 3,
-    created: '2022-03-18T09:36:15.366129',
+    created: '2022-03-28T12:24:31.776682',
     lastUsed: null,
-    lastCacheUpdate: '2022-03-18T09:36:20.292989',
+    lastCacheUpdate: '2022-03-28T12:24:37.280825',
   },
   {
     name: 'allProjectsOverview',
