@@ -11,11 +11,11 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "@vendia/serverless-express": "^4.5.3",
-    "aws-sdk": "^2.1073.0",
-    "axios": "^0.26.0",
+    "@vendia/serverless-express": "^4.5.4",
+    "aws-sdk": "^2.1101.0",
+    "axios": "^0.26.1",
     "cookie-parser": "^1.4.6",
-    "express": "^4.17.2",
+    "express": "^4.17.3",
     "node-fetch": "^2.6.7",
     "openid-client": "^4.9.1",
     "uuid": "^8.3.2"
