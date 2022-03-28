@@ -7,12 +7,12 @@ import {
 import {
   BilledCustomerHours,
   EmployeeWithPrimaryCustomer,
+  EmployeeCustomers,
 } from './customerTypes'
 import {
   groupEmployeesByCustomer,
   createCustomerCardData,
 } from './customerAggregation'
-import { EmployeeInformation } from '../employees/employeesTypes'
 
 const router = express.Router()
 
@@ -50,14 +50,11 @@ router.get('/customerCards', async (req, res, next) => {
       accessToken: req.accessToken,
       reportName: 'perProject',
     })
-    const employeeInformation = await getReport<EmployeeInformation[]>({
+    const employeeCustomers = await getReport<EmployeeCustomers[]>({
       accessToken: req.accessToken,
-      reportName: 'employeeInformation',
+      reportName: 'employeeCustomers',
     })
-    const aggregatedData = createCustomerCardData(
-      perProject,
-      employeeInformation
-    )
+    const aggregatedData = createCustomerCardData(perProject, employeeCustomers)
     res.send(aggregatedData)
   } catch (error) {
     next(error)

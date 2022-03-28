@@ -5,8 +5,8 @@ import {
   EmployeeWithPrimaryCustomer,
   CustomerCardsData,
   BilledCustomerHours,
+  EmployeeCustomers,
 } from './customerTypes'
-import { EmployeeInformation } from '../employees/employeesTypes'
 import { mergeCustomersForEmployees } from '../employees/aggregationHelpers'
 
 export function groupEmployeesByCustomer(
@@ -52,7 +52,7 @@ function createEmployeeForCustomerList(
 
 export function createCustomerCardData(
   projects: BilledCustomerHours[],
-  employees: EmployeeInformation[]
+  employeesCustomer: EmployeeCustomers[]
 ): CustomerCardsData[] {
   const results = {}
   const last_reg_period: number = Math.max.apply(
@@ -79,17 +79,26 @@ export function createCustomerCardData(
       results[elem.customer]['billedTotal'] + elem.hours
   })
 
-  const employeesWithMergedCustomers = mergeCustomersForEmployees(employees)
-  const customerList = employeesWithMergedCustomers.map((a) => a.customers)
+  const last_reg_periods = [
+    last_reg_period,
+    last_reg_period - 1,
+    last_reg_period - 2,
+  ]
+
   Object.keys(results).forEach((customer) => {
     let consultants = 0
-    customerList.forEach((customers) => {
-      if (customers.find((el) => el.customer === customer)) {
-        consultants = consultants + 1
+    employeesCustomer.forEach((employeeCustomer) => {
+      if (employeeCustomer.customer == customer) {
+        const reg_periods = employeeCustomer.reg_periods
+          .split(';')
+          .map((period) => Number(period))
+        if (last_reg_periods.some((p) => reg_periods.includes(p)))
+          consultants = consultants + 1
       }
     })
     if (consultants === 0) delete results[customer]
     else results[customer]['consultants'] = consultants
   })
+
   return Object.values(results)
 }

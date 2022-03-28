@@ -46,3 +46,11 @@ export type CustomerCardsData = {
   billedLastPeriod: number
   billedTotal: number
 }
+
+export type EmployeeCustomers = {
+  user_id: string
+  email: string
+  customer: string
+  work_order_description: string
+  reg_periods: string
+}
