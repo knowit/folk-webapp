@@ -73,14 +73,10 @@ export function createCustomerCardData(
     }
     if (elem.reg_period === last_reg_period) {
       results[elem.customer]['billedLastPeriod'] =
-        results[elem.customer]['billedLastPeriod'] != 0
-          ? curr_el['billedLastPeriod'] + elem.hours
-          : elem.hours
+        results[elem.customer]['billedLastPeriod'] + elem.hours
     }
     results[elem.customer]['billedTotal'] =
-      results[elem.customer]['billedTotal'] != 0
-        ? curr_el['billedTotal'] + elem.hours
-        : elem.hours
+      results[elem.customer]['billedTotal'] + elem.hours
   })
 
   const employeesWithMergedCustomers = mergeCustomersForEmployees(employees)
