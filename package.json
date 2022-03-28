@@ -75,17 +75,17 @@
     "@nivo/pie": "^0.67.0",
     "@nivo/radar": "^0.67.0",
     "@nivo/sunburst": "^0.67.0",
-    "axios": "^0.26.0",
-    "browserslist": "^4.19.1",
-    "http-proxy-middleware": "^2.0.3",
+    "axios": "^0.26.1",
+    "browserslist": "^4.20.2",
+    "http-proxy-middleware": "^2.0.4",
     "react": "^17.0.1",
     "react-cookie": "^4.0.3",
     "react-dom": "^17.0.1",
-    "react-router-dom": "^6.2.1",
+    "react-router-dom": "^6.2.2",
     "react-scripts": "^5.0.0",
     "react-virtualized": "^9.22.2",
-    "swr": "^1.2.1",
-    "typescript": "^4.5.5"
+    "swr": "^1.2.2",
+    "typescript": "^4.6.3"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.3",
