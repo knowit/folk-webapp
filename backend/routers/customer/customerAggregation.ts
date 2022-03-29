@@ -83,24 +83,19 @@ export function createCustomerCardData(
   })
 
   Object.keys(results).forEach((customer) => {
-    let consultants = 0
+    const consultants = new Set()
     employeesCustomer.forEach((employeeCustomer) => {
-      const usr_ids = []
       if (employeeCustomer.customer == customer) {
         const reg_periods = employeeCustomer.reg_periods
           .split(';')
           .map((period) => Number(period))
-        if (
-          last_reg_periods.some((p) => reg_periods.includes(p)) &&
-          !usr_ids.includes(employeeCustomer.user_id)
-        ) {
-          usr_ids.push(employeeCustomer.user_id)
-          consultants = consultants + 1
+        if (last_reg_periods.some((p) => reg_periods.includes(p))) {
+          consultants.add(employeeCustomer.user_id)
         }
       }
     })
-    if (consultants === 0) delete results[customer]
-    else results[customer]['consultants'] = consultants
+    if (consultants.size === 0) delete results[customer]
+    else results[customer]['consultants'] = consultants.size
   })
 
   return Object.values(results)
