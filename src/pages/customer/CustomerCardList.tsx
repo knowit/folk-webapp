@@ -1,13 +1,10 @@
 import { Skeleton } from '@material-ui/lab'
 import React from 'react'
-import { DDPayload } from '../../data/types'
-import { useFetchedData } from '../../hooks/service'
 import CustomerCard, { CustomerData } from './CustomerCard'
+import { useCustomerCards } from '../../api/data/customer/customerQueries'
 
 const CustomerCardList = () => {
-  const [data, pending, error] = useFetchedData<DDPayload>({
-    url: '/api/data/customerCards',
-  })
+  const { data, error } = useCustomerCards()
 
   if (error) {
     return (
@@ -17,7 +14,7 @@ const CustomerCardList = () => {
     )
   }
 
-  if (pending) {
+  if (!data) {
     return <Skeleton variant="rect" height={780} animation="wave" />
   }
 

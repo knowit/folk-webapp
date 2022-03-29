@@ -8,7 +8,7 @@ import {
 } from './customerApiTypes'
 
 export const getCustomerCards = () =>
-  getAtApi<CustomerCardResponse>('/data/customerCards')
+  getAtApiV2<CustomerCardResponse>('/customer/customerCards')
 
 export const getEmployeesByCustomer = () =>
   getAtApiV2<EmployeesByCustomerResponse>('/customer/employeesByCustomer')
