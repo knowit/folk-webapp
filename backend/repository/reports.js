@@ -176,6 +176,20 @@ const reports = [
     lastCacheUpdate: '2022-01-21T11:37:56.327021',
   },
   {
+    name: 'employeeCustomers',
+    queryString:
+      'WITH mapped_customers_per_resource_per_period AS (SELECT DISTINCT guid, reg_period, CASE WHEN customer = "dagens ubw prosjekt" THEN kunde ELSE customer END AS customer, work_order_description FROM dev_level_3_database.ubw_customer_per_resource LEFT JOIN ( SELECT DISTINCT "dagens ubw prosjekt", arbeids_ordre, kunde FROM dev_level_3_database.test_test_no_kundemapping_test ) ON "dagens ubw prosjekt" = customer AND arbeids_ordre = work_order_description ORDER BY reg_period) SELECT cvpartner.user_id, cvpartner.email, ubw.customer, ubw.work_order_description, array_join(array_agg(ubw.reg_period), \';\', \'\') AS reg_periods FROM dev_level_3_database.cv_partner_employees AS cvpartner INNER JOIN mapped_customers_per_resource_per_period AS ubw ON cvpartner.guid = ubw.guid GROUP BY cvpartner.user_id, cvpartner.email, ubw.customer, ubw.work_order_description',
+    tables: [
+      'cv_partner_employees',
+      'test_test_no_kundemapping_test',
+      'ubw_customer_per_resource',
+    ],
+    dataProtection: 3,
+    created: '2022-03-28T11:01:22.121302',
+    lastUsed: null,
+    lastCacheUpdate: '2022-03-28T11:01:25.328454',
+  },
+  {
     name: 'workExperienceDistributedInYears',
     queryString:
       "SELECT years_working, Count(years_working) AS count FROM (SELECT user_id, sum(if (month_from = -1 OR year_from = -1, 0, date_diff('Month', try_cast(concat(cast(year_from as varchar), '-', cast(month_from as varchar), '-01') as date), if (month_to = -1 OR year_to = -1, Now(), try_cast(concat(cast(year_to as varchar), '-', cast(month_to as varchar), '-', cast(Day(Now()) as varchar)) as date))))) / 12 as years_working FROM dev_level_3_database.cv_partner_work_experience wex GROUP BY user_id) GROUP BY  years_working ORDER BY  count desc",
