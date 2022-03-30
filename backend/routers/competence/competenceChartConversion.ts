@@ -218,8 +218,8 @@ export const competenceMappingSunburst = (
     data: [],
   }
 
-  aggregatedData.MotivationAndCompetence.data.forEach((category) => {
-    const { subcategories, competence, motivation } = category
+  aggregatedData.MotivationAndCompetence.data.forEach((categoryData) => {
+    const { subcategories, competence, motivation, category } = categoryData
 
     const motivationChildren = []
     const competenceChildren = []
@@ -252,7 +252,7 @@ export const competenceMappingSunburst = (
   })
 
   return {
-    Competence: competenceData,
-    Motivation: motivationData,
+    competence: competenceData,
+    motivation: motivationData,
   }
 }

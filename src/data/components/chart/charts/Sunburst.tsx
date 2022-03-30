@@ -57,7 +57,6 @@ export default function Sunburst({ data, groupKey, big }: SunburstChartsProps) {
       />
     )
   }
-
   return (
     <div style={{ height, width: '100%' }}>
       <ResponsiveSunburst
