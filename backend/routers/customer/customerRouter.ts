@@ -7,7 +7,7 @@ import {
 import {
   BilledCustomerHours,
   EmployeeWithPrimaryCustomer,
-  EmployeeCustomers,
+  EmployeeCustomersReport,
 } from './customerTypes'
 import {
   groupEmployeesByCustomer,
@@ -50,7 +50,7 @@ router.get('/customerCards', async (req, res, next) => {
       accessToken: req.accessToken,
       reportName: 'perProject',
     })
-    const employeeCustomers = await getReport<EmployeeCustomers[]>({
+    const employeeCustomers = await getReport<EmployeeCustomersReport>({
       accessToken: req.accessToken,
       reportName: 'employeeCustomers',
     })

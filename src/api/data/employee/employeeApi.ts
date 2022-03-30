@@ -15,7 +15,7 @@ export const getEmployeeTable = () =>
   getAtApiV2<EmployeeTableResponse>('/employees/employeeTable')
 
 export const getEmployeeProfile = (url: string, email: string) =>
-  getAtApi<EmployeeProfileResponse>(`/data/employeeProfile`, {
+  getAtApiV2<EmployeeProfileResponse>(`/employees/employeeProfile`, {
     params: { email },
   })
 

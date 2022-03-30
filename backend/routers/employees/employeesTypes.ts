@@ -4,20 +4,18 @@ import { TableRow } from '../datatypes/typeData'
  * Employee Reports
  */
 
-export type EmployeeInformationReport = EmployeeInformation[]
-export type EmployeeInformation = {
+export type EmployeeProfileInformationReport = EmployeeProfileInformation[]
+export type EmployeeProfileInformation = {
   user_id: string
   guid: string
-  navn: string
-  manager: string
-  title?: string
-  link: string
-  degree?: string
-  image_key?: string
   email: string
-  customer?: string
-  weight?: number
-  work_order_description?: string
+  name: string
+  title?: string
+  phone?: string
+  degree?: string
+  manager: string
+  image_key?: string
+  link: string
 }
 
 export type BasicEmployeeInformationReport = BasicEmployeeInformation[]
@@ -158,21 +156,14 @@ export type CategoryScores = [
  */
 
 export type EmployeeProfileResponse = Omit<
-  EmployeeWithMergedCustomers,
-  'customer' | 'weight' | 'work_order_description' | 'image_key' | 'link'
+  EmployeeProfileInformation,
+  'guid' | 'image_key' | 'link'
 > & {
   image: string
   workExperience: WorkExperience[]
   tags: Tags
   links: CvLinks
-}
-
-export type EmployeeWithMergedCustomers = EmployeeInformation & {
-  customers: CustomerWithWeight[]
-}
-
-export type CustomerWithWeight = Customer & {
-  weight: number
+  customers: Customer[]
 }
 
 export type Tags = {

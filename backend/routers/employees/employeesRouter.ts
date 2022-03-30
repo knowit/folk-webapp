@@ -13,13 +13,14 @@ import {
 import {
   BasicEmployeeInformationReport,
   EmployeeExperienceReport,
-  EmployeeInformationReport,
+  EmployeeProfileInformationReport,
   EmployeeMotivationAndCompetenceReport,
   EmployeeSkillsReport,
   EmployeeWorkStatusReport,
   JobRotationInformationReport,
   WorkExperienceReport,
 } from './employeesTypes'
+import { EmployeeCustomersReport } from '../customer/customerTypes'
 
 const router = express.Router()
 
@@ -195,20 +196,34 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      const employeeInformationPromise = getReport<EmployeeInformationReport>({
+      const employeeInformationPromise =
+        getReport<EmployeeProfileInformationReport>({
+          accessToken: req.accessToken,
+          reportName: 'employeeProfile',
+          queryParams: {
+            email: req.query.email,
+          },
+        })
+
+      const employeeCustomersPromise = getReport<EmployeeCustomersReport>({
         accessToken: req.accessToken,
-        reportName: 'employeeInformation',
+        reportName: 'employeeCustomers',
         queryParams: {
           email: req.query.email,
         },
       })
 
-      const [employeeSkills, workExperience, employeeInformation] =
-        await Promise.all([
-          employeeSkillsPromise,
-          workExperiencePromise,
-          employeeInformationPromise,
-        ])
+      const [
+        employeeSkills,
+        workExperience,
+        employeeInformation,
+        employeeCustomers,
+      ] = await Promise.all([
+        employeeSkillsPromise,
+        workExperiencePromise,
+        employeeInformationPromise,
+        employeeCustomersPromise,
+      ])
 
       if (!employeeInformation || employeeInformation.length === 0) {
         const err: NotFoundError = {
@@ -222,7 +237,8 @@ router.get<unknown, unknown, unknown, EmailParam>(
       const aggregatedData = aggregateEmployeeProfile(
         employeeSkills,
         workExperience,
-        employeeInformation
+        employeeInformation,
+        employeeCustomers
       )
 
       res.send(aggregatedData)

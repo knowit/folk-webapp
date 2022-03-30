@@ -65,26 +65,19 @@ export interface ProjectExperience {
  * EmployeeProfile
  */
 
-interface Employee {
+export interface EmployeeProfileResponse {
   user_id: string
-  guid: string
-  navn: string
-  manager: string
+  email: string
+  name: string
+  phone?: string
   title: string
   degree?: string
-  email: string
-  customers: CustomerWithWeight[]
-}
-
-export interface EmployeeProfileResponse extends Employee {
+  manager: string
   image?: string
   workExperience: WorkExperience[]
   tags: Tags
   links: CvLinks
-}
-
-export interface CustomerWithWeight extends Customer {
-  weight: number
+  customers: Customer[]
 }
 
 export interface WorkExperience {

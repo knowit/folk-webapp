@@ -74,11 +74,7 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
     <article className={classes.root}>
       <div className={classes.header}>
         <EmployeeAvatar imageUrl={employee?.image} isLoading={isLoading} />
-        <EmployeeByline
-          employeeName={employee?.navn}
-          jobTitle={employee?.title}
-          isLoading={isLoading}
-        />
+        <EmployeeByline employee={employee} isLoading={isLoading} />
       </div>
       <div className={classes.body}>
         <div className={classes.column}>

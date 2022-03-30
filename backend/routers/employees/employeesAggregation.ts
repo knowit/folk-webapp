@@ -3,13 +3,12 @@ import {
   getProjectStatusForEmployee,
   getCategoryScoresForEmployee,
   getStorageUrl,
-  mergeCustomersForEmployees,
   createCvLinks,
 } from './aggregationHelpers'
 import {
   BasicEmployeeInformation,
   EmployeeExperience,
-  EmployeeInformation,
+  EmployeeProfileInformation,
   EmployeeMotivationAndCompetence,
   EmployeeProfileResponse,
   EmployeeSkills,
@@ -18,6 +17,7 @@ import {
   JobRotationInformation,
   WorkExperience,
 } from './employeesTypes'
+import { EmployeeCustomers } from '../customer/customerTypes'
 
 export const aggregateEmployeeTable = (
   basicEmployeeInformation: BasicEmployeeInformation[],
@@ -118,26 +118,30 @@ export const aggregateEmployeeCompetenceAndMotivation = (
 export const aggregateEmployeeProfile = (
   employeeSkills: EmployeeSkills[],
   workExperience: WorkExperience[],
-  employeeInformation: EmployeeInformation[]
+  employeeInformation: EmployeeProfileInformation[],
+  employeeCustomers: EmployeeCustomers[]
 ): EmployeeProfileResponse => {
   if (employeeInformation.length === 0) {
     return
   }
 
-  const employee = mergeCustomersForEmployees(employeeInformation)[0]
+  const employee = employeeInformation[0]
 
   return {
     user_id: employee.user_id,
-    guid: employee.guid,
-    navn: employee.navn,
-    manager: employee.manager,
-    title: employee.title,
-    degree: employee.degree,
     email: employee.email,
+    name: employee.name,
+    title: employee.title,
+    phone: employee.phone,
+    degree: employee.degree,
+    manager: employee.manager,
     image: getStorageUrl(employee.image_key),
-    customers: employee.customers,
     workExperience,
     tags: mapEmployeeTags(employeeSkills[0]),
     links: createCvLinks(employee.link),
+    customers: employeeCustomers.map((customer) => ({
+      customer: customer.customer,
+      workOrderDescription: customer.work_order_description,
+    })),
   }
 }

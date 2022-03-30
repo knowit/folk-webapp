@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { CustomerWithWeight } from '../../../api/data/employee/employeeApiTypes'
+import { Customer } from '../../../api/data/employee/employeeApiTypes'
 import { makeStyles } from '@material-ui/core/styles'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { FallbackMessage } from './FallbackMessage'
@@ -13,7 +13,7 @@ const useStyles = makeStyles({
 })
 
 interface Props {
-  customers?: CustomerWithWeight[]
+  customers?: Customer[]
   isLoading?: boolean
   isError?: boolean
 }
@@ -35,14 +35,16 @@ export function CustomersForEmployee({ customers, isLoading, isError }: Props) {
     return <FallbackMessage message="Fant ingen kunder å vise." />
   }
 
-  const customersSortedByWeight = customers.sort(
-    (customerA, customerB) => customerA.weight - customerB.weight
+  const sortedCustomers = customers.sort((customerA, customerB) =>
+    String(customerA.customer).localeCompare(String(customerB.customer))
   )
 
   return (
     <ExperienceList>
-      {customersSortedByWeight.map((customer) => (
-        <ExperienceListItem key={customer.customer + customer.weight}>
+      {sortedCustomers.map((customer) => (
+        <ExperienceListItem
+          key={customer.customer + customer.workOrderDescription}
+        >
           <span className={classes.customerName}>{customer.customer}: </span>
           {customer.workOrderDescription}
         </ExperienceListItem>
