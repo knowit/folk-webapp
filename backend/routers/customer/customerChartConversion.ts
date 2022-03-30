@@ -19,7 +19,9 @@ export const hoursBilledPerCustomerBar = (data: BilledCustomerHours[]) => {
   } as BarChartData
 }
 
-export const hoursBilledPerWeekLine = (data: BilledCustomerHours[]) => {
+export const hoursBilledPerWeekLine = (
+  data: BilledCustomerHours[]
+): LineChartData => {
   const aggregationMap: Record<string, Record<string, number>> = {}
 
   // Build map of customers and aggregate all hours for all weeks
@@ -35,7 +37,7 @@ export const hoursBilledPerWeekLine = (data: BilledCustomerHours[]) => {
     }
   }
 
-  const output: LineChartData[] = []
+  const output: LineChartData['data'] = []
   // Generate output fitting desired format
   for (const [customer, values] of Object.entries(aggregationMap)) {
     const dataList = []
@@ -45,5 +47,5 @@ export const hoursBilledPerWeekLine = (data: BilledCustomerHours[]) => {
     output.push({ id: customer, data: dataList })
   }
 
-  return output
+  return { type: 'LineChart', data: output }
 }

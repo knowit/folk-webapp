@@ -20,7 +20,7 @@ export const CustomerOverview = () => {
         dataComponentProps={{
           chartVariants: [
             {
-              type: 'Bar',
+              type: 'BarChart',
               props: {
                 dataKey: 'kunde',
                 yLabels: ['timer'],
@@ -38,7 +38,7 @@ export const CustomerOverview = () => {
         dataComponentProps={{
           chartVariants: [
             {
-              type: 'Line',
+              type: 'LineChart',
             },
           ],
         }}

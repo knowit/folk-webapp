@@ -1,29 +1,28 @@
 import { Grid } from '@material-ui/core'
 import React from 'react'
-import { useCompetenceAreasRadar } from '../api/data/competence/competenceQueries'
-import RadarChart from '../components/charts/RadarChart'
-import { GridItem } from '../components/gridItem/GridItem'
+import {
+  useCompetenceAmountBar,
+  useCompetenceAreasCharts,
+  useFagtimerLine,
+} from '../api/data/competence/competenceQueries'
+import ChartCard from '../components/charts/ChartCard'
 
 const Debug = () => {
-  const { data, error } = useCompetenceAreasRadar()
+  const { data: competenceArea } = useCompetenceAreasCharts()
+  const { data: competenceAmountBar } = useCompetenceAmountBar()
+  const { data: fagEvents } = useFagtimerLine()
 
-  if (error) return <div>{error}</div>
-  if (!data) return <div>Loading...</div>
-
-  const mainCat = data['MainCategories']
+  if (!competenceAmountBar || !competenceArea || !fagEvents)
+    return <div>Loading...</div>
 
   return (
     <Grid container>
-      <GridItem>
-        <RadarChart
-          indexBy={mainCat.indexBy}
-          keys={mainCat.keys}
-          data={mainCat.data}
-        />
-      </GridItem>
-      <GridItem>
+      <ChartCard title="Kompetanse" data={competenceArea} />
+      <ChartCard title="Kometansemengde" data={competenceAmountBar} />
+      <ChartCard title="fagEvents" data={fagEvents} />
+      {/* <GridItem>
         <pre>{JSON.stringify(data, null, 2)}</pre>
-      </GridItem>
+      </GridItem> */}
     </Grid>
   )
 }

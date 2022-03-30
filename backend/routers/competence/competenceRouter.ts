@@ -3,8 +3,7 @@ import { getReport } from '../../dataplattform/client'
 import {
   ageDistributionBar,
   competenceAmountBar,
-  competenceAreasBar,
-  competenceAreasRadar,
+  competenceAreas,
   competenceMappingBar,
   competenceMappingSunburst,
   educationPie,
@@ -66,26 +65,13 @@ router.get('/competenceAmount/bar', async (req, res, next) => {
   }
 })
 
-router.get('/competenceAreas/bar', async (req, res, next) => {
+router.get('/competenceAreas', async (req, res, next) => {
   try {
     const data = await getReport<CategoryAverage[]>({
       accessToken: req.accessToken,
       reportName: 'averageCompetenceAndMotivation',
     })
-    const aggregatedData = competenceAreasBar(data)
-    res.send(aggregatedData)
-  } catch (error) {
-    next(error)
-  }
-})
-
-router.get('/competenceAreas/radar', async (req, res, next) => {
-  try {
-    const data = await getReport<CategoryAverage[]>({
-      accessToken: req.accessToken,
-      reportName: 'averageCompetenceAndMotivation',
-    })
-    const aggregatedData = competenceAreasRadar(data)
+    const aggregatedData = competenceAreas(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)

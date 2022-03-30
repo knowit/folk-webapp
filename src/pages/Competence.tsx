@@ -22,7 +22,7 @@ export default function Competence() {
         dataComponentProps={{
           chartVariants: [
             {
-              type: 'Bar',
+              type: 'BarChart',
               props: {
                 dataKey: 'category',
                 yLabels: ['competenceProportion', 'motivationProportion'],
@@ -40,14 +40,14 @@ export default function Competence() {
         dataComponentProps={{
           chartVariants: [
             {
-              type: 'Radar',
+              type: 'RadarChart',
               props: {
                 groupKey: 'category',
                 valueKey: ['motivation', 'competence'],
               },
             },
             {
-              type: 'Bar',
+              type: 'BarChart',
               props: {
                 dataKey: 'category',
                 yLabels: ['motivation', 'competence'],
@@ -63,14 +63,14 @@ export default function Competence() {
         dataComponentProps={{
           chartVariants: [
             {
-              type: 'Bar',
+              type: 'BarChart',
               props: {
                 dataKey: 'years',
                 yLabels: ['count'],
               },
             },
             {
-              type: 'Pie',
+              type: 'PieChart',
               props: {
                 groupKey: 'years',
                 valueKey: ['count'],
@@ -86,7 +86,7 @@ export default function Competence() {
         dataComponentProps={{
           chartVariants: [
             {
-              type: 'Bar',
+              type: 'BarChart',
               props: {
                 dataKey: 'age',
                 yLabels: ['count'],
@@ -103,7 +103,7 @@ export default function Competence() {
         dataComponentProps={{
           chartVariants: [
             {
-              type: 'Line',
+              type: 'LineChart',
             },
           ],
         }}
@@ -116,7 +116,7 @@ export default function Competence() {
         dataComponentProps={{
           chartVariants: [
             {
-              type: 'Line',
+              type: 'LineChart',
             },
           ],
         }}
@@ -128,7 +128,7 @@ export default function Competence() {
         dataComponentProps={{
           chartVariants: [
             {
-              type: 'Pie',
+              type: 'PieChart',
               props: {
                 groupKey: 'degree',
                 valueKey: 'count',
@@ -145,7 +145,7 @@ export default function Competence() {
         dataComponentProps={{
           chartVariants: [
             {
-              type: 'Sunburst',
+              type: 'SunburstChart',
               props: {
                 maxValue: 5,
                 yLabels: ['value'],
@@ -153,7 +153,7 @@ export default function Competence() {
               },
             },
             {
-              type: 'Bar',
+              type: 'BarChart',
               props: {
                 maxValue: 5,
                 yLabels: ['value'],

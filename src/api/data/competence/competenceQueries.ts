@@ -5,8 +5,7 @@ import {
   getCompetenceAmount,
   getCompetenceAmountBar,
   getCompetenceAreas,
-  getCompetenceAreasBar,
-  getCompetenceAreasRadar,
+  getCompetenceAreasCharts,
   getCompetenceFilter,
   getCompetenceMapping,
   getCompetenceMappingBar,
@@ -85,13 +84,8 @@ export const useCompetenceAmountBar = () =>
     revalidateOnFocus: false,
   })
 
-export const useCompetenceAreasBar = () =>
-  useSWR('/competenceAreasBar', getCompetenceAreasBar, {
-    revalidateOnFocus: false,
-  })
-
-export const useCompetenceAreasRadar = () =>
-  useSWR('/competenceAreasRadar', getCompetenceAreasRadar, {
+export const useCompetenceAreasCharts = () =>
+  useSWR('/competenceAreasCharts', getCompetenceAreasCharts, {
     revalidateOnFocus: false,
   })
 

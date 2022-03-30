@@ -1,4 +1,4 @@
-import { BarChartData, RadarChartData } from '../chartTypes'
+import { MultipleChartData, BarChartData, RadarChartData } from '../chartTypes'
 import { aggregateEmployeeCompetenceAndMotivation } from './employeesAggregation'
 import { EmployeeMotivationAndCompetence } from './employeesTypes'
 
@@ -10,20 +10,27 @@ import { EmployeeMotivationAndCompetence } from './employeesTypes'
  */
 export const employeeMotivationAndCompetenceBar = (
   data: EmployeeMotivationAndCompetence[]
-) => {
-  const aggregatedData = aggregateEmployeeCompetenceAndMotivation(data)
+): MultipleChartData<[BarChartData]> => {
+  const indexBy = 'category'
+  const keys = ['motivation', 'competence']
+  const aggregatedData = aggregateEmployeeCompetenceAndMotivation(
+    data
+  ) as Record<string, any>
 
-  const output: Record<string, BarChartData> = {}
-
-  for (const [key, value] of Object.entries(aggregatedData)) {
-    output[key] = {
-      indexBy: 'category',
-      keys: ['motivation', 'competence'],
-      data: value as any[],
-    }
+  return {
+    type: 'MultipleChart',
+    groups: Object.entries(aggregatedData).map(([name, data]) => ({
+      name,
+      charts: [
+        {
+          type: 'BarChart',
+          indexBy,
+          keys,
+          data,
+        },
+      ],
+    })),
   }
-
-  return output
 }
 
 /**
@@ -34,18 +41,25 @@ export const employeeMotivationAndCompetenceBar = (
  */
 export const employeeMotivationAndCompetenceRadar = (
   data: EmployeeMotivationAndCompetence[]
-) => {
-  const aggregatedData = aggregateEmployeeCompetenceAndMotivation(data)
+): MultipleChartData<[RadarChartData]> => {
+  const indexBy = 'category'
+  const keys = ['motivation', 'competence']
+  const aggregatedData = aggregateEmployeeCompetenceAndMotivation(
+    data
+  ) as Record<string, any>
 
-  const output: Record<string, RadarChartData> = {}
-
-  for (const [key, value] of Object.entries(aggregatedData)) {
-    output[key] = {
-      indexBy: 'category',
-      keys: ['motivation', 'competence'],
-      data: value as any[],
-    }
+  return {
+    type: 'MultipleChart',
+    groups: Object.entries(aggregatedData).map(([name, data]) => ({
+      name,
+      charts: [
+        {
+          type: 'RadarChart',
+          indexBy,
+          keys,
+          data,
+        },
+      ],
+    })),
   }
-
-  return output
 }

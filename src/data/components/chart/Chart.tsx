@@ -21,11 +21,11 @@ interface ChartGridItemProps {
 const chartComponents: {
   [key in ChartType]: (props: any) => JSX.Element
 } = {
-  Line: Line,
-  Bar: Bar,
-  Pie: Pie,
-  Radar: Radar,
-  Sunburst: Sunburst,
+  LineChart: Line,
+  BarChart: Bar,
+  PieChart: Pie,
+  RadarChart: Radar,
+  SunburstChart: Sunburst,
 }
 
 interface ChartProps {

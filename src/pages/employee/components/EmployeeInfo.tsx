@@ -209,7 +209,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
             props={{
               chartVariants: [
                 {
-                  type: 'Bar',
+                  type: 'BarChart',
                   props: {
                     dataKey: 'category',
                     yLabels: ['motivation', 'competence'],
@@ -217,7 +217,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
                   },
                 },
                 {
-                  type: 'Radar',
+                  type: 'RadarChart',
                   props: {
                     groupKey: 'category',
                     valueKey: ['motivation', 'competence'],

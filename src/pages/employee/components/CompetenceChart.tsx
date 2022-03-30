@@ -37,7 +37,7 @@ export function CompetenceChart({ employeeEmail }: Props) {
       props={{
         chartVariants: [
           {
-            type: 'Bar',
+            type: 'BarChart',
             props: {
               dataKey: 'category',
               yLabels: ['motivation', 'competence'],
@@ -45,7 +45,7 @@ export function CompetenceChart({ employeeEmail }: Props) {
             },
           },
           {
-            type: 'Radar',
+            type: 'RadarChart',
             props: {
               groupKey: 'category',
               valueKey: ['motivation', 'competence'],
