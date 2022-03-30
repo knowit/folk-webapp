@@ -7,11 +7,9 @@ import {
   Theme,
   withStyles,
 } from '@material-ui/core'
-import { ColumnSort } from '../../../DDTable'
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox'
 import { CheckBoxHeader } from '../DataTable'
-
-export type SortOrder = 'NONE' | 'ASC' | 'DESC'
+import { Column, ColumnSort } from '../../../types'
 
 const useSortableHeaderStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,10 +51,12 @@ const BlackCheckBox = withStyles({
 })((props: CheckboxProps) => (
   <Checkbox color="default" disableRipple {...props} />
 ))
+
 interface SortableHeaderCellProps {
   title: string
   onOrderChange: (newOrder: ColumnSort) => void
   columnIndex: number
+  column: Column
   currentOrder: string
   checkBox: CheckBoxHeader
 }
@@ -66,13 +66,18 @@ export default function SortableHeaderCell({
   currentOrder,
   onOrderChange,
   columnIndex,
+  column,
   checkBox,
 }: SortableHeaderCellProps) {
   const classes = useSortableHeaderStyles()
 
   const sortClick = () => {
     const newOrder = currentOrder === 'ASC' ? 'DESC' : 'ASC'
-    onOrderChange({ sortOrder: newOrder, columnIndex: columnIndex })
+    onOrderChange({
+      sortOrder: newOrder,
+      columnIndex: columnIndex,
+      getSortValue: column.getValue,
+    })
   }
 
   const sortIcon = () => {

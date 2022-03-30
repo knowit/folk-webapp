@@ -39,7 +39,7 @@ export function EmployeeTable() {
                 title: 'Konsulent',
                 width: 385,
                 isExpandable: true,
-                getSearchValue: (consultant: Pick<ConsultantInfo, 'name'>) => {
+                getValue: (consultant: Pick<ConsultantInfo, 'name'>) => {
                   return consultant.name
                 },
                 renderCell: ConsultantCell,
@@ -51,7 +51,7 @@ export function EmployeeTable() {
                 title: 'Tittel',
                 width: 222,
                 headerCell: SortableHeaderCell,
-                getSearchValue: (jobTitle: string | undefined | null) => {
+                getValue: (jobTitle: string | undefined | null) => {
                   return jobTitle
                 },
               },
@@ -64,10 +64,10 @@ export function EmployeeTable() {
                 title: 'Kunde',
                 width: 337,
                 renderCell: CustomerStatusCell,
-                getSearchValue: (customer: Customer | null) => {
+                getValue: (customer: Customer | null) => {
                   return customer?.customer
                     ? `${customer.customer} ${customer.workOrderDescription}`
-                    : 'Ikke i prosjekt'
+                    : ''
                 },
                 headerCell: SortableHeaderCell,
               },

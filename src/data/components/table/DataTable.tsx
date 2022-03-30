@@ -11,8 +11,7 @@ import {
   TableRowProps,
 } from 'react-virtualized'
 import CharacterLimitBox from './components/CharacterLimitBox'
-import { ColumnSort } from '../../DDTable'
-import { Column } from '../../types'
+import { Column, ColumnSort } from '../../types'
 import { EmployeeTableRow } from '../../../api/data/employee/employeeApiTypes'
 import { EmployeeForCustomerList } from '../../../api/data/customer/customerApiTypes'
 
@@ -227,6 +226,7 @@ function VirtualizedTable({
           title={title}
           checkBox={checkBox}
           columnIndex={index}
+          column={columns[index]}
           onOrderChange={onSortChange}
           currentOrder={
             currentOrder?.columnIndex === index
