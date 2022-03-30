@@ -133,6 +133,20 @@ const reports = [
     lastCacheUpdate: '2022-01-21T10:08:37.503238',
   },
   {
+    name: 'basicEmployeeInformation',
+    queryString:
+      'WITH mapped_primary_customers AS (SELECT guid, work_order_description, CASE WHEN customer = "dagens ubw prosjekt" THEN kunde ELSE customer END AS customer FROM (SELECT guid, customer, work_order_description FROM dev_level_3_database.ubw_customer_per_resource ubw1 WHERE weigth = 1 AND time = (SELECT MAX(time) FROM dev_level_3_database.ubw_customer_per_resource ubw2 WHERE ubw2.guid = ubw1.guid)) LEFT JOIN (SELECT DISTINCT "dagens ubw prosjekt", arbeids_ordre, kunde FROM dev_level_3_database.test_test_no_kundemapping_test) ON "dagens ubw prosjekt" = customer AND arbeids_ordre = work_order_description) SELECT cvpartner.user_id, cvpartner.guid, cvpartner.email, cvpartner.navn AS name, cvpartner.title, cvpartner.link, cvpartner.image_key, ubw.customer AS primary_customer, ubw.work_order_description AS primary_work_order_description FROM dev_level_3_database.cv_partner_employees AS cvpartner LEFT JOIN mapped_primary_customers AS ubw ON cvpartner.guid = ubw.guid ORDER BY name',
+    tables: [
+      'cv_partner_employees',
+      'test_test_no_kundemapping_test',
+      'ubw_customer_per_resource',
+    ],
+    dataProtection: 3,
+    created: '2022-03-28T12:24:31.776682',
+    lastUsed: null,
+    lastCacheUpdate: '2022-03-28T12:24:37.280825',
+  },
+  {
     name: 'allProjectsOverview',
     queryString:
       'SELECT customer, SUM(billedTotal) as billedTotal, SUM(billedLastPeriod) as billedLastPeriod, SUM(consultants) as consultants FROM (SELECT CASE WHEN total.customer = "dagens ubw prosjekt" THEN kunde ELSE total.customer END AS customer, total.work_order, billedTotal, billedLastPeriod, consultants FROM ((SELECT customer, work_order, sum(hours) as billedTotal FROM ubw_per_project_data d1 WHERE timestamp = (SELECT MAX(timestamp) FROM ubw_per_project_data d2 WHERE d1.customer = d2.customer AND d1.reg_period = d2.reg_period) GROUP BY customer, employees, work_order ) total JOIN (SELECT customer, work_order,hours as billedLastPeriod FROM ubw_per_project_data d1 WHERE reg_period = (SELECT MAX(reg_period) FROM ubw_per_project_data d2 WHERE d1.customer = d2.customer AND d1.work_order = d2.work_order) group by customer, hours, work_order) lastPeriod ON total.customer = lastPeriod.customer AND total.work_order = lastPeriod.work_order JOIN (SELECT customer, work_order, MAX(employees) as consultants FROM ( SELECT *, RANK() OVER (PARTITION BY customer ORDER BY reg_period DESC) AS row_number FROM ( SELECT customer, employees, reg_period, work_order FROM ubw_per_project_data d1 WHERE timestamp = (SELECT MAX(timestamp) FROM ubw_per_project_data d2 WHERE d1.customer = d2.customer AND d1.reg_period = d2.reg_period AND d1.work_order = d2.work_order) ORDER BY customer DESC, reg_period DESC ) ) WHERE row_number <= 5 GROUP BY customer, work_order) numConsul ON total.customer = numConsul.customer AND total.work_order = numConsul.work_order LEFT JOIN test_test_no_kundemapping_test ON total.customer = "dagens ubw prosjekt" AND total.work_order = arbeids_ordre) ) GROUP BY customer',

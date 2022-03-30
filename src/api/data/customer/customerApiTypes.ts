@@ -1,4 +1,5 @@
-import { CvLinks } from '../employee/employeeApiTypes'
+import { ConsultantInfo, CvLinks } from '../employee/employeeApiTypes'
+import { TableRow } from '../tableResponses'
 
 // customerCards
 interface CustomerCardData {
@@ -18,20 +19,14 @@ export interface CustomerWithEmployees {
   employees: EmployeeForCustomerList[]
 }
 
-export type EmployeeForCustomerList = {
-  rowId: string
-  rowData: [
-    info: {
-      email: string
-      value: string // Employee name
-      image?: string
-      user_id: string
-    },
-    jobTitle: string | null,
-    customerAndProject: string,
-    cvLinks: CvLinks
-  ]
-}
+export type EmployeeForCustomerList = TableRow<CustomerListTableRowData>
+
+export type CustomerListTableRowData = [
+  info: ConsultantInfo,
+  jobTitle: string | null,
+  customerAndProject: string,
+  cvLinks: CvLinks
+]
 
 // hoursBilledPerCustomer
 interface BilledCustomer {
