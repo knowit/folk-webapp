@@ -33,8 +33,8 @@ const useStyles = makeStyles({
 const sortColumn = (rows: TableRow<any>[], currentSort: ColumnSort) => {
   if (!currentSort) return rows
 
-  const getValueFn =
-    currentSort.getSortValue ?? ((rowData) => JSON.stringify(rowData))
+  const getValueFnFallback = (rowData: any) => JSON.stringify(rowData)
+  const getValueFn = currentSort.getSortValue ?? getValueFnFallback
 
   const getCellValue = (row: TableRow<any>) => {
     return getValueFn(row.rowData[currentSort.columnIndex])
