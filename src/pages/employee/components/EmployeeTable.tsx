@@ -67,7 +67,7 @@ export function EmployeeTable() {
                 getValue: (customer: Customer | null) => {
                   return customer?.customer
                     ? `${customer.customer} ${customer.workOrderDescription}`
-                    : ''
+                    : undefined
                 },
                 headerCell: SortableHeaderCell,
               },
