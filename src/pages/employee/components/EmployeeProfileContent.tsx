@@ -82,7 +82,7 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
             <CompetenceSummary employee={employee} isLoading={isLoading} />
           </section>
           <section>
-            <h2>Kunder</h2>
+            <h2>Kunder siste måned</h2>
             <CustomersForEmployee
               customers={employee?.customers}
               isLoading={isLoading}
@@ -97,7 +97,10 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
           </section>
           <section>
             <h2>Prosjekterfaring</h2>
-            <ProjectExperienceList user_id={employee?.user_id} />
+            <ProjectExperienceList
+              projectExperience={employee?.projectExperience}
+              isLoading={isLoading}
+            />
           </section>
           <section>
             <h2>Last ned CV</h2>
