@@ -23,7 +23,7 @@ const customerColumns: Column[] = [
     title: 'Konsulent',
     width: 385,
     isExpandable: true,
-    getSearchValue: (consultant: { value: string }) => {
+    getValue: (consultant: { value: string }) => {
       return consultant.value
     },
     renderCell: ConsultantCell,
@@ -33,7 +33,7 @@ const customerColumns: Column[] = [
   {
     title: 'Kunde',
     width: 480,
-    getSearchValue: (customerProject: string) => {
+    getValue: (customerProject: string) => {
       return customerProject
     },
   },

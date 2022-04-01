@@ -5,7 +5,7 @@ import DataTable from './components/table/DataTable'
 import SearchInput from '../components/SearchInput'
 import FilterInput from '../components/filter/FilterInput'
 import { RowCount } from './components/RowCount'
-import { Column, DDTableProps, GetSearchValueFn } from './types'
+import { Column, ColumnSort, DDTableProps, GetColumnValueFn } from './types'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   filterNonCustomer,
@@ -14,16 +14,11 @@ import {
   handleThresholdChange,
   searchAndFilter,
 } from '../components/filter/FilterUtil'
-import { SortOrder } from './components/table/cells/SortableHeaderCell'
+import { TableRow } from '../api/data/tableResponses'
 
 export interface SearchableColumn {
   columnIndex: number
-  getSearchValue: GetSearchValueFn
-}
-
-export interface ColumnSort {
-  columnIndex: number
-  sortOrder: SortOrder
+  getSearchValue: GetColumnValueFn
 }
 
 const useStyles = makeStyles({
@@ -35,21 +30,29 @@ const useStyles = makeStyles({
   },
 })
 
-const sortColumn = (rows: any[], currentSort: ColumnSort) => {
-  const compare = (a: any, b: any) => {
-    return JSON.stringify(a.rowData[currentSort.columnIndex])
-      .toLowerCase()
-      .localeCompare(
-        JSON.stringify(b.rowData[currentSort.columnIndex]).toLowerCase()
-      )
+const sortColumn = (rows: TableRow<any>[], currentSort: ColumnSort) => {
+  if (!currentSort) return rows
+
+  const getValueFnFallback = (rowData: any) => JSON.stringify(rowData)
+  const getValueFn = currentSort.getSortValue ?? getValueFnFallback
+
+  const getCellValue = (row: TableRow<any>) => {
+    return getValueFn(row.rowData[currentSort.columnIndex])
   }
 
-  if (!currentSort) return rows
+  const compare = (a: TableRow<any>, b: TableRow<any>) => {
+    const aValue = getCellValue(a)
+    const bValue = getCellValue(b)
+    return String(aValue)
+      .toLowerCase()
+      .localeCompare(String(bValue).toLowerCase())
+  }
+
   switch (currentSort.sortOrder) {
     case 'ASC':
-      return rows.sort(compare)
+      return rows.sort((a, b) => compare(a, b))
     case 'DESC':
-      return rows.sort(compare).reverse()
+      return rows.sort((a, b) => compare(b, a))
     default:
       return rows
   }
@@ -58,10 +61,10 @@ const sortColumn = (rows: any[], currentSort: ColumnSort) => {
 export function getSearchableColumns(columns: Column[]): SearchableColumn[] {
   const result: SearchableColumn[] = []
   columns.forEach((column, index) => {
-    if (column.getSearchValue) {
+    if (column.getValue) {
       result.push({
         columnIndex: index,
-        getSearchValue: column.getSearchValue,
+        getSearchValue: column.getValue,
       })
     }
   })
@@ -142,6 +145,12 @@ export default function DDTable({
       )
   )
 
+  const checkBox = {
+    label: 'Se kun ledige',
+    changeHandler: toggleDisplayNonProject,
+    checked: displayNonProject,
+  }
+
   return (
     <>
       <GridItemHeader title={title}>
@@ -163,8 +172,7 @@ export default function DDTable({
       <DataTable
         setColumnSort={setColumnSort}
         currentColumnSort={columnSort}
-        checked={displayNonProject}
-        checkBoxChangeHandler={toggleDisplayNonProject}
+        checkBox={checkBox}
         rows={sortedRows}
         columns={props.columns}
       />

@@ -1,7 +1,6 @@
 import React from 'react'
 import DDTable from '../../../data/DDTable'
 import {
-  CheckBoxHeaderCell,
   ConsultantCell,
   CustomerStatusCell,
   CvCell,
@@ -40,19 +39,19 @@ export function EmployeeTable() {
                 title: 'Konsulent',
                 width: 385,
                 isExpandable: true,
-                getSearchValue: (consultant: Pick<ConsultantInfo, 'name'>) => {
+                getValue: (consultant: Pick<ConsultantInfo, 'name'>) => {
                   return consultant.name
                 },
                 renderCell: ConsultantCell,
                 renderExpanded: EmployeeInfo,
-                headerCell: CheckBoxHeaderCell,
+                headerCell: SortableHeaderCell,
                 checkBoxLabel: 'Vis kun ledige',
               },
               {
                 title: 'Tittel',
                 width: 222,
                 headerCell: SortableHeaderCell,
-                getSearchValue: (jobTitle: string | undefined | null) => {
+                getValue: (jobTitle: string | undefined | null) => {
                   return jobTitle
                 },
               },
@@ -65,10 +64,10 @@ export function EmployeeTable() {
                 title: 'Kunde',
                 width: 337,
                 renderCell: CustomerStatusCell,
-                getSearchValue: (customer: Customer | null) => {
+                getValue: (customer: Customer | null) => {
                   return customer?.customer
                     ? `${customer.customer} ${customer.workOrderDescription}`
-                    : 'Ikke i prosjekt'
+                    : undefined
                 },
                 headerCell: SortableHeaderCell,
               },

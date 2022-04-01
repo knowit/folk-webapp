@@ -2,8 +2,6 @@ import * as React from 'react'
 import { SWRResponse } from 'swr'
 import { FilterObject } from '../components/filter/FilterUtil'
 
-export type DDPayload = { [key: string]: any }
-
 export type ChartType = 'Line' | 'Bar' | 'Pie' | 'Radar' | 'Sunburst'
 export type ChartVariant = {
   type: ChartType
@@ -23,20 +21,28 @@ export type Column = {
   width: number
   isExpandable?: boolean
   checkBoxLabel?: string
-  getSearchValue?: GetSearchValueFn
+  getValue?: GetColumnValueFn
   renderCell?: (props: any) => JSX.Element
   renderExpanded?: (props: any) => JSX.Element
   headerCell?: (props: any) => JSX.Element
   checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-export type GetSearchValueFn = (data: any) => string | number | undefined | null
+export type GetColumnValueFn = (data: any) => string | number | undefined | null
 
 export interface DDComponentProps {
   payload: any
   title: string
   description?: string
   fullsize?: boolean
+}
+
+export type SortOrder = 'NONE' | 'ASC' | 'DESC'
+
+export interface ColumnSort {
+  sortOrder: SortOrder
+  columnIndex: number
+  getSortValue?: GetColumnValueFn
 }
 
 export interface DDTableProps extends DDComponentProps {
