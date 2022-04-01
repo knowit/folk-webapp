@@ -118,14 +118,14 @@ export const aggregateEmployeeCompetenceAndMotivation = (
 export const aggregateEmployeeProfile = (
   employeeSkills: EmployeeSkills[],
   workExperience: WorkExperience[],
-  employeeInformation: EmployeeProfileInformation[],
+  employeeProfileInformation: EmployeeProfileInformation[],
   employeeCustomers: EmployeeCustomers[]
 ): EmployeeProfileResponse => {
-  if (employeeInformation.length === 0) {
+  if (employeeProfileInformation.length === 0) {
     return
   }
 
-  const employee = employeeInformation[0]
+  const employee = employeeProfileInformation[0]
 
   return {
     user_id: employee.user_id,

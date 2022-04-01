@@ -30,6 +30,20 @@ const reports = [
     lastCacheUpdate: '2022-03-28T13:36:22.390506',
   },
   {
+    name: 'employeeProfileInformation',
+    queryString:
+      'WITH last_education AS (SELECT a.user_id, array_agg(a.degree)[1] AS degree, array_agg(a.year_to)[1] AS year_to FROM dev_level_3_database.cv_partner_education a INNER JOIN (SELECT user_id, max(year_to) AS year_to FROM dev_level_3_database.cv_partner_education GROUP BY user_id) b ON a.user_id = b.user_id AND a.year_to = b.year_to GROUP BY a.user_id) SELECT cv.user_id, cv.guid, cv.email, cv.navn AS name, cv.telefon AS phone, cv.title, edu.degree, ad.manager, cv.image_key, cv.link FROM dev_level_3_database.cv_partner_employees AS cv LEFT OUTER JOIN last_education AS edu ON edu.user_id = cv.user_id LEFT OUTER JOIN dev_level_3_database.active_directory AS ad ON ad.guid = cv.guid ORDER BY name',
+    tables: [
+      'active_directory',
+      'cv_partner_education',
+      'cv_partner_employees',
+    ],
+    dataProtection: 3,
+    created: '2022-04-01T07:43:15.177430',
+    lastUsed: null,
+    lastCacheUpdate: '2022-04-01T07:43:17.614737',
+  },
+  {
     name: 'competence',
     queryString:
       'WITH last_education AS (SELECT a.user_id, array_agg(a.degree)[1] AS degree, array_agg(a.year_to)[1] AS year_to FROM dev_level_3_database.cv_partner_education a INNER JOIN (SELECT user_id, max(year_to) AS year_to FROM dev_level_3_database.cv_partner_education GROUP BY  user_id ) b ON a.user_id = b.user_id AND a.year_to = b.year_to GROUP BY  a.user_id) SELECT emp.user_id, navn, title, link, degree, email, image_key\n FROM dev_level_3_database.cv_partner_employees AS emp LEFT OUTER JOIN last_education AS e ON e.user_id = emp.user_id order by navn',

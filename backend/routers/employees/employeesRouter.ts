@@ -196,10 +196,10 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      const employeeInformationPromise =
+      const employeeProfileInformationPromise =
         getReport<EmployeeProfileInformationReport>({
           accessToken: req.accessToken,
-          reportName: 'employeeProfile',
+          reportName: 'employeeProfileInformation',
           queryParams: {
             email: req.query.email,
           },
@@ -216,16 +216,19 @@ router.get<unknown, unknown, unknown, EmailParam>(
       const [
         employeeSkills,
         workExperience,
-        employeeInformation,
+        employeeProfileInformation,
         employeeCustomers,
       ] = await Promise.all([
         employeeSkillsPromise,
         workExperiencePromise,
-        employeeInformationPromise,
+        employeeProfileInformationPromise,
         employeeCustomersPromise,
       ])
 
-      if (!employeeInformation || employeeInformation.length === 0) {
+      if (
+        !employeeProfileInformation ||
+        employeeProfileInformation.length === 0
+      ) {
         const err: NotFoundError = {
           status: 404,
           message: "Employee with email '" + req.query.email + "' not found.",
@@ -237,7 +240,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
       const aggregatedData = aggregateEmployeeProfile(
         employeeSkills,
         workExperience,
-        employeeInformation,
+        employeeProfileInformation,
         employeeCustomers
       )
 
