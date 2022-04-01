@@ -116,9 +116,10 @@ export const aggregateEmployeeCompetenceAndMotivation = (
 }
 
 export const aggregateEmployeeProfile = (
+  employeeProfileInformation: EmployeeProfileInformation[],
   employeeSkills: EmployeeSkills[],
   workExperience: WorkExperience[],
-  employeeProfileInformation: EmployeeProfileInformation[],
+  projectExperience: ProjectExperience[],
   employeeCustomers: EmployeeCustomers[]
 ): EmployeeProfileResponse => {
   if (employeeProfileInformation.length === 0) {
@@ -136,9 +137,23 @@ export const aggregateEmployeeProfile = (
     degree: employee.degree,
     manager: employee.manager,
     image: getStorageUrl(employee.image_key),
-    workExperience,
     tags: mapEmployeeTags(employeeSkills[0]),
     links: createCvLinks(employee.link),
+    workExperience: workExperience.map((job) => ({
+      employer: job.employer,
+      month_from: job.month_from,
+      month_to: job.month_to,
+      year_from: job.year_from,
+      year_to: job.year_to,
+    })),
+    projectExperience: projectExperience.map((project) => ({
+      customer: project.customer,
+      project: project.description,
+      year_from: project.year_from,
+      month_from: project.month_from,
+      year_to: project.year_to,
+      month_to: project.month_to,
+    })),
     customers: employeeCustomers.map((customer) => ({
       customer: customer.customer,
       workOrderDescription: customer.work_order_description,

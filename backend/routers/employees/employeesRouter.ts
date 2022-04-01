@@ -180,6 +180,15 @@ router.get<unknown, unknown, unknown, EmailParam>(
         throw err
       }
 
+      const employeeProfileInformationPromise =
+        getReport<EmployeeProfileInformationReport>({
+          accessToken: req.accessToken,
+          reportName: 'employeeProfileInformation',
+          queryParams: {
+            email: req.query.email,
+          },
+        })
+
       const employeeSkillsPromise = getReport<EmployeeSkillsReport>({
         accessToken: req.accessToken,
         reportName: 'employeeSkills',
@@ -196,14 +205,13 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      const employeeProfileInformationPromise =
-        getReport<EmployeeProfileInformationReport>({
-          accessToken: req.accessToken,
-          reportName: 'employeeProfileInformation',
-          queryParams: {
-            email: req.query.email,
-          },
-        })
+      const projectExperiencePromise = getReport<ProjectExperienceReport>({
+        accessToken: req.accessToken,
+        reportName: 'projectExperience',
+        queryParams: {
+          email: req.query.email,
+        },
+      })
 
       const employeeCustomersPromise = getReport<EmployeeCustomersReport>({
         accessToken: req.accessToken,
@@ -214,14 +222,16 @@ router.get<unknown, unknown, unknown, EmailParam>(
       })
 
       const [
+        employeeProfileInformation,
         employeeSkills,
         workExperience,
-        employeeProfileInformation,
+        projectExperience,
         employeeCustomers,
       ] = await Promise.all([
+        employeeProfileInformationPromise,
         employeeSkillsPromise,
         workExperiencePromise,
-        employeeProfileInformationPromise,
+        projectExperiencePromise,
         employeeCustomersPromise,
       ])
 
@@ -238,9 +248,10 @@ router.get<unknown, unknown, unknown, EmailParam>(
       }
 
       const aggregatedData = aggregateEmployeeProfile(
+        employeeProfileInformation,
         employeeSkills,
         workExperience,
-        employeeProfileInformation,
+        projectExperience,
         employeeCustomers
       )
 

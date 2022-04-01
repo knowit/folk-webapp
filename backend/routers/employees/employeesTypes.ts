@@ -161,10 +161,28 @@ export type EmployeeProfileResponse = Omit<
   'guid' | 'image_key' | 'link'
 > & {
   image: string
-  workExperience: WorkExperience[]
   tags: Tags
   links: CvLinks
   customers: Customer[]
+  workExperience: WorkExperienceForProfile[]
+  projectExperience: ProjectExperienceForProfile[]
+}
+
+type WorkExperienceForProfile = {
+  employer: string
+  month_from: number
+  year_from: number
+  month_to: number
+  year_to: number
+}
+
+type ProjectExperienceForProfile = {
+  customer: string
+  project: string
+  year_from: number
+  month_from: number
+  year_to: number
+  month_to: number
 }
 
 export type Tags = {
