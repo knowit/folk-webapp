@@ -1,9 +1,9 @@
 import { formatMonthYear } from './formatMonthYear'
 
 export function formatMonthYearRange(
-  fromMonth: number | undefined,
+  fromMonth: number,
   fromYear: number,
-  toMonth: number | undefined,
+  toMonth: number,
   toYear: number
 ): string {
   return [
