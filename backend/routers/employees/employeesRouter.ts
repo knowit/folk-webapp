@@ -12,7 +12,7 @@ import {
 } from './employeesAggregation'
 import {
   BasicEmployeeInformationReport,
-  EmployeeExperienceReport,
+  ProjectExperienceReport,
   EmployeeProfileInformationReport,
   EmployeeMotivationAndCompetenceReport,
   EmployeeSkillsReport,
@@ -91,7 +91,7 @@ router.get<unknown, unknown, unknown, UserIdParam>(
         throw err
       }
 
-      const data = await getReport<EmployeeExperienceReport>({
+      const data = await getReport<ProjectExperienceReport>({
         accessToken: req.accessToken,
         reportName: 'projectExperience',
         queryParams: {

@@ -85,9 +85,10 @@ export type WorkExperience = {
   year_to: number
 }
 
-export type EmployeeExperienceReport = EmployeeExperience[]
-export type EmployeeExperience = {
+export type ProjectExperienceReport = ProjectExperience[]
+export type ProjectExperience = {
   user_id: string
+  email: string
   navn: string
   customer: string
   description: string

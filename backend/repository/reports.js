@@ -293,12 +293,12 @@ const reports = [
   {
     name: 'projectExperience',
     queryString:
-      'SELECT emp.user_id, navn, customer, description, year_from, year_to, month_from,  month_to FROM dev_level_3_database.cv_partner_project_experience AS exp JOIN (SELECT user_id, navn FROM dev_level_3_database.cv_partner_employees) emp ON exp.user_id = emp.user_id',
+      'SELECT emp.user_id, email, navn, customer, description, year_from, year_to, month_from, month_to FROM dev_level_3_database.cv_partner_project_experience AS exp JOIN (SELECT user_id, navn, email FROM dev_level_3_database.cv_partner_employees) emp ON exp.user_id = emp.user_id',
     tables: ['cv_partner_employees', 'cv_partner_project_experience'],
     dataProtection: 3,
-    created: '2021-07-28T10:38:43.562688',
+    created: '2022-04-01T08:26:31.053906',
     lastUsed: null,
-    lastCacheUpdate: '2022-01-21T10:08:57.380277',
+    lastCacheUpdate: '2022-04-01T08:26:37.031550',
   },
   {
     name: 'test123',

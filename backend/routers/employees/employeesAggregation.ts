@@ -7,7 +7,7 @@ import {
 } from './aggregationHelpers'
 import {
   BasicEmployeeInformation,
-  EmployeeExperience,
+  ProjectExperience,
   EmployeeProfileInformation,
   EmployeeMotivationAndCompetence,
   EmployeeProfileResponse,
@@ -57,7 +57,7 @@ export const aggregateEmployeeTable = (
   })
 }
 
-export const aggregateEmployeeExperience = (data: EmployeeExperience[]) => {
+export const aggregateEmployeeExperience = (data: ProjectExperience[]) => {
   const formatTime = (year: number, month: number) =>
     [
       year && year > 0 ? year : '',
