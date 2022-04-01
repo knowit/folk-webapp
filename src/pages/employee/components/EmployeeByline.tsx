@@ -33,27 +33,31 @@ interface Props {
 export function EmployeeByline({ employee, isLoading }: Props) {
   const classes = useStyles()
 
-  const EmployeeName = () =>
-    isLoading ? (
-      <LineSkeleton width="50%" height="3em" />
-    ) : (
-      <h1 className={classes.name}>{employee?.name}</h1>
-    )
+  const EmployeeName = () => {
+    if (isLoading) {
+      return <LineSkeleton width="50%" height="3em" />
+    }
+    return <h1 className={classes.name}>{employee?.name}</h1>
+  }
 
-  const EmployeeJobTitle = () =>
-    isLoading ? (
-      <LineSkeleton width="40%" height="1.5em" />
-    ) : (
-      <p className={classes.jobTitle}>{employee?.title}</p>
-    )
+  const EmployeeJobTitle = () => {
+    if (isLoading) {
+      return <LineSkeleton width="40%" height="1.5em" />
+    }
+    if (employee?.title) {
+      return <p className={classes.jobTitle}>{employee?.title}</p>
+    }
+    return null
+  }
 
-  const EmployeeContactInfo = () =>
-    isLoading ? (
-      <MultiLineSkeleton lines={2} maxWidth="45%" lineHeight="1.5em" />
-    ) : (
+  const EmployeeContactInfo = () => {
+    if (isLoading) {
+      return <MultiLineSkeleton lines={2} maxWidth="45%" lineHeight="1.5em" />
+    }
+    return (
       <dl className={classes.contactInfo}>
         <div>
-          <dt>E-post: </dt>
+          <dt>E-post:</dt>
           <dd>
             <a className={classes.link} href={`mailto:${employee?.email}`}>
               {employee?.email}
@@ -62,12 +66,13 @@ export function EmployeeByline({ employee, isLoading }: Props) {
         </div>
         {employee?.phone ? (
           <div>
-            <dt>Telefon: </dt>
+            <dt>Telefon:</dt>
             <dd>{employee?.phone}</dd>
           </div>
         ) : null}
       </dl>
     )
+  }
 
   return (
     <div>
