@@ -1,11 +1,4 @@
-import {
-  mapEmployeeTags,
-  getEventSet,
-  mergeCustomersForEmployees,
-  range,
-  sum,
-} from './util'
-import Reporting from '../reporting'
+import { mapEmployeeTags, getEventSet, range, sum } from './util'
 import { LineChartData } from '../routers/chartTypes'
 
 type EmployeeMotivationAndCompetence = {
@@ -17,21 +10,6 @@ type EmployeeMotivationAndCompetence = {
   categoryMotivationAvg: number
   categoryCompetenceAvg: number
 }
-
-const getStorageUrl = (key: string) => {
-  if (key !== undefined) {
-    return `${process.env.STORAGE_URL}/${key}`
-  } else {
-    return undefined
-  }
-}
-
-const cvs = [
-  ['no', 'pdf'],
-  ['int', 'pdf'],
-  ['no', 'word'],
-  ['int', 'word'],
-]
 
 type ReportParams = {
   parameters: {
@@ -504,56 +482,6 @@ export const competenceAmount = async ({
   return {
     setNames: Object.keys(output),
     sets: output,
-  }
-}
-
-export const employeeProfileReports = ({
-  parameters: { email } = {},
-}: ReportParams) => [
-  {
-    reportName: 'employeeSkills',
-    filter: { email },
-  },
-  {
-    reportName: 'workExperience',
-    filter: { email },
-  },
-  {
-    reportName: 'employeeInformation',
-    filter: { email },
-  },
-]
-
-/**
- * Dette endepunktet henter data om en enkelt person for å fylle opp sidene for hver enkelt ansatt.
- */
-export const employeeProfile = async ({ data }: EmployeeData) => {
-  const [employeeSkills, workExperience, employeeInformation] = data
-
-  if (!employeeInformation || employeeInformation.length === 0) {
-    throw Reporting({ status: 404, message: 'No employee information found' })
-  }
-
-  const employee = mergeCustomersForEmployees(employeeInformation)[0]
-
-  return {
-    user_id: employee.user_id,
-    guid: employee.guid,
-    navn: employee.navn,
-    manager: employee.manager,
-    title: employee.title,
-    degree: employee.degree,
-    email: employee.email,
-    image: getStorageUrl(employee.image_key),
-    customers: employee.customers,
-    workExperience,
-    tags: mapEmployeeTags(employeeSkills[0]),
-    links: Object.fromEntries(
-      cvs.map(([lang, format]) => [
-        `${lang}_${format}`,
-        employee.link?.replace('{LANG}', lang).replace('{FORMAT}', format),
-      ])
-    ),
   }
 }
 

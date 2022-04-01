@@ -1,4 +1,4 @@
-import { EmployeeInformation, EmployeeSkills } from './data'
+import { EmployeeSkills } from './data'
 import AWS from 'aws-sdk'
 AWS.config.update({ region: 'eu-central-1' })
 
@@ -8,50 +8,6 @@ export const range = (x: number, y: number) =>
       while (x <= y) yield x++
     })()
   )
-
-type EmployeeWithMergedCustomers = EmployeeInformation & {
-  customers: Customer[]
-}
-
-type Customer = {
-  customer: string
-  workOrderDescription: string
-  weight: number
-}
-
-/**
- * Receives a list of employees, where each employee is listed once for each
- * customer it is related to. This means that an employee might be listed more
- * than once. The function merges the received employees and returns a list of
- * distinct employees, each with a merged list of their related customers.
- */
-export const mergeCustomersForEmployees = (
-  employees: EmployeeInformation[]
-): EmployeeWithMergedCustomers[] => {
-  const employeesWithMergedCustomers = {}
-
-  employees.forEach((employee) => {
-    const employeeToMerge =
-      employeesWithMergedCustomers[employee.guid] ?? employee
-    const customersForEmployee = employeeToMerge.customers ?? []
-
-    if (employee.customer) {
-      const thisCustomer = {
-        customer: employee.customer,
-        workOrderDescription: employee.work_order_description,
-        weight: employee.weight,
-      }
-      customersForEmployee.push(thisCustomer)
-    }
-
-    employeesWithMergedCustomers[employee.guid] = {
-      ...employeeToMerge,
-      customers: customersForEmployee,
-    }
-  })
-
-  return Object.values(employeesWithMergedCustomers)
-}
 
 export function mapEmployeeTags(employeeSkills?: EmployeeSkills) {
   const { skill, language, role } = employeeSkills ?? {}
