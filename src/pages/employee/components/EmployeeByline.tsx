@@ -57,7 +57,7 @@ export function EmployeeByline({ employee, isLoading }: Props) {
     return (
       <dl className={classes.contactInfo}>
         <div>
-          <dt>E-post:</dt>
+          <dt>E-post:&nbsp;</dt>
           <dd>
             <a className={classes.link} href={`mailto:${employee?.email}`}>
               {employee?.email}
@@ -66,7 +66,7 @@ export function EmployeeByline({ employee, isLoading }: Props) {
         </div>
         {employee?.phone ? (
           <div>
-            <dt>Telefon:</dt>
+            <dt>Telefon:&nbsp;</dt>
             <dd>{employee?.phone}</dd>
           </div>
         ) : null}
