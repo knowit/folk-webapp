@@ -4,7 +4,7 @@ import { CompetenceSummary } from './CompetenceSummary'
 import { WorkExperienceList } from './WorkExperienceList'
 import { ProjectExperienceList } from './ProjectExperienceList'
 import { CompetenceChart } from './CompetenceChart'
-import { useEmployeeProfile } from '../../../api/data/employee/employeeQueries'
+import { useEmployeeCompetence } from '../../../api/data/employee/employeeQueries'
 import { EmployeeNotFound } from './EmployeeNotFound'
 import { FallbackMessage } from './FallbackMessage'
 
@@ -61,7 +61,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
   const classes = useStyles()
 
   // TODO: use useEmployeeCompetence
-  const { data: employee, error } = useEmployeeProfile(data.email)
+  const { data: employee, error } = useEmployeeCompetence(data.email)
   const isLoading = !employee
 
   // TODO: maybe not memoize here? Check render performance

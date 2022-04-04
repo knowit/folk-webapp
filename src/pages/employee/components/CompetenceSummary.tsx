@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { makeStyles } from '@material-ui/core'
-import { EmployeeProfileResponse } from '../../../api/data/employee/employeeApiTypes'
+import { EmployeeCompetenceResponse } from '../../../api/data/employee/employeeApiTypes'
 import { getStartedInKnowit } from '../../../utils/getStartedInKnowit'
 import { getTotalWorkExperience } from '../../../utils/getTotalWorkExperience'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
@@ -14,15 +14,8 @@ const useStyles = makeStyles({
   },
 })
 
-function getStringFromList(list: string[] | undefined) {
-  if (!list || list.length === 0) return
-  return Array.from(new Set(list))
-    .filter((item) => Boolean(item))
-    .join(', ')
-}
-
 interface Props {
-  employee?: EmployeeProfileResponse
+  employee?: EmployeeCompetenceResponse
   isLoading?: boolean
   isError?: boolean
 }
@@ -48,11 +41,11 @@ export function CompetenceSummary({ employee, isLoading, isError }: Props) {
       <CompetenceSummaryItem label="Utdanning" value={employee?.degree} />
       <CompetenceSummaryItem
         label="Hovedkompetanse"
-        value={getStringFromList(employee?.tags.skills)}
+        value={employee?.tags.skills.join(', ')}
       />
       <CompetenceSummaryItem
         label="Roller"
-        value={getStringFromList(employee?.tags.roles)}
+        value={employee?.tags.roles.join(', ')}
       />
       <CompetenceSummaryItem
         label="Startet i Knowit"

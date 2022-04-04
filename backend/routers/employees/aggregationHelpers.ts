@@ -6,8 +6,12 @@ import {
   EmployeeWorkStatus,
   JobRotationInformation,
   JobRotationStatus,
+  ProjectExperience,
+  ProjectExperienceForProfile,
   ProjectStatus,
   Tags,
+  WorkExperience,
+  WorkExperienceForProfile,
 } from './employeesTypes'
 
 export const getStorageUrl = (key?: string) => {
@@ -17,14 +21,44 @@ export const getStorageUrl = (key?: string) => {
   return `${process.env.STORAGE_URL}/${key}`
 }
 
+function getDistinctStringValues(list?: string[]) {
+  if (!list || list.length === 0) return
+  return Array.from(new Set(list)).filter(Boolean)
+}
+
 export function mapEmployeeTags(employeeSkills?: EmployeeSkills): Tags {
   const { skill, language, role } = employeeSkills ?? {}
 
   return {
-    skills: skill?.split(';') ?? [],
-    languages: language?.split(';') ?? [],
-    roles: role?.split(';') ?? [],
+    skills: getDistinctStringValues(skill?.split(';')) ?? [],
+    languages: getDistinctStringValues(language?.split(';')) ?? [],
+    roles: getDistinctStringValues(role?.split(';')) ?? [],
   }
+}
+
+export function mapWorkExperience(
+  workExperience: WorkExperience[]
+): WorkExperienceForProfile[] {
+  return workExperience.map((job) => ({
+    employer: job.employer,
+    month_from: job.month_from,
+    month_to: job.month_to,
+    year_from: job.year_from,
+    year_to: job.year_to,
+  }))
+}
+
+export function mapProjectExperience(
+  projectExperience: ProjectExperience[]
+): ProjectExperienceForProfile[] {
+  return projectExperience.map((project) => ({
+    customer: project.customer,
+    project: project.description,
+    year_from: project.year_from,
+    month_from: project.month_from,
+    year_to: project.year_to,
+    month_to: project.month_to,
+  }))
 }
 
 export const getProjectStatusForEmployee = (

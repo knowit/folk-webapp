@@ -4,6 +4,8 @@ import {
   getCategoryScoresForEmployee,
   getStorageUrl,
   createCvLinks,
+  mapWorkExperience,
+  mapProjectExperience,
 } from './aggregationHelpers'
 import {
   BasicEmployeeInformation,
@@ -16,6 +18,7 @@ import {
   EmployeeWorkStatus,
   JobRotationInformation,
   WorkExperience,
+  EmployeeCompetenceResponse,
 } from './employeesTypes'
 import { EmployeeCustomers } from '../customer/customerTypes'
 
@@ -57,21 +60,25 @@ export const aggregateEmployeeTable = (
   })
 }
 
-export const aggregateEmployeeExperience = (data: ProjectExperience[]) => {
-  const formatTime = (year: number, month: number) =>
-    [
-      year && year > 0 ? year : '',
-      year && year > 0 && month && month > 0 ? `/${month}` : '',
-    ].join('')
+export const aggregateEmployeeCompetence = (
+  employeeProfileInformation: EmployeeProfileInformation[],
+  employeeSkills: EmployeeSkills[],
+  workExperience: WorkExperience[],
+  projectExperience: ProjectExperience[]
+): EmployeeCompetenceResponse => {
+  if (employeeProfileInformation.length === 0) {
+    return
+  }
+
+  const employee = employeeProfileInformation[0]
 
   return {
-    name: data.length > 0 ? data[0].navn : '',
-    experience: data.reverse().map((exp) => ({
-      customer: exp.customer,
-      project: exp.description,
-      time_from: formatTime(exp.year_from, exp.month_from),
-      time_to: formatTime(exp.year_to, exp.month_to),
-    })),
+    email: employee.email,
+    degree: employee.degree,
+    manager: employee.manager,
+    tags: mapEmployeeTags(employeeSkills[0]),
+    workExperience: mapWorkExperience(workExperience),
+    projectExperience: mapProjectExperience(projectExperience),
   }
 }
 
@@ -139,21 +146,8 @@ export const aggregateEmployeeProfile = (
     image: getStorageUrl(employee.image_key),
     tags: mapEmployeeTags(employeeSkills[0]),
     links: createCvLinks(employee.link),
-    workExperience: workExperience.map((job) => ({
-      employer: job.employer,
-      month_from: job.month_from,
-      month_to: job.month_to,
-      year_from: job.year_from,
-      year_to: job.year_to,
-    })),
-    projectExperience: projectExperience.map((project) => ({
-      customer: project.customer,
-      project: project.description,
-      year_from: project.year_from,
-      month_from: project.month_from,
-      year_to: project.year_to,
-      month_to: project.month_to,
-    })),
+    workExperience: mapWorkExperience(workExperience),
+    projectExperience: mapProjectExperience(projectExperience),
     customers: employeeCustomers.map((customer) => ({
       customer: customer.customer,
       workOrderDescription: customer.work_order_description,
