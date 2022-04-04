@@ -7,7 +7,7 @@ import {
   ProjectStatusCell,
   SortableHeaderCell,
 } from '../../../data/components/table/DataCells'
-import { EmployeeInfo } from './EmployeeInfo'
+import { EmployeeTableExpandedInfo } from './EmployeeTableExpandedInfo'
 import {
   Customer,
   ConsultantInfo,
@@ -43,7 +43,7 @@ export function EmployeeTable() {
                   return consultant.name
                 },
                 renderCell: ConsultantCell,
-                renderExpanded: EmployeeInfo,
+                renderExpanded: EmployeeTableExpandedInfo,
                 headerCell: SortableHeaderCell,
                 checkBoxLabel: 'Vis kun ledige',
               },

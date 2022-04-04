@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
-import { EmployeeInfo } from '../employee/components/EmployeeInfo'
+import { EmployeeTableExpandedInfo } from '../employee/components/EmployeeTableExpandedInfo'
 import { GridItem } from '../../components/gridItem/GridItem'
 import {
   CenteredHeaderCell,
@@ -27,7 +27,7 @@ const customerColumns: Column[] = [
       return consultant.value
     },
     renderCell: ConsultantCell,
-    renderExpanded: EmployeeInfo,
+    renderExpanded: EmployeeTableExpandedInfo,
   },
   { title: 'Tittel', width: 222 },
   {

@@ -43,13 +43,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-interface EmployeeInfoProps {
+interface Props {
   data: {
     email: string
   }
 }
 
-export function EmployeeInfo({ data }: EmployeeInfoProps) {
+export function EmployeeTableExpandedInfo({ data }: Props) {
   const classes = useStyles()
 
   const { data: employee, error } = useEmployeeCompetence(data.email)
