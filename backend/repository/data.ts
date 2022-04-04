@@ -125,7 +125,6 @@ export const employeeCompetence = async ({ data }: EmployeeData) => {
     tags: mapEmployeeTags(employeeSkills[0]),
     manager: employeeInformation[0].manager,
     degree: employeeInformation[0].degree,
-    guid: employeeInformation[0].guid,
   }
 }
 
