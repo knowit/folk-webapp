@@ -14,6 +14,13 @@ const useStyles = makeStyles({
   },
 })
 
+function getStringFromList(list: string[] | undefined) {
+  if (!list || list.length === 0) return
+  return Array.from(new Set(list))
+    .filter((item) => Boolean(item))
+    .join(', ')
+}
+
 interface Props {
   employee?: EmployeeProfileResponse
   isLoading?: boolean
@@ -41,11 +48,11 @@ export function CompetenceSummary({ employee, isLoading, isError }: Props) {
       <CompetenceSummaryItem label="Utdanning" value={employee?.degree} />
       <CompetenceSummaryItem
         label="Hovedkompetanse"
-        value={employee?.tags.skills.join(', ')}
+        value={getStringFromList(employee?.tags.skills)}
       />
       <CompetenceSummaryItem
         label="Roller"
-        value={employee?.tags.roles.join(', ')}
+        value={getStringFromList(employee?.tags.roles)}
       />
       <CompetenceSummaryItem
         label="Startet i Knowit"
