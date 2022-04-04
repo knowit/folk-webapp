@@ -33,7 +33,7 @@ export function ProjectExperienceList({
     return (
       <FallbackMessage
         isError
-        message="Noe gikk galt ved henting av prosjekter."
+        message="Beklager, noe gikk galt ved henting av prosjekter."
       />
     )
   }

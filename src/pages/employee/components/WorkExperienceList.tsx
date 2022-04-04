@@ -30,7 +30,7 @@ export function WorkExperienceList({
     return (
       <FallbackMessage
         isError
-        message="Noe gikk galt ved henting av arbeidserfaring."
+        message="Beklager, noe gikk galt ved henting av arbeidserfaring."
       />
     )
   }

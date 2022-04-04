@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
-import EmployeeInfo from '../employee/components/EmployeeInfo'
+import { EmployeeInfo } from '../employee/components/EmployeeInfo'
 import { GridItem } from '../../components/gridItem/GridItem'
 import {
   CenteredHeaderCell,

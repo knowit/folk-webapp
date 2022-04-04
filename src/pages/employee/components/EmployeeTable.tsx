@@ -7,7 +7,7 @@ import {
   ProjectStatusCell,
   SortableHeaderCell,
 } from '../../../data/components/table/DataCells'
-import EmployeeInfo from './EmployeeInfo'
+import { EmployeeInfo } from './EmployeeInfo'
 import {
   Customer,
   ConsultantInfo,

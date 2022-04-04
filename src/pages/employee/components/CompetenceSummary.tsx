@@ -27,7 +27,7 @@ export function CompetenceSummary({ employee, isLoading, isError }: Props) {
     return (
       <FallbackMessage
         isError
-        message="Noe gikk galt ved henting av informasjon for ansatt."
+        message="Beklager, noe gikk galt ved henting av informasjon for den ansatte."
       />
     )
   }

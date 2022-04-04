@@ -5,8 +5,6 @@ import { WorkExperienceList } from './WorkExperienceList'
 import { ProjectExperienceList } from './ProjectExperienceList'
 import { CompetenceChart } from './CompetenceChart'
 import { useEmployeeCompetence } from '../../../api/data/employee/employeeQueries'
-import { EmployeeNotFound } from './EmployeeNotFound'
-import { FallbackMessage } from './FallbackMessage'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,20 +47,14 @@ interface EmployeeInfoProps {
   data: {
     email: string
   }
-  rowId: string
-  columnWidths?: [
-    summary: number,
-    experience: number,
-    motivationCompetence: number
-  ]
 }
 
-export default function EmployeeInfo({ data }: EmployeeInfoProps) {
+export function EmployeeInfo({ data }: EmployeeInfoProps) {
   const classes = useStyles()
 
-  // TODO: use useEmployeeCompetence
   const { data: employee, error } = useEmployeeCompetence(data.email)
   const isLoading = !employee
+  const isError = Boolean(error)
 
   // TODO: maybe not memoize here? Check render performance
   const memoizedCompetenceChart = React.useMemo(
@@ -70,36 +62,27 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
     [data]
   )
 
-  // TODO: Test if this works here
-  if (error && error.status === 404) {
-    return <EmployeeNotFound employeeId={data.email} />
-  }
-
-  // TODO: Test if this works here
-  if (error) {
-    return (
-      <FallbackMessage
-        isError
-        message="Noe gikk galt ved henting av informasjon for ansatt."
-      />
-    )
-  }
-
   return (
     <div className={classes.root}>
       <section className={[classes.column, classes.summary].join(' ')}>
-        <CompetenceSummary employee={employee} isLoading={isLoading} />
+        <CompetenceSummary
+          employee={employee}
+          isLoading={isLoading}
+          isError={isError}
+        />
       </section>
       <section className={[classes.column, classes.experience].join(' ')}>
         <h3>Arbeidserfaring</h3>
         <WorkExperienceList
           workExperience={employee?.workExperience}
           isLoading={isLoading}
+          isError={isError}
         />
         <h3>Prosjekterfaring</h3>
         <ProjectExperienceList
           projectExperience={employee?.projectExperience}
           isLoading={isLoading}
+          isError={isError}
         />
       </section>
       <div className={[classes.column, classes.competenceMotivation].join(' ')}>
