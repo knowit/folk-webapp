@@ -56,12 +56,6 @@ export function EmployeeTableExpandedInfo({ data }: Props) {
   const isLoading = !employee
   const isError = Boolean(error)
 
-  // TODO: maybe not memoize here? Check render performance
-  const memoizedCompetenceChart = React.useMemo(
-    () => <CompetenceChart employeeEmail={data.email} />,
-    [data]
-  )
-
   return (
     <div className={classes.root}>
       <section className={[classes.column, classes.summary].join(' ')}>
@@ -86,7 +80,7 @@ export function EmployeeTableExpandedInfo({ data }: Props) {
         />
       </section>
       <div className={[classes.column, classes.competenceMotivation].join(' ')}>
-        {memoizedCompetenceChart}
+        <CompetenceChart employeeEmail={data.email} />
       </div>
     </div>
   )
