@@ -5,22 +5,21 @@ import { TableCell, withStyles } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper'
 import {
   AutoSizer,
-  Column,
+  Column as VirtualizedColumn,
   Index,
   Table,
   TableRowProps,
 } from 'react-virtualized'
 import CharacterLimitBox from './components/CharacterLimitBox'
-import { ColumnSort } from '../../DDTable'
-import { Columns } from '../../types'
-import { EmployeeTableResponse } from '../../../api/data/employee/employeeApiTypes'
+import { Column, ColumnSort } from '../../types'
+import { EmployeeTableRow } from '../../../api/data/employee/employeeApiTypes'
+import { EmployeeForCustomerList } from '../../../api/data/customer/customerApiTypes'
 
 interface DataTableProps {
-  columns: Columns[]
-  rows: EmployeeTableResponse[]
+  columns: Column[]
+  rows: EmployeeTableRow[] | EmployeeForCustomerList[]
   setColumnSort?: (CurrentSort: ColumnSort) => void
-  checkBoxChangeHandler?: () => void
-  checked?: boolean
+  checkBox?: CheckBoxHeader
   currentColumnSort?: ColumnSort
 }
 
@@ -41,6 +40,12 @@ interface CellProps {
   cellData: any[]
   rowId: string
   name: string
+}
+
+export interface CheckBoxHeader {
+  label: string
+  changeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
+  checked: boolean
 }
 
 const TableCellNoBorders = withStyles({
@@ -99,15 +104,13 @@ export const tableStyles = makeStyles((theme: Theme) =>
 
 const DEFAULT_CELL_HEIGHT = 70
 const EXPANDED_CELL_HEIGHT = 522
-const COLUMNS_WIDTH = [385, 222, 143, 337, 53]
 
 function VirtualizedTable({
   columns,
   rows,
   setColumnSort,
-  checkBoxChangeHandler,
   currentColumnSort,
-  checked,
+  checkBox,
 }: DataTableProps) {
   const classes = tableStyles()
   const tableRef = useRef<Table>(null)
@@ -116,9 +119,9 @@ function VirtualizedTable({
   useEffect(() => {
     // We need to alert the react-virtualized table that the height of a
     // row has changed, so that it can recalculate total height and reposition
-    // rows. This runs when a row is expanded/collapsed:
+    // rows. This runs when a row is expanded/collapsed or when the sort order is changed:
     tableRef.current?.recomputeRowHeights()
-  }, [tableRef, expandedRowIds])
+  }, [tableRef, expandedRowIds, currentColumnSort])
 
   function rowIsExpanded(rowId: string) {
     return expandedRowIds.includes(rowId)
@@ -191,10 +194,7 @@ function VirtualizedTable({
       <div key={key} className={classes.column} style={style}>
         <div className={className}>
           {columns.map((column, columnIndex) => (
-            <div
-              key={columnIndex}
-              style={{ width: COLUMNS_WIDTH[columnIndex] }}
-            >
+            <div key={columnIndex} style={{ width: column.width }}>
               <Cell
                 CellType={column.renderCell}
                 rowId={rowId}
@@ -218,22 +218,21 @@ function VirtualizedTable({
     index: number,
     currentOrder?: ColumnSort,
     HeaderCell?: (props: any) => JSX.Element,
-    checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void
+    checkBox?: CheckBoxHeader
   ) {
     if (HeaderCell) {
       return (
         <HeaderCell
           title={title}
-          checkBoxLabel="Se kun ledige"
-          checkBoxChangeHandler={checkBoxChangeHandler}
+          checkBox={checkBox}
           columnIndex={index}
+          column={columns[index]}
           onOrderChange={onSortChange}
           currentOrder={
             currentOrder?.columnIndex === index
               ? currentOrder.sortOrder
               : 'NONE'
           }
-          checked={checked}
         />
       )
     }
@@ -279,21 +278,21 @@ function VirtualizedTable({
           noRowsRenderer={EmptyRow}
           gridClassName={classes.noFocus}
         >
-          {columns.map(({ title, headerCell }, index) => (
-            <Column
-              key={title}
+          {columns.map((column, index) => (
+            <VirtualizedColumn
+              key={column.title}
               headerRenderer={() =>
                 renderHeaderCell(
-                  title,
+                  column.title,
                   index,
                   currentColumnSort,
-                  headerCell,
-                  checkBoxChangeHandler
+                  column.headerCell,
+                  checkBox
                 )
               }
               className={classes.flexContainer}
               dataKey={String(index)}
-              width={COLUMNS_WIDTH[index]}
+              width={column.width}
             />
           ))}
         </Table>

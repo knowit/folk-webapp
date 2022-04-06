@@ -1,6 +1,7 @@
 import { useCompetenceFilter } from '../../api/data/competence/competenceQueries'
-import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
+import { EmployeeTableRow } from '../../api/data/employee/employeeApiTypes'
 import { SearchableColumn } from '../../data/DDTable'
+import { EmployeeForCustomerList } from '../../api/data/customer/customerApiTypes'
 
 export interface CategoryWithGroup {
   category: string
@@ -8,22 +9,24 @@ export interface CategoryWithGroup {
 }
 
 export interface FilterObject {
-  name: FilterType
+  column:
+    | EmployeeTableColumnMapping.MOTIVATION
+    | EmployeeTableColumnMapping.COMPETENCE
+  label: string
   values: string[]
   threshold: number
   placeholder: string
   datafetch: () => CategoryWithGroup[]
 }
-export type FilterType = 'COMPETENCE' | 'MOTIVATION' | 'CUSTOMER'
 
-const ColumnMapping: Record<FilterType, number> = {
-  MOTIVATION: 4,
-  COMPETENCE: 5,
-  CUSTOMER: 3,
+export enum EmployeeTableColumnMapping {
+  CUSTOMER = 3,
+  MOTIVATION = 5,
+  COMPETENCE = 6,
 }
 
-function searchRow(
-  row: EmployeeTableResponse,
+export function searchRow(
+  row: EmployeeTableRow | EmployeeForCustomerList,
   searchableColumns: SearchableColumn[],
   searchTerm: string
 ) {
@@ -71,13 +74,13 @@ function filterRow(
 }
 
 export const searchAndFilter = (
-  rows: EmployeeTableResponse[],
+  rows: EmployeeTableRow[],
   searchableColumns: SearchableColumn[],
   searchTerm: string,
   filters: FilterObject[] = []
 ) => {
   const hasSearchTerm = !!searchTerm && searchTerm.trim() !== ''
-  return rows.filter((row: EmployeeTableResponse) => {
+  return rows.filter((row) => {
     const rowMatchesSearchTerm = hasSearchTerm
       ? searchRow(row, searchableColumns, searchTerm)
       : true
@@ -86,10 +89,9 @@ export const searchAndFilter = (
 
     filters.forEach((filter) => {
       if (filter.values.length > 0) {
-        const rowDataIndex = ColumnMapping[filter.name]
         rowMatchesFilters =
           rowMatchesFilters &&
-          filterRow(row.rowData[rowDataIndex], filter.values, filter.threshold)
+          filterRow(row.rowData[filter.column], filter.values, filter.threshold)
       }
     })
 
@@ -97,10 +99,11 @@ export const searchAndFilter = (
   })
 }
 
-export function filterNonCustomer(rows: EmployeeTableResponse[]) {
-  return rows.filter((row: EmployeeTableResponse) => {
-    const rowDataIndex = ColumnMapping['CUSTOMER']
-    return Object.keys(row.rowData[rowDataIndex]).length === 0
+export function filterNonCustomer(rows: EmployeeTableRow[]) {
+  return rows.filter((row) => {
+    const rowDataIndex = EmployeeTableColumnMapping['CUSTOMER']
+    const hasNoCustomer = !row.rowData[rowDataIndex]?.customer
+    return hasNoCustomer
   })
 }
 

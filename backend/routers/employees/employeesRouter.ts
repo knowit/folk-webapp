@@ -11,30 +11,41 @@ import {
   aggregateEmployeeTable,
 } from './employeesAggregation'
 import {
-  EmployeeExperience,
-  EmployeeInformation,
-  EmployeeMotivationAndCompetence,
-  EmployeeSkills,
-  WorkExperience,
+  BasicEmployeeInformationReport,
+  EmployeeExperienceReport,
+  EmployeeInformationReport,
+  EmployeeMotivationAndCompetenceReport,
+  EmployeeSkillsReport,
+  EmployeeWorkStatusReport,
+  JobRotationInformationReport,
+  WorkExperienceReport,
 } from './employeesTypes'
 
 const router = express.Router()
 
 router.get('/employeeTable', async (req, res, next) => {
   try {
-    const employeeInformationPromise = getReport<any[]>({
-      accessToken: req.accessToken,
-      reportName: 'employeeInformation',
-    })
+    const basicEmployeeInformationPromise =
+      getReport<BasicEmployeeInformationReport>({
+        accessToken: req.accessToken,
+        reportName: 'basicEmployeeInformation',
+      })
 
-    const employeeMotivationAndCompetencePromise = getReport<any[]>({
-      accessToken: req.accessToken,
-      reportName: 'employeeMotivationAndCompetence',
-    })
+    const employeeMotivationAndCompetencePromise =
+      getReport<EmployeeMotivationAndCompetenceReport>({
+        accessToken: req.accessToken,
+        reportName: 'employeeMotivationAndCompetence',
+      })
 
-    const jobRotationInformationPromise = getReport<any[]>({
+    const jobRotationInformationPromise =
+      getReport<JobRotationInformationReport>({
+        accessToken: req.accessToken,
+        reportName: 'jobRotationInformation',
+      })
+
+    const employeeWorkStatusPromise = getReport<EmployeeWorkStatusReport>({
       accessToken: req.accessToken,
-      reportName: 'jobRotationInformation',
+      reportName: 'employeeWorkStatus',
     })
 
     const employeeStatusPromise = getReport<any[]>({
@@ -43,22 +54,23 @@ router.get('/employeeTable', async (req, res, next) => {
     })
 
     const [
-      employeeInformation,
+      basicEmployeeInformation,
       employeeMotivationAndCompetence,
       jobRotationInformation,
-      employeeStatus,
+      employeeWorkStatus,
     ] = await Promise.all([
-      employeeInformationPromise,
+      basicEmployeeInformationPromise,
       employeeMotivationAndCompetencePromise,
       jobRotationInformationPromise,
       employeeStatusPromise,
+      employeeWorkStatusPromise,
     ])
 
     const aggregatedData = aggregateEmployeeTable(
-      employeeInformation,
+      basicEmployeeInformation,
       employeeMotivationAndCompetence,
       jobRotationInformation,
-      employeeStatus
+      employeeWorkStatus
     )
 
     res.send(aggregatedData)
@@ -84,7 +96,7 @@ router.get<unknown, unknown, unknown, UserIdParam>(
         throw err
       }
 
-      const data = await getReport<EmployeeExperience[]>({
+      const data = await getReport<EmployeeExperienceReport>({
         accessToken: req.accessToken,
         reportName: 'projectExperience',
         queryParams: {
@@ -115,7 +127,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         } as ParamError
       }
 
-      const data = await getReport<EmployeeMotivationAndCompetence[]>({
+      const data = await getReport<EmployeeMotivationAndCompetenceReport>({
         accessToken: req.accessToken,
         reportName: 'employeeMotivationAndCompetence',
         queryParams: {
@@ -143,7 +155,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         } as ParamError
       }
 
-      const data = await getReport<EmployeeMotivationAndCompetence[]>({
+      const data = await getReport<EmployeeMotivationAndCompetenceReport>({
         accessToken: req.accessToken,
         reportName: 'employeeMotivationAndCompetence',
         queryParams: {
@@ -173,7 +185,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         throw err
       }
 
-      const employeeSkillsPromise = getReport<EmployeeSkills[]>({
+      const employeeSkillsPromise = getReport<EmployeeSkillsReport>({
         accessToken: req.accessToken,
         reportName: 'employeeSkills',
         queryParams: {
@@ -181,7 +193,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      const workExperiencePromise = getReport<WorkExperience[]>({
+      const workExperiencePromise = getReport<WorkExperienceReport>({
         accessToken: req.accessToken,
         reportName: 'workExperience',
         queryParams: {
@@ -189,7 +201,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      const employeeInformationPromise = getReport<EmployeeInformation[]>({
+      const employeeInformationPromise = getReport<EmployeeInformationReport>({
         accessToken: req.accessToken,
         reportName: 'employeeInformation',
         queryParams: {

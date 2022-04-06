@@ -21,19 +21,24 @@ const useStyles = makeStyles(() =>
       fontSize: '18px',
       fontWeight: 'normal',
     },
-    BigGridHeaderTitle: {
+    bigGridHeaderTitle: {
       fontSize: '30px',
       fontWeight: 'normal',
       paddingLeft: '11px',
     },
     knowitGreen: {
       backgroundColor: '#00897B',
+      color: '#FFFFFF',
       width: '100%',
       height: '70px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
       margin: '0px',
+    },
+    knowitGreenTitle: {
+      color: '#FFFFFF',
+      fontWeight: 'bold',
     },
   })
 )
@@ -55,15 +60,20 @@ export function GridItemHeader({
 }: GridItemHeaderProps) {
   const classes = useStyles()
   const headerHeight = big ? classes.bigGridHeaderRoot : null
-  const fontSize = big ? classes.BigGridHeaderTitle : null
+  const fontSize = big ? classes.bigGridHeaderTitle : null
   const knowitGreen = green ? classes.knowitGreen : null
+  const knowitGreenTitle = green ? classes.knowitGreenTitle : null
 
   return (
     <div
       className={[classes.gridHeaderRoot, headerHeight, knowitGreen].join(' ')}
     >
       <Grid container direction="row" alignItems="center">
-        <h3 className={[classes.gridHeaderTitle, fontSize].join(' ')}>
+        <h3
+          className={[classes.gridHeaderTitle, fontSize, knowitGreenTitle].join(
+            ' '
+          )}
+        >
           {title}
         </h3>
         {description ? (

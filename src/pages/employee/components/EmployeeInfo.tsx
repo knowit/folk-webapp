@@ -7,6 +7,7 @@ import Chart from '../../../data/components/chart/Chart'
 import { useEmployeeRadar } from '../../../api/data/employee/employeeQueries'
 import { formatMonthYearRange } from '../../../utils/formatMonthYearRange'
 import {
+  ConsultantInfo,
   EmployeeExperienceResponse,
   ProjectExperience,
   WorkExperience,
@@ -27,6 +28,7 @@ interface EmployeeInfoData {
   }
   workExperience: WorkExperience[]
   manager: string
+  degree?: string
   guid: string
 }
 
@@ -86,12 +88,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface EmployeeInfoProps {
-  data: {
-    competenceUrl: string
-    user_id: string
-    email_id: string
-    degree: string
-  }
+  data: Pick<ConsultantInfo, 'email' | 'user_id'>
   id: string
   setRowHeight: (id: string, height: number) => void
 }
@@ -105,21 +102,27 @@ function getStringFromList(list: string[] | undefined) {
 
 export default function EmployeeInfo({ data }: EmployeeInfoProps) {
   const classes = useStyles()
-  const url = data.competenceUrl
-  const [empData, pending] = useFetchedData<EmployeeInfoData>({ url })
-  const user_id = data.user_id
+  const [empData, pending] = useFetchedData<EmployeeInfoData>({
+    url: `/api/data/employeeCompetence?email=${data.email}`,
+  })
   const [expData, expPending] = useFetchedData<EmployeeExperienceResponse>({
-    url: `/api/data/employeeExperience?user_id=${user_id}`,
+    url: `/api/data/employeeExperience?user_id=${data.user_id}`,
   })
 
-  const { data: employeeChartData } = useEmployeeRadar(data.email_id)
+  const { data: employeeChartData } = useEmployeeRadar(data.email)
 
   return (
     <div className={classes.root}>
       <div className={classes.info}>
         <div className={classes.cell}>
-          <b>Utdanning: </b>
-          {data.degree}
+          {pending ? (
+            <Skeleton variant="rect" width={340} height={15} animation="wave" />
+          ) : (
+            <>
+              <b>Utdanning: </b>
+              {empData?.degree ?? <NoData />}
+            </>
+          )}
         </div>
         <div className={classes.cell}>
           {pending ? (

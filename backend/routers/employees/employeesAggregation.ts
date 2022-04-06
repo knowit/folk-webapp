@@ -1,75 +1,66 @@
-import { v4 as uuid } from 'uuid'
 import {
   mapEmployeeTags,
-  cvs,
-  findCustomerWithHighestWeight,
-  findProjectStatusForEmployee,
+  getProjectStatusForEmployee,
   getCategoryScoresForEmployee,
   getStorageUrl,
-  makeCvLink,
   mergeCustomersForEmployees,
+  createCvLinks,
 } from './aggregationHelpers'
 import {
+  BasicEmployeeInformation,
   EmployeeExperience,
   EmployeeInformation,
   EmployeeMotivationAndCompetence,
-  EmployeeProfile,
+  EmployeeProfileResponse,
   EmployeeSkills,
+  EmployeeTableResponse,
+  EmployeeWorkStatus,
+  JobRotationInformation,
   WorkExperience,
 } from './employeesTypes'
 
 export const aggregateEmployeeTable = (
-  employeeInformation,
-  employeeMotivationAndCompetence,
-  jobRotationInformation,
-  employeeStatus
-) => {
-  const currentRegPeriod =
-    Math.max.apply(
-      null,
-      employeeStatus.map((workStatus) => workStatus.last_reg_period)
-    ) ?? 0
+  basicEmployeeInformation: BasicEmployeeInformation[],
+  employeeMotivationAndCompetence: EmployeeMotivationAndCompetence[],
+  jobRotationInformation: JobRotationInformation[],
+  employeeWorkStatus: EmployeeWorkStatus[]
+): EmployeeTableResponse => {
+  const currentRegPeriod = Math.max.apply(
+    Math,
+    ...employeeWorkStatus.map((workStatus) => workStatus.last_reg_period)
+  )
 
-  const employeesWithMergedCustomers =
-    mergeCustomersForEmployees(employeeInformation)
-  return employeesWithMergedCustomers.map((employee) => ({
-    rowId: uuid(),
-    rowData: [
-      {
-        value: employee.navn,
-        image: getStorageUrl(employee.image_key),
-        competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
-          employee.email
-        )}`,
-        email: employee.email,
-        email_id: employee.email,
-        user_id: employee.user_id,
-        degree: employee.degree,
-      },
-      employee.title,
-      findProjectStatusForEmployee(
-        jobRotationInformation,
-        employeeStatus,
-        employee.guid,
-        currentRegPeriod
-      ),
-      findCustomerWithHighestWeight(employee.customers),
-      Object.fromEntries(
-        cvs.map(([lang, format]) => [
-          `${lang}_${format}`,
-          employee.link.replace('{LANG}', lang).replace('{FORMAT}', format),
-        ])
-      ),
-      getCategoryScoresForEmployee(
-        employee.email,
-        employeeMotivationAndCompetence
-      )[0],
-      getCategoryScoresForEmployee(
-        employee.email,
-        employeeMotivationAndCompetence
-      )[1],
-    ],
-  }))
+  return basicEmployeeInformation.map((employee) => {
+    const [motivationScores, competenceScores] = getCategoryScoresForEmployee(
+      employee.email,
+      employeeMotivationAndCompetence
+    )
+    return {
+      rowId: employee.email,
+      rowData: [
+        {
+          user_id: employee.user_id,
+          name: employee.name,
+          email: employee.email,
+          image_url: getStorageUrl(employee.image_key),
+        },
+        employee.title || null,
+        getProjectStatusForEmployee(
+          jobRotationInformation,
+          employeeWorkStatus,
+          employee.guid,
+          currentRegPeriod
+        ),
+        {
+          customer: employee.primary_customer,
+          workOrderDescription: employee.primary_work_order_description,
+        },
+        createCvLinks(employee.link),
+        motivationScores,
+        competenceScores,
+      ],
+    }
+  })
 }
 
 export const aggregateEmployeeExperience = (data: EmployeeExperience[]) => {
@@ -134,7 +125,7 @@ export const aggregateEmployeeProfile = (
   employeeSkills: EmployeeSkills[],
   workExperience: WorkExperience[],
   employeeInformation: EmployeeInformation[]
-): EmployeeProfile => {
+): EmployeeProfileResponse => {
   if (employeeInformation.length === 0) {
     return
   }
@@ -153,11 +144,6 @@ export const aggregateEmployeeProfile = (
     customers: employee.customers,
     workExperience,
     tags: mapEmployeeTags(employeeSkills[0]),
-    links: {
-      no_pdf: makeCvLink('no', 'pdf', employee.link),
-      int_pdf: makeCvLink('int', 'pdf', employee.link),
-      no_word: makeCvLink('no', 'word', employee.link),
-      int_word: makeCvLink('int', 'word', employee.link),
-    },
+    links: createCvLinks(employee.link),
   }
 }

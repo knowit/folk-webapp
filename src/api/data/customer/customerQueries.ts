@@ -1,6 +1,7 @@
 import useSWR from 'swr'
 import {
   getCustomerCards,
+  getEmployeesByCustomer,
   getHoursBilledPerCustomer,
   getHoursBilledPerCustomerBar,
   getHoursBilledPerWeek,
@@ -9,6 +10,11 @@ import {
 
 export const useCustomerCards = () =>
   useSWR('/customerCard', getCustomerCards, {
+    revalidateOnFocus: false,
+  })
+
+export const useEmployeesByCustomer = () =>
+  useSWR('/employeesByCustomer', getEmployeesByCustomer, {
     revalidateOnFocus: false,
   })
 

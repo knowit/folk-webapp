@@ -1,29 +1,22 @@
 import {
   CategoryScores,
-  Customer,
+  CvLinks,
   EmployeeInformation,
   EmployeeMotivationAndCompetence,
   EmployeeSkills,
   EmployeeWithMergedCustomers,
   EmployeeWorkStatus,
-  JobRotation,
+  JobRotationInformation,
   JobRotationStatus,
+  ProjectStatus,
   Tags,
 } from './employeesTypes'
 
-export const cvs = [
-  ['no', 'pdf'],
-  ['int', 'pdf'],
-  ['no', 'word'],
-  ['int', 'word'],
-]
-
-export const getStorageUrl = (key: string) => {
-  if (key !== undefined) {
-    return `${process.env.STORAGE_URL}/${key}`
-  } else {
-    return undefined
+export const getStorageUrl = (key?: string) => {
+  if (!key) {
+    return
   }
+  return `${process.env.STORAGE_URL}/${key}`
 }
 
 /**
@@ -60,20 +53,6 @@ export const mergeCustomersForEmployees = (
   return Object.values(employeesWithMergedCustomers)
 }
 
-export function findCustomerWithHighestWeight(customers: Customer[]) {
-  if (!customers || customers.length === 0) {
-    return {}
-  }
-
-  return customers.reduce((prevCustomer, thisCustomer) => {
-    if (thisCustomer.weight < prevCustomer.weight) {
-      return thisCustomer
-    } else {
-      return prevCustomer
-    }
-  })
-}
-
 export function mapEmployeeTags(employeeSkills?: EmployeeSkills): Tags {
   const { skill, language, role } = employeeSkills ?? {}
 
@@ -84,14 +63,48 @@ export function mapEmployeeTags(employeeSkills?: EmployeeSkills): Tags {
   }
 }
 
-export const getYear = (): number => {
+export const getProjectStatusForEmployee = (
+  jobRotationInformation: JobRotationInformation[],
+  employeeWorkStatus: EmployeeWorkStatus[],
+  guid: string,
+  currentRegPeriod: number
+): ProjectStatus => {
+  const [wantNewProject, openForNewProject] = jobRotationStatus(
+    jobRotationInformation,
+    guid
+  )
+
+  const work = getEmployeeWork(employeeWorkStatus, guid)
+
+  let inProject = false
+  let isInternal = false
+
+  if (work) {
+    inProject = currentRegPeriod - work.last_reg_period < 5
+    isInternal = !work.project_type.toLowerCase().includes('external')
+  }
+
+  if ((wantNewProject || openForNewProject) > 0 && inProject) {
+    return wantNewProject > openForNewProject
+      ? ProjectStatus.WantChange
+      : ProjectStatus.OpenForChange
+  }
+
+  return !inProject
+    ? ProjectStatus.NoProject
+    : isInternal
+    ? ProjectStatus.InternalProject
+    : ProjectStatus.ExternalProject
+}
+
+const getYear = (): number => {
   const currentDate = new Date()
   const currentYear = currentDate.getFullYear()
 
   return Number(currentYear)
 }
 
-export const getWeek = (): string => {
+const getWeek = (): string => {
   const currentDate = new Date()
   const oneJan = new Date(getYear(), 0, 1)
   const numberOfDays = Math.floor(
@@ -120,78 +133,21 @@ const getEmployeeWork = (
   })
 }
 
-export const findProjectStatusForEmployee = (
-  jobRotationEmployees: JobRotation[],
-  employeeWorkStatus: EmployeeWorkStatus[],
-  guid: string,
-  currentRegPeriod: number
-): string => {
-  const work = getEmployeeWork(employeeWorkStatus, guid)
-
-  const [wantNewProject, openForNewProject]: JobRotationStatus =
-    jobRotationStatus(jobRotationEmployees, guid)
-
-  let inProjectStatus = false
-  let isInternal = false
-
-  if (work) {
-    inProjectStatus = currentRegPeriod - work.last_reg_period < 5
-    isInternal = !work.project_type.toLowerCase().includes('external')
-  }
-
-  const statusColor = statusColorCode(
-    wantNewProject,
-    openForNewProject,
-    inProjectStatus,
-    isInternal
-  )
-
-  return statusColor
-}
-
 const jobRotationStatus = (
-  jobRotations: JobRotation[],
-  email: string
+  jobRotationInformation: JobRotationInformation[],
+  guid: string
 ): JobRotationStatus => {
-  let wantNewProject, openForNewProject: number
+  let wantNewProject,
+    openForNewProject = 0
 
-  jobRotations.forEach((employee) => {
-    if (employee.email == email) {
+  jobRotationInformation.forEach((employee) => {
+    if (employee.guid == guid) {
       employee.index === 1 && (wantNewProject = employee.customscalevalue)
       employee.index === 2 && (openForNewProject = employee.customscalevalue)
     }
   })
 
   return [wantNewProject, openForNewProject]
-}
-
-export const statusColorCode = (
-  wantNewProject: number,
-  openForNewProject: number,
-  inProject: boolean,
-  isInternal: boolean
-): string => {
-  const getProjectColor = (): string => {
-    if (!inProject) return 'red'
-    if (isInternal) return 'blue'
-    return 'green'
-  }
-  const getNewProjectColor = (): string => {
-    if (wantNewProject >= openForNewProject) return 'orange'
-    return 'yellow'
-  }
-
-  const getStatusColor = (projecStatus: string, newProject: string): string => {
-    if (projecStatus === 'red') return projecStatus
-    if (wantNewProject > 0 || openForNewProject > 0) return newProject
-    return projecStatus
-  }
-
-  const projectStatus = getProjectColor()
-  const newProject = getNewProjectColor()
-  const statusColor = getStatusColor(projectStatus, newProject)
-
-  return statusColor
 }
 
 export const getCategoryScoresForEmployee = (
@@ -211,10 +167,19 @@ export const getCategoryScoresForEmployee = (
   return [employeeMotivation, employeeCompetence]
 }
 
-export const makeCvLink = (
-  lang: string,
-  format: string,
-  linkTemplate?: string
-) => {
-  return linkTemplate?.replace('{LANG}', lang).replace('{FORMAT}', format)
+export function createCvLinks(linkTemplate: string): CvLinks {
+  if (!linkTemplate) {
+    // Just to be safe, should not happen
+    return
+  }
+  return {
+    no_pdf: createCvLink('no', 'pdf', linkTemplate),
+    int_pdf: createCvLink('int', 'pdf', linkTemplate),
+    no_word: createCvLink('no', 'word', linkTemplate),
+    int_word: createCvLink('int', 'word', linkTemplate),
+  }
+}
+
+function createCvLink(language: string, format: string, linkTemplate: string) {
+  return linkTemplate.replace('{LANG}', language).replace('{FORMAT}', format)
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 import DDTable from '../../../data/DDTable'
 import {
-  CheckBoxHeaderCell,
   ConsultantCell,
   CustomerStatusCell,
   CvCell,
@@ -9,10 +8,16 @@ import {
   SortableHeaderCell,
 } from '../../../data/components/table/DataCells'
 import EmployeeInfo from './EmployeeInfo'
-import { CustomerStatusData } from '../../../data/components/table/cells/CustomerStatusCell'
+import {
+  Customer,
+  ConsultantInfo,
+} from '../../../api/data/employee/employeeApiTypes'
 import { Skeleton } from '@material-ui/lab'
 import { useEmployeeTable } from '../../../api/data/employee/employeeQueries'
-import { useCategories } from '../../../components/filter/FilterUtil'
+import {
+  EmployeeTableColumnMapping,
+  useCategories,
+} from '../../../components/filter/FilterUtil'
 import { GridItem } from '../../../components/gridItem/GridItem'
 
 export function EmployeeTable() {
@@ -32,46 +37,55 @@ export function EmployeeTable() {
             columns: [
               {
                 title: 'Konsulent',
+                width: 385,
                 isExpandable: true,
-                getSearchValue: (consultant: { value: string }) => {
-                  return consultant.value
+                getValue: (consultant: Pick<ConsultantInfo, 'name'>) => {
+                  return consultant.name
                 },
                 renderCell: ConsultantCell,
                 renderExpanded: EmployeeInfo,
-                headerCell: CheckBoxHeaderCell,
+                headerCell: SortableHeaderCell,
                 checkBoxLabel: 'Vis kun ledige',
               },
               {
                 title: 'Tittel',
+                width: 222,
                 headerCell: SortableHeaderCell,
-                getSearchValue: (jobTitle: string | undefined | null) => {
+                getValue: (jobTitle: string | undefined | null) => {
                   return jobTitle
                 },
               },
-              { title: 'Prosjektstatus', renderCell: ProjectStatusCell },
+              {
+                title: 'Prosjektstatus',
+                width: 143,
+                renderCell: ProjectStatusCell,
+              },
               {
                 title: 'Kunde',
+                width: 337,
                 renderCell: CustomerStatusCell,
-                getSearchValue: (customer: CustomerStatusData) => {
-                  return customer.customer
+                getValue: (customer: Customer | null) => {
+                  return customer?.customer
                     ? `${customer.customer} ${customer.workOrderDescription}`
-                    : 'Ikke i prosjekt'
+                    : undefined
                 },
                 headerCell: SortableHeaderCell,
               },
-              { title: 'CV', renderCell: CvCell },
+              { title: 'CV', width: 53, renderCell: CvCell },
             ],
           }}
           initialFilters={[
             {
-              name: 'COMPETENCE',
+              label: 'Kompetanse',
+              column: EmployeeTableColumnMapping.COMPETENCE,
               values: [],
               threshold: 3,
               placeholder: 'Filtrer på kompetanse...',
               datafetch: useCategories,
             },
             {
-              name: 'MOTIVATION',
+              label: 'Motivasjon',
+              column: EmployeeTableColumnMapping.MOTIVATION,
               values: [],
               threshold: 4,
               placeholder: 'Filtrer på motivasjon...',
