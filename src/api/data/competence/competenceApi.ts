@@ -55,11 +55,8 @@ export const getFagtimerCharts = () =>
 export const getFagEventsCharts = () =>
   getAtApiV2<ChartData>('/competence/fagEvents')
 
-export const getEducationPie = () =>
-  getAtApiV2<ChartData>('/competence/education/pie')
+export const getEducationCharts = () =>
+  getAtApiV2<ChartData>('/competence/education')
 
-export const getCompetenceMappingBar = () =>
-  getAtApiV2<ChartData>('/competence/competenceMapping/bar')
-
-export const getCompetenceMappingSunburst = () =>
-  getAtApiV2<ChartData>('/competence/competenceMapping/sunburst')
+export const getCompetenceMappingCharts = () =>
+  getAtApiV2<ChartData>('/competence/competenceMapping')

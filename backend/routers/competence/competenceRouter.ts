@@ -4,8 +4,7 @@ import {
   ageDistribution,
   competenceAmount,
   competenceAreas,
-  competenceMappingBar,
-  competenceMappingSunburst,
+  competenceMappingConversion,
   educationPie,
   experienceDistribution,
   fagEventsLine,
@@ -120,7 +119,7 @@ router.get('/fagEvents', async (req, res, next) => {
   }
 })
 
-router.get('/education/pie', async (req, res, next) => {
+router.get('/education', async (req, res, next) => {
   try {
     const data = await getReport<DegreeDistribution[]>({
       accessToken: req.accessToken,
@@ -134,28 +133,14 @@ router.get('/education/pie', async (req, res, next) => {
   }
 })
 
-router.get('/competenceMapping/bar', async (req, res, next) => {
+router.get('/competenceMapping', async (req, res, next) => {
   try {
     const data = await getReport<CategoryAverage[]>({
       accessToken: req.accessToken,
       reportName: 'newCompetenceMotivationAverages',
     })
 
-    const aggregatedData = competenceMappingBar(data)
-    res.send(aggregatedData)
-  } catch (error) {
-    next(error)
-  }
-})
-
-router.get('/competenceMapping/sunburst', async (req, res, next) => {
-  try {
-    const data = await getReport<CategoryAverage[]>({
-      accessToken: req.accessToken,
-      reportName: 'newCompetenceMotivationAverages',
-    })
-
-    const aggregatedData = competenceMappingSunburst(data)
+    const aggregatedData = competenceMappingConversion(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)

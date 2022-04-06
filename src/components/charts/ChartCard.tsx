@@ -16,6 +16,7 @@ import BarChart from './BarChart'
 import LineChart from './LineChart'
 import PieChart from './PieChart'
 import RadarChart from './RadarChart'
+import SunburstChart from './SunburstChart'
 
 interface SingularChartProps {
   chartData: SingularChartData
@@ -32,7 +33,7 @@ const SingularChart = ({ chartData }: SingularChartProps) => {
     case 'PieChart':
       return <PieChart {...chartData} />
     case 'SunburstChart':
-      throw new Error('Not implemented')
+      return <SunburstChart {...chartData} />
   }
 }
 

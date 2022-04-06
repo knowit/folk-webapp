@@ -194,12 +194,13 @@ export const educationPie = (data: DegreeDistribution[]): PieChartData => {
   return { type: 'PieChart', id, value, data }
 }
 
-export const competenceMappingBar = (
+export const competenceMappingConversion = (
   data: CategoryAverage[]
-): MultipleChartData<[BarChartData]> => {
+): MultipleChartData<[BarChartData, SunburstChartData]> => {
   const indexBy = 'category'
 
-  const aggregatedData = competenceMapping(data)
+  const aggregatedBarData = competenceMapping(data)
+  const aggregatedSunburstData = competenceMappingSunburst(data)
 
   return {
     type: 'MultipleChart',
@@ -211,8 +212,9 @@ export const competenceMappingBar = (
             type: 'BarChart',
             indexBy,
             keys: ['competence'],
-            data: aggregatedData.MotivationAndCompetence.data,
+            data: aggregatedBarData.MotivationAndCompetence.data,
           },
+          aggregatedSunburstData['competence'],
         ],
       },
       {
@@ -222,15 +224,16 @@ export const competenceMappingBar = (
             type: 'BarChart',
             indexBy,
             keys: ['motivation'],
-            data: aggregatedData.MotivationAndCompetence.data,
+            data: aggregatedBarData.MotivationAndCompetence.data,
           },
+          aggregatedSunburstData['motivation'],
         ],
       },
     ],
   }
 }
 
-export const competenceMappingSunburst = (
+const competenceMappingSunburst = (
   data: CategoryAverage[]
 ): Record<string, SunburstChartData> => {
   const id = 'category'

@@ -8,10 +8,9 @@ import {
   getCompetenceAreasCharts,
   getCompetenceFilter,
   getCompetenceMapping,
-  getCompetenceMappingBar,
-  getCompetenceMappingSunburst,
+  getCompetenceMappingCharts,
   getEducation,
-  getEducationPie,
+  getEducationCharts,
   getExperienceDistribution,
   getExperienceDistributionCharts,
   getFagEvents,
@@ -98,17 +97,12 @@ export const useFagEventsCharts = () =>
     revalidateOnFocus: false,
   })
 
-export const useEducationPie = () =>
-  useSWR('/educationPie', getEducationPie, {
+export const useEducationCharts = () =>
+  useSWR('/educationCharts', getEducationCharts, {
     revalidateOnFocus: false,
   })
 
-export const useCompetenceMappingBar = () =>
-  useSWR('/competenceMappingBar', getCompetenceMappingBar, {
-    revalidateOnFocus: false,
-  })
-
-export const useCompetenceMappingSunburst = () =>
-  useSWR('/competenceMappingSunburst', getCompetenceMappingSunburst, {
+export const useCompetenceMappingCharts = () =>
+  useSWR('/competenceMappingCharts', getCompetenceMappingCharts, {
     revalidateOnFocus: false,
   })

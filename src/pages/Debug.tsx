@@ -3,7 +3,7 @@ import React from 'react'
 import {
   useCompetenceAmountCharts,
   useCompetenceAreasCharts,
-  useFagEventsCharts,
+  useCompetenceMappingCharts,
   useFagtimerCharts,
 } from '../api/data/competence/competenceQueries'
 import ChartCard from '../components/charts/ChartCard'
@@ -13,7 +13,7 @@ const Debug = () => {
   const { data: competenceArea } = useCompetenceAreasCharts()
   const { data: competenceAmountBar } = useCompetenceAmountCharts()
   const { data: fagEvents } = useFagtimerCharts()
-  const { data: testing } = useFagEventsCharts()
+  const { data: testing } = useCompetenceMappingCharts()
 
   if (!competenceAmountBar || !competenceArea || !fagEvents || !testing)
     return <div>Loading...</div>

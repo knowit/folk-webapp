@@ -19,6 +19,7 @@ export type SingularChartData =
   | RadarChartData
   | LineChartData
   | PieChartData
+  | SunburstChartData
 
 export interface BarChartData {
   type: 'BarChart'
