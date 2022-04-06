@@ -11,16 +11,15 @@ import {
   TableRowProps,
 } from 'react-virtualized'
 import CharacterLimitBox from './components/CharacterLimitBox'
-import { ColumnSort } from '../../DDTable'
-import { Column } from '../../types'
-import { EmployeeTableResponse } from '../../../api/data/employee/employeeApiTypes'
+import { Column, ColumnSort } from '../../types'
+import { EmployeeTableRow } from '../../../api/data/employee/employeeApiTypes'
+import { EmployeeForCustomerList } from '../../../api/data/customer/customerApiTypes'
 
 interface DataTableProps {
   columns: Column[]
-  rows: EmployeeTableResponse[]
+  rows: EmployeeTableRow[] | EmployeeForCustomerList[]
   setColumnSort?: (CurrentSort: ColumnSort) => void
-  checkBoxChangeHandler?: () => void
-  checked?: boolean
+  checkBox?: CheckBoxHeader
   currentColumnSort?: ColumnSort
 }
 
@@ -41,6 +40,12 @@ interface CellProps {
   cellData: any[]
   rowId: string
   name: string
+}
+
+export interface CheckBoxHeader {
+  label: string
+  changeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
+  checked: boolean
 }
 
 const TableCellNoBorders = withStyles({
@@ -104,9 +109,8 @@ function VirtualizedTable({
   columns,
   rows,
   setColumnSort,
-  checkBoxChangeHandler,
   currentColumnSort,
-  checked,
+  checkBox,
 }: DataTableProps) {
   const classes = tableStyles()
   const tableRef = useRef<Table>(null)
@@ -214,22 +218,21 @@ function VirtualizedTable({
     index: number,
     currentOrder?: ColumnSort,
     HeaderCell?: (props: any) => JSX.Element,
-    checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void
+    checkBox?: CheckBoxHeader
   ) {
     if (HeaderCell) {
       return (
         <HeaderCell
           title={title}
-          checkBoxLabel="Se kun ledige"
-          checkBoxChangeHandler={checkBoxChangeHandler}
+          checkBox={checkBox}
           columnIndex={index}
+          column={columns[index]}
           onOrderChange={onSortChange}
           currentOrder={
             currentOrder?.columnIndex === index
               ? currentOrder.sortOrder
               : 'NONE'
           }
-          checked={checked}
         />
       )
     }
@@ -284,7 +287,7 @@ function VirtualizedTable({
                   index,
                   currentColumnSort,
                   column.headerCell,
-                  checkBoxChangeHandler
+                  checkBox
                 )
               }
               className={classes.flexContainer}

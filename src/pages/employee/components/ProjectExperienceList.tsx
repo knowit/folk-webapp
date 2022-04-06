@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { formatMonthYearRange } from '../../../utils/formatMonthYearRange'
 import { makeStyles } from '@material-ui/core/styles'
-import { useEmployeeExperience } from '../../../api/data/employee/employeeQueries'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { FallbackMessage } from './FallbackMessage'
 import { ExperienceList } from './ExperienceList'
 import { ExperienceListItem } from './ExperienceListItem'
+import { ProjectExperience } from '../../../api/data/employee/employeeApiTypes'
 
 const useStyles = makeStyles({
   timeRange: {
@@ -17,15 +17,19 @@ const useStyles = makeStyles({
 })
 
 interface Props {
-  user_id?: string
+  projectExperience?: ProjectExperience[]
+  isLoading?: boolean
+  isError?: boolean
 }
 
-export function ProjectExperienceList({ user_id }: Props) {
+export function ProjectExperienceList({
+  projectExperience,
+  isLoading,
+  isError,
+}: Props) {
   const classes = useStyles()
 
-  const { data, error } = useEmployeeExperience(user_id)
-
-  if (error) {
+  if (isError) {
     return (
       <FallbackMessage
         isError
@@ -34,41 +38,48 @@ export function ProjectExperienceList({ user_id }: Props) {
     )
   }
 
-  if (!data) {
+  if (isLoading) {
     return <MultiLineSkeleton />
   }
-
-  const { experience: projectExperience } = data
 
   if (!projectExperience || projectExperience.length === 0) {
     return <FallbackMessage message="Fant ingen prosjekter å vise." />
   }
 
-  const sortedProjects = projectExperience.sort((projectA, projectB) => {
-    const aDate = new Date(projectA.time_from || projectA.time_to)
-    const bDate = new Date(projectB.time_from || projectB.time_to)
-    return aDate.valueOf() - bDate.valueOf()
-  })
+  const sortedProjects = projectExperience.sort(compareProjects)
 
   return (
     <ExperienceList>
-      {sortedProjects.map(({ project, customer, time_from, time_to }) => (
-        <ExperienceListItem key={project + time_from}>
-          <time className={classes.timeRange}>
-            {formatTimeRange(time_from, time_to)}
-          </time>
-          {': '}
-          {customer}
-          {' – '}
-          <span className={classes.projectTitle}>{project}</span>
-        </ExperienceListItem>
-      ))}
+      {sortedProjects.map(
+        ({ customer, project, year_to, month_to, year_from, month_from }) => (
+          <ExperienceListItem key={project + year_from + month_from}>
+            <time className={classes.timeRange}>
+              {formatMonthYearRange(month_from, year_from, month_to, year_to)}
+            </time>
+            {': '}
+            {customer}
+            {' – '}
+            <span className={classes.projectTitle}>{project}</span>
+          </ExperienceListItem>
+        )
+      )}
     </ExperienceList>
   )
 }
 
-function formatTimeRange(fromDate: string, toDate: string) {
-  const [fromYear, fromMonth] = fromDate.split('/').map(Number)
-  const [toYear, toMonth] = toDate.split('/').map(Number)
-  return formatMonthYearRange(fromMonth, fromYear, toMonth, toYear)
+function compareProjects(
+  projectA: ProjectExperience,
+  projectB: ProjectExperience
+) {
+  const aDate = createComparableProjectDate(projectA)
+  const bDate = createComparableProjectDate(projectB)
+  return aDate.valueOf() - bDate.valueOf()
+}
+
+function createComparableProjectDate(project: ProjectExperience) {
+  const { year_from, month_from, year_to, month_to } = project
+  if (!year_from || year_from <= 0) {
+    return new Date(year_to, month_to)
+  }
+  return new Date(year_from, month_from)
 }

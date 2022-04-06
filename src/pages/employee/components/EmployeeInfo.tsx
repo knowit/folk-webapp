@@ -2,8 +2,9 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Skeleton } from '@material-ui/lab'
 import * as React from 'react'
 import {
+  ConsultantInfo,
   EmployeeExperienceResponse,
-  ProjectExperience,
+  EmployeeExperience,
   WorkExperience,
 } from '../../../api/data/employee/employeeApiTypes'
 import {
@@ -73,10 +74,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface EmployeeInfoProps {
-  data: {
-    user_id: string
-    email: string
-  }
+  data: Pick<ConsultantInfo, 'email' | 'user_id'>
   id: string
   setRowHeight: (id: string, height: number) => void
 }
@@ -106,7 +104,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
           ) : (
             <>
               <b>Utdanning: </b>
-              {empData?.degree}
+              {empData?.degree ?? <NoData />}
             </>
           )}
         </div>
@@ -244,8 +242,8 @@ export const GetProjects = (expData: {
 }
 
 function compareProjectDates(
-  projectA: ProjectExperience,
-  projectB: ProjectExperience
+  projectA: EmployeeExperience,
+  projectB: EmployeeExperience
 ) {
   const aDate = new Date(projectA.time_from || projectA.time_to)
   const bDate = new Date(projectB.time_from || projectB.time_to)

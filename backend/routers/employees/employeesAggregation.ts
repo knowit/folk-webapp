@@ -1,60 +1,63 @@
-import { v4 as uuid } from 'uuid'
 import {
   mapEmployeeTags,
-  findCustomerWithHighestWeight,
-  findProjectStatusForEmployee,
+  getProjectStatusForEmployee,
   getCategoryScoresForEmployee,
   getStorageUrl,
-  mergeCustomersForEmployees,
   createCvLinks,
 } from './aggregationHelpers'
 import {
-  EmployeeExperience,
-  EmployeeInformation,
+  BasicEmployeeInformation,
+  ProjectExperience,
+  EmployeeProfileInformation,
   EmployeeMotivationAndCompetence,
-  EmployeeProfile,
+  EmployeeProfileResponse,
   EmployeeSkills,
+  EmployeeTableResponse,
+  EmployeeWorkStatus,
+  JobRotationInformation,
   WorkExperience,
 } from './employeesTypes'
+import { EmployeeCustomers } from '../customer/customerTypes'
 
 export const aggregateEmployeeTable = (
-  employeeInformation,
-  employeeMotivationAndCompetence,
-  jobRotationInformation
-) => {
-  const employeesWithMergedCustomers =
-    mergeCustomersForEmployees(employeeInformation)
-  return employeesWithMergedCustomers.map((employee) => ({
-    rowId: uuid(),
-    rowData: [
-      {
-        value: employee.navn,
-        image: getStorageUrl(employee.image_key),
-        competenceUrl: `/api/data/employeeCompetence?email=${encodeURIComponent(
-          employee.email
-        )}`,
-        email: employee.email,
-        email_id: employee.email,
-        user_id: employee.user_id,
-        degree: employee.degree,
-      },
-      employee.title,
-      findProjectStatusForEmployee(jobRotationInformation, employee.email),
-      findCustomerWithHighestWeight(employee.customers),
-      createCvLinks(employee.link),
-      getCategoryScoresForEmployee(
-        employee.email,
-        employeeMotivationAndCompetence
-      )[0],
-      getCategoryScoresForEmployee(
-        employee.email,
-        employeeMotivationAndCompetence
-      )[1],
-    ],
-  }))
+  basicEmployeeInformation: BasicEmployeeInformation[],
+  employeeMotivationAndCompetence: EmployeeMotivationAndCompetence[],
+  jobRotationInformation: JobRotationInformation[],
+  employeeWorkStatus: EmployeeWorkStatus[]
+): EmployeeTableResponse => {
+  return basicEmployeeInformation.map((employee) => {
+    const [motivationScores, competenceScores] = getCategoryScoresForEmployee(
+      employee.email,
+      employeeMotivationAndCompetence
+    )
+    return {
+      rowId: employee.email,
+      rowData: [
+        {
+          user_id: employee.user_id,
+          name: employee.name,
+          email: employee.email,
+          image_url: getStorageUrl(employee.image_key),
+        },
+        employee.title || null,
+        getProjectStatusForEmployee(
+          jobRotationInformation,
+          employeeWorkStatus,
+          employee.guid
+        ),
+        {
+          customer: employee.primary_customer,
+          workOrderDescription: employee.primary_work_order_description,
+        },
+        createCvLinks(employee.link),
+        motivationScores,
+        competenceScores,
+      ],
+    }
+  })
 }
 
-export const aggregateEmployeeExperience = (data: EmployeeExperience[]) => {
+export const aggregateEmployeeExperience = (data: ProjectExperience[]) => {
   const formatTime = (year: number, month: number) =>
     [
       year && year > 0 ? year : '',
@@ -113,28 +116,47 @@ export const aggregateEmployeeCompetenceAndMotivation = (
 }
 
 export const aggregateEmployeeProfile = (
+  employeeProfileInformation: EmployeeProfileInformation[],
   employeeSkills: EmployeeSkills[],
   workExperience: WorkExperience[],
-  employeeInformation: EmployeeInformation[]
-): EmployeeProfile => {
-  if (employeeInformation.length === 0) {
+  projectExperience: ProjectExperience[],
+  employeeCustomers: EmployeeCustomers[]
+): EmployeeProfileResponse => {
+  if (employeeProfileInformation.length === 0) {
     return
   }
 
-  const employee = mergeCustomersForEmployees(employeeInformation)[0]
+  const employee = employeeProfileInformation[0]
 
   return {
     user_id: employee.user_id,
-    guid: employee.guid,
-    navn: employee.navn,
-    manager: employee.manager,
-    title: employee.title,
-    degree: employee.degree,
     email: employee.email,
+    name: employee.name,
+    title: employee.title,
+    phone: employee.phone,
+    degree: employee.degree,
+    manager: employee.manager,
     image: getStorageUrl(employee.image_key),
-    customers: employee.customers,
-    workExperience,
     tags: mapEmployeeTags(employeeSkills[0]),
     links: createCvLinks(employee.link),
+    workExperience: workExperience.map((job) => ({
+      employer: job.employer,
+      month_from: job.month_from,
+      month_to: job.month_to,
+      year_from: job.year_from,
+      year_to: job.year_to,
+    })),
+    projectExperience: projectExperience.map((project) => ({
+      customer: project.customer,
+      project: project.description,
+      year_from: project.year_from,
+      month_from: project.month_from,
+      year_to: project.year_to,
+      month_to: project.month_to,
+    })),
+    customers: employeeCustomers.map((customer) => ({
+      customer: customer.customer,
+      workOrderDescription: customer.work_order_description,
+    })),
   }
 }

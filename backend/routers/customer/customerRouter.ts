@@ -1,13 +1,16 @@
 import express from 'express'
 import { getReport } from '../../dataplattform/client'
-import { groupEmployeesByCustomer } from './customerAggregation'
+import {
+  createCustomerCardData,
+  groupEmployeesByCustomer,
+} from './customerAggregation'
 import {
   hoursBilledPerCustomer,
   hoursBilledPerWeek,
 } from './customerChartConversion'
 import {
   BilledCustomerHours,
-  CustomerCardData,
+  EmployeeCustomersReport,
   EmployeeWithPrimaryCustomer,
 } from './customerTypes'
 
@@ -43,12 +46,16 @@ router.get('/hoursBilledPerWeek', async (req, res, next) => {
 
 router.get('/customerCards', async (req, res, next) => {
   try {
-    const data = await getReport<CustomerCardData[]>({
+    const perProject = await getReport<BilledCustomerHours[]>({
       accessToken: req.accessToken,
-      reportName: 'allProjectsOverview',
+      reportName: 'perProject',
     })
-
-    res.send(data)
+    const employeeCustomers = await getReport<EmployeeCustomersReport>({
+      accessToken: req.accessToken,
+      reportName: 'employeeCustomers',
+    })
+    const aggregatedData = createCustomerCardData(perProject, employeeCustomers)
+    res.send(aggregatedData)
   } catch (error) {
     next(error)
   }

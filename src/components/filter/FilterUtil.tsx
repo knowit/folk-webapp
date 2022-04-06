@@ -1,6 +1,7 @@
 import { useCompetenceFilter } from '../../api/data/competence/competenceQueries'
-import { EmployeeTableResponse } from '../../api/data/employee/employeeApiTypes'
+import { EmployeeTableRow } from '../../api/data/employee/employeeApiTypes'
 import { SearchableColumn } from '../../data/DDTable'
+import { EmployeeForCustomerList } from '../../api/data/customer/customerApiTypes'
 
 export interface CategoryWithGroup {
   category: string
@@ -8,7 +9,9 @@ export interface CategoryWithGroup {
 }
 
 export interface FilterObject {
-  column: EmployeeTableColumnMapping
+  column:
+    | EmployeeTableColumnMapping.MOTIVATION
+    | EmployeeTableColumnMapping.COMPETENCE
   label: string
   values: string[]
   threshold: number
@@ -23,7 +26,7 @@ export enum EmployeeTableColumnMapping {
 }
 
 export function searchRow(
-  row: EmployeeTableResponse,
+  row: EmployeeTableRow | EmployeeForCustomerList,
   searchableColumns: SearchableColumn[],
   searchTerm: string
 ) {
@@ -71,13 +74,13 @@ function filterRow(
 }
 
 export const searchAndFilter = (
-  rows: EmployeeTableResponse[],
+  rows: EmployeeTableRow[],
   searchableColumns: SearchableColumn[],
   searchTerm: string,
   filters: FilterObject[] = []
 ) => {
   const hasSearchTerm = !!searchTerm && searchTerm.trim() !== ''
-  return rows.filter((row: EmployeeTableResponse) => {
+  return rows.filter((row) => {
     const rowMatchesSearchTerm = hasSearchTerm
       ? searchRow(row, searchableColumns, searchTerm)
       : true
@@ -96,10 +99,11 @@ export const searchAndFilter = (
   })
 }
 
-export function filterNonCustomer(rows: EmployeeTableResponse[]) {
-  return rows.filter((row: EmployeeTableResponse) => {
+export function filterNonCustomer(rows: EmployeeTableRow[]) {
+  return rows.filter((row) => {
     const rowDataIndex = EmployeeTableColumnMapping['CUSTOMER']
-    return Object.keys(row.rowData[rowDataIndex]).length === 0
+    const hasNoCustomer = !row.rowData[rowDataIndex]?.customer
+    return hasNoCustomer
   })
 }
 

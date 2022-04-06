@@ -1,4 +1,4 @@
-import { EmployeeInformation, EmployeeSkills } from './data'
+import { EmployeeSkills } from './data'
 import AWS from 'aws-sdk'
 AWS.config.update({ region: 'eu-central-1' })
 
@@ -9,84 +9,6 @@ export const range = (x: number, y: number) =>
     })()
   )
 
-type EmployeeWithMergedCustomers = EmployeeInformation & {
-  customers: Customer[]
-}
-
-type Customer = {
-  customer: string
-  workOrderDescription: string
-  weight: number
-}
-
-export const getYear = (): number => {
-  const currentDate = new Date()
-  const currentYear = currentDate.getFullYear()
-
-  return Number(currentYear)
-}
-
-export const getWeek = (): string => {
-  const currentDate = new Date()
-  const oneJan = new Date(getYear(), 0, 1)
-  const numberOfDays = Math.floor(
-    (Number(currentDate) - Number(oneJan)) / (24 * 60 * 60 * 1000)
-  )
-  const currentWeekNumber = Math.floor(
-    (currentDate.getDay() + 1 + numberOfDays) / 7
-  )
-
-  return currentWeekNumber.toString()
-}
-
-/**
- * Receives a list of employees, where each employee is listed once for each
- * customer it is related to. This means that an employee might be listed more
- * than once. The function merges the received employees and returns a list of
- * distinct employees, each with a merged list of their related customers.
- */
-export const mergeCustomersForEmployees = (
-  employees: EmployeeInformation[]
-): EmployeeWithMergedCustomers[] => {
-  const employeesWithMergedCustomers = {}
-
-  employees.forEach((employee) => {
-    const employeeToMerge =
-      employeesWithMergedCustomers[employee.guid] ?? employee
-    const customersForEmployee = employeeToMerge.customers ?? []
-
-    if (employee.customer) {
-      const thisCustomer = {
-        customer: employee.customer,
-        workOrderDescription: employee.work_order_description,
-        weight: employee.weight,
-      }
-      customersForEmployee.push(thisCustomer)
-    }
-
-    employeesWithMergedCustomers[employee.guid] = {
-      ...employeeToMerge,
-      customers: customersForEmployee,
-    }
-  })
-
-  return Object.values(employeesWithMergedCustomers)
-}
-
-export function findCustomerWithHighestWeight(customers: Customer[]) {
-  if (!customers || customers.length === 0) {
-    return {}
-  }
-
-  return customers.reduce((prevCustomer, thisCustomer) => {
-    if (thisCustomer.weight < prevCustomer.weight) {
-      return thisCustomer
-    } else {
-      return prevCustomer
-    }
-  })
-}
-
 export function mapEmployeeTags(employeeSkills?: EmployeeSkills) {
   const { skill, language, role } = employeeSkills ?? {}
 
@@ -95,19 +17,6 @@ export function mapEmployeeTags(employeeSkills?: EmployeeSkills) {
     languages: language?.split(';') ?? [],
     roles: role?.split(';') ?? [],
   }
-}
-
-export const statusColorCode = (
-  wantNewProject: number,
-  openForNewProject: number,
-  inProject: boolean
-): string => {
-  const projectStatus = inProject ? 'green' : 'red'
-  const color = wantNewProject > openForNewProject ? 'orange' : 'yellow'
-  const statusColor =
-    (wantNewProject || openForNewProject) > 0 ? color : projectStatus
-
-  return statusColor
 }
 
 export const sum = (data, property) => {

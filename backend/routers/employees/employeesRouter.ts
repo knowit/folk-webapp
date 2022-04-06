@@ -8,46 +8,61 @@ import {
   aggregateEmployeeTable,
 } from './employeesAggregation'
 import {
-  EmployeeExperience,
-  EmployeeInformation,
-  EmployeeMotivationAndCompetence,
-  EmployeeSkills,
-  WorkExperience,
+  BasicEmployeeInformationReport,
+  ProjectExperienceReport,
+  EmployeeProfileInformationReport,
+  EmployeeMotivationAndCompetenceReport,
+  EmployeeSkillsReport,
+  EmployeeWorkStatusReport,
+  JobRotationInformationReport,
+  WorkExperienceReport,
 } from './employeesTypes'
+import { EmployeeCustomersReport } from '../customer/customerTypes'
 
 const router = express.Router()
 
 router.get('/employeeTable', async (req, res, next) => {
   try {
-    const employeeInformationPromise = getReport<any[]>({
-      accessToken: req.accessToken,
-      reportName: 'employeeInformation',
-    })
+    const basicEmployeeInformationPromise =
+      getReport<BasicEmployeeInformationReport>({
+        accessToken: req.accessToken,
+        reportName: 'basicEmployeeInformation',
+      })
 
-    const employeeMotivationAndCompetencePromise = getReport<any[]>({
-      accessToken: req.accessToken,
-      reportName: 'employeeMotivationAndCompetence',
-    })
+    const employeeMotivationAndCompetencePromise =
+      getReport<EmployeeMotivationAndCompetenceReport>({
+        accessToken: req.accessToken,
+        reportName: 'employeeMotivationAndCompetence',
+      })
 
-    const jobRotationInformationPromise = getReport<any[]>({
+    const jobRotationInformationPromise =
+      getReport<JobRotationInformationReport>({
+        accessToken: req.accessToken,
+        reportName: 'jobRotationInformation',
+      })
+
+    const employeeWorkStatusPromise = getReport<EmployeeWorkStatusReport>({
       accessToken: req.accessToken,
-      reportName: 'jobRotationInformation',
+      reportName: 'employeeWorkStatus',
     })
 
     const [
-      employeeInformation,
+      basicEmployeeInformation,
       employeeMotivationAndCompetence,
       jobRotationInformation,
+      employeeWorkStatus,
     ] = await Promise.all([
-      employeeInformationPromise,
+      basicEmployeeInformationPromise,
       employeeMotivationAndCompetencePromise,
       jobRotationInformationPromise,
+      employeeWorkStatusPromise,
     ])
 
     const aggregatedData = aggregateEmployeeTable(
-      employeeInformation,
+      basicEmployeeInformation,
       employeeMotivationAndCompetence,
-      jobRotationInformation
+      jobRotationInformation,
+      employeeWorkStatus
     )
 
     res.send(aggregatedData)
@@ -73,7 +88,7 @@ router.get<unknown, unknown, unknown, UserIdParam>(
         throw err
       }
 
-      const data = await getReport<EmployeeExperience[]>({
+      const data = await getReport<ProjectExperienceReport>({
         accessToken: req.accessToken,
         reportName: 'projectExperience',
         queryParams: {
@@ -104,7 +119,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         } as ParamError
       }
 
-      const data = await getReport<EmployeeMotivationAndCompetence[]>({
+      const data = await getReport<EmployeeMotivationAndCompetenceReport>({
         accessToken: req.accessToken,
         reportName: 'employeeMotivationAndCompetence',
         queryParams: {
@@ -133,7 +148,16 @@ router.get<unknown, unknown, unknown, EmailParam>(
         throw err
       }
 
-      const employeeSkillsPromise = getReport<EmployeeSkills[]>({
+      const employeeProfileInformationPromise =
+        getReport<EmployeeProfileInformationReport>({
+          accessToken: req.accessToken,
+          reportName: 'employeeProfileInformation',
+          queryParams: {
+            email: req.query.email,
+          },
+        })
+
+      const employeeSkillsPromise = getReport<EmployeeSkillsReport>({
         accessToken: req.accessToken,
         reportName: 'employeeSkills',
         queryParams: {
@@ -141,7 +165,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      const workExperiencePromise = getReport<WorkExperience[]>({
+      const workExperiencePromise = getReport<WorkExperienceReport>({
         accessToken: req.accessToken,
         reportName: 'workExperience',
         queryParams: {
@@ -149,22 +173,40 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      const employeeInformationPromise = getReport<EmployeeInformation[]>({
+      const projectExperiencePromise = getReport<ProjectExperienceReport>({
         accessToken: req.accessToken,
-        reportName: 'employeeInformation',
+        reportName: 'projectExperience',
         queryParams: {
           email: req.query.email,
         },
       })
 
-      const [employeeSkills, workExperience, employeeInformation] =
-        await Promise.all([
-          employeeSkillsPromise,
-          workExperiencePromise,
-          employeeInformationPromise,
-        ])
+      const employeeCustomersPromise = getReport<EmployeeCustomersReport>({
+        accessToken: req.accessToken,
+        reportName: 'employeeCustomers',
+        queryParams: {
+          email: req.query.email,
+        },
+      })
 
-      if (!employeeInformation || employeeInformation.length === 0) {
+      const [
+        employeeProfileInformation,
+        employeeSkills,
+        workExperience,
+        projectExperience,
+        employeeCustomers,
+      ] = await Promise.all([
+        employeeProfileInformationPromise,
+        employeeSkillsPromise,
+        workExperiencePromise,
+        projectExperiencePromise,
+        employeeCustomersPromise,
+      ])
+
+      if (
+        !employeeProfileInformation ||
+        employeeProfileInformation.length === 0
+      ) {
         const err: NotFoundError = {
           status: 404,
           message: "Employee with email '" + req.query.email + "' not found.",
@@ -174,9 +216,11 @@ router.get<unknown, unknown, unknown, EmailParam>(
       }
 
       const aggregatedData = aggregateEmployeeProfile(
+        employeeProfileInformation,
         employeeSkills,
         workExperience,
-        employeeInformation
+        projectExperience,
+        employeeCustomers
       )
 
       res.send(aggregatedData)

@@ -4,13 +4,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { withStyles } from '@material-ui/core'
 import { NoData } from '../../../../components/ErrorText'
 import CvDialog from '../components/CvDialog'
-
-interface CvCellData {
-  no_pdf: string
-  int_pdf: string
-  no_word: string
-  int_word: string
-}
+import { CvLinks } from '../../../../api/data/employee/employeeApiTypes'
 
 const useStyles = makeStyles({
   root: {
@@ -31,7 +25,7 @@ const DownloadIcon = withStyles({
 })(GetApp)
 
 interface CVCellProps {
-  data: CvCellData
+  data: CvLinks
   name: string
 }
 

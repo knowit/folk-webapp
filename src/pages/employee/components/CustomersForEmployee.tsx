@@ -35,14 +35,16 @@ export function CustomersForEmployee({ customers, isLoading, isError }: Props) {
     return <FallbackMessage message="Fant ingen kunder å vise." />
   }
 
-  const customersSortedByWeight = customers.sort(
-    (customerA, customerB) => customerA.weight - customerB.weight
+  const sortedCustomers = customers.sort((customerA, customerB) =>
+    String(customerA.customer).localeCompare(String(customerB.customer))
   )
 
   return (
     <ExperienceList>
-      {customersSortedByWeight.map((customer) => (
-        <ExperienceListItem key={customer.customer + customer.weight}>
+      {sortedCustomers.map((customer) => (
+        <ExperienceListItem
+          key={customer.customer + customer.workOrderDescription}
+        >
           <span className={classes.customerName}>{customer.customer}: </span>
           {customer.workOrderDescription}
         </ExperienceListItem>
