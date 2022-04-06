@@ -1,5 +1,5 @@
 import { getAtApi, getAtApiV2 } from '../../client'
-import { ChartData } from '../chartResponses'
+import { ChartData } from '../chartTypes'
 import {
   AgeDistributionResponse,
   CompetenceAmountResponse,

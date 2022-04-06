@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { SWRResponse } from 'swr'
-import { SingularChartData } from '../api/data/chartResponses'
+import { SingularChartData } from '../api/data/chartTypes'
 import { FilterObject } from '../components/filter/FilterUtil'
 
 export type DDPayload = { [key: string]: any }

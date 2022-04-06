@@ -3,7 +3,7 @@ import {
   ChartData,
   MultipleChartData,
   SingularChartData,
-} from '../../api/data/chartResponses'
+} from '../../api/data/chartTypes'
 import {
   ChartDisplayOptions,
   ChartVariantToggle,

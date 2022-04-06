@@ -1,5 +1,5 @@
 import { getAtApi, getAtApiV2 } from '../../client'
-import { BarChartData, LineChartData } from '../chartResponses'
+import { BarChartData, LineChartData } from '../chartTypes'
 import {
   CustomerCardResponse,
   EmployeesByCustomerResponse,
