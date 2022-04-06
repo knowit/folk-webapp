@@ -1,7 +1,9 @@
 import { BarChartData, LineChartData } from '../chartTypes'
 import { BilledCustomerHours } from './customerTypes'
 
-export const hoursBilledPerCustomerBar = (data: BilledCustomerHours[]) => {
+export const hoursBilledPerCustomer = (
+  data: BilledCustomerHours[]
+): BarChartData => {
   const aggregatedData = {}
 
   for (const { customer, hours } of data) {
@@ -13,10 +15,11 @@ export const hoursBilledPerCustomerBar = (data: BilledCustomerHours[]) => {
   }
 
   return {
+    type: 'BarChart',
     indexBy: 'customer',
     keys: ['hours'],
     data: Object.values(aggregatedData),
-  } as BarChartData
+  }
 }
 
 export const hoursBilledPerWeekLine = (

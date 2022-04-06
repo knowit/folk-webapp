@@ -3,7 +3,7 @@ import {
   getCustomerCards,
   getEmployeesByCustomer,
   getHoursBilledPerCustomer,
-  getHoursBilledPerCustomerBar,
+  getHoursBilledPerCustomerCharts,
   getHoursBilledPerWeek,
   getHoursBilledPerWeekLine,
 } from './customerApi'
@@ -29,8 +29,8 @@ export const useHoursBilledPerWeek = () =>
   })
 
 // API V2
-export const useHoursBilledPerCustomerBar = () =>
-  useSWR('/hoursBilledPerCustomerBar', getHoursBilledPerCustomerBar, {
+export const useHoursBilledPerCustomerCharts = () =>
+  useSWR('/hoursBilledPerCustomerCharts', getHoursBilledPerCustomerCharts, {
     revalidateOnFocus: false,
   })
 
