@@ -374,11 +374,11 @@ const reports = [
   {
     name: 'employeeWorkStatus',
     queryString:
-      "SELECT alias, guid, customer, project_type, MAX(reg_period) as last_reg_period, SUM(weigth - 1) AS weight_sum FROM ( SELECT reg_period, alias, project_type, customer, weigth, guid FROM dev_level_3_database.ubw_customer_per_resource d1 WHERE d1.reg_period > date_format(date_add('week', -5, from_unixtime(1635773486)), '%Y%v') ) GROUP BY alias, guid, customer, project_type",
+      'SELECT alias, guid, customer, project_type, MAX(reg_period) as last_reg_period, SUM(weigth - 1) AS weight_sum FROM dev_level_3_database.ubw_customer_per_resource GROUP BY alias, guid, customer, project_type',
     tables: ['ubw_customer_per_resource'],
     dataProtection: 3,
-    created: '2022-01-26T09:48:19.801911',
+    created: '2022-04-06T09:27:45.082059',
     lastUsed: null,
-    lastCacheUpdate: '2022-01-26T09:48:24.170895',
+    lastCacheUpdate: '2022-04-06T09:27:46.784403',
   },
 ]

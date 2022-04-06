@@ -66,8 +66,7 @@ export function mapEmployeeTags(employeeSkills?: EmployeeSkills): Tags {
 export const getProjectStatusForEmployee = (
   jobRotationInformation: JobRotationInformation[],
   employeeWorkStatus: EmployeeWorkStatus[],
-  guid: string,
-  currentRegPeriod: number
+  guid: string
 ): ProjectStatus => {
   const [wantNewProject, openForNewProject] = jobRotationStatus(
     jobRotationInformation,
@@ -80,7 +79,7 @@ export const getProjectStatusForEmployee = (
   let isInternal = false
 
   if (work) {
-    inProject = currentRegPeriod - work.last_reg_period < 5
+    inProject = true
     isInternal = !work.project_type.toLowerCase().includes('external')
   }
 
@@ -95,26 +94,6 @@ export const getProjectStatusForEmployee = (
     : isInternal
     ? ProjectStatus.InternalProject
     : ProjectStatus.ExternalProject
-}
-
-const getYear = (): number => {
-  const currentDate = new Date()
-  const currentYear = currentDate.getFullYear()
-
-  return Number(currentYear)
-}
-
-const getWeek = (): string => {
-  const currentDate = new Date()
-  const oneJan = new Date(getYear(), 0, 1)
-  const numberOfDays = Math.floor(
-    (Number(currentDate) - Number(oneJan)) / (24 * 60 * 60 * 1000)
-  )
-  const currentWeekNumber = Math.floor(
-    (currentDate.getDay() + 1 + numberOfDays) / 7
-  )
-
-  return currentWeekNumber.toString()
 }
 
 const getEmployeeWork = (

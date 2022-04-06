@@ -48,11 +48,6 @@ router.get('/employeeTable', async (req, res, next) => {
       reportName: 'employeeWorkStatus',
     })
 
-    const employeeStatusPromise = getReport<any[]>({
-      accessToken: req.accessToken,
-      reportName: 'employeeWorkStatus',
-    })
-
     const [
       basicEmployeeInformation,
       employeeMotivationAndCompetence,
@@ -62,7 +57,6 @@ router.get('/employeeTable', async (req, res, next) => {
       basicEmployeeInformationPromise,
       employeeMotivationAndCompetencePromise,
       jobRotationInformationPromise,
-      employeeStatusPromise,
       employeeWorkStatusPromise,
     ])
 

@@ -25,11 +25,6 @@ export const aggregateEmployeeTable = (
   jobRotationInformation: JobRotationInformation[],
   employeeWorkStatus: EmployeeWorkStatus[]
 ): EmployeeTableResponse => {
-  const currentRegPeriod = Math.max.apply(
-    Math,
-    ...employeeWorkStatus.map((workStatus) => workStatus.last_reg_period)
-  )
-
   return basicEmployeeInformation.map((employee) => {
     const [motivationScores, competenceScores] = getCategoryScoresForEmployee(
       employee.email,
@@ -48,8 +43,7 @@ export const aggregateEmployeeTable = (
         getProjectStatusForEmployee(
           jobRotationInformation,
           employeeWorkStatus,
-          employee.guid,
-          currentRegPeriod
+          employee.guid
         ),
         {
           customer: employee.primary_customer,
