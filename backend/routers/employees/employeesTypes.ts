@@ -44,6 +44,7 @@ export type JobRotationInformation = {
 }
 
 export type EmployeeWorkStatusReport = EmployeeWorkStatus[]
+
 export type EmployeeWorkStatus = {
   alias: string
   guid: string
@@ -123,7 +124,7 @@ export type EmployeeInfo = {
 }
 
 export enum ProjectStatus {
-  // InternalProject = 'INTERNAL',
+  InternalProject = 'INTERNAL',
   ExternalProject = 'EXTERNAL',
   NoProject = 'NO_PROJECT',
   WantChange = 'WANT_CHANGE',

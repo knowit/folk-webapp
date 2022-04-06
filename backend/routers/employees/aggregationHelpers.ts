@@ -37,43 +37,27 @@ export const getProjectStatusForEmployee = (
     guid
   )
 
-  if ((wantNewProject || openForNewProject) > 0) {
+  const work = getEmployeeWork(employeeWorkStatus, guid)
+
+  let inProject = false
+  let isInternal = false
+
+  if (work) {
+    inProject = true
+    isInternal = !work.project_type.toLowerCase().includes('external')
+  }
+
+  if ((wantNewProject || openForNewProject) > 0 && inProject) {
     return wantNewProject > openForNewProject
       ? ProjectStatus.WantChange
       : ProjectStatus.OpenForChange
   }
 
-  const currentRegPeriod = parseInt(getYear() + getWeek(), 10)
-  const work = getEmployeeWork(employeeWorkStatus, guid)
-
-  let inProject = false
-  if (work) {
-    inProject =
-      work.project_type.toLowerCase().includes('external') &&
-      currentRegPeriod - work.last_reg_period < 5
-  }
-
-  return inProject ? ProjectStatus.ExternalProject : ProjectStatus.NoProject
-}
-
-const getYear = (): number => {
-  const currentDate = new Date()
-  const currentYear = currentDate.getFullYear()
-
-  return Number(currentYear)
-}
-
-const getWeek = (): string => {
-  const currentDate = new Date()
-  const oneJan = new Date(getYear(), 0, 1)
-  const numberOfDays = Math.floor(
-    (Number(currentDate) - Number(oneJan)) / (24 * 60 * 60 * 1000)
-  )
-  const currentWeekNumber = Math.floor(
-    (currentDate.getDay() + 1 + numberOfDays) / 7
-  )
-
-  return currentWeekNumber.toString()
+  return !inProject
+    ? ProjectStatus.NoProject
+    : isInternal
+    ? ProjectStatus.InternalProject
+    : ProjectStatus.ExternalProject
 }
 
 const getEmployeeWork = (

@@ -56,7 +56,7 @@ type StatusDisplayDetails = Record<
 const statusDisplayDetails: StatusDisplayDetails = {
   [ProjectStatus.ExternalProject]: {
     color: '#4C8E00',
-    label: 'Opptatt i prosjekt',
+    label: 'Opptatt i ekstern prosjekt',
   },
   [ProjectStatus.OpenForChange]: {
     color: '#FFD500',
@@ -69,6 +69,10 @@ const statusDisplayDetails: StatusDisplayDetails = {
   [ProjectStatus.NoProject]: {
     color: '#D10000',
     label: 'Ikke i prosjekt',
+  },
+  [ProjectStatus.InternalProject]: {
+    color: '#004C8E',
+    label: 'Opptatt i intern prosjekt',
   },
 }
 

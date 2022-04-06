@@ -26,7 +26,7 @@ export interface ConsultantInfo {
 }
 
 export enum ProjectStatus {
-  // InternalProject = 'INTERNAL',
+  InternalProject = 'INTERNAL',
   ExternalProject = 'EXTERNAL',
   NoProject = 'NO_PROJECT',
   WantChange = 'WANT_CHANGE',
