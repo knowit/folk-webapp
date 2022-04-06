@@ -19,7 +19,7 @@ export const getEmployeeExperience = (url: string, user_id: string) =>
     params: { user_id },
   })
 
-export const getEmployeeMotivationAndCompetence = (
+export const getEmployeeMotivationAndCompetenceCharts = (
   url: string,
   email: string
 ) =>

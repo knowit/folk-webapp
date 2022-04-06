@@ -27,25 +27,3 @@ export type CustomerListTableRowData = [
   customerAndProject: string,
   cvLinks: CvLinks
 ]
-
-// hoursBilledPerCustomer
-interface BilledCustomer {
-  kunde: string
-  timer: number
-}
-
-export interface HoursBilledPerCustomerResponse {
-  setNames: string[]
-  sets: Record<string, BilledCustomer[]>
-}
-
-// hoursBilledPerWeek
-interface BilledWeek {
-  id: string
-  data: { x: number; y: number }[]
-}
-
-export interface HoursBilledPerWeekResponse {
-  setNames: string[]
-  sets: Record<string, BilledWeek[]>
-}

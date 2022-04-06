@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useEmployeeMotivationAndCompetence } from '../../../api/data/employee/employeeQueries'
+import { useEmployeeMotivationAndCompetenceCharts } from '../../../api/data/employee/employeeQueries'
 import { GridItem } from '../../../components/gridItem/GridItem'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
@@ -12,7 +12,8 @@ interface Props {
 }
 
 export function CompetenceChart({ employeeEmail }: Props) {
-  const { data, error } = useEmployeeMotivationAndCompetence(employeeEmail)
+  const { data, error } =
+    useEmployeeMotivationAndCompetenceCharts(employeeEmail)
 
   if (error) {
     return (

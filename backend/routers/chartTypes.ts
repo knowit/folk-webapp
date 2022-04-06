@@ -1,3 +1,5 @@
+// THIS FILE MUST CORRESPOND 100% WITH THE FILE WITH THE SAME NAME IN THE FRONTEND
+
 export type ChartData =
   | MultipleChartData<SingularChartData[]>
   | SingularChartData

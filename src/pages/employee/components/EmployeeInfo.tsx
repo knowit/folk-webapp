@@ -9,7 +9,7 @@ import {
 } from '../../../api/data/employee/employeeApiTypes'
 import {
   useEmployeeExperience,
-  useEmployeeMotivationAndCompetence,
+  useEmployeeMotivationAndCompetenceCharts,
   useEmployeeProfile,
 } from '../../../api/data/employee/employeeQueries'
 import ChartCard from '../../../components/charts/ChartCard'
@@ -91,7 +91,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
 
   const { data: empData } = useEmployeeProfile(data.email)
   const { data: expData } = useEmployeeExperience(data.user_id)
-  const { data: employeeChartData } = useEmployeeMotivationAndCompetence(
+  const { data: employeeChartData } = useEmployeeMotivationAndCompetenceCharts(
     data.email
   )
 

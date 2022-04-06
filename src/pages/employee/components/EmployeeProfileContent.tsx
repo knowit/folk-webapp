@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 import * as React from 'react'
 import {
-  useEmployeeMotivationAndCompetence,
+  useEmployeeMotivationAndCompetenceCharts,
   useEmployeeProfile,
 } from '../../../api/data/employee/employeeQueries'
 import ChartCard from '../../../components/charts/ChartCard'
@@ -58,7 +58,7 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
   const classes = useStyles()
 
   const { data: employeeMotivationAndCompetence } =
-    useEmployeeMotivationAndCompetence(employeeEmail)
+    useEmployeeMotivationAndCompetenceCharts(employeeEmail)
   const { data: employee, error } = useEmployeeProfile(employeeEmail)
   const isLoading = !employee
 
