@@ -10,14 +10,16 @@ function getLineWidth(index: number) {
 interface MultiLineSkeletonProps {
   lines?: number
   lineHeight?: number | string
+  maxWidth?: number | string
 }
 
 export function MultiLineSkeleton({
   lines = 3,
   lineHeight = '1.5em',
+  maxWidth = '100%',
 }: MultiLineSkeletonProps) {
   return (
-    <>
+    <div style={{ maxWidth }}>
       {Array.from({ length: lines }).map((_, index) => (
         <LineSkeleton
           key={index}
@@ -25,6 +27,6 @@ export function MultiLineSkeleton({
           height={lineHeight}
         />
       ))}
-    </>
+    </div>
   )
 }

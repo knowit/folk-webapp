@@ -12,14 +12,15 @@ import {
 } from './employeesAggregation'
 import {
   BasicEmployeeInformationReport,
-  EmployeeExperienceReport,
-  EmployeeInformationReport,
+  ProjectExperienceReport,
+  EmployeeProfileInformationReport,
   EmployeeMotivationAndCompetenceReport,
   EmployeeSkillsReport,
   EmployeeWorkStatusReport,
   JobRotationInformationReport,
   WorkExperienceReport,
 } from './employeesTypes'
+import { EmployeeCustomersReport } from '../customer/customerTypes'
 
 const router = express.Router()
 
@@ -90,7 +91,7 @@ router.get<unknown, unknown, unknown, UserIdParam>(
         throw err
       }
 
-      const data = await getReport<EmployeeExperienceReport>({
+      const data = await getReport<ProjectExperienceReport>({
         accessToken: req.accessToken,
         reportName: 'projectExperience',
         queryParams: {
@@ -179,6 +180,15 @@ router.get<unknown, unknown, unknown, EmailParam>(
         throw err
       }
 
+      const employeeProfileInformationPromise =
+        getReport<EmployeeProfileInformationReport>({
+          accessToken: req.accessToken,
+          reportName: 'employeeProfileInformation',
+          queryParams: {
+            email: req.query.email,
+          },
+        })
+
       const employeeSkillsPromise = getReport<EmployeeSkillsReport>({
         accessToken: req.accessToken,
         reportName: 'employeeSkills',
@@ -195,22 +205,40 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      const employeeInformationPromise = getReport<EmployeeInformationReport>({
+      const projectExperiencePromise = getReport<ProjectExperienceReport>({
         accessToken: req.accessToken,
-        reportName: 'employeeInformation',
+        reportName: 'projectExperience',
         queryParams: {
           email: req.query.email,
         },
       })
 
-      const [employeeSkills, workExperience, employeeInformation] =
-        await Promise.all([
-          employeeSkillsPromise,
-          workExperiencePromise,
-          employeeInformationPromise,
-        ])
+      const employeeCustomersPromise = getReport<EmployeeCustomersReport>({
+        accessToken: req.accessToken,
+        reportName: 'employeeCustomers',
+        queryParams: {
+          email: req.query.email,
+        },
+      })
 
-      if (!employeeInformation || employeeInformation.length === 0) {
+      const [
+        employeeProfileInformation,
+        employeeSkills,
+        workExperience,
+        projectExperience,
+        employeeCustomers,
+      ] = await Promise.all([
+        employeeProfileInformationPromise,
+        employeeSkillsPromise,
+        workExperiencePromise,
+        projectExperiencePromise,
+        employeeCustomersPromise,
+      ])
+
+      if (
+        !employeeProfileInformation ||
+        employeeProfileInformation.length === 0
+      ) {
         const err: NotFoundError = {
           status: 404,
           message: "Employee with email '" + req.query.email + "' not found.",
@@ -220,9 +248,11 @@ router.get<unknown, unknown, unknown, EmailParam>(
       }
 
       const aggregatedData = aggregateEmployeeProfile(
+        employeeProfileInformation,
         employeeSkills,
         workExperience,
-        employeeInformation
+        projectExperience,
+        employeeCustomers
       )
 
       res.send(aggregatedData)

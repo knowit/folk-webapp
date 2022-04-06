@@ -9,7 +9,7 @@ import { formatMonthYearRange } from '../../../utils/formatMonthYearRange'
 import {
   ConsultantInfo,
   EmployeeExperienceResponse,
-  ProjectExperience,
+  EmployeeExperience,
   WorkExperience,
 } from '../../../api/data/employee/employeeApiTypes'
 import { getStartedInKnowit } from '../../../utils/getStartedInKnowit'
@@ -284,8 +284,8 @@ export const GetProjects = (expData: {
 }
 
 function compareProjectDates(
-  projectA: ProjectExperience,
-  projectB: ProjectExperience
+  projectA: EmployeeExperience,
+  projectB: EmployeeExperience
 ) {
   const aDate = new Date(projectA.time_from || projectA.time_to)
   const bDate = new Date(projectB.time_from || projectB.time_to)

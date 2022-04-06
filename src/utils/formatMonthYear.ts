@@ -14,10 +14,10 @@ const months = [
 ]
 
 export function formatMonthYear(
-  month: number | undefined,
+  month: number,
   year: number
 ): string | undefined {
-  if (year === -1) {
+  if (!year || year <= 0) {
     return
   }
   if (!month || month <= 0) {

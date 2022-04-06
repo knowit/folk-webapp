@@ -51,10 +51,10 @@ export interface CvLinks {
 
 export interface EmployeeExperienceResponse {
   name: string
-  experience?: ProjectExperience[]
+  experience?: EmployeeExperience[]
 }
 
-export interface ProjectExperience {
+export interface EmployeeExperience {
   customer: string
   project: string
   time_to: string
@@ -65,32 +65,33 @@ export interface ProjectExperience {
  * EmployeeProfile
  */
 
-interface Employee {
+export interface EmployeeProfileResponse {
   user_id: string
-  guid: string
-  navn: string
-  manager: string
-  title: string
-  degree?: string
   email: string
-  customers: CustomerWithWeight[]
-}
-
-export interface EmployeeProfileResponse extends Employee {
+  name: string
+  phone?: string
+  title?: string
+  degree?: string
+  manager: string
   image?: string
-  workExperience: WorkExperience[]
   tags: Tags
   links: CvLinks
-}
-
-export interface CustomerWithWeight extends Customer {
-  weight: number
+  customers: Customer[]
+  workExperience: WorkExperience[]
+  projectExperience: ProjectExperience[]
 }
 
 export interface WorkExperience {
-  user_id: string
-  email: string
   employer: string
+  month_from: number
+  year_from: number
+  month_to: number
+  year_to: number
+}
+
+export interface ProjectExperience {
+  customer: string
+  project: string
   month_from: number
   year_from: number
   month_to: number

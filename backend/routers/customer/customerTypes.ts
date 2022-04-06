@@ -42,6 +42,7 @@ export type CustomerCardsData = {
   billedTotal: number
 }
 
+export type EmployeeCustomersReport = EmployeeCustomers[]
 export type EmployeeCustomers = {
   user_id: string
   email: string

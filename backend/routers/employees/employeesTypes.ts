@@ -4,20 +4,18 @@ import { TableRow } from '../datatypes/typeData'
  * Employee Reports
  */
 
-export type EmployeeInformationReport = EmployeeInformation[]
-export type EmployeeInformation = {
+export type EmployeeProfileInformationReport = EmployeeProfileInformation[]
+export type EmployeeProfileInformation = {
   user_id: string
   guid: string
-  navn: string
-  manager: string
-  title?: string
-  link: string
-  degree?: string
-  image_key?: string
   email: string
-  customer?: string
-  weight?: number
-  work_order_description?: string
+  name: string
+  title?: string
+  phone?: string
+  degree?: string
+  manager: string
+  image_key?: string
+  link: string
 }
 
 export type BasicEmployeeInformationReport = BasicEmployeeInformation[]
@@ -87,9 +85,10 @@ export type WorkExperience = {
   year_to: number
 }
 
-export type EmployeeExperienceReport = EmployeeExperience[]
-export type EmployeeExperience = {
+export type ProjectExperienceReport = ProjectExperience[]
+export type ProjectExperience = {
   user_id: string
+  email: string
   navn: string
   customer: string
   description: string
@@ -158,21 +157,32 @@ export type CategoryScores = [
  */
 
 export type EmployeeProfileResponse = Omit<
-  EmployeeWithMergedCustomers,
-  'customer' | 'weight' | 'work_order_description' | 'image_key' | 'link'
+  EmployeeProfileInformation,
+  'guid' | 'image_key' | 'link'
 > & {
   image: string
-  workExperience: WorkExperience[]
   tags: Tags
   links: CvLinks
+  customers: Customer[]
+  workExperience: WorkExperienceForProfile[]
+  projectExperience: ProjectExperienceForProfile[]
 }
 
-export type EmployeeWithMergedCustomers = EmployeeInformation & {
-  customers: CustomerWithWeight[]
+type WorkExperienceForProfile = {
+  employer: string
+  month_from: number
+  year_from: number
+  month_to: number
+  year_to: number
 }
 
-export type CustomerWithWeight = Customer & {
-  weight: number
+type ProjectExperienceForProfile = {
+  customer: string
+  project: string
+  year_from: number
+  month_from: number
+  year_to: number
+  month_to: number
 }
 
 export type Tags = {

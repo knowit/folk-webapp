@@ -30,6 +30,20 @@ const reports = [
     lastCacheUpdate: '2022-03-28T13:36:22.390506',
   },
   {
+    name: 'employeeProfileInformation',
+    queryString:
+      'WITH last_education AS (SELECT a.user_id, array_agg(a.degree)[1] AS degree, array_agg(a.year_to)[1] AS year_to FROM dev_level_3_database.cv_partner_education a INNER JOIN (SELECT user_id, max(year_to) AS year_to FROM dev_level_3_database.cv_partner_education GROUP BY user_id) b ON a.user_id = b.user_id AND a.year_to = b.year_to GROUP BY a.user_id) SELECT cv.user_id, cv.guid, cv.email, cv.navn AS name, cv.telefon AS phone, cv.title, edu.degree, ad.manager, cv.image_key, cv.link FROM dev_level_3_database.cv_partner_employees AS cv LEFT OUTER JOIN last_education AS edu ON edu.user_id = cv.user_id LEFT OUTER JOIN dev_level_3_database.active_directory AS ad ON ad.guid = cv.guid ORDER BY name',
+    tables: [
+      'active_directory',
+      'cv_partner_education',
+      'cv_partner_employees',
+    ],
+    dataProtection: 3,
+    created: '2022-04-01T07:43:15.177430',
+    lastUsed: null,
+    lastCacheUpdate: '2022-04-01T07:43:17.614737',
+  },
+  {
     name: 'competence',
     queryString:
       'WITH last_education AS (SELECT a.user_id, array_agg(a.degree)[1] AS degree, array_agg(a.year_to)[1] AS year_to FROM dev_level_3_database.cv_partner_education a INNER JOIN (SELECT user_id, max(year_to) AS year_to FROM dev_level_3_database.cv_partner_education GROUP BY  user_id ) b ON a.user_id = b.user_id AND a.year_to = b.year_to GROUP BY  a.user_id) SELECT emp.user_id, navn, title, link, degree, email, image_key\n FROM dev_level_3_database.cv_partner_employees AS emp LEFT OUTER JOIN last_education AS e ON e.user_id = emp.user_id order by navn',
@@ -279,12 +293,12 @@ const reports = [
   {
     name: 'projectExperience',
     queryString:
-      'SELECT emp.user_id, navn, customer, description, year_from, year_to, month_from,  month_to FROM dev_level_3_database.cv_partner_project_experience AS exp JOIN (SELECT user_id, navn FROM dev_level_3_database.cv_partner_employees) emp ON exp.user_id = emp.user_id',
+      'SELECT emp.user_id, email, navn, customer, description, year_from, year_to, month_from, month_to FROM dev_level_3_database.cv_partner_project_experience AS exp JOIN (SELECT user_id, navn, email FROM dev_level_3_database.cv_partner_employees) emp ON exp.user_id = emp.user_id',
     tables: ['cv_partner_employees', 'cv_partner_project_experience'],
     dataProtection: 3,
-    created: '2021-07-28T10:38:43.562688',
+    created: '2022-04-01T08:26:31.053906',
     lastUsed: null,
-    lastCacheUpdate: '2022-01-21T10:08:57.380277',
+    lastCacheUpdate: '2022-04-01T08:26:37.031550',
   },
   {
     name: 'test123',
