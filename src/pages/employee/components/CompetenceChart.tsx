@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { useEmployeeRadar } from '../../../api/data/employee/employeeQueries'
+import { useEmployeeMotivationAndCompetence } from '../../../api/data/employee/employeeQueries'
+import { GridItem } from '../../../components/gridItem/GridItem'
+import { GridItemContent } from '../../../components/gridItem/GridItemContent'
+import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
 import { ChartSkeleton } from '../../../components/skeletons/ChartSkeleton'
 import Chart from '../../../data/components/chart/Chart'
-import { GridItem } from '../../../components/gridItem/GridItem'
-import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
-import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { FallbackMessage } from './FallbackMessage'
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export function CompetenceChart({ employeeEmail }: Props) {
-  const { data, error } = useEmployeeRadar(employeeEmail)
+  const { data, error } = useEmployeeMotivationAndCompetence(employeeEmail)
 
   if (error) {
     return (

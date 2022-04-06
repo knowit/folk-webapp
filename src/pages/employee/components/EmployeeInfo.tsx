@@ -1,16 +1,17 @@
-import * as React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Skeleton } from '@material-ui/lab'
-import { useFetchedData } from '../../../hooks/service'
-import { NoData } from '../../../components/ErrorText'
-import Chart from '../../../data/components/chart/Chart'
-import { useEmployeeRadar } from '../../../api/data/employee/employeeQueries'
-import { formatMonthYearRange } from '../../../utils/formatMonthYearRange'
+import * as React from 'react'
 import {
   EmployeeExperienceResponse,
   ProjectExperience,
   WorkExperience,
 } from '../../../api/data/employee/employeeApiTypes'
+import { useEmployeeMotivationAndCompetence } from '../../../api/data/employee/employeeQueries'
+import ChartCard from '../../../components/charts/ChartCard'
+import { NoData } from '../../../components/ErrorText'
+import Chart from '../../../data/components/chart/Chart'
+import { useFetchedData } from '../../../hooks/service'
+import { formatMonthYearRange } from '../../../utils/formatMonthYearRange'
 import { getStartedInKnowit } from '../../../utils/getStartedInKnowit'
 import { getTotalWorkExperience } from '../../../utils/getTotalWorkExperience'
 
@@ -111,7 +112,9 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
     url: `/api/data/employeeExperience?user_id=${data.user_id}`,
   })
 
-  const { data: employeeChartData } = useEmployeeRadar(data.email)
+  const { data: employeeChartData } = useEmployeeMotivationAndCompetence(
+    data.email
+  )
 
   return (
     <div className={classes.root}>
@@ -202,34 +205,8 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
         )}
       </div>
       <div className={classes.oversikt}>
-        {employeeChartData ? (
-          <Chart
-            payload={employeeChartData}
-            title="Motivasjon"
-            props={{
-              chartVariants: [
-                {
-                  type: 'BarChart',
-                  props: {
-                    dataKey: 'category',
-                    yLabels: ['motivation', 'competence'],
-                    maxValue: 5,
-                  },
-                },
-                {
-                  type: 'RadarChart',
-                  props: {
-                    groupKey: 'category',
-                    valueKey: ['motivation', 'competence'],
-                    maxValue: 5,
-                  },
-                },
-              ],
-            }}
-            fullsize={true}
-          />
-        ) : (
-          <Skeleton variant="rect" height={320} width={400} animation="wave" />
+        {employeeChartData && (
+          <ChartCard title="Kompetansemengde" data={employeeChartData} />
         )}
       </div>
     </div>

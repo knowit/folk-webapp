@@ -3,7 +3,6 @@ import {
   getEmployeeExperience,
   getEmployeeMotivationAndCompetence,
   getEmployeeProfile,
-  getEmployeeRadar,
   getEmployeeTable,
 } from './employeeApi'
 
@@ -28,14 +27,6 @@ export const useEmployeeExperience = (user_id?: string) =>
       revalidateOnFocus: false,
     }
   )
-
-/**
- * @param email Optional parameter, SWR waits until it is defined to fetch data
- */
-export const useEmployeeRadar = (email?: string) =>
-  useSWR(email ? ['/employeeRadar', email] : null, getEmployeeRadar, {
-    revalidateOnFocus: false,
-  })
 
 /**
  * @param email Optional parameter, SWR waits until it is defined to fetch data

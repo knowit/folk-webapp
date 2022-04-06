@@ -1,5 +1,8 @@
 import * as React from 'react'
-import { useEmployeeProfile } from '../../../api/data/employee/employeeQueries'
+import {
+  useEmployeeMotivationAndCompetence,
+  useEmployeeProfile,
+} from '../../../api/data/employee/employeeQueries'
 import { makeStyles } from '@material-ui/core'
 import { CompetenceSummary } from './CompetenceSummary'
 import { WorkExperienceList } from './WorkExperienceList'
@@ -11,6 +14,7 @@ import { CvDownloadList } from './CvDownloadList'
 import { EmployeeAvatar } from './EmployeeAvatar'
 import { EmployeeNotFound } from './EmployeeNotFound'
 import { FallbackMessage } from './FallbackMessage'
+import ChartCard from '../../../components/charts/ChartCard'
 
 const useStyles = makeStyles({
   root: {
@@ -54,6 +58,8 @@ interface Props {
 export function EmployeeProfileContent({ employeeEmail }: Props) {
   const classes = useStyles()
 
+  const { data: employeeData } =
+    useEmployeeMotivationAndCompetence(employeeEmail)
   const { data: employee, error } = useEmployeeProfile(employeeEmail)
   const isLoading = !employee
 
@@ -109,7 +115,9 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
           </section>
         </div>
         <div className={classes.column}>
-          <CompetenceChart employeeEmail={employee?.email} />
+          {employeeData && (
+            <ChartCard title="Kompetansekartlegging" data={employeeData} />
+          )}
         </div>
       </div>
     </article>
