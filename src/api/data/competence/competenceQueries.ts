@@ -1,7 +1,7 @@
 import useSWR from 'swr'
 import {
   getAgeDistribution,
-  getAgeDistributionBar,
+  getAgeDistributionCharts,
   getCompetenceAmount,
   getCompetenceAmountCharts,
   getCompetenceAreas,
@@ -83,8 +83,8 @@ export const useCompetenceAreasCharts = () =>
     revalidateOnFocus: false,
   })
 
-export const useAgeDistributionBar = () =>
-  useSWR('/ageDistributionBar', getAgeDistributionBar, {
+export const useAgeDistributionCharts = () =>
+  useSWR('/ageDistributionCharts', getAgeDistributionCharts, {
     revalidateOnFocus: false,
   })
 

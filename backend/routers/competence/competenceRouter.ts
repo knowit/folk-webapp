@@ -1,7 +1,7 @@
 import express from 'express'
 import { getReport } from '../../dataplattform/client'
 import {
-  ageDistributionBar,
+  ageDistribution,
   competenceAmount,
   competenceAreas,
   competenceMappingBar,
@@ -64,7 +64,7 @@ router.get('/competenceAreas', async (req, res, next) => {
   }
 })
 
-router.get('/ageDistribution/bar', async (req, res, next) => {
+router.get('/ageDistribution', async (req, res, next) => {
   try {
     const ageDistributionPromise = getReport<AgeDistribution[]>({
       accessToken: req.accessToken,
@@ -76,13 +76,13 @@ router.get('/ageDistribution/bar', async (req, res, next) => {
       reportName: 'ageDistributionGroups',
     })
 
-    const [ageDistribution, ageDistributionGroups] = await Promise.all([
+    const [ageDistributionData, ageDistributionGroups] = await Promise.all([
       ageDistributionPromise,
       ageDistributionGroupsPromise,
     ])
 
-    const aggregatedData = ageDistributionBar([
-      ageDistribution,
+    const aggregatedData = ageDistribution([
+      ageDistributionData,
       ageDistributionGroups,
     ])
 

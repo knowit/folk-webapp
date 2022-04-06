@@ -1,6 +1,7 @@
 import { Grid } from '@material-ui/core'
 import React from 'react'
 import {
+  useAgeDistributionCharts,
   useCompetenceAmountCharts,
   useCompetenceAreasCharts,
   useFagtimerLine,
@@ -13,9 +14,7 @@ const Debug = () => {
   const { data: competenceArea } = useCompetenceAreasCharts()
   const { data: competenceAmountBar } = useCompetenceAmountCharts()
   const { data: fagEvents } = useFagtimerLine()
-  const { data: testing } = useEmployeeMotivationAndCompetence(
-    'fredrik.arnesen@knowit.no'
-  )
+  const { data: testing } = useAgeDistributionCharts()
 
   if (!competenceAmountBar || !competenceArea || !fagEvents || !testing)
     return <div>Loading...</div>

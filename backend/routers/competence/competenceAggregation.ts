@@ -202,7 +202,7 @@ export const competenceMapping = (
   return result
 }
 
-export const ageDistribution = (
+export const ageDistributionFormatting = (
   data: AgeDistribution[]
 ): AgeDistributionData[] => {
   return data

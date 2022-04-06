@@ -8,7 +8,7 @@ import {
   SunburstChartData,
 } from '../chartTypes'
 import {
-  ageDistribution,
+  ageDistributionFormatting,
   ageGroupDistribution,
   competenceAmountMapping,
   competenceAreasAggregated,
@@ -123,20 +123,20 @@ export const competenceAreas = (
   }
 }
 
-export const ageDistributionBar = (
+export const ageDistribution = (
   data: [AgeDistribution[], AgeGroupDistribution[]]
 ): MultipleChartData<[BarChartData]> => {
   const indexBy = 'age'
   const keys = ['count']
 
-  const detailed = ageDistribution(data[0])
+  const detailed = ageDistributionFormatting(data[0])
   const grouped = ageGroupDistribution(data[1])
 
   return {
     type: 'MultipleChart',
     groups: [
       {
-        name: 'grouped',
+        name: 'Aldersgrupper',
         charts: [
           {
             type: 'BarChart',
@@ -147,7 +147,7 @@ export const ageDistributionBar = (
         ],
       },
       {
-        name: 'detailed',
+        name: 'Detaljert oversikt',
         charts: [
           {
             type: 'BarChart',
