@@ -182,9 +182,9 @@ export const fagtimer = (fagtimer: FagtimeStats[]): LineChartData => {
   return { type: 'LineChart', data }
 }
 
-export const fagEventsLine = (data: FagEventData[]): LineChartData[] => {
+export const fagEventsLine = (data: FagEventData[]): LineChartData => {
   const aggregatedData = getEventSet(data)
-  return aggregatedData
+  return { type: 'LineChart', data: aggregatedData }
 }
 
 export const educationPie = (data: DegreeDistribution[]): PieChartData => {

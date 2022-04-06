@@ -106,7 +106,7 @@ router.get('/fagtimer', async (req, res, next) => {
   }
 })
 
-router.get('/fagEvents/line', async (req, res, next) => {
+router.get('/fagEvents', async (req, res, next) => {
   try {
     const data = await getReport<FagEventData[]>({
       accessToken: req.accessToken,

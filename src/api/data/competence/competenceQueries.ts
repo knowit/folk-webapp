@@ -15,7 +15,7 @@ import {
   getExperienceDistribution,
   getExperienceDistributionCharts,
   getFagEvents,
-  getFagEventsLine,
+  getFagEventsCharts,
   getFagtimer,
   getFagtimerCharts,
 } from './competenceApi'
@@ -93,8 +93,8 @@ export const useFagtimerCharts = () =>
     revalidateOnFocus: false,
   })
 
-export const useFagEventsLine = () =>
-  useSWR('/fagEventsLine', getFagEventsLine, {
+export const useFagEventsCharts = () =>
+  useSWR('/fagEventsCharts', getFagEventsCharts, {
     revalidateOnFocus: false,
   })
 

@@ -52,8 +52,8 @@ export const getAgeDistributionCharts = () =>
 export const getFagtimerCharts = () =>
   getAtApiV2<ChartData>('/competence/fagtimer')
 
-export const getFagEventsLine = () =>
-  getAtApiV2<ChartData>('/competence/fagEvents/line')
+export const getFagEventsCharts = () =>
+  getAtApiV2<ChartData>('/competence/fagEvents')
 
 export const getEducationPie = () =>
   getAtApiV2<ChartData>('/competence/education/pie')
