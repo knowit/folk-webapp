@@ -40,8 +40,8 @@ export const getCompetenceFilter = () =>
 export const getExperienceDistributionCharts = () =>
   getAtApiV2<ChartData>('/competence/experienceDistribution')
 
-export const getCompetenceAmountBar = () =>
-  getAtApiV2<ChartData>('/competence/competenceAmount/bar')
+export const getCompetenceAmountCharts = () =>
+  getAtApiV2<ChartData>('/competence/competenceAmount')
 
 export const getCompetenceAreasCharts = () =>
   getAtApiV2<ChartData>('/competence/competenceAreas')

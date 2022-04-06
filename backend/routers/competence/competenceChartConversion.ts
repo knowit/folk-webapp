@@ -60,7 +60,7 @@ export const experienceDistribution = (
   }
 }
 
-export const competenceAmountBar = (
+export const competenceAmount = (
   data: CompetenceAmount[]
 ): MultipleChartData<[BarChartData]> => {
   const indexBy = 'category'

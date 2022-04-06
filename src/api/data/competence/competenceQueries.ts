@@ -3,7 +3,7 @@ import {
   getAgeDistribution,
   getAgeDistributionBar,
   getCompetenceAmount,
-  getCompetenceAmountBar,
+  getCompetenceAmountCharts,
   getCompetenceAreas,
   getCompetenceAreasCharts,
   getCompetenceFilter,
@@ -73,8 +73,8 @@ export const useExperienceDistributionCharts = () =>
     revalidateOnFocus: false,
   })
 
-export const useCompetenceAmountBar = () =>
-  useSWR('/competenceAmountBar', getCompetenceAmountBar, {
+export const useCompetenceAmountCharts = () =>
+  useSWR('/competenceAmountCharts', getCompetenceAmountCharts, {
     revalidateOnFocus: false,
   })
 

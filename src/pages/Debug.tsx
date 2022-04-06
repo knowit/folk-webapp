@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core'
 import React from 'react'
 import {
-  useCompetenceAmountBar,
+  useCompetenceAmountCharts,
   useCompetenceAreasCharts,
   useFagtimerLine,
 } from '../api/data/competence/competenceQueries'
@@ -11,7 +11,7 @@ import { GridItem } from '../components/gridItem/GridItem'
 
 const Debug = () => {
   const { data: competenceArea } = useCompetenceAreasCharts()
-  const { data: competenceAmountBar } = useCompetenceAmountBar()
+  const { data: competenceAmountBar } = useCompetenceAmountCharts()
   const { data: fagEvents } = useFagtimerLine()
   const { data: testing } = useEmployeeMotivationAndCompetence(
     'fredrik.arnesen@knowit.no'
