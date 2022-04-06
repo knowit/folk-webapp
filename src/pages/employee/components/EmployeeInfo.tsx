@@ -6,31 +6,16 @@ import {
   ProjectExperience,
   WorkExperience,
 } from '../../../api/data/employee/employeeApiTypes'
-import { useEmployeeMotivationAndCompetence } from '../../../api/data/employee/employeeQueries'
+import {
+  useEmployeeExperience,
+  useEmployeeMotivationAndCompetence,
+  useEmployeeProfile,
+} from '../../../api/data/employee/employeeQueries'
 import ChartCard from '../../../components/charts/ChartCard'
 import { NoData } from '../../../components/ErrorText'
-import Chart from '../../../data/components/chart/Chart'
-import { useFetchedData } from '../../../hooks/service'
 import { formatMonthYearRange } from '../../../utils/formatMonthYearRange'
 import { getStartedInKnowit } from '../../../utils/getStartedInKnowit'
 import { getTotalWorkExperience } from '../../../utils/getTotalWorkExperience'
-
-interface MotivationMap {
-  [category: string]: number
-}
-
-interface EmployeeInfoData {
-  motivation: MotivationMap
-  tags: {
-    languages: string[]
-    skills: string[]
-    roles: string[]
-  }
-  workExperience: WorkExperience[]
-  manager: string
-  degree?: string
-  guid: string
-}
 
 export const months = [
   'Januar',
@@ -105,13 +90,9 @@ function getStringFromList(list: string[] | undefined) {
 
 export default function EmployeeInfo({ data }: EmployeeInfoProps) {
   const classes = useStyles()
-  const [empData, pending] = useFetchedData<EmployeeInfoData>({
-    url: `/api/data/employeeCompetence?email=${data.email}`,
-  })
-  const [expData, expPending] = useFetchedData<EmployeeExperienceResponse>({
-    url: `/api/data/employeeExperience?user_id=${data.user_id}`,
-  })
 
+  const { data: empData } = useEmployeeProfile(data.email)
+  const { data: expData } = useEmployeeExperience(data.user_id)
   const { data: employeeChartData } = useEmployeeMotivationAndCompetence(
     data.email
   )
@@ -120,7 +101,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
     <div className={classes.root}>
       <div className={classes.info}>
         <div className={classes.cell}>
-          {pending ? (
+          {!empData ? (
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
           ) : (
             <>
@@ -130,7 +111,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
           )}
         </div>
         <div className={classes.cell}>
-          {pending ? (
+          {!empData ? (
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
           ) : (
             <>
@@ -140,7 +121,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
           )}
         </div>
         <div className={classes.cell}>
-          {pending ? (
+          {!empData ? (
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
           ) : (
             <>
@@ -150,7 +131,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
           )}
         </div>
         <div className={classes.cell}>
-          {pending ? (
+          {!empData ? (
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
           ) : (
             <>
@@ -160,7 +141,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
           )}
         </div>
         <div className={classes.cell}>
-          {pending ? (
+          {!empData ? (
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
           ) : (
             <div title="Beregnet ut i fra første jobb på CV">
@@ -170,7 +151,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
           )}
         </div>
         <div className={classes.cell}>
-          {pending ? (
+          {!empData ? (
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
           ) : (
             <>
@@ -180,7 +161,7 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
           )}
         </div>
         <div className={classes.cell}>
-          {pending ? (
+          {!empData ? (
             <Skeleton variant="rect" width={340} height={15} animation="wave" />
           ) : (
             <>
@@ -192,13 +173,13 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
       </div>
       <div className={classes.erfaring}>
         <h3> Arbeidserfaring</h3>
-        {pending ? (
+        {!empData ? (
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <GetWorkExperience workExp={empData?.workExperience} />
         )}
         <h3> Prosjekterfaring </h3>
-        {expPending ? (
+        {!expData ? (
           <Skeleton variant="rect" width={340} height={15} animation="wave" />
         ) : (
           <GetProjects expData={expData} />

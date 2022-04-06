@@ -1,20 +1,19 @@
+import { makeStyles } from '@material-ui/core'
 import * as React from 'react'
 import {
   useEmployeeMotivationAndCompetence,
   useEmployeeProfile,
 } from '../../../api/data/employee/employeeQueries'
-import { makeStyles } from '@material-ui/core'
+import ChartCard from '../../../components/charts/ChartCard'
 import { CompetenceSummary } from './CompetenceSummary'
-import { WorkExperienceList } from './WorkExperienceList'
-import { ProjectExperienceList } from './ProjectExperienceList'
 import { CustomersForEmployee } from './CustomersForEmployee'
-import { CompetenceChart } from './CompetenceChart'
-import { EmployeeByline } from './EmployeeByline'
 import { CvDownloadList } from './CvDownloadList'
 import { EmployeeAvatar } from './EmployeeAvatar'
+import { EmployeeByline } from './EmployeeByline'
 import { EmployeeNotFound } from './EmployeeNotFound'
 import { FallbackMessage } from './FallbackMessage'
-import ChartCard from '../../../components/charts/ChartCard'
+import { ProjectExperienceList } from './ProjectExperienceList'
+import { WorkExperienceList } from './WorkExperienceList'
 
 const useStyles = makeStyles({
   root: {
@@ -58,7 +57,7 @@ interface Props {
 export function EmployeeProfileContent({ employeeEmail }: Props) {
   const classes = useStyles()
 
-  const { data: employeeData } =
+  const { data: employeeMotivationAndCompetence } =
     useEmployeeMotivationAndCompetence(employeeEmail)
   const { data: employee, error } = useEmployeeProfile(employeeEmail)
   const isLoading = !employee
@@ -115,8 +114,11 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
           </section>
         </div>
         <div className={classes.column}>
-          {employeeData && (
-            <ChartCard title="Kompetansekartlegging" data={employeeData} />
+          {employeeMotivationAndCompetence && (
+            <ChartCard
+              title="Kompetansekartlegging"
+              data={employeeMotivationAndCompetence}
+            />
           )}
         </div>
       </div>
