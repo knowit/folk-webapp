@@ -22,7 +22,7 @@ export const hoursBilledPerCustomer = (
   }
 }
 
-export const hoursBilledPerWeekLine = (
+export const hoursBilledPerWeek = (
   data: BilledCustomerHours[]
 ): LineChartData => {
   const aggregationMap: Record<string, Record<string, number>> = {}

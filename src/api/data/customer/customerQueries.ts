@@ -5,7 +5,7 @@ import {
   getHoursBilledPerCustomer,
   getHoursBilledPerCustomerCharts,
   getHoursBilledPerWeek,
-  getHoursBilledPerWeekLine,
+  getHoursBilledPerWeekCharts,
 } from './customerApi'
 
 export const useCustomerCards = () =>
@@ -34,7 +34,7 @@ export const useHoursBilledPerCustomerCharts = () =>
     revalidateOnFocus: false,
   })
 
-export const useHoursBilledPerWeekLine = () =>
-  useSWR('/hoursBilledPerWeekLine', getHoursBilledPerWeekLine, {
+export const useHoursBilledPerWeekCharts = () =>
+  useSWR('/hoursBilledPerWeekCharts', getHoursBilledPerWeekCharts, {
     revalidateOnFocus: false,
   })

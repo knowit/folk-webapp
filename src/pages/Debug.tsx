@@ -5,7 +5,7 @@ import {
   useCompetenceAreasCharts,
   useFagtimerCharts,
 } from '../api/data/competence/competenceQueries'
-import { useHoursBilledPerCustomerCharts } from '../api/data/customer/customerQueries'
+import { useHoursBilledPerWeekCharts } from '../api/data/customer/customerQueries'
 import ChartCard from '../components/charts/ChartCard'
 import { GridItem } from '../components/gridItem/GridItem'
 
@@ -13,7 +13,7 @@ const Debug = () => {
   const { data: competenceArea } = useCompetenceAreasCharts()
   const { data: competenceAmountBar } = useCompetenceAmountCharts()
   const { data: fagEvents } = useFagtimerCharts()
-  const { data: testing } = useHoursBilledPerCustomerCharts()
+  const { data: testing } = useHoursBilledPerWeekCharts()
 
   if (!competenceAmountBar || !competenceArea || !fagEvents || !testing)
     return <div>Loading...</div>
