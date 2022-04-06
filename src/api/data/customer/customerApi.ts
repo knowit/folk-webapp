@@ -8,18 +8,11 @@ import {
 } from './customerApiTypes'
 
 export const getCustomerCards = () =>
-  getAtApi<CustomerCardResponse>('/data/customerCards')
+  getAtApiV2<CustomerCardResponse>('/customer/customerCards')
 
 export const getEmployeesByCustomer = () =>
   getAtApiV2<EmployeesByCustomerResponse>('/customer/employeesByCustomer')
 
-export const getHoursBilledPerCustomer = () =>
-  getAtApi<HoursBilledPerCustomerResponse>('/data/hoursBilledPerCustomer')
-
-export const getHoursBilledPerWeek = () =>
-  getAtApi<HoursBilledPerWeekResponse>('/data/hoursBilledPerWeek')
-
-// API V2
 export const getHoursBilledPerCustomerCharts = () =>
   getAtApiV2<BarChartData>('/customer/hoursBilledPerCustomer')
 

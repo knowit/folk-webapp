@@ -1,33 +1,20 @@
 import { Skeleton } from '@material-ui/lab'
 import React from 'react'
-import { DDPayload } from '../../data/types'
-import { useFetchedData } from '../../hooks/service'
-import CustomerCard, { CustomerData } from './CustomerCard'
+import { useCustomerCards } from '../../api/data/customer/customerQueries'
+import CustomerCard from './CustomerCard'
 
 const CustomerCardList = () => {
-  const [data, pending, error] = useFetchedData<DDPayload>({
-    url: '/api/data/customerCards',
-  })
+  const { data } = useCustomerCards()
 
-  if (error) {
-    return (
-      <>
-        Error! {error.name} {error.message}
-      </>
-    )
-  }
-
-  if (pending) {
+  if (!data) {
     return <Skeleton variant="rect" height={780} animation="wave" />
   }
 
   return (
     <>
-      {data
-        ? data.map((customer: CustomerData) => (
-            <CustomerCard key={customer.customer} data={customer} />
-          ))
-        : null}
+      {data.map((customer) => (
+        <CustomerCard key={customer.customer} data={customer} />
+      ))}
     </>
   )
 }

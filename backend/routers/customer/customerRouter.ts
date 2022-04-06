@@ -7,6 +7,7 @@ import {
 } from './customerChartConversion'
 import {
   BilledCustomerHours,
+  CustomerCardData,
   EmployeeWithPrimaryCustomer,
 } from './customerTypes'
 
@@ -42,7 +43,12 @@ router.get('/hoursBilledPerWeek', async (req, res, next) => {
 
 router.get('/customerCards', async (req, res, next) => {
   try {
-    res.send('Customer cards')
+    const data = await getReport<CustomerCardData[]>({
+      accessToken: req.accessToken,
+      reportName: 'allProjectsOverview',
+    })
+
+    res.send(data)
   } catch (error) {
     next(error)
   }
