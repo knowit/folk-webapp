@@ -13,8 +13,7 @@ import {
   getEducation,
   getEducationPie,
   getExperienceDistribution,
-  getExperienceDistributionBar,
-  getExperienceDistributionPie,
+  getExperienceDistributionCharts,
   getFagEvents,
   getFagEventsLine,
   getFagtimer,
@@ -69,13 +68,8 @@ export const useCompetenceFilter = () =>
   })
 
 // API v2
-export const useExperienceDistributionBar = () =>
-  useSWR('/experienceDistributionBar', getExperienceDistributionBar, {
-    revalidateOnFocus: false,
-  })
-
-export const useExperienceDistributionPie = () =>
-  useSWR('/experienceDistributionPie', getExperienceDistributionPie, {
+export const useExperienceDistributionCharts = () =>
+  useSWR('/experienceDistribution', getExperienceDistributionCharts, {
     revalidateOnFocus: false,
   })
 

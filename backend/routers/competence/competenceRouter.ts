@@ -7,8 +7,7 @@ import {
   competenceMappingBar,
   competenceMappingSunburst,
   educationPie,
-  experienceDistributionBar,
-  experienceDistributionPie,
+  experienceDistribution,
   fagEventsLine,
   fagtimerLine,
 } from './competenceChartConversion'
@@ -26,26 +25,13 @@ import {
 
 const router = express.Router()
 
-router.get('/experienceDistribution/bar', async (req, res, next) => {
+router.get('/experienceDistribution', async (req, res, next) => {
   try {
     const data = await getReport<YearsWorkingDistributionCount[]>({
       accessToken: req.accessToken,
       reportName: 'workExperienceDistributedInYears',
     })
-    const aggregatedData = experienceDistributionBar(data)
-    res.send(aggregatedData)
-  } catch (error) {
-    next(error)
-  }
-})
-
-router.get('/experienceDistribution/pie', async (req, res, next) => {
-  try {
-    const data = await getReport<YearsWorkingDistributionCount[]>({
-      accessToken: req.accessToken,
-      reportName: 'workExperienceDistributedInYears',
-    })
-    const aggregatedData = experienceDistributionPie(data)
+    const aggregatedData = experienceDistribution(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)

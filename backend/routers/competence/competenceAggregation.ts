@@ -57,8 +57,8 @@ export const experienceMapping = (
   })
 
   return {
-    regular: { data: groupedListData },
-    detailed: { data: detailedGroupedListData },
+    Erfaring: { data: groupedListData },
+    'Detaljert oversikt': { data: detailedGroupedListData },
   }
 }
 

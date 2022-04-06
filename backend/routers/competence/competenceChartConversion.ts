@@ -27,11 +27,13 @@ import {
 } from './competenceTypes'
 
 // /experienceDistribution
-export const experienceDistributionBar = (
+export const experienceDistribution = (
   data: YearsWorkingDistributionCount[]
-): MultipleChartData<[BarChartData]> => {
+): MultipleChartData<[BarChartData, PieChartData]> => {
   const indexBy = 'years'
   const keys = ['count']
+  const id = 'years'
+  const value = 'count'
   const aggregatedData = experienceMapping(data)
 
   return {
@@ -46,26 +48,6 @@ export const experienceDistributionBar = (
             keys,
             data,
           },
-        ],
-      }
-    }),
-  }
-}
-
-export const experienceDistributionPie = (
-  data: YearsWorkingDistributionCount[]
-): MultipleChartData<[PieChartData]> => {
-  const id = 'years'
-  const value = 'count'
-
-  const aggregatedData = experienceMapping(data)
-
-  return {
-    type: 'MultipleChart',
-    groups: Object.entries(aggregatedData).map(([name, { data }]) => {
-      return {
-        name,
-        charts: [
           {
             type: 'PieChart',
             id,

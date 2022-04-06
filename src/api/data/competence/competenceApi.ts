@@ -37,11 +37,8 @@ export const getCompetenceFilter = () =>
   getAtApi<CompetenceFilterResponse[]>('/data/competenceFilter')
 
 // API V2
-export const getExperienceDistributionBar = () =>
-  getAtApiV2<ChartData>('/competence/experienceDistribution/bar')
-
-export const getExperienceDistributionPie = () =>
-  getAtApiV2<ChartData>('/competence/experienceDistribution/pie')
+export const getExperienceDistributionCharts = () =>
+  getAtApiV2<ChartData>('/competence/experienceDistribution')
 
 export const getCompetenceAmountBar = () =>
   getAtApiV2<ChartData>('/competence/competenceAmount/bar')
