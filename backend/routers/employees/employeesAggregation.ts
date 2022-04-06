@@ -24,6 +24,12 @@ export const aggregateEmployeeTable = (
   jobRotationInformation,
   employeeStatus
 ) => {
+  const currentRegPeriod =
+    Math.max.apply(
+      null,
+      employeeStatus.map((workStatus) => workStatus.last_reg_period)
+    ) ?? 0
+
   const employeesWithMergedCustomers =
     mergeCustomersForEmployees(employeeInformation)
   return employeesWithMergedCustomers.map((employee) => ({
@@ -44,7 +50,8 @@ export const aggregateEmployeeTable = (
       findProjectStatusForEmployee(
         jobRotationInformation,
         employeeStatus,
-        employee.guid
+        employee.guid,
+        currentRegPeriod
       ),
       findCustomerWithHighestWeight(employee.customers),
       Object.fromEntries(

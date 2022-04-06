@@ -3,8 +3,6 @@ import {
   mapEmployeeTags,
   findCustomerWithHighestWeight,
   getEventSet,
-  getWeek,
-  getYear,
   mergeCustomersForEmployees,
   range,
   statusColorCode,
@@ -87,10 +85,9 @@ const getEmployeeWork = (
 const findProjectStatusForEmployee = (
   jobRotationEmployees: JobRotation[],
   employeeWorkStatus: EmployeeWorkStatus[],
-  guid: string
+  guid: string,
+  currentRegPeriod: number
 ): string => {
-  const currentRegPeriod = parseInt(getYear() + getWeek(), 10)
-
   const work = getEmployeeWork(employeeWorkStatus, guid)
 
   const [wantNewProject, openForNewProject]: JobRotationStatus =
@@ -162,6 +159,12 @@ type EmployeeWorkStatus = {
 export const employeeTable = async ({ data }: EmployeeTable) => {
   const [allEmployees, motivationAndCompetence, jobRotation, employeeStatus] =
     data
+
+  const currentRegPeriod = Math.max.apply(
+    Math,
+    ...employeeStatus.map((workStatus) => workStatus.last_reg_period)
+  )
+  console.log(employeeStatus)
   const employeesWithMergedCustomers = mergeCustomersForEmployees(allEmployees)
 
   return employeesWithMergedCustomers.map((employee) => ({
@@ -179,7 +182,12 @@ export const employeeTable = async ({ data }: EmployeeTable) => {
         degree: employee.degree,
       },
       employee.title,
-      findProjectStatusForEmployee(jobRotation, employeeStatus, employee.guid),
+      findProjectStatusForEmployee(
+        jobRotation,
+        employeeStatus,
+        employee.guid,
+        currentRegPeriod
+      ),
       findCustomerWithHighestWeight(employee.customers),
       Object.fromEntries(
         cvs.map(([lang, format]) => [

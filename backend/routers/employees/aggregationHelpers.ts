@@ -123,10 +123,9 @@ const getEmployeeWork = (
 export const findProjectStatusForEmployee = (
   jobRotationEmployees: JobRotation[],
   employeeWorkStatus: EmployeeWorkStatus[],
-  guid: string
+  guid: string,
+  currentRegPeriod: number
 ): string => {
-  const currentRegPeriod = parseInt(getYear() + getWeek(), 10)
-
   const work = getEmployeeWork(employeeWorkStatus, guid)
 
   const [wantNewProject, openForNewProject]: JobRotationStatus =
