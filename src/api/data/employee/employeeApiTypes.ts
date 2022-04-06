@@ -5,8 +5,6 @@ export interface EmployeeTableResponse {
   rowData: any[]
 }
 
-// employeeRadar has same response as CompetenceAreasResponse
-
 /**
  * EmployeeExperience (= project experience for employee)
  */

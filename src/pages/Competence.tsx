@@ -1,168 +1,74 @@
-import React from 'react'
 import { Grid } from '@material-ui/core'
-import DDChart from '../data/DDChart'
+import React from 'react'
 import {
-  useCompetenceAmount,
-  useCompetenceAreas,
-  useExperienceDistribution,
-  useAgeDistribution,
-  useFagtimer,
-  useFagEvents,
-  useEducation,
-  useCompetenceMapping,
+  useAgeDistributionCharts,
+  useCompetenceAmountCharts,
+  useCompetenceAreasCharts,
+  useCompetenceMappingCharts,
+  useEducationCharts,
+  useExperienceDistributionCharts,
+  useFagEventsCharts,
+  useFagtimerCharts,
 } from '../api/data/competence/competenceQueries'
+import ChartCard from '../components/charts/ChartCard'
 
 export default function Competence() {
+  const { data: competenceAmountData } = useCompetenceAmountCharts()
+  const { data: competenceAreasData } = useCompetenceAreasCharts()
+  const { data: experienceDistributionData } = useExperienceDistributionCharts()
+  const { data: ageDistributionData } = useAgeDistributionCharts()
+  const { data: fagtimerData } = useFagtimerCharts()
+  const { data: fagEventsData } = useFagEventsCharts()
+  const { data: educationData } = useEducationCharts()
+  const { data: competenceMappingData } = useCompetenceMappingCharts()
+
   return (
     <Grid container spacing={2}>
-      <DDChart
-        fetchHook={useCompetenceAmount}
-        title="Kompetansemengde"
-        description="Andel ansatte som har svart 3 eller mer på kompetansekartleggingen"
-        dataComponentProps={{
-          chartVariants: [
-            {
-              type: 'BarChart',
-              props: {
-                dataKey: 'category',
-                yLabels: ['competenceProportion', 'motivationProportion'],
-                maxValue: 'auto',
-                tooltipValues: ['competenceAmount', 'motivationAmount'],
-              },
-            },
-          ],
-        }}
-      />
+      {competenceAmountData && (
+        <ChartCard
+          title="Kompetansemengde"
+          description="Andel ansatte som har svart 3 eller mer på kompetansekartleggingen"
+          data={competenceAmountData}
+        />
+      )}
 
-      <DDChart
-        fetchHook={useCompetenceAreas}
-        title="Kompetanseområder"
-        dataComponentProps={{
-          chartVariants: [
-            {
-              type: 'RadarChart',
-              props: {
-                groupKey: 'category',
-                valueKey: ['motivation', 'competence'],
-              },
-            },
-            {
-              type: 'BarChart',
-              props: {
-                dataKey: 'category',
-                yLabels: ['motivation', 'competence'],
-              },
-            },
-          ],
-        }}
-      />
+      {competenceAreasData && (
+        <ChartCard title="Kompetanseområder" data={competenceAreasData} />
+      )}
 
-      <DDChart
-        fetchHook={useExperienceDistribution}
-        title="Erfaring"
-        dataComponentProps={{
-          chartVariants: [
-            {
-              type: 'BarChart',
-              props: {
-                dataKey: 'years',
-                yLabels: ['count'],
-              },
-            },
-            {
-              type: 'PieChart',
-              props: {
-                groupKey: 'years',
-                valueKey: ['count'],
-              },
-            },
-          ],
-        }}
-      />
+      {experienceDistributionData && (
+        <ChartCard title="Erfaring" data={experienceDistributionData} />
+      )}
 
-      <DDChart
-        fetchHook={useAgeDistribution}
-        title="Alder"
-        dataComponentProps={{
-          chartVariants: [
-            {
-              type: 'BarChart',
-              props: {
-                dataKey: 'age',
-                yLabels: ['count'],
-              },
-            },
-          ],
-        }}
-      />
+      {ageDistributionData && (
+        <ChartCard title="Alder" data={ageDistributionData} />
+      )}
 
-      <DDChart
-        fetchHook={useFagtimer}
-        title="Aktivitet faggrupper"
-        description="Hver vertikal akse viser antall unike fag aktiviteter per uke, deulike linjene representerer de ulike årene"
-        dataComponentProps={{
-          chartVariants: [
-            {
-              type: 'LineChart',
-            },
-          ],
-        }}
-      />
+      {fagtimerData && (
+        <ChartCard
+          title="Aktivitet faggrupper"
+          description="Hver vertikal akse viser antall unike fag aktiviteter per uke, deulike linjene representerer de ulike årene"
+          data={fagtimerData}
+        />
+      )}
 
-      <DDChart
-        fetchHook={useFagEvents}
-        title="Fag og hendelser"
-        description="Hver vertikal akse viser antall unike hendelser per måned fra Google kalenderne Knowit Events og Knowit Fagkalender."
-        dataComponentProps={{
-          chartVariants: [
-            {
-              type: 'LineChart',
-            },
-          ],
-        }}
-      />
+      {fagEventsData && (
+        <ChartCard
+          title="Fag og hendelser"
+          description="Hver vertikal akse viser antall unike hendelser per måned fra Google kalenderne Knowit Events og Knowit Fagkalender."
+          data={fagEventsData}
+        />
+      )}
 
-      <DDChart
-        title="Utdannelse"
-        fetchHook={useEducation}
-        dataComponentProps={{
-          chartVariants: [
-            {
-              type: 'PieChart',
-              props: {
-                groupKey: 'degree',
-                valueKey: 'count',
-              },
-            },
-          ],
-        }}
-      />
+      {educationData && <ChartCard title="Utdannelse" data={educationData} />}
 
-      <DDChart
-        fetchHook={useCompetenceMapping}
-        title="Kompetansekartlegging"
-        description="Grafen viser gjennomsnittlig score på kompetanse/motivasjon innenfor hver av hovedkategoriene. I tillegg vises gjennomsnittlig score for hver underkategori og forholdet mellom underkategoriene i samme hovedkategori."
-        dataComponentProps={{
-          chartVariants: [
-            {
-              type: 'SunburstChart',
-              props: {
-                maxValue: 5,
-                yLabels: ['value'],
-                groupKey: 'category',
-              },
-            },
-            {
-              type: 'BarChart',
-              props: {
-                maxValue: 5,
-                yLabels: ['value'],
-                dataKey: 'category',
-              },
-            },
-          ],
-        }}
-      />
+      {competenceMappingData && (
+        <ChartCard
+          title="Kompetansekartlegging"
+          description="Grafen viser gjennomsnittlig score på kompetanse/motivasjon innenfor hver av hovedkategoriene. I tillegg vises gjennomsnittlig score for hver underkategori og forholdet mellom underkategoriene i samme hovedkategori."
+          data={competenceMappingData}
+        />
+      )}
     </Grid>
   )
 }

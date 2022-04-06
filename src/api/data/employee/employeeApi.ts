@@ -8,25 +8,24 @@ import {
 } from './employeeApiTypes'
 
 export const getEmployeeTable = () =>
-  getAtApi<EmployeeTableResponse[]>('/data/employeeTable')
+  getAtApiV2<EmployeeTableResponse[]>('/employees/employeeTable')
 
 export const getEmployeeProfile = (url: string, email: string) =>
-  getAtApi<EmployeeProfileResponse>(`/data/employeeProfile`, {
+  getAtApiV2<EmployeeProfileResponse>(`/employees/employeeProfile`, {
     params: { email },
   })
 
 export const getEmployeeExperience = (url: string, user_id: string) =>
-  getAtApi<EmployeeExperienceResponse>(`/data/employeeExperience`, {
+  getAtApiV2<EmployeeExperienceResponse>(`/employees/employeeExperience`, {
     params: { user_id },
   })
 
-// ! This might not be typed correctly
+// TODO: Fik ordentlig endepunkt for denne
 export const getEmployeeRadar = (url: string, email: string) =>
   getAtApi<CompetenceAreasResponse>(`/data/employeeRadar`, {
     params: { email },
   })
 
-// API V2
 export const getEmployeeMotivationAndCompetence = (
   url: string,
   email: string

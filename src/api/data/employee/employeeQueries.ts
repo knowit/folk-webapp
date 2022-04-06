@@ -37,8 +37,6 @@ export const useEmployeeRadar = (email?: string) =>
     revalidateOnFocus: false,
   })
 
-// API V2
-
 /**
  * @param email Optional parameter, SWR waits until it is defined to fetch data
  */
