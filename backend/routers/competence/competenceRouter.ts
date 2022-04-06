@@ -9,7 +9,7 @@ import {
   educationPie,
   experienceDistribution,
   fagEventsLine,
-  fagtimerLine,
+  fagtimer,
 } from './competenceChartConversion'
 import {
   AgeDistribution,
@@ -92,14 +92,14 @@ router.get('/ageDistribution', async (req, res, next) => {
   }
 })
 
-router.get('/fagtimer/line', async (req, res, next) => {
+router.get('/fagtimer', async (req, res, next) => {
   try {
     const data = await getReport<FagtimeStats[]>({
       accessToken: req.accessToken,
       reportName: 'fagActivity',
     })
 
-    const aggregatedData = fagtimerLine(data)
+    const aggregatedData = fagtimer(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)

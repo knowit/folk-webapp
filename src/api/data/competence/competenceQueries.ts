@@ -17,7 +17,7 @@ import {
   getFagEvents,
   getFagEventsLine,
   getFagtimer,
-  getFagtimerLine,
+  getFagtimerCharts,
 } from './competenceApi'
 
 // ? Maybe one can revalidate on focus? look at network and traffic
@@ -88,8 +88,8 @@ export const useAgeDistributionCharts = () =>
     revalidateOnFocus: false,
   })
 
-export const useFagtimerLine = () =>
-  useSWR('/fagtimerLine', getFagtimerLine, {
+export const useFagtimerCharts = () =>
+  useSWR('/fagtimerCharts', getFagtimerCharts, {
     revalidateOnFocus: false,
   })
 

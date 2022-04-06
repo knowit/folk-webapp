@@ -161,7 +161,7 @@ export const ageDistribution = (
   }
 }
 
-export const fagtimerLine = (fagtimer: FagtimeStats[]): LineChartData => {
+export const fagtimer = (fagtimer: FagtimeStats[]): LineChartData => {
   const data = range(2018, new Date().getFullYear()).map((year) => ({
     id: year.toString(),
     data: range(1, 53).map((i) => {

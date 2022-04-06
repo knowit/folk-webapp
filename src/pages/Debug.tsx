@@ -4,16 +4,15 @@ import {
   useAgeDistributionCharts,
   useCompetenceAmountCharts,
   useCompetenceAreasCharts,
-  useFagtimerLine,
+  useFagtimerCharts,
 } from '../api/data/competence/competenceQueries'
-import { useEmployeeMotivationAndCompetence } from '../api/data/employee/employeeQueries'
 import ChartCard from '../components/charts/ChartCard'
 import { GridItem } from '../components/gridItem/GridItem'
 
 const Debug = () => {
   const { data: competenceArea } = useCompetenceAreasCharts()
   const { data: competenceAmountBar } = useCompetenceAmountCharts()
-  const { data: fagEvents } = useFagtimerLine()
+  const { data: fagEvents } = useFagtimerCharts()
   const { data: testing } = useAgeDistributionCharts()
 
   if (!competenceAmountBar || !competenceArea || !fagEvents || !testing)
