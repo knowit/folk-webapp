@@ -3,9 +3,9 @@ import React from 'react'
 import {
   useCompetenceAmountBar,
   useCompetenceAreasCharts,
-  useExperienceDistributionCharts,
   useFagtimerLine,
 } from '../api/data/competence/competenceQueries'
+import { useEmployeeMotivationAndCompetence } from '../api/data/employee/employeeQueries'
 import ChartCard from '../components/charts/ChartCard'
 import { GridItem } from '../components/gridItem/GridItem'
 
@@ -13,7 +13,9 @@ const Debug = () => {
   const { data: competenceArea } = useCompetenceAreasCharts()
   const { data: competenceAmountBar } = useCompetenceAmountBar()
   const { data: fagEvents } = useFagtimerLine()
-  const { data: testing } = useExperienceDistributionCharts()
+  const { data: testing } = useEmployeeMotivationAndCompetence(
+    'fredrik.arnesen@knowit.no'
+  )
 
   if (!competenceAmountBar || !competenceArea || !fagEvents || !testing)
     return <div>Loading...</div>

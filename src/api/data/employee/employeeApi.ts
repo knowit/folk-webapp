@@ -27,18 +27,10 @@ export const getEmployeeRadar = (url: string, email: string) =>
   })
 
 // API V2
-export const getEmployeeMotivationAndCompetenceBar = (
+export const getEmployeeMotivationAndCompetence = (
   url: string,
   email: string
 ) =>
-  getAtApiV2<ChartData>('/employees/employeeMotivationAndCompetence/bar', {
-    params: { email },
-  })
-
-export const getEmployeeMotivationAndCompetenceRadar = (
-  url: string,
-  email: string
-) =>
-  getAtApiV2<ChartData>('/employees/employeeMotivationAndCompetence/radar', {
+  getAtApiV2<ChartData>('/employees/employeeMotivationAndCompetence', {
     params: { email },
   })
