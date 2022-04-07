@@ -6,6 +6,7 @@ import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkelet
 import { FallbackMessage } from './FallbackMessage'
 import { ExperienceList } from './ExperienceList'
 import { ExperienceListItem } from './ExperienceListItem'
+import { compareExperienceDesc } from '../../../utils/compareExperienceDesc'
 
 const useStyles = makeStyles({
   timeRange: {
@@ -43,11 +44,7 @@ export function WorkExperienceList({
     return <FallbackMessage message="Fant ingen arbeidserfaring å vise." />
   }
 
-  const jobsSortedByDateDesc = workExperience.sort((jobA, jobB) => {
-    const dateA = new Date(jobA.year_from, jobA.month_from)
-    const dateB = new Date(jobB.year_from, jobB.month_from)
-    return dateB.valueOf() - dateA.valueOf()
-  })
+  const jobsSortedByDateDesc = workExperience.sort(compareExperienceDesc)
 
   return (
     <ExperienceList>
