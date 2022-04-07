@@ -43,15 +43,15 @@ export function WorkExperienceList({
     return <FallbackMessage message="Fant ingen arbeidserfaring å vise." />
   }
 
-  const jobsSortedByDate = workExperience.sort((jobA, jobB) => {
-    const dateA = new Date(jobB.year_from, jobB.month_from)
-    const dateB = new Date(jobA.year_from, jobA.month_from)
-    return dateA.valueOf() - dateB.valueOf()
+  const jobsSortedByDateDesc = workExperience.sort((jobA, jobB) => {
+    const dateA = new Date(jobA.year_from, jobA.month_from)
+    const dateB = new Date(jobB.year_from, jobB.month_from)
+    return dateB.valueOf() - dateA.valueOf()
   })
 
   return (
     <ExperienceList>
-      {jobsSortedByDate.map((job) => {
+      {jobsSortedByDateDesc.map((job) => {
         const timeRange = formatMonthYearRange(
           job.month_from,
           job.year_from,

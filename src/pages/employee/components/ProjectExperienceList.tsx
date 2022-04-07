@@ -46,7 +46,7 @@ export function ProjectExperienceList({
     return <FallbackMessage message="Fant ingen prosjekter å vise." />
   }
 
-  const sortedProjects = projectExperience.sort(compareProjects)
+  const sortedProjects = projectExperience.sort(compareProjectsDesc)
 
   return (
     <ExperienceList>
@@ -67,13 +67,13 @@ export function ProjectExperienceList({
   )
 }
 
-function compareProjects(
+function compareProjectsDesc(
   projectA: ProjectExperience,
   projectB: ProjectExperience
 ) {
   const aDate = createComparableProjectDate(projectA)
   const bDate = createComparableProjectDate(projectB)
-  return aDate.valueOf() - bDate.valueOf()
+  return bDate.valueOf() - aDate.valueOf()
 }
 
 function createComparableProjectDate(project: ProjectExperience) {
