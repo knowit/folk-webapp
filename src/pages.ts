@@ -1,9 +1,9 @@
-import NotFound from './pages/NotFound'
-import UnderConstruction from './pages/UnderConstruction'
+import Competence from './pages/CompetencePage'
+import Customer from './pages/CustomerPage'
 import EmployeePage from './pages/employee/EmployeePage'
-import Competence from './pages/Competence'
 import EmployeeProfile from './pages/employee/EmployeeProfile'
-import Customer from './pages/customer/Customer'
+import NotFound from './pages/NotFoundPage'
+import UnderConstruction from './pages/UnderConstructionPage'
 
 export {
   NotFound,

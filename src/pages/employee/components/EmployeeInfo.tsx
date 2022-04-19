@@ -184,9 +184,9 @@ export default function EmployeeInfo({ data }: EmployeeInfoProps) {
         )}
       </div>
       <div className={classes.oversikt}>
-        {employeeChartData && (
+        {/* {employeeChartData && (
           <ChartCard title="Kompetansemengde" data={employeeChartData} />
-        )}
+        )} */}
       </div>
     </div>
   )

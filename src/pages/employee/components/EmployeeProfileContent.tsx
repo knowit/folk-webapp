@@ -113,12 +113,12 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
           </section>
         </div>
         <div className={classes.column}>
-          {employeeMotivationAndCompetence && (
+          {/* {employeeMotivationAndCompetence && (
             <ChartCard
               title="Kompetansekartlegging"
               data={employeeMotivationAndCompetence}
             />
-          )}
+          )} */}
         </div>
       </div>
     </article>

@@ -1,3 +1,4 @@
+import { Alert, AlertTitle, Skeleton } from '@material-ui/lab'
 import React, { useState } from 'react'
 import {
   ChartData,
@@ -110,15 +111,26 @@ const MultipleChartCard = ({
 interface ChartCardProps {
   title: string
   description?: string
-  data: ChartData
+  data: ChartData | undefined
+  error: any
 }
 
-const ChartCard = ({ data, ...props }: ChartCardProps) => {
-  if (data.type === 'MultipleChart') {
-    return <MultipleChartCard data={data} {...props} />
-  } else {
-    return <SingularChartCard data={data} {...props} />
-  }
+const ChartCard = ({ data, error, ...props }: ChartCardProps) => {
+  if (error)
+    return (
+      <Alert severity="error">
+        <AlertTitle>Error</AlertTitle>
+        <strong>Kunne ikke hente data!</strong>
+      </Alert>
+    )
+
+  if (!data) return <Skeleton variant="rect" width={210} height={118} />
+
+  return data.type === 'MultipleChart' ? (
+    <MultipleChartCard data={data} {...props} />
+  ) : (
+    <SingularChartCard data={data} {...props} />
+  )
 }
 
 export default ChartCard

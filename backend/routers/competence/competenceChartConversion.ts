@@ -64,12 +64,7 @@ export const competenceAmount = (
   data: CompetenceAmount[]
 ): MultipleChartData<[BarChartData]> => {
   const indexBy = 'category'
-  const keys = [
-    'competenceAmount',
-    'motivationAmount',
-    'competencePropotion',
-    'motivationPropotion',
-  ]
+  const keys = ['competenceProportion', 'motivationProportion']
 
   const aggregatedData = competenceAmountMapping(data)
 
@@ -84,6 +79,7 @@ export const competenceAmount = (
             indexBy,
             keys,
             data,
+            maxValue: 'auto',
           },
         ],
       }
@@ -93,7 +89,7 @@ export const competenceAmount = (
 
 export const competenceAreas = (
   data: CategoryAverage[]
-): MultipleChartData<[BarChartData, RadarChartData]> => {
+): MultipleChartData<[RadarChartData, BarChartData]> => {
   const indexBy = 'category'
   const keys = ['motivation', 'competence']
 
@@ -106,13 +102,13 @@ export const competenceAreas = (
         name,
         charts: [
           {
-            type: 'BarChart',
+            type: 'RadarChart',
             indexBy,
             keys,
             data,
           },
           {
-            type: 'RadarChart',
+            type: 'BarChart',
             indexBy,
             keys,
             data,

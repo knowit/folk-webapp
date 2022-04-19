@@ -10,7 +10,7 @@ import {
   NotFound,
   UnderConstruction,
 } from '../pages'
-import Debug from '../pages/Debug'
+import Debug from '../pages/DebugPage'
 import LoginPage from '../pages/login/LoginPage'
 
 export default function Content() {
