@@ -39,7 +39,7 @@ export function EmployeeTable() {
                 title: 'Konsulent',
                 width: 385,
                 isExpandable: true,
-                getValue: (consultant: Pick<ConsultantInfo, 'name'>) => {
+                getValue: (consultant: ConsultantInfo) => {
                   return consultant.name
                 },
                 renderCell: ConsultantCell,
