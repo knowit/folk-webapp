@@ -1,4 +1,3 @@
-import { Skeleton } from '@material-ui/lab'
 import React, { useState } from 'react'
 import {
   ChartData,
