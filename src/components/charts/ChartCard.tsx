@@ -16,6 +16,7 @@ import { FallbackMessage } from '../../pages/employee/components/FallbackMessage
 import { GridItem } from '../gridItem/GridItem'
 import { GridItemContent } from '../gridItem/GridItemContent'
 import { GridItemHeader } from '../gridItem/GridItemHeader'
+import { MultiLineSkeleton } from '../skeletons/MultiLineSkeleton'
 import BarChart from './BarChart'
 import { IsBigProps } from './common'
 import LineChart from './LineChart'
@@ -180,7 +181,7 @@ const ChartCard = ({
       </GridItem>
     )
 
-  if (!data) return <Skeleton variant="rect" width={300} height={118} />
+  if (!data) return <MultiLineSkeleton />
 
   return data.type === 'MultipleChart' ? (
     <MultipleChartCard
