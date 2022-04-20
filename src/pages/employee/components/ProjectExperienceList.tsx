@@ -6,6 +6,7 @@ import { FallbackMessage } from './FallbackMessage'
 import { ExperienceList } from './ExperienceList'
 import { ExperienceListItem } from './ExperienceListItem'
 import { ProjectExperience } from '../../../api/data/employee/employeeApiTypes'
+import { compareExperienceDesc } from '../../../utils/compareExperienceDesc'
 
 const useStyles = makeStyles({
   timeRange: {
@@ -33,7 +34,7 @@ export function ProjectExperienceList({
     return (
       <FallbackMessage
         isError
-        message="Noe gikk galt ved henting av prosjekter."
+        message="Beklager, noe gikk galt ved henting av prosjekter."
       />
     )
   }
@@ -46,11 +47,11 @@ export function ProjectExperienceList({
     return <FallbackMessage message="Fant ingen prosjekter å vise." />
   }
 
-  const sortedProjects = projectExperience.sort(compareProjects)
+  const projectsSortedByDateDesc = projectExperience.sort(compareExperienceDesc)
 
   return (
     <ExperienceList>
-      {sortedProjects.map(
+      {projectsSortedByDateDesc.map(
         ({ customer, project, year_to, month_to, year_from, month_from }) => (
           <ExperienceListItem key={project + year_from + month_from}>
             <time className={classes.timeRange}>
@@ -65,21 +66,4 @@ export function ProjectExperienceList({
       )}
     </ExperienceList>
   )
-}
-
-function compareProjects(
-  projectA: ProjectExperience,
-  projectB: ProjectExperience
-) {
-  const aDate = createComparableProjectDate(projectA)
-  const bDate = createComparableProjectDate(projectB)
-  return aDate.valueOf() - bDate.valueOf()
-}
-
-function createComparableProjectDate(project: ProjectExperience) {
-  const { year_from, month_from, year_to, month_to } = project
-  if (!year_from || year_from <= 0) {
-    return new Date(year_to, month_to)
-  }
-  return new Date(year_from, month_from)
 }

@@ -154,22 +154,19 @@ export type CategoryScores = [
 ]
 
 /**
- * Employee Profile
+ * Employee Competence (only competence/experience data from employee profile)
  */
 
-export type EmployeeProfileResponse = Omit<
-  EmployeeProfileInformation,
-  'guid' | 'image_key' | 'link'
-> & {
-  image: string
+export type EmployeeCompetenceResponse = {
+  email: string
+  manager: string
+  degree?: string
   tags: Tags
-  links: CvLinks
-  customers: Customer[]
   workExperience: WorkExperienceForProfile[]
   projectExperience: ProjectExperienceForProfile[]
 }
 
-type WorkExperienceForProfile = {
+export type WorkExperienceForProfile = {
   employer: string
   month_from: number
   year_from: number
@@ -177,7 +174,7 @@ type WorkExperienceForProfile = {
   year_to: number
 }
 
-type ProjectExperienceForProfile = {
+export type ProjectExperienceForProfile = {
   customer: string
   project: string
   year_from: number
@@ -191,6 +188,20 @@ export type Tags = {
   skills: string[]
   roles: string[]
 }
+
+/**
+ * Employee Profile
+ */
+
+export type EmployeeProfileResponse = Omit<
+  EmployeeProfileInformation,
+  'guid' | 'image_key' | 'link'
+> &
+  EmployeeCompetenceResponse & {
+    image: string
+    links: CvLinks
+    customers: Customer[]
+  }
 
 /**
  * Employee Experience

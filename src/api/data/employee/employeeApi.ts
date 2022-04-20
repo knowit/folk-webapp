@@ -6,7 +6,7 @@ import {
 } from '../chartResponses'
 import { CompetenceAreasResponse } from '../competence/competenceApiTypes'
 import {
-  EmployeeExperienceResponse,
+  EmployeeCompetenceResponse,
   EmployeeProfileResponse,
   EmployeeTableResponse,
 } from './employeeApiTypes'
@@ -19,9 +19,9 @@ export const getEmployeeProfile = (url: string, email: string) =>
     params: { email },
   })
 
-export const getEmployeeExperience = (url: string, user_id: string) =>
-  getAtApi<EmployeeExperienceResponse>(`/data/employeeExperience`, {
-    params: { user_id },
+export const getEmployeeCompetence = (url: string, email: string) =>
+  getAtApiV2<EmployeeCompetenceResponse>(`/employees/employeeCompetence`, {
+    params: { email },
   })
 
 // ! This might not be typed correctly

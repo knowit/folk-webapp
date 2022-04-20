@@ -69,13 +69,13 @@ export function GridItemHeader({
       className={[classes.gridHeaderRoot, headerHeight, knowitGreen].join(' ')}
     >
       <Grid container direction="row" alignItems="center">
-        <h3
+        <h2
           className={[classes.gridHeaderTitle, fontSize, knowitGreenTitle].join(
             ' '
           )}
         >
           {title}
-        </h3>
+        </h2>
         {description ? (
           <InfoTooltip description={description} placement="right" />
         ) : null}

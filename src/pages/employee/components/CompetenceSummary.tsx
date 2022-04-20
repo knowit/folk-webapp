@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { makeStyles } from '@material-ui/core'
-import { EmployeeProfileResponse } from '../../../api/data/employee/employeeApiTypes'
+import { EmployeeCompetenceResponse } from '../../../api/data/employee/employeeApiTypes'
 import { getStartedInKnowit } from '../../../utils/getStartedInKnowit'
 import { getTotalWorkExperience } from '../../../utils/getTotalWorkExperience'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
@@ -15,7 +15,7 @@ const useStyles = makeStyles({
 })
 
 interface Props {
-  employee?: EmployeeProfileResponse
+  employee?: EmployeeCompetenceResponse
   isLoading?: boolean
   isError?: boolean
 }
@@ -27,7 +27,7 @@ export function CompetenceSummary({ employee, isLoading, isError }: Props) {
     return (
       <FallbackMessage
         isError
-        message="Noe gikk galt ved henting av informasjon for ansatt."
+        message="Beklager, noe gikk galt ved henting av informasjon for den ansatte."
       />
     )
   }
