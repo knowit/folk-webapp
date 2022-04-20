@@ -1,15 +1,12 @@
-import { makeStyles } from '@material-ui/core'
+import { Grid, makeStyles } from '@material-ui/core'
 import * as React from 'react'
-import {
-  useEmployeeMotivationAndCompetenceCharts,
-  useEmployeeProfile,
-} from '../../../api/data/employee/employeeQueries'
-import ChartCard from '../../../components/charts/ChartCard'
+import { useEmployeeProfile } from '../../../api/data/employee/employeeQueries'
 import { CompetenceSummary } from './CompetenceSummary'
 import { CustomersForEmployee } from './CustomersForEmployee'
 import { CvDownloadList } from './CvDownloadList'
 import { EmployeeAvatar } from './EmployeeAvatar'
 import { EmployeeByline } from './EmployeeByline'
+import EmployeeCompetenceCard from './EmployeeMotivationAndCompetenceCard'
 import { EmployeeNotFound } from './EmployeeNotFound'
 import { FallbackMessage } from './FallbackMessage'
 import { ProjectExperienceList } from './ProjectExperienceList'
@@ -57,8 +54,6 @@ interface Props {
 export function EmployeeProfileContent({ employeeEmail }: Props) {
   const classes = useStyles()
 
-  const { data: employeeMotivationAndCompetence } =
-    useEmployeeMotivationAndCompetenceCharts(employeeEmail)
   const { data: employee, error } = useEmployeeProfile(employeeEmail)
   const isLoading = !employee
 
@@ -113,12 +108,7 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
           </section>
         </div>
         <div className={classes.column}>
-          {/* {employeeMotivationAndCompetence && (
-            <ChartCard
-              title="Kompetansekartlegging"
-              data={employeeMotivationAndCompetence}
-            />
-          )} */}
+          <EmployeeCompetenceCard employeeEmail={employeeEmail} />
         </div>
       </div>
     </article>

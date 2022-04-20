@@ -12,6 +12,7 @@ import {
 } from '../../data/components/chart/components/ChartDisplayOptions'
 import DropdownPicker from '../../data/components/chart/components/DropdownPicker'
 import { ToggleBigChartButton } from '../../data/components/chart/components/ToggleBigChartButton'
+import { FallbackMessage } from '../../pages/employee/components/FallbackMessage'
 import { GridItem } from '../gridItem/GridItem'
 import { GridItemContent } from '../gridItem/GridItemContent'
 import { GridItemHeader } from '../gridItem/GridItemHeader'
@@ -50,6 +51,7 @@ const SingularChart = ({
 interface SingularChartCardProps {
   title: string
   description?: string
+  fullSize: boolean
   data: SingularChartData
 }
 
@@ -59,11 +61,12 @@ interface SingularChartCardProps {
 const SingularChartCard = ({
   title,
   description,
+  fullSize = false,
   data,
 }: SingularChartCardProps) => {
   const [isBig, setIsBig] = useState(false)
   return (
-    <GridItem>
+    <GridItem fullSize={fullSize}>
       <GridItemHeader title={title} description={description} />
       <GridItemContent>
         {/* Sub header containing only the increase size-button */}
@@ -86,12 +89,14 @@ const SingularChartCard = ({
 interface MultipleChartCardProps {
   title: string
   description?: string
+  fullSize: boolean
   data: MultipleChartData<SingularChartData[]>
 }
 
 const MultipleChartCard = ({
   title,
   description,
+  fullSize,
   data: { groups },
 }: MultipleChartCardProps) => {
   const [selectedGroupName, setSelectedGroupName] = useState(groups[0].name)
@@ -104,7 +109,7 @@ const MultipleChartCard = ({
   )!
 
   return (
-    <GridItem>
+    <GridItem fullSize={fullSize}>
       {/* Header containing dropdown picker */}
       <GridItemHeader title={title} description={description}>
         <DropdownPicker
@@ -153,25 +158,44 @@ const MultipleChartCard = ({
 interface ChartCardProps {
   title: string
   description?: string
+  fullSize?: boolean
   data: ChartData | undefined
   error: any
 }
 
-const ChartCard = ({ data, error, ...props }: ChartCardProps) => {
+const ChartCard = ({
+  fullSize = false,
+  data,
+  error,
+  title,
+  ...props
+}: ChartCardProps) => {
   if (error)
     return (
-      <Alert severity="error">
-        <AlertTitle>Error</AlertTitle>
-        <strong>Kunne ikke hente data!</strong>
-      </Alert>
+      <GridItem>
+        <GridItemHeader title={title} />
+        <GridItemContent>
+          <FallbackMessage message="Noe gikk galt ved henting av data." />
+        </GridItemContent>
+      </GridItem>
     )
 
   if (!data) return <Skeleton variant="rect" width={300} height={118} />
 
   return data.type === 'MultipleChart' ? (
-    <MultipleChartCard data={data} {...props} />
+    <MultipleChartCard
+      fullSize={fullSize}
+      title={title}
+      data={data}
+      {...props}
+    />
   ) : (
-    <SingularChartCard data={data} {...props} />
+    <SingularChartCard
+      fullSize={fullSize}
+      title={title}
+      data={data}
+      {...props}
+    />
   )
 }
 

@@ -1,10 +1,10 @@
-import * as React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { CompetenceSummary } from './CompetenceSummary'
-import { WorkExperienceList } from './WorkExperienceList'
-import { ProjectExperienceList } from './ProjectExperienceList'
-import { CompetenceChart } from './CompetenceChart'
+import * as React from 'react'
 import { useEmployeeCompetence } from '../../../api/data/employee/employeeQueries'
+import { CompetenceSummary } from './CompetenceSummary'
+import EmployeeCompetenceCard from './EmployeeMotivationAndCompetenceCard'
+import { ProjectExperienceList } from './ProjectExperienceList'
+import { WorkExperienceList } from './WorkExperienceList'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -80,7 +80,7 @@ export function EmployeeTableExpandedInfo({ data }: Props) {
         />
       </section>
       <div className={[classes.column, classes.competenceMotivation].join(' ')}>
-        <CompetenceChart employeeEmail={data.email} />
+        <EmployeeCompetenceCard employeeEmail={data.email} />
       </div>
     </div>
   )
