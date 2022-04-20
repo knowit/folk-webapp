@@ -6,7 +6,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
   isBig = false,
   ...props
 }) => (
-  <div style={{ width: '100%', height: isBig ? '400px' : '280' }}>
+  <div style={{ width: '100%', height: isBig ? '400px' : '280px' }}>
     <ResponsiveLine
       margin={{ top: 10, right: 20, bottom: 70, left: 40 }}
       xScale={{ type: 'point' }}

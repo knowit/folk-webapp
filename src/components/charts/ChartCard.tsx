@@ -166,7 +166,7 @@ const ChartCard = ({ data, error, ...props }: ChartCardProps) => {
       </Alert>
     )
 
-  if (!data) return <Skeleton variant="rect" width={210} height={118} />
+  if (!data) return <Skeleton variant="rect" width={300} height={118} />
 
   return data.type === 'MultipleChart' ? (
     <MultipleChartCard data={data} {...props} />
