@@ -1,10 +1,8 @@
-import { getAtApi, getAtApiV2 } from '../../client'
-import { BarChartData, LineChartData } from '../chartResponses'
+import { getAtApiV2 } from '../../client'
+import { BarChartData, LineChartData } from '../chartTypes'
 import {
   CustomerCardResponse,
   EmployeesByCustomerResponse,
-  HoursBilledPerCustomerResponse,
-  HoursBilledPerWeekResponse,
 } from './customerApiTypes'
 
 export const getCustomerCards = () =>
@@ -13,15 +11,8 @@ export const getCustomerCards = () =>
 export const getEmployeesByCustomer = () =>
   getAtApiV2<EmployeesByCustomerResponse>('/customer/employeesByCustomer')
 
-export const getHoursBilledPerCustomer = () =>
-  getAtApi<HoursBilledPerCustomerResponse>('/data/hoursBilledPerCustomer')
+export const getHoursBilledPerCustomerCharts = () =>
+  getAtApiV2<BarChartData>('/customer/hoursBilledPerCustomer')
 
-export const getHoursBilledPerWeek = () =>
-  getAtApi<HoursBilledPerWeekResponse>('/data/hoursBilledPerWeek')
-
-// API V2
-export const getHoursBilledPerCustomerBar = () =>
-  getAtApiV2<BarChartData>('/customer/hoursBilledPerCustomer/bar')
-
-export const getHoursBilledPerWeekLine = () =>
-  getAtApiV2<LineChartData>('/customer/hoursBilledPerWeek/line')
+export const getHoursBilledPerWeekCharts = () =>
+  getAtApiV2<LineChartData>('/customer/hoursBilledPerWeek')

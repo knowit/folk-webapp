@@ -49,7 +49,7 @@ export const fagtimer = async ({ data }: { data: FagActivity[] }) => {
   }
 
   return {
-    componentType: 'Line',
+    componenttype: 'LineChart',
     setNames: ['Fagtimer'],
     sets: {
       Fagtimer: makeFagTimerDataForNivo(fagActivity),
@@ -558,6 +558,7 @@ export const hoursBilledPerWeek = async ({ data }) => {
     .map(
       ([key, value]) =>
         ({
+          type: 'LineChart',
           id: key,
           data: value,
         } as LineChartData)

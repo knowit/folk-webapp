@@ -2,12 +2,13 @@ import { getEventSet, range } from '../../repository/util'
 import {
   BarChartData,
   LineChartData,
+  MultipleChartData,
   PieChartData,
   RadarChartData,
   SunburstChartData,
 } from '../chartTypes'
 import {
-  ageDistribution,
+  ageDistributionFormatting,
   ageGroupDistribution,
   competenceAmountMapping,
   competenceAreasAggregated,
@@ -26,180 +27,209 @@ import {
 } from './competenceTypes'
 
 // /experienceDistribution
-export const experienceDistributionBar = (
+export const experienceDistribution = (
   data: YearsWorkingDistributionCount[]
-): Record<string, BarChartData> => {
+): MultipleChartData<[BarChartData, PieChartData]> => {
   const indexBy = 'years'
   const keys = ['count']
-
-  const aggregatedData = experienceMapping(data)
-
-  const result: Record<string, BarChartData> = {}
-
-  Object.keys(aggregatedData).forEach((key) => {
-    result[key] = {
-      indexBy,
-      keys,
-      data: aggregatedData[key].data,
-    }
-  })
-
-  return result
-}
-
-export const experienceDistributionPie = (
-  data: YearsWorkingDistributionCount[]
-): Record<string, PieChartData> => {
   const id = 'years'
   const value = 'count'
-
   const aggregatedData = experienceMapping(data)
 
-  const result: Record<string, PieChartData> = {}
-
-  Object.keys(aggregatedData).forEach((key) => {
-    result[key] = { id, value, data: aggregatedData[key].data }
-  })
-
-  return result
+  return {
+    type: 'MultipleChart',
+    groups: Object.entries(aggregatedData).map(([name, { data }]) => {
+      return {
+        name,
+        charts: [
+          {
+            type: 'BarChart',
+            indexBy,
+            keys,
+            data,
+          },
+          {
+            type: 'PieChart',
+            id,
+            value,
+            data,
+          },
+        ],
+      }
+    }),
+  }
 }
 
-export const competenceAmountBar = (
+export const competenceAmount = (
   data: CompetenceAmount[]
-): Record<string, BarChartData> => {
+): MultipleChartData<[BarChartData]> => {
   const indexBy = 'category'
-  const keys = [
-    'competenceAmount',
-    'motivationAmount',
-    'competencePropotion',
-    'motivationPropotion',
-  ]
+  const keys = ['competenceProportion', 'motivationProportion']
 
   const aggregatedData = competenceAmountMapping(data)
-  const result: Record<string, BarChartData> = {}
 
-  Object.keys(aggregatedData).forEach((key) => {
-    result[key] = {
-      indexBy,
-      keys,
-      data: aggregatedData[key].data,
-    }
-  })
-
-  return result
+  return {
+    type: 'MultipleChart',
+    groups: Object.entries(aggregatedData).map(([name, { data }]) => {
+      return {
+        name,
+        charts: [
+          {
+            type: 'BarChart',
+            indexBy,
+            keys,
+            data,
+            maxValue: 'auto',
+          },
+        ],
+      }
+    }),
+  }
 }
 
-export const competenceAreasBar = (
+export const competenceAreas = (
   data: CategoryAverage[]
-): Record<string, BarChartData> => {
+): MultipleChartData<[RadarChartData, BarChartData]> => {
   const indexBy = 'category'
   const keys = ['motivation', 'competence']
 
   const aggregatedData = competenceAreasAggregated(data)
-  const result: Record<string, BarChartData> = {}
 
-  Object.keys(aggregatedData).forEach((key) => {
-    result[key] = {
-      indexBy,
-      keys,
-      data: aggregatedData[key].data,
-    }
-  })
-
-  return result
+  return {
+    type: 'MultipleChart',
+    groups: Object.entries(aggregatedData).map(([name, { data }]) => {
+      return {
+        name,
+        charts: [
+          {
+            type: 'RadarChart',
+            indexBy,
+            keys,
+            data,
+          },
+          {
+            type: 'BarChart',
+            indexBy,
+            keys,
+            data,
+          },
+        ],
+      }
+    }),
+  }
 }
 
-export const competenceAreasRadar = (
-  data: CategoryAverage[]
-): Record<string, RadarChartData> => {
-  const indexBy = 'category'
-  const keys = ['motivation', 'competence']
-
-  const aggregatedData = competenceAreasAggregated(data)
-  const result: Record<string, RadarChartData> = {}
-
-  Object.keys(aggregatedData).forEach((key) => {
-    result[key] = {
-      indexBy,
-      keys,
-      data: aggregatedData[key].data,
-    }
-  })
-
-  return result
-}
-
-export const ageDistributionBar = (
+export const ageDistribution = (
   data: [AgeDistribution[], AgeGroupDistribution[]]
-): Record<string, BarChartData> => {
+): MultipleChartData<[BarChartData]> => {
   const indexBy = 'age'
   const keys = ['count']
 
-  const detailed = ageDistribution(data[0])
+  const detailed = ageDistributionFormatting(data[0])
   const grouped = ageGroupDistribution(data[1])
 
   return {
-    grouped: { indexBy, keys, data: grouped },
-    detailed: { indexBy, keys, data: detailed },
+    type: 'MultipleChart',
+    groups: [
+      {
+        name: 'Aldersgrupper',
+        charts: [
+          {
+            type: 'BarChart',
+            indexBy,
+            keys,
+            data: grouped,
+          },
+        ],
+      },
+      {
+        name: 'Detaljert oversikt',
+        charts: [
+          {
+            type: 'BarChart',
+            indexBy,
+            keys,
+            data: detailed,
+          },
+        ],
+      },
+    ],
   }
 }
 
-export const fagtimerLine = (data: FagtimeStats[]): LineChartData[] => {
-  const toLineData = (data: FagtimeStats[]): LineChartData[] => {
-    const setData = range(2018, new Date().getFullYear()).map((year) => ({
-      id: year.toString(),
-      data: range(1, 53).map((i) => {
-        const currentYear = data.filter((dataItem) => dataItem.year === year)
-        const currentWeekData = currentYear.find(
-          (dataItem) => dataItem.week === i
-        )
-        return {
-          x: i,
-          y:
-            currentWeekData && currentWeekData.used_hrs
-              ? currentWeekData.used_hrs
-              : 0,
-        }
-      }),
-    }))
-    return setData
-  }
+export const fagtimer = (fagtimer: FagtimeStats[]): LineChartData => {
+  const data = range(2018, new Date().getFullYear()).map((year) => ({
+    id: year.toString(),
+    data: range(1, 53).map((i) => {
+      const currentYear = fagtimer.filter((dataItem) => dataItem.year === year)
+      const currentWeekData = currentYear.find(
+        (dataItem) => dataItem.week === i
+      )
+      return {
+        x: i,
+        y:
+          currentWeekData && currentWeekData.used_hrs
+            ? currentWeekData.used_hrs
+            : 0,
+      }
+    }),
+  }))
 
-  return toLineData(data)
+  return { type: 'LineChart', data }
 }
 
-export const fagEventsLine = (data: FagEventData[]): LineChartData[] => {
+export const fagEventsLine = (data: FagEventData[]): LineChartData => {
   const aggregatedData = getEventSet(data)
-  return aggregatedData
+  return { type: 'LineChart', data: aggregatedData }
 }
 
 export const educationPie = (data: DegreeDistribution[]): PieChartData => {
   const id = 'degree'
   const value = 'count'
 
-  return { id, value, data }
+  return { type: 'PieChart', id, value, data }
 }
 
-export const competenceMappingBar = (data: CategoryAverage[]) => {
+export const competenceMappingConversion = (
+  data: CategoryAverage[]
+): MultipleChartData<[SunburstChartData, BarChartData]> => {
   const indexBy = 'category'
 
-  const aggregatedData = competenceMapping(data)
+  const aggregatedBarData = competenceMapping(data)
+  const aggregatedSunburstData = competenceMappingSunburst(data)
 
   return {
-    Competence: {
-      indexBy,
-      keys: ['competence'],
-      data: aggregatedData.MotivationAndCompetence.data,
-    },
-    Motivation: {
-      indexBy,
-      keys: ['motivation'],
-      data: aggregatedData.MotivationAndCompetence.data,
-    },
+    type: 'MultipleChart',
+    groups: [
+      {
+        name: 'Competence',
+        charts: [
+          aggregatedSunburstData['competence'],
+          {
+            type: 'BarChart',
+            indexBy,
+            keys: ['competence'],
+            data: aggregatedBarData.MotivationAndCompetence.data,
+          },
+        ],
+      },
+      {
+        name: 'Motivation',
+        charts: [
+          aggregatedSunburstData['motivation'],
+          {
+            type: 'BarChart',
+            indexBy,
+            keys: ['motivation'],
+            data: aggregatedBarData.MotivationAndCompetence.data,
+          },
+        ],
+      },
+    ],
   }
 }
 
-export const competenceMappingSunburst = (
+const competenceMappingSunburst = (
   data: CategoryAverage[]
 ): Record<string, SunburstChartData> => {
   const id = 'category'
@@ -207,19 +237,21 @@ export const competenceMappingSunburst = (
   const aggregatedData = competenceMapping(data)
 
   const competenceData: SunburstChartData = {
+    type: 'SunburstChart',
     id,
     value: 'competence',
     data: [],
   }
 
   const motivationData: SunburstChartData = {
+    type: 'SunburstChart',
     id,
     value: 'motivation',
     data: [],
   }
 
-  aggregatedData.MotivationAndCompetence.data.forEach((category) => {
-    const { subcategories, competence, motivation } = category
+  aggregatedData.MotivationAndCompetence.data.forEach((categoryData) => {
+    const { subcategories, competence, motivation, category } = categoryData
 
     const motivationChildren = []
     const competenceChildren = []
@@ -252,7 +284,7 @@ export const competenceMappingSunburst = (
   })
 
   return {
-    Competence: competenceData,
-    Motivation: motivationData,
+    competence: competenceData,
+    motivation: motivationData,
   }
 }

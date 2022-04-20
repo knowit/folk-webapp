@@ -7,6 +7,7 @@ const useStyles = makeStyles({
     boxShadow: '0px 4px 10px #00000012',
     borderRadius: '0px 0px 6px 6px',
     overflow: 'hidden',
+    height: '100%',
   },
 })
 

@@ -1,126 +1,57 @@
 import useSWR from 'swr'
 import {
-  getAgeDistribution,
-  getAgeDistributionBar,
-  getCompetenceAmount,
-  getCompetenceAmountBar,
-  getCompetenceAreas,
-  getCompetenceAreasBar,
-  getCompetenceAreasRadar,
+  getAgeDistributionCharts,
+  getCompetenceAmountCharts,
+  getCompetenceAreasCharts,
   getCompetenceFilter,
-  getCompetenceMapping,
-  getCompetenceMappingBar,
-  getCompetenceMappingSunburst,
-  getEducation,
-  getEducationPie,
-  getExperienceDistribution,
-  getExperienceDistributionBar,
-  getExperienceDistributionPie,
-  getFagEvents,
-  getFagEventsLine,
-  getFagtimer,
-  getFagtimerLine,
+  getCompetenceMappingCharts,
+  getEducationCharts,
+  getExperienceDistributionCharts,
+  getFagEventsCharts,
+  getFagtimerCharts,
 } from './competenceApi'
-
-// ? Maybe one can revalidate on focus? look at network and traffic
-
-export const useCompetenceAmount = () =>
-  useSWR('/competenceAmount', getCompetenceAmount, {
-    revalidateOnFocus: false,
-  })
-
-export const useCompetenceAreas = () =>
-  useSWR('/competenceAreas', getCompetenceAreas, {
-    revalidateOnFocus: false,
-  })
-
-export const useExperienceDistribution = () =>
-  useSWR('/experienceDistribution', getExperienceDistribution, {
-    revalidateOnFocus: false,
-  })
-
-export const useAgeDistribution = () =>
-  useSWR('/ageDistribution', getAgeDistribution, {
-    revalidateOnFocus: false,
-  })
-
-export const useFagtimer = () =>
-  useSWR('/fagtimer', getFagtimer, {
-    revalidateOnFocus: false,
-  })
-
-export const useFagEvents = () =>
-  useSWR('/getFagEvents', getFagEvents, {
-    revalidateOnFocus: false,
-  })
-
-export const useEducation = () =>
-  useSWR('/education', getEducation, {
-    revalidateOnFocus: false,
-  })
-
-export const useCompetenceMapping = () =>
-  useSWR('/competenceMapping', getCompetenceMapping, {
-    revalidateOnFocus: false,
-  })
 
 export const useCompetenceFilter = () =>
   useSWR('/competenceFilter', getCompetenceFilter, {
     revalidateOnFocus: false,
   })
 
-// API v2
-export const useExperienceDistributionBar = () =>
-  useSWR('/experienceDistributionBar', getExperienceDistributionBar, {
+export const useExperienceDistributionCharts = () =>
+  useSWR('/experienceDistributionCharts', getExperienceDistributionCharts, {
     revalidateOnFocus: false,
   })
 
-export const useExperienceDistributionPie = () =>
-  useSWR('/experienceDistributionPie', getExperienceDistributionPie, {
+export const useCompetenceAmountCharts = () =>
+  useSWR('/competenceAmountCharts', getCompetenceAmountCharts, {
     revalidateOnFocus: false,
   })
 
-export const useCompetenceAmountBar = () =>
-  useSWR('/competenceAmountBar', getCompetenceAmountBar, {
+export const useCompetenceAreasCharts = () =>
+  useSWR('/competenceAreasCharts', getCompetenceAreasCharts, {
     revalidateOnFocus: false,
   })
 
-export const useCompetenceAreasBar = () =>
-  useSWR('/competenceAreasBar', getCompetenceAreasBar, {
+export const useAgeDistributionCharts = () =>
+  useSWR('/ageDistributionCharts', getAgeDistributionCharts, {
     revalidateOnFocus: false,
   })
 
-export const useCompetenceAreasRadar = () =>
-  useSWR('/competenceAreasRadar', getCompetenceAreasRadar, {
+export const useFagtimerCharts = () =>
+  useSWR('/fagtimerCharts', getFagtimerCharts, {
     revalidateOnFocus: false,
   })
 
-export const useAgeDistributionBar = () =>
-  useSWR('/ageDistributionBar', getAgeDistributionBar, {
+export const useFagEventsCharts = () =>
+  useSWR('/fagEventsCharts', getFagEventsCharts, {
     revalidateOnFocus: false,
   })
 
-export const useFagtimerLine = () =>
-  useSWR('/fagtimerLine', getFagtimerLine, {
+export const useEducationCharts = () =>
+  useSWR('/educationCharts', getEducationCharts, {
     revalidateOnFocus: false,
   })
 
-export const useFagEventsLine = () =>
-  useSWR('/fagEventsLine', getFagEventsLine, {
-    revalidateOnFocus: false,
-  })
-
-export const useEducationPie = () =>
-  useSWR('/educationPie', getEducationPie, {
-    revalidateOnFocus: false,
-  })
-
-export const useCompetenceMappingBar = () =>
-  useSWR('/competenceMappingBar', getCompetenceMappingBar, {
-    revalidateOnFocus: false,
-  })
-
-export const useCompetenceMappingSunburst = () =>
-  useSWR('/competenceMappingSunburst', getCompetenceMappingSunburst, {
+export const useCompetenceMappingCharts = () =>
+  useSWR('/competenceMappingCharts', getCompetenceMappingCharts, {
     revalidateOnFocus: false,
   })

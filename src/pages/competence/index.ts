@@ -1,0 +1,8 @@
+export { default as AgeDistributionCard } from './AgeDistributionCard'
+export { default as CompetenceAmountCard } from './CompetenceAmountCard'
+export { default as CompetenceAreasCard } from './CompetenceAreasCard'
+export { default as CompetenceMappingCard } from './CompetenceMappingCard'
+export { default as EducationCard } from './EducationCard'
+export { default as ExperienceDistributionCard } from './ExperienceDistributionCard'
+export { default as FagEventsCard } from './FagEventsCard'
+export { default as FagtimerCard } from './FagtimerCard'

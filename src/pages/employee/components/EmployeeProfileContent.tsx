@@ -1,16 +1,16 @@
+import { makeStyles } from '@material-ui/core'
 import * as React from 'react'
 import { useEmployeeProfile } from '../../../api/data/employee/employeeQueries'
-import { makeStyles } from '@material-ui/core'
 import { CompetenceSummary } from './CompetenceSummary'
-import { WorkExperienceList } from './WorkExperienceList'
-import { ProjectExperienceList } from './ProjectExperienceList'
 import { CustomersForEmployee } from './CustomersForEmployee'
-import { CompetenceChart } from './CompetenceChart'
-import { EmployeeByline } from './EmployeeByline'
 import { CvDownloadList } from './CvDownloadList'
 import { EmployeeAvatar } from './EmployeeAvatar'
+import { EmployeeByline } from './EmployeeByline'
+import EmployeeCompetenceCard from './EmployeeMotivationAndCompetenceCard'
 import { EmployeeNotFound } from './EmployeeNotFound'
 import { FallbackMessage } from './FallbackMessage'
+import { ProjectExperienceList } from './ProjectExperienceList'
+import { WorkExperienceList } from './WorkExperienceList'
 
 const useStyles = makeStyles({
   root: {
@@ -108,7 +108,7 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
           </section>
         </div>
         <div className={classes.column}>
-          <CompetenceChart employeeEmail={employee?.email} />
+          <EmployeeCompetenceCard employeeEmail={employeeEmail} />
         </div>
       </div>
     </article>

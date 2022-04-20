@@ -57,8 +57,8 @@ export const experienceMapping = (
   })
 
   return {
-    regular: { data: groupedListData },
-    detailed: { data: detailedGroupedListData },
+    Erfaring: { data: groupedListData },
+    'Detaljert oversikt': { data: detailedGroupedListData },
   }
 }
 
@@ -202,7 +202,7 @@ export const competenceMapping = (
   return result
 }
 
-export const ageDistribution = (
+export const ageDistributionFormatting = (
   data: AgeDistribution[]
 ): AgeDistributionData[] => {
   return data

@@ -50,3 +50,10 @@ export type EmployeeCustomers = {
   work_order_description: string
   reg_periods: string
 }
+
+export interface CustomerCardData {
+  customer: string
+  consultants: number
+  billedLastPeriod: number
+  billedTotal: number
+}

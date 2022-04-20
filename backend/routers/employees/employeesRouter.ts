@@ -1,10 +1,7 @@
 import express from 'express'
 import { getReport } from '../../dataplattform/client'
 import { NotFoundError, ParamError } from '../errorHandling'
-import {
-  employeeMotivationAndCompetenceBar,
-  employeeMotivationAndCompetenceRadar,
-} from './employeeChartConversion'
+import { employeeMotivationAndCompetence } from './employeeChartConversion'
 import {
   aggregateEmployeeCompetence,
   aggregateEmployeeProfile,
@@ -163,7 +160,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
 )
 
 router.get<unknown, unknown, unknown, EmailParam>(
-  '/employeeMotivationAndCompetence/bar',
+  '/employeeMotivationAndCompetence',
   async (req, res, next) => {
     try {
       if (!req.query.email) {
@@ -181,36 +178,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
-      const aggregatedData = employeeMotivationAndCompetenceBar(data)
-
-      res.send(aggregatedData)
-    } catch (error) {
-      next(error)
-    }
-  }
-)
-
-router.get<unknown, unknown, unknown, EmailParam>(
-  '/employeeMotivationAndCompetence/radar',
-  async (req, res, next) => {
-    try {
-      if (!req.query.email) {
-        throw {
-          status: 400,
-          message: "Param 'email' is missing.",
-        } as ParamError
-      }
-
-      const data = await getReport<EmployeeMotivationAndCompetenceReport>({
-        accessToken: req.accessToken,
-        reportName: 'employeeMotivationAndCompetence',
-        queryParams: {
-          email: req.query.email,
-        },
-      })
-
-      const aggregatedData = employeeMotivationAndCompetenceRadar(data)
-
+      const aggregatedData = employeeMotivationAndCompetence(data)
       res.send(aggregatedData)
     } catch (error) {
       next(error)

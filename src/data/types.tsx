@@ -1,8 +1,11 @@
 import * as React from 'react'
 import { SWRResponse } from 'swr'
+import { SingularChartData } from '../api/data/chartTypes'
 import { FilterObject } from '../components/filter/FilterUtil'
 
-export type ChartType = 'Line' | 'Bar' | 'Pie' | 'Radar' | 'Sunburst'
+export type DDPayload = { [key: string]: any }
+
+export type ChartType = SingularChartData['type']
 export type ChartVariant = {
   type: ChartType
   props?: {

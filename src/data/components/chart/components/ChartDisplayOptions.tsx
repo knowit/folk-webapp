@@ -12,10 +12,10 @@ const chartVariantInfo: {
     icon: React.ReactNode
   }
 } = {
-  Line: { label: 'linjediagram', icon: <ShowChart /> },
-  Bar: { label: 'stolpediagram', icon: <BarChart /> },
-  Pie: { label: 'kakediagram', icon: <PieChart /> },
-  Radar: {
+  LineChart: { label: 'linjediagram', icon: <ShowChart /> },
+  BarChart: { label: 'stolpediagram', icon: <BarChart /> },
+  PieChart: { label: 'kakediagram', icon: <PieChart /> },
+  RadarChart: {
     label: 'radardiagram',
     icon: (
       <SvgIcon>
@@ -24,7 +24,7 @@ const chartVariantInfo: {
       </SvgIcon>
     ),
   },
-  Sunburst: { label: 'sunburst-diagram', icon: <DonutLarge /> },
+  SunburstChart: { label: 'sunburst-diagram', icon: <DonutLarge /> },
 }
 
 interface ChartVariantToggleProps {

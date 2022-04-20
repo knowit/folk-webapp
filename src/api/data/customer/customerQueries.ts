@@ -2,14 +2,12 @@ import useSWR from 'swr'
 import {
   getCustomerCards,
   getEmployeesByCustomer,
-  getHoursBilledPerCustomer,
-  getHoursBilledPerCustomerBar,
-  getHoursBilledPerWeek,
-  getHoursBilledPerWeekLine,
+  getHoursBilledPerCustomerCharts,
+  getHoursBilledPerWeekCharts,
 } from './customerApi'
 
 export const useCustomerCards = () =>
-  useSWR('/customerCard', getCustomerCards, {
+  useSWR('/customerCards', getCustomerCards, {
     revalidateOnFocus: false,
   })
 
@@ -18,23 +16,12 @@ export const useEmployeesByCustomer = () =>
     revalidateOnFocus: false,
   })
 
-export const useHoursBilledPerCustomer = () =>
-  useSWR('/hoursBilledPerCustomer', getHoursBilledPerCustomer, {
+export const useHoursBilledPerCustomerCharts = () =>
+  useSWR('/hoursBilledPerCustomerCharts', getHoursBilledPerCustomerCharts, {
     revalidateOnFocus: false,
   })
 
-export const useHoursBilledPerWeek = () =>
-  useSWR('/hoursBilledPerWeek', getHoursBilledPerWeek, {
-    revalidateOnFocus: false,
-  })
-
-// API V2
-export const useHoursBilledPerCustomerBar = () =>
-  useSWR('/hoursBilledPerCustomerBar', getHoursBilledPerCustomerBar, {
-    revalidateOnFocus: false,
-  })
-
-export const useHoursBilledPerWeekLine = () =>
-  useSWR('/hoursBilledPerWeekLine', getHoursBilledPerWeekLine, {
+export const useHoursBilledPerWeekCharts = () =>
+  useSWR('/hoursBilledPerWeekCharts', getHoursBilledPerWeekCharts, {
     revalidateOnFocus: false,
   })

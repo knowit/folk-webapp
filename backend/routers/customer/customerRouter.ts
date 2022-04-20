@@ -1,43 +1,43 @@
 import express from 'express'
 import { getReport } from '../../dataplattform/client'
 import {
-  hoursBilledPerCustomerBar,
-  hoursBilledPerWeekLine,
+  createCustomerCardData,
+  groupEmployeesByCustomer,
+} from './customerAggregation'
+import {
+  hoursBilledPerCustomer,
+  hoursBilledPerWeek,
 } from './customerChartConversion'
 import {
   BilledCustomerHours,
-  EmployeeWithPrimaryCustomer,
   EmployeeCustomersReport,
+  EmployeeWithPrimaryCustomer,
 } from './customerTypes'
-import {
-  groupEmployeesByCustomer,
-  createCustomerCardData,
-} from './customerAggregation'
 
 const router = express.Router()
 
-router.get('/hoursBilledPerCustomer/bar', async (req, res, next) => {
+router.get('/hoursBilledPerCustomer', async (req, res, next) => {
   try {
     const data = await getReport<BilledCustomerHours[]>({
       accessToken: req.accessToken,
       reportName: 'perProject',
     })
 
-    const aggregatedData = hoursBilledPerCustomerBar(data)
+    const aggregatedData = hoursBilledPerCustomer(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)
   }
 })
 
-router.get('/hoursBilledPerWeek/line', async (req, res, next) => {
+router.get('/hoursBilledPerWeek', async (req, res, next) => {
   try {
     const data = await getReport<BilledCustomerHours[]>({
       accessToken: req.accessToken,
       reportName: 'perProject',
     })
 
-    const aggregatedData = hoursBilledPerWeekLine(data)
+    const aggregatedData = hoursBilledPerWeek(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)

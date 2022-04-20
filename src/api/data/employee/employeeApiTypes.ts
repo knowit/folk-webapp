@@ -3,7 +3,6 @@ import { TableRow } from '../tableResponses'
 /**
  * EmployeeTable
  */
-
 export type EmployeeTableResponse = EmployeeTableRow[]
 
 export type EmployeeTableRow = TableRow<EmployeeTableRowData>
@@ -84,7 +83,6 @@ export interface Tags {
 /**
  * EmployeeProfile
  */
-
 export interface EmployeeProfileResponse extends EmployeeCompetenceResponse {
   user_id: string
   email: string

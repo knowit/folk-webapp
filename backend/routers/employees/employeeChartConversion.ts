@@ -1,51 +1,42 @@
-import { BarChartData, RadarChartData } from '../chartTypes'
+import { MultipleChartData, BarChartData, RadarChartData } from '../chartTypes'
 import { aggregateEmployeeCompetenceAndMotivation } from './employeesAggregation'
 import { EmployeeMotivationAndCompetence } from './employeesTypes'
 
 /**
- * Aggregation function that formats data from AWS to fit a Nivo Bar chart.
+ * Aggregation function that formats data from AWS to fit a Nivo Bar and Pie chart.
  *
  * @param data raw data from AWS
- * @returns data fitting a Nivo Bar component
+ * @returns data fitting Nivo components
  */
-export const employeeMotivationAndCompetenceBar = (
+export const employeeMotivationAndCompetence = (
   data: EmployeeMotivationAndCompetence[]
-) => {
-  const aggregatedData = aggregateEmployeeCompetenceAndMotivation(data)
+): MultipleChartData<[BarChartData, RadarChartData]> => {
+  const indexBy = 'category'
+  const keys = ['motivation', 'competence']
+  const aggregatedData = aggregateEmployeeCompetenceAndMotivation(
+    data
+  ) as Record<string, any>
 
-  const output: Record<string, BarChartData> = {}
-
-  for (const [key, value] of Object.entries(aggregatedData)) {
-    output[key] = {
-      indexBy: 'category',
-      keys: ['motivation', 'competence'],
-      data: value as any[],
-    }
+  return {
+    type: 'MultipleChart',
+    groups: Object.entries(aggregatedData).map(([name, data]) => ({
+      name,
+      charts: [
+        {
+          type: 'BarChart',
+          indexBy,
+          keys,
+          data,
+          maxValue: 5,
+        },
+        {
+          type: 'RadarChart',
+          indexBy,
+          keys,
+          data,
+          maxValue: 5,
+        },
+      ],
+    })),
   }
-
-  return output
-}
-
-/**
- * Aggregation function that formats data from AWS to fit a Nivo Radar chart.
- *
- * @param data raw data from AWS
- * @returns data fitting a Nivo Radar component
- */
-export const employeeMotivationAndCompetenceRadar = (
-  data: EmployeeMotivationAndCompetence[]
-) => {
-  const aggregatedData = aggregateEmployeeCompetenceAndMotivation(data)
-
-  const output: Record<string, RadarChartData> = {}
-
-  for (const [key, value] of Object.entries(aggregatedData)) {
-    output[key] = {
-      indexBy: 'category',
-      keys: ['motivation', 'competence'],
-      data: value as any[],
-    }
-  }
-
-  return output
 }

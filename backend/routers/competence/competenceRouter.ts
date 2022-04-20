@@ -1,17 +1,14 @@
 import express from 'express'
 import { getReport } from '../../dataplattform/client'
 import {
-  ageDistributionBar,
-  competenceAmountBar,
-  competenceAreasBar,
-  competenceAreasRadar,
-  competenceMappingBar,
-  competenceMappingSunburst,
+  ageDistribution,
+  competenceAmount,
+  competenceAreas,
+  competenceMappingConversion,
   educationPie,
-  experienceDistributionBar,
-  experienceDistributionPie,
+  experienceDistribution,
   fagEventsLine,
-  fagtimerLine,
+  fagtimer,
 } from './competenceChartConversion'
 import {
   AgeDistribution,
@@ -27,72 +24,46 @@ import {
 
 const router = express.Router()
 
-router.get('/experienceDistribution/bar', async (req, res, next) => {
+router.get('/experienceDistribution', async (req, res, next) => {
   try {
     const data = await getReport<YearsWorkingDistributionCount[]>({
       accessToken: req.accessToken,
       reportName: 'workExperienceDistributedInYears',
     })
-    const aggregatedData = experienceDistributionBar(data)
+    const aggregatedData = experienceDistribution(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)
   }
 })
 
-router.get('/experienceDistribution/pie', async (req, res, next) => {
-  try {
-    const data = await getReport<YearsWorkingDistributionCount[]>({
-      accessToken: req.accessToken,
-      reportName: 'workExperienceDistributedInYears',
-    })
-    const aggregatedData = experienceDistributionPie(data)
-    res.send(aggregatedData)
-  } catch (error) {
-    next(error)
-  }
-})
-
-router.get('/competenceAmount/bar', async (req, res, next) => {
+router.get('/competenceAmount', async (req, res, next) => {
   try {
     const data = await getReport<CompetenceAmount[]>({
       accessToken: req.accessToken,
       reportName: 'competenceAmountAggregated',
     })
-    const aggregatedData = competenceAmountBar(data)
+    const aggregatedData = competenceAmount(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)
   }
 })
 
-router.get('/competenceAreas/bar', async (req, res, next) => {
+router.get('/competenceAreas', async (req, res, next) => {
   try {
     const data = await getReport<CategoryAverage[]>({
       accessToken: req.accessToken,
       reportName: 'averageCompetenceAndMotivation',
     })
-    const aggregatedData = competenceAreasBar(data)
+    const aggregatedData = competenceAreas(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)
   }
 })
 
-router.get('/competenceAreas/radar', async (req, res, next) => {
-  try {
-    const data = await getReport<CategoryAverage[]>({
-      accessToken: req.accessToken,
-      reportName: 'averageCompetenceAndMotivation',
-    })
-    const aggregatedData = competenceAreasRadar(data)
-    res.send(aggregatedData)
-  } catch (error) {
-    next(error)
-  }
-})
-
-router.get('/ageDistribution/bar', async (req, res, next) => {
+router.get('/ageDistribution', async (req, res, next) => {
   try {
     const ageDistributionPromise = getReport<AgeDistribution[]>({
       accessToken: req.accessToken,
@@ -104,13 +75,13 @@ router.get('/ageDistribution/bar', async (req, res, next) => {
       reportName: 'ageDistributionGroups',
     })
 
-    const [ageDistribution, ageDistributionGroups] = await Promise.all([
+    const [ageDistributionData, ageDistributionGroups] = await Promise.all([
       ageDistributionPromise,
       ageDistributionGroupsPromise,
     ])
 
-    const aggregatedData = ageDistributionBar([
-      ageDistribution,
+    const aggregatedData = ageDistribution([
+      ageDistributionData,
       ageDistributionGroups,
     ])
 
@@ -120,21 +91,21 @@ router.get('/ageDistribution/bar', async (req, res, next) => {
   }
 })
 
-router.get('/fagtimer/line', async (req, res, next) => {
+router.get('/fagtimer', async (req, res, next) => {
   try {
     const data = await getReport<FagtimeStats[]>({
       accessToken: req.accessToken,
       reportName: 'fagActivity',
     })
 
-    const aggregatedData = fagtimerLine(data)
+    const aggregatedData = fagtimer(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)
   }
 })
 
-router.get('/fagEvents/line', async (req, res, next) => {
+router.get('/fagEvents', async (req, res, next) => {
   try {
     const data = await getReport<FagEventData[]>({
       accessToken: req.accessToken,
@@ -148,7 +119,7 @@ router.get('/fagEvents/line', async (req, res, next) => {
   }
 })
 
-router.get('/education/pie', async (req, res, next) => {
+router.get('/education', async (req, res, next) => {
   try {
     const data = await getReport<DegreeDistribution[]>({
       accessToken: req.accessToken,
@@ -162,28 +133,14 @@ router.get('/education/pie', async (req, res, next) => {
   }
 })
 
-router.get('/competenceMapping/bar', async (req, res, next) => {
+router.get('/competenceMapping', async (req, res, next) => {
   try {
     const data = await getReport<CategoryAverage[]>({
       accessToken: req.accessToken,
       reportName: 'newCompetenceMotivationAverages',
     })
 
-    const aggregatedData = competenceMappingBar(data)
-    res.send(aggregatedData)
-  } catch (error) {
-    next(error)
-  }
-})
-
-router.get('/competenceMapping/sunburst', async (req, res, next) => {
-  try {
-    const data = await getReport<CategoryAverage[]>({
-      accessToken: req.accessToken,
-      reportName: 'newCompetenceMotivationAverages',
-    })
-
-    const aggregatedData = competenceMappingSunburst(data)
+    const aggregatedData = competenceMappingConversion(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)

@@ -1,7 +1,7 @@
 import React from 'react'
-import NavTab from '../../components/header/NavTab'
-import CustomerList from './CustomerList'
-import { CustomerOverview } from './CustomerOverview'
+import NavTab from '../components/header/NavTab'
+import CustomerList from './customer/CustomerList'
+import { CustomerOverview } from './customer/CustomerOverview'
 
 export default function Customer() {
   return (
