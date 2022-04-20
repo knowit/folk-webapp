@@ -3,7 +3,6 @@ import { TableRow } from '../tableResponses'
 /**
  * EmployeeTable
  */
-
 export type EmployeeTableResponse = EmployeeTableRow[]
 
 export type EmployeeTableRow = TableRow<EmployeeTableRowData>
@@ -46,39 +45,16 @@ export interface CvLinks {
 }
 
 /**
- * EmployeeExperience (= project experience for employee)
+ * Employee Competence (only competence/experience data from employee profile)
  */
 
-export interface EmployeeExperienceResponse {
-  name: string
-  experience?: EmployeeExperience[]
-}
-
-export interface EmployeeExperience {
-  customer: string
-  project: string
-  time_to: string
-  time_from: string
-}
-
-/**
- * EmployeeProfile
- */
-
-export interface EmployeeProfileResponse {
-  user_id: string
+export interface EmployeeCompetenceResponse {
   email: string
-  name: string
-  phone?: string
-  title?: string
-  degree?: string
   manager: string
-  image?: string
+  degree?: string
   tags: Tags
-  links: CvLinks
-  customers: Customer[]
-  workExperience: WorkExperience[]
   projectExperience: ProjectExperience[]
+  workExperience: WorkExperience[]
 }
 
 export interface WorkExperience {
@@ -103,3 +79,19 @@ export interface Tags {
   languages: string[]
   roles: string[]
 }
+
+/**
+ * EmployeeProfile
+ */
+export interface EmployeeProfileResponse extends EmployeeCompetenceResponse {
+  user_id: string
+  email: string
+  name: string
+  phone?: string
+  title?: string
+  image?: string
+  links: CvLinks
+  customers: Customer[]
+}
+
+// employeeRadar has same response as CompetenceAreasResponse

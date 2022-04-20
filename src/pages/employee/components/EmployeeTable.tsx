@@ -7,7 +7,7 @@ import {
   ProjectStatusCell,
   SortableHeaderCell,
 } from '../../../data/components/table/DataCells'
-import EmployeeInfo from './EmployeeInfo'
+import { EmployeeTableExpandedInfo } from './EmployeeTableExpandedInfo'
 import {
   Customer,
   ConsultantInfo,
@@ -39,11 +39,11 @@ export function EmployeeTable() {
                 title: 'Konsulent',
                 width: 385,
                 isExpandable: true,
-                getValue: (consultant: Pick<ConsultantInfo, 'name'>) => {
+                getValue: (consultant: ConsultantInfo) => {
                   return consultant.name
                 },
                 renderCell: ConsultantCell,
-                renderExpanded: EmployeeInfo,
+                renderExpanded: EmployeeTableExpandedInfo,
                 headerCell: SortableHeaderCell,
                 checkBoxLabel: 'Vis kun ledige',
               },

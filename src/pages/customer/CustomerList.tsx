@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
-import EmployeeInfo from '../employee/components/EmployeeInfo'
+import { EmployeeTableExpandedInfo } from '../employee/components/EmployeeTableExpandedInfo'
 import { GridItem } from '../../components/gridItem/GridItem'
 import {
   CenteredHeaderCell,
@@ -17,17 +17,18 @@ import { CustomerFilter } from './CustomerFilter'
 import { getSearchableColumns } from '../../data/DDTable'
 import { searchEmployeesByCustomer } from './util/searchEmployeesByCustomer'
 import { RowCount } from '../../data/components/RowCount'
+import { ConsultantInfo } from '../../api/data/employee/employeeApiTypes'
 
 const customerColumns: Column[] = [
   {
     title: 'Konsulent',
     width: 385,
     isExpandable: true,
-    getValue: (consultant: { value: string }) => {
-      return consultant.value
+    getValue: (consultant: ConsultantInfo) => {
+      return consultant.name
     },
     renderCell: ConsultantCell,
-    renderExpanded: EmployeeInfo,
+    renderExpanded: EmployeeTableExpandedInfo,
   },
   { title: 'Tittel', width: 222 },
   {

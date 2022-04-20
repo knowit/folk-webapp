@@ -3,7 +3,7 @@ import { getReport } from '../../dataplattform/client'
 import { NotFoundError, ParamError } from '../errorHandling'
 import { employeeMotivationAndCompetence } from './employeeChartConversion'
 import {
-  aggregateEmployeeExperience,
+  aggregateEmployeeCompetence,
   aggregateEmployeeProfile,
   aggregateEmployeeTable,
 } from './employeesAggregation'
@@ -71,42 +71,93 @@ router.get('/employeeTable', async (req, res, next) => {
   }
 })
 
-interface UserIdParam {
-  user_id?: string
+interface EmailParam {
+  email?: string
 }
 
-router.get<unknown, unknown, unknown, UserIdParam>(
-  '/employeeExperience',
+router.get<unknown, unknown, unknown, EmailParam>(
+  '/employeeCompetence',
   async (req, res, next) => {
     try {
-      if (!req.query.user_id) {
+      if (!req.query.email) {
         const err: ParamError = {
           status: 400,
-          message: "Param 'user_id' is missing.",
+          message: "Param 'email' is missing.",
         }
 
         throw err
       }
 
-      const data = await getReport<ProjectExperienceReport>({
+      const employeeProfileInformationPromise =
+        getReport<EmployeeProfileInformationReport>({
+          accessToken: req.accessToken,
+          reportName: 'employeeProfileInformation',
+          queryParams: {
+            email: req.query.email,
+          },
+        })
+
+      const employeeSkillsPromise = getReport<EmployeeSkillsReport>({
         accessToken: req.accessToken,
-        reportName: 'projectExperience',
+        reportName: 'employeeSkills',
         queryParams: {
-          user_id: req.query.user_id,
+          email: req.query.email,
         },
       })
 
-      const aggregatedData = aggregateEmployeeExperience(data)
+      const workExperiencePromise = getReport<WorkExperienceReport>({
+        accessToken: req.accessToken,
+        reportName: 'workExperience',
+        queryParams: {
+          email: req.query.email,
+        },
+      })
+
+      const projectExperiencePromise = getReport<ProjectExperienceReport>({
+        accessToken: req.accessToken,
+        reportName: 'projectExperience',
+        queryParams: {
+          email: req.query.email,
+        },
+      })
+
+      const [
+        employeeProfileInformation,
+        employeeSkills,
+        workExperience,
+        projectExperience,
+      ] = await Promise.all([
+        employeeProfileInformationPromise,
+        employeeSkillsPromise,
+        workExperiencePromise,
+        projectExperiencePromise,
+      ])
+
+      if (
+        !employeeProfileInformation ||
+        employeeProfileInformation.length === 0
+      ) {
+        const err: NotFoundError = {
+          status: 404,
+          message: "Employee with email '" + req.query.email + "' not found.",
+        }
+
+        throw err
+      }
+
+      const aggregatedData = aggregateEmployeeCompetence(
+        employeeProfileInformation,
+        employeeSkills,
+        workExperience,
+        projectExperience
+      )
+
       res.send(aggregatedData)
     } catch (error) {
       next(error)
     }
   }
 )
-
-interface EmailParam {
-  email?: string
-}
 
 router.get<unknown, unknown, unknown, EmailParam>(
   '/employeeMotivationAndCompetence',

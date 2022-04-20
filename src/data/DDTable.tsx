@@ -43,9 +43,9 @@ const sortColumn = (rows: TableRow<any>[], currentSort: ColumnSort) => {
   const compare = (a: TableRow<any>, b: TableRow<any>) => {
     const aValue = getCellValue(a)
     const bValue = getCellValue(b)
-    return String(aValue)
-      .toLowerCase()
-      .localeCompare(String(bValue).toLowerCase())
+    if (!aValue) return 1
+    if (!bValue) return -1
+    return String(aValue).localeCompare(String(bValue))
   }
 
   switch (currentSort.sortOrder) {

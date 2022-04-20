@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 import {
-  getEmployeeExperience,
+  getEmployeeCompetence,
   getEmployeeMotivationAndCompetenceCharts,
   getEmployeeProfile,
   getEmployeeTable,
@@ -16,17 +16,10 @@ export const useEmployeeProfile = (email: string) =>
     revalidateOnFocus: false,
   })
 
-/**
- * @param user_id Optional parameter, SWR waits until it is defined to fetch data
- */
-export const useEmployeeExperience = (user_id?: string) =>
-  useSWR(
-    user_id ? ['/employeeExperience', user_id] : null,
-    getEmployeeExperience,
-    {
-      revalidateOnFocus: false,
-    }
-  )
+export const useEmployeeCompetence = (email: string) =>
+  useSWR(['/employeeCompetence', email], getEmployeeCompetence, {
+    revalidateOnFocus: false,
+  })
 
 /**
  * @param email Optional parameter, SWR waits until it is defined to fetch data

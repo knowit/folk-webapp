@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import EmployeeInfo from '../pages/employee/components/EmployeeInfo'
+import { EmployeeTableExpandedInfo } from '../pages/employee/components/EmployeeTableExpandedInfo'
 import { useFetchedData } from '../hooks/service' // component to test
 
 const fakeUser = {
@@ -46,7 +46,6 @@ const fakeUser = {
 }
 
 const mockData = {
-  user_id: '123',
   email: '123',
 }
 
@@ -54,76 +53,38 @@ jest.mock('../hooks/service', () => ({
   useFetchedData: jest.fn().mockReturnValue([fakeUser, false, null]),
 }))
 
-const mockCallbackFunction = jest.fn()
-
 describe('EmployeeInfo', () => {
   it('should call mockFetch', () => {
-    render(
-      <EmployeeInfo
-        data={mockData}
-        id={'1'}
-        setRowHeight={mockCallbackFunction}
-      />
-    )
+    render(<EmployeeTableExpandedInfo data={mockData} />)
     expect(useFetchedData).toHaveBeenCalled()
   })
 
   it.each(fakeUser.tags.languages)(
     'should render all languages',
     (language) => {
-      render(
-        <EmployeeInfo
-          data={mockData}
-          id={'1'}
-          setRowHeight={mockCallbackFunction}
-        />
-      )
+      render(<EmployeeTableExpandedInfo data={mockData} />)
       expect(screen.getByText(language, { exact: false })).toBeInTheDocument()
     }
   )
 
   it.each(fakeUser.tags.skills)('should render all skills', (skill) => {
-    render(
-      <EmployeeInfo
-        data={mockData}
-        id={'1'}
-        setRowHeight={mockCallbackFunction}
-      />
-    )
+    render(<EmployeeTableExpandedInfo data={mockData} />)
     expect(screen.getByText(skill, { exact: false })).toBeInTheDocument()
   })
 
   it.each(fakeUser.tags.roles)('should render all roles', (role) => {
-    render(
-      <EmployeeInfo
-        data={mockData}
-        id={'1'}
-        setRowHeight={mockCallbackFunction}
-      />
-    )
+    render(<EmployeeTableExpandedInfo data={mockData} />)
     expect(screen.getByText(role, { exact: false })).toBeInTheDocument()
   })
 
   it('should render correct active years', () => {
-    render(
-      <EmployeeInfo
-        data={mockData}
-        id={'1'}
-        setRowHeight={mockCallbackFunction}
-      />
-    )
+    render(<EmployeeTableExpandedInfo data={mockData} />)
     const ActiveYears = String(new Date().getFullYear() - 2010) + ' år.'
     expect(screen.getByText(ActiveYears)).toBeInTheDocument()
   })
 
   it('Should render correct start date in knowit', () => {
-    render(
-      <EmployeeInfo
-        data={mockData}
-        id={'1'}
-        setRowHeight={mockCallbackFunction}
-      />
-    )
+    render(<EmployeeTableExpandedInfo data={mockData} />)
     expect(screen.getByText('05/2017.')).toBeInTheDocument()
   })
 })
