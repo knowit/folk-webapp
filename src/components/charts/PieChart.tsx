@@ -1,6 +1,6 @@
 import { PieSvgProps, ResponsivePie } from '@nivo/pie'
 import React from 'react'
-import { chartColors } from './common'
+import { chartColors, IsBigProps } from './common'
 
 type PieType = Pick<
   PieSvgProps<any>,
@@ -48,8 +48,11 @@ type PieType = Pick<
   | 'layers'
 >
 
-const PieChart: React.FC<PieType> = (props) => (
-  <div style={{ width: '100%', height: '300px' }}>
+const PieChart: React.FC<PieType & IsBigProps> = ({
+  isBig = false,
+  ...props
+}) => (
+  <div style={{ width: '100%', height: isBig ? '400px' : '300px' }}>
     <ResponsivePie
       margin={{ top: 40, right: 20, bottom: 65, left: 30 }}
       innerRadius={0.5}

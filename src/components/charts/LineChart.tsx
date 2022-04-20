@@ -1,9 +1,12 @@
 import { LineSvgProps, ResponsiveLine } from '@nivo/line'
 import React from 'react'
-import { chartColors } from './common'
+import { chartColors, IsBigProps } from './common'
 
-const LineChart: React.FC<LineSvgProps> = ({ ...props }) => (
-  <div style={{ width: '100%', height: '280px' }}>
+const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
+  isBig = false,
+  ...props
+}) => (
+  <div style={{ width: '100%', height: isBig ? '400px' : '280' }}>
     <ResponsiveLine
       margin={{ top: 10, right: 20, bottom: 70, left: 40 }}
       xScale={{ type: 'point' }}
@@ -15,7 +18,7 @@ const LineChart: React.FC<LineSvgProps> = ({ ...props }) => (
         reverse: false,
       }}
       axisTop={null}
-      axisBottom={null}
+      axisBottom={isBig ? {} : null}
       axisRight={null}
       colors={chartColors}
       curve="monotoneX"

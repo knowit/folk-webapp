@@ -6,6 +6,7 @@ const DialogBox = withStyles(() => ({
   paper: {
     width: '950px',
     borderRadius: '0px',
+    padding: '2rem',
   },
 }))(Dialog)
 

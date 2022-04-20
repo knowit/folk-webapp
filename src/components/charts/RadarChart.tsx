@@ -1,9 +1,12 @@
 import { RadarProps, ResponsiveRadar } from '@nivo/radar'
 import React from 'react'
-import { chartColors } from './common'
+import { chartColors, IsBigProps } from './common'
 
-const RadarChart: React.FC<RadarProps> = ({ ...props }) => (
-  <div style={{ width: '100%', height: '300px' }}>
+const RadarChart: React.FC<RadarProps & IsBigProps> = ({
+  isBig = false,
+  ...props
+}) => (
+  <div style={{ width: '100%', height: isBig ? '400px' : '300px' }}>
     <ResponsiveRadar
       maxValue={5}
       margin={{ top: 50, right: 10, bottom: 50, left: 10 }}

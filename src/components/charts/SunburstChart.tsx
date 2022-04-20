@@ -1,4 +1,4 @@
-import { chartColors } from './common'
+import { chartColors, IsBigProps } from './common'
 import React from 'react'
 import {
   DatumId,
@@ -44,7 +44,12 @@ type SBType = Pick<
   | 'defs'
 >
 
-const SunburstChart: React.FC<SBType> = ({ value, data, ...props }) => {
+const SunburstChart: React.FC<SBType & IsBigProps> = ({
+  isBig = false,
+  value,
+  data,
+  ...props
+}) => {
   data = { children: data }
   const valueKey = (value ?? 'value') as string
   const idKey = (props.id ?? 'id') as string
@@ -96,7 +101,7 @@ const SunburstChart: React.FC<SBType> = ({ value, data, ...props }) => {
   }
 
   return (
-    <div style={{ width: '100%', height: '500px' }}>
+    <div style={{ width: '100%', height: isBig ? '400px' : '300px' }}>
       <ResponsiveSunburst
         colors={chartColors}
         margin={{ top: 10, right: 10, bottom: 30, left: 10 }}

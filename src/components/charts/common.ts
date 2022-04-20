@@ -12,3 +12,8 @@ export const chartColors: Colors = [
   '#919191',
   '#AAB863',
 ]
+
+export interface IsBigProps {
+  isBig: boolean
+  setIsBig?: (val: boolean) => void
+}

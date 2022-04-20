@@ -1,6 +1,6 @@
-import { chartColors } from './common'
 import { BarSvgProps, ResponsiveBar } from '@nivo/bar'
 import React from 'react'
+import { chartColors, IsBigProps } from './common'
 
 const splitText = (longText: string | number) => {
   const maxLength = 10
@@ -49,8 +49,11 @@ const CustomTick = (tick: any) => {
  * Nivo Bar Chart with custom styling.
  * Allows for overloading of all props for more detailed customization.
  */
-const BarChart: React.FC<BarSvgProps> = ({ ...props }) => (
-  <div style={{ width: '100%', height: '300px' }}>
+const BarChart: React.FC<BarSvgProps & IsBigProps> = ({
+  isBig = false,
+  ...props
+}) => (
+  <div style={{ width: '100%', height: isBig ? '400px' : '300px' }}>
     <ResponsiveBar
       margin={{ top: 40, right: 20, bottom: 65, left: 30 }}
       enableLabel={false}
@@ -100,7 +103,8 @@ const BarChart: React.FC<BarSvgProps> = ({ ...props }) => (
           direction: 'row',
           itemHeight: 10,
           itemWidth: 130,
-          translateY: -15,
+          translateY: -25,
+          itemsSpacing: 15,
         },
       ]}
       {...props}
