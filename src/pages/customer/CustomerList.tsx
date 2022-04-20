@@ -17,14 +17,15 @@ import { CustomerFilter } from './CustomerFilter'
 import { getSearchableColumns } from '../../data/DDTable'
 import { searchEmployeesByCustomer } from './util/searchEmployeesByCustomer'
 import { RowCount } from '../../data/components/RowCount'
+import { ConsultantInfo } from '../../api/data/employee/employeeApiTypes'
 
 const customerColumns: Column[] = [
   {
     title: 'Konsulent',
     width: 385,
     isExpandable: true,
-    getValue: (consultant: { value: string }) => {
-      return consultant.value
+    getValue: (consultant: ConsultantInfo) => {
+      return consultant.name
     },
     renderCell: ConsultantCell,
     renderExpanded: EmployeeInfo,
