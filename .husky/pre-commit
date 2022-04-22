@@ -1,7 +1,7 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn run pretty-quick --staged
+# yarn run pretty-quick --staged
 
 # GREEN='\033[0;32m'
 # PURPLE='\033[0;35m'
