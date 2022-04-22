@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { formatMonthYearRange } from '../../../utils/formatMonthYearRange'
+import { formatMonthYearRange } from '../utils/format-month-year-range'
 import { makeStyles } from '@material-ui/core/styles'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { FallbackMessage } from './FallbackMessage'
 import { ExperienceList } from './ExperienceList'
 import { ExperienceListItem } from './ExperienceListItem'
 import { ProjectExperience } from '../../../api/data/employee/employeeApiTypes'
-import { compareExperienceDesc } from '../../../utils/compareExperienceDesc'
+import { compareExperienceDesc } from '../utils/compare-experience-desc'
 
 const useStyles = makeStyles({
   timeRange: {

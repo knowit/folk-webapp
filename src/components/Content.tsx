@@ -3,14 +3,14 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { isLoggedIn } from '../api/auth/authHelpers'
 import { useUserInfo } from '../context/UserInfoContext'
 import {
-  Competence,
-  Customer,
+  CompetencePage,
+  CustomerPage,
   EmployeePage,
-  EmployeeProfile,
-  NotFound,
-  UnderConstruction,
+  EmployeeProfilePage,
+  NotFoundPage,
+  UnderConstructionPage,
+  DebugPage,
 } from '../pages'
-import Debug from '../pages/DebugPage'
 import LoginPage from '../pages/login/LoginPage'
 
 export default function Content() {
@@ -24,13 +24,13 @@ export default function Content() {
     <Routes>
       <Route path="/" element={<Navigate replace to="/ansatte" />} />
       <Route path="/ansatte" element={<EmployeePage />} />
-      <Route path="/ansatt/:id" element={<EmployeeProfile />} />
-      <Route path="/kunder" element={<Customer />} />
-      <Route path="/kompetanse" element={<Competence />} />
-      <Route path="/arbeidsmiljo" element={<UnderConstruction />} />
-      <Route path="/rekruttering" element={<UnderConstruction />} />
-      <Route path="/debug" element={<Debug />} />
-      <Route path="*" element={<NotFound />} />
+      <Route path="/ansatt/:id" element={<EmployeeProfilePage />} />
+      <Route path="/kunder" element={<CustomerPage />} />
+      <Route path="/kompetanse" element={<CompetencePage />} />
+      <Route path="/arbeidsmiljo" element={<UnderConstructionPage />} />
+      <Route path="/rekruttering" element={<UnderConstructionPage />} />
+      <Route path="/debug" element={<DebugPage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
 }

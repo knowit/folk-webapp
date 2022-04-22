@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { CvLinks } from '../../../api/data/employee/employeeApiTypes'
 import { makeStyles } from '@material-ui/core/styles'
-import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
-import { mapLinkKeyToLabel } from '../../../utils/cvLinkHelpers'
 import GetApp from '@material-ui/icons/GetApp'
 import { FallbackMessage } from './FallbackMessage'
 import { ExperienceList } from './ExperienceList'
 import { ExperienceListItem } from './ExperienceListItem'
 import { withStyles } from '@material-ui/core'
+import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
+import { mapLinkKeyToLabel } from '../utils/cv-link-helpers'
 
 const useStyles = makeStyles((theme) => ({
   link: {

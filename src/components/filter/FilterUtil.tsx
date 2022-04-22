@@ -1,6 +1,6 @@
 import { useCompetenceFilter } from '../../api/data/competence/competenceQueries'
 import { EmployeeTableRow } from '../../api/data/employee/employeeApiTypes'
-import { SearchableColumn } from '../../data/DDTable'
+import { SearchableColumn } from '../table/DDTable'
 import { EmployeeForCustomerList } from '../../api/data/customer/customerApiTypes'
 
 export interface CategoryWithGroup {
