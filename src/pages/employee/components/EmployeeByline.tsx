@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { makeStyles } from '@material-ui/core'
-import { LineSkeleton } from '../../../components/skeletons/LineSkeleton'
 import { EmployeeProfileResponse } from '../../../api/data/employee/employeeApiTypes'
+import { LineSkeleton } from '../../../components/skeletons/LineSkeleton'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 
 const useStyles = makeStyles((theme) => ({

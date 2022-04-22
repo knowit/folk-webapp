@@ -4,24 +4,21 @@ import {
   MultipleChartData,
   SingularChartData,
 } from '../../api/data/chartTypes'
-import BigChart from '../../data/components/chart/components/BigChart'
-import {
-  ChartDisplayOptions,
-  ChartVariantToggle,
-} from '../../data/components/chart/components/ChartDisplayOptions'
-import DropdownPicker from '../../data/components/chart/components/DropdownPicker'
-import { ToggleBigChartButton } from '../../data/components/chart/components/ToggleBigChartButton'
 import { FallbackMessage } from '../../pages/employee/components/FallbackMessage'
 import { GridItem } from '../gridItem/GridItem'
 import { GridItemContent } from '../gridItem/GridItemContent'
 import { GridItemHeader } from '../gridItem/GridItemHeader'
 import { MultiLineSkeleton } from '../skeletons/MultiLineSkeleton'
-import BarChart from './BarChart'
-import { IsBigProps } from './common'
-import LineChart from './LineChart'
-import PieChart from './PieChart'
-import RadarChart from './RadarChart'
-import SunburstChart from './SunburstChart'
+import BigChart from './BigChart'
+import { ChartDisplayOptions, ChartVariantToggle } from './ChartDisplayOptions'
+import DropdownPicker from './DropdownPicker'
+import BarChart from './nivo/BarChart'
+import { IsBigProps } from './nivo/common'
+import LineChart from './nivo/LineChart'
+import PieChart from './nivo/PieChart'
+import RadarChart from './nivo/RadarChart'
+import SunburstChart from './nivo/SunburstChart'
+import { ToggleBigChartButton } from './ToggleBigChartButton'
 
 interface SingularChartProps {
   chartData: SingularChartData

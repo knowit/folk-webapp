@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
-import { EmployeeTable } from './components/EmployeeTable'
+import { EmployeeTable } from './table/EmployeeTable'
 
 export default function EmployeePage() {
   return (

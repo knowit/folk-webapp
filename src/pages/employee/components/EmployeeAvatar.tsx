@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Avatar, makeStyles } from '@material-ui/core'
 import { ReactComponent as FallbackUserIcon } from '../../../assets/fallback_user.svg'
 import { CircleSkeleton } from '../../../components/skeletons/CircleSkeleton'

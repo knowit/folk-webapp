@@ -1,6 +1,6 @@
 import express from 'express'
 import { getReport } from '../../dataplattform/client'
-import { NotFoundError, ParamError } from '../errorHandling'
+import { NotFoundError, ParamError } from '../../middlewares/errorHandling'
 import { employeeMotivationAndCompetence } from './employeeChartConversion'
 import {
   aggregateEmployeeCompetence,
