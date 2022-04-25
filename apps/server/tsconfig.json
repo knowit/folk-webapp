@@ -1,0 +1,5 @@
+{
+  "extends": "@folk/tsconfig/server.json",
+  "exclude": ["node_modules"],
+  "compilerOptions": { "outDir": "dist", "incremental": true }
+}
