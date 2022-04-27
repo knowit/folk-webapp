@@ -1,4 +1,4 @@
-name: Knowit Folk - Server
+name: "Server: Lint"
 
 on:
   pull_request:
