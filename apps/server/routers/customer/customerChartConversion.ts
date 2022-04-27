@@ -1,4 +1,4 @@
-import { BarChartData, LineChartData } from '@folk/common/types/chartTypes'
+import { BarChartData, LineChartData } from '../chartTypes'
 import { BilledCustomerHours } from './customerTypes'
 
 export const hoursBilledPerCustomer = (
