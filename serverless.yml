@@ -24,9 +24,7 @@ custom:
     prod: folk.knowit.no
   domain: ${self:custom.stageDomains.${self:custom.stage}}
   serverlessPluginTypescript:
-    tsConfigFileLocation: './backend/tsconfig.json'
-
-
+    tsConfigFileLocation: "./apps/server/tsconfig.json"
 
 provider:
   name: aws
@@ -41,14 +39,14 @@ provider:
 
 package:
   include:
-    - backend/**
+    - apps/server/**
   exclude:
     - "*/**"
   individually: true
 
 functions:
   proxyLambda:
-    handler: backend/lambda.handler
+    handler: apps/server/lambda.handler
     name: ${self:custom.service}-express-proxy
     environment: ${self:custom.env}
     role: LambdaRole

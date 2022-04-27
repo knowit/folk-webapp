@@ -1,8 +1,0 @@
-screen 0
-stuff "yarn start:local^M"
-split
-focus down
-chdir backend
-screen 1
-stuff "yarn start:local^M"
-focus up
