@@ -55,6 +55,7 @@ functions:
 
 plugins:
   - serverless-plugin-typescript
+  - serverless-plugin-monorepo
 
 resources:
   Resources:
