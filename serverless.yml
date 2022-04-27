@@ -40,8 +40,8 @@ provider:
 package:
   include:
     - apps/server/**
-  exclude:
-    - "*/**"
+  # exclude:
+  #   - "*/**"
   individually: true
 
 functions:
