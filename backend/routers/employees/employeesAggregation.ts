@@ -85,7 +85,7 @@ export const aggregateEmployeeCompetence = (
 export const aggregateEmployeeCompetenceAndMotivation = (
   data: EmployeeMotivationAndCompetence[]
 ) => {
-  const categoriesMap = { mainCategories: {} }
+  const categoriesMap = { Hovedkategorier: {} }
 
   data.forEach((row) => {
     const {
@@ -107,7 +107,7 @@ export const aggregateEmployeeCompetenceAndMotivation = (
       competence: subCategoryCompetence,
     }
 
-    categoriesMap['mainCategories'][category] = {
+    categoriesMap['Hovedkategorier'][category] = {
       category,
       motivation: categoryMotivationAvg,
       competence: categoryCompetenceAvg,

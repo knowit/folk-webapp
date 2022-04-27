@@ -12,7 +12,7 @@ export interface CategoryAmountData {
 }
 
 export interface CategoriesMap {
-  MainCategories: Record<string, CategoryAmountData>
+  Hovedkategorier: Record<string, CategoryAmountData>
   [key: string]: Record<string, CategoryAmountData>
 }
 

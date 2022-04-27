@@ -202,7 +202,7 @@ export const competenceMappingConversion = (
     type: 'MultipleChart',
     groups: [
       {
-        name: 'Competence',
+        name: 'Kompetanse',
         charts: [
           aggregatedSunburstData['competence'],
           {
@@ -214,7 +214,7 @@ export const competenceMappingConversion = (
         ],
       },
       {
-        name: 'Motivation',
+        name: 'Motivasjon',
         charts: [
           aggregatedSunburstData['motivation'],
           {

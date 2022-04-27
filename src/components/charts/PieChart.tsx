@@ -2,56 +2,13 @@ import { PieSvgProps, ResponsivePie } from '@nivo/pie'
 import React from 'react'
 import { chartColors, IsBigProps } from './common'
 
-type PieType = Pick<
-  PieSvgProps<any>,
-  | 'legends'
-  | 'fill'
-  | 'id'
-  | 'value'
-  | 'data'
-  | 'onClick'
-  | 'onMouseMove'
-  | 'onMouseEnter'
-  | 'onMouseLeave'
-  | 'borderWidth'
-  | 'isInteractive'
-  | 'tooltip'
-  | 'borderColor'
-  | 'defs'
-  | 'valueFormat'
-  | 'colors'
-  | 'margin'
-  | 'sortByValue'
-  | 'innerRadius'
-  | 'padAngle'
-  | 'cornerRadius'
-  | 'startAngle'
-  | 'endAngle'
-  | 'fit'
-  | 'theme'
-  | 'enableRadialLabels'
-  | 'radialLabel'
-  | 'radialLabelsSkipAngle'
-  | 'radialLabelsTextXOffset'
-  | 'radialLabelsTextColor'
-  | 'radialLabelsLinkOffset'
-  | 'radialLabelsLinkDiagonalLength'
-  | 'radialLabelsLinkHorizontalLength'
-  | 'radialLabelsLinkStrokeWidth'
-  | 'radialLabelsLinkColor'
-  | 'enableSliceLabels'
-  | 'sliceLabel'
-  | 'sliceLabelsRadiusOffset'
-  | 'sliceLabelsSkipAngle'
-  | 'sliceLabelsTextColor'
-  | 'role'
-  | 'layers'
->
+type Props = Omit<PieSvgProps<any>, 'width' | 'height'> &
+  IsBigProps & {
+    sliceLabelsSkipAngle?: number
+    radialLabel?: (e: any) => string
+  }
 
-const PieChart: React.FC<PieType & IsBigProps> = ({
-  isBig = false,
-  ...props
-}) => (
+const PieChart: React.FC<Props> = ({ isBig = false, ...props }) => (
   <div style={{ width: '100%', height: isBig ? '400px' : '300px' }}>
     <ResponsivePie
       margin={{ top: 40, right: 20, bottom: 65, left: 30 }}
@@ -61,7 +18,7 @@ const PieChart: React.FC<PieType & IsBigProps> = ({
       colors={chartColors}
       borderWidth={1}
       sliceLabelsSkipAngle={10}
-      radialLabel={(e) => `${e.label} (${e.value})`}
+      radialLabel={(e: any) => `${e.label} (${e.value})`}
       {...props}
     />
   </div>
