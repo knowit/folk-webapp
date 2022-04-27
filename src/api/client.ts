@@ -52,7 +52,7 @@ const getAt = async <T>(endpoint: string, options?: GetOptions) => {
     if (axios.isAxiosError(e)) {
       const err: ApiError = {
         status: e.response?.status ?? 400,
-        message: e.response?.data,
+        message: (e.response?.data as any) ?? '',
         errorType: 'API',
       }
       return Promise.reject(err)
