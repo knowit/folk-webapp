@@ -41,6 +41,7 @@ package:
   excludeDevDependencies: false
   include:
     - apps/server/**
+    - packages/**/*
   # exclude:
   #   - "*/**"
   individually: true
