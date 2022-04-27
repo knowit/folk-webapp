@@ -4,6 +4,22 @@
   "compilerOptions": {
     "outDir": "dist",
     "incremental": true,
-    "typeRoots": ["@types"]
+    "typeRoots": ["@types"],
+    "composite": false,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "inlineSources": false,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "preserveWatchOutput": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "lib": ["es2020"],
+    "module": "CommonJS",
+    "target": "es2020"
   }
 }

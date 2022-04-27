@@ -23,7 +23,6 @@
   "devDependencies": {
     "@folk/common": "workspace:^",
     "@folk/prettier-config": "workspace:^",
-    "@folk/tsconfig": "workspace:^",
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.4.1",

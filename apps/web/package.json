@@ -83,7 +83,6 @@
   "devDependencies": {
     "@folk/common": "workspace:^",
     "@folk/prettier-config": "workspace:^",
-    "@folk/tsconfig": "workspace:^",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
     "@types/jest": "^27.4.1",
