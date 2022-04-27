@@ -1,5 +1,5 @@
+import { BarChartData, LineChartData } from '@folk/common/types/chartTypes'
 import { getAtApiV2 } from '../../client'
-import { BarChartData, LineChartData } from '../chartTypes'
 import {
   CustomerCardResponse,
   EmployeesByCustomerResponse,

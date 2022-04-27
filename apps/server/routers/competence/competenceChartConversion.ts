@@ -1,4 +1,3 @@
-import { getEventSet, range } from '../../repository/util'
 import {
   BarChartData,
   LineChartData,
@@ -6,7 +5,8 @@ import {
   PieChartData,
   RadarChartData,
   SunburstChartData,
-} from '../chartTypes'
+} from '@folk/common/types/chartTypes'
+import { getEventSet, range } from '../../repository/util'
 import {
   ageDistributionFormatting,
   ageGroupDistribution,

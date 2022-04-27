@@ -1,6 +1,6 @@
+import { SingularChartData } from '@folk/common/types/chartTypes'
 import * as React from 'react'
 import { SWRResponse } from 'swr'
-import { SingularChartData } from '../../api/data/chartTypes'
 import { FilterObject } from '../filter/FilterUtil'
 
 export type DDPayload = { [key: string]: any }

@@ -1,4 +1,8 @@
-import { MultipleChartData, BarChartData, RadarChartData } from '../chartTypes'
+import {
+  MultipleChartData,
+  BarChartData,
+  RadarChartData,
+} from '@folk/common/types/chartTypes'
 import { aggregateEmployeeCompetenceAndMotivation } from './employeesAggregation'
 import { EmployeeMotivationAndCompetence } from './employeesTypes'
 

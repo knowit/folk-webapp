@@ -1,5 +1,3 @@
-// THIS FILE MUST CORRESPOND 100% WITH THE FILE WITH THE SAME NAME IN THE FRONTEND
-
 export type ChartData =
   | MultipleChartData<SingularChartData[]>
   | SingularChartData
@@ -7,7 +5,7 @@ export type ChartData =
 export type MultipleChartData<
   T extends SingularChartData[] = SingularChartData[]
 > = {
-  type: 'MultipleChart'
+  type: "MultipleChart"
   groups: ChartGroup<T>[]
 }
 
@@ -24,21 +22,21 @@ export type SingularChartData =
   | SunburstChartData
 
 export interface BarChartData {
-  type: 'BarChart'
+  type: "BarChart"
   indexBy: string
   keys: string[]
   data: any[]
 }
 
 export interface RadarChartData {
-  type: 'RadarChart'
+  type: "RadarChart"
   indexBy: string
   keys: string[]
   data: any[]
 }
 
 export type LineChartData = {
-  type: 'LineChart'
+  type: "LineChart"
   data: {
     id: string | number
     data: Array<{
@@ -49,14 +47,14 @@ export type LineChartData = {
 }
 
 export interface PieChartData {
-  type: 'PieChart'
+  type: "PieChart"
   id: string
   value: string
   data: any[]
 }
 
 export interface SunburstChartData {
-  type: 'SunburstChart'
+  type: "SunburstChart"
   id: string
   value: string
   data: any[]

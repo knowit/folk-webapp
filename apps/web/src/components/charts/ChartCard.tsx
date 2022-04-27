@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
 import {
   ChartData,
   MultipleChartData,
   SingularChartData,
-} from '../../api/data/chartTypes'
+} from '@folk/common/types/chartTypes'
+import React, { useState } from 'react'
 import { FallbackMessage } from '../../pages/employee/components/FallbackMessage'
 import { GridItem } from '../gridItem/GridItem'
 import { GridItemContent } from '../gridItem/GridItemContent'

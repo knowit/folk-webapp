@@ -1,5 +1,5 @@
+import { ChartData } from '@folk/common/types/chartTypes'
 import { getAtApiV2 } from '../../client'
-import { ChartData } from '../chartTypes'
 import { CompetenceFilterResponse } from './competenceApiTypes'
 
 export const getCompetenceFilter = () =>

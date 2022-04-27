@@ -21,6 +21,7 @@
     "openid-client": "^4.9.1"
   },
   "devDependencies": {
+    "@folk/common": "workspace:^",
     "@folk/prettier-config": "workspace:^",
     "@folk/tsconfig": "workspace:^",
     "@types/cookie-parser": "^1.4.2",

@@ -83,6 +83,7 @@
     "typescript": "^4.6.3"
   },
   "devDependencies": {
+    "@folk/common": "workspace:^",
     "@folk/prettier-config": "workspace:^",
     "@folk/tsconfig": "workspace:^",
     "@testing-library/jest-dom": "^5.16.3",
