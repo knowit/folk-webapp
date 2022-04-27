@@ -1,0 +1,7 @@
+{
+  "name": "@folk/prettier-config",
+  "version": "1.0.0",
+  "description": "Prettier config for Folk",
+  "main": "index.json",
+  "license": "MIT"
+}
