@@ -5,4 +5,5 @@ export const Translation: Record<string, string> = {
   count: 'Antall',
   competenceProportion: 'Kompetanseandel',
   motivationProportion: 'Motivasjonandel',
+  hours: 'Timer',
 }
