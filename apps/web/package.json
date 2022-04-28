@@ -29,7 +29,7 @@
     "reinstall": "rm -rf ./node_module && yarn",
     "predeploy:dev": "echo predeploy && yarn build",
     "predeploy:prod": "yarn build",
-    "deploy:dev": "echo deploy && aws s3 sync apps/web/build s3://dev-folk-webapp-static-web",
+    "deploy:dev": "echo deploy && aws s3 build s3://dev-folk-webapp-static-web",
     "deploy:prod": "aws s3 sync build s3://prod-folk-webapp-static-web",
     "postdeploy:dev": "echo postdeploy && aws cloudfront create-invalidation --distribution-id E215UYR726ILDS --paths /",
     "postdeploy:prod": "aws cloudfront create-invalidation --distribution-id E16SNX0CEZ21PY --paths /",
