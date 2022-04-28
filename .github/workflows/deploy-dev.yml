@@ -53,6 +53,9 @@ jobs:
       - uses: softprops/turnstyle@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build web
+        working-directory: apps/web
+        run: yarn predeploy:dev
       - name: Deploy frontend
         working-directory: apps/web
         run: yarn deploy:dev
