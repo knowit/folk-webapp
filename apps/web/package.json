@@ -83,7 +83,6 @@
   "devDependencies": {
     "@folk/common": "workspace:^",
     "@folk/prettier-config": "workspace:^",
-    "@folk/tsconfig": "workspace:^",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
     "@types/jest": "^27.4.1",
@@ -95,7 +94,6 @@
     "dotenv": "^16.0.0",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.4.0",
-    "husky": "^7.0.0",
-    "serverless-plugin-typescript": "^2.1.1"
+    "husky": "^7.0.0"
   }
 }

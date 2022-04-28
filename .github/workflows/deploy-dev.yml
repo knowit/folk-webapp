@@ -1,4 +1,4 @@
-name: Knowit Folk - Deploy - Dev
+name: Deploy - Dev
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy_backend:
+  deploy_server:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -23,18 +23,18 @@ jobs:
           aws-region: eu-central-1
       - name: Install serverless
         run: yarn add serverless@1.66.0
-      - name: Install backend dependencies
+      - name: Install server dependencies
         working-directory: apps/server
         run: yarn install
       - uses: softprops/turnstyle@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Deploy backend
+      - name: Deploy server
         run: yarn sls deploy --stage dev
 
-  deploy_frontend:
+  deploy_web:
     runs-on: ubuntu-latest
-    needs: deploy_backend
+    needs: deploy_server
     steps:
       - uses: actions/checkout@v2
       - name: Set up node 14
@@ -53,6 +53,9 @@ jobs:
       - uses: softprops/turnstyle@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Deploy frontend
+      - name: Build web
+        working-directory: apps/web
+        run: yarn predeploy:dev
+      - name: Deploy web
         working-directory: apps/web
         run: yarn deploy:dev
