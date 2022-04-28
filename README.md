@@ -1,7 +1,7 @@
 # Knowit folk
 
-![Knowit Folk - Backend](https://github.com/knowit/folk-webapp/workflows/Knowit%20Folk%20-%20Backend/badge.svg)
-![Knowit Folk - Frontend](https://github.com/knowit/folk-webapp/workflows/Knowit%20Folk%20-%20Frontend/badge.svg)
+![Server: Lint](https://github.com/knowit/folk-webapp/workflows/Server%20Lint/badge.svg)
+![Web: Lint & Build](https://github.com/knowit/folk-webapp/workflows/Web%20Lint%20%26%20Build/badge.svg)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
