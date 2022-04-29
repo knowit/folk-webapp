@@ -6,17 +6,32 @@
     "packages/*",
     "apps/*"
   ],
+  "engines": {
+    "npm": "please-use-yarn",
+    "yarn": "3.2.0"
+  },
+  "scripts": {
+    "web:start": "yarn workspace web start",
+    "web:dev": "yarn workspace web dev",
+    "web:build": "yarn workspace web build",
+    "web:format": "yarn workspace web format",
+    "web:format-check": "yarn workspace web format:check",
+    "web:lint": "yarn workspace web lint",
+    "web:lint-fix": "yarn workspace web lint:fix",
+    "server:dev": "yarn workspace server dev",
+    "server:format": "yarn workspace server format",
+    "server:format-check": "yarn workspace server format:check",
+    "server:lint": "yarn workspace server lint",
+    "server:lint-fix": "yarn workspace server lint:fix",
+    "postinstall": "husky install"
+  },
   "devDependencies": {
     "eslint": "7.32.0",
+    "husky": "^7.0.4",
     "prettier": "^2.5.1",
     "pretty-quick": "^3.1.3",
     "serverless": "1.66.0",
     "typescript": "^4.6.3"
-  },
-  "scripts": {
-    "web:dev": "yarn workspace web start:local",
-    "web:build": "yarn workspace web build",
-    "server:dev": "yarn workspace server start:local"
   },
   "resolutions": {
     "follow-redirects": ">=1.14.8",
