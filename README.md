@@ -2,21 +2,26 @@
 
 ![Prod](https://github.com/knowit/folk-webapp/workflows/Deploy%20-%20Prod/badge.svg)
 ![Dev](https://github.com/knowit/folk-webapp/workflows/Deploy%20-%20Dev/badge.svg)
-
 ![Server: Lint](https://github.com/knowit/folk-webapp/workflows/Server%20Lint/badge.svg)
 ![Web: Lint & Build](https://github.com/knowit/folk-webapp/workflows/Web%20Lint%20%26%20Build/badge.svg)
 
-A web application that presents information about employees and customers at Knowit Objectnet, based on data gathered by
+An application that presents information about employees and customers at Knowit Objectnet, based on data gathered by
 the "Dataplattform" project.
 
-The web application is composed of two parts, both residing in this repository:
+This is a [monorepo](https://monorepo.tools/), containing the following `apps`:
 
-- a [React](https://reactjs.org/) SPA (single page application) frontend that fetches and presents data from the
-  Node/Express backend (see below). The code for this frontend is located in the root folder of the project. The
-  frontend is bootstrapped and built using [Create React App](https://create-react-app.dev/).
-- a [Node.js](https://nodejs.org/en/) and [Express](https://expressjs.com/) backend-for-frontend that fetches and
-  aggregates data from the "Dataplattform" API. The code for this backend is located in the `/backend` folder of the
-  project. [Read more about how the backend fetches and serves data.](#Backend-Data-Fetching)
+**Web:**
+
+A SPA (single page application) application built with [React.js](https://reactjs.org/), that fetches and presents data from the [ Node.js ](https://nodejs.org/en/)/[ Express ](https://expressjs.com/) server (see below). The code for this web app is located under [apps/web](https://github.com/knowit/folk-webapp/tree/master/apps/web). The web app is bootstrapped and built using [Create React App](https://create-react-app.dev/).
+
+**Server:**
+
+[Node.js](https://nodejs.org/en/) and [Express](https://expressjs.com/) a server that acts as the middleman between the web app and AWS. It fetches and
+aggregates data from the "Dataplattform" API. The code for this server is located under [apps/server](https://github.com/knowit/folk-webapp/tree/master/apps/server). [Read more](#backend-data-fetching) about how the server fetches and serves data.
+
+---
+
+In addition to the two `apps`, there are `packages` containing shared code and config utilized in the `apps`.
 
 ## Requirements
 
