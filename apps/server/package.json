@@ -4,7 +4,7 @@
   "private": true,
   "prettier": "@folk/prettier-config",
   "scripts": {
-    "dev": "nodemon -r dotenv/config local.ts",
+    "dev:local": "nodemon -r dotenv/config local.ts",
     "format": "run -T prettier --write .",
     "format:check": "run -T prettier --check .",
     "lint": "run -T eslint .",
