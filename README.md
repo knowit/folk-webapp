@@ -17,7 +17,7 @@ A SPA (single page application) application built with [React.js](https://reactj
 **Server:**
 
 [Node.js](https://nodejs.org/en/) and [Express](https://expressjs.com/) a server that acts as the middleman between the web app and AWS. It fetches and
-aggregates data from the "Dataplattform" API. The code for this server is located under [apps/server](https://github.com/knowit/folk-webapp/tree/master/apps/server). [Read more](#backend-data-fetching) about how the server fetches and serves data.
+aggregates data from the "Dataplattform" API. The code for this server is located under [apps/server](https://github.com/knowit/folk-webapp/tree/master/apps/server). [Read more](#server-data-fetching) about how the server fetches and serves data.
 
 ---
 
@@ -47,7 +47,7 @@ This option allows you to work on both the web and server part of the applicatio
 from the locally running server.
 
 1. For the server to be able to connect and fetch data from the Dataplattform API, it's necessary to add the correct
-   credentials. [Follow these instructions on how to set this up in an `.env` file for the server.](https://github.com/knowit/folk-webapp/wiki/Backend)
+   credentials. [Follow these instructions on how to set this up in an `.env` file for the server.](https://github.com/knowit/folk-webapp/wiki/Server)
 2. Open two terminal windows/tabs/panes from the root of the repo, and run: `yarn server:dev:local` and `yarn web:dev:local`.
 
 ### Option B: running web locally, using server running in [the development environment](#Environments)
