@@ -2,8 +2,8 @@
 
 ![Prod](https://github.com/knowit/folk-webapp/workflows/Deploy%20-%20Prod/badge.svg)
 ![Dev](https://github.com/knowit/folk-webapp/workflows/Deploy%20-%20Dev/badge.svg)
-![Server: Lint](https://github.com/knowit/folk-webapp/workflows/Server%20Lint/badge.svg)
-![Web: Lint & Build](https://github.com/knowit/folk-webapp/workflows/Web%20Lint%20%26%20Build/badge.svg)
+![Server: Lint](https://github.com/knowit/folk-webapp/workflows/Server/badge.svg)
+![Web: Lint & Build](https://github.com/knowit/folk-webapp/workflows/Web/badge.svg)
 
 An application that presents information about employees and customers at Knowit Objectnet, based on data gathered by
 the "Dataplattform" project.
