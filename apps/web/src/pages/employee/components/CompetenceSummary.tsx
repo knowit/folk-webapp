@@ -51,11 +51,11 @@ export function CompetenceSummary({ employee, isLoading, isError }: Props) {
         label="Startet i Knowit"
         value={getStartedInKnowit(employee?.workExperience)}
       />
-      <CompetenceSummaryItem
-        label="Beregnet arbeidserfaring"
+      {/*<CompetenceSummaryItem
+        label='Beregnet arbeidserfaring'
         value={getTotalWorkExperience(employee?.workExperience)}
-        description="Beregnet ut i fra første jobb på CV"
-      />
+        description='Beregnet ut i fra første jobb på CV'
+      /> */}
       <CompetenceSummaryItem
         label="Språk"
         value={employee?.tags.languages.join(', ')}
