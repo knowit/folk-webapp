@@ -22,6 +22,12 @@ const useStyles = makeStyles(() =>
     accordionDetails: {
       padding: '0px',
     },
+    content: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '65%',
+    },
   })
 )
 
@@ -53,14 +59,19 @@ export function CustomerAccordion({
           className={classes.accordionSummary}
           expandIcon={expanded ? <Minimize /> : <Add />}
         >
-          {customerName}
-          <OpenInNew
-            className={'openNewIconAccordion'}
-            style={{ marginLeft: '15px' }}
-            onClick={(e) => {
-              e.stopPropagation() /* todo show kundeflik */
-            }}
-          />
+          <div className={classes.content}>
+            <div>
+              {customerName}
+              <OpenInNew
+                className={'openNewIconAccordion'}
+                style={{ marginLeft: '15px' }}
+                onClick={(e) => {
+                  e.stopPropagation() /* todo show kundeflik */
+                }}
+              />
+            </div>
+            <div>Antall konsulenter: {employees.length}</div>
+          </div>
         </AccordionSummary>
         <AccordionDetails className={classes.accordionDetails}>
           <GridItem fullSize={true}>
