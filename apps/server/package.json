@@ -18,7 +18,7 @@
     "cookie-parser": "^1.4.6",
     "express": "^4.18.0",
     "node-fetch": "^2.6.7",
-    "openid-client": "^5.1.5"
+    "openid-client": "^4.9.1"
   },
   "devDependencies": {
     "@folk/common": "workspace:^",
