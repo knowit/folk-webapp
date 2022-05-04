@@ -30,7 +30,7 @@ jobs:
       - name: serverless deploy
         uses: serverless/github-action@v3
         with:
-          args: serverless deploy --stage dev
+          args: deploy --stage dev
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
