@@ -2,28 +2,3 @@
 . "$(dirname "$0")/_/husky.sh"
 
 yarn run pretty-quick --staged
-
-# GREEN='\033[0;32m'
-# PURPLE='\033[0;35m'
-# RESET='\033[0m' # No Color
-
-# echo 🐺  Husky running pre-commit tasks!
-
-# echo 💻 Frontend checks:
-
-# echo 🧹 Running ESLint
-# yarn run lint
-
-# echo 💅 Running Prettier
-# yarn run format:check
-
-# echo 💾 Backend checks:
-# cd backend
-
-# echo 🧹 Running ESLint
-# yarn run lint
-
-# echo 💅 Running Prettier
-# yarn run format:check
-
-# echo ✅ all checks passed!

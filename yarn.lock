@@ -7603,9 +7603,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.118":
-  version: 1.4.126
-  resolution: "electron-to-chromium@npm:1.4.126"
-  checksum: cef32304aa1036f083c32c151189c7a0aa7d6c397f9b6e3ddeba383e087bff1bbc239998a0d84f721c654591db7b9ae87856416fe0eb5f83f16999e46c57f178
+  version: 1.4.127
+  resolution: "electron-to-chromium@npm:1.4.127"
+  checksum: 960333a1da1b29b58ba0daab9e9c7527c2d54f4fc74a82c65a7556cb4ade1e8a1710e5ccd2c3bbf610a164800c6a13bad5c8212a0cf6f07091f1384f6e557939
   languageName: node
   linkType: hard
 
@@ -13099,8 +13099,8 @@ __metadata:
   linkType: hard
 
 "nodemon@npm:^2.0.15":
-  version: 2.0.15
-  resolution: "nodemon@npm:2.0.15"
+  version: 2.0.16
+  resolution: "nodemon@npm:2.0.16"
   dependencies:
     chokidar: ^3.5.2
     debug: ^3.2.7
@@ -13114,7 +13114,7 @@ __metadata:
     update-notifier: ^5.1.0
   bin:
     nodemon: bin/nodemon.js
-  checksum: 0569b09b713fdcc76f06734d7cc106950e69e02069cbf44bda3fae8d266926bdfa003aeddd22f8fcdf46ea6ff51ca64f5528f8006536e79820a26e648ef346cf
+  checksum: ff818aa91b283bd0f1f6cfb8fdc9b5c3e74d5efa0cb72276dc242b742dc35d3f0720d35d99dbe85ecf6df7185f083ef9b1f7908094e43fd4e2508b6805d644dc
   languageName: node
   linkType: hard
 
