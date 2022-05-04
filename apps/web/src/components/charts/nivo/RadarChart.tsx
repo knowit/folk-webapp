@@ -1,6 +1,6 @@
 import { RadarSvgProps, ResponsiveRadar } from '@nivo/radar'
 import React from 'react'
-import { Translation } from '../../utils/translation'
+import { Translation } from '../../../utils/translation'
 import { chartColors, IsBigProps } from './common'
 
 type Props<D extends Record<string, unknown>> = Omit<

@@ -68,7 +68,7 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => (
       legendLabel={(data) => {
         if (data) {
           const label = Translation[data.id] ?? data.id
-          return label
+          return label as string
         }
         return ''
       }}
