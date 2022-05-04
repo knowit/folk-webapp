@@ -6,7 +6,7 @@ import { apiRouterV2 } from './routers/routers'
 
 const app = express()
 
-// Register middleware
+// Register Middleware
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
