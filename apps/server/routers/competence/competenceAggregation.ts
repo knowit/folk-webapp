@@ -66,11 +66,11 @@ export const competenceAmountMapping = (
   data: CompetenceAmount[]
 ): AggregatedData<CategoryAmountData[]> => {
   const result: AggregatedData<CategoryAmountData[]> = {
-    MainCategories: { data: [] },
+    Hovedkategorier: { data: [] },
   }
 
   const addMainCategory = (row: CompetenceAmount) => {
-    result.MainCategories.data.push({
+    result.Hovedkategorier.data.push({
       category: row.category,
       competenceAmount: row.competenceAmount,
       motivationAmount: row.motivationAmount,
@@ -103,11 +103,11 @@ export const competenceAreasAggregated = (
   data: CategoryAverage[]
 ): AggregatedData<CategoryAreaData[]> => {
   const result: AggregatedData<CategoryAreaData[]> = {
-    MainCategories: { data: [] },
+    Hovedkategorier: { data: [] },
   }
 
   const addMainCategory = (data: CategoryAverage) => {
-    let category = result.MainCategories.data.find(
+    let category = result.Hovedkategorier.data.find(
       (c) => c.category === data.category
     )
 
@@ -119,7 +119,7 @@ export const competenceAreasAggregated = (
       }
 
       result[data.category] = { data: [] }
-      result.MainCategories.data.push(category)
+      result.Hovedkategorier.data.push(category)
     }
 
     category.motivation += data.motivation
@@ -139,7 +139,7 @@ export const competenceAreasAggregated = (
     addSubCategory(row)
   })
 
-  result.MainCategories.data.forEach((c) => {
+  result.Hovedkategorier.data.forEach((c) => {
     c.motivation /= result[c.category].data.length
     c.competence /= result[c.category].data.length
   })

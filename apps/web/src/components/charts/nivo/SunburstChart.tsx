@@ -1,11 +1,6 @@
 import { chartColors, IsBigProps } from './common'
 import React from 'react'
-import {
-  DatumId,
-  NormalizedDatum,
-  ResponsiveSunburst,
-  SvgProps,
-} from '@nivo/sunburst'
+import { DatumId, ResponsiveSunburst, SunburstSvgProps } from '@nivo/sunburst'
 import { BasicTooltip } from '@nivo/tooltip'
 
 /**
@@ -13,38 +8,13 @@ import { BasicTooltip } from '@nivo/tooltip'
  * Allows for overloading of all props for more detailed customization.
  */
 
-type SBType = Pick<
-  SvgProps<any>,
-  | 'fill'
-  | 'data'
-  | 'id'
-  | 'value'
-  | 'onClick'
-  | 'onMouseEnter'
-  | 'onMouseLeave'
-  | 'onMouseMove'
-  | 'borderWidth'
-  | 'borderColor'
-  | 'animate'
-  | 'motionConfig'
-  | 'layers'
-  | 'margin'
-  | 'cornerRadius'
-  | 'colors'
-  | 'childColor'
-  | 'enableSliceLabels'
-  | 'sliceLabel'
-  | 'sliceLabelsSkipAngle'
-  | 'sliceLabelsTextColor'
-  | 'role'
-  | 'theme'
-  | 'isInteractive'
-  | 'tooltip'
-  | 'valueFormat'
-  | 'defs'
->
+type Props<RawDatum> = Partial<
+  Omit<SunburstSvgProps<RawDatum>, 'data' | 'width' | 'height'>
+> &
+  Pick<SunburstSvgProps<RawDatum>, 'data'> &
+  IsBigProps
 
-const SunburstChart: React.FC<SBType & IsBigProps> = ({
+const SunburstChart: React.FC<Props<any>> = ({
   isBig = false,
   value,
   data,
@@ -66,27 +36,32 @@ const SunburstChart: React.FC<SBType & IsBigProps> = ({
     return total + (child.size || 0)
   }
 
-  const CustomTooltip = ({
-    id,
-    value,
-    parent,
-    depth,
-    color,
-  }: NormalizedDatum<any>) => {
+  const GetParentId = (path: Array<string | undefined>): string => {
+    for (let i = path.length - 1; i >= 0 - 1; i--) {
+      if (path[i] !== undefined) {
+        return path[i] as string
+      }
+    }
+    return ''
+  }
+
+  const CustomTooltip = ({ id, value, path, depth, color }: any) => {
     let displayValue = 0
+    const parentId = GetParentId(path)
+
     if (depth === 1) displayValue = value
     else {
       try {
         displayValue = data.children
           .find(
             (main: { [x: string]: DatumId | undefined }) =>
-              main[idKey] === parent?.data.id
+              main[idKey] === parentId
           )
           .children.find(
             (child: { [x: string]: DatumId }) => child[idKey] === id
           )[valueKey]
-      } catch {
-        console.log('error')
+      } catch (error) {
+        console.log('error', error)
       }
     }
 
