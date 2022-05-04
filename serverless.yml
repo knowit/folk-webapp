@@ -38,10 +38,12 @@ provider:
     payload: "2.0"
 
 package:
+  excludeDevDependencies: false
   include:
     - apps/server/**
-  exclude:
-    - "*/**"
+    - packages/**/*
+  # exclude:
+  #   - "*/**"
   individually: true
 
 functions:
@@ -55,6 +57,7 @@ functions:
 
 plugins:
   - serverless-plugin-typescript
+  - serverless-plugin-monorepo
 
 resources:
   Resources:

@@ -5,7 +5,7 @@ import {
   PieChartData,
   RadarChartData,
   SunburstChartData,
-} from '@folk/common/types/chartTypes'
+} from '../chartTypes'
 import { getEventSet, range } from '../../repository/util'
 import {
   ageDistributionFormatting,
