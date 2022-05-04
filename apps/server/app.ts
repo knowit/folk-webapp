@@ -22,6 +22,7 @@ app.use((req, res, next) => {
     status: 404,
     message: `Endpoint was not found.`,
   }
+  console.log()
 
   next(err)
 })
