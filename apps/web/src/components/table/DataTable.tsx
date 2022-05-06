@@ -105,7 +105,7 @@ export const tableStyles = makeStyles((theme: Theme) =>
 const DEFAULT_CELL_HEIGHT = 70
 const EXPANDED_CELL_HEIGHT = 522
 
-function VirtualizedTable({
+export function VirtualizedTable({
   columns,
   rows,
   setColumnSort,
@@ -126,7 +126,6 @@ function VirtualizedTable({
   function rowIsExpanded(rowId: string) {
     return expandedRowIds.includes(rowId)
   }
-
   function toggleExpand(rowId: string) {
     if (rowIsExpanded(rowId)) {
       setExpandedRowIds((prevState) => [
@@ -262,42 +261,59 @@ function VirtualizedTable({
     )
   }
 
+  function getTableHeight() {
+    let currHeight = 0
+    rows.forEach((item, index) => {
+      const currIndex: Index = { index: index }
+      currHeight += getRowHeight(currIndex)
+    })
+    return currHeight + 70 //Adding 70 to make room for header
+  }
+
   return (
-    <AutoSizer>
-      {({ height, width }) => (
-        <Table
-          rowRenderer={Row}
-          ref={tableRef}
-          height={height}
-          width={width}
-          rowHeight={getRowHeight}
-          headerHeight={DEFAULT_CELL_HEIGHT}
-          rowCount={rows.length}
-          rowGetter={getRowData}
-          rowClassName={classes.flexContainer}
-          noRowsRenderer={EmptyRow}
-          gridClassName={classes.noFocus}
-        >
-          {columns.map((column, index) => (
-            <VirtualizedColumn
-              key={column.title}
-              headerRenderer={() =>
-                renderHeaderCell(
-                  column.title,
-                  index,
-                  currentColumnSort,
-                  column.headerCell,
-                  checkBox
-                )
-              }
-              className={classes.flexContainer}
-              dataKey={String(index)}
-              width={column.width}
-            />
-          ))}
-        </Table>
-      )}
-    </AutoSizer>
+    <Paper
+      style={{
+        height: getTableHeight(),
+        width: '100%',
+        backgroundColor: 'white',
+      }}
+    >
+      <AutoSizer>
+        {({ height, width }) => (
+          <Table
+            rowRenderer={Row}
+            ref={tableRef}
+            height={height}
+            width={width}
+            rowHeight={getRowHeight}
+            headerHeight={DEFAULT_CELL_HEIGHT}
+            rowCount={rows.length}
+            rowGetter={getRowData}
+            rowClassName={classes.flexContainer}
+            noRowsRenderer={EmptyRow}
+            gridClassName={classes.noFocus}
+          >
+            {columns.map((column, index) => (
+              <VirtualizedColumn
+                key={column.title}
+                headerRenderer={() =>
+                  renderHeaderCell(
+                    column.title,
+                    index,
+                    currentColumnSort,
+                    column.headerCell,
+                    checkBox
+                  )
+                }
+                className={classes.flexContainer}
+                dataKey={String(index)}
+                width={column.width}
+              />
+            ))}
+          </Table>
+        )}
+      </AutoSizer>
+    </Paper>
   )
 }
 
