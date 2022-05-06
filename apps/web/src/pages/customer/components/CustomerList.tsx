@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { Box, Grid } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import { GridItem } from '../../../components/gridItem/GridItem'
 import {

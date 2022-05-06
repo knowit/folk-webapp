@@ -61,8 +61,8 @@ export function CustomerAccordion({
           className={classes.accordionSummary}
           expandIcon={expanded ? <Minimize /> : <Add />}
         >
-          <div
-            style={{
+          <Box
+            sx={{
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -80,7 +80,7 @@ export function CustomerAccordion({
               />
             </div>
             <div>Antall konsulenter: {employees.length}</div>
-          </div>
+          </Box>
         </AccordionSummary>
         <AccordionDetails className={classes.accordionDetails}>
           <VirtualizedTable rows={employees} columns={columns} />
