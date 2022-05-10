@@ -52,7 +52,7 @@ export function CustomerAccordion({
       }}
     >
       <Accordion
-        style={{ paddingTop: '5px', width: '100%' }}
+        style={{ marginTop: '5px', width: '100%' }}
         expanded={expanded}
         onChange={() => setExpanded(!expanded)}
         square={true}

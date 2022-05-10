@@ -50,6 +50,7 @@ interface SingularChartCardProps {
   description?: string
   fullSize: boolean
   data: SingularChartData
+  showFilter?: boolean
 }
 
 /**
@@ -59,12 +60,77 @@ const SingularChartCard = ({
   title,
   description,
   fullSize = false,
+  showFilter,
   data,
 }: SingularChartCardProps) => {
   const [isBig, setIsBig] = useState(false)
+  const filterValues = ['Siste måned', 'Siste kvartal', 'Hittil i år', 'Totalt']
+  const [selectedFilter, setSelectedFilter] = useState(filterValues[0])
+
+  function getFilterData(filter: string): SingularChartData {
+    //Depending on the different filters, this function will return correct info to display in chart
+    if (data.type === 'LineChart' || data.type === 'BarChart') {
+      switch (filter) {
+        case 'Siste måned':
+          return findLastMonthData()
+        case 'Siste kvartal':
+          return data
+        case 'Hittil i år':
+          return data
+        case 'Totalt':
+          return data
+        default:
+          return data
+      }
+    } else {
+      return data
+    }
+  }
+
+  //Function to show chart data for only in the current week (reg_period)
+  function findLastMonthData(): SingularChartData {
+    if (data && data.type === 'LineChart') {
+      const monthData = data.data.map((customer) => {
+        return {
+          ...customer,
+          data: customer.data.filter((week) =>
+            Object.keys(week).reduce((acc) => {
+              return (
+                acc ||
+                (typeof week.x === 'string' &&
+                  (week.x.includes('202143') ||
+                    week.x.includes('202144') ||
+                    week.x.includes('202145') ||
+                    week.x.includes('202146')))
+              )
+            }, false)
+          ),
+        }
+      })
+      const weekChartObject: SingularChartData = { ...data, data: monthData }
+      console.log(monthData)
+      return weekChartObject
+    }
+    if (data && data.type === 'BarChart') {
+      //Det er ikke mulig å telle timer per måned, kvartal, år. Det er fordi timene kommer summert
+      return data
+    } else {
+      return data
+    }
+  }
+
   return (
     <GridItem fullSize={fullSize}>
-      <GridItemHeader title={title} description={description} />
+      <GridItemHeader title={title} description={description}>
+        {showFilter && (
+          //Finne en måte å filtrere data ift periode og valgt filter
+          <DropdownPicker
+            values={filterValues}
+            selected={selectedFilter}
+            onChange={setSelectedFilter}
+          />
+        )}
+      </GridItemHeader>
       <GridItemContent>
         {/* Sub header containing only the increase size-button */}
         <ChartDisplayOptions>
@@ -72,11 +138,17 @@ const SingularChartCard = ({
         </ChartDisplayOptions>
 
         {/* The small chart */}
-        <SingularChart isBig={false} chartData={data} />
+        <SingularChart
+          isBig={false}
+          chartData={showFilter ? getFilterData(selectedFilter) : data}
+        />
 
         {/* The big chart */}
         <BigChart open={isBig} onClose={() => setIsBig(false)}>
-          <SingularChart isBig={isBig} chartData={data} />
+          <SingularChart
+            isBig={isBig}
+            chartData={showFilter ? getFilterData(selectedFilter) : data}
+          />
         </BigChart>
       </GridItemContent>
     </GridItem>
@@ -158,6 +230,7 @@ interface ChartCardProps {
   fullSize?: boolean
   data: ChartData | undefined
   error: any
+  showFilter?: boolean
 }
 
 const ChartCard = ({
@@ -165,6 +238,7 @@ const ChartCard = ({
   data,
   error,
   title,
+  showFilter = false,
   ...props
 }: ChartCardProps) => {
   if (error)
@@ -191,6 +265,7 @@ const ChartCard = ({
       fullSize={fullSize}
       title={title}
       data={data}
+      showFilter={showFilter}
       {...props}
     />
   )
