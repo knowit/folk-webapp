@@ -4,7 +4,6 @@ import { chartColors, IsBigProps } from './common'
 
 const splitText = (longText: string | number) => {
   const maxLength = 10
-  console.log(longText)
   const text = longText.toString()
   const textList: string[] = []
   let start = 0

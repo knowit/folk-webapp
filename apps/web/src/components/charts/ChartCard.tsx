@@ -126,7 +126,6 @@ const SingularChartCard = ({
     <GridItem fullSize={fullSize}>
       <GridItemHeader title={title} description={description}>
         {showFilter && (
-          //Finne en måte å filtrere data ift periode og valgt filter
           <DropdownPicker
             values={filterValues}
             selected={selectedFilter}
