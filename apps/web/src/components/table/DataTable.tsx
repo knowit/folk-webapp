@@ -321,7 +321,7 @@ export default function DataTable(props: DataTableProps) {
   return (
     <Paper
       style={{
-        height: 780,
+        height: '100%',
         width: '100%',
         backgroundColor: 'white',
       }}

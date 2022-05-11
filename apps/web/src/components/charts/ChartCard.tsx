@@ -87,7 +87,7 @@ const SingularChartCard = ({
     }
   }
 
-  //Function to show chart data for only in the current week (reg_period)
+  //Function to show chart data for only in the current week (reg_period). Is static atm, must be updated to calculate current week and month automatically
   function findLastMonthData(): SingularChartData {
     if (data && data.type === 'LineChart') {
       const monthData = data.data.map((customer) => {
