@@ -4,9 +4,11 @@ import { useHoursBilledPerWeekCharts } from '../../../api/data/customer/customer
 
 const HoursBilledPerWeekCard = () => {
   const { data, error } = useHoursBilledPerWeekCharts()
+
   useEffect(() => {
     console.log(data)
   })
+
   return (
     <ChartCard
       title="Timer brukt per uke"

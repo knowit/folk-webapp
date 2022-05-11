@@ -3,7 +3,7 @@ import {
   MultipleChartData,
   SingularChartData,
 } from '@folk/common/types/chartTypes'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FallbackMessage } from '../../pages/employee/components/FallbackMessage'
 import { GridItem } from '../gridItem/GridItem'
 import { GridItemContent } from '../gridItem/GridItemContent'
@@ -67,6 +67,9 @@ const SingularChartCard = ({
   const filterValues = ['Siste måned', 'Siste kvartal', 'Hittil i år', 'Totalt']
   const [selectedFilter, setSelectedFilter] = useState(filterValues[0])
 
+  useEffect(() => {
+    console.log(data)
+  })
   function getFilterData(filter: string): SingularChartData {
     //Depending on the different filters, this function will return correct info to display in chart
     if (data.type === 'LineChart' || data.type === 'BarChart') {
