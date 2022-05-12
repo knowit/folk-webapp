@@ -72,7 +72,10 @@ const SingularChartCard = ({
   })
   function getFilterData(filter: string): SingularChartData {
     //Depending on the different filters, this function will return correct info to display in chart
-    if (data.type === 'LineChart' || data.type === 'BarChart') {
+    if (
+      (data && data.type === 'LineChart') ||
+      (data && data.type === 'BarChart')
+    ) {
       switch (filter) {
         case 'Siste måned':
           return findLastMonthData()
@@ -111,11 +114,12 @@ const SingularChartCard = ({
         }
       })
       const weekChartObject: SingularChartData = { ...data, data: monthData }
-      console.log(monthData)
       return weekChartObject
     }
     if (data && data.type === 'BarChart') {
       //Det er ikke mulig å telle timer per måned, kvartal, år. Det er fordi timene kommer summert
+      const { ['weeklyData']: remove, ...rest } = data
+      console.log(rest)
       return data
     } else {
       return data

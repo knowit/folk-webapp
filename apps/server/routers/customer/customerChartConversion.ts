@@ -6,18 +6,9 @@ export const hoursBilledPerCustomer = (
 ): BarChartData => {
   const aggregatedData = {}
 
-  //Todo: Få med en timeoversikt med reg_periods for å kunne filtrere på chart
-  for (const { customer, hours, reg_period } of data) {
+  for (const { customer, hours } of data) {
     if (!(customer in aggregatedData)) {
-      aggregatedData[customer] = { customer, hours, reg_periods: [] }
-      if (!(reg_period in aggregatedData[customer].reg_periods)) {
-        const allRegPeriods = aggregatedData[customer].reg_periods
-        allRegPeriods.push(reg_period)
-        aggregatedData[customer] = {
-          ...aggregatedData[customer],
-          reg_periods: allRegPeriods,
-        }
-      }
+      aggregatedData[customer] = { customer, hours }
     } else {
       aggregatedData[customer].hours += hours
     }

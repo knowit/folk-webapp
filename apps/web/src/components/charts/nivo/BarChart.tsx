@@ -22,7 +22,6 @@ const splitText = (longText: string | number) => {
 
 const CustomTick = (tick: any) => {
   const y = tick.tickIndex % 2 === 0 ? 10 : -15
-  console.log(tick)
   const values = splitText(tick.value)
   return (
     <g transform={`translate(${tick.x},${tick.y + 22})`}>

@@ -1,13 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import ChartCard from '../../../components/charts/ChartCard'
 import { useHoursBilledPerWeekCharts } from '../../../api/data/customer/customerQueries'
 
 const HoursBilledPerWeekCard = () => {
   const { data, error } = useHoursBilledPerWeekCharts()
-
-  useEffect(() => {
-    console.log(data)
-  })
 
   return (
     <ChartCard
