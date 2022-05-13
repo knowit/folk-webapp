@@ -117,11 +117,41 @@ const SingularChartCard = ({
       return weekChartObject
     }
     if (data && data.type === 'BarChart') {
-      //Det er ikke mulig å telle timer per måned, kvartal, år. Det er fordi timene kommer summert
-      const { ['weeklyData']: remove, ...rest } = data
-      console.log('Remove: ', remove)
-      console.log('Rest: ', rest)
-      return data
+      const aggregatedData: { customer: string; hours: number }[] = []
+      //Bygge listen med timer i forhold til filter. Denne kan skilles ut i egen metode etterhvert
+      data.data.forEach((customer) => {
+        if (!(customer in aggregatedData)) {
+          aggregatedData.push({ customer, hours: 0 })
+        } else {
+          if (data.weeklyData) {
+            const currentCustomer = data.weeklyData.data.find(
+              (item) => item?.id === customer.name
+            )
+            currentCustomer?.data.forEach((regPeriod) => {
+              if (
+                typeof regPeriod.y === 'number' &&
+                typeof regPeriod.x === 'string'
+              ) {
+                if (
+                  regPeriod.x.includes('202143') ||
+                  regPeriod.x.includes('202144')
+                ) {
+                  aggregatedData[customer].hours += regPeriod.y
+                }
+              }
+            })
+          }
+        }
+      })
+      console.log('DATA: ', aggregatedData)
+
+      const chartData: SingularChartData = {
+        type: data.type,
+        indexBy: data.indexBy,
+        keys: data.keys,
+        data: aggregatedData,
+      }
+      return chartData
     } else {
       return data
     }
