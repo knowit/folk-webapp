@@ -119,7 +119,8 @@ const SingularChartCard = ({
     if (data && data.type === 'BarChart') {
       //Det er ikke mulig å telle timer per måned, kvartal, år. Det er fordi timene kommer summert
       const { ['weeklyData']: remove, ...rest } = data
-      console.log(rest)
+      console.log('Remove: ', remove)
+      console.log('Rest: ', rest)
       return data
     } else {
       return data
@@ -256,7 +257,6 @@ const ChartCard = ({
         </GridItemContent>
       </GridItem>
     )
-
   if (!data) return <MultiLineSkeleton />
 
   return data.type === 'MultipleChart' ? (

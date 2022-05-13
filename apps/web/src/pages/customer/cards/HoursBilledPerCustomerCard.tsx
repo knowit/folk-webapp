@@ -1,32 +1,16 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import ChartCard from '../../../components/charts/ChartCard'
-import {
-  useHoursBilledPerCustomerCharts,
-  useHoursBilledPerWeekCharts,
-} from '../../../api/data/customer/customerQueries'
-import { BarChartData } from 'server/routers/chartTypes'
+import { useHoursBilledPerCustomerCharts } from '../../../api/data/customer/customerQueries'
 
 const HoursBilledPerCustomerCard = () => {
-  const { data: perCustomerData, error: perCustomerError } =
-    useHoursBilledPerCustomerCharts()
-  //Retrieve weekly data to properly filter total hours billed in chart
-  const { data: weeklyData } = useHoursBilledPerWeekCharts()
+  const { data, error } = useHoursBilledPerCustomerCharts()
 
-  const actualData: BarChartData = {
-    weeklyData: weeklyData,
-    ...perCustomerData,
-  }
-
-  useEffect(() => {
-    console.log(perCustomerData)
-    console.log(actualData)
-  })
   return (
     <ChartCard
       title="Timer brukt per kunde"
       description="Dataene er fra første registrering i UBW. Noen av dataene kan være justert i etterkant, og disse justeringene er ikke oppdatert her."
-      data={actualData}
-      error={perCustomerError}
+      data={data}
+      error={error}
       showFilter={true}
     />
   )
