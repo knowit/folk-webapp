@@ -60,6 +60,7 @@ const BarChart: React.FC<BarSvgProps & IsBigProps> = ({
       colors={chartColors}
       borderRadius={3}
       groupMode="grouped"
+      key={props.data.length}
       tooltip={({ indexValue, value, id }) => {
         // Har coded to fit competenceAmount/Proportion. Should be updated some day.
         if (id.toString().includes('Proportion' || 'Amount')) {

@@ -114,13 +114,15 @@ const SingularChartCard = ({
         }
       })
       const weekChartObject: SingularChartData = { ...data, data: monthData }
+      console.log('NEW DATA: ', weekChartObject)
+      console.log('ORIGINAL DATA: ', data)
       return weekChartObject
     }
     if (data && data.type === 'BarChart') {
-      const filteredData: { customer: string; hours: number }[] = []
+      const aggregatedData: { customer: string; hours: number }[] = []
       data.data.forEach((customer) => {
-        if (filteredData.indexOf(customer) < 0) {
-          filteredData.push({ customer: customer.customer, hours: 0 })
+        if (aggregatedData.indexOf(customer) < 0) {
+          aggregatedData.push({ customer: customer.customer, hours: 0 })
           if (data.weeklyData) {
             const currentCustomer = data.weeklyData.data.find((item) =>
               typeof item.id === 'string' ? item.id === customer.customer : null
@@ -134,16 +136,20 @@ const SingularChartCard = ({
                   regPeriod.x.includes('202143') ||
                   regPeriod.x.includes('202144')
                 ) {
-                  const customerIndex = filteredData.findIndex(
+                  const customerIndex = aggregatedData.findIndex(
                     (c) => c.customer === currentCustomer.id
                   )
-                  filteredData[customerIndex].hours += regPeriod.y
+                  aggregatedData[customerIndex].hours += regPeriod.y
                 }
               }
             })
           }
         }
       })
+
+      const filteredData = aggregatedData.filter(
+        (customer) => customer.hours !== 0
+      )
 
       const chartData: SingularChartData = {
         type: data.type,
