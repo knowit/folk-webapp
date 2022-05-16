@@ -3,7 +3,7 @@ import {
   MultipleChartData,
   SingularChartData,
 } from '@folk/common/types/chartTypes'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { FallbackMessage } from '../../pages/employee/components/FallbackMessage'
 import { GridItem } from '../gridItem/GridItem'
 import { GridItemContent } from '../gridItem/GridItemContent'
@@ -67,11 +67,7 @@ const SingularChartCard = ({
   const filterValues = ['Siste måned', 'Siste kvartal', 'Hittil i år', 'Totalt']
   const [selectedFilter, setSelectedFilter] = useState(filterValues[0])
 
-  useEffect(() => {
-    console.log(data)
-  })
   function getFilterData(filter: string): SingularChartData {
-    //Depending on the different filters, this function will return correct info to display in chart
     if (
       (data && data.type === 'LineChart') ||
       (data && data.type === 'BarChart')
@@ -93,8 +89,8 @@ const SingularChartCard = ({
     }
   }
 
-  //Function to show chart data for only in the current week (reg_period). Is static atm, must be updated to calculate current week and month automatically
   function findLastMonthData(): SingularChartData {
+    //Denne buggen kan være forårsaken at x-aksen ikke tegnes på nytt
     if (data && data.type === 'LineChart') {
       const monthData = data.data.map((customer) => {
         return {
@@ -103,19 +99,16 @@ const SingularChartCard = ({
             Object.keys(week).reduce((acc) => {
               return (
                 acc ||
-                (typeof week.x === 'string' &&
-                  (week.x.includes('202143') ||
-                    week.x.includes('202144') ||
-                    week.x.includes('202145') ||
-                    week.x.includes('202146')))
+                week.x.includes('202143') ||
+                week.x.includes('202144') ||
+                week.x.includes('202145') ||
+                week.x.includes('202146')
               )
             }, false)
           ),
         }
       })
       const weekChartObject: SingularChartData = { ...data, data: monthData }
-      console.log('NEW DATA: ', weekChartObject)
-      console.log('ORIGINAL DATA: ', data)
       return weekChartObject
     }
     if (data && data.type === 'BarChart') {
@@ -124,23 +117,18 @@ const SingularChartCard = ({
         if (aggregatedData.indexOf(customer) < 0) {
           aggregatedData.push({ customer: customer.customer, hours: 0 })
           if (data.weeklyData) {
-            const currentCustomer = data.weeklyData.data.find((item) =>
-              typeof item.id === 'string' ? item.id === customer.customer : null
+            const currentCustomer = data.weeklyData.data.find(
+              (item) => item.id === customer.customer
             )
             currentCustomer?.data.forEach((regPeriod) => {
               if (
-                typeof regPeriod.y === 'number' &&
-                typeof regPeriod.x === 'string'
+                regPeriod.x.includes('202143') ||
+                regPeriod.x.includes('202144')
               ) {
-                if (
-                  regPeriod.x.includes('202143') ||
-                  regPeriod.x.includes('202144')
-                ) {
-                  const customerIndex = aggregatedData.findIndex(
-                    (c) => c.customer === currentCustomer.id
-                  )
-                  aggregatedData[customerIndex].hours += regPeriod.y
-                }
+                const customerIndex = aggregatedData.findIndex(
+                  (c) => c.customer === currentCustomer.id
+                )
+                aggregatedData[customerIndex].hours += regPeriod.y
               }
             })
           }

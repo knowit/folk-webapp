@@ -41,8 +41,8 @@ export type LineChartData = {
   data: {
     id: string | number;
     data: Array<{
-      x: number | string | Date;
-      y: number | string | Date;
+      x: string;
+      y: number;
     }>;
   }[];
 };
