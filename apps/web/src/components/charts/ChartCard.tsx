@@ -117,15 +117,13 @@ const SingularChartCard = ({
       return weekChartObject
     }
     if (data && data.type === 'BarChart') {
-      const aggregatedData: { customer: string; hours: number }[] = []
-      //Bygge listen med timer i forhold til filter. Denne kan skilles ut i egen metode etterhvert
+      const filteredData: { customer: string; hours: number }[] = []
       data.data.forEach((customer) => {
-        if (!(customer in aggregatedData)) {
-          aggregatedData.push({ customer, hours: 0 })
-        } else {
+        if (filteredData.indexOf(customer) < 0) {
+          filteredData.push({ customer: customer.customer, hours: 0 })
           if (data.weeklyData) {
-            const currentCustomer = data.weeklyData.data.find(
-              (item) => item?.id === customer.name
+            const currentCustomer = data.weeklyData.data.find((item) =>
+              typeof item.id === 'string' ? item.id === customer.customer : null
             )
             currentCustomer?.data.forEach((regPeriod) => {
               if (
@@ -136,21 +134,24 @@ const SingularChartCard = ({
                   regPeriod.x.includes('202143') ||
                   regPeriod.x.includes('202144')
                 ) {
-                  aggregatedData[customer].hours += regPeriod.y
+                  const customerIndex = filteredData.findIndex(
+                    (c) => c.customer === currentCustomer.id
+                  )
+                  filteredData[customerIndex].hours += regPeriod.y
                 }
               }
             })
           }
         }
       })
-      console.log('DATA: ', aggregatedData)
 
       const chartData: SingularChartData = {
         type: data.type,
         indexBy: data.indexBy,
         keys: data.keys,
-        data: aggregatedData,
+        data: filteredData,
       }
+
       return chartData
     } else {
       return data
