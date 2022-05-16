@@ -89,26 +89,63 @@ const SingularChartCard = ({
     }
   }
 
+  function getYear() {
+    const currentDate = new Date()
+    const currentYear = currentDate.getFullYear()
+
+    return Number(currentYear)
+  }
+
+  function getWeek() {
+    const currentDate = new Date()
+    const oneJan = new Date(getYear(), 0, 1)
+    const numberOfDays = Math.floor(
+      (Number(currentDate) - Number(oneJan)) / (24 * 60 * 60 * 1000)
+    )
+    const currentWeekNumber = Math.ceil(
+      (currentDate.getDay() + 1 + numberOfDays) / 7
+    )
+
+    return currentWeekNumber.toString()
+  }
+
+  function getCurrentRegPeriod() {
+    const currYear = getYear()
+    const currWeek = getWeek()
+
+    const regPeriod: string = currYear.toString() + currWeek.toString()
+    return regPeriod
+  }
+
+  //Denne må bruke funksjonen getCurrentRegPeriod når tilstrekkelig med oppdatert testdata er lagt til slik filter fungerer med data fra nåtid.
   function findLastMonthData(): SingularChartData {
-    //Denne buggen kan være forårsaken at x-aksen ikke tegnes på nytt
+    console.log(getCurrentRegPeriod())
     if (data && data.type === 'LineChart') {
       const monthData = data.data.map((customer) => {
         return {
           ...customer,
-          data: customer.data.filter((week) =>
-            Object.keys(week).reduce((acc) => {
-              return (
-                acc ||
-                week.x.includes('202143') ||
-                week.x.includes('202144') ||
-                week.x.includes('202145') ||
-                week.x.includes('202146')
-              )
-            }, false)
-          ),
+          data: customer.data
+            .filter((week) =>
+              Object.keys(week).reduce((acc) => {
+                return (
+                  acc ||
+                  week.x.includes('202143') ||
+                  week.x.includes('202144') ||
+                  week.x.includes('202145') ||
+                  week.x.includes('202146')
+                )
+              }, false)
+            )
+            .sort((a, b) =>
+              Number(a.x.trim().toLowerCase()) >
+              Number(b.x.trim().toLowerCase())
+                ? 1
+                : -1
+            ),
         }
       })
       const weekChartObject: SingularChartData = { ...data, data: monthData }
+      console.log(weekChartObject)
       return weekChartObject
     }
     if (data && data.type === 'BarChart') {
@@ -135,9 +172,9 @@ const SingularChartCard = ({
         }
       })
 
-      const filteredData = aggregatedData.filter(
-        (customer) => customer.hours !== 0
-      )
+      const filteredData = aggregatedData
+        .filter((customer) => customer.hours !== 0)
+        .sort((a, b) => (a.hours < b.hours ? 1 : -1))
 
       const chartData: SingularChartData = {
         type: data.type,
