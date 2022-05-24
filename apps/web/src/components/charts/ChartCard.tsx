@@ -3,7 +3,7 @@ import {
   MultipleChartData,
   SingularChartData,
 } from '@folk/common/types/chartTypes'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FallbackMessage } from '../../pages/employee/components/FallbackMessage'
 import { GridItem } from '../gridItem/GridItem'
 import { GridItemContent } from '../gridItem/GridItemContent'
@@ -67,6 +67,10 @@ const SingularChartCard = ({
   const filterValues = ['Siste måned', 'Siste kvartal', 'Hittil i år', 'Totalt']
   const [selectedFilter, setSelectedFilter] = useState(filterValues[0])
 
+  useEffect(() => {
+    console.log(data)
+  })
+
   function getFilterData(filter: string): SingularChartData {
     if (
       (data && data.type === 'LineChart') ||
@@ -89,11 +93,20 @@ const SingularChartCard = ({
     }
   }
 
+  function findLastQuarterData() {
+    const sortedData = data.data.sort((a, b) =>
+      Number(a.x) > Number(b.x) ? 1 : -1
+    )
+    const sortedObject: SingularChartData = { ...data, data: sortedData }
+    console.log(sortedData)
+    return sortedObject
+  }
+
   function getYear() {
     const currentDate = new Date()
     const currentYear = currentDate.getFullYear()
 
-    return Number(currentYear)
+    return currentYear
   }
 
   function getWeek() {
@@ -113,13 +126,12 @@ const SingularChartCard = ({
     const currYear = getYear()
     const currWeek = getWeek()
 
-    const regPeriod: string = currYear.toString() + currWeek.toString()
+    const regPeriod: string = currYear + currWeek
     return regPeriod
   }
 
   //Denne må bruke funksjonen getCurrentRegPeriod når tilstrekkelig med oppdatert testdata er lagt til slik filter fungerer med data fra nåtid.
   function findLastMonthData(): SingularChartData {
-    console.log(getCurrentRegPeriod())
     if (data && data.type === 'LineChart') {
       const monthData = data.data.map((customer) => {
         return {
