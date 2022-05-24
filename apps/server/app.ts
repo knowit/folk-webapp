@@ -6,7 +6,7 @@ import { apiRouterV2 } from './routers/routers'
 
 const app = express()
 
-// Register middleware
+// Register Middleware
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -22,7 +22,6 @@ app.use((req, res, next) => {
     status: 404,
     message: `Endpoint was not found.`,
   }
-
   next(err)
 })
 
