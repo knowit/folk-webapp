@@ -154,22 +154,14 @@ const SingularChartCard = ({
       return data
     }
   }
-  /*
-        const sortedData = data.data.map((customer) => {
-        customer.data.sort((a, b) => (Number(a.x) > Number(b.x) ? 1 : -1))
-        return customer
-      })
-      const sortedObject: SingularChartData = { ...data, data: sortedData }
-  * */
 
-  /* function getYear() {
+  /* function getYear(){
     const currentDate = new Date()
     const currentYear = currentDate.getFullYear()
-
     return currentYear
   }
 
-  function getWeek() {
+  function getWeek(){
     const currentDate = new Date()
     const oneJan = new Date(getYear(), 0, 1)
     const numberOfDays = Math.floor(
@@ -178,14 +170,12 @@ const SingularChartCard = ({
     const currentWeekNumber = Math.ceil(
       (currentDate.getDay() + 1 + numberOfDays) / 7
     )
-
     return currentWeekNumber.toString()
   }
 
-  function getCurrentRegPeriod() {
+  function getCurrentRegPeriod(){
     const currYear = getYear()
     const currWeek = getWeek()
-
     const regPeriod: string = currYear + currWeek
     return regPeriod
   }*/
