@@ -3,7 +3,7 @@ import {
   MultipleChartData,
   SingularChartData,
 } from '@folk/common/types/chartTypes'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { FallbackMessage } from '../../pages/employee/components/FallbackMessage'
 import { GridItem } from '../gridItem/GridItem'
 import { GridItemContent } from '../gridItem/GridItemContent'
@@ -67,24 +67,21 @@ const SingularChartCard = ({
   const filterValues = ['Siste måned', 'Siste kvartal', 'Hittil i år', 'Totalt']
   const [selectedFilter, setSelectedFilter] = useState(filterValues[0])
 
-  useEffect(() => {
-    console.log(data)
-  })
-
   function getFilterData(filter: string): SingularChartData {
     if (
       (data && data.type === 'LineChart') ||
       (data && data.type === 'BarChart')
     ) {
+      //To be used with getCurrentRegPeriod() to generate list of regPeriods.
       switch (filter) {
         case 'Siste måned':
-          return findLastMonthData()
+          return findFilteredData(['202143', '202144', '202145', '202146'])
         case 'Siste kvartal':
-          return findLastQuarterData()
+          return findFilteredData(['202143', '202144', '202146'])
         case 'Hittil i år':
-          return data
+          return findFilteredData()
         case 'Totalt':
-          return data
+          return findFilteredData()
         default:
           return data
       }
@@ -93,22 +90,77 @@ const SingularChartCard = ({
     }
   }
 
-  function findLastQuarterData() {
+  //Generic function to filter data based on regPeriods provided.
+  const findFilteredData = (regPeriods?: string[]): SingularChartData => {
+    if (regPeriods === null) return data
     if (data && data.type === 'LineChart') {
-      const sortedData = data.data.map((customer) => {
-        customer.data.sort((a, b) => (Number(a.x) > Number(b.x) ? 1 : -1))
-        return customer
+      const monthData = data.data.map((customer) => {
+        return {
+          ...customer,
+          data: customer.data
+            .filter((week) =>
+              Object.keys(week).reduce((acc) => {
+                return acc || regPeriods.includes(week.x)
+              }, false)
+            )
+            .sort((a, b) =>
+              Number(a.x.trim().toLowerCase()) >
+              Number(b.x.trim().toLowerCase())
+                ? 1
+                : -1
+            ),
+        }
       })
-      const sortedObject: SingularChartData = { ...data, data: sortedData }
-      console.log(sortedData)
-      return sortedObject
+      const weekChartObject: SingularChartData = {
+        ...data,
+        data: monthData,
+      }
+      return weekChartObject
     }
     if (data && data.type === 'BarChart') {
-      return data
+      const aggregatedData: { customer: string; hours: number }[] = []
+      data.data.forEach((customer) => {
+        if (aggregatedData.indexOf(customer) < 0) {
+          aggregatedData.push({ customer: customer.customer, hours: 0 })
+          if (data.weeklyData) {
+            const currentCustomer = data.weeklyData.data.find(
+              (item) => item.id === customer.customer
+            )
+            currentCustomer?.data.forEach((regPeriod) => {
+              if (regPeriods.includes(regPeriod.x)) {
+                const customerIndex = aggregatedData.findIndex(
+                  (c) => c.customer === currentCustomer.id
+                )
+                aggregatedData[customerIndex].hours += regPeriod.y
+              }
+            })
+          }
+        }
+      })
+
+      const filteredData = aggregatedData
+        .filter((customer) => customer.hours !== 0)
+        .sort((a, b) => (a.hours < b.hours ? 1 : -1))
+
+      const chartData: SingularChartData = {
+        type: data.type,
+        indexBy: data.indexBy,
+        keys: data.keys,
+        data: filteredData,
+      }
+
+      return chartData
     } else {
       return data
     }
   }
+  /*
+        const sortedData = data.data.map((customer) => {
+        customer.data.sort((a, b) => (Number(a.x) > Number(b.x) ? 1 : -1))
+        return customer
+      })
+      const sortedObject: SingularChartData = { ...data, data: sortedData }
+  * */
 
   /* function getYear() {
     const currentDate = new Date()
@@ -137,77 +189,6 @@ const SingularChartCard = ({
     const regPeriod: string = currYear + currWeek
     return regPeriod
   }*/
-
-  //Denne må bruke funksjonen getCurrentRegPeriod når tilstrekkelig med oppdatert testdata er lagt til slik filter fungerer med data fra nåtid.
-  function findLastMonthData(): SingularChartData {
-    if (data && data.type === 'LineChart') {
-      const monthData = data.data.map((customer) => {
-        return {
-          ...customer,
-          data: customer.data
-            .filter((week) =>
-              Object.keys(week).reduce((acc) => {
-                return (
-                  acc ||
-                  week.x.includes('202143') ||
-                  week.x.includes('202144') ||
-                  week.x.includes('202145') ||
-                  week.x.includes('202146')
-                )
-              }, false)
-            )
-            .sort((a, b) =>
-              Number(a.x.trim().toLowerCase()) >
-              Number(b.x.trim().toLowerCase())
-                ? 1
-                : -1
-            ),
-        }
-      })
-      const weekChartObject: SingularChartData = { ...data, data: monthData }
-      console.log(weekChartObject)
-      return weekChartObject
-    }
-    if (data && data.type === 'BarChart') {
-      const aggregatedData: { customer: string; hours: number }[] = []
-      data.data.forEach((customer) => {
-        if (aggregatedData.indexOf(customer) < 0) {
-          aggregatedData.push({ customer: customer.customer, hours: 0 })
-          if (data.weeklyData) {
-            const currentCustomer = data.weeklyData.data.find(
-              (item) => item.id === customer.customer
-            )
-            currentCustomer?.data.forEach((regPeriod) => {
-              if (
-                regPeriod.x.includes('202143') ||
-                regPeriod.x.includes('202144')
-              ) {
-                const customerIndex = aggregatedData.findIndex(
-                  (c) => c.customer === currentCustomer.id
-                )
-                aggregatedData[customerIndex].hours += regPeriod.y
-              }
-            })
-          }
-        }
-      })
-
-      const filteredData = aggregatedData
-        .filter((customer) => customer.hours !== 0)
-        .sort((a, b) => (a.hours < b.hours ? 1 : -1))
-
-      const chartData: SingularChartData = {
-        type: data.type,
-        indexBy: data.indexBy,
-        keys: data.keys,
-        data: filteredData,
-      }
-
-      return chartData
-    } else {
-      return data
-    }
-  }
 
   return (
     <GridItem fullSize={fullSize}>
