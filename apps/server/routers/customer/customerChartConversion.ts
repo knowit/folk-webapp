@@ -46,7 +46,6 @@ export const hoursBilledPerCustomer = (
 
   const weeklyData: LineChartData['data'] = getHoursBilledPerWeek(data)
   const lineChartData: LineChartData = { type: 'LineChart', data: weeklyData }
-
   const output: BarChartData = {
     type: 'BarChart',
     indexBy: 'customer',

@@ -80,7 +80,7 @@ const SingularChartCard = ({
         case 'Siste måned':
           return findLastMonthData()
         case 'Siste kvartal':
-          return data
+          return findLastQuarterData()
         case 'Hittil i år':
           return data
         case 'Totalt':
@@ -94,15 +94,23 @@ const SingularChartCard = ({
   }
 
   function findLastQuarterData() {
-    const sortedData = data.data.sort((a, b) =>
-      Number(a.x) > Number(b.x) ? 1 : -1
-    )
-    const sortedObject: SingularChartData = { ...data, data: sortedData }
-    console.log(sortedData)
-    return sortedObject
+    if (data && data.type === 'LineChart') {
+      const sortedData = data.data.map((customer) => {
+        customer.data.sort((a, b) => (Number(a.x) > Number(b.x) ? 1 : -1))
+        return customer
+      })
+      const sortedObject: SingularChartData = { ...data, data: sortedData }
+      console.log(sortedData)
+      return sortedObject
+    }
+    if (data && data.type === 'BarChart') {
+      return data
+    } else {
+      return data
+    }
   }
 
-  function getYear() {
+  /* function getYear() {
     const currentDate = new Date()
     const currentYear = currentDate.getFullYear()
 
@@ -128,7 +136,7 @@ const SingularChartCard = ({
 
     const regPeriod: string = currYear + currWeek
     return regPeriod
-  }
+  }*/
 
   //Denne må bruke funksjonen getCurrentRegPeriod når tilstrekkelig med oppdatert testdata er lagt til slik filter fungerer med data fra nåtid.
   function findLastMonthData(): SingularChartData {

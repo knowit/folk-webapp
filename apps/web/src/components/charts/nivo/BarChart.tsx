@@ -57,88 +57,94 @@ type Props<RawDatum extends BarDatum> = Omit<
 > &
   IsBigProps
 
-const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => (
-  <div style={{ width: '100%', height: isBig ? '400px' : '300px' }}>
-    <ResponsiveBar
-      margin={{ top: 40, right: 20, bottom: 65, left: 30 }}
-      enableLabel={false}
-      colors={chartColors}
-      borderRadius={3}
-      groupMode="grouped"
-      key={props.data.length}
-      legendLabel={(data) => {
-        if (data) {
-          const label = Translation[data.id] ?? data.id
-          return label as string
-        }
-        return ''
-      }}
-      tooltip={({ indexValue, value, id }) => {
-        // Har coded to fit competenceAmount/Proportion. Should be updated some day.
-        if (id.toString().includes('Proportion' || 'Amount')) {
-          const dataSet: any = props.data.find(
-            (i: any) => i.category === indexValue
-          )
+const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
+  const findMaxValue = props?.data?.reduce(function (prev, current) {
+    return prev.hours > current.hours ? prev : current
+  })
+  return (
+    <div style={{ width: '100%', height: isBig ? '400px' : '300px' }}>
+      <ResponsiveBar
+        margin={{ top: 40, right: 20, bottom: 65, left: 30 }}
+        enableLabel={false}
+        colors={chartColors}
+        borderRadius={3}
+        groupMode="grouped"
+        key={props.data.length}
+        legendLabel={(data) => {
+          if (data) {
+            const label = Translation[data.id] ?? data.id
+            return label as string
+          }
+          return ''
+        }}
+        maxValue={Number(findMaxValue.hours) + 5} //Need extra space for bars to stay under max value in xAxis
+        tooltip={({ indexValue, value, id }) => {
+          // Har coded to fit competenceAmount/Proportion. Should be updated some day.
+          if (id.toString().includes('Proportion' || 'Amount')) {
+            const dataSet: any = props.data.find(
+              (i: any) => i.category === indexValue
+            )
 
-          const key = id.toString().includes('motivation')
-            ? 'motivation'
-            : 'competence'
+            const key = id.toString().includes('motivation')
+              ? 'motivation'
+              : 'competence'
 
-          const objectKey =
-            key === 'motivation' ? 'motivationAmount' : 'competenceAmount'
+            const objectKey =
+              key === 'motivation' ? 'motivationAmount' : 'competenceAmount'
 
-          const totalEmployees = dataSet ? dataSet[objectKey] : 0
+            const totalEmployees = dataSet ? dataSet[objectKey] : 0
 
-          return (
-            <div
-              style={{
-                padding: '6px',
-                backgroundColor: 'white',
-                borderRadius: '4px',
-                boxShadow:
-                  '1px 1px rgba(0,0,0,0.1), -1px 0px 1px rgba(0,0,0,0.1)',
-              }}
-            >
-              <b>{indexValue}:</b>
-              <br /> <b>{Translation[key] ?? key}</b>
-              <br /> Antall ansatte: {totalEmployees}
-              <br /> Andel: {value.toFixed(1)}%
-            </div>
-          )
-        } else {
-          return (
-            <div
-              style={{
-                padding: '6px',
-                backgroundColor: 'white',
-                borderRadius: '4px',
-                boxShadow:
-                  '1px 1px rgba(0,0,0,0.1), -1px 0px 1px rgba(0,0,0,0.1)',
-              }}
-            >
-              <b>{indexValue}:</b>
-              <br /> {Translation[id] ?? id}: {value.toFixed(1)}
-            </div>
-          )
-        }
-      }}
-      axisBottom={{
-        renderTick: CustomTick,
-      }}
-      legends={[
-        {
-          dataFrom: 'keys',
-          anchor: 'top',
-          direction: 'row',
-          itemHeight: 10,
-          itemWidth: 130,
-          translateY: -25,
-          itemsSpacing: 15,
-        },
-      ]}
-      {...props}
-    />
-  </div>
-)
+            return (
+              <div
+                style={{
+                  padding: '6px',
+                  backgroundColor: 'white',
+                  borderRadius: '4px',
+                  boxShadow:
+                    '1px 1px rgba(0,0,0,0.1), -1px 0px 1px rgba(0,0,0,0.1)',
+                }}
+              >
+                <b>{indexValue}:</b>
+                <br /> <b>{Translation[key] ?? key}</b>
+                <br /> Antall ansatte: {totalEmployees}
+                <br /> Andel: {value.toFixed(1)}%
+              </div>
+            )
+          } else {
+            return (
+              <div
+                style={{
+                  padding: '6px',
+                  backgroundColor: 'white',
+                  borderRadius: '4px',
+                  boxShadow:
+                    '1px 1px rgba(0,0,0,0.1), -1px 0px 1px rgba(0,0,0,0.1)',
+                }}
+              >
+                <b>{indexValue}:</b>
+                <br /> {Translation[id] ?? id}: {value.toFixed(1)}
+              </div>
+            )
+          }
+        }}
+        axisBottom={{
+          renderTick: CustomTick,
+        }}
+        legends={[
+          {
+            dataFrom: 'keys',
+            anchor: 'top',
+            direction: 'row',
+            itemHeight: 10,
+            itemWidth: 130,
+            translateY: -25,
+            itemsSpacing: 15,
+          },
+        ]}
+        {...props}
+      />
+    </div>
+  )
+}
 
 export default BarChart
