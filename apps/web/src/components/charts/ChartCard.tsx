@@ -83,7 +83,7 @@ const SingularChartCard = ({
         case 'Totalt':
           return findFilteredData()
         default:
-          return data
+          return findFilteredData()
       }
     } else {
       return data
@@ -92,7 +92,10 @@ const SingularChartCard = ({
 
   //Generic function to filter data based on regPeriods provided.
   const findFilteredData = (regPeriods?: string[]): SingularChartData => {
-    if (regPeriods === null) return data
+    if (regPeriods === undefined || regPeriods.length === 0) {
+      return data
+    }
+
     if (data && data.type === 'LineChart') {
       const monthData = data.data.map((customer) => {
         const filteredData = customer.data
@@ -116,7 +119,6 @@ const SingularChartCard = ({
         ...data,
         data: monthData,
       }
-
       return weekChartObject
     }
 
@@ -151,7 +153,6 @@ const SingularChartCard = ({
         keys: data.keys,
         data: filteredData,
       }
-
       return chartData
     } else {
       return data
