@@ -95,28 +95,31 @@ const SingularChartCard = ({
     if (regPeriods === null) return data
     if (data && data.type === 'LineChart') {
       const monthData = data.data.map((customer) => {
+        const filteredData = customer.data
+          .filter((week) =>
+            Object.keys(week).reduce((acc) => {
+              return acc || regPeriods.includes(week.x)
+            }, false)
+          )
+          .sort((a, b) =>
+            Number(a.x.trim().toLowerCase()) > Number(b.x.trim().toLowerCase())
+              ? 1
+              : -1
+          )
         return {
           ...customer,
-          data: customer.data
-            .filter((week) =>
-              Object.keys(week).reduce((acc) => {
-                return acc || regPeriods.includes(week.x)
-              }, false)
-            )
-            .sort((a, b) =>
-              Number(a.x.trim().toLowerCase()) >
-              Number(b.x.trim().toLowerCase())
-                ? 1
-                : -1
-            ),
+          data: filteredData,
         }
       })
+
       const weekChartObject: SingularChartData = {
         ...data,
         data: monthData,
       }
+
       return weekChartObject
     }
+
     if (data && data.type === 'BarChart') {
       const aggregatedData: { customer: string; hours: number }[] = []
       data.data.forEach((customer) => {
