@@ -24,7 +24,6 @@ jobs:
       - name: Install serverless
         run: npm install -g serverless
       - name: Install server dependencies
-        working-directory: apps/server
         run: yarn workspaces focus server
       - uses: softprops/turnstyle@v1
         env:
