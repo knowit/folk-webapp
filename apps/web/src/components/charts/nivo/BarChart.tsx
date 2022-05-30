@@ -58,9 +58,17 @@ type Props<RawDatum extends BarDatum> = Omit<
   IsBigProps
 
 const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
-  const findMaxValue = props?.data?.reduce(function (prev, current) {
-    return prev.hours > current.hours ? prev : current
-  })
+  const findMaxValue = (): number => {
+    if (props && props.data.length > 0) {
+      const maxValue = props?.data?.reduce(function (prev, current) {
+        return prev.hours > current.hours ? prev : current
+      })
+      return Number(maxValue) + 5
+    } else {
+      return Number(props.maxValue)
+    }
+  }
+
   return (
     <div style={{ width: '100%', height: isBig ? '400px' : '300px' }}>
       <ResponsiveBar
@@ -77,7 +85,7 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
           }
           return ''
         }}
-        maxValue={Number(findMaxValue.hours) + 5} //Need extra space for bars to stay under max value in xAxis
+        maxValue={findMaxValue()} //Need extra space for bars to stay under max value in xAxis
         tooltip={({ indexValue, value, id }) => {
           // Har coded to fit competenceAmount/Proportion. Should be updated some day.
           if (id.toString().includes('Proportion' || 'Amount')) {
