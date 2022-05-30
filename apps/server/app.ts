@@ -5,6 +5,7 @@ import { errorHandler, NotFoundError } from './middlewares/errorHandling'
 import { apiRouterV2 } from './routers/routers'
 
 const app = express()
+console.log("trigger deploy")
 
 // Register Middleware
 app.use(cookieParser())
