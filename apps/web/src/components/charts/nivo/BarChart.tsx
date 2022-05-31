@@ -59,6 +59,7 @@ type Props<RawDatum extends BarDatum> = Omit<
 
 const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
   const [maxY, setMaxY] = useState(0)
+
   function getStandardDeviation(array) {
     const n = array.length
     const mean = array.reduce((a, b) => a + b) / n
@@ -66,6 +67,7 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
       array.map((x) => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n
     )
   }
+
   useEffect(() => {
     if (props.data.length > 0) {
       const yValues = props.data.map((customer) => customer.hours)
