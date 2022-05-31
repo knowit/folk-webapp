@@ -67,7 +67,7 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
     )
   }
   useEffect(() => {
-    if (props && props.data.length > 0) {
+    if (props.data.length > 0) {
       const yValues = props.data.map((customer) => customer.hours)
       const maxValue = yValues.reduce((v1, v2) =>
         Number(v1) > Number(v2) ? Number(v1) : Number(v2)
