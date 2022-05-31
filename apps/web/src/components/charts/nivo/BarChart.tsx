@@ -1,5 +1,5 @@
 import { BarDatum, BarSvgProps, ResponsiveBar } from '@nivo/bar'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Translation } from '../../../utils/translation'
 import { chartColors, IsBigProps } from './common'
 
@@ -58,16 +58,21 @@ type Props<RawDatum extends BarDatum> = Omit<
   IsBigProps
 
 const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
-  const findMaxValue = (): number => {
-    if (props && props.data.length > 0) {
-      const maxValue = props?.data?.reduce(function (prev, current) {
-        return prev.hours > current.hours ? prev : current
-      })
-      return Number(maxValue) + 5
-    } else {
-      return Number(props.maxValue)
-    }
+  const [maxY, setMaxY] = useState(0)
+  function getStandardDeviation(array) {
+    const n = array.length
+    const mean = array.reduce((a, b) => a + b) / n
+    return Math.sqrt(
+      array.map((x) => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n
+    )
   }
+  useEffect(() => {
+    const yValues = props.data.map((customer) => customer.hours)
+    const maxValue = yValues.reduce((v1, v2) =>
+      Number(v1) > Number(v2) ? Number(v1) : Number(v2)
+    )
+    setMaxY(Number(maxValue) + getStandardDeviation(yValues))
+  }, [props.data])
 
   return (
     <div style={{ width: '100%', height: isBig ? '400px' : '300px' }}>
@@ -85,7 +90,7 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
           }
           return ''
         }}
-        maxValue={findMaxValue()} //Need extra space for bars to stay under max value in xAxis
+        maxValue={maxY} //Need extra space for bars to stay under max value in xAxis
         tooltip={({ indexValue, value, id }) => {
           // Har coded to fit competenceAmount/Proportion. Should be updated some day.
           if (id.toString().includes('Proportion' || 'Amount')) {
