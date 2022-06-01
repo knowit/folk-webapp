@@ -29,9 +29,7 @@ const MultipleChartCard = ({
   const [selectedChartIndex, setSelectedChartIndex] = useState(0)
   const [isBig, setIsBig] = useState(false)
 
-  const selectedGroup = groups.find(
-    (group) => group.name === selectedGroupName
-  )!
+  const selectedGroup = groups.find((group) => group.name === selectedGroupName)
 
   return (
     <GridItem fullSize={fullSize}>
@@ -47,7 +45,7 @@ const MultipleChartCard = ({
       <GridItemContent>
         {/* Sub header containing toggle of charts as well as increase size button */}
         <ChartDisplayOptions>
-          {selectedGroup.charts.length > 1 && (
+          {selectedGroup && selectedGroup.charts.length > 1 && (
             <ChartVariantToggle
               chartVariants={selectedGroup.charts.map((chart) => ({
                 type: chart.type,
