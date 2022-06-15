@@ -1,30 +1,9 @@
 import { BarChartData, LineChartData } from '../chartTypes'
 import { BilledCustomerHours } from './customerTypes'
 
-export const hoursBilledPerCustomer = (
+function getHoursBilledPerWeek(
   data: BilledCustomerHours[]
-): BarChartData => {
-  const aggregatedData = {}
-
-  for (const { customer, hours } of data) {
-    if (!(customer in aggregatedData)) {
-      aggregatedData[customer] = { customer, hours }
-    } else {
-      aggregatedData[customer].hours += hours
-    }
-  }
-
-  return {
-    type: 'BarChart',
-    indexBy: 'customer',
-    keys: ['hours'],
-    data: Object.values(aggregatedData),
-  }
-}
-
-export const hoursBilledPerWeek = (
-  data: BilledCustomerHours[]
-): LineChartData => {
+): LineChartData['data'] {
   const aggregationMap: Record<string, Record<string, number>> = {}
 
   // Build map of customers and aggregate all hours for all weeks
@@ -49,6 +28,39 @@ export const hoursBilledPerWeek = (
     }
     output.push({ id: customer, data: dataList })
   }
+  return output
+}
+
+export const hoursBilledPerCustomer = (
+  data: BilledCustomerHours[]
+): BarChartData => {
+  const aggregatedData = {}
+
+  for (const { customer, hours } of data) {
+    if (!(customer in aggregatedData)) {
+      aggregatedData[customer] = { customer, hours }
+    } else {
+      aggregatedData[customer].hours += hours
+    }
+  }
+
+  const weeklyData: LineChartData['data'] = getHoursBilledPerWeek(data)
+  const lineChartData: LineChartData = { type: 'LineChart', data: weeklyData }
+  const output: BarChartData = {
+    type: 'BarChart',
+    indexBy: 'customer',
+    keys: ['hours'],
+    data: Object.values(aggregatedData),
+    weeklyData: lineChartData,
+  } as BarChartData
+
+  return output
+}
+
+export const hoursBilledPerWeek = (
+  data: BilledCustomerHours[]
+): LineChartData => {
+  const output: LineChartData['data'] = getHoursBilledPerWeek(data)
 
   return { type: 'LineChart', data: output }
 }

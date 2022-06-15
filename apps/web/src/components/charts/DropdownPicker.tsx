@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Select, InputBase, MenuItem, Fade } from '@material-ui/core'
+import { Fade, InputBase, MenuItem, Select } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 type ValueType = { displayValue: string; value: any } | string
@@ -133,7 +133,7 @@ export default function DropdownPicker({
       values
         .map((x) => getDisplayValue(x))
         .reduce((prev, next) => (prev.length > next.length ? prev : next), ''),
-      big ? '25pt arial' : '16pt arial'
+      big ? '25pt arial' : '19pt arial'
     ) + 46
   const smallClasses = useStyles({ width })
   const bigClasses = useBigStyles({ width })

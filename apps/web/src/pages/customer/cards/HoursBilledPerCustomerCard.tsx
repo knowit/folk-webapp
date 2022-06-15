@@ -1,15 +1,18 @@
 import React from 'react'
-import { useHoursBilledPerCustomerCharts } from '../../../api/data/customer/customerQueries'
 import ChartCard from '../../../components/charts/ChartCard'
+import { useHoursBilledPerCustomerCharts } from '../../../api/data/customer/customerQueries'
+import { POSSIBLE_OLD_DATA_WARNING } from './messages'
 
 const HoursBilledPerCustomerCard = () => {
   const { data, error } = useHoursBilledPerCustomerCharts()
+
   return (
     <ChartCard
       title="Timer brukt per kunde"
-      description="Dataene er fra første registrering i UBW og kan derfor være unøyaktige."
+      description={POSSIBLE_OLD_DATA_WARNING}
       data={data}
       error={error}
+      showFilter={false}
     />
   )
 }

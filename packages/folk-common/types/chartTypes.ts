@@ -1,61 +1,62 @@
 export type ChartData =
   | MultipleChartData<SingularChartData[]>
-  | SingularChartData
+  | SingularChartData;
 
 export type MultipleChartData<
   T extends SingularChartData[] = SingularChartData[]
 > = {
-  type: "MultipleChart"
-  groups: ChartGroup<T>[]
-}
+  type: "MultipleChart";
+  groups: ChartGroup<T>[];
+};
 
 export type ChartGroup<T extends SingularChartData[] = SingularChartData[]> = {
-  name: string
-  charts: T
-}
+  name: string;
+  charts: T;
+};
 
 export type SingularChartData =
   | BarChartData
   | RadarChartData
   | LineChartData
   | PieChartData
-  | SunburstChartData
+  | SunburstChartData;
 
 export interface BarChartData {
-  type: "BarChart"
-  indexBy: string
-  keys: string[]
-  data: any[]
+  type: "BarChart";
+  indexBy: string;
+  keys: string[];
+  data: any[];
+  weeklyData?: LineChartData;
 }
 
 export interface RadarChartData {
-  type: "RadarChart"
-  indexBy: string
-  keys: string[]
-  data: any[]
+  type: "RadarChart";
+  indexBy: string;
+  keys: string[];
+  data: any[];
 }
 
 export type LineChartData = {
-  type: "LineChart"
+  type: "LineChart";
   data: {
-    id: string | number
+    id: string | number;
     data: Array<{
-      x: number | string | Date
-      y: number | string | Date
-    }>
-  }[]
-}
+      x: string;
+      y: number;
+    }>;
+  }[];
+};
 
 export interface PieChartData {
-  type: "PieChart"
-  id: string
-  value: string
-  data: any[]
+  type: "PieChart";
+  id: string;
+  value: string;
+  data: any[];
 }
 
 export interface SunburstChartData {
-  type: "SunburstChart"
-  id: string
-  value: string
-  data: any[]
+  type: "SunburstChart";
+  id: string;
+  value: string;
+  data: any[];
 }

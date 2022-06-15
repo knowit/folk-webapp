@@ -4,12 +4,12 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Box,
 } from '@material-ui/core'
 import { Minimize, Add, OpenInNew } from '@material-ui/icons'
 import React, { useState } from 'react'
 import { EmployeeForCustomerList } from '../../../api/data/customer/customerApiTypes'
-import { GridItem } from '../../../components/gridItem/GridItem'
-import DataTable from '../../../components/table/DataTable'
+import { VirtualizedTable } from '../../../components/table/DataTable'
 import { Column } from '../../../components/table/tableTypes'
 
 const useStyles = makeStyles(() =>
@@ -42,9 +42,17 @@ export function CustomerAccordion({
   const classes = useStyles()
 
   return (
-    <GridItem fullSize>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: 'max-content',
+        width: '100%',
+        flex: '1',
+      }}
+    >
       <Accordion
-        style={{ paddingTop: '5px', width: '100%' }}
+        style={{ marginTop: '5px', width: '100%' }}
         expanded={expanded}
         onChange={() => setExpanded(!expanded)}
         square={true}
@@ -53,21 +61,31 @@ export function CustomerAccordion({
           className={classes.accordionSummary}
           expandIcon={expanded ? <Minimize /> : <Add />}
         >
-          {customerName}
-          <OpenInNew
-            className={'openNewIconAccordion'}
-            style={{ marginLeft: '15px' }}
-            onClick={(e) => {
-              e.stopPropagation() /* todo show kundeflik */
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              width: '65%',
             }}
-          />
+          >
+            <div>
+              {customerName}
+              <OpenInNew
+                className={'openNewIconAccordion'}
+                style={{ marginLeft: '15px' }}
+                onClick={(e) => {
+                  e.stopPropagation() /* todo show kundeflik */
+                }}
+              />
+            </div>
+            <div>Antall konsulenter: {employees.length}</div>
+          </Box>
         </AccordionSummary>
         <AccordionDetails className={classes.accordionDetails}>
-          <GridItem fullSize={true}>
-            <DataTable rows={employees} columns={columns} />
-          </GridItem>
+          <VirtualizedTable rows={employees} columns={columns} />
         </AccordionDetails>
       </Accordion>
-    </GridItem>
+    </Box>
   )
 }

@@ -9,7 +9,6 @@ const CustomerCardList = () => {
   if (!data) {
     return <Skeleton variant="rect" height={780} animation="wave" />
   }
-
   return (
     <>
       {data.map((customer) => (

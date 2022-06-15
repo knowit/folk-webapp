@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { Grid } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import { GridItem } from '../../../components/gridItem/GridItem'
 import {
@@ -97,7 +97,7 @@ export default function CustomerList() {
   }
 
   return (
-    <Grid container>
+    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       {isLoading ? (
         <Skeleton width={'100%'} animation="wave" />
       ) : (
@@ -110,6 +110,6 @@ export default function CustomerList() {
       )}
 
       {getCustomerAccordions()}
-    </Grid>
+    </Box>
   )
 }
