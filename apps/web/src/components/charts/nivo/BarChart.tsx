@@ -78,10 +78,17 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
     }
   }, [props.data])
 
+  const bigLeftMargin = Math.floor(maxY) >= 10000
+
   return (
     <div style={{ width: '100%', height: isBig ? '400px' : '300px' }}>
       <ResponsiveBar
-        margin={{ top: 40, right: 20, bottom: 65, left: 30 }}
+        margin={{
+          top: 40,
+          right: 20,
+          bottom: 65,
+          left: bigLeftMargin ? 55 : 30,
+        }}
         enableLabel={false}
         colors={chartColors}
         borderRadius={3}
