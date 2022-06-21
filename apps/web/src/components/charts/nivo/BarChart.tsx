@@ -101,7 +101,7 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
           }
           return ''
         }}
-        maxValue={maxY} //Need extra space for bars to stay under max value in xAxis
+        maxValue={maxY > 0 ? maxY : 'auto'} //Need extra space for bars to stay under max value in xAxis
         tooltip={({ indexValue, value, id }) => {
           // Har coded to fit competenceAmount/Proportion. Should be updated some day.
           if (id.toString().includes('Proportion' || 'Amount')) {
