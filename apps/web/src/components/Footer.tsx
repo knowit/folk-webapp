@@ -33,8 +33,8 @@ export default function Footer() {
   return (
     <footer className={classes.footer}>
       <p>
-        Knowit Folk. Lakkegata 53, 0178 Oslo &ensp;|&ensp; Tlf. 02486 &ensp;|
-        &ensp;
+        Knowit Folk. Universitetsgata 7, 0164 Oslo &ensp;|&ensp; Tlf. 02486
+        &ensp;| &ensp;
         <a className={classes.link} href={improvementsHref}>
           Kontakt og tilbakemeldinger
         </a>
