@@ -59,11 +59,11 @@ const statusDisplayDetails: StatusDisplayDetails = {
     label: 'Opptatt i ekstern prosjekt',
   },
   [ProjectStatus.OpenForChange]: {
-    color: '#FFD500',
+    color: '#4C8E00',
     label: 'Åpen for å bytte prosjekt',
   },
   [ProjectStatus.WantChange]: {
-    color: '#FF8800',
+    color: '#4C8E00',
     label: 'Ønsker å bytte prosjekt',
   },
   [ProjectStatus.NoProject]: {
