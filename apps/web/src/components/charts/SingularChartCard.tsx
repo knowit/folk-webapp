@@ -48,7 +48,7 @@ function getWeek(fromDate?: Date): number {
 }
 
 /** Returns number of first week of current quarter */
-const getWeekOfQuarter = () => {
+function getWeekOfQuarter() {
   const currDate = overrideDate || new Date()
   const quarter = Math.ceil(currDate.getMonth() / 3) - 1
   const month = [0, 3, 6, 9][quarter]
@@ -57,14 +57,14 @@ const getWeekOfQuarter = () => {
 }
 
 /** Returns number of first week of current month */
-const getWeekOfMonth = () => {
+function getWeekOfMonth() {
   const currDate = overrideDate || new Date()
 
   return getWeek(new Date(currDate.getFullYear(), currDate.getMonth(), 1))
 }
 
 /** Returns a list of sequential reg periods (year + week number), starting from @fromWeek to current reg period */
-const getRegPeriodsFromWeek = (fromWeek: number): string[] => {
+function getRegPeriodsFromWeek(fromWeek: number): string[] {
   const currDate = overrideDate || new Date()
   const currYear = currDate.getFullYear()
   const currWeek = getWeek()
