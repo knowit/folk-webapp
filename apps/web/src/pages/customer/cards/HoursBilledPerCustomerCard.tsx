@@ -12,7 +12,7 @@ const HoursBilledPerCustomerCard = () => {
       description={POSSIBLE_OLD_DATA_WARNING}
       data={data}
       error={error}
-      showFilter={false}
+      showFilter={true}
     />
   )
 }
