@@ -78,8 +78,6 @@ const getRegPeriodsFromWeek = (fromWeek: number): string[] => {
 
 function getRegPeriods(filter: FilterOptions) {
   switch (filter) {
-    case 'Siste uke':
-      return getRegPeriodsFromWeek(getWeek())
     case 'Siste måned':
       return getRegPeriodsFromWeek(getWeekOfMonth())
     case 'Siste kvartal':
@@ -113,12 +111,11 @@ const SingularChartCard = ({
 
   function getFilterData(filter: FilterOptions): SingularChartData {
     if (
-      (data && data.type === 'LineChart') ||
-      (data && data.type === 'BarChart')
+      data &&
+      ['LineChart', 'BarChart'].includes(data.type) &&
+      filter !== 'Totalt'
     ) {
-      return filter === 'Totalt'
-        ? data
-        : findFilteredData(getRegPeriods(filter))
+      return findFilteredData(getRegPeriods(filter))
     } else {
       return data
     }
@@ -131,23 +128,30 @@ const SingularChartCard = ({
     }
 
     if (data && data.type === 'LineChart') {
-      const monthData = data.data.map((customer) => {
-        const filteredData = customer.data
-          .filter((week) =>
-            Object.keys(week).reduce((acc) => {
-              return acc || regPeriods.includes(week.x)
-            }, false)
-          )
-          .sort((a, b) =>
-            Number(a.x.trim().toLowerCase()) > Number(b.x.trim().toLowerCase())
-              ? 1
-              : -1
-          )
-        return {
-          ...customer,
-          data: filteredData,
-        }
-      })
+      const monthData = data.data
+        .map((customer) => {
+          const filteredData = customer.data
+            .filter((week) =>
+              Object.keys(week).reduce((acc) => {
+                return acc || regPeriods.includes(week.x)
+              }, false)
+            )
+            .sort((a, b) =>
+              Number(a.x.trim().toLowerCase()) >
+              Number(b.x.trim().toLowerCase())
+                ? 1
+                : -1
+            )
+
+          // Filter out empty data
+          return filteredData.length
+            ? {
+                ...customer,
+                data: filteredData,
+              }
+            : null
+        })
+        .filter((item) => item)
 
       const weekChartObject: SingularChartData = {
         ...data,
