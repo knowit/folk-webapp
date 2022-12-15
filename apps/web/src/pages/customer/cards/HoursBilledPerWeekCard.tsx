@@ -12,7 +12,7 @@ const HoursBilledPerWeekCard = () => {
       description={POSSIBLE_OLD_DATA_WARNING}
       data={data}
       error={error}
-      showFilter={true}
+      showFilter={false}
     />
   )
 }
