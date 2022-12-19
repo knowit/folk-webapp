@@ -20,20 +20,20 @@ const useStyles = makeStyles({
 interface Props {
   projectExperience?: ProjectExperience[]
   isLoading?: boolean
-  isError?: boolean
+  error?: object
 }
 
 export function ProjectExperienceList({
   projectExperience,
   isLoading,
-  isError,
+  error,
 }: Props) {
   const classes = useStyles()
 
-  if (isError) {
+  if (error) {
     return (
       <FallbackMessage
-        isError
+        error={error}
         message="Beklager, noe gikk galt ved henting av prosjekter."
       />
     )

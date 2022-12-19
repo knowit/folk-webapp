@@ -52,12 +52,7 @@ export default function CustomerList() {
   const isLoading = !data
 
   if (error) {
-    return (
-      <FallbackMessage
-        isError
-        message="Det oppstod en feil ved henting av data."
-      />
-    )
+    return <FallbackMessage error={error} />
   }
 
   const filteredData = data
