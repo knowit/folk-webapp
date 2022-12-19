@@ -12,8 +12,8 @@
   },
   "dependencies": {
     "@folk/common": "workspace:^",
-    "@vendia/serverless-express": "^4.8.0",
-    "aws-sdk": "^2.1127.0",
+    "@vendia/serverless-express": "^4.10.1",
+    "aws-sdk": "^2.1277.0",
     "axios": "^0.27.2",
     "cookie-parser": "^1.4.6",
     "express": "^4.18.2",
