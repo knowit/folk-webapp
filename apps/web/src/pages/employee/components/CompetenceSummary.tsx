@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useState } from 'react'
 import { makeStyles } from '@material-ui/core'
 import { EmployeeCompetenceResponse } from '../../../api/data/employee/employeeApiTypes'
 import { getStartedInKnowit } from '../utils/get-started-in-knowit'
@@ -21,6 +22,11 @@ interface Props {
 
 export function CompetenceSummary({ employee, isLoading, isError }: Props) {
   const classes = useStyles()
+  const [experience, setExperience] = useState('Ingen data funnet')
+
+  const updateExperience = (value: string) => {
+    setExperience(value)
+  }
 
   if (isError) {
     return (
@@ -50,11 +56,11 @@ export function CompetenceSummary({ employee, isLoading, isError }: Props) {
         label="Startet i Knowit"
         value={getStartedInKnowit(employee?.workExperience)}
       />
-      {/*<CompetenceSummaryItem
-        label='Beregnet arbeidserfaring'
-        value={getTotalWorkExperience(employee?.workExperience)}
-        description='Beregnet ut i fra første jobb på CV'
-      /> */}
+      <CompetenceSummaryItem
+        label="Beregnet arbeidserfaring"
+        value={employee?.employeeExperience?.experience.toString()}
+        description="Beregnet ut i fra første jobb på CV"
+      />
       <CompetenceSummaryItem
         label="Språk"
         value={employee?.tags.languages.join(', ')}

@@ -1,24 +1,26 @@
 import {
-  mapEmployeeTags,
-  getProjectStatusForEmployee,
-  getCategoryScoresForEmployee,
-  getStorageUrl,
   createCvLinks,
-  mapWorkExperience,
+  getCategoryScoresForEmployee,
+  getExperienceForEmployee,
+  getProjectStatusForEmployee,
+  getStorageUrl,
+  mapEmployeeTags,
   mapProjectExperience,
+  mapWorkExperience,
 } from './aggregationHelpers'
 import {
   BasicEmployeeInformation,
-  ProjectExperience,
-  EmployeeProfileInformation,
+  EmployeeCompetenceResponse,
+  EmployeeExperience,
   EmployeeMotivationAndCompetence,
+  EmployeeProfileInformation,
   EmployeeProfileResponse,
   EmployeeSkills,
   EmployeeTableResponse,
   EmployeeWorkStatus,
   JobRotationInformation,
+  ProjectExperience,
   WorkExperience,
-  EmployeeCompetenceResponse,
 } from './employeesTypes'
 import { EmployeeCustomers } from '../customer/customerTypes'
 
@@ -64,7 +66,8 @@ export const aggregateEmployeeCompetence = (
   employeeProfileInformation: EmployeeProfileInformation[],
   employeeSkills: EmployeeSkills[],
   workExperience: WorkExperience[],
-  projectExperience: ProjectExperience[]
+  projectExperience: ProjectExperience[],
+  employeeExperience: EmployeeExperience[]
 ): EmployeeCompetenceResponse => {
   if (employeeProfileInformation.length === 0) {
     return
@@ -79,6 +82,10 @@ export const aggregateEmployeeCompetence = (
     tags: mapEmployeeTags(employeeSkills[0]),
     workExperience: mapWorkExperience(workExperience),
     projectExperience: mapProjectExperience(projectExperience),
+    employeeExperience: getExperienceForEmployee(
+      employee.email,
+      employeeExperience
+    ),
   }
 }
 

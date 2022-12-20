@@ -1,6 +1,7 @@
 import {
   CategoryScores,
   CvLinks,
+  EmployeeExperience,
   EmployeeMotivationAndCompetence,
   EmployeeSkills,
   EmployeeWorkStatus,
@@ -59,6 +60,13 @@ export function mapProjectExperience(
     year_to: project.year_to,
     month_to: project.month_to,
   }))
+}
+
+export function getExperienceForEmployee(
+  email: string,
+  employees: EmployeeExperience[]
+): EmployeeExperience {
+  return employees.find((employee) => employee.email == email)
 }
 
 export const getProjectStatusForEmployee = (

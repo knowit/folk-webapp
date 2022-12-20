@@ -5,6 +5,7 @@ import {
   EmployeeProfileResponse,
   EmployeeTableResponse,
 } from './employeeApiTypes'
+import { EmployeeExperience } from 'server/routers/employees/employeesTypes'
 
 export const getEmployeeTable = () =>
   getAtApiV2<EmployeeTableResponse[]>('/employees/employeeTable')
@@ -24,5 +25,10 @@ export const getEmployeeMotivationAndCompetenceCharts = (
   email: string
 ) =>
   getAtApiV2<ChartData>('/employees/employeeMotivationAndCompetence', {
+    params: { email },
+  })
+
+export const getEmployeeExperience = (email: string) =>
+  getAtApiV2<EmployeeExperience>('/employees/employeeExperience', {
     params: { email },
   })
