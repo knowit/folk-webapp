@@ -16,19 +16,14 @@ const useStyles = makeStyles({
 interface Props {
   employee?: EmployeeCompetenceResponse
   isLoading?: boolean
-  isError?: boolean
+  error?: object
 }
 
-export function CompetenceSummary({ employee, isLoading, isError }: Props) {
+export function CompetenceSummary({ employee, isLoading, error }: Props) {
   const classes = useStyles()
 
-  if (isError) {
-    return (
-      <FallbackMessage
-        isError
-        message="Beklager, noe gikk galt ved henting av informasjon for den ansatte."
-      />
-    )
+  if (error) {
+    return <FallbackMessage error={error} />
   }
 
   if (isLoading) {

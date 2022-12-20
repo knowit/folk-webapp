@@ -17,23 +17,18 @@ const useStyles = makeStyles({
 interface Props {
   workExperience?: WorkExperience[]
   isLoading?: boolean
-  isError?: boolean
+  error?: object
 }
 
 export function WorkExperienceList({
   workExperience,
   isLoading,
-  isError,
+  error,
 }: Props) {
   const classes = useStyles()
 
-  if (isError) {
-    return (
-      <FallbackMessage
-        isError
-        message="Beklager, noe gikk galt ved henting av arbeidserfaring."
-      />
-    )
+  if (error) {
+    return <FallbackMessage error={error} />
   }
 
   if (isLoading) {

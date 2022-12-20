@@ -1,22 +1,64 @@
 import * as React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import { Tooltip } from '@material-ui/core'
+import { InfoRounded } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     fontStyle: 'italic',
     margin: 0,
+    display: 'flex',
+    alignItems: 'center',
     color: ({ isError }: { isError?: boolean }) =>
       isError ? theme.palette.error.main : 'inherit',
+  },
+  tooltip: {
+    maxWidth: '100%',
+    fontSize: '1rem',
+    backgroundColor: theme.palette.background.paper,
+    borderColor: theme.palette.primary.main,
+    borderWidth: '1px',
+    borderStyle: 'solid',
+  },
+  icon: {
+    marginLeft: '5px',
   },
 }))
 
 interface Props {
-  message: string
-  isError?: boolean
+  message?: string
+  error?: object
 }
 
-export function FallbackMessage({ message, isError }: Props) {
-  const classes = useStyles({ isError })
+export function FallbackMessage({
+  message = 'Det oppsto en feil ved henting av data',
+  error,
+}: Props) {
+  const classes = useStyles({ isError: error !== undefined })
 
-  return <p className={classes.root}>{message}</p>
+  const errorMessage =
+    error['status'] != 403
+      ? message
+      : 'Innlogget bruker har ikke tilgang til å hente data'
+  const detailMessage = error && (
+    <pre className={classes.root}>{JSON.stringify(error, null, 2)}</pre>
+  )
+  const help = () => (
+    <Tooltip
+      className={classes.icon}
+      classes={{ tooltip: classes.tooltip }}
+      title={detailMessage}
+    >
+      <InfoRounded />
+    </Tooltip>
+  )
+
+  return (
+    <p className={classes.root}>
+      <h3 className={classes.root}>
+        {errorMessage}
+        {error && help()}
+      </h3>
+    </p>
+  )
 }

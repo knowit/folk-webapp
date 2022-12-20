@@ -54,7 +54,6 @@ export function EmployeeTableExpandedInfo({ data }: Props) {
 
   const { data: employee, error } = useEmployeeCompetence(data.email)
   const isLoading = !employee
-  const isError = Boolean(error)
 
   return (
     <div className={classes.root}>
@@ -62,7 +61,7 @@ export function EmployeeTableExpandedInfo({ data }: Props) {
         <CompetenceSummary
           employee={employee}
           isLoading={isLoading}
-          isError={isError}
+          error={error}
         />
       </section>
       <section className={[classes.column, classes.experience].join(' ')}>
@@ -70,13 +69,13 @@ export function EmployeeTableExpandedInfo({ data }: Props) {
         <WorkExperienceList
           workExperience={employee?.workExperience}
           isLoading={isLoading}
-          isError={isError}
+          error={error}
         />
         <h3>Prosjekterfaring</h3>
         <ProjectExperienceList
           projectExperience={employee?.projectExperience}
           isLoading={isLoading}
-          isError={isError}
+          error={error}
         />
       </section>
       <div className={[classes.column, classes.competenceMotivation].join(' ')}>

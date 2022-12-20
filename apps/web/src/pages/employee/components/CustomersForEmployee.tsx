@@ -15,16 +15,14 @@ const useStyles = makeStyles({
 interface Props {
   customers?: Customer[]
   isLoading?: boolean
-  isError?: boolean
+  error?: object
 }
 
-export function CustomersForEmployee({ customers, isLoading, isError }: Props) {
+export function CustomersForEmployee({ customers, isLoading, error }: Props) {
   const classes = useStyles()
 
-  if (isError) {
-    return (
-      <FallbackMessage isError message="Noe gikk galt ved henting av kunder." />
-    )
+  if (error) {
+    return <FallbackMessage error={error} />
   }
 
   if (isLoading) {
