@@ -7,7 +7,7 @@
     "apps/*"
   ],
   "engines": {
-    "node": "14",
+    "node": "18",
     "npm": "please-use-yarn",
     "yarn": "3.2.0"
   },
