@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Router } from 'express'
 import { getReport } from '../../dataplattform/client'
 import {
   ageDistribution,
@@ -22,7 +22,7 @@ import {
   YearsWorkingDistributionCount,
 } from './competenceTypes'
 
-const router = express.Router()
+const router: Router = express.Router()
 
 router.get('/experienceDistribution', async (req, res, next) => {
   try {

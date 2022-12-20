@@ -1,8 +1,8 @@
-import express, { Request, Response } from 'express'
+import express, { Request, Response, Router } from 'express'
 import { Issuer, TokenSet } from 'openid-client'
 import { URL } from 'url'
 import reporting from '../reporting'
-const router = express.Router()
+const router: Router = express.Router()
 
 const authEndpoint = process.env.OAUTH_URL
 const clientId = process.env.CLIENT_ID

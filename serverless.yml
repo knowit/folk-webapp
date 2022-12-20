@@ -30,7 +30,7 @@ provider:
   name: aws
   stage: dev
   region: eu-central-1
-  runtime: nodejs14.x
+  runtime: nodejs18.x
   stackName: ${self:custom.service}
   timeout: 25
   httpApi:

@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up node 14
-        uses: actions/setup-node@v2-beta
+      - name: Set up node 18
+        uses: actions/setup-node@v3
         with:
-          node-version: "14"
+          node-version: "18"
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -36,10 +36,10 @@ jobs:
     needs: deploy_server
     steps:
       - uses: actions/checkout@v2
-      - name: Set up node 14
-        uses: actions/setup-node@v2-beta
+      - name: Set up node 18
+        uses: actions/setup-node@v3
         with:
-          node-version: "14"
+          node-version: "18"
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:

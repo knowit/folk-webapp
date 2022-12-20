@@ -8,6 +8,9 @@ interface UserContextProps {
   user: UserInfo | null
   setUser: (val: UserInfo | null) => void
 }
+interface UserInfoProviderProps {
+  children: React.ReactNode
+}
 
 const UserContext = createContext<UserContextProps | null>(null)
 
@@ -24,7 +27,9 @@ export const useUserInfo = () => {
   return { user, logout }
 }
 
-export const UserInfoProvider: React.FC = ({ children }) => {
+export const UserInfoProvider: React.FC<UserInfoProviderProps> = ({
+  children,
+}) => {
   const [fetchedUser, setFetchedUser] = useState<UserInfo | null>(null)
 
   useEffect(() => {
