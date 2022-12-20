@@ -1,19 +1,29 @@
 import * as React from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { TableCell, withStyles } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper'
 import {
-  AutoSizer,
-  Column as VirtualizedColumn,
+  AutoSizer as _AutoSizer,
+  AutoSizerProps,
+  Column as _VirtualizedColumn,
+  ColumnProps,
   Index,
-  Table,
+  Table as _Table,
+  TableProps,
   TableRowProps,
 } from 'react-virtualized'
 import CharacterLimitBox from './components/CharacterLimitBox'
 import { Column, ColumnSort } from './tableTypes'
 import { EmployeeTableRow } from '../../api/data/employee/employeeApiTypes'
 import { EmployeeForCustomerList } from '../../api/data/customer/customerApiTypes'
+
+// Hack to allow upgrade to React 18
+// https://github.com/bvaughn/react-virtualized/issues/1739#issuecomment-1264276522
+// TODO Not maintained. Consider swapping to https://github.com/bvaughn/react-window
+const AutoSizer = _AutoSizer as unknown as FC<AutoSizerProps>
+const Table = _Table as unknown as FC<TableProps>
+const VirtualizedColumn = _VirtualizedColumn as unknown as FC<ColumnProps>
 
 interface DataTableProps {
   columns: Column[]
@@ -113,7 +123,7 @@ export function VirtualizedTable({
   checkBox,
 }: DataTableProps) {
   const classes = tableStyles()
-  const tableRef = useRef<Table>(null)
+  const tableRef = useRef<_Table>(null)
   const [expandedRowIds, setExpandedRowIds] = useState<string[]>([])
 
   useEffect(() => {
