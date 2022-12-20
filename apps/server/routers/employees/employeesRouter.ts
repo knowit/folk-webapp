@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Router } from 'express'
 import { getReport } from '../../dataplattform/client'
 import { NotFoundError, ParamError } from '../../middlewares/errorHandling'
 import { employeeMotivationAndCompetence } from './employeeChartConversion'
@@ -19,7 +19,7 @@ import {
 } from './employeesTypes'
 import { EmployeeCustomersReport } from '../customer/customerTypes'
 
-const router = express.Router()
+const router: Router = express.Router()
 
 router.get('/employeeTable', async (req, res, next) => {
   try {

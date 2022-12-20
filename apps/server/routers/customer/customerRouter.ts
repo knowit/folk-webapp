@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Router } from 'express'
 import { getReport } from '../../dataplattform/client'
 import {
   createCustomerCardData,
@@ -14,7 +14,7 @@ import {
   EmployeeWithPrimaryCustomer,
 } from './customerTypes'
 
-const router = express.Router()
+const router: Router = express.Router()
 
 router.get('/hoursBilledPerCustomer', async (req, res, next) => {
   try {

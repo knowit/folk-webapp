@@ -1,10 +1,10 @@
 import cookieParser from 'cookie-parser'
-import express from 'express'
+import express, { Express } from 'express'
 import authRouter from './routers/authRouter'
 import { errorHandler, NotFoundError } from './middlewares/errorHandling'
 import { apiRouterV2 } from './routers/routers'
 
-const app = express()
+const app: Express = express()
 
 // Register Middleware
 app.use(cookieParser())
