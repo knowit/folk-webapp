@@ -62,12 +62,7 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
   }
 
   if (error) {
-    return (
-      <FallbackMessage
-        isError
-        message="Noe gikk galt ved henting av informasjon for ansatt."
-      />
-    )
+    return <FallbackMessage error={error} />
   }
 
   return (
@@ -86,6 +81,7 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
             <CustomersForEmployee
               customers={employee?.customers}
               isLoading={isLoading}
+              error={error}
             />
           </section>
           <section>
@@ -93,6 +89,7 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
             <WorkExperienceList
               workExperience={employee?.workExperience}
               isLoading={isLoading}
+              error={error}
             />
           </section>
           <section>
@@ -100,6 +97,7 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
             <ProjectExperienceList
               projectExperience={employee?.projectExperience}
               isLoading={isLoading}
+              error={error}
             />
           </section>
           <section>

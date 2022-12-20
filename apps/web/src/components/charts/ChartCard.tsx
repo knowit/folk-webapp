@@ -61,7 +61,7 @@ const ChartCard = ({
       <GridItem>
         <GridItemHeader title={title} />
         <GridItemContent>
-          <FallbackMessage message="Noe gikk galt ved henting av data." />
+          <FallbackMessage error={error} />
         </GridItemContent>
       </GridItem>
     )

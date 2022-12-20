@@ -19,15 +19,18 @@ import {
   useCategories,
 } from '../../../components/filter/FilterUtil'
 import { GridItem } from '../../../components/gridItem/GridItem'
+import { FallbackMessage } from '../components/FallbackMessage'
 
 export function EmployeeTable() {
   const TableSkeleton = () => (
     <Skeleton variant="rect" height={780} animation="wave" />
   )
 
-  const { data: employeeData } = useEmployeeTable()
+  const { data: employeeData, error } = useEmployeeTable()
+
   return (
     <GridItem fullSize={true}>
+      {error && <FallbackMessage error={error} />}
       {employeeData ? (
         <DDTable
           title="Prosjektstatus"

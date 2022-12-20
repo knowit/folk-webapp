@@ -1,1 +1,1 @@
-export * as Types from "./types/chartTypes"
+export * as Types from "./types/chartTypes";

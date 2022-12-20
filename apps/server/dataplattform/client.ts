@@ -37,7 +37,7 @@ export const getReport = async <T>({
         status: e.response?.status ?? 400,
         errorType: 'API',
         error: e,
-        message: 'Could not fetch data.',
+        message: e.response?.data['message'] ?? 'Could not fetch data.',
       }
       return Promise.reject(err)
     }
