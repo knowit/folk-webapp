@@ -21,7 +21,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-central-1
       - name: Install serverless
-        run: npm install -g serverless@1.66.0
+        run: npm install -g serverless@3.25.1
       - name: Install server dependencies
         run: yarn workspaces focus server
       - uses: softprops/turnstyle@v1
