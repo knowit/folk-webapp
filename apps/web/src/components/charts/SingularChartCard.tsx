@@ -17,6 +17,78 @@ interface SingularChartCardProps {
   showFilter?: boolean
 }
 
+type FilterOptions =
+  | 'Siste uke'
+  | 'Siste måned'
+  | 'Siste kvartal'
+  | 'Hittil i år'
+  | 'Totalt'
+
+// Can be used to override date to set an older date, for testing purposes
+const overrideDate = new Date(2021, 10, 13)
+
+/** Returns the ISO week of current date or from optional param @fromDate */
+function getWeek(fromDate?: Date): number {
+  const weekDate = new Date(fromDate ? fromDate : overrideDate || new Date())
+  weekDate.setHours(0, 0, 0, 0)
+  // Thursday in current week decides the year
+  weekDate.setDate(weekDate.getDate() + 3 - ((weekDate.getDay() + 6) % 7))
+  // January 4 is always in week 1
+  const firstWeek = new Date(weekDate.getFullYear(), 0, 4)
+  // Adjust to Thursday in week 1 and count number of weeks from date to week 1
+  return (
+    1 +
+    Math.round(
+      ((weekDate.getTime() - firstWeek.getTime()) / 86400000 -
+        3 +
+        ((firstWeek.getDay() + 6) % 7)) /
+        7
+    )
+  )
+}
+
+/** Returns number of first week of current quarter */
+function getWeekOfQuarter() {
+  const currDate = overrideDate || new Date()
+  const quarter = Math.ceil(currDate.getMonth() / 3) - 1
+  const month = [0, 3, 6, 9][quarter]
+
+  return getWeek(new Date(currDate.getFullYear(), month, 1))
+}
+
+/** Returns number of first week of current month */
+function getWeekOfMonth() {
+  const currDate = overrideDate || new Date()
+
+  return getWeek(new Date(currDate.getFullYear(), currDate.getMonth(), 1))
+}
+
+/** Returns a list of sequential reg periods (year + week number), starting from @fromWeek to current reg period */
+function getRegPeriodsFromWeek(fromWeek: number): string[] {
+  const currDate = overrideDate || new Date()
+  const currYear = currDate.getFullYear()
+  const currWeek = getWeek()
+  const length = currWeek - fromWeek + 1
+  const weekDates = length
+    ? [...new Array(length)].map((_, i) => `${currYear}${fromWeek + i}`)
+    : []
+
+  return weekDates
+}
+
+function getRegPeriods(filter: FilterOptions) {
+  switch (filter) {
+    case 'Siste måned':
+      return getRegPeriodsFromWeek(getWeekOfMonth())
+    case 'Siste kvartal':
+      return getRegPeriodsFromWeek(getWeekOfQuarter())
+    case 'Hittil i år':
+      return getRegPeriodsFromWeek(1)
+    default:
+      return getRegPeriodsFromWeek(getWeek())
+  }
+}
+
 /**
  * A card for rendering a single card.
  */
@@ -28,27 +100,22 @@ const SingularChartCard = ({
   data,
 }: SingularChartCardProps) => {
   const [isBig, setIsBig] = useState(false)
-  const filterValues = ['Siste måned', 'Siste kvartal', 'Hittil i år', 'Totalt']
+  const filterValues: FilterOptions[] = [
+    'Siste uke',
+    'Siste måned',
+    'Siste kvartal',
+    'Hittil i år',
+    'Totalt',
+  ]
   const [selectedFilter, setSelectedFilter] = useState(filterValues[0])
 
-  function getFilterData(filter: string): SingularChartData {
+  function getFilterData(filter: FilterOptions): SingularChartData {
     if (
-      (data && data.type === 'LineChart') ||
-      (data && data.type === 'BarChart')
+      data &&
+      ['LineChart', 'BarChart'].includes(data.type) &&
+      filter !== 'Totalt'
     ) {
-      //To be used with getCurrentRegPeriod() to generate list of regPeriods.
-      switch (filter) {
-        case 'Siste måned':
-          return findFilteredData(['202143', '202144', '202145', '202146'])
-        case 'Siste kvartal':
-          return findFilteredData(['202143', '202144', '202146'])
-        case 'Hittil i år':
-          return findFilteredData()
-        case 'Totalt':
-          return findFilteredData()
-        default:
-          return findFilteredData()
-      }
+      return findFilteredData(getRegPeriods(filter))
     } else {
       return data
     }
@@ -61,23 +128,30 @@ const SingularChartCard = ({
     }
 
     if (data && data.type === 'LineChart') {
-      const monthData = data.data.map((customer) => {
-        const filteredData = customer.data
-          .filter((week) =>
-            Object.keys(week).reduce((acc) => {
-              return acc || regPeriods.includes(week.x)
-            }, false)
-          )
-          .sort((a, b) =>
-            Number(a.x.trim().toLowerCase()) > Number(b.x.trim().toLowerCase())
-              ? 1
-              : -1
-          )
-        return {
-          ...customer,
-          data: filteredData,
-        }
-      })
+      const monthData = data.data
+        .map((customer) => {
+          const filteredData = customer.data
+            .filter((week) =>
+              Object.keys(week).reduce((acc) => {
+                return acc || regPeriods.includes(week.x)
+              }, false)
+            )
+            .sort((a, b) =>
+              Number(a.x.trim().toLowerCase()) >
+              Number(b.x.trim().toLowerCase())
+                ? 1
+                : -1
+            )
+
+          // Filter out empty data
+          return filteredData.length
+            ? {
+                ...customer,
+                data: filteredData,
+              }
+            : null
+        })
+        .filter((item) => item)
 
       const weekChartObject: SingularChartData = {
         ...data,
@@ -122,31 +196,6 @@ const SingularChartCard = ({
       return data
     }
   }
-
-  /* function getYear(){
-    const currentDate = new Date()
-    const currentYear = currentDate.getFullYear()
-    return currentYear
-  }
-
-  function getWeek(){
-    const currentDate = new Date()
-    const oneJan = new Date(getYear(), 0, 1)
-    const numberOfDays = Math.floor(
-      (Number(currentDate) - Number(oneJan)) / (24 * 60 * 60 * 1000)
-    )
-    const currentWeekNumber = Math.ceil(
-      (currentDate.getDay() + 1 + numberOfDays) / 7
-    )
-    return currentWeekNumber.toString()
-  }
-
-  function getCurrentRegPeriod(){
-    const currYear = getYear()
-    const currWeek = getWeek()
-    const regPeriod: string = currYear + currWeek
-    return regPeriod
-  }*/
 
   return (
     <GridItem fullSize={fullSize}>
