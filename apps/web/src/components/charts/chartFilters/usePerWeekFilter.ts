@@ -12,6 +12,7 @@ type DateDisplay = {
   date: Date
 }
 
+/** Returns props of x scale displays and date based on regPeriod to compare sort */
 function getDateDisplay(regPeriod: string): DateDisplay {
   const y = Number(regPeriod.slice(0, 4))
   const w = Number(regPeriod.slice(-2))
