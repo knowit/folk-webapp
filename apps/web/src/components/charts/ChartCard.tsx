@@ -13,6 +13,7 @@ import RadarChart from './nivo/RadarChart'
 import SunburstChart from './nivo/SunburstChart'
 import MultipleChartCard from './MultipleChartCard'
 import SingularChartCard from './SingularChartCard'
+import { ChartFilterType } from './chartFilters/useFilteredData'
 
 interface SingularChartProps {
   chartData: SingularChartData
@@ -46,6 +47,7 @@ interface ChartCardProps {
   data: ChartData | undefined
   error: any
   showFilter?: boolean
+  filterType?: ChartFilterType
 }
 
 const ChartCard = ({
@@ -53,6 +55,7 @@ const ChartCard = ({
   data,
   error,
   title,
+  filterType,
   showFilter = false,
   ...props
 }: ChartCardProps) => {
@@ -80,6 +83,7 @@ const ChartCard = ({
       title={title}
       data={data}
       showFilter={showFilter}
+      filterType={filterType}
       {...props}
     />
   )

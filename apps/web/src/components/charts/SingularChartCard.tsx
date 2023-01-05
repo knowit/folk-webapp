@@ -8,6 +8,9 @@ import { ChartDisplayOptions } from './ChartDisplayOptions'
 import { ToggleBigChartButton } from './ToggleBigChartButton'
 import BigChart from './BigChart'
 import { SingularChart } from './ChartCard'
+import useFilteredData, {
+  ChartFilterType,
+} from './chartFilters/useFilteredData'
 
 interface SingularChartCardProps {
   title: string
@@ -15,78 +18,7 @@ interface SingularChartCardProps {
   fullSize: boolean
   data: SingularChartData
   showFilter?: boolean
-}
-
-type FilterOptions =
-  | 'Siste uke'
-  | 'Siste måned'
-  | 'Siste kvartal'
-  | 'Hittil i år'
-  | 'Totalt'
-
-// Can be used to override date to set an older date, for testing purposes
-const overrideDate = new Date(2021, 10, 13)
-
-/** Returns the ISO week of current date or from optional param @fromDate */
-function getWeek(fromDate?: Date): number {
-  const weekDate = new Date(fromDate ? fromDate : overrideDate || new Date())
-  weekDate.setHours(0, 0, 0, 0)
-  // Thursday in current week decides the year
-  weekDate.setDate(weekDate.getDate() + 3 - ((weekDate.getDay() + 6) % 7))
-  // January 4 is always in week 1
-  const firstWeek = new Date(weekDate.getFullYear(), 0, 4)
-  // Adjust to Thursday in week 1 and count number of weeks from date to week 1
-  return (
-    1 +
-    Math.round(
-      ((weekDate.getTime() - firstWeek.getTime()) / 86400000 -
-        3 +
-        ((firstWeek.getDay() + 6) % 7)) /
-        7
-    )
-  )
-}
-
-/** Returns number of first week of current quarter */
-function getWeekOfQuarter() {
-  const currDate = overrideDate || new Date()
-  const quarter = Math.ceil(currDate.getMonth() / 3) - 1
-  const month = [0, 3, 6, 9][quarter]
-
-  return getWeek(new Date(currDate.getFullYear(), month, 1))
-}
-
-/** Returns number of first week of current month */
-function getWeekOfMonth() {
-  const currDate = overrideDate || new Date()
-
-  return getWeek(new Date(currDate.getFullYear(), currDate.getMonth(), 1))
-}
-
-/** Returns a list of sequential reg periods (year + week number), starting from @fromWeek to current reg period */
-function getRegPeriodsFromWeek(fromWeek: number): string[] {
-  const currDate = overrideDate || new Date()
-  const currYear = currDate.getFullYear()
-  const currWeek = getWeek()
-  const length = currWeek - fromWeek + 1
-  const weekDates = length
-    ? [...new Array(length)].map((_, i) => `${currYear}${fromWeek + i}`)
-    : []
-
-  return weekDates
-}
-
-function getRegPeriods(filter: FilterOptions) {
-  switch (filter) {
-    case 'Siste måned':
-      return getRegPeriodsFromWeek(getWeekOfMonth())
-    case 'Siste kvartal':
-      return getRegPeriodsFromWeek(getWeekOfQuarter())
-    case 'Hittil i år':
-      return getRegPeriodsFromWeek(1)
-    default:
-      return getRegPeriodsFromWeek(getWeek())
-  }
+  filterType?: ChartFilterType
 }
 
 /**
@@ -97,112 +29,20 @@ const SingularChartCard = ({
   description,
   fullSize = false,
   showFilter,
+  filterType,
   data,
 }: SingularChartCardProps) => {
   const [isBig, setIsBig] = useState(false)
-  const filterValues: FilterOptions[] = [
-    'Siste uke',
-    'Siste måned',
-    'Siste kvartal',
-    'Hittil i år',
-    'Totalt',
-  ]
-  const [selectedFilter, setSelectedFilter] = useState(filterValues[0])
-
-  function getFilterData(filter: FilterOptions): SingularChartData {
-    if (
-      data &&
-      ['LineChart', 'BarChart'].includes(data.type) &&
-      filter !== 'Totalt'
-    ) {
-      return findFilteredData(getRegPeriods(filter))
-    } else {
-      return data
-    }
-  }
-
-  //Generic function to filter data based on regPeriods provided.
-  const findFilteredData = (regPeriods?: string[]): SingularChartData => {
-    if (regPeriods === undefined || regPeriods.length === 0) {
-      return data
-    }
-
-    if (data && data.type === 'LineChart') {
-      const monthData = data.data
-        .map((customer) => {
-          const filteredData = customer.data
-            .filter((week) =>
-              Object.keys(week).reduce((acc) => {
-                return acc || regPeriods.includes(week.x)
-              }, false)
-            )
-            .sort((a, b) =>
-              Number(a.x.trim().toLowerCase()) >
-              Number(b.x.trim().toLowerCase())
-                ? 1
-                : -1
-            )
-
-          // Filter out empty data
-          return filteredData.length
-            ? {
-                ...customer,
-                data: filteredData,
-              }
-            : null
-        })
-        .filter((item) => item)
-
-      const weekChartObject: SingularChartData = {
-        ...data,
-        data: monthData,
-      }
-      return weekChartObject
-    }
-
-    if (data && data.type === 'BarChart') {
-      const aggregatedData: { customer: string; hours: number }[] = []
-      data.data.forEach((customer) => {
-        if (aggregatedData.indexOf(customer) < 0) {
-          aggregatedData.push({ customer: customer.customer, hours: 0 })
-          if (data.weeklyData) {
-            const currentCustomer = data.weeklyData.data.find(
-              (item) => item.id === customer.customer
-            )
-            currentCustomer?.data.forEach((regPeriod) => {
-              if (regPeriods.includes(regPeriod.x)) {
-                const customerIndex = aggregatedData.findIndex(
-                  (c) => c.customer === currentCustomer.id
-                )
-                aggregatedData[customerIndex].hours += regPeriod.y
-              }
-            })
-          }
-        }
-      })
-
-      const filteredData = aggregatedData
-        .filter((customer) => customer.hours !== 0)
-        .sort((a, b) => (a.hours < b.hours ? 1 : -1))
-
-      const chartData: SingularChartData = {
-        type: data.type,
-        indexBy: data.indexBy,
-        keys: data.keys,
-        data: filteredData,
-      }
-      return chartData
-    } else {
-      return data
-    }
-  }
+  const { filterOptions, getFilteredData, setSelectedFilter, selectedFilter } =
+    useFilteredData(filterType, data)
+  const chartData = showFilter ? getFilteredData() : data
 
   return (
     <GridItem fullSize={fullSize}>
       <GridItemHeader title={title} description={description}>
         {showFilter && (
           <DropdownPicker
-            values={filterValues}
+            values={filterOptions}
             selected={selectedFilter}
             onChange={setSelectedFilter}
           />
@@ -215,17 +55,11 @@ const SingularChartCard = ({
         </ChartDisplayOptions>
 
         {/* The small chart */}
-        <SingularChart
-          isBig={false}
-          chartData={showFilter ? getFilterData(selectedFilter) : data}
-        />
+        <SingularChart isBig={false} chartData={chartData} />
 
         {/* The big chart */}
         <BigChart open={isBig} onClose={() => setIsBig(false)}>
-          <SingularChart
-            isBig={isBig}
-            chartData={showFilter ? getFilterData(selectedFilter) : data}
-          />
+          <SingularChart isBig={isBig} chartData={chartData} />
         </BigChart>
       </GridItemContent>
     </GridItem>

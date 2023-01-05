@@ -13,6 +13,7 @@ const HoursBilledPerCustomerCard = () => {
       data={data}
       error={error}
       showFilter={true}
+      filterType="perCustomer"
     />
   )
 }
