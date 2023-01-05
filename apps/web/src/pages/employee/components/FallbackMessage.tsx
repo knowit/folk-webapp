@@ -37,7 +37,7 @@ export function FallbackMessage({
   const classes = useStyles({ isError: error !== undefined })
 
   const errorMessage =
-    error['status'] != 403
+    error?.['status'] != 403
       ? message
       : 'Innlogget bruker har ikke tilgang til å hente data'
   const detailMessage = error && (
