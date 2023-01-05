@@ -1,4 +1,5 @@
 import { TableRow } from '../tableResponses'
+import { EmployeeExperience } from 'server/routers/employees/employeesTypes'
 
 /**
  * EmployeeTable
@@ -14,7 +15,8 @@ export type EmployeeTableRowData = [
   primaryCustomer: Customer | null,
   cvLinks: CvLinks,
   motivationScores: Record<string, number>,
-  competenceScores: Record<string, number>
+  competenceScores: Record<string, number>,
+  employeeExperience: EmployeeExperience
 ]
 
 export interface ConsultantInfo {
@@ -55,6 +57,7 @@ export interface EmployeeCompetenceResponse {
   tags: Tags
   projectExperience: ProjectExperience[]
   workExperience: WorkExperience[]
+  employeeExperience: EmployeeExperience
 }
 
 export interface WorkExperience {

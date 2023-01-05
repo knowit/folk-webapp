@@ -9,12 +9,13 @@ import {
 } from './employeesAggregation'
 import {
   BasicEmployeeInformationReport,
-  ProjectExperienceReport,
-  EmployeeProfileInformationReport,
+  EmployeeExperienceReport,
   EmployeeMotivationAndCompetenceReport,
+  EmployeeProfileInformationReport,
   EmployeeSkillsReport,
   EmployeeWorkStatusReport,
   JobRotationInformationReport,
+  ProjectExperienceReport,
   WorkExperienceReport,
 } from './employeesTypes'
 import { EmployeeCustomersReport } from '../customer/customerTypes'
@@ -121,16 +122,26 @@ router.get<unknown, unknown, unknown, EmailParam>(
         },
       })
 
+      const employeeExperiencePromise = getReport<EmployeeExperienceReport>({
+        accessToken: req.accessToken,
+        reportName: 'ubwExperience',
+        queryParams: {
+          email: req.query.email,
+        },
+      })
+
       const [
         employeeProfileInformation,
         employeeSkills,
         workExperience,
         projectExperience,
+        employeeExperience,
       ] = await Promise.all([
         employeeProfileInformationPromise,
         employeeSkillsPromise,
         workExperiencePromise,
         projectExperiencePromise,
+        employeeExperiencePromise,
       ])
 
       if (
@@ -149,7 +160,8 @@ router.get<unknown, unknown, unknown, EmailParam>(
         employeeProfileInformation,
         employeeSkills,
         workExperience,
-        projectExperience
+        projectExperience,
+        employeeExperience
       )
 
       res.send(aggregatedData)

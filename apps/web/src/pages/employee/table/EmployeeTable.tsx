@@ -9,8 +9,8 @@ import {
 } from '../../../components/table/DataCells'
 import { EmployeeTableExpandedInfo } from './EmployeeTableExpandedInfo'
 import {
-  Customer,
   ConsultantInfo,
+  Customer,
 } from '../../../api/data/employee/employeeApiTypes'
 import { Skeleton } from '@material-ui/lab'
 import { useEmployeeTable } from '../../../api/data/employee/employeeQueries'

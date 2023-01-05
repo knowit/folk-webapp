@@ -1,6 +1,7 @@
 import useSWR from 'swr'
 import {
   getEmployeeCompetence,
+  getEmployeeExperience,
   getEmployeeMotivationAndCompetenceCharts,
   getEmployeeProfile,
   getEmployeeTable,
@@ -18,6 +19,11 @@ export const useEmployeeProfile = (email: string) =>
 
 export const useEmployeeCompetence = (email: string) =>
   useSWR(['/employeeCompetence', email], getEmployeeCompetence, {
+    revalidateOnFocus: false,
+  })
+
+export const useEmployeeExperience = (email: string) =>
+  useSWR(['/employeeExperience', email], getEmployeeExperience, {
     revalidateOnFocus: false,
   })
 

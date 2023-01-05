@@ -164,6 +164,7 @@ export type EmployeeCompetenceResponse = {
   tags: Tags
   workExperience: WorkExperienceForProfile[]
   projectExperience: ProjectExperienceForProfile[]
+  employeeExperience?: EmployeeExperience
 }
 
 export type WorkExperienceForProfile = {
@@ -216,4 +217,17 @@ type AreaCategory = {
   category: string
   motivation: number
   competence: number
+}
+
+export type EmployeeExperienceReport = EmployeeExperience[]
+
+export type EmployeeExperience = {
+  alias: string
+  name: string
+  experience: number
+  examination_year: string
+  grade: string
+  start_year: string
+  guid: string
+  email: string
 }
