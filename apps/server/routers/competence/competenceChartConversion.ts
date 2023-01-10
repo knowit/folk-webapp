@@ -25,6 +25,7 @@ import {
   FagtimeStats,
   YearsWorkingDistributionCount,
 } from './competenceTypes'
+import { NumberOfEmployees } from '../employees/employeesTypes'
 
 // /experienceDistribution
 export const experienceDistribution = (
@@ -125,6 +126,12 @@ export const ageDistribution = (
   const indexBy = 'age'
   const keys = ['count']
 
+  console.log('In age distribution: server')
+
+  console.log(data)
+  console.log(data[0])
+  console.log(data[1])
+
   const detailed = ageDistributionFormatting(data[0])
   const grouped = ageGroupDistribution(data[1])
 
@@ -183,10 +190,30 @@ export const fagEventsLine = (data: FagEventData[]): LineChartData => {
   return { type: 'LineChart', data: aggregatedData }
 }
 
-export const educationPie = (data: DegreeDistribution[]): PieChartData => {
+export const educationPie = (
+  degreeDistribution: DegreeDistribution[],
+  numberOfEmployees: NumberOfEmployees[]
+): PieChartData => {
   const id = 'degree'
   const value = 'count'
 
+  const numberOfEmployeesCount = numberOfEmployees?.[0]?.antallAnsatte
+  const numberOfEmployeesWithEducation = degreeDistribution.reduce(
+    (accu, currentValue) => accu + currentValue.count,
+    0
+  )
+
+  const notRegisteredEducationCount = numberOfEmployeesCount
+    ? numberOfEmployeesCount - numberOfEmployeesWithEducation
+    : 0
+
+  const data = [
+    ...degreeDistribution,
+    {
+      degree: 'Ikke registrert',
+      count: notRegisteredEducationCount,
+    },
+  ]
   return { type: 'PieChart', id, value, data }
 }
 
