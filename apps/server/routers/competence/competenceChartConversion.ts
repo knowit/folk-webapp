@@ -126,12 +126,6 @@ export const ageDistribution = (
   const indexBy = 'age'
   const keys = ['count']
 
-  console.log('In age distribution: server')
-
-  console.log(data)
-  console.log(data[0])
-  console.log(data[1])
-
   const detailed = ageDistributionFormatting(data[0])
   const grouped = ageGroupDistribution(data[1])
 
