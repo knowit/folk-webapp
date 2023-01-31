@@ -59,6 +59,7 @@ export default function Header() {
             <NavMenuItem label="Ansatte" to="/ansatte" />
             <NavMenuItem label="Kunder" to="/kunder" />
             <NavMenuItem label="Kompetanse" to="/kompetanse" />
+            <NavMenuItem label="Organisasjonsstruktur" to="/organisasjon" />
             <NavMenuItem label="Arbeidsmiljø" to="/arbeidsmiljo" />
             <NavMenuItem label="Rekruttering" to="/rekruttering" />
           </NavMenu>

@@ -14,6 +14,7 @@ export type EmployeeProfileInformation = {
   phone?: string
   degree?: string
   manager: string
+  manager_email?: string
   image_key?: string
   link: string
 }

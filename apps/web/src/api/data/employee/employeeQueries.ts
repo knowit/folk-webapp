@@ -4,6 +4,7 @@ import {
   getEmployeeExperience,
   getEmployeeMotivationAndCompetenceCharts,
   getEmployeeProfile,
+  getEmployeeStructure,
   getEmployeeTable,
 } from './employeeApi'
 
@@ -46,3 +47,8 @@ export const useEmployeeMotivationAndCompetenceCharts = (email?: string) =>
       revalidateOnFocus: false,
     }
   )
+
+export const useEmployeeStructure = () =>
+  useSWR('/employeeStructure', getEmployeeStructure, {
+    revalidateOnFocus: false,
+  })
