@@ -180,7 +180,7 @@ export const aggregateStructure = (
   const findHirearchyLevel = (
     person: EmployeeProfileInformation,
     personsGroupedByEmail: Record<string, EmployeeProfileInformation[]>,
-    level: number = 0
+    level = 0
   ): number => {
     const manager = personsGroupedByEmail[person.manager_email]?.[0]
     if (manager) {
