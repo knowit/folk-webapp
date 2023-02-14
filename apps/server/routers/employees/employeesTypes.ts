@@ -231,3 +231,7 @@ export type EmployeeExperience = {
   guid: string
   email: string
 }
+
+export type NumberOfEmployees = {
+  antallAnsatte: number
+}

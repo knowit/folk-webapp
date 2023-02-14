@@ -1,5 +1,6 @@
 import express, { Router } from 'express'
 import { getReport } from '../../dataplattform/client'
+import { NumberOfEmployees } from '../employees/employeesTypes'
 import {
   ageDistribution,
   competenceAmount,
@@ -121,12 +122,25 @@ router.get('/fagEvents', async (req, res, next) => {
 
 router.get('/education', async (req, res, next) => {
   try {
-    const data = await getReport<DegreeDistribution[]>({
+    const degreeDistributionPromise = getReport<DegreeDistribution[]>({
       accessToken: req.accessToken,
       reportName: 'degreeDist',
     })
 
-    const aggregatedData = educationPie(data)
+    const numberOfEmployeesPromise = getReport<NumberOfEmployees[]>({
+      accessToken: req.accessToken,
+      reportName: 'countEmployees',
+    })
+
+    const [degreeDistributionData, numberOfEmployeesData] = await Promise.all([
+      degreeDistributionPromise,
+      numberOfEmployeesPromise,
+    ])
+
+    const aggregatedData = educationPie(
+      degreeDistributionData,
+      numberOfEmployeesData
+    )
     res.send(aggregatedData)
   } catch (error) {
     next(error)
