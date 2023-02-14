@@ -54,7 +54,7 @@ export function EmployeeTable() {
                 width: 222,
                 headerCell: SortableHeaderCell,
                 getValue: (jobTitle: string | undefined | null) => {
-                  return jobTitle
+                  return jobTitle || 'Ansatt'
                 },
               },
               {
