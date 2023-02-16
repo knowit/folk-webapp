@@ -19,7 +19,7 @@ const RadarChart: React.FC<Props<any>> = ({ isBig = false, ...props }) => (
       dotColor={{ theme: 'background' }}
       colors={chartColors}
       blendMode="multiply"
-      valueFormat={(v: any) => v.toFixed(2)}
+      valueFormat={(v: any) => v?.toFixed(2)}
       sliceTooltip={(data) => {
         // This is to make
         return (

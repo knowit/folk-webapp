@@ -131,7 +131,7 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
                 <b>{indexValue}:</b>
                 <br /> <b>{Translation[key] ?? key}</b>
                 <br /> Antall ansatte: {totalEmployees}
-                <br /> Andel: {value.toFixed(1)}%
+                <br /> Andel: {value?.toFixed(1)}%
               </div>
             )
           } else {
