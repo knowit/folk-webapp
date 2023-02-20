@@ -3,11 +3,11 @@ import { useState } from 'react'
 import { FilteredData } from './useFilteredData'
 
 export type PerCustomerFilterOptions =
+  | 'Totalt'
   | 'Siste uke'
   | 'Siste måned'
   | 'Siste kvartal'
   | 'Hittil i år'
-  | 'Totalt'
 
 // Can be used to override date to set an older date, for testing purposes
 const overrideDate = new Date(2021, 10, 13)
@@ -76,11 +76,11 @@ function getRegPeriods(filter: PerCustomerFilterOptions): string[] {
 
 const usePerCustomerFilter = (data: SingularChartData): FilteredData => {
   const filterOptions: PerCustomerFilterOptions[] = [
+    'Totalt',
     'Siste uke',
     'Siste måned',
     'Siste kvartal',
     'Hittil i år',
-    'Totalt',
   ]
 
   const [selectedFilter, setSelectedFilter] = useState(filterOptions[0])
