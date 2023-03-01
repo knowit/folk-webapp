@@ -296,12 +296,15 @@ router.get<unknown, unknown, unknown, EmailParam>(
 
 router.get('/employeeStructure', async (req, res, next) => {
   try {
-    const employeeProfileInformationReport =
+    const employeeProfileInformationPromise =
       await getReport<EmployeeProfileInformationReport>({
         accessToken: req.accessToken,
         reportName: 'employeeProfileInformation',
       })
 
+    const employeeProfileInformationReport = await Promise.all(
+      employeeProfileInformationPromise
+    )
     const aggregatedData = aggregateStructure(employeeProfileInformationReport)
 
     res.send(aggregatedData)

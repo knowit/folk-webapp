@@ -8,9 +8,13 @@ interface Props {
 
 const OrganizationStructureTree = ({ employeeStructureData }: Props) => {
   return (
-    <>
-      {employeeStructureData ? Network({ data: employeeStructureData }) : <></>}
-    </>
+    <div>
+      {employeeStructureData ? (
+        <Network data={employeeStructureData} />
+      ) : (
+        <div>Ingen data funnet</div>
+      )}
+    </div>
   )
 }
 

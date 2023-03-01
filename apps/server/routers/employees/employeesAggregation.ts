@@ -192,7 +192,7 @@ export const aggregateStructure = (
   }
 
   const links: NetworkLink[] = employeeStructureResponse
-    .map((singleEmployeeStructure) => ({
+    ?.map((singleEmployeeStructure) => ({
       target: singleEmployeeStructure.manager_email,
       source: singleEmployeeStructure.email,
       distance:
@@ -203,7 +203,7 @@ export const aggregateStructure = (
     }))
     .filter((link) => groupedByEmail[link.target])
 
-  const nodes: NetworkNode[] = employeeStructureResponse.map(
+  const nodes: NetworkNode[] = employeeStructureResponse?.map(
     (singleEmployeeStructure) => ({
       id: singleEmployeeStructure.email,
       height: 0,
