@@ -300,9 +300,6 @@ router.get('/employeeStructure', async (req, res, next) => {
       await getReport<EmployeeProfileInformationReport>({
         accessToken: req.accessToken,
         reportName: 'employeeProfileInformation',
-        queryParams: {
-          email: req.query.email,
-        },
       })
 
     const aggregatedData = aggregateStructure(employeeProfileInformationReport)
