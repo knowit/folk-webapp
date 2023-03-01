@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { InputBase, InputAdornment, Theme, debounce } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import { makeStyles } from '@material-ui/core/styles'
@@ -27,16 +27,41 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface Props {
   onSearch: (val: string) => void
+  currentSearchValue?: string
+  onValueChange?: (val: string) => void
   onClear: () => void
   placeholder: string
 }
 
-export default function SearchInput({ onSearch, onClear, placeholder }: Props) {
+export default function SearchInput({
+  onSearch,
+  onClear,
+  currentSearchValue = undefined,
+  onValueChange = undefined,
+  placeholder,
+}: Props) {
   const classes = useStyles()
   const [searchValue, setSearchValue] = useState('')
 
+  const updateSearchValue = useCallback(
+    (value) => {
+      setSearchValue(value)
+      onValueChange && onValueChange(value)
+    },
+    [setSearchValue, onValueChange]
+  )
+
+  useEffect(() => {
+    if (
+      currentSearchValue !== undefined &&
+      currentSearchValue !== searchValue
+    ) {
+      updateSearchValue(currentSearchValue)
+    }
+  }, [currentSearchValue, searchValue, updateSearchValue])
+
   const clearInput = () => {
-    setSearchValue('')
+    updateSearchValue('')
     onClear()
   }
 
@@ -47,7 +72,7 @@ export default function SearchInput({ onSearch, onClear, placeholder }: Props) {
 
   const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
-    setSearchValue(event.target.value)
+    updateSearchValue(event.target.value)
     triggerSearch(event.target.value)
   }
 
