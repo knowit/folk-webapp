@@ -6,6 +6,7 @@ import {
   aggregateEmployeeCompetence,
   aggregateEmployeeProfile,
   aggregateEmployeeTable,
+  aggregateStructure,
 } from './employeesAggregation'
 import {
   BasicEmployeeInformationReport,
@@ -292,5 +293,21 @@ router.get<unknown, unknown, unknown, EmailParam>(
     }
   }
 )
+
+router.get('/employeeStructure', async (req, res, next) => {
+  try {
+    const employeeProfileInformationReport =
+      await getReport<EmployeeProfileInformationReport>({
+        accessToken: req.accessToken,
+        reportName: 'employeeProfileInformation',
+      })
+
+    const aggregatedData = aggregateStructure(employeeProfileInformationReport)
+
+    res.send(aggregatedData)
+  } catch (error) {
+    next(error)
+  }
+})
 
 export { router as employeesRouter }

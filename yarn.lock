@@ -2396,6 +2396,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nivo/network@npm:^0.80.0":
+  version: 0.80.0
+  resolution: "@nivo/network@npm:0.80.0"
+  dependencies:
+    "@nivo/annotations": 0.80.0
+    "@nivo/colors": 0.80.0
+    "@nivo/tooltip": 0.80.0
+    "@react-spring/web": 9.4.5
+    d3-force: ^2.0.1
+  peerDependencies:
+    "@nivo/core": 0.80.0
+    react: ">= 16.14.0 < 19.0.0"
+  checksum: b405db9e5289b9ce337a324faf8f2f89c89dcc6a95240a2b6eddff19ad8c9fa6f158e401b93dda2b34d47c85dd7e4e58a8ad8dd7c960b507932e0f3ab81e4932
+  languageName: node
+  linkType: hard
+
 "@nivo/pie@npm:^0.80.0":
   version: 0.80.0
   resolution: "@nivo/pie@npm:0.80.0"
@@ -6250,6 +6266,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"d3-dispatch@npm:1 - 2":
+  version: 2.0.0
+  resolution: "d3-dispatch@npm:2.0.0"
+  checksum: cf473676ae0df1915d51d056d2c6734ceec480d258611d970a01847c50e8c273c185032bf9ed491abd077696bcbeeb491dc94af53e888871f3a1a0fac7365cec
+  languageName: node
+  linkType: hard
+
+"d3-force@npm:^2.0.1":
+  version: 2.1.1
+  resolution: "d3-force@npm:2.1.1"
+  dependencies:
+    d3-dispatch: 1 - 2
+    d3-quadtree: 1 - 2
+    d3-timer: 1 - 2
+  checksum: aaee5b86d753450e72dae6748765ac3e0b7b784bd420a61264b778d697b9521a343b74b5c55654be2ff7fdf9bada0953a6fcae9be69091176d0579b56df72937
+  languageName: node
+  linkType: hard
+
 "d3-format@npm:1 - 2":
   version: 2.0.0
   resolution: "d3-format@npm:2.0.0"
@@ -6284,6 +6318,13 @@ __metadata:
   version: 1.0.9
   resolution: "d3-path@npm:1.0.9"
   checksum: d4382573baf9509a143f40944baeff9fead136926aed6872f7ead5b3555d68925f8a37935841dd51f1d70b65a294fe35c065b0906fb6e42109295f6598fc16d0
+  languageName: node
+  linkType: hard
+
+"d3-quadtree@npm:1 - 2":
+  version: 2.0.0
+  resolution: "d3-quadtree@npm:2.0.0"
+  checksum: e5f9cee19a636666e9f1614f9a9508dde9af47d80769ecb70b6b5033448a8c3ae96f39f1ffea0d1782442559412e3f98508fedf5dc39fe09a2f5995e6a0913bf
   languageName: node
   linkType: hard
 
@@ -6341,6 +6382,13 @@ __metadata:
   version: 1.1.0
   resolution: "d3-time@npm:1.1.0"
   checksum: 33fcfff94ff093dde2048c190ecca8b39fe0ec8b3c61e9fc39c5f6072ce5b86dd2b91823f086366995422bbbac7f74fd9abdb7efe4f292a73b1c6197c699cc78
+  languageName: node
+  linkType: hard
+
+"d3-timer@npm:1 - 2":
+  version: 2.0.0
+  resolution: "d3-timer@npm:2.0.0"
+  checksum: 70733c3baffe473155b712896f04f27dae32d6e94169827f57aebb203e190926ba37af12c5f56cbc7126e538a4b1cd083f2451b80dc2a5644d076b6b31982bd8
   languageName: node
   linkType: hard
 
@@ -16187,6 +16235,7 @@ __metadata:
     "@nivo/bar": ^0.80.0
     "@nivo/core": ^0.80.0
     "@nivo/line": ^0.80.0
+    "@nivo/network": ^0.80.0
     "@nivo/pie": ^0.80.0
     "@nivo/radar": ^0.80.0
     "@nivo/sunburst": ^0.80.0

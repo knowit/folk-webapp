@@ -10,6 +10,7 @@ import {
   NotFoundPage,
   UnderConstructionPage,
   DebugPage,
+  OrganizationStructurePage,
 } from '../pages'
 import LoginPage from '../pages/login/LoginPage'
 
@@ -27,6 +28,7 @@ export default function Content() {
       <Route path="/ansatt/:id" element={<EmployeeProfilePage />} />
       <Route path="/kunder" element={<CustomerPage />} />
       <Route path="/kompetanse" element={<CompetencePage />} />
+      <Route path="/organisasjon" element={<OrganizationStructurePage />} />
       <Route path="/arbeidsmiljo" element={<UnderConstructionPage />} />
       <Route path="/rekruttering" element={<UnderConstructionPage />} />
       <Route path="/debug" element={<DebugPage />} />
