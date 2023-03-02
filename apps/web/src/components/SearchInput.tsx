@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { InputBase, InputAdornment, Theme, debounce } from '@material-ui/core'
+import React, { useState, useEffect, useRef } from 'react'
+import { InputBase, InputAdornment, Theme } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import { makeStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
@@ -27,28 +27,53 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface Props {
   onSearch: (val: string) => void
+  currentSearchValue?: string
   onClear: () => void
   placeholder: string
+  debounceDelay?: number
 }
 
-export default function SearchInput({ onSearch, onClear, placeholder }: Props) {
+export default function SearchInput({
+  onSearch,
+  onClear,
+  currentSearchValue = '',
+  placeholder,
+  debounceDelay = 250,
+}: Props) {
   const classes = useStyles()
-  const [searchValue, setSearchValue] = useState('')
+  const [searchValue, setSearchValue] = useState(currentSearchValue)
+  const searchRef = useRef('')
+  const previousSearchRef = useRef('')
+  const timerRunning = useRef(false)
+  searchRef.current = searchValue
+
+  useEffect(() => {
+    setSearchValue(currentSearchValue)
+  }, [currentSearchValue])
+
+  useEffect(() => {
+    const delay = searchValue !== '' ? debounceDelay : 0
+    if (!timerRunning.current) {
+      timerRunning.current = true
+      onSearch(searchRef.current)
+      previousSearchRef.current = searchRef.current
+      setTimeout(() => {
+        if (searchRef.current !== previousSearchRef.current) {
+          onSearch(searchRef.current)
+        }
+        timerRunning.current = false
+      }, delay)
+    }
+  }, [searchValue, onSearch, debounceDelay])
 
   const clearInput = () => {
     setSearchValue('')
     onClear()
   }
 
-  // This function is debounced, so that we wait a bit (250ms) between each search
-  const triggerSearch = debounce((searchTerm) => {
-    onSearch(searchTerm)
-  }, 250)
-
   const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
     setSearchValue(event.target.value)
-    triggerSearch(event.target.value)
   }
 
   return (

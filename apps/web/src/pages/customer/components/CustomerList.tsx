@@ -97,7 +97,10 @@ export default function CustomerList() {
         <Skeleton width={'100%'} animation="wave" />
       ) : (
         <>
-          <CustomerFilter onSearch={setSearchTerm} />
+          <CustomerFilter
+            currentSearchTerm={searchTerm}
+            onSearch={setSearchTerm}
+          />
           <RowCount>
             Viser {filteredData.length} av {data.length} kunder
           </RowCount>
