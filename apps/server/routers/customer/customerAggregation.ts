@@ -86,9 +86,10 @@ export function createCustomerCardData(
     const consultants = new Set()
     employeesCustomer.forEach((employeeCustomer) => {
       if (employeeCustomer.customer == customer) {
-        const reg_periods = employeeCustomer.reg_periods
-          .split(';')
-          .map((period) => Number(period))
+        const reg_periods =
+          employeeCustomer?.reg_periods
+            .split(';')
+            .map((period) => Number(period)) || []
         if (last_reg_periods.some((p) => reg_periods.includes(p))) {
           consultants.add(employeeCustomer.user_id)
         }
