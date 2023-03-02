@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { InputBase, InputAdornment, Theme, debounce } from '@material-ui/core'
+import React, { useState, useEffect, useRef } from 'react'
+import { InputBase, InputAdornment, Theme } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import { makeStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
@@ -28,52 +28,52 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   onSearch: (val: string) => void
   currentSearchValue?: string
-  onValueChange?: (val: string) => void
   onClear: () => void
   placeholder: string
+  debounceDelay?: number
 }
 
 export default function SearchInput({
   onSearch,
   onClear,
-  currentSearchValue = undefined,
-  onValueChange = undefined,
+  currentSearchValue = '',
   placeholder,
+  debounceDelay = 250,
 }: Props) {
   const classes = useStyles()
-  const [searchValue, setSearchValue] = useState('')
-
-  const updateSearchValue = useCallback(
-    (value) => {
-      setSearchValue(value)
-      onValueChange && onValueChange(value)
-    },
-    [setSearchValue, onValueChange]
-  )
+  const [searchValue, setSearchValue] = useState(currentSearchValue)
+  const searchRef = useRef('')
+  const previousSearchRef = useRef('')
+  const timerRunning = useRef(false)
+  searchRef.current = searchValue
 
   useEffect(() => {
-    if (
-      currentSearchValue !== undefined &&
-      currentSearchValue !== searchValue
-    ) {
-      updateSearchValue(currentSearchValue)
+    setSearchValue(currentSearchValue)
+  }, [currentSearchValue])
+
+  useEffect(() => {
+    const delay = searchValue !== '' ? debounceDelay : 0
+    if (!timerRunning.current) {
+      timerRunning.current = true
+      onSearch(searchRef.current)
+      previousSearchRef.current = searchRef.current
+      setTimeout(() => {
+        if (searchRef.current !== previousSearchRef.current) {
+          onSearch(searchRef.current)
+        }
+        timerRunning.current = false
+      }, delay)
     }
-  }, [currentSearchValue, searchValue, updateSearchValue])
+  }, [searchValue, onSearch, debounceDelay])
 
   const clearInput = () => {
-    updateSearchValue('')
+    setSearchValue('')
     onClear()
   }
 
-  // This function is debounced, so that we wait a bit (250ms) between each search
-  const triggerSearch = debounce((searchTerm) => {
-    onSearch(searchTerm)
-  }, 250)
-
   const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
-    updateSearchValue(event.target.value)
-    triggerSearch(event.target.value)
+    setSearchValue(event.target.value)
   }
 
   return (

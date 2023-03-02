@@ -48,7 +48,6 @@ const customerColumns: Column[] = [
 
 export default function CustomerList() {
   const [searchTerm, setSearchTerm] = useState('')
-  const [nonDebouncedSearchTerm, setNonDebouncedSearchTerm] = useState('')
   const { data, error } = useEmployeesByCustomer()
   const isLoading = !data
 
@@ -99,9 +98,8 @@ export default function CustomerList() {
       ) : (
         <>
           <CustomerFilter
-            currentSearchTerm={nonDebouncedSearchTerm}
+            currentSearchTerm={searchTerm}
             onSearch={setSearchTerm}
-            onValueChange={setNonDebouncedSearchTerm}
           />
           <RowCount>
             Viser {filteredData.length} av {data.length} kunder
