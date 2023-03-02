@@ -296,7 +296,6 @@ router.get<unknown, unknown, unknown, EmailParam>(
 
 router.get('/employeeStructure', async (req, res, next) => {
   try {
-    // Comment to trigger deploy
     const employeeProfileInformationPromise =
       await getReport<EmployeeProfileInformationReport>({
         accessToken: req.accessToken,
