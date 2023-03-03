@@ -88,6 +88,7 @@ export function createCustomerCardData(
       if (employeeCustomer.customer == customer) {
         const reg_periods =
           employeeCustomer?.reg_periods
+            .toString()
             .split(';')
             .map((period) => Number(period)) || []
         if (last_reg_periods.some((p) => reg_periods.includes(p))) {
