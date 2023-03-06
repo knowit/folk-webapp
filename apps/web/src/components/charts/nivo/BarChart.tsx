@@ -89,6 +89,7 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
           bottom: 65,
           left: bigLeftMargin ? 55 : 30,
         }}
+        animate={false}
         enableLabel={false}
         colors={chartColors}
         borderRadius={3}

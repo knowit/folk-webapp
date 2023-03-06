@@ -12,6 +12,7 @@ export const Network = ({ data }) => {
       <ResponsiveNetwork
         data={data}
         margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+        animate={false}
         linkDistance={(e: any) => e.distance}
         centeringStrength={1}
         repulsivity={50}

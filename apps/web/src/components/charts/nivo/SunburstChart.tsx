@@ -80,6 +80,7 @@ const SunburstChart: React.FC<Props<any>> = ({
       <ResponsiveSunburst
         colors={chartColors}
         margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
+        animate={false}
         cornerRadius={2}
         value={GetCorrectValue}
         tooltip={CustomTooltip}
