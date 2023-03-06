@@ -10,7 +10,6 @@ import {
   NotFoundPage,
   UnderConstructionPage,
   DebugPage,
-  OrganizationStructurePage,
 } from '../pages'
 import LoginPage from '../pages/login/LoginPage'
 
