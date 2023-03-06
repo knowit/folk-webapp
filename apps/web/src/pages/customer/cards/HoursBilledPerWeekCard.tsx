@@ -10,6 +10,8 @@ const HoursBilledPerWeekCard = () => {
     <ChartCard
       title="Timer brukt per periode"
       description={POSSIBLE_OLD_DATA_WARNING}
+      isHorizontal={true}
+      fullSize={true}
       data={data}
       error={error}
       showFilter={true}

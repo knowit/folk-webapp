@@ -6,7 +6,7 @@ import { GridItemContent } from '../gridItem/GridItemContent'
 import { GridItemHeader } from '../gridItem/GridItemHeader'
 import { MultiLineSkeleton } from '../skeletons/MultiLineSkeleton'
 import BarChart from './nivo/BarChart'
-import { IsBigProps } from './nivo/common'
+import { IsBigProps, IsHorizontalProps } from './nivo/common'
 import LineChart from './nivo/LineChart'
 import PieChart from './nivo/PieChart'
 import RadarChart from './nivo/RadarChart'
@@ -25,10 +25,13 @@ interface SingularChartProps {
 export const SingularChart = ({
   isBig,
   chartData,
-}: SingularChartProps & IsBigProps) => {
+  isHorizontal,
+}: SingularChartProps & IsBigProps & IsHorizontalProps) => {
   switch (chartData.type) {
     case 'BarChart':
-      return <BarChart isBig={isBig} {...chartData} />
+      return (
+        <BarChart isBig={isBig} {...chartData} isHorizontal={isHorizontal} />
+      )
     case 'RadarChart':
       return <RadarChart isBig={isBig} {...chartData} />
     case 'LineChart':
@@ -48,6 +51,7 @@ interface ChartCardProps {
   error: any
   showFilter?: boolean
   filterType?: ChartFilterType
+  isHorizontal?: boolean
 }
 
 const ChartCard = ({
@@ -57,6 +61,7 @@ const ChartCard = ({
   title,
   filterType,
   showFilter = false,
+  isHorizontal = false,
   ...props
 }: ChartCardProps) => {
   if (error)
@@ -84,6 +89,7 @@ const ChartCard = ({
       data={data}
       showFilter={showFilter}
       filterType={filterType}
+      isHorizontal={isHorizontal}
       {...props}
     />
   )

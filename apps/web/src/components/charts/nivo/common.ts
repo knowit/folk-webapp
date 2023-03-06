@@ -17,3 +17,7 @@ export interface IsBigProps {
   isBig: boolean
   setIsBig?: (val: boolean) => void
 }
+
+export interface IsHorizontalProps {
+  isHorizontal?: boolean
+}

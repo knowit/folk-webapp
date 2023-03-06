@@ -19,6 +19,7 @@ interface SingularChartCardProps {
   data: SingularChartData
   showFilter?: boolean
   filterType?: ChartFilterType
+  isHorizontal?: boolean
 }
 
 /**
@@ -31,21 +32,28 @@ const SingularChartCard = ({
   showFilter,
   filterType,
   data,
+  isHorizontal = false,
 }: SingularChartCardProps) => {
   const [isBig, setIsBig] = useState(false)
   const { filterOptions, getFilteredData, setSelectedFilter, selectedFilter } =
     useFilteredData(filterType, data)
   const chartData = showFilter ? getFilteredData() : data
-
+  console.log('Data: ', chartData)
   return (
     <GridItem fullSize={fullSize}>
       <GridItemHeader title={title} description={description}>
         {showFilter && (
-          <DropdownPicker
-            values={filterOptions}
-            selected={selectedFilter}
-            onChange={setSelectedFilter}
-          />
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <DropdownPicker
+              values={filterOptions}
+              selected={selectedFilter}
+              onChange={setSelectedFilter}
+            />
+            <DropdownPicker
+              values={['Entur', 'Ruter']}
+              selected={'Velg kunder'}
+            />
+          </div>
         )}
       </GridItemHeader>
       <GridItemContent>
@@ -55,11 +63,22 @@ const SingularChartCard = ({
         </ChartDisplayOptions>
 
         {/* The small chart */}
-        <SingularChart isBig={false} chartData={chartData} />
+        <SingularChart
+          isBig={false}
+          chartData={{
+            data: chartData.data.sort((a, b) => a.hours - b.hours),
+            ...chartData,
+          }}
+          isHorizontal={isHorizontal}
+        />
 
         {/* The big chart */}
         <BigChart open={isBig} onClose={() => setIsBig(false)}>
-          <SingularChart isBig={isBig} chartData={chartData} />
+          <SingularChart
+            isBig={isBig}
+            chartData={chartData}
+            isHorizontal={isHorizontal}
+          />
         </BigChart>
       </GridItemContent>
     </GridItem>

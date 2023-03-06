@@ -13,6 +13,8 @@ const HoursBilledPerCustomerCard = () => {
       data={data}
       error={error}
       showFilter={true}
+      isHorizontal={true}
+      fullSize={true}
       filterType="perCustomer"
     />
   )

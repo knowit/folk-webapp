@@ -1,7 +1,7 @@
 import { BarDatum, BarSvgProps, ResponsiveBar } from '@nivo/bar'
 import React, { useEffect, useState } from 'react'
 import { Translation } from '../../../utils/translation'
-import { chartColors, IsBigProps } from './common'
+import { chartColors, IsBigProps, IsHorizontalProps } from './common'
 
 const splitText = (longText: string | number) => {
   const maxLength = 10
@@ -55,9 +55,14 @@ type Props<RawDatum extends BarDatum> = Omit<
   BarSvgProps<RawDatum>,
   'height' | 'width'
 > &
-  IsBigProps
+  IsBigProps &
+  IsHorizontalProps
 
-const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
+const BarChart: React.FC<Props<BarDatum>> = ({
+  isBig = false,
+  isHorizontal,
+  ...props
+}) => {
   const [maxY, setMaxY] = useState(0)
 
   function getStandardDeviation(array) {
@@ -79,7 +84,6 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
   }, [props.data])
 
   const bigLeftMargin = Math.floor(maxY) >= 10000
-
   return (
     <div style={{ width: '100%', height: isBig ? '400px' : '300px' }}>
       <ResponsiveBar
@@ -89,10 +93,12 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
           bottom: 65,
           left: bigLeftMargin ? 55 : 30,
         }}
-        enableLabel={false}
+        enableLabel={isHorizontal}
+        label={isHorizontal ? (d) => `${d.indexValue}` : ''}
         colors={chartColors}
         borderRadius={3}
         groupMode="grouped"
+        layout={isHorizontal ? 'horizontal' : 'vertical'}
         key={props.data.length}
         legendLabel={(data) => {
           if (data) {
@@ -154,6 +160,7 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
         axisBottom={{
           renderTick: CustomTick,
         }}
+        axisLeft={null}
         legends={[
           {
             dataFrom: 'keys',
