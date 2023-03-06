@@ -1,5 +1,5 @@
 import { SingularChartData } from '../../../../../packages/folk-common/types/chartTypes'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GridItem } from '../gridItem/GridItem'
 import { GridItemHeader } from '../gridItem/GridItemHeader'
 import DropdownPicker from './DropdownPicker'
@@ -38,7 +38,22 @@ const SingularChartCard = ({
   const { filterOptions, getFilteredData, setSelectedFilter, selectedFilter } =
     useFilteredData(filterType, data)
   const chartData = showFilter ? getFilteredData() : data
-  console.log('Data: ', chartData)
+  const [customerFilter, setCustomerFilter] = useState<string[]>([])
+  useEffect(() => {
+    if (
+      chartData !== undefined &&
+      chartData.data !== undefined &&
+      chartData.data.length > 0
+    ) {
+      console.log('Setting values..')
+      const allCustomers = chartData.data.map((item) => {
+        if (item.id !== undefined) return item.id
+      })
+      setCustomerFilter(allCustomers)
+      console.log('Values are now: ', allCustomers)
+    }
+  }, [])
+  console.log('Data: ', customerFilter)
   return (
     <GridItem fullSize={fullSize}>
       <GridItemHeader title={title} description={description}>
@@ -49,10 +64,7 @@ const SingularChartCard = ({
               selected={selectedFilter}
               onChange={setSelectedFilter}
             />
-            <DropdownPicker
-              values={['Entur', 'Ruter']}
-              selected={'Velg kunder'}
-            />
+            <DropdownPicker selected={''} values={['customerFilter']} />
           </div>
         )}
       </GridItemHeader>

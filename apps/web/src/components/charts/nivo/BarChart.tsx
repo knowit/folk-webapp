@@ -46,6 +46,31 @@ const CustomTick = (tick: any) => {
   )
 }
 
+const TempTick = (tick: any) => {
+  const y = tick.tickIndex
+  const values = splitText(tick.value)
+  return (
+    <g transform={`translate(${tick.x},${tick.y + 10})`}>
+      <line stroke="rgb(119,119,119)" strokeWidth={1.5} y1={-5} y2={15} />
+      <text
+        y={5}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        style={{
+          fill: '#333',
+          fontSize: 10,
+        }}
+      >
+        {values.map((value: string, index) => (
+          <tspan key={value + index} y={y + 20} x={0}>
+            {value}
+          </tspan>
+        ))}
+      </text>
+    </g>
+  )
+}
+
 /**
  * Nivo Bar Chart with custom styling.
  * Allows for overloading of all props for more detailed customization.
@@ -95,6 +120,8 @@ const BarChart: React.FC<Props<BarDatum>> = ({
         }}
         enableLabel={isHorizontal}
         label={isHorizontal ? (d) => `${d.indexValue}` : ''}
+        enableGridX={isHorizontal}
+        enableGridY={!isHorizontal}
         colors={chartColors}
         borderRadius={3}
         groupMode="grouped"
@@ -158,7 +185,7 @@ const BarChart: React.FC<Props<BarDatum>> = ({
           }
         }}
         axisBottom={{
-          renderTick: CustomTick,
+          renderTick: isHorizontal ? TempTick : CustomTick,
         }}
         axisLeft={null}
         legends={[
