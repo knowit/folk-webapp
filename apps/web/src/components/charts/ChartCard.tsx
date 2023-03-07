@@ -14,6 +14,7 @@ import SunburstChart from './nivo/SunburstChart'
 import MultipleChartCard from './MultipleChartCard'
 import SingularChartCard from './SingularChartCard'
 import { ChartFilterType } from './chartFilters/useFilteredData'
+import { SliceTooltip } from '@nivo/line'
 
 interface SingularChartProps {
   chartData: SingularChartData
@@ -25,6 +26,7 @@ interface SingularChartProps {
 export const SingularChart = ({
   isBig,
   chartData,
+  ...props
 }: SingularChartProps & IsBigProps) => {
   switch (chartData.type) {
     case 'BarChart':
@@ -32,7 +34,7 @@ export const SingularChart = ({
     case 'RadarChart':
       return <RadarChart isBig={isBig} {...chartData} />
     case 'LineChart':
-      return <LineChart isBig={isBig} {...chartData} />
+      return <LineChart isBig={isBig} {...chartData} {...props} />
     case 'PieChart':
       return <PieChart isBig={isBig} {...chartData} />
     case 'SunburstChart':
@@ -48,6 +50,7 @@ interface ChartCardProps {
   error: any
   showFilter?: boolean
   filterType?: ChartFilterType
+  sliceTooltip?: SliceTooltip
 }
 
 const ChartCard = ({

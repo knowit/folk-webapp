@@ -11,6 +11,7 @@ import { SingularChart } from './ChartCard'
 import useFilteredData, {
   ChartFilterType,
 } from './chartFilters/useFilteredData'
+import { SliceTooltip } from '@nivo/line'
 
 interface SingularChartCardProps {
   title: string
@@ -19,6 +20,7 @@ interface SingularChartCardProps {
   data: SingularChartData
   showFilter?: boolean
   filterType?: ChartFilterType
+  sliceTooltip?: SliceTooltip
 }
 
 /**
@@ -31,6 +33,7 @@ const SingularChartCard = ({
   showFilter,
   filterType,
   data,
+  ...props
 }: SingularChartCardProps) => {
   const [isBig, setIsBig] = useState(false)
   const { filterOptions, getFilteredData, setSelectedFilter, selectedFilter } =
@@ -55,11 +58,11 @@ const SingularChartCard = ({
         </ChartDisplayOptions>
 
         {/* The small chart */}
-        <SingularChart isBig={false} chartData={chartData} />
+        <SingularChart isBig={false} chartData={chartData} {...props} />
 
         {/* The big chart */}
         <BigChart open={isBig} onClose={() => setIsBig(false)}>
-          <SingularChart isBig={isBig} chartData={chartData} />
+          <SingularChart isBig={isBig} chartData={chartData} {...props} />
         </BigChart>
       </GridItemContent>
     </GridItem>

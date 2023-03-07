@@ -5,6 +5,7 @@ function getHoursBilledPerWeek(
   data: BilledCustomerHours[]
 ): LineChartData['data'] {
   const aggregationMap: Record<string, Record<string, number>> = {}
+  const regPeriodsSet = new Set()
 
   // Build map of customers and aggregate all hours for all weeks
   for (const { customer, reg_period, hours } of data) {
@@ -17,15 +18,29 @@ function getHoursBilledPerWeek(
     } else {
       aggregationMap[customer][reg_period] += hours
     }
+
+    regPeriodsSet.add(reg_period)
   }
 
+  const sortedRegPeriods = Array.from(regPeriodsSet).sort()
   const output: LineChartData['data'] = []
+
   // Generate output fitting desired format
   for (const [customer, values] of Object.entries(aggregationMap)) {
+    // Ensure that all weeks are present in the data even if there are no hours billed
+    sortedRegPeriods.forEach((regPeriod: string) => {
+      if (!(regPeriod in values)) {
+        values[regPeriod] = 0
+      }
+    })
+
     const dataList = []
     for (const [x, y] of Object.entries(values)) {
       dataList.push({ x, y })
     }
+
+    dataList.sort((a, b) => parseInt(a.x) - parseInt(b.x))
+
     output.push({ id: customer, data: dataList })
   }
   return output
