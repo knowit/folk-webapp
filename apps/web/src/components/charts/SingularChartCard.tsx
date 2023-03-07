@@ -1,5 +1,5 @@
 import { SingularChartData } from '../../../../../packages/folk-common/types/chartTypes'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { GridItem } from '../gridItem/GridItem'
 import { GridItemHeader } from '../gridItem/GridItemHeader'
 import DropdownPicker from './DropdownPicker'
@@ -11,6 +11,15 @@ import { SingularChart } from './ChartCard'
 import useFilteredData, {
   ChartFilterType,
 } from './chartFilters/useFilteredData'
+import {
+  Checkbox,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  OutlinedInput,
+  Select,
+} from '@material-ui/core'
+import FormControl from '@material-ui/core/FormControl'
 
 interface SingularChartCardProps {
   title: string
@@ -22,9 +31,6 @@ interface SingularChartCardProps {
   isHorizontal?: boolean
 }
 
-/**
- * A card for rendering a single card.
- */
 const SingularChartCard = ({
   title,
   description,
@@ -37,34 +43,58 @@ const SingularChartCard = ({
   const [isBig, setIsBig] = useState(false)
   const { filterOptions, getFilteredData, setSelectedFilter, selectedFilter } =
     useFilteredData(filterType, data)
-  const chartData = showFilter ? getFilteredData() : data
-  const [customerFilter, setCustomerFilter] = useState<string[]>([])
-  useEffect(() => {
-    if (
-      chartData !== undefined &&
-      chartData.data !== undefined &&
-      chartData.data.length > 0
-    ) {
-      console.log('Setting values..')
-      const allCustomers = chartData.data.map((item) => {
+  const chartData: SingularChartData = showFilter ? getFilteredData() : data
+  const allCustomers = chartData.data
+    .map((item) => {
+      if (showFilter) {
+        //Datatype er forkjellig på de to grafene. Kundenavn ligger på .id på den ene grafen og på .customer på den andre grafen
         if (item.id !== undefined) return item.id
-      })
-      setCustomerFilter(allCustomers)
-      console.log('Values are now: ', allCustomers)
-    }
-  }, [])
-  console.log('Data: ', customerFilter)
+        else if (item.customer !== undefined) return item.customer
+      }
+    })
+    .filter((item) => item !== undefined)
+
+  const [customerFilter, setCustomerFilter] = useState<string[]>(allCustomers)
+
   return (
     <GridItem fullSize={fullSize}>
       <GridItemHeader title={title} description={description}>
         {showFilter && (
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              width: '60%',
+              justifyContent: 'space-between',
+            }}
+          >
             <DropdownPicker
               values={filterOptions}
               selected={selectedFilter}
               onChange={setSelectedFilter}
             />
-            <DropdownPicker selected={''} values={['customerFilter']} />
+            <div style={{ width: '50%' }}>
+              <FormControl style={{ width: '100%' }}>
+                <InputLabel htmlFor="grouped-native-select">
+                  Velg kundefilter
+                </InputLabel>
+                <Select
+                  multiple
+                  defaultValue="Velg kundefilter"
+                  value={[]}
+                  id="grouped-native-select"
+                  input={<OutlinedInput />}
+                  style={{ backgroundColor: '#F1F0ED' }}
+                >
+                  {customerFilter.map((variant) => (
+                    <MenuItem key={variant} value={variant}>
+                      <Checkbox checked={false} />
+                      <ListItemText primary={variant} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
           </div>
         )}
       </GridItemHeader>

@@ -21,14 +21,13 @@ const splitText = (longText: string | number) => {
   return textList
 }
 
-const CustomTick = (tick: any) => {
+const VerticalTick = (tick: any) => {
   const y = tick.tickIndex % 2 === 0 ? 10 : -15
   const values = splitText(tick.value)
   return (
     <g transform={`translate(${tick.x},${tick.y + 22})`}>
       <line stroke="rgb(119,119,119)" strokeWidth={1.5} y1={-22} y2={y} />
       <text
-        y={y + 5}
         textAnchor="middle"
         dominantBaseline="middle"
         style={{
@@ -46,14 +45,13 @@ const CustomTick = (tick: any) => {
   )
 }
 
-const TempTick = (tick: any) => {
+const HorizontalTick = (tick: any) => {
   const y = tick.tickIndex
   const values = splitText(tick.value)
   return (
     <g transform={`translate(${tick.x},${tick.y + 10})`}>
       <line stroke="rgb(119,119,119)" strokeWidth={1.5} y1={-5} y2={15} />
       <text
-        y={5}
         textAnchor="middle"
         dominantBaseline="middle"
         style={{
@@ -185,7 +183,7 @@ const BarChart: React.FC<Props<BarDatum>> = ({
           }
         }}
         axisBottom={{
-          renderTick: isHorizontal ? TempTick : CustomTick,
+          renderTick: isHorizontal ? HorizontalTick : VerticalTick,
         }}
         axisLeft={null}
         legends={[
