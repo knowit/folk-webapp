@@ -8,7 +8,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
 }) => (
   <div style={{ width: '100%', height: isBig ? '400px' : '280px' }}>
     <ResponsiveLine
-      margin={{ top: 10, right: 20, bottom: 70, left: 40 }}
+      margin={{ top: 10, right: 40, bottom: 70, left: 40 }}
       animate={false}
       xScale={{ type: 'point' }}
       yScale={{
