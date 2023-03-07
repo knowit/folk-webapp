@@ -15,6 +15,7 @@ import MultipleChartCard from './MultipleChartCard'
 import SingularChartCard from './SingularChartCard'
 import { ChartFilterType } from './chartFilters/useFilteredData'
 import { SliceTooltip } from '@nivo/line'
+import { Skeleton } from '@material-ui/lab'
 
 interface SingularChartProps {
   chartData: SingularChartData
@@ -71,7 +72,13 @@ const ChartCard = ({
         </GridItemContent>
       </GridItem>
     )
-  if (!data) return <MultiLineSkeleton />
+  if (!data) {
+    return (
+      <GridItem fullSize={fullSize}>
+        <Skeleton variant="rect" height={438} />
+      </GridItem>
+    )
+  }
 
   return data.type === 'MultipleChart' ? (
     <MultipleChartCard
