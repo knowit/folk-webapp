@@ -108,6 +108,10 @@ const SingularChartCard = ({
     setGraphData(newGraph)
   }, [filteredCustomers])
 
+  useEffect(() => {
+    setGraphData(chartData)
+  }, [])
+
   return (
     <GridItem fullSize={fullSize}>
       <GridItemHeader title={title} description={description}>
