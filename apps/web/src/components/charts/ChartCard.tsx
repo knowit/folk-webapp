@@ -29,6 +29,7 @@ export const SingularChart = ({
   isHorizontal,
   ...props
 }: SingularChartProps & IsBigProps & IsHorizontalProps) => {
+  console.log('Chart data: ', chartData)
   switch (chartData.type) {
     case 'BarChart':
       return (

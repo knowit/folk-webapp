@@ -83,34 +83,30 @@ const SingularChartCard = ({
   }
 
   useEffect(() => {
-    //const newData = filteredCustomers.filter((customer) => customer.checked ?? customer)
-    console.log('Current filters: ', filteredCustomers)
-    const newData = chartData.data.map((customer) => {
+    let isBarChart = false
+    const newData = chartData.data.filter((customer) => {
       if (showFilter) {
         if (customer.id !== undefined) {
           const currentCustomer = filteredCustomers.find(
             (curr) => curr.name === customer.id
           )
-          if (currentCustomer.checked)
-            return { id: customer.id, hours: customer.hours }
+          if (currentCustomer.checked) {
+            return { id: customer.id, data: customer.data }
+          }
         } else if (customer.customer !== undefined) {
+          isBarChart = true
           const currentCustomer = filteredCustomers.find(
             (curr) => curr.name === customer.customer
           )
-          if (currentCustomer.checked)
+          if (currentCustomer.checked) {
             return { customer: customer.customer, hours: customer.hours }
+          }
         }
       }
     })
-    console.log('Changed data: ', newData)
-    const newGraph: SingularChartData = { data: newData, ...chartData }
-    setGraphData(newGraph) //Type mismatch?? Dataen blir ikke oppdatert
-    console.log('Graph: ', graphData)
+    const newGraph = { ...chartData, data: newData } as SingularChartData
+    setGraphData(newGraph)
   }, [filteredCustomers])
-
-  useEffect(() => {
-    // console.log("Data: ", graphData)
-  }, [graphData])
 
   return (
     <GridItem fullSize={fullSize}>
