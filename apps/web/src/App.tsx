@@ -3,6 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import Header from './components/header/Header'
 import Content from './components/Content'
 import Footer from './components/Footer'
+import { useUserInfo } from './context/UserInfoContext'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,6 +33,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function App() {
   const classes = useStyles()
+
+  const { user } = useUserInfo()
+  if (user === undefined) return null
+
   return (
     <div className={classes.container}>
       <Header />
