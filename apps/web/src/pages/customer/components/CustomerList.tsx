@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useState } from 'react'
 import { Box } from '@material-ui/core'
-import { Skeleton } from '@material-ui/lab'
+import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { GridItem } from '../../../components/gridItem/GridItem'
 import {
   CenteredHeaderCell,
@@ -65,9 +65,7 @@ export default function CustomerList() {
 
   const getCustomerAccordions = () => {
     if (isLoading) {
-      return (
-        <Skeleton variant="rect" height={500} width={'100%'} animation="wave" />
-      )
+      return <BaseSkeleton variant="rect" height={500} width={'100%'} />
     }
 
     if (filteredData.length === 0) {

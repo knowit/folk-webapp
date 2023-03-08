@@ -1,4 +1,4 @@
-import { Skeleton } from '@material-ui/lab'
+import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import React from 'react'
 import { useCustomerCards } from '../../../api/data/customer/customerQueries'
 import CustomerCard from '../cards/CustomerCard'
@@ -12,7 +12,7 @@ const CustomerCardList = () => {
       <>
         {[...Array(4)].map((_, index) => (
           <GridItem key={index}>
-            <Skeleton variant="rect" height={175} />
+            <BaseSkeleton variant="rect" height={175} />
           </GridItem>
         ))}
       </>

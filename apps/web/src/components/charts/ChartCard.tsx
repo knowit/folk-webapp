@@ -4,7 +4,7 @@ import { FallbackMessage } from '../../pages/employee/components/FallbackMessage
 import { GridItem } from '../gridItem/GridItem'
 import { GridItemContent } from '../gridItem/GridItemContent'
 import { GridItemHeader } from '../gridItem/GridItemHeader'
-import { MultiLineSkeleton } from '../skeletons/MultiLineSkeleton'
+import { ChartSkeleton } from '../skeletons/ChartSkeleton'
 import BarChart from './nivo/BarChart'
 import { IsBigProps } from './nivo/common'
 import LineChart from './nivo/LineChart'
@@ -15,7 +15,6 @@ import MultipleChartCard from './MultipleChartCard'
 import SingularChartCard from './SingularChartCard'
 import { ChartFilterType } from './chartFilters/useFilteredData'
 import { SliceTooltip } from '@nivo/line'
-import { Skeleton } from '@material-ui/lab'
 
 interface SingularChartProps {
   chartData: SingularChartData
@@ -75,7 +74,7 @@ const ChartCard = ({
   if (!data) {
     return (
       <GridItem fullSize={fullSize}>
-        <Skeleton variant="rect" height={438} />
+        <ChartSkeleton />
       </GridItem>
     )
   }
