@@ -55,7 +55,7 @@ const SingularChartCard = ({
     .filter((item) => item !== undefined)
 
   const [customerFilter, setCustomerFilter] = useState<string[]>(allCustomers)
-
+  console.log('Filter: ', customerFilter)
   return (
     <GridItem fullSize={fullSize}>
       <GridItemHeader title={title} description={description}>
@@ -75,7 +75,15 @@ const SingularChartCard = ({
             />
             <div style={{ width: '50%' }}>
               <FormControl style={{ width: '100%' }}>
-                <InputLabel htmlFor="grouped-native-select">
+                <InputLabel
+                  style={{
+                    zIndex: '1',
+                    color: 'black',
+                    paddingLeft: '12px',
+                    paddingRight: '24px',
+                  }}
+                  htmlFor="grouped-native-select"
+                >
                   Velg kundefilter
                 </InputLabel>
                 <Select
