@@ -33,7 +33,7 @@ export default function Footer() {
   return (
     <footer className={classes.footer}>
       <p>
-        Knowit Folk. Universitetsgata 7, 0164 Oslo &ensp;|&ensp; Tlf. 02486
+        Knowit Folk. Universitetsgata 1, 0164 Oslo &ensp;|&ensp; Tlf. 02486
         &ensp;| &ensp;
         <a className={classes.link} href={improvementsHref}>
           Kontakt og tilbakemeldinger
