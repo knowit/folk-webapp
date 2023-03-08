@@ -4,7 +4,7 @@ import { FallbackMessage } from '../../pages/employee/components/FallbackMessage
 import { GridItem } from '../gridItem/GridItem'
 import { GridItemContent } from '../gridItem/GridItemContent'
 import { GridItemHeader } from '../gridItem/GridItemHeader'
-import { MultiLineSkeleton } from '../skeletons/MultiLineSkeleton'
+import { ChartSkeleton } from '../skeletons/ChartSkeleton'
 import BarChart from './nivo/BarChart'
 import { IsBigProps } from './nivo/common'
 import LineChart from './nivo/LineChart'
@@ -71,7 +71,13 @@ const ChartCard = ({
         </GridItemContent>
       </GridItem>
     )
-  if (!data) return <MultiLineSkeleton />
+  if (!data) {
+    return (
+      <GridItem fullSize={fullSize}>
+        <ChartSkeleton />
+      </GridItem>
+    )
+  }
 
   return data.type === 'MultipleChart' ? (
     <MultipleChartCard

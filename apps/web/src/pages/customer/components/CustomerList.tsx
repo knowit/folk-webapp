@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useState } from 'react'
 import { Box } from '@material-ui/core'
-import { Skeleton } from '@material-ui/lab'
+import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { GridItem } from '../../../components/gridItem/GridItem'
 import {
   CenteredHeaderCell,
@@ -65,7 +65,7 @@ export default function CustomerList() {
 
   const getCustomerAccordions = () => {
     if (isLoading) {
-      return <Skeleton width={'100%'} animation="wave" />
+      return <BaseSkeleton variant="rect" height={500} width={'100%'} />
     }
 
     if (filteredData.length === 0) {
@@ -93,20 +93,10 @@ export default function CustomerList() {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-      {isLoading ? (
-        <Skeleton width={'100%'} animation="wave" />
-      ) : (
-        <>
-          <CustomerFilter
-            currentSearchTerm={searchTerm}
-            onSearch={setSearchTerm}
-          />
-          <RowCount>
-            Viser {filteredData.length} av {data.length} kunder
-          </RowCount>
-        </>
-      )}
-
+      <CustomerFilter currentSearchTerm={searchTerm} onSearch={setSearchTerm} />
+      <RowCount>
+        Viser {filteredData?.length || 0} av {data?.length || 0} kunder
+      </RowCount>
       {getCustomerAccordions()}
     </Box>
   )

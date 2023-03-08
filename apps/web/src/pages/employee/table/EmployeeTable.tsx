@@ -12,7 +12,7 @@ import {
   ConsultantInfo,
   Customer,
 } from '../../../api/data/employee/employeeApiTypes'
-import { Skeleton } from '@material-ui/lab'
+import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { useEmployeeTable } from '../../../api/data/employee/employeeQueries'
 import {
   EmployeeTableColumnMapping,
@@ -22,9 +22,7 @@ import { GridItem } from '../../../components/gridItem/GridItem'
 import { FallbackMessage } from '../components/FallbackMessage'
 
 export function EmployeeTable() {
-  const TableSkeleton = () => (
-    <Skeleton variant="rect" height={780} animation="wave" />
-  )
+  const TableSkeleton = () => <BaseSkeleton variant="rect" height={780} />
 
   const { data: employeeData, error } = useEmployeeTable()
 
