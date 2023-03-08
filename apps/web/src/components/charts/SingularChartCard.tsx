@@ -1,5 +1,5 @@
 import { SingularChartData } from '../../../../../packages/folk-common/types/chartTypes'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GridItem } from '../gridItem/GridItem'
 import { GridItemHeader } from '../gridItem/GridItemHeader'
 import DropdownPicker from './DropdownPicker'
@@ -33,6 +33,12 @@ interface SingularChartCardProps {
   sliceTooltip?: SliceTooltip
 }
 
+interface CustomerFilter {
+  id: number
+  name: string
+  checked: boolean
+}
+
 const SingularChartCard = ({
   title,
   description,
@@ -47,18 +53,65 @@ const SingularChartCard = ({
   const { filterOptions, getFilteredData, setSelectedFilter, selectedFilter } =
     useFilteredData(filterType, data)
   const chartData: SingularChartData = showFilter ? getFilteredData() : data
-  const allCustomers = chartData.data
-    .map((item) => {
+  const allCustomers: CustomerFilter[] = chartData.data
+    .map((item, index) => {
       if (showFilter) {
-        //Datatype er forkjellig på de to grafene. Kundenavn ligger på .id på den ene grafen og på .customer på den andre grafen
-        if (item.id !== undefined) return item.id
-        else if (item.customer !== undefined) return item.customer
+        if (item.id !== undefined)
+          return { id: index, name: item.id, checked: true }
+        else if (item.customer !== undefined)
+          return { id: index, name: item.customer, checked: true }
       }
     })
     .filter((item) => item !== undefined)
 
-  const [customerFilter, setCustomerFilter] = useState<string[]>(allCustomers)
-  console.log('Filter: ', customerFilter)
+  const [filteredCustomers, setFilteredCustomers] =
+    useState<CustomerFilter[]>(allCustomers)
+  const [graphData, setGraphData] = useState<SingularChartData>(chartData)
+
+  const handleFilterChange = (event) => {
+    const currentFilteredCustomers = [...filteredCustomers]
+    const customerName = event.target.value[0]
+    const clickedCustomer = filteredCustomers.find(
+      (tempCustomer) => tempCustomer.name === customerName
+    )
+    currentFilteredCustomers[clickedCustomer.id] = {
+      id: clickedCustomer.id,
+      name: clickedCustomer.name,
+      checked: !clickedCustomer.checked,
+    }
+    setFilteredCustomers(currentFilteredCustomers)
+  }
+
+  useEffect(() => {
+    //const newData = filteredCustomers.filter((customer) => customer.checked ?? customer)
+    console.log('Current filters: ', filteredCustomers)
+    const newData = chartData.data.map((customer) => {
+      if (showFilter) {
+        if (customer.id !== undefined) {
+          const currentCustomer = filteredCustomers.find(
+            (curr) => curr.name === customer.id
+          )
+          if (currentCustomer.checked)
+            return { id: customer.id, hours: customer.hours }
+        } else if (customer.customer !== undefined) {
+          const currentCustomer = filteredCustomers.find(
+            (curr) => curr.name === customer.customer
+          )
+          if (currentCustomer.checked)
+            return { customer: customer.customer, hours: customer.hours }
+        }
+      }
+    })
+    console.log('Changed data: ', newData)
+    const newGraph: SingularChartData = { data: newData, ...chartData }
+    setGraphData(newGraph) //Type mismatch?? Dataen blir ikke oppdatert
+    console.log('Graph: ', graphData)
+  }, [filteredCustomers])
+
+  useEffect(() => {
+    // console.log("Data: ", graphData)
+  }, [graphData])
+
   return (
     <GridItem fullSize={fullSize}>
       <GridItemHeader title={title} description={description}>
@@ -93,14 +146,15 @@ const SingularChartCard = ({
                   multiple
                   defaultValue="Velg kundefilter"
                   value={[]}
+                  onChange={handleFilterChange}
                   id="grouped-native-select"
                   input={<OutlinedInput />}
                   style={{ backgroundColor: '#F1F0ED' }}
                 >
-                  {customerFilter.map((variant) => (
-                    <MenuItem key={variant} value={variant}>
-                      <Checkbox checked={false} />
-                      <ListItemText primary={variant} />
+                  {filteredCustomers.map((customer) => (
+                    <MenuItem key={customer.id} value={customer.name}>
+                      <Checkbox checked={customer.checked} />
+                      <ListItemText primary={customer.name} />
                     </MenuItem>
                   ))}
                 </Select>
@@ -118,10 +172,7 @@ const SingularChartCard = ({
         {/* The small chart */}
         <SingularChart
           isBig={false}
-          chartData={{
-            data: chartData.data.sort((a, b) => a.hours - b.hours),
-            ...chartData,
-          }}
+          chartData={graphData}
           isHorizontal={isHorizontal}
           {...props}
         />
@@ -130,7 +181,7 @@ const SingularChartCard = ({
         <BigChart open={isBig} onClose={() => setIsBig(false)}>
           <SingularChart
             isBig={isBig}
-            chartData={chartData}
+            chartData={graphData}
             isHorizontal={isHorizontal}
             {...props}
           />
