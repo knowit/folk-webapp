@@ -14,6 +14,7 @@ const RadarChart: React.FC<Props<any>> = ({ isBig = false, ...props }) => (
     <ResponsiveRadar
       maxValue={5}
       margin={{ top: 50, right: 10, bottom: 50, left: 10 }}
+      animate={false}
       gridLabelOffset={16}
       dotBorderWidth={2}
       dotColor={{ theme: 'background' }}

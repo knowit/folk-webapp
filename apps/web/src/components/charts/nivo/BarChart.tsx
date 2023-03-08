@@ -120,6 +120,7 @@ const BarChart: React.FC<Props<BarDatum>> = ({
         label={isHorizontal ? (d) => `${d.indexValue}` : ''}
         enableGridX={isHorizontal}
         enableGridY={!isHorizontal}
+        animate={false}
         colors={chartColors}
         borderRadius={3}
         groupMode="grouped"

@@ -20,6 +20,7 @@ import {
   Select,
 } from '@material-ui/core'
 import FormControl from '@material-ui/core/FormControl'
+import { SliceTooltip } from '@nivo/line'
 
 interface SingularChartCardProps {
   title: string
@@ -29,6 +30,7 @@ interface SingularChartCardProps {
   showFilter?: boolean
   filterType?: ChartFilterType
   isHorizontal?: boolean
+  sliceTooltip?: SliceTooltip
 }
 
 const SingularChartCard = ({
@@ -39,6 +41,7 @@ const SingularChartCard = ({
   filterType,
   data,
   isHorizontal = false,
+  ...props
 }: SingularChartCardProps) => {
   const [isBig, setIsBig] = useState(false)
   const { filterOptions, getFilteredData, setSelectedFilter, selectedFilter } =
@@ -120,6 +123,7 @@ const SingularChartCard = ({
             ...chartData,
           }}
           isHorizontal={isHorizontal}
+          {...props}
         />
 
         {/* The big chart */}
@@ -128,6 +132,7 @@ const SingularChartCard = ({
             isBig={isBig}
             chartData={chartData}
             isHorizontal={isHorizontal}
+            {...props}
           />
         </BigChart>
       </GridItemContent>

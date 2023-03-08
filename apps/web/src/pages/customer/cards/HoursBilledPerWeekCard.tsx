@@ -2,6 +2,7 @@ import React from 'react'
 import ChartCard from '../../../components/charts/ChartCard'
 import { useHoursBilledPerWeekCharts } from '../../../api/data/customer/customerQueries'
 import { POSSIBLE_OLD_DATA_WARNING } from './messages'
+import HoursBilledPerWeekTooltip from '../components/HoursBilledPerWeekTooltip'
 
 const HoursBilledPerWeekCard = () => {
   const { data, error } = useHoursBilledPerWeekCharts()
@@ -16,6 +17,7 @@ const HoursBilledPerWeekCard = () => {
       error={error}
       showFilter={true}
       filterType="perWeek"
+      sliceTooltip={HoursBilledPerWeekTooltip}
     />
   )
 }
