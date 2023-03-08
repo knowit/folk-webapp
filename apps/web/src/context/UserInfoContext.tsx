@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { UserInfo } from '../api/auth/authApiTypes'
 import { getUserInfo } from '../api/data/user/userApi'
+import { getAccessToken } from '../api/auth/authHelpers'
 
 import { isError } from '../api/errorHandling'
 
 interface UserContextProps {
-  user: UserInfo | null
+  user: UserInfo | null | undefined
   setUser: (val: UserInfo | null) => void
 }
 interface UserInfoProviderProps {
@@ -30,13 +31,21 @@ export const useUserInfo = () => {
 export const UserInfoProvider: React.FC<UserInfoProviderProps> = ({
   children,
 }) => {
-  const [fetchedUser, setFetchedUser] = useState<UserInfo | null>(null)
+  const [fetchedUser, setFetchedUser] = useState<UserInfo | null>(undefined)
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        /* The timeout is to prevent a user which was logged in in previous seesion from seeing the login page for a short flash.
+         * When user is undefined, App component will return null, which will prevent the login page from being rendered. */
+        const timeout = setTimeout(
+          () => {
+            setFetchedUser(null)
+          },
+          getAccessToken() ? 3000 : 0
+        )
         const user = await getUserInfo()
-
+        clearTimeout(timeout)
         setFetchedUser(user)
       } catch (error) {
         if (isError(error)) {
