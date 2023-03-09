@@ -27,10 +27,24 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ data }) => {
         </Link>
       </GridItemHeader>
       <GridItemContent>
-        <Box>Antall konsulenter: {consultants}</Box>
-        <Box>Fakturerte timer siste periode: {billedLastPeriod}</Box>
+        <Box>Kundeansvarlig</Box>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ width: '33%' }}>
+            Antall konsulenter:{' '}
+            <Box sx={{ fontSize: 32, fontWeight: 800 }}>{consultants}</Box>
+          </Box>
+          <Box sx={{ width: '33%' }}>
+            Fakturerte timer siste periode:{' '}
+            <Box sx={{ fontSize: 32, fontWeight: 800 }}>{billedLastPeriod}</Box>
+          </Box>
+          <Box sx={{ width: '33%' }}>
+            Totalt fakturerte timer:{' '}
+            <Box sx={{ fontSize: 32, fontWeight: 800 }}>{billedTotal}</Box>
+          </Box>
+        </Box>
+        {/*<Box>Fakturerte timer siste periode: {billedLastPeriod}</Box>
         <Box>Totalt fakturerte timer: {billedTotal}</Box>
-        <Box>Kunde siden: -</Box>
+        <Box>Kunde siden: -</Box>*/}
       </GridItemContent>
     </GridItem>
   )
