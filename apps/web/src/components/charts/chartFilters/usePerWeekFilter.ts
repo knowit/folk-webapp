@@ -2,11 +2,12 @@ import { SingularChartData } from '../../../../../../packages/folk-common/types/
 import { useState } from 'react'
 import { FilteredData } from './useFilteredData'
 
-export type PerWeekFilterOptions = 'Uke' | 'Måned' | 'Kvartal' | 'År'
+export type PerWeekFilterOptions = 'Uke' | 'Måned' | 'Kvartal' | 'Halvår' | 'År'
 
 type DateDisplay = {
   month: string
   year: string
+  halfyear: string
   week: string
   quarter: string
   date: Date
@@ -21,10 +22,12 @@ function getDateDisplay(regPeriod: string): DateDisplay {
 
   const month = date.toLocaleString('no-NO', { month: 'short' })
   const quarter = Math.ceil(date.getMonth() / 3) - 1
+  const halfyear = Math.ceil(date.getMonth() / 6)
 
   return {
     month: `${y} - ${month}`,
     year: `${y}`,
+    halfyear: `${y} - ${halfyear}. halvår`,
     week: `${y} - Uke ${w}`,
     quarter: `${y} - Q${quarter}`,
     date: date,
@@ -36,6 +39,7 @@ const usePerWeekFilter = (data: SingularChartData): FilteredData => {
     'Uke',
     'Måned',
     'Kvartal',
+    'Halvår',
     'År',
   ]
 
@@ -56,6 +60,8 @@ const usePerWeekFilter = (data: SingularChartData): FilteredData => {
                 return { ...value, x: date.month }
               case 'Kvartal':
                 return { ...value, x: date.quarter }
+              case 'Halvår':
+                return { ...value, x: date.halfyear }
               case 'År':
                 return { ...value, x: date.year }
               default:
