@@ -107,100 +107,107 @@ const BarChart: React.FC<Props<BarDatum>> = ({
   }, [props.data])
 
   const bigLeftMargin = Math.floor(maxY) >= 10000
-  //Ytterste div burde ha en høyde på 650px med overflowY: auto. Responsivebar må ha en større høyde enn dette igjen for at det skal bli scrollbart, så da kan vi sette den til 500%.
   return (
-    <div style={{ width: '100%', height: isBig ? '500px' : '300px' }}>
-      <ResponsiveBar
-        margin={{
-          top: 40,
-          right: 20,
-          bottom: 65,
-          left: bigLeftMargin ? 55 : 30,
-        }}
-        enableLabel={isHorizontal}
-        label={isHorizontal ? (d) => `${d.indexValue}` : ''}
-        enableGridX={isHorizontal}
-        enableGridY={!isHorizontal}
-        animate={false}
-        colors={chartColors}
-        borderRadius={3}
-        groupMode="grouped"
-        layout={isHorizontal ? 'horizontal' : 'vertical'}
-        key={props.data.length}
-        legendLabel={(data) => {
-          if (data) {
-            const label = Translation[data.id] ?? data.id
-            return label as string
-          }
-          return ''
-        }}
-        maxValue={maxY > 0 ? maxY : 'auto'} //Need extra space for bars to stay under max value in xAxis
-        tooltip={({ indexValue, value, id }) => {
-          // Har coded to fit competenceAmount/Proportion. Should be updated some day.
-          if (id.toString().includes('Proportion' || 'Amount')) {
-            const dataSet: any = props.data.find(
-              (i: any) => i.category === indexValue
-            )
+    <div
+      style={{
+        width: '100%',
+        height: isBig ? '800px' : '650px',
+        overflowY: 'auto',
+      }}
+    >
+      <div style={{ height: '600%', width: '100%' }}>
+        <ResponsiveBar
+          margin={{
+            top: 40,
+            right: 20,
+            bottom: 65,
+            left: bigLeftMargin ? 55 : 30,
+          }}
+          enableLabel={isHorizontal}
+          label={isHorizontal ? (d) => `${d.indexValue}` : ''}
+          enableGridX={isHorizontal}
+          enableGridY={!isHorizontal}
+          animate={false}
+          colors={chartColors}
+          borderRadius={3}
+          groupMode="grouped"
+          layout={isHorizontal ? 'horizontal' : 'vertical'}
+          key={props.data.length}
+          legendLabel={(data) => {
+            if (data) {
+              const label = Translation[data.id] ?? data.id
+              return label as string
+            }
+            return ''
+          }}
+          maxValue={maxY > 0 ? maxY : 'auto'} //Need extra space for bars to stay under max value in xAxis
+          tooltip={({ indexValue, value, id }) => {
+            // Har coded to fit competenceAmount/Proportion. Should be updated some day.
+            if (id.toString().includes('Proportion' || 'Amount')) {
+              const dataSet: any = props.data.find(
+                (i: any) => i.category === indexValue
+              )
 
-            const key = id.toString().includes('motivation')
-              ? 'motivation'
-              : 'competence'
+              const key = id.toString().includes('motivation')
+                ? 'motivation'
+                : 'competence'
 
-            const objectKey =
-              key === 'motivation' ? 'motivationAmount' : 'competenceAmount'
+              const objectKey =
+                key === 'motivation' ? 'motivationAmount' : 'competenceAmount'
 
-            const totalEmployees = dataSet ? dataSet[objectKey] : 0
+              const totalEmployees = dataSet ? dataSet[objectKey] : 0
 
-            return (
-              <div
-                style={{
-                  padding: '6px',
-                  backgroundColor: 'white',
-                  borderRadius: '4px',
-                  boxShadow:
-                    '1px 1px rgba(0,0,0,0.1), -1px 0px 1px rgba(0,0,0,0.1)',
-                }}
-              >
-                <b>{indexValue}:</b>
-                <br /> <b>{Translation[key] ?? key}</b>
-                <br /> Antall ansatte: {totalEmployees}
-                <br /> Andel: {value?.toFixed(1)}%
-              </div>
-            )
-          } else {
-            return (
-              <div
-                style={{
-                  padding: '6px',
-                  backgroundColor: 'white',
-                  borderRadius: '4px',
-                  boxShadow:
-                    '1px 1px rgba(0,0,0,0.1), -1px 0px 1px rgba(0,0,0,0.1)',
-                }}
-              >
-                <b>{indexValue}:</b>
-                <br /> {Translation[id] ?? id}: {value.toFixed(1)}
-              </div>
-            )
-          }
-        }}
-        axisBottom={{
-          renderTick: isHorizontal ? HorizontalTick : VerticalTick,
-        }}
-        axisLeft={null}
-        legends={[
-          {
-            dataFrom: 'keys',
-            anchor: 'top',
-            direction: 'row',
-            itemHeight: 10,
-            itemWidth: 130,
-            translateY: -25,
-            itemsSpacing: 15,
-          },
-        ]}
-        {...props}
-      />
+              return (
+                <div
+                  style={{
+                    padding: '6px',
+                    backgroundColor: 'white',
+                    borderRadius: '4px',
+                    boxShadow:
+                      '1px 1px rgba(0,0,0,0.1), -1px 0px 1px rgba(0,0,0,0.1)',
+                  }}
+                >
+                  <b>{indexValue}:</b>
+                  <br /> <b>{Translation[key] ?? key}</b>
+                  <br /> Antall ansatte: {totalEmployees}
+                  <br /> Andel: {value?.toFixed(1)}%
+                </div>
+              )
+            } else {
+              return (
+                <div
+                  style={{
+                    padding: '6px',
+                    backgroundColor: 'white',
+                    borderRadius: '4px',
+                    boxShadow:
+                      '1px 1px rgba(0,0,0,0.1), -1px 0px 1px rgba(0,0,0,0.1)',
+                  }}
+                >
+                  <b>{indexValue}:</b>
+                  <br /> {Translation[id] ?? id}: {value.toFixed(1)}
+                </div>
+              )
+            }
+          }}
+          axisBottom={{
+            renderTick: isHorizontal ? HorizontalTick : VerticalTick,
+          }}
+          axisLeft={null}
+          legends={[
+            {
+              dataFrom: 'keys',
+              anchor: 'top',
+              direction: 'row',
+              itemHeight: 10,
+              itemWidth: 130,
+              translateY: -25,
+              itemsSpacing: 15,
+            },
+          ]}
+          {...props}
+        />
+      </div>
     </div>
   )
 }
