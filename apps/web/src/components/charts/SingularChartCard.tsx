@@ -66,7 +66,14 @@ const SingularChartCard = ({
 
   const [filteredCustomers, setFilteredCustomers] =
     useState<CustomerFilter[]>(allCustomers)
-  const [graphData, setGraphData] = useState<SingularChartData>(chartData)
+  const [graphData, setGraphData] = useState<SingularChartData>(
+    chartData.type === 'BarChart'
+      ? {
+          ...chartData,
+          data: chartData.data.sort((a, b) => a.hours - b.hours),
+        }
+      : chartData
+  )
 
   const handleFilterChange = (event) => {
     const currentFilteredCustomers = [...filteredCustomers]
@@ -83,34 +90,38 @@ const SingularChartCard = ({
   }
 
   useEffect(() => {
-    const newData = chartData.data
-      .filter((customer) => {
-        if (showFilter) {
-          if (customer.id !== undefined) {
-            const currentCustomer = filteredCustomers.find(
-              (curr) => curr.name === customer.id
-            )
-            if (currentCustomer.checked) {
-              return { id: customer.id, data: customer.data }
-            }
-          } else if (customer.customer !== undefined) {
-            const currentCustomer = filteredCustomers.find(
-              (curr) => curr.name === customer.customer
-            )
-            if (currentCustomer.checked) {
-              return { customer: customer.customer, hours: customer.hours }
-            }
+    let isBarChart = false
+    const newData = chartData.data.filter((customer) => {
+      if (showFilter) {
+        if (customer.id !== undefined) {
+          const currentCustomer = filteredCustomers.find(
+            (curr) => curr.name === customer.id
+          )
+          if (currentCustomer.checked) {
+            return { id: customer.id, data: customer.data }
+          }
+        } else if (customer.customer !== undefined) {
+          isBarChart = true
+          const currentCustomer = filteredCustomers.find(
+            (curr) => curr.name === customer.customer
+          )
+          if (currentCustomer.checked) {
+            return { customer: customer.customer, hours: customer.hours }
           }
         }
-      })
-      .slice(0, 10)
+      }
+    })
+    if (isBarChart) {
+      newData.sort((a, b) => a.hours - b.hours)
+    }
+
     const newGraph = { ...chartData, data: newData } as SingularChartData
     setGraphData(newGraph)
   }, [filteredCustomers])
 
   useEffect(() => {
-    setGraphData(chartData)
-  }, [])
+    console.log('Filtered data: ', selectedFilter)
+  }, [chartData])
 
   return (
     <GridItem fullSize={fullSize}>
