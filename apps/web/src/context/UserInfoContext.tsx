@@ -42,7 +42,7 @@ export const UserInfoProvider: React.FC<UserInfoProviderProps> = ({
           () => {
             setFetchedUser(null)
           },
-          getAccessToken() ? 3000 : 0
+          localStorage.getItem('login') ? 3000 : 0
         )
         const user = await getUserInfo()
         clearTimeout(timeout)
