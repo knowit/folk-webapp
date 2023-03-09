@@ -27,11 +27,24 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ data }) => {
         </Link>
       </GridItemHeader>
       <GridItemContent>
-        <Box>Kundeansvarlig</Box>
+        <Box
+          sx={{
+            fontSize: 20,
+            fontWeight: 700,
+            display: 'flex',
+            flexDirection: 'row',
+            marginBottom: 10,
+          }}
+        >
+          Kundeansvarlig:
+          <Box style={{ fontSize: '20', fontWeight: '400', paddingLeft: 5 }}>
+            Konsulent Konsulentsen
+          </Box>
+        </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Box
             sx={{
-              width: '20%',
+              width: '22%',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
@@ -39,11 +52,11 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ data }) => {
             }}
           >
             Antall konsulenter:
-            <Box sx={{ fontSize: 32, fontWeight: 800 }}>{consultants}</Box>
+            <Box sx={{ fontSize: 32, fontWeight: 700 }}>{consultants}</Box>
           </Box>
           <Box
             sx={{
-              width: '20%',
+              width: '25%',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
@@ -51,11 +64,11 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ data }) => {
             }}
           >
             Fakturerte timer siste periode:
-            <Box sx={{ fontSize: 32, fontWeight: 800 }}>{billedLastPeriod}</Box>
+            <Box sx={{ fontSize: 32, fontWeight: 700 }}>{billedLastPeriod}</Box>
           </Box>
           <Box
             sx={{
-              width: '20%',
+              width: '22%',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
@@ -63,7 +76,7 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ data }) => {
             }}
           >
             Totalt fakturerte timer:
-            <Box sx={{ fontSize: 32, fontWeight: 800 }}>{billedTotal}</Box>
+            <Box sx={{ fontSize: 32, fontWeight: 700 }}>{billedTotal}</Box>
           </Box>
         </Box>
         {/*<Box>Fakturerte timer siste periode: {billedLastPeriod}</Box>
