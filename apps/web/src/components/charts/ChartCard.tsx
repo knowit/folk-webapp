@@ -20,16 +20,12 @@ interface SingularChartProps {
   chartData: SingularChartData
 }
 
-/**
- * The chart to be rendered.
- */
 export const SingularChart = ({
   isBig,
   chartData,
   isHorizontal,
   ...props
 }: SingularChartProps & IsBigProps & IsHorizontalProps) => {
-  console.log('Chart data: ', chartData)
   switch (chartData.type) {
     case 'BarChart':
       return (

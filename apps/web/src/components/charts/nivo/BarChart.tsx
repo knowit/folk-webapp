@@ -107,8 +107,9 @@ const BarChart: React.FC<Props<BarDatum>> = ({
   }, [props.data])
 
   const bigLeftMargin = Math.floor(maxY) >= 10000
+  //Ytterste div burde ha en høyde på 650px med overflowY: auto. Responsivebar må ha en større høyde enn dette igjen for at det skal bli scrollbart, så da kan vi sette den til 500%.
   return (
-    <div style={{ width: '100%', height: isBig ? '400px' : '300px' }}>
+    <div style={{ width: '100%', height: isBig ? '500px' : '300px' }}>
       <ResponsiveBar
         margin={{
           top: 40,

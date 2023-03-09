@@ -37,13 +37,7 @@ export interface RadarChartData {
 
 export type LineChartData = {
   type: 'LineChart'
-  data: {
-    id: string | number
-    data: Array<{
-      x: number | string | Date
-      y: number | string | Date
-    }>
-  }[]
+  data: any[]
 }
 
 export interface PieChartData {

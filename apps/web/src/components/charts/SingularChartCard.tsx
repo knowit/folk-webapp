@@ -83,27 +83,27 @@ const SingularChartCard = ({
   }
 
   useEffect(() => {
-    let isBarChart = false
-    const newData = chartData.data.filter((customer) => {
-      if (showFilter) {
-        if (customer.id !== undefined) {
-          const currentCustomer = filteredCustomers.find(
-            (curr) => curr.name === customer.id
-          )
-          if (currentCustomer.checked) {
-            return { id: customer.id, data: customer.data }
-          }
-        } else if (customer.customer !== undefined) {
-          isBarChart = true
-          const currentCustomer = filteredCustomers.find(
-            (curr) => curr.name === customer.customer
-          )
-          if (currentCustomer.checked) {
-            return { customer: customer.customer, hours: customer.hours }
+    const newData = chartData.data
+      .filter((customer) => {
+        if (showFilter) {
+          if (customer.id !== undefined) {
+            const currentCustomer = filteredCustomers.find(
+              (curr) => curr.name === customer.id
+            )
+            if (currentCustomer.checked) {
+              return { id: customer.id, data: customer.data }
+            }
+          } else if (customer.customer !== undefined) {
+            const currentCustomer = filteredCustomers.find(
+              (curr) => curr.name === customer.customer
+            )
+            if (currentCustomer.checked) {
+              return { customer: customer.customer, hours: customer.hours }
+            }
           }
         }
-      }
-    })
+      })
+      .slice(0, 10)
     const newGraph = { ...chartData, data: newData } as SingularChartData
     setGraphData(newGraph)
   }, [filteredCustomers])
