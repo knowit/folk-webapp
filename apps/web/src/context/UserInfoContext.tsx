@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { UserInfo } from '../api/auth/authApiTypes'
 import { getUserInfo } from '../api/data/user/userApi'
-import { getAccessToken } from '../api/auth/authHelpers'
 
 import { isError } from '../api/errorHandling'
 
