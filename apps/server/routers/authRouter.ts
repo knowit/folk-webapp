@@ -77,7 +77,9 @@ router.get('/callback', async function (req: Request, res: Response) {
     ...cookieSettings,
   })
   res.clearCookie('authReferer')
-  res.redirect(302, getPath(referer))
+  const redirectURL = new URL(referer)
+  redirectURL.searchParams.append('login', 'true')
+  res.redirect(302, redirectURL.toString())
 })
 
 router.get('/userInfo', async function (req: Request, res: Response) {

@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { UserInfo } from '../api/auth/authApiTypes'
 import { getUserInfo } from '../api/data/user/userApi'
-import { getAccessToken } from '../api/auth/authHelpers'
 
 import { isError } from '../api/errorHandling'
 
@@ -42,7 +41,7 @@ export const UserInfoProvider: React.FC<UserInfoProviderProps> = ({
           () => {
             setFetchedUser(null)
           },
-          getAccessToken() ? 3000 : 0
+          localStorage.getItem('login') ? 3000 : 0
         )
         const user = await getUserInfo()
         clearTimeout(timeout)

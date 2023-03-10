@@ -34,6 +34,13 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function App() {
   const classes = useStyles()
 
+  const url = new URL(window.location.href)
+  if (url.searchParams.has('login')) {
+    localStorage.setItem('login', 'true')
+    url.searchParams.delete('login')
+    history.replaceState(null, '', url)
+  }
+
   const { user } = useUserInfo()
   if (user === undefined) return null
 
