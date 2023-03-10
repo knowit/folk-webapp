@@ -27,20 +27,6 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ data }) => {
             </Link>*/}
       </GridItemHeader>
       <GridItemContent>
-        <Box
-          sx={{
-            fontSize: 20,
-            fontWeight: 700,
-            display: 'flex',
-            flexDirection: 'row',
-            marginBottom: 10,
-          }}
-        >
-          Kundeansvarlig:
-          <Box style={{ fontSize: '20', fontWeight: '400', paddingLeft: 5 }}>
-            Konsulent Konsulentsen
-          </Box>
-        </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Box
             sx={{
