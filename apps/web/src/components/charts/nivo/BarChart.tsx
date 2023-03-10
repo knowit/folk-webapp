@@ -107,15 +107,25 @@ const BarChart: React.FC<Props<BarDatum>> = ({
   }, [props.data])
 
   const bigLeftMargin = Math.floor(maxY) >= 10000
+  const calculateChartHeight: string =
+    isHorizontal && props.data.length > 11
+      ? (props.data.length * 8).toString() + '%'
+      : '100%'
   return (
     <div
       style={{
         width: '100%',
-        height: isBig ? '700px' : '550px',
-        overflowY: 'auto',
+        height:
+          isBig && !isHorizontal ? '400px' : isHorizontal ? '600px' : '300px',
+        overflowY: isHorizontal && props.data.length > 11 ? 'auto' : null,
       }}
     >
-      <div style={{ height: '600%', width: '100%' }}>
+      <div
+        style={{
+          height: calculateChartHeight,
+          width: '100%',
+        }}
+      >
         <ResponsiveBar
           margin={{
             top: 35,

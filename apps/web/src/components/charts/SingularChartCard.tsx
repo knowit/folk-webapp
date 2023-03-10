@@ -43,23 +43,6 @@ interface CustomerFilter {
 }
 
 const useBigStyles = makeStyles({
-  root: ({ width }: { width: number }) => ({
-    backgroundColor: '#F1F0ED',
-    fontSize: 25,
-    border: '1px solid white',
-    width,
-    marginRight: 10,
-    borderRadius: 0,
-  }),
-  input: {
-    height: 77,
-    paddingLeft: 12,
-    paddingTop: 0,
-    paddingBottom: 0,
-    lineHeight: '43px',
-    display: 'flex',
-    alignItems: 'center',
-  },
   menuPaper: ({ width }: { width: number }) => ({
     borderRadius: 0,
     width,
@@ -71,11 +54,6 @@ const useBigStyles = makeStyles({
     borderLeft: '1px solid white',
     borderRight: '1px solid white',
     borderTop: '1px solid white',
-  },
-  menuItem: {
-    fontSize: 25,
-    borderBottom: '1px solid white',
-    paddingLeft: 12,
   },
 })
 
@@ -102,9 +80,8 @@ const SingularChartCard = ({
           return { id: index, name: item.customer, checked: true }
       }
     })
-    .filter((item) => item !== undefined)
+    ?.filter((item) => item !== undefined)
   const classes = useBigStyles({ width: 60 })
-
   const [filteredCustomers, setFilteredCustomers] =
     useState<CustomerFilter[]>(allCustomers)
   const [graphData, setGraphData] = useState<SingularChartData>(
@@ -123,23 +100,45 @@ const SingularChartCard = ({
     graphData.data.length === filteredCustomers.length
 
   const handleFilterChange = (event) => {
-    const currentFilteredCustomers = [...filteredCustomers]
-    const customerName = event.target.value[0]
-    const clickedCustomer = filteredCustomers.find(
-      (tempCustomer) => tempCustomer.name === customerName
-    )
-    currentFilteredCustomers[clickedCustomer.id] = {
-      id: clickedCustomer.id,
-      name: clickedCustomer.name,
-      checked: !clickedCustomer.checked,
+    if (event.target.value[event.target.value.length - 1] === 'all') {
+      if (isAllSelected) {
+        const tempCustomers: CustomerFilter[] = filteredCustomers.map(
+          (customer) => {
+            if (customer && customer.checked)
+              return { id: customer.id, name: customer.name, checked: false }
+            return customer
+          }
+        )
+        setFilteredCustomers(tempCustomers)
+      } else {
+        const tempCustomers: CustomerFilter[] = filteredCustomers.map(
+          (customer) => {
+            if (customer && !customer.checked)
+              return { id: customer.id, name: customer.name, checked: true }
+            return customer
+          }
+        )
+        setFilteredCustomers(tempCustomers)
+      }
+    } else {
+      const currentFilteredCustomers = [...filteredCustomers]
+      const customerName = event.target.value[0]
+      const clickedCustomer = filteredCustomers.find(
+        (tempCustomer) => tempCustomer.name === customerName
+      )
+      currentFilteredCustomers[clickedCustomer.id] = {
+        id: clickedCustomer.id,
+        name: clickedCustomer.name,
+        checked: !clickedCustomer.checked,
+      }
+      setFilteredCustomers(currentFilteredCustomers)
     }
-    setFilteredCustomers(currentFilteredCustomers)
   }
 
   useEffect(() => {
     let isBarChart = false
     const newData = chartData.data.filter((customer) => {
-      if (showFilter) {
+      if (showFilter && filteredCustomers.length > 0) {
         if (customer.id !== undefined) {
           const currentCustomer = filteredCustomers.find(
             (curr) => curr.name === customer.id
@@ -169,8 +168,21 @@ const SingularChartCard = ({
   }, [filteredCustomers, showFilter])
 
   useEffect(() => {
-    console.log('Filtered data: ', selectedFilter)
+    console.log('Chartdata: ', chartData)
   }, [chartData])
+
+  const selectAllHandler = () => {
+    if (isAllSelected) {
+      setFilteredCustomers([])
+    } else {
+      const tempCustomers: CustomerFilter[] = filteredCustomers.map(
+        (customer) => {
+          if (!customer.checked) return { ...customer, checked: true }
+        }
+      )
+      setFilteredCustomers(tempCustomers)
+    }
+  }
 
   const MenuProps: Partial<MenuPropsType> = {
     TransitionComponent: Fade,
@@ -233,11 +245,14 @@ const SingularChartCard = ({
                   style={{ backgroundColor: '#F1F0ED' }}
                   MenuProps={MenuProps}
                 >
-                  <MenuItem>
-                    <Checkbox id={'all'} key={'all'} checked={isAllSelected} />
+                  <MenuItem value={'all'}>
+                    <Checkbox
+                      checked={isAllSelected}
+                      onSelect={selectAllHandler}
+                    />
                     <ListItemText primary={'Velg alle'} />
                   </MenuItem>
-                  {filteredCustomers.map((customer) => (
+                  {filteredCustomers?.map((customer) => (
                     <MenuItem key={customer.id} value={customer.name}>
                       <Checkbox checked={customer.checked} />
                       <ListItemText primary={customer.name} />
