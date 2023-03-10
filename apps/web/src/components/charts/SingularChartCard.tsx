@@ -13,6 +13,7 @@ import useFilteredData, {
 } from './chartFilters/useFilteredData'
 import {
   Checkbox,
+  Fade,
   InputLabel,
   ListItemText,
   MenuItem,
@@ -21,6 +22,8 @@ import {
 } from '@material-ui/core'
 import FormControl from '@material-ui/core/FormControl'
 import { SliceTooltip } from '@nivo/line'
+import { makeStyles } from '@material-ui/core/styles'
+import { MenuProps as MenuPropsType } from '@material-ui/core/Menu'
 
 interface SingularChartCardProps {
   title: string
@@ -38,6 +41,43 @@ interface CustomerFilter {
   name: string
   checked: boolean
 }
+
+const useBigStyles = makeStyles({
+  root: ({ width }: { width: number }) => ({
+    backgroundColor: '#F1F0ED',
+    fontSize: 25,
+    border: '1px solid white',
+    width,
+    marginRight: 10,
+    borderRadius: 0,
+  }),
+  input: {
+    height: 77,
+    paddingLeft: 12,
+    paddingTop: 0,
+    paddingBottom: 0,
+    lineHeight: '43px',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  menuPaper: ({ width }: { width: number }) => ({
+    borderRadius: 0,
+    width,
+    backgroundColor: '#F1F0ED',
+    marginLeft: -1,
+    maxHeight: 340,
+  }),
+  menuList: {
+    borderLeft: '1px solid white',
+    borderRight: '1px solid white',
+    borderTop: '1px solid white',
+  },
+  menuItem: {
+    fontSize: 25,
+    borderBottom: '1px solid white',
+    paddingLeft: 12,
+  },
+})
 
 const SingularChartCard = ({
   title,
@@ -63,6 +103,7 @@ const SingularChartCard = ({
       }
     })
     .filter((item) => item !== undefined)
+  const classes = useBigStyles({ width: 60 })
 
   const [filteredCustomers, setFilteredCustomers] =
     useState<CustomerFilter[]>(allCustomers)
@@ -70,10 +111,16 @@ const SingularChartCard = ({
     chartData.type === 'BarChart'
       ? {
           ...chartData,
-          data: chartData.data.sort((a, b) => a.hours - b.hours),
+          data: chartData.data
+            .sort((a, b) => a.hours - b.hours)
+            .filter((customer) => customer.hours > 0),
         }
       : chartData
   )
+
+  const isAllSelected =
+    graphData.data.length > 0 &&
+    graphData.data.length === filteredCustomers.length
 
   const handleFilterChange = (event) => {
     const currentFilteredCustomers = [...filteredCustomers]
@@ -112,16 +159,39 @@ const SingularChartCard = ({
       }
     })
     if (isBarChart) {
-      newData.sort((a, b) => a.hours - b.hours)
+      newData
+        .sort((a, b) => a.hours - b.hours)
+        .filter((customer) => customer.hours > 0)
     }
 
     const newGraph = { ...chartData, data: newData } as SingularChartData
     setGraphData(newGraph)
-  }, [filteredCustomers])
+  }, [filteredCustomers, showFilter])
 
   useEffect(() => {
     console.log('Filtered data: ', selectedFilter)
   }, [chartData])
+
+  const MenuProps: Partial<MenuPropsType> = {
+    TransitionComponent: Fade,
+    MenuListProps: {
+      disablePadding: true,
+      className: classes.menuList,
+    },
+    PaperProps: {
+      className: classes.menuPaper,
+    },
+    getContentAnchorEl: null,
+    anchorOrigin: {
+      vertical: 'bottom',
+      horizontal: 'left',
+    },
+    transformOrigin: {
+      vertical: 'top',
+      horizontal: 'left',
+    },
+    elevation: 0,
+  }
 
   return (
     <GridItem fullSize={fullSize}>
@@ -131,7 +201,7 @@ const SingularChartCard = ({
             style={{
               display: 'flex',
               flexDirection: 'row',
-              width: '60%',
+              width: '80%',
               justifyContent: 'space-between',
             }}
           >
@@ -140,8 +210,8 @@ const SingularChartCard = ({
               selected={selectedFilter}
               onChange={setSelectedFilter}
             />
-            <div style={{ width: '50%' }}>
-              <FormControl style={{ width: '100%' }}>
+            <div style={{ width: '60%' }}>
+              <FormControl style={{ height: '100%', width: '100%' }}>
                 <InputLabel
                   style={{
                     zIndex: '1',
@@ -161,7 +231,12 @@ const SingularChartCard = ({
                   id="grouped-native-select"
                   input={<OutlinedInput />}
                   style={{ backgroundColor: '#F1F0ED' }}
+                  MenuProps={MenuProps}
                 >
+                  <MenuItem>
+                    <Checkbox id={'all'} key={'all'} checked={isAllSelected} />
+                    <ListItemText primary={'Velg alle'} />
+                  </MenuItem>
                   {filteredCustomers.map((customer) => (
                     <MenuItem key={customer.id} value={customer.name}>
                       <Checkbox checked={customer.checked} />

@@ -111,14 +111,14 @@ const BarChart: React.FC<Props<BarDatum>> = ({
     <div
       style={{
         width: '100%',
-        height: isBig ? '800px' : '650px',
+        height: isBig ? '700px' : '550px',
         overflowY: 'auto',
       }}
     >
       <div style={{ height: '600%', width: '100%' }}>
         <ResponsiveBar
           margin={{
-            top: 40,
+            top: 35,
             right: 20,
             bottom: 65,
             left: bigLeftMargin ? 55 : 30,
