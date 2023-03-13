@@ -22,9 +22,9 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ data }) => {
   return (
     <GridItem>
       <GridItemHeader title={customer}>
-        {/*<Link to={'#'}>
-              <OpenInNewStyled />
-            </Link>*/}
+        <Link to={'#'}>
+          <OpenInNewStyled />
+        </Link>
       </GridItemHeader>
       <GridItemContent>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -65,9 +65,6 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ data }) => {
             <Box sx={{ fontSize: 32, fontWeight: 700 }}>{billedTotal}</Box>
           </Box>
         </Box>
-        {/*<Box>Fakturerte timer siste periode: {billedLastPeriod}</Box>
-            <Box>Totalt fakturerte timer: {billedTotal}</Box>
-            <Box>Kunde siden: -</Box>*/}
       </GridItemContent>
     </GridItem>
   )
