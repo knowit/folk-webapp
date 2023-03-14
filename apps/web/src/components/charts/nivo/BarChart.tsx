@@ -116,7 +116,7 @@ const BarChart: React.FC<Props<BarDatum>> = ({
       style={{
         width: '100%',
         height:
-          isBig && !isHorizontal ? '400px' : isHorizontal ? '600px' : '300px',
+          isBig && !isHorizontal ? '400px' : isHorizontal ? '500px' : '300px',
         overflowY: isHorizontal && props.data.length > 11 ? 'auto' : null,
       }}
     >

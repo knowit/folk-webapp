@@ -9,12 +9,9 @@ export type PerCustomerFilterOptions =
   | 'Siste kvartal'
   | 'Hittil i år'
 
-// Can be used to override date to set an older date, for testing purposes
-const overrideDate = new Date(2021, 10, 13)
-
 /** Returns the ISO week of current date or from optional param @fromDate */
 function getWeek(fromDate?: Date): number {
-  const weekDate = new Date(fromDate ? fromDate : overrideDate || new Date())
+  const weekDate = new Date(fromDate ? fromDate : new Date())
   weekDate.setHours(0, 0, 0, 0)
   // Thursday in current week decides the year
   weekDate.setDate(weekDate.getDate() + 3 - ((weekDate.getDay() + 6) % 7))
@@ -34,31 +31,50 @@ function getWeek(fromDate?: Date): number {
 
 /** Returns number of first week of current quarter */
 function getWeekOfQuarter(): number {
-  const currDate = overrideDate || new Date()
-  const quarter = Math.ceil(currDate.getMonth() / 3) - 1
+  const currDate = new Date()
+  const quarter = Math.ceil((currDate.getMonth() + 1) / 3) - 1
   const month = [0, 3, 6, 9][quarter]
 
-  return getWeek(new Date(currDate.getFullYear(), month, 1))
+  return getWeek(new Date(currDate.getFullYear(), month, 4))
 }
 
 /** Returns number of first week of current month */
 function getWeekOfMonth(): number {
-  const currDate = overrideDate || new Date()
+  const currDate = new Date()
 
   return getWeek(new Date(currDate.getFullYear(), currDate.getMonth(), 1))
 }
 
 /** Returns a list of sequential reg periods (year + week number), starting from @fromWeek to current reg period */
 function getRegPeriodsFromWeek(fromWeek: number): string[] {
-  const currDate = overrideDate || new Date()
+  const currDate = new Date()
   const currYear = currDate.getFullYear()
   const currWeek = getWeek()
   const length = currWeek - fromWeek + 1
-  const weekDates = length
+  return length
     ? [...new Array(length)].map((_, i) => `${currYear}${fromWeek + i}`)
     : []
+}
 
-  return weekDates
+function getTotalRegPeriods(): string[] {
+  const earlyDate = new Date(2000, 1, 4) // Bruker et tidlig år for å få med alle timer registrert i ubw
+  const regPeriods = []
+  for (
+    let year = earlyDate.getFullYear();
+    year <= new Date().getFullYear();
+    year++
+  ) {
+    for (let week = 1; week <= 52; week++) {
+      // Må passe på at den ikke looper lenger enn nåværende uke i inneværende år
+      if (week < 10) {
+        regPeriods.push(`${year}0${week}`)
+      } else {
+        regPeriods.push(`${year}${week}`)
+      }
+    }
+  }
+  console.log(regPeriods)
+  return regPeriods
 }
 
 function getRegPeriods(filter: PerCustomerFilterOptions): string[] {
@@ -69,6 +85,8 @@ function getRegPeriods(filter: PerCustomerFilterOptions): string[] {
       return getRegPeriodsFromWeek(getWeekOfQuarter())
     case 'Hittil i år':
       return getRegPeriodsFromWeek(1)
+    case 'Totalt':
+      return getTotalRegPeriods()
     default:
       return getRegPeriodsFromWeek(getWeek())
   }
