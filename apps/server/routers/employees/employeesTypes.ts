@@ -236,3 +236,8 @@ export type EmployeeExperience = {
 export type NumberOfEmployees = {
   antallAnsatte: number
 }
+
+export type EmployeeNode = {
+  employee: EmployeeProfileInformation
+  children?: EmployeeNode[]
+}

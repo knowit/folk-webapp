@@ -21,9 +21,9 @@ import {
   JobRotationInformation,
   ProjectExperience,
   WorkExperience,
+  EmployeeNode,
 } from './employeesTypes'
 import { EmployeeCustomers } from '../customer/customerTypes'
-import { NetworkData, NetworkLink, NetworkNode } from '../chartTypes'
 import { groupBy } from '../../repository/util'
 
 export const aggregateEmployeeTable = (
@@ -164,61 +164,37 @@ export const aggregateEmployeeProfile = (
   }
 }
 
-export const aggregateStructure = (
-  employeeStructureResponse: EmployeeProfileInformation[]
-): NetworkData => {
-  const groupedByEmail = groupBy(employeeStructureResponse, (i) => i.email)
-
-  const color = [
-    'rgba(75, 100, 85, 1)',
-    'rgba(165, 177, 170, 1)',
-    'rgba(183, 222, 189, 1)',
-    'rgba(219, 238, 222, 1)',
-    'rgba(219, 238, 222, 1)',
-  ]
-
-  const findHirearchyLevel = (
-    person: EmployeeProfileInformation,
-    personsGroupedByEmail: Record<string, EmployeeProfileInformation[]>,
-    level = 0
-  ): number => {
-    const manager = personsGroupedByEmail[person.manager_email]?.[0]
-    if (manager) {
-      level++
-      return findHirearchyLevel(manager, personsGroupedByEmail, level)
-    } else {
-      return level
+function buildHierarchy(
+  employees: Record<string, EmployeeProfileInformation[]>,
+  employee: EmployeeProfileInformation
+): EmployeeNode {
+  const children: EmployeeNode[] = []
+  for (const email in employees) {
+    const potentialChild = employees[email][0]
+    if (potentialChild.manager_email === employee.email) {
+      children.push(buildHierarchy(employees, potentialChild))
     }
   }
+  return children.length ? { employee, children } : { employee }
+}
 
-  const links: NetworkLink[] = employeeStructureResponse
-    ?.map((singleEmployeeStructure) => ({
-      target: singleEmployeeStructure.manager_email,
-      source: singleEmployeeStructure.email,
-      distance:
-        110 + 15 * findHirearchyLevel(singleEmployeeStructure, groupedByEmail),
-      color:
-        color?.[findHirearchyLevel(singleEmployeeStructure, groupedByEmail)] ||
-        color[color.length - 1],
-    }))
-    .filter((link) => groupedByEmail[link.target])
-
-  const nodes: NetworkNode[] = employeeStructureResponse?.map(
-    (singleEmployeeStructure) => ({
-      id: singleEmployeeStructure.email,
-      height: 0,
-      size:
-        40 - 4 * findHirearchyLevel(singleEmployeeStructure, groupedByEmail),
-      color: color[findHirearchyLevel(singleEmployeeStructure, groupedByEmail)],
-      name: singleEmployeeStructure.name,
-      managerName: singleEmployeeStructure.manager,
-      title: singleEmployeeStructure.title,
-      image_url: getStorageUrl(singleEmployeeStructure.image_key),
-    })
-  )
-
-  return {
-    nodes,
-    links,
+function transformEmployees(
+  employees: Record<string, EmployeeProfileInformation[]>
+): EmployeeNode {
+  for (const email in employees) {
+    const employee = employees[email][0]
+    if (!employee.manager_email) {
+      return buildHierarchy(employees, employee)
+    }
   }
+}
+
+export const aggregateStructure = (
+  employeeStructureResponse: EmployeeProfileInformation[]
+): EmployeeNode => {
+  const groupedByEmail = groupBy(employeeStructureResponse, (i) => i.email)
+
+  const rootNode = transformEmployees(groupedByEmail)
+
+  return rootNode
 }

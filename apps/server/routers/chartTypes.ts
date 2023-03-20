@@ -59,25 +59,3 @@ export interface SunburstChartData {
   value: string
   data: any[]
 }
-
-export type NetworkNode = {
-  id: string
-  height: number
-  size: number
-  color: string
-  name?: string
-  managerName?: string
-  title?: string
-}
-
-export type NetworkLink = {
-  source: string
-  target: string
-  distance: number
-  color?: string
-}
-
-export type NetworkData = {
-  nodes: NetworkNode[]
-  links: NetworkLink[]
-}
