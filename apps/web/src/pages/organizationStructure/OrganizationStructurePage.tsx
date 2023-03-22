@@ -1,12 +1,25 @@
-import React from 'react'
 import { useEmployeeStructure } from '../../api/data/employee/employeeQueries'
 import OrganizationStructureTree from './Components/OrganizationStructureTree'
+import { BaseSkeleton } from '../../components/skeletons/BaseSkeleton'
+import { FallbackMessage } from '../employee/components/FallbackMessage'
 
 export default function OrganizationStructurePage() {
-  const { data: employeeData } = useEmployeeStructure()
+  const { data, isLoading, error } = useEmployeeStructure()
+
+  if (isLoading) {
+    return <BaseSkeleton variant="rect" width={'100%'} height={'100vh'} />
+  }
+
+  if (error) {
+    return <FallbackMessage error={error} />
+  }
+
   return (
-    <div>
-      <OrganizationStructureTree employeeStructureData={employeeData} />
-    </div>
+    <OrganizationStructureTree
+      data={data}
+      width={1215}
+      height={1200}
+      margin={140}
+    />
   )
 }

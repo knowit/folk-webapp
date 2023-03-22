@@ -5,8 +5,10 @@ import {
   EmployeeProfileResponse,
   EmployeeTableResponse,
 } from './employeeApiTypes'
-import { EmployeeExperience } from 'server/routers/employees/employeesTypes'
-import { NetworkData } from 'server/routers/chartTypes'
+import {
+  EmployeeExperience,
+  EmployeeNode,
+} from 'server/routers/employees/employeesTypes'
 
 export const getEmployeeTable = () =>
   getAtApiV2<EmployeeTableResponse[]>('/employees/employeeTable')
@@ -34,5 +36,6 @@ export const getEmployeeExperience = (email: string) =>
     params: { email },
   })
 
-export const getEmployeeStructure = () =>
-  getAtApiV2<NetworkData>('/employees/employeeStructure')
+export const getEmployeeStructure = () => {
+  return getAtApiV2<EmployeeNode>('/employees/employeeStructure')
+}
