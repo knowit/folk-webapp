@@ -18,8 +18,8 @@ const useStyles = makeStyles(() =>
       height: '102.7px',
     },
     gridHeaderTitle: {
-      fontSize: '18px',
-      fontWeight: 'normal',
+      fontSize: '24px',
+      fontWeight: 700,
     },
     bigGridHeaderTitle: {
       fontSize: '30px',

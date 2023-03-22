@@ -6,6 +6,7 @@ const useStyles = makeStyles(() =>
     gridContentRoot: {
       width: '100%',
       padding: '15px',
+      fontSize: '16px',
       backgroundColor: 'white',
       borderLeft: '1px solid #E4E1DB',
       borderBottom: '1px solid #E4E1DB',
