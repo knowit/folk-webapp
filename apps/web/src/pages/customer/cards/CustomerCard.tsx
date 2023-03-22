@@ -5,6 +5,7 @@ import { GridItem } from '../../../components/gridItem/GridItem'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
 import { OpenInNewStyled } from '../../../components/table/cells/ConsultantCell'
+import { styled } from '@material-ui/styles'
 
 export type CustomerData = {
   customer: string
@@ -16,6 +17,18 @@ export type CustomerData = {
 interface CustomerCardProps {
   data: CustomerData
 }
+const BoxInfo = styled(Box)({
+  width: '25%',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  textAlign: 'center',
+})
+
+const BoxInfoNumbers = styled(Box)({
+  fontSize: 32,
+  fontWeight: 700,
+})
 
 const CustomerCard: React.FC<CustomerCardProps> = ({ data }) => {
   const { customer, consultants, billedLastPeriod, billedTotal } = data
@@ -28,42 +41,18 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ data }) => {
       </GridItemHeader>
       <GridItemContent>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Box
-            sx={{
-              width: '25%',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              textAlign: 'center',
-            }}
-          >
+          <BoxInfo>
             Antall konsulenter:
-            <Box sx={{ fontSize: 32, fontWeight: 700 }}>{consultants}</Box>
-          </Box>
-          <Box
-            sx={{
-              width: '25%',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              textAlign: 'center',
-            }}
-          >
+            <BoxInfoNumbers>{consultants}</BoxInfoNumbers>
+          </BoxInfo>
+          <BoxInfo>
             Fakturerte timer siste periode:
-            <Box sx={{ fontSize: 32, fontWeight: 700 }}>{billedLastPeriod}</Box>
-          </Box>
-          <Box
-            sx={{
-              width: '25%',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              textAlign: 'center',
-            }}
-          >
+            <BoxInfoNumbers>{billedLastPeriod}</BoxInfoNumbers>
+          </BoxInfo>
+          <BoxInfo>
             Totalt fakturerte timer:
-            <Box sx={{ fontSize: 32, fontWeight: 700 }}>{billedTotal}</Box>
-          </Box>
+            <BoxInfoNumbers>{billedTotal}</BoxInfoNumbers>
+          </BoxInfo>
         </Box>
       </GridItemContent>
     </GridItem>
