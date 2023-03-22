@@ -21,13 +21,13 @@ function getDateDisplay(regPeriod: string): DateDisplay {
   date.setDate(date.getDate() + (1 - date.getDay()))
 
   const month = date.toLocaleString('no-NO', { month: 'short' })
-  const quarter = Math.ceil(date.getMonth() / 3) - 1
-  const halfyear = Math.ceil(date.getMonth() / 6)
+  const quarter = Math.floor((date.getMonth() + 3) / 3)
+  const halfyear = date.getMonth() <= 5 ? 'første' : 'andre'
 
   return {
     month: `${y} - ${month}`,
     year: `${y}`,
-    halfyear: `${y} - ${halfyear}. halvår`,
+    halfyear: `${y} - ${halfyear} halvår`,
     week: `${y} - Uke ${w}`,
     quarter: `${y} - Q${quarter}`,
     date: date,
