@@ -6,7 +6,6 @@ import { HoursBilledPerCustomerCard, HoursBilledPerWeekCard } from '../cards'
 export const CustomerOverview = () => {
   return (
     <Grid container spacing={2}>
-      <HoursBilledPerCustomerCard />
       <HoursBilledPerWeekCard />
       <CustomerCardList />
     </Grid>
