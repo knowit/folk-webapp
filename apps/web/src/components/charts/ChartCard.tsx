@@ -13,7 +13,6 @@ import RadarChart from './nivo/RadarChart'
 import SunburstChart from './nivo/SunburstChart'
 import MultipleChartCard from './MultipleChartCard'
 import SingularChartCard from './SingularChartCard'
-import { ChartFilterType } from './chartFilters/useFilteredData'
 import { SliceTooltip } from '@nivo/line'
 
 interface SingularChartProps {
@@ -48,9 +47,8 @@ interface ChartCardProps {
   fullSize?: boolean
   data: ChartData | undefined
   error: any
-  showFilter?: boolean
-  filterType?: ChartFilterType
   sliceTooltip?: SliceTooltip
+  extraHeaderContent?: React.ReactNode
 }
 
 const ChartCard = ({
@@ -58,8 +56,7 @@ const ChartCard = ({
   data,
   error,
   title,
-  filterType,
-  showFilter = false,
+  extraHeaderContent,
   ...props
 }: ChartCardProps) => {
   if (error)
@@ -91,8 +88,7 @@ const ChartCard = ({
       fullSize={fullSize}
       title={title}
       data={data}
-      showFilter={showFilter}
-      filterType={filterType}
+      extraHeaderContent={extraHeaderContent}
       {...props}
     />
   )
