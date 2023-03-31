@@ -50,7 +50,7 @@ const HoursBilledPerWeekCard = () => {
                   <FormControlLabel
                     key={option}
                     value={option}
-                    control={<Radio />}
+                    control={<Radio color="primary" />}
                     label={option}
                     style={{ flexGrow: 1 }}
                   />
