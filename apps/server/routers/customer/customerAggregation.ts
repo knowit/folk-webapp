@@ -42,7 +42,7 @@ function createEmployeeForCustomerList(
         image_url: getStorageUrl(employee.image_key),
         user_id: employee.user_id,
       },
-      employee.title || null,
+      employee.title || 'Ansatt',
       `${employee.customer_name}: ${employee.work_order_description}`,
       createCvLinks(employee.link),
     ],
