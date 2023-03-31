@@ -56,12 +56,16 @@ export default function Header() {
             <KnowitLogo title="knowit-logo" className={classes.logo} />
           </Link>
           <NavMenu>
-            <NavMenuItem label="Ansatte" to="/ansatte" />
-            <NavMenuItem label="Kunder" to="/kunder" />
-            <NavMenuItem label="Kompetanse" to="/kompetanse" />
-            <NavMenuItem label="Organisasjonsstruktur" to="/organisasjon" />
-            <NavMenuItem label="Arbeidsmiljø" to="/arbeidsmiljo" />
-            <NavMenuItem label="Rekruttering" to="/rekruttering" />
+            {user && (
+              <>
+                <NavMenuItem label="Ansatte" to="/ansatte" />
+                <NavMenuItem label="Kunder" to="/kunder" />
+                <NavMenuItem label="Kompetanse" to="/kompetanse" />
+                <NavMenuItem label="Organisasjonsstruktur" to="/organisasjon" />
+                <NavMenuItem label="Arbeidsmiljø" to="/arbeidsmiljo" />
+                <NavMenuItem label="Rekruttering" to="/rekruttering" />
+              </>
+            )}
           </NavMenu>
           <LoginLogoutButton />
           <Avatar
