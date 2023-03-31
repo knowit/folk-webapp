@@ -38,9 +38,9 @@ const usePerWeekFilter = (data: SingularChartData): FilteredData => {
   const filterOptions: PerWeekFilterOptions[] = [
     'Uke',
     'Måned',
-    'Kvartal',
-    'Halvår',
-    'År',
+    //'Kvartal',
+    //'Halvår',
+    //'År',
   ]
 
   const [selectedFilter, setSelectedFilter] = useState(filterOptions[0])
