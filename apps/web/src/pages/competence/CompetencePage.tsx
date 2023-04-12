@@ -10,8 +10,10 @@ import {
   FagEventsCard,
   FagtimerCard,
 } from './cards'
+import { pageTitle } from '../../utils/pagetitle'
 
 export default function CompetencePage() {
+  pageTitle('Kompetanse')
   return (
     <Grid container spacing={2}>
       <CompetenceAmountCard />
