@@ -10,8 +10,16 @@ export default function Customer() {
   return (
     <NavTab
       contentList={[
-        { content: CustomerList(), title: 'Listevisning' },
-        { content: CustomerOverview(), title: 'Overordnet oversikt' },
+        {
+          content: CustomerList(),
+          title: 'Listevisning',
+          pageTitle: 'Kundeliste',
+        },
+        {
+          content: CustomerOverview(),
+          title: 'Overordnet oversikt',
+          pageTitle: 'Kundeoversikt',
+        },
       ]}
     />
   )
