@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { createStyles, Tab, Tabs } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { pageTitle } from '../../utils/pagetitle'
 
 interface NavTabContent {
   content: any
   title: string
+  pageTitle: string
 }
 
 const useStyles = makeStyles(() =>
@@ -57,6 +59,7 @@ export default function NavTab(props: NavTabProps) {
   const handleChange = (event: any, tabValue: number) => {
     setValue(tabValue)
     sessionStorage.setItem(localStorageKey, `${tabValue}`)
+    pageTitle(props.contentList[tabValue].pageTitle)
   }
 
   const createTabs = () => {
