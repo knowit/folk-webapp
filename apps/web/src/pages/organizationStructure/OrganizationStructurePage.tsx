@@ -2,9 +2,12 @@ import { useEmployeeStructure } from '../../api/data/employee/employeeQueries'
 import OrganizationStructureTree from './Components/OrganizationStructureTree'
 import { BaseSkeleton } from '../../components/skeletons/BaseSkeleton'
 import { FallbackMessage } from '../employee/components/FallbackMessage'
+import { pageTitle } from '../../utils/pagetitle'
 
 export default function OrganizationStructurePage() {
   const { data, isLoading, error } = useEmployeeStructure()
+
+  pageTitle('Organisasjonsstruktur')
 
   if (isLoading) {
     return <BaseSkeleton variant="rect" width={'100%'} height={'100vh'} />

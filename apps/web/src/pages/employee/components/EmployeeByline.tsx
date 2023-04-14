@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core'
 import { EmployeeProfileResponse } from '../../../api/data/employee/employeeApiTypes'
 import { LineSkeleton } from '../../../components/skeletons/LineSkeleton'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
+import { pageTitle } from '../../../utils/pagetitle'
 
 const useStyles = makeStyles((theme) => ({
   name: {
@@ -32,6 +33,8 @@ interface Props {
 
 export function EmployeeByline({ employee, isLoading }: Props) {
   const classes = useStyles()
+
+  employee && pageTitle(employee?.name)
 
   const EmployeeName = () => {
     if (isLoading) {
