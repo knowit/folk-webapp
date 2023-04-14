@@ -19,7 +19,7 @@ import {
   handleThresholdChange,
   searchAndFilter,
 } from '../filter/FilterUtil'
-import { TableRow } from '../../api/data/tableResponses'
+import { SortColumnInTable } from './util/sort-column-in-table'
 
 export interface SearchableColumn {
   columnIndex: number
@@ -34,34 +34,6 @@ const useStyles = makeStyles({
     width: '900px',
   },
 })
-
-const sortColumn = (rows: TableRow<any>[], currentSort: ColumnSort) => {
-  if (!currentSort) return rows
-
-  const getValueFnFallback = (rowData: any) => JSON.stringify(rowData)
-  const getValueFn = currentSort.getSortValue ?? getValueFnFallback
-
-  const getCellValue = (row: TableRow<any>) => {
-    return getValueFn(row.rowData[currentSort.columnIndex])
-  }
-
-  const compare = (a: TableRow<any>, b: TableRow<any>) => {
-    const aValue = getCellValue(a)
-    const bValue = getCellValue(b)
-    if (!aValue) return 1
-    if (!bValue) return -1
-    return String(aValue).localeCompare(String(bValue))
-  }
-
-  switch (currentSort.sortOrder) {
-    case 'ASC':
-      return rows.sort((a, b) => compare(a, b))
-    case 'DESC':
-      return rows.sort((a, b) => compare(b, a))
-    default:
-      return rows
-  }
-}
 
 export function getSearchableColumns(columns: Column[]): SearchableColumn[] {
   const result: SearchableColumn[] = []
@@ -107,7 +79,7 @@ export default function DDTable({
     ? filterNonCustomer(filteredRows)
     : filteredRows
 
-  const sortedRows = sortColumn(NonProject, columnSort)
+  const sortedRows = SortColumnInTable(NonProject, columnSort)
 
   const classes = useStyles()
 
