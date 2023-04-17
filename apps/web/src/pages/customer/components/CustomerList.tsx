@@ -30,6 +30,7 @@ const customerColumns: Column[] = [
     },
     renderCell: ConsultantCell,
     renderExpanded: EmployeeTableExpandedInfo,
+    headerCell: SortableHeaderCell,
   },
   { title: 'Tittel', width: 222 },
   {

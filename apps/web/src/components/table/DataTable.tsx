@@ -125,6 +125,7 @@ export function VirtualizedTable({
   const classes = tableStyles()
   const tableRef = useRef<_Table>(null)
   const [expandedRowIds, setExpandedRowIds] = useState<string[]>([])
+  const [sortOrderUnchanged, setSortOrderUnchanged] = useState(true)
 
   useEffect(() => {
     // We need to alert the react-virtualized table that the height of a
@@ -158,6 +159,9 @@ export function VirtualizedTable({
   function onSortChange(columnSort: ColumnSort) {
     if (setColumnSort) {
       setColumnSort(columnSort)
+    }
+    if (sortOrderUnchanged) {
+      setSortOrderUnchanged(false)
     }
   }
 
@@ -242,6 +246,7 @@ export function VirtualizedTable({
               ? currentOrder.sortOrder
               : 'NONE'
           }
+          sortOrderUnchanged={sortOrderUnchanged}
         />
       )
     }

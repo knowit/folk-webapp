@@ -59,6 +59,7 @@ interface SortableHeaderCellProps {
   column: Column
   currentOrder: string
   checkBox: CheckBoxHeader
+  sortOrderUnchanged: boolean
 }
 
 export default function SortableHeaderCell({
@@ -68,11 +69,18 @@ export default function SortableHeaderCell({
   columnIndex,
   column,
   checkBox,
+  sortOrderUnchanged,
 }: SortableHeaderCellProps) {
   const classes = useSortableHeaderStyles()
 
   const sortClick = () => {
-    const newOrder = currentOrder === 'ASC' ? 'DESC' : 'ASC'
+    const newOrder =
+      columnIndex == 0 && sortOrderUnchanged
+        ? 'DESC'
+        : currentOrder === 'ASC'
+        ? 'DESC'
+        : 'ASC'
+
     onOrderChange({
       sortOrder: newOrder,
       columnIndex: columnIndex,
@@ -88,7 +96,9 @@ export default function SortableHeaderCell({
         return <ArrowDownward />
       case 'NONE':
       default:
-        return null
+        if (columnIndex == 0 && sortOrderUnchanged) {
+          return <ArrowDownward />
+        } else return null
     }
   }
 
@@ -98,7 +108,7 @@ export default function SortableHeaderCell({
         {title}
         {sortIcon()}
       </div>
-      {columnIndex == 0 ? (
+      {columnIndex == 0 && checkBox ? (
         <div className={classes.checkBox}>
           <FormControlLabel
             className={classes.label}
