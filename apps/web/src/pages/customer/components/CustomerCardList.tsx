@@ -12,7 +12,7 @@ const CustomerCardList = () => {
       <>
         {[...Array(4)].map((_, index) => (
           <GridItem key={index}>
-            <BaseSkeleton variant="rect" height={175} />
+            <BaseSkeleton variant="rectangular" height={175} />
           </GridItem>
         ))}
       </>

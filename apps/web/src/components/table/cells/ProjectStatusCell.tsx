@@ -1,10 +1,6 @@
 import * as React from 'react'
-import {
-  makeStyles,
-  Tooltip,
-  TooltipProps,
-  withStyles,
-} from '@material-ui/core'
+import { Tooltip, TooltipProps } from '@mui/material'
+import { makeStyles, withStyles } from '@mui/styles'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import { ProjectStatus } from '../../../api/data/employee/employeeApiTypes'
 

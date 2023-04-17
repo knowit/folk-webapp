@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Grid } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { Grid } from '@mui/material'
+import { createStyles, makeStyles } from '@mui/styles'
 import { InfoTooltip } from '../InfoTooltip'
 
 const useStyles = makeStyles(() =>

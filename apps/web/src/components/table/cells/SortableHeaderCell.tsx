@@ -1,17 +1,11 @@
 import React from 'react'
 import { ArrowDownward, ArrowUpward } from '@mui/icons-material'
-import { makeStyles } from '@material-ui/core/styles'
-import {
-  createStyles,
-  FormControlLabel,
-  Theme,
-  withStyles,
-} from '@material-ui/core'
-import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox'
+import { createStyles, makeStyles, DefaultTheme, withStyles } from '@mui/styles'
+import { Checkbox, CheckboxProps, FormControlLabel } from '@mui/material'
 import { CheckBoxHeader } from '../DataTable'
 import { Column, ColumnSort } from '../tableTypes'
 
-const useSortableHeaderStyles = makeStyles((theme: Theme) =>
+const useSortableHeaderStyles = makeStyles((theme: DefaultTheme) =>
   createStyles({
     label: {
       marginRight: 0,

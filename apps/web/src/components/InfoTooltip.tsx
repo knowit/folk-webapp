@@ -1,10 +1,6 @@
 import * as React from 'react'
-import {
-  Tooltip as MuiTooltip,
-  TooltipProps,
-  withStyles,
-} from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { Tooltip as MuiTooltip, TooltipProps } from '@mui/material'
+import { makeStyles, withStyles } from '@mui/styles'
 import InfoIcon from '@mui/icons-material/Info'
 
 const useStyles = makeStyles((theme) => ({

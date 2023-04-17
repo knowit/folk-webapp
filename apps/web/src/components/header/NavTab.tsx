@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { createStyles, Tab, Tabs } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { Tab, Tabs } from '@mui/material'
+import { createStyles, makeStyles } from '@mui/styles'
 import { pageTitle } from '../../utils/pagetitle'
 
 interface NavTabContent {

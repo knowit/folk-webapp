@@ -1,13 +1,7 @@
 import React from 'react'
-import {
-  Avatar,
-  Button,
-  makeStyles,
-  TableCell,
-  withStyles,
-  Theme,
-  createStyles,
-} from '@material-ui/core'
+import { Avatar, Button } from '@mui/material'
+import { TableCell } from '@mui/material'
+import { createStyles, makeStyles, DefaultTheme, withStyles } from '@mui/styles'
 import { ReactComponent as FallbackUserIcon } from '../../../assets/fallback_user.svg'
 import CharacterLimitBox from '../components/CharacterLimitBox'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -16,7 +10,7 @@ import { OpenInNew } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 import { ConsultantInfo } from '../../../api/data/employee/employeeApiTypes'
 
-const useCompetenceMappingStyles = makeStyles((theme: Theme) =>
+const useCompetenceMappingStyles = makeStyles((theme: DefaultTheme) =>
   createStyles({
     root: {
       display: 'flex',

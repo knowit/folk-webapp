@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { GridItem } from '../../../components/gridItem/GridItem'
 import {
@@ -65,7 +65,7 @@ export default function CustomerList() {
 
   const getCustomerAccordions = () => {
     if (isLoading) {
-      return <BaseSkeleton variant="rect" height={500} width={'100%'} />
+      return <BaseSkeleton variant="rectangular" height={500} width={'100%'} />
     }
 
     if (filteredData.length === 0) {

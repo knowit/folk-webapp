@@ -1,6 +1,6 @@
 import React from 'react'
-import Dialog from '@material-ui/core/Dialog'
-import { withStyles } from '@material-ui/core/styles'
+import Dialog from '@mui/material/Dialog'
+import { withStyles } from '@mui/styles'
 
 const DialogBox = withStyles(() => ({
   paper: {

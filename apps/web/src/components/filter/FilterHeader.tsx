@@ -1,7 +1,7 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { createStyles, makeStyles } from '@mui/styles'
 import React from 'react'
 import CloseIcon from '@mui/icons-material/Close'
-import { Mark, Slider } from '@material-ui/core'
+import { Slider } from '@mui/material'
 import { EmployeeTableColumnMapping } from './FilterUtil'
 
 const useStyles = makeStyles(() =>
@@ -119,6 +119,11 @@ interface Props {
   type: EmployeeTableColumnMapping
 }
 
+interface Mark {
+  value: number
+  label: string
+}
+
 export function FilterHeader({
   title,
   filterList,
@@ -131,7 +136,7 @@ export function FilterHeader({
   const threshold = filterThreshold
 
   function handleThresholdSliderChange(
-    _event: React.ChangeEvent<unknown>,
+    _event: object,
     value: number | number[]
   ) {
     if (Array.isArray(value)) {

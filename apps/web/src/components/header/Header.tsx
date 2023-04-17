@@ -1,6 +1,6 @@
 import React from 'react'
-import { AppBar, Toolbar, Avatar } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { AppBar, Toolbar, Avatar } from '@mui/material'
+import { createStyles, makeStyles } from '@mui/styles'
 import { Link } from 'react-router-dom'
 import { NavMenu } from './NavMenu'
 import { ReactComponent as KnowitLogo } from '../../assets/logo.svg'
