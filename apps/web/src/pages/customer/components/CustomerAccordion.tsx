@@ -6,7 +6,7 @@ import {
   AccordionDetails,
   Box,
 } from '@material-ui/core'
-import { Minimize, Add, OpenInNew } from '@material-ui/icons'
+import { Minimize, Add, OpenInNew } from '@mui/icons-material'
 import React, { useState } from 'react'
 import { EmployeeForCustomerList } from '../../../api/data/customer/customerApiTypes'
 import { VirtualizedTable } from '../../../components/table/DataTable'

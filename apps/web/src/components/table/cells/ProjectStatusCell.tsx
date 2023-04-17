@@ -5,7 +5,7 @@ import {
   TooltipProps,
   withStyles,
 } from '@material-ui/core'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import { ProjectStatus } from '../../../api/data/employee/employeeApiTypes'
 
 const StatusCircle = ({ color }: { color: string }) => {

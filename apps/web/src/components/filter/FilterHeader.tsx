@@ -1,6 +1,6 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import React from 'react'
-import CloseIcon from '@material-ui/icons/Close'
+import CloseIcon from '@mui/icons-material/Close'
 import { Mark, Slider } from '@material-ui/core'
 import { EmployeeTableColumnMapping } from './FilterUtil'
 

@@ -1,6 +1,6 @@
 import { Theme, withStyles } from '@material-ui/core'
 import IconButton from '@material-ui/core/IconButton'
-import { Fullscreen, FullscreenExit } from '@material-ui/icons'
+import { Fullscreen, FullscreenExit } from '@mui/icons-material'
 import React from 'react'
 
 const FullscreenIconButton = withStyles((theme: Theme) => ({

@@ -10,9 +10,9 @@ import {
 } from '@material-ui/core'
 import { ReactComponent as FallbackUserIcon } from '../../../assets/fallback_user.svg'
 import CharacterLimitBox from '../components/CharacterLimitBox'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import ExpandLessIcon from '@material-ui/icons/ExpandLess'
-import { OpenInNew } from '@material-ui/icons'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import { OpenInNew } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 import { ConsultantInfo } from '../../../api/data/employee/employeeApiTypes'
 

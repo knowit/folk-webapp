@@ -3,7 +3,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { makeStyles } from '@material-ui/core/styles'
 import { InputBase, withStyles } from '@material-ui/core'
-import FilterListIcon from '@material-ui/icons/FilterList'
+import FilterListIcon from '@mui/icons-material/FilterList'
 import { CategoryWithGroup } from './FilterUtil'
 
 const StyledCheckBox = withStyles(() => ({

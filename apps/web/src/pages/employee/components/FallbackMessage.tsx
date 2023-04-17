@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Tooltip } from '@material-ui/core'
-import { InfoRounded } from '@material-ui/icons'
+import { InfoRounded } from '@mui/icons-material'
 
 const useStyles = makeStyles((theme) => ({
   root: {

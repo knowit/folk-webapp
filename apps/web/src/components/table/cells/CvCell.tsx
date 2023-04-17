@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import GetApp from '@material-ui/icons/GetApp'
+import GetApp from '@mui/icons-material/GetApp'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { withStyles } from '@material-ui/core'
 import { NoData } from '../../ErrorText'

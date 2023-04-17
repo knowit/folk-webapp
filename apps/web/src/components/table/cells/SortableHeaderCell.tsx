@@ -1,5 +1,5 @@
 import React from 'react'
-import { ArrowDownward, ArrowUpward } from '@material-ui/icons'
+import { ArrowDownward, ArrowUpward } from '@mui/icons-material'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   createStyles,

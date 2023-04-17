@@ -5,7 +5,7 @@ import {
   withStyles,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import InfoIcon from '@material-ui/icons/Info'
+import InfoIcon from '@mui/icons-material/Info'
 
 const useStyles = makeStyles((theme) => ({
   triggerButton: {
