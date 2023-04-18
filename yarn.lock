@@ -1668,6 +1668,97 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@date-io/core@npm:^2.16.0":
+  version: 2.16.0
+  resolution: "@date-io/core@npm:2.16.0"
+  checksum: 336d0dd90fd0848116472cfb0e694e85860b2916952304201bb4d3a23d453d44589d346494584faba0fc05751cc38f1880889ce48cd982377aac2bfb20469b8a
+  languageName: node
+  linkType: hard
+
+"@date-io/date-fns-jalali@npm:^2.16.0":
+  version: 2.16.0
+  resolution: "@date-io/date-fns-jalali@npm:2.16.0"
+  dependencies:
+    "@date-io/core": ^2.16.0
+  peerDependencies:
+    date-fns-jalali: ^2.13.0-0
+  peerDependenciesMeta:
+    date-fns-jalali:
+      optional: true
+  checksum: 141ee217ee0599f2d593438903785e8b4ade87dd53b0fef986fd0b8545a22a7d2eaad59a3daba7a516d7426ea27b188a92f78bc0e72ae92f90c1dea269260a48
+  languageName: node
+  linkType: hard
+
+"@date-io/date-fns@npm:^2.16.0":
+  version: 2.16.0
+  resolution: "@date-io/date-fns@npm:2.16.0"
+  dependencies:
+    "@date-io/core": ^2.16.0
+  peerDependencies:
+    date-fns: ^2.0.0
+  peerDependenciesMeta:
+    date-fns:
+      optional: true
+  checksum: aedb23c07da6f1e38a81ffe77ca1cb95167e1a175a3d65561cf244fbd1a5a0b961e84df88fe00b9cfa4bd32eda6d430e6d14567e2b040257198cd12748d5fcc5
+  languageName: node
+  linkType: hard
+
+"@date-io/hijri@npm:^2.16.1":
+  version: 2.16.1
+  resolution: "@date-io/hijri@npm:2.16.1"
+  dependencies:
+    "@date-io/moment": ^2.16.1
+  peerDependencies:
+    moment-hijri: ^2.1.2
+  peerDependenciesMeta:
+    moment-hijri:
+      optional: true
+  checksum: 21c5eb658f14c7a0deaa877565df305d01e9b6cf97d94ae5c7be4de47b8cf6e3b72a07142346c070d6c32da75a5c53638452c1ff0303de27c19757c03bc9d09a
+  languageName: node
+  linkType: hard
+
+"@date-io/jalaali@npm:^2.16.1":
+  version: 2.16.1
+  resolution: "@date-io/jalaali@npm:2.16.1"
+  dependencies:
+    "@date-io/moment": ^2.16.1
+  peerDependencies:
+    moment-jalaali: ^0.7.4 || ^0.8.0 || ^0.9.0
+  peerDependenciesMeta:
+    moment-jalaali:
+      optional: true
+  checksum: 3df4865145c38f20080804a2bb7650afeff2dd427e96f5c2fa4157ecb9ba6bdba56b25e791ecb2d5a13c8c04a87c42ab807f5be2485abc23c46281b6a5909f3a
+  languageName: node
+  linkType: hard
+
+"@date-io/luxon@npm:^2.16.1":
+  version: 2.16.1
+  resolution: "@date-io/luxon@npm:2.16.1"
+  dependencies:
+    "@date-io/core": ^2.16.0
+  peerDependencies:
+    luxon: ^1.21.3 || ^2.x || ^3.x
+  peerDependenciesMeta:
+    luxon:
+      optional: true
+  checksum: ac3f667ff122728e7559fac96f75bc85109d0054bf3955c1aea9d8365e08bd49ed51780f7f3900160773c0ed584db21556ea7d49acf075c61a30eb0b0e5da935
+  languageName: node
+  linkType: hard
+
+"@date-io/moment@npm:^2.16.1":
+  version: 2.16.1
+  resolution: "@date-io/moment@npm:2.16.1"
+  dependencies:
+    "@date-io/core": ^2.16.0
+  peerDependencies:
+    moment: ^2.24.0
+  peerDependenciesMeta:
+    moment:
+      optional: true
+  checksum: 37a541661c504e1005904fab27b7b01d0c5d6c9c8c8a3b0a69d42a578aee8c52de7c181f917ad7acb14a9d7356d240c7e107777edf10efa11a453535977fc905
+  languageName: node
+  linkType: hard
+
 "@emotion/babel-plugin@npm:^11.10.6":
   version: 11.10.6
   resolution: "@emotion/babel-plugin@npm:11.10.6"
@@ -2510,7 +2601,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/utils@npm:^5.12.0":
+"@mui/utils@npm:^5.11.13, @mui/utils@npm:^5.12.0":
   version: 5.12.0
   resolution: "@mui/utils@npm:5.12.0"
   dependencies:
@@ -2522,6 +2613,61 @@ __metadata:
   peerDependencies:
     react: ^17.0.0 || ^18.0.0
   checksum: 87b2c7468803b083f50af28d7c215c45291e73fef16570848b596d0f1cde1fc613c20e8951f431217b31451de254744abd50eda5013dedec4982420b5bf1c6b6
+  languageName: node
+  linkType: hard
+
+"@mui/x-date-pickers@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "@mui/x-date-pickers@npm:6.2.0"
+  dependencies:
+    "@babel/runtime": ^7.21.0
+    "@date-io/core": ^2.16.0
+    "@date-io/date-fns": ^2.16.0
+    "@date-io/date-fns-jalali": ^2.16.0
+    "@date-io/hijri": ^2.16.1
+    "@date-io/jalaali": ^2.16.1
+    "@date-io/luxon": ^2.16.1
+    "@date-io/moment": ^2.16.1
+    "@mui/utils": ^5.11.13
+    "@types/react-transition-group": ^4.4.5
+    clsx: ^1.2.1
+    prop-types: ^15.8.1
+    react-transition-group: ^4.4.5
+  peerDependencies:
+    "@emotion/react": ^11.9.0
+    "@emotion/styled": ^11.8.1
+    "@mui/base": ^5.0.0-alpha.87
+    "@mui/material": ^5.8.6
+    "@mui/system": ^5.8.0
+    date-fns: ^2.25.0
+    date-fns-jalali: ^2.13.0-0
+    dayjs: ^1.10.7
+    luxon: ^3.0.2
+    moment: ^2.29.4
+    moment-hijri: ^2.1.2
+    moment-jalaali: ^0.7.4 || ^0.8.0 || ^0.9.0
+    react: ^17.0.2 || ^18.0.0
+    react-dom: ^17.0.2 || ^18.0.0
+  peerDependenciesMeta:
+    "@emotion/react":
+      optional: true
+    "@emotion/styled":
+      optional: true
+    date-fns:
+      optional: true
+    date-fns-jalali:
+      optional: true
+    dayjs:
+      optional: true
+    luxon:
+      optional: true
+    moment:
+      optional: true
+    moment-hijri:
+      optional: true
+    moment-jalaali:
+      optional: true
+  checksum: 540d38f5a469c38a6e794976ba471519196b0c1c7e8e37aa696b8385152750c9ae62f25c5f33a07cd21e9ffe36a4e4cd7f9f36f4e1c8441d8768605600fb50bd
   languageName: node
   linkType: hard
 
@@ -3925,22 +4071,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.memoize@npm:^4.1.7":
-  version: 4.1.7
-  resolution: "@types/lodash.memoize@npm:4.1.7"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 85f128b6606ab0545c11194208cf844536f981859221dff0032b1043dd4e02ee5aa1b96020d1e02a24db31be7493f2e9ff45836d2e3c35cf973fc6488f129eed
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:*":
-  version: 4.14.192
-  resolution: "@types/lodash@npm:4.14.192"
-  checksum: 31e1f0543a04158d2c429c45efd7c77882736630d0652f82eb337d6159ec0c249c5d175c0af731537b53271e665ff8d76f43221d75d03646d31cb4bd6f0056b1
-  languageName: node
-  linkType: hard
-
 "@types/lodash@npm:^4.14.123":
   version: 4.14.182
   resolution: "@types/lodash@npm:4.14.182"
@@ -4616,13 +4746,6 @@ __metadata:
     "@webassemblyjs/ast": 1.11.1
     "@xtuc/long": 4.2.2
   checksum: f15ae4c2441b979a3b4fce78f3d83472fb22350c6dc3fd34bfe7c3da108e0b2360718734d961bba20e7716cb8578e964b870da55b035e209e50ec9db0378a3f7
-  languageName: node
-  linkType: hard
-
-"@wojtekmaj/date-utils@npm:^1.1.3":
-  version: 1.1.3
-  resolution: "@wojtekmaj/date-utils@npm:1.1.3"
-  checksum: 4ae0eba0876b8c156720c249ddd665efd8da0c42a02bbf037475b8a30554e02fa642e6f1d81d1fffdc02c6d816fb73590ee03c003ac976d91380745533dbf327
   languageName: node
   linkType: hard
 
@@ -7341,7 +7464,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:^1.11.6":
+"dayjs@npm:^1.11.6, dayjs@npm:^1.11.7":
   version: 1.11.7
   resolution: "dayjs@npm:1.11.7"
   checksum: 5003a7c1dd9ed51385beb658231c3548700b82d3548c0cfbe549d85f2d08e90e972510282b7506941452c58d32136d6362f009c77ca55381a09c704e9f177ebb
@@ -9236,11 +9359,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "folk-webapp@workspace:."
   dependencies:
+    "@mui/x-date-pickers": ^6.2.0
+    dayjs: ^1.11.7
     eslint: ^8.30.0
     husky: ^8.0.2
     prettier: ^2.8.1
     pretty-quick: ^3.1.3
-    react-calendar: ^4.2.1
     serverless: ^3.25.1
     typescript: ^4.9.4
   languageName: unknown
@@ -9588,16 +9712,6 @@ __metadata:
     call-bind: ^1.0.2
     get-intrinsic: ^1.1.1
   checksum: 9ceff8fe968f9270a37a1f73bf3f1f7bda69ca80f4f80850670e0e7b9444ff99323f7ac52f96567f8b5f5fbe7ac717a0d81d3407c7313e82810c6199446a5247
-  languageName: node
-  linkType: hard
-
-"get-user-locale@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "get-user-locale@npm:2.2.1"
-  dependencies:
-    "@types/lodash.memoize": ^4.1.7
-    lodash.memoize: ^4.1.1
-  checksum: 929e368d120795295a9fb98724b1f236ea42fe570fa710a8c6d5ecf03f32d11a57966ab7cef38f416523fdf57178d888e835919bc52321696236d74092d06dbc
   languageName: node
   linkType: hard
 
@@ -11909,7 +12023,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.memoize@npm:^4.1.1, lodash.memoize@npm:^4.1.2":
+"lodash.memoize@npm:^4.1.2":
   version: 4.1.2
   resolution: "lodash.memoize@npm:4.1.2"
   checksum: 9ff3942feeccffa4f1fafa88d32f0d24fdc62fd15ded5a74a5f950ff5f0c6f61916157246744c620173dddf38d37095a92327d5fd3861e2063e736a5c207d089
@@ -14340,7 +14454,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -14507,22 +14621,6 @@ __metadata:
     regenerator-runtime: ^0.13.9
     whatwg-fetch: ^3.6.2
   checksum: 1bb031080af15397d6eb9c69a0c2e93799991f7197a086e4409ba719398f1256b542a3d6c9a34673d516c684eef3e8226c99b335982593851f58f65f6e43571b
-  languageName: node
-  linkType: hard
-
-"react-calendar@npm:^4.2.1":
-  version: 4.2.1
-  resolution: "react-calendar@npm:4.2.1"
-  dependencies:
-    "@types/react": "*"
-    "@wojtekmaj/date-utils": ^1.1.3
-    clsx: ^1.2.1
-    get-user-locale: ^2.2.1
-    prop-types: ^15.6.0
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: a14ce00249b867d44ace3c1766f2af41347883c5e594fa10aeeb0eaf4034da9b9a2434df0b666ff736efa7d25c029b65a4008482df9b61a4b7f81e1751a1da27
   languageName: node
   linkType: hard
 

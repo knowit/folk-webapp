@@ -46,6 +46,7 @@
     "ansi-regex": "^5.0.1"
   },
   "dependencies": {
-    "react-calendar": "^4.2.1"
+    "@mui/x-date-pickers": "^6.2.0",
+    "dayjs": "^1.11.7"
   }
 }

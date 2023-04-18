@@ -1,6 +1,7 @@
-import { Button, Popover, styled } from '@material-ui/core'
+import { Button, Popover, styled } from '@mui/material'
 import React, { FC } from 'react'
-import { DatePicker } from './DatePicker';
+import { DateRangePicker } from './DateRangePicker';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 const StyledButton = styled(Button)(({ theme }) => ({
   borderRadius: '50px',
@@ -10,11 +11,11 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }))
 
 
-type DatePickerButtonProps = {
+type DateRangePickerButtonProps = {
   onComplete: (startDate?: Date, endDate?: Date) => void
 }
 
-export const DatePickerButton: FC<DatePickerButtonProps> = ({ onComplete }) => {
+export const DateRangePickerButton: FC<DateRangePickerButtonProps> = ({ onComplete }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -26,8 +27,6 @@ export const DatePickerButton: FC<DatePickerButtonProps> = ({ onComplete }) => {
   };
 
   const onSubmit = (startDate, endDate) => {
-    console.log("start", startDate)
-    console.log("end", endDate)
     handleClose()
     onComplete(startDate, endDate)
   }
@@ -37,7 +36,7 @@ export const DatePickerButton: FC<DatePickerButtonProps> = ({ onComplete }) => {
 
   return (
     <>
-      <StyledButton aria-describedby={id} variant="contained" onClick={handleClick}>Angi periode</StyledButton>
+      <StyledButton aria-describedby={id} variant="contained" onClick={handleClick} startIcon={<CalendarTodayIcon />}>Angi periode</StyledButton>
       <Popover
         id={id}
         open={open}
@@ -52,7 +51,7 @@ export const DatePickerButton: FC<DatePickerButtonProps> = ({ onComplete }) => {
           horizontal: 'right'
         }}
       >
-        <DatePicker onSubmit={onSubmit} />
+        <DateRangePicker onSubmit={onSubmit} />
       </Popover>
     </>
   )

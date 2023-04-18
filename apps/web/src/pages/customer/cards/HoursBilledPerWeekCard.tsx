@@ -13,7 +13,7 @@ import {
   Radio,
   FormControl,
 } from '@mui/material'
-import { DatePickerButton } from '../../../components/DatePickerButton'
+import { DateRangePickerButton } from '../../../components/DateRangePickerButton'
 
 const HoursBilledPerWeekCard = () => {
   const { data, error } = useHoursBilledPerWeekCharts()
@@ -57,7 +57,7 @@ const HoursBilledPerWeekCard = () => {
                   />
                 ))}
               </RadioGroup>
-              <DatePickerButton onComplete={(startDate, endDate) => { console.log("startDate", startDate); console.log("endDate", endDate) }} />
+              <DateRangePickerButton onComplete={(startDate, endDate) => { console.log("startDate", startDate); console.log("endDate", endDate) }} />
             </Box>
           </FormControl>
         }
