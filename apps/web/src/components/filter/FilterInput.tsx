@@ -102,7 +102,7 @@ export default function FilterInput({
         <div ref={params.InputProps.ref}>
           <InputBase
             type="text"
-            {...params.inputProps}
+            inputProps={{ ...params.inputProps }}
             className={classes.input}
             placeholder={placeholder}
             endAdornment={<FilterListIcon />}
