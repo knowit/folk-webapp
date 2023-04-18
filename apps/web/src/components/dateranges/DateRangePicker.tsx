@@ -1,18 +1,18 @@
 import { Box, Button, styled } from '@mui/material'
 import React, { FC } from 'react'
-import { Dayjs } from 'dayjs';
-import { DateField } from '@mui/x-date-pickers/DateField';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Dayjs } from 'dayjs'
+import { DateField } from '@mui/x-date-pickers/DateField'
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 const StyledDateField = styled(DateField<Dayjs>)(({ theme }) => ({
   backgroundColor: 'white',
-  width: '100%'
+  width: '100%',
 }))
 
 const StyledDateCalendar = styled(DateCalendar<Dayjs>)(({ theme }) => ({
-  backgroundColor: 'white'
+  backgroundColor: 'white',
 }))
 
 type DateRangePickerProps = {
@@ -33,23 +33,32 @@ export const DateRangePicker: FC<DateRangePickerProps> = ({ onSubmit }) => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-      <Box padding={'0.5rem'} >
-        <Box display={'flex'} gap={'10px'} padding={'0.5rem'} justifyContent={'center'}>
+      <Box padding={'0.5rem'}>
+        <Box
+          display={'flex'}
+          gap={'10px'}
+          padding={'0.5rem'}
+          justifyContent={'center'}
+        >
           <StyledDateField
-            label='Start'
+            label="Start"
             value={startDate}
             onChange={(newValue) => setStartDate(newValue)}
-            format='DD.MM.YYYY'
+            format="DD.MM.YYYY"
           />
           <StyledDateField
-            label='Slutt'
+            label="Slutt"
             value={endDate}
             onChange={(newValue) => setEndDate(newValue)}
-            format='DD.MM.YYYY'
+            format="DD.MM.YYYY"
           />
         </Box>
-        <Box display={'flex'} gap={'10px'} padding={'0.5rem'} justifyContent={'center'}>
+        <Box
+          display={'flex'}
+          gap={'10px'}
+          padding={'0.5rem'}
+          justifyContent={'center'}
+        >
           <StyledDateCalendar
             value={startDate}
             onChange={(newValue) => setStartDate(newValue)}
@@ -61,9 +70,10 @@ export const DateRangePicker: FC<DateRangePickerProps> = ({ onSubmit }) => {
             displayWeekNumber
           />
         </Box>
-        <Button variant='contained' onClick={submitButtonFn}>Lagre</Button>
+        <Button variant="contained" onClick={submitButtonFn}>
+          Lagre
+        </Button>
       </Box>
     </LocalizationProvider>
-
   )
 }
