@@ -8,7 +8,7 @@ import { createStyles, makeStyles } from '@mui/styles'
 import { Minimize, Add, OpenInNew } from '@mui/icons-material'
 import React, { useState } from 'react'
 import { EmployeeForCustomerList } from '../../../api/data/customer/customerApiTypes'
-import { VirtualizedTable } from '../../../components/table/DataTable'
+import DataTable from '../../../components/table/DataTable'
 import { Column } from '../../../components/table/tableTypes'
 
 const useStyles = makeStyles(() =>
@@ -82,7 +82,7 @@ export function CustomerAccordion({
           </Box>
         </AccordionSummary>
         <AccordionDetails className={classes.accordionDetails}>
-          <VirtualizedTable rows={employees} columns={columns} />
+          <DataTable columns={columns} rows={employees} />
         </AccordionDetails>
       </Accordion>
     </Box>

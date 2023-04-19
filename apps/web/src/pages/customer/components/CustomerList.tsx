@@ -7,6 +7,7 @@ import {
   CenteredHeaderCell,
   ConsultantCell,
   CvCell,
+  SortableHeaderCell,
 } from '../../../components/table/DataCells'
 import { useEmployeesByCustomer } from '../../../api/data/customer/customerQueries'
 import { CustomerAccordion } from './CustomerAccordion'
@@ -29,6 +30,7 @@ const customerColumns: Column[] = [
     },
     renderCell: ConsultantCell,
     renderExpanded: EmployeeTableExpandedInfo,
+    headerCell: SortableHeaderCell,
   },
   { title: 'Tittel', width: 222 },
   {
@@ -37,6 +39,7 @@ const customerColumns: Column[] = [
     getValue: (customerProject: string) => {
       return customerProject
     },
+    headerCell: SortableHeaderCell,
   },
   {
     title: 'CV',
