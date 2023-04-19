@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { withStyles } from '@material-ui/core/styles'
-import Tooltip from '@material-ui/core/Tooltip'
+import { withStyles } from '@mui/styles'
+import { Tooltip } from '@mui/material'
 import { NoData } from '../../ErrorText'
 
 const HtmlTooltip = withStyles((theme) => ({

@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import Dialog from '@material-ui/core/Dialog'
-import Radio from '@material-ui/core/Radio'
-import RadioGroup from '@material-ui/core/RadioGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormControl from '@material-ui/core/FormControl'
-import Button from '@material-ui/core/Button'
-import CloseIcon from '@material-ui/icons/Close'
-import { withStyles, makeStyles } from '@material-ui/core/styles'
-import Card from '@material-ui/core/Card'
-import Divider from '@material-ui/core/Divider/Divider'
+import {
+  Button,
+  Card,
+  Dialog,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+} from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import { makeStyles, withStyles } from '@mui/styles'
 import { CvLinks } from '../../../api/data/employee/employeeApiTypes'
 
 const DialogBox = withStyles(() => ({

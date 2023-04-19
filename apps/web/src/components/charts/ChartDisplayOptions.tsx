@@ -1,8 +1,8 @@
 import React from 'react'
-import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab'
-import { BarChart, PieChart, ShowChart, DonutLarge } from '@material-ui/icons'
-import { makeStyles } from '@material-ui/core/styles'
-import { createStyles, SvgIcon } from '@material-ui/core'
+import { ToggleButton, ToggleButtonGroup } from '@mui/material'
+import { BarChart, PieChart, ShowChart, DonutLarge } from '@mui/icons-material'
+import { makeStyles, createStyles } from '@mui/styles'
+import { SvgIcon } from '@mui/material'
 import { ReactComponent as RadarLogo } from '../../assets/RadarChart.svg'
 import { ChartType, ChartVariant } from '../table/tableTypes'
 

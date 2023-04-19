@@ -1,11 +1,11 @@
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { GridItem } from '../../../components/gridItem/GridItem'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
 import { OpenInNewStyled } from '../../../components/table/cells/ConsultantCell'
-import { styled } from '@material-ui/styles'
+import { styled } from '@mui/styles'
 
 export type CustomerData = {
   customer: string

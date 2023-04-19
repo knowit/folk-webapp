@@ -22,7 +22,9 @@ import { GridItem } from '../../../components/gridItem/GridItem'
 import { FallbackMessage } from '../components/FallbackMessage'
 
 export function EmployeeTable() {
-  const TableSkeleton = () => <BaseSkeleton variant="rect" height={780} />
+  const TableSkeleton = () => (
+    <BaseSkeleton variant="rectangular" height={780} />
+  )
 
   const { data: employeeData, error } = useEmployeeTable()
 

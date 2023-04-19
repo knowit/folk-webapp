@@ -1,11 +1,10 @@
 import * as React from 'react'
 import { CvLinks } from '../../../api/data/employee/employeeApiTypes'
-import { makeStyles } from '@material-ui/core/styles'
-import GetApp from '@material-ui/icons/GetApp'
+import { makeStyles, withStyles } from '@mui/styles'
+import GetApp from '@mui/icons-material/GetApp'
 import { FallbackMessage } from './FallbackMessage'
 import { ExperienceList } from './ExperienceList'
 import { ExperienceListItem } from './ExperienceListItem'
-import { withStyles } from '@material-ui/core'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { mapLinkKeyToLabel } from '../utils/cv-link-helpers'
 

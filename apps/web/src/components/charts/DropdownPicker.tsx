@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
-import { Fade, InputBase, MenuItem, Select } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { Fade, InputBase, MenuItem, Select } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 type ValueType = { displayValue: string; value: any } | string
 
@@ -168,7 +168,6 @@ export default function DropdownPicker({
         PaperProps: {
           className: classes.menuPaper,
         },
-        getContentAnchorEl: null,
         anchorOrigin: {
           vertical: 'bottom',
           horizontal: 'left',

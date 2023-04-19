@@ -1,9 +1,9 @@
-import { Theme, withStyles } from '@material-ui/core'
-import IconButton from '@material-ui/core/IconButton'
-import { Fullscreen, FullscreenExit } from '@material-ui/icons'
+import { DefaultTheme, withStyles } from '@mui/styles'
+import IconButton from '@mui/material/IconButton'
+import { Fullscreen, FullscreenExit } from '@mui/icons-material'
 import React from 'react'
 
-const FullscreenIconButton = withStyles((theme: Theme) => ({
+const FullscreenIconButton = withStyles((theme: DefaultTheme) => ({
   root: {
     marginLeft: 'auto',
     padding: 0,

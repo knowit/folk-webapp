@@ -10,7 +10,9 @@ export default function OrganizationStructurePage() {
   pageTitle('Organisasjonsstruktur')
 
   if (isLoading) {
-    return <BaseSkeleton variant="rect" width={'100%'} height={'100vh'} />
+    return (
+      <BaseSkeleton variant="rectangular" width={'100%'} height={'100vh'} />
+    )
   }
 
   if (error) {

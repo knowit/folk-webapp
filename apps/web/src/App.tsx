@@ -1,11 +1,17 @@
 import React from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { Theme } from '@mui/material/styles'
+import { createStyles, makeStyles, DefaultTheme } from '@mui/styles'
 import Header from './components/header/Header'
 import Content from './components/Content'
 import Footer from './components/Footer'
 import { useUserInfo } from './context/UserInfoContext'
 
-const useStyles = makeStyles((theme: Theme) =>
+declare module '@mui/styles/defaultTheme' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
+
+const useStyles = makeStyles((theme: DefaultTheme) =>
   createStyles({
     container: {
       minHeight: '100vh',

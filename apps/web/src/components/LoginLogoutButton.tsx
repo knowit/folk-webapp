@@ -1,5 +1,5 @@
-import { ButtonBase } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { ButtonBase } from '@mui/material'
+import { createStyles, makeStyles } from '@mui/styles'
 import React from 'react'
 import { clearLocalStorage } from '../api/auth/authHelpers'
 import { useUserInfo } from '../context/UserInfoContext'

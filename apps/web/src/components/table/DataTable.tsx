@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { FC, useEffect, useRef, useState } from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { TableCell, withStyles } from '@material-ui/core'
-import Paper from '@material-ui/core/Paper'
+import { createStyles, makeStyles, DefaultTheme, withStyles } from '@mui/styles'
+import { Paper, TableCell } from '@mui/material'
 import {
   AutoSizer as _AutoSizer,
   AutoSizerProps,
@@ -65,7 +64,7 @@ const TableCellNoBorders = withStyles({
   },
 })(TableCell)
 
-export const tableStyles = makeStyles((theme: Theme) =>
+export const tableStyles = makeStyles((theme: DefaultTheme) =>
   createStyles({
     tableHead: {
       fontWeight: 'bold',

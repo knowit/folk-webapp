@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, Box } from '@material-ui/core'
+import { Typography, Box } from '@mui/material'
 import { useLocation } from 'react-router-dom'
 import { pageTitle } from '../../utils/pagetitle'
 

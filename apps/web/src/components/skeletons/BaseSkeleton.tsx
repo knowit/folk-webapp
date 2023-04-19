@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Skeleton } from '@material-ui/lab'
-import { SkeletonTypeMap } from '@material-ui/lab/Skeleton/Skeleton'
+import { Skeleton, SkeletonTypeMap } from '@mui/material'
 
 export type SkeletonProps = Pick<SkeletonTypeMap['props'], 'width' | 'height'>
 
