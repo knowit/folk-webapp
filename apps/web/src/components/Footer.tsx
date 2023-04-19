@@ -1,8 +1,8 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { createStyles, makeStyles, DefaultTheme } from '@mui/styles'
 import React from 'react'
 import { usePrivacyPolicy } from '../api/other/otherQueries'
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme: DefaultTheme) =>
   createStyles({
     footer: {
       width: '100%',

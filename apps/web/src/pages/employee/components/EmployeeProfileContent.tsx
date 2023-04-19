@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@mui/styles'
 import * as React from 'react'
 import { useEmployeeProfile } from '../../../api/data/employee/employeeQueries'
 import { CompetenceSummary } from './CompetenceSummary'

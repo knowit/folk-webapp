@@ -1,9 +1,8 @@
 import React, { ChangeEvent } from 'react'
-import Checkbox from '@material-ui/core/Checkbox'
-import Autocomplete from '@material-ui/lab/Autocomplete'
-import { makeStyles } from '@material-ui/core/styles'
-import { InputBase, withStyles } from '@material-ui/core'
-import FilterListIcon from '@material-ui/icons/FilterList'
+import Checkbox from '@mui/material/Checkbox'
+import { makeStyles, withStyles } from '@mui/styles'
+import { InputBase, Autocomplete } from '@mui/material'
+import FilterListIcon from '@mui/icons-material/FilterList'
 import { CategoryWithGroup } from './FilterUtil'
 
 const StyledCheckBox = withStyles(() => ({
@@ -83,12 +82,14 @@ export default function FilterInput({
       options={categoriesWithGroup}
       groupBy={(option) => option.group}
       getOptionLabel={(option) => option.category}
-      getOptionSelected={(option, value) => option.category === value.category}
+      isOptionEqualToValue={(option, value) =>
+        option.category === value.category
+      }
       multiple
       disableCloseOnSelect
       className={classes.autocomplete}
       onChange={handleCategoryChange}
-      renderOption={(option, state) => (
+      renderOption={(props, option, state) => (
         <div className={classes.option}>
           <StyledCheckBox
             className={classes.checkbox}
@@ -97,11 +98,11 @@ export default function FilterInput({
           {option.category}
         </div>
       )}
-      renderInput={(params) => (
+      renderInput={(params: any) => (
         <div ref={params.InputProps.ref}>
           <InputBase
             type="text"
-            {...params.inputProps}
+            inputProps={{ ...params.inputProps }}
             className={classes.input}
             placeholder={placeholder}
             endAdornment={<FilterListIcon />}

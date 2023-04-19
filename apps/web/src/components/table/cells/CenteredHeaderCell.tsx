@@ -1,6 +1,6 @@
 import React from 'react'
 import { tableStyles } from '../DataTable'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { createStyles, makeStyles } from '@mui/styles'
 
 const centeredStyle = makeStyles(() =>
   createStyles({

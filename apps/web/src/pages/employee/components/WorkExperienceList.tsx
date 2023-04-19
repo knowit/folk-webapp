@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { WorkExperience } from '../../../api/data/employee/employeeApiTypes'
 import { formatMonthYearRange } from '../utils/format-month-year-range'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@mui/styles'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { FallbackMessage } from './FallbackMessage'
 import { ExperienceList } from './ExperienceList'

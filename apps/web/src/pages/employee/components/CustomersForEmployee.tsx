@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Customer } from '../../../api/data/employee/employeeApiTypes'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@mui/styles'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { FallbackMessage } from './FallbackMessage'
 import { ExperienceList } from './ExperienceList'

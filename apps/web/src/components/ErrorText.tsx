@@ -1,7 +1,7 @@
 import React from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { createStyles, makeStyles, DefaultTheme } from '@mui/styles'
 
-const useErrorStyle = makeStyles((theme: Theme) =>
+const useErrorStyle = makeStyles((theme: DefaultTheme) =>
   createStyles({
     root: {
       width: '100%',

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@mui/styles'
 import { EmployeeProfileResponse } from '../../../api/data/employee/employeeApiTypes'
 import { LineSkeleton } from '../../../components/skeletons/LineSkeleton'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'

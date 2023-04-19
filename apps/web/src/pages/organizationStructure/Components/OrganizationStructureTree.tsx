@@ -5,7 +5,7 @@ import { descending } from 'd3-array'
 import { linkRadial } from 'd3-shape'
 import { zoom } from 'd3-zoom'
 import { select } from 'd3-selection'
-import { useTheme } from '@material-ui/core'
+import { useTheme } from '@mui/material'
 
 interface Props {
   data: EmployeeNode

@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { createStyles, makeStyles, DefaultTheme } from '@mui/styles'
 import * as React from 'react'
 import { useEmployeeCompetence } from '../../../api/data/employee/employeeQueries'
 import { CompetenceSummary } from '../components/CompetenceSummary'
@@ -6,7 +6,7 @@ import EmployeeCompetenceCard from '../cards/EmployeeMotivationAndCompetenceCard
 import { ProjectExperienceList } from '../components/ProjectExperienceList'
 import { WorkExperienceList } from '../components/WorkExperienceList'
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme: DefaultTheme) =>
   createStyles({
     root: {
       display: 'flex',

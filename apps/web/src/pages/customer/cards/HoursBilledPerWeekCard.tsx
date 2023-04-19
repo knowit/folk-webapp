@@ -12,7 +12,7 @@ import {
   FormControlLabel,
   Radio,
   FormControl,
-} from '@material-ui/core'
+} from '@mui/material'
 
 const HoursBilledPerWeekCard = () => {
   const { data, error } = useHoursBilledPerWeekCharts()

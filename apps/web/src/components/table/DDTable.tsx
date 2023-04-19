@@ -11,7 +11,7 @@ import {
   DDTableProps,
   GetColumnValueFn,
 } from './tableTypes'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@mui/styles'
 import {
   filterNonCustomer,
   FilterObject,

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@mui/styles'
 import { EmployeeCompetenceResponse } from '../../../api/data/employee/employeeApiTypes'
 import { getStartedInKnowit } from '../utils/get-started-in-knowit'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'

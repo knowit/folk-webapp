@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { InputBase, InputAdornment, Theme } from '@material-ui/core'
-import SearchIcon from '@material-ui/icons/Search'
-import { makeStyles } from '@material-ui/core/styles'
-import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
+import { InputBase, InputAdornment, Theme } from '@mui/material'
+import SearchIcon from '@mui/icons-material/Search'
+import { makeStyles } from '@mui/styles'
+import IconButton from '@mui/material/IconButton'
+import CloseIcon from '@mui/icons-material/Close'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
