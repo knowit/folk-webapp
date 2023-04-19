@@ -5,12 +5,7 @@ import DataTable from './DataTable'
 import SearchInput from '../SearchInput'
 import FilterInput from '../filter/FilterInput'
 import { RowCount } from './RowCount'
-import {
-  Column,
-  ColumnSort,
-  DDTableProps,
-  GetColumnValueFn,
-} from './tableTypes'
+import { Column, DDTableProps, GetColumnValueFn } from './tableTypes'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   filterNonCustomer,
@@ -19,7 +14,6 @@ import {
   handleThresholdChange,
   searchAndFilter,
 } from '../filter/FilterUtil'
-import { SortColumnInTable } from './util/sort-column-in-table'
 
 export interface SearchableColumn {
   columnIndex: number
@@ -57,10 +51,6 @@ export default function DDTable({
   const allRows = payload
   const [filters, setFilters] = useState<FilterObject[]>(initialFilters)
   const [searchTerm, setSearchTerm] = useState<string>('')
-  const [columnSort, setColumnSort] = useState<ColumnSort>({
-    columnIndex: 0,
-    sortOrder: 'NONE',
-  })
   const [displayNonProject, setDisplayNonProject] = useState(false)
 
   function toggleDisplayNonProject() {
@@ -78,8 +68,6 @@ export default function DDTable({
   const NonProject = displayNonProject
     ? filterNonCustomer(filteredRows)
     : filteredRows
-
-  const sortedRows = SortColumnInTable(NonProject, columnSort)
 
   const classes = useStyles()
 
@@ -144,13 +132,11 @@ export default function DDTable({
       </GridItemHeader>
       {filterHeaders}
       <RowCount>
-        Viser {sortedRows.length} av {allRows.length} ansatte
+        Viser {NonProject.length} av {allRows.length} ansatte
       </RowCount>
       <DataTable
-        setColumnSort={setColumnSort}
-        currentColumnSort={columnSort}
         checkBox={checkBox}
-        rows={sortedRows}
+        rows={NonProject}
         columns={props.columns}
       />
     </>

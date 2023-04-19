@@ -17,6 +17,7 @@ import CharacterLimitBox from './components/CharacterLimitBox'
 import { Column, ColumnSort } from './tableTypes'
 import { EmployeeTableRow } from '../../api/data/employee/employeeApiTypes'
 import { EmployeeForCustomerList } from '../../api/data/customer/customerApiTypes'
+import { SortColumnInTable } from './util/sort-column-in-table'
 
 // Hack to allow upgrade to React 18
 // https://github.com/bvaughn/react-virtualized/issues/1739#issuecomment-1264276522
@@ -333,6 +334,13 @@ export function VirtualizedTable({
 }
 
 export default function DataTable(props: DataTableProps) {
+  const [currentColumnSort, setColumnSort] = useState<ColumnSort>({
+    columnIndex: 0,
+    sortOrder: 'NONE',
+  })
+
+  const sortedRows = SortColumnInTable(props.rows, currentColumnSort)
+
   return (
     <Paper
       style={{
@@ -341,7 +349,12 @@ export default function DataTable(props: DataTableProps) {
         backgroundColor: 'white',
       }}
     >
-      <VirtualizedTable {...props} />
+      <VirtualizedTable
+        {...props}
+        rows={sortedRows}
+        setColumnSort={setColumnSort}
+        currentColumnSort={currentColumnSort}
+      />
     </Paper>
   )
 }

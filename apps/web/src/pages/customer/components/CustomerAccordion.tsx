@@ -10,8 +10,7 @@ import { Minimize, Add, OpenInNew } from '@material-ui/icons'
 import React, { useState } from 'react'
 import { EmployeeForCustomerList } from '../../../api/data/customer/customerApiTypes'
 import DataTable from '../../../components/table/DataTable'
-import { Column, ColumnSort } from '../../../components/table/tableTypes'
-import { SortColumnInTable } from '../../../components/table/util/sort-column-in-table'
+import { Column } from '../../../components/table/tableTypes'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -41,13 +40,6 @@ export function CustomerAccordion({
 }: CustomerDropdownProps) {
   const [expanded, setExpanded] = useState(expand)
   const classes = useStyles()
-
-  const [columnSort, setColumnSort] = useState<ColumnSort>({
-    columnIndex: 0,
-    sortOrder: 'NONE',
-  })
-
-  const sortedRows = SortColumnInTable(employees, columnSort)
 
   return (
     <Box
@@ -91,12 +83,7 @@ export function CustomerAccordion({
           </Box>
         </AccordionSummary>
         <AccordionDetails className={classes.accordionDetails}>
-          <DataTable
-            setColumnSort={setColumnSort}
-            currentColumnSort={columnSort}
-            columns={columns}
-            rows={sortedRows}
-          />
+          <DataTable columns={columns} rows={employees} />
         </AccordionDetails>
       </Accordion>
     </Box>
