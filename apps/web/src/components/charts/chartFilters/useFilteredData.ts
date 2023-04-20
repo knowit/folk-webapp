@@ -1,13 +1,12 @@
 import { SingularChartData } from '../../../../../../packages/folk-common/types/chartTypes'
-import usePerWeekFilter, { PerWeekFilterOptions } from './usePerWeekFilter'
 import perCustomerFilter, {
   PerCustomerFilterOptions,
 } from './usePerCustomerFilter'
 import { Dispatch, SetStateAction } from 'react'
 
-export type ChartFilterType = 'perWeek' | 'perCustomer'
+export type ChartFilterType = 'perCustomer'
 
-type FilterOption = PerCustomerFilterOptions | PerWeekFilterOptions
+type FilterOption = PerCustomerFilterOptions
 
 export type FilteredData = {
   filterOptions: FilterOption[]
@@ -18,12 +17,10 @@ export type FilteredData = {
 
 const getHook = (type: ChartFilterType) => {
   switch (type) {
-    case 'perWeek':
-      return usePerWeekFilter
     case 'perCustomer':
       return perCustomerFilter
     default:
-      return usePerWeekFilter
+      return perCustomerFilter
   }
 }
 
