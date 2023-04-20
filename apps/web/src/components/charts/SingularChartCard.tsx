@@ -8,6 +8,7 @@ import { ToggleBigChartButton } from './ToggleBigChartButton'
 import BigChart from './BigChart'
 import { SingularChart } from './ChartCard'
 import { SliceTooltip } from '@nivo/line'
+import { styled } from '@mui/styles'
 
 interface SingularChartCardProps {
   title: string
@@ -16,7 +17,17 @@ interface SingularChartCardProps {
   data: SingularChartData
   sliceTooltip?: SliceTooltip
   extraHeaderContent?: React.ReactNode
+  noDataText?: string
 }
+
+const NoDataTextWrapper = styled('div')({
+  position: 'absolute',
+  textAlign: 'center',
+  width: '100%',
+  top: '50%',
+  fontSize: '1.5em',
+  transform: 'translateY(-50%)',
+})
 
 /**
  * A card for rendering a single card.
@@ -27,6 +38,7 @@ const SingularChartCard = ({
   fullSize = false,
   data,
   extraHeaderContent,
+  noDataText,
   ...props
 }: SingularChartCardProps) => {
   const [isBig, setIsBig] = useState(false)
@@ -44,20 +56,28 @@ const SingularChartCard = ({
           {extraHeaderContent && extraHeaderContent}
         </div>
       </GridItemHeader>
-      <GridItemContent>
-        {/* Sub header containing only the increase size-button */}
-        <ChartDisplayOptions>
-          <ToggleBigChartButton big={isBig} onChange={() => setIsBig(!isBig)} />
-        </ChartDisplayOptions>
+      <div style={{ position: 'relative' }}>
+        <GridItemContent>
+          {/* Sub header containing only the increase size-button */}
+          <ChartDisplayOptions>
+            <ToggleBigChartButton
+              big={isBig}
+              onChange={() => setIsBig(!isBig)}
+            />
+          </ChartDisplayOptions>
+          {data.data.length === 0 && noDataText && (
+            <NoDataTextWrapper>{noDataText}</NoDataTextWrapper>
+          )}
 
-        {/* The small chart */}
-        <SingularChart isBig={false} chartData={data} {...props} />
+          {/* The small chart */}
+          <SingularChart isBig={false} chartData={data} {...props} />
 
-        {/* The big chart */}
-        <BigChart open={isBig} onClose={() => setIsBig(false)}>
-          <SingularChart isBig={isBig} chartData={data} {...props} />
-        </BigChart>
-      </GridItemContent>
+          {/* The big chart */}
+          <BigChart open={isBig} onClose={() => setIsBig(false)}>
+            <SingularChart isBig={isBig} chartData={data} {...props} />
+          </BigChart>
+        </GridItemContent>
+      </div>
     </GridItem>
   )
 }

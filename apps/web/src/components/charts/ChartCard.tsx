@@ -49,6 +49,7 @@ interface ChartCardProps {
   error: any
   sliceTooltip?: SliceTooltip
   extraHeaderContent?: React.ReactNode
+  noDataText?: string
 }
 
 const ChartCard = ({
@@ -56,7 +57,6 @@ const ChartCard = ({
   data,
   error,
   title,
-  extraHeaderContent,
   ...props
 }: ChartCardProps) => {
   if (error)
@@ -88,7 +88,6 @@ const ChartCard = ({
       fullSize={fullSize}
       title={title}
       data={data}
-      extraHeaderContent={extraHeaderContent}
       {...props}
     />
   )

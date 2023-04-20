@@ -110,6 +110,7 @@ const HoursBilledPerWeekCard = ({
             data={filteredData}
             error={error}
             fullSize={true}
+            noDataText="Velg kunder du vil vise i listen til høyre"
             sliceTooltip={HoursBilledPerWeekTooltip}
             extraHeaderContent={
               <FormControl component="fieldset">
