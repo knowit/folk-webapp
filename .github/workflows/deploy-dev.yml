@@ -64,7 +64,7 @@ jobs:
 
   slackNotification:
     if: ${{ always() }}
-    needs: [deploy]
+    needs: [deploy_server, deploy_web]
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
@@ -73,7 +73,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_CHANNEL: folk_deployments
-          SLACK_COLOR: ${{ needs.deploy.result }}
+          SLACK_COLOR: ${{ needs.deploy_dev.result }}
           SLACK_ICON: https://github.com/rtCamp.png?size=48
           SLACK_USERNAME: Folk Deployments
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
