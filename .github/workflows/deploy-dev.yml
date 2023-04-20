@@ -3,7 +3,7 @@ name: Deploy - Dev
 on:
   push:
     branches:
-      - feature/390-slackvarsling-for-deploy
+      - 390-slackvarsling-for-deploy
   workflow_dispatch:
 
 jobs:
