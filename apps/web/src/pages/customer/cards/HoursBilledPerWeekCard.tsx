@@ -17,7 +17,7 @@ import { styled } from '@mui/styles'
 import usePerWeekFilter from '../../../components/charts/chartFilters/usePerWeekFilter'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
-import FlipMove from 'react-flip-move'
+import { motion, LayoutGroup } from 'framer-motion'
 
 const GridContainer = styled('div')({
   display: 'grid',
@@ -48,6 +48,8 @@ interface HoursBilledPerWeekCardProps {
   setSelectedCustomerIds: (ids: string[]) => void
 }
 
+const easingFunction = { ease: [0.33, 0, 1, 0.62], duration: 1 }
+
 const HoursBilledPerWeekCard = ({
   selectedCustomerIds,
   setSelectedCustomerIds,
@@ -65,10 +67,10 @@ const HoursBilledPerWeekCard = ({
     data === undefined ? [] : data?.data?.map((item) => item.id as string)
 
   const selectedCustomers = customers.filter((customer) =>
-    selectedCustomerIds.includes(customer)
+    selectedCustomerIds?.includes(customer)
   )
   const unselectedCustomers = customers.filter(
-    (customer) => !selectedCustomerIds.includes(customer)
+    (customer) => !selectedCustomerIds?.includes(customer)
   )
   const handleSelectAll = () => {
     setSelectedCustomerIds(customers)
@@ -94,13 +96,13 @@ const HoursBilledPerWeekCard = ({
       : {
           ...data,
           data: chartData?.data?.filter((customer) => {
-            return selectedCustomerIds.includes(customer.id as string)
+            return selectedCustomerIds?.includes(customer.id as string)
           }),
         }
 
   return (
     <GridItem fullSize>
-      {filteredData === undefined ? (
+      {filteredData === undefined || selectedCustomerIds === null ? (
         <BaseSkeleton variant="rectangular" height={420}></BaseSkeleton>
       ) : (
         <GridContainer>
@@ -110,7 +112,7 @@ const HoursBilledPerWeekCard = ({
             data={filteredData}
             error={error}
             fullSize={true}
-            noDataText="Velg kunder du vil vise i listen til høyre"
+            noDataText="Bruk listen til høyre for å velge hvilke kunder du vil vise i grafen"
             sliceTooltip={HoursBilledPerWeekTooltip}
             extraHeaderContent={
               <FormControl component="fieldset">
@@ -144,9 +146,9 @@ const HoursBilledPerWeekCard = ({
           <CustomerFilterWrapper>
             <GridItemHeader title="Filtrer kunder">
               <Checkbox
-                checked={selectedCustomerIds.length === customers.length}
+                checked={selectedCustomerIds?.length === customers.length}
                 onChange={
-                  selectedCustomerIds.length === customers.length
+                  selectedCustomerIds?.length === customers.length
                     ? handleSelectNone
                     : handleSelectAll
                 }
@@ -157,40 +159,54 @@ const HoursBilledPerWeekCard = ({
             <ScrollableDiv>
               <GridItemContent>
                 <CheckboxFlexWrapper>
-                  <FlipMove typeName={null}>
+                  <LayoutGroup>
                     {selectedCustomers.map((customer) => (
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={selectedCustomerIds.includes(customer)}
-                            onChange={(event) =>
-                              handleCheckboxChange(event, customer)
-                            }
-                            name={customer}
-                          />
-                        }
-                        label={customer}
-                        labelPlacement="start"
+                      <motion.div
+                        layoutId={customer}
                         key={customer}
-                      />
+                        initial={false}
+                        transition={easingFunction}
+                      >
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={selectedCustomerIds.includes(customer)}
+                              onChange={(event) =>
+                                handleCheckboxChange(event, customer)
+                              }
+                              name={customer}
+                            />
+                          }
+                          label={customer}
+                          labelPlacement="start"
+                          key={customer}
+                        />
+                      </motion.div>
                     ))}
                     {unselectedCustomers.map((customer) => (
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={selectedCustomerIds.includes(customer)}
-                            onChange={(event) =>
-                              handleCheckboxChange(event, customer)
-                            }
-                            name={customer}
-                          />
-                        }
-                        label={customer}
-                        labelPlacement="start"
+                      <motion.div
+                        layoutId={customer}
                         key={customer}
-                      />
+                        initial={false}
+                        transition={easingFunction}
+                      >
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={selectedCustomerIds?.includes(customer)}
+                              onChange={(event) =>
+                                handleCheckboxChange(event, customer)
+                              }
+                              name={customer}
+                            />
+                          }
+                          label={customer}
+                          labelPlacement="start"
+                          key={customer}
+                        />
+                      </motion.div>
                     ))}
-                  </FlipMove>
+                  </LayoutGroup>
                 </CheckboxFlexWrapper>
               </GridItemContent>
             </ScrollableDiv>
