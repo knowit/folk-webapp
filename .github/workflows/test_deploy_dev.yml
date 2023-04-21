@@ -24,7 +24,7 @@ jobs:
       - name: Set up node 18
         uses: actions/setup-node@v3
         with:
-          node-version: "30"
+          node-version: "18"
   slackNotification:
     if: ${{ always() }}
     needs: [test_deploy, test_extra]
