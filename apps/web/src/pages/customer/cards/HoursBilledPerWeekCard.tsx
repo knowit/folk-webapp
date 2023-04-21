@@ -67,10 +67,10 @@ const HoursBilledPerWeekCard = ({
     data === undefined ? [] : data?.data?.map((item) => item.id as string)
 
   const selectedCustomers = customers.filter((customer) =>
-    selectedCustomerIds.includes(customer)
+    selectedCustomerIds?.includes(customer)
   )
   const unselectedCustomers = customers.filter(
-    (customer) => !selectedCustomerIds.includes(customer)
+    (customer) => !selectedCustomerIds?.includes(customer)
   )
   const handleSelectAll = () => {
     setSelectedCustomerIds(customers)
@@ -96,13 +96,13 @@ const HoursBilledPerWeekCard = ({
       : {
           ...data,
           data: chartData?.data?.filter((customer) => {
-            return selectedCustomerIds.includes(customer.id as string)
+            return selectedCustomerIds?.includes(customer.id as string)
           }),
         }
 
   return (
     <GridItem fullSize>
-      {filteredData === undefined ? (
+      {filteredData === undefined || selectedCustomerIds === null ? (
         <BaseSkeleton variant="rectangular" height={420}></BaseSkeleton>
       ) : (
         <GridContainer>
@@ -146,9 +146,9 @@ const HoursBilledPerWeekCard = ({
           <CustomerFilterWrapper>
             <GridItemHeader title="Filtrer kunder">
               <Checkbox
-                checked={selectedCustomerIds.length === customers.length}
+                checked={selectedCustomerIds?.length === customers.length}
                 onChange={
-                  selectedCustomerIds.length === customers.length
+                  selectedCustomerIds?.length === customers.length
                     ? handleSelectNone
                     : handleSelectAll
                 }
