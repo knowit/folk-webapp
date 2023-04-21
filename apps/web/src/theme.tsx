@@ -1,6 +1,11 @@
 import { createTheme } from '@mui/material/styles'
 
-const colours = { black: '#333333', lightGrey: '#b8b8b6', rose: '#FAC0B1' }
+const colours = {
+  black: '#333333',
+  lightGrey: '#b8b8b6',
+  rose: '#FAC0B1',
+  white: '#F1F0ED',
+}
 
 export const theme = createTheme({
   palette: {
@@ -13,7 +18,7 @@ export const theme = createTheme({
     },
     background: {
       default: '#FFFFFF',
-      paper: '#F1F0ED',
+      paper: colours.white,
     },
     text: {
       primary: colours.black,
@@ -42,6 +47,13 @@ export const theme = createTheme({
           borderBottomStyle: 'solid',
           boxShadow: 'none',
           height: '79px',
+        },
+      },
+    },
+    MuiSlider: {
+      styleOverrides: {
+        root: {
+          minWidth: '150px',
         },
       },
     },
@@ -81,6 +93,10 @@ export const theme = createTheme({
           flexWrap: 'wrap',
           backgroundColor: colours.black,
           padding: '10px 25px 0px 25px',
+          '& .MuiTabs-indicator': { display: 'none' },
+          '& .Mui-selected': {
+            backgroundColor: colours.white,
+          },
         },
       },
     },

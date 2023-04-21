@@ -7,19 +7,6 @@ interface NavTabContent {
   title: string
   pageTitle: string
 }
-
-const classes = {
-  sxTabs: [
-    { '& .MuiTabs-indicator': { display: 'none' } },
-    {
-      '& .Mui-selected': {
-        backgroundColor: '#F1F0ED',
-        color: '#000',
-      },
-    },
-  ],
-}
-
 interface NavTabProps {
   contentList: NavTabContent[]
 }
@@ -52,12 +39,7 @@ export default function NavTab(props: NavTabProps) {
 
   return (
     <>
-      <Tabs
-        sx={classes.sxTabs}
-        value={value}
-        onChange={handleChange}
-        variant="fullWidth"
-      >
+      <Tabs value={value} onChange={handleChange} variant="fullWidth">
         {createTabs()}
       </Tabs>
       {props.contentList[value].content}

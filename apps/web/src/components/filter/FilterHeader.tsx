@@ -71,7 +71,6 @@ const useStyles = makeStyles(() =>
       fontStyle: 'italic',
       alignSelf: 'flex-start',
     },
-    thresholdSlider: { minWidth: '150px' },
     thresholdInput: { display: 'none' },
   })
 )
@@ -181,7 +180,6 @@ export function FilterHeader({
             Terskel:
           </label>
           <Slider
-            className={classes.thresholdSlider}
             id={`${type}-threshold-slider`}
             value={threshold}
             step={1}
