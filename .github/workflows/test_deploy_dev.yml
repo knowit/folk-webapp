@@ -17,9 +17,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18"
+  test_extra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up node 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: "30"
   slackNotification:
     if: ${{ always() }}
-    needs: [test_deploy]
+    needs: [test_deploy, test_extra]
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
@@ -28,7 +36,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_CHANNEL: folk_deployments
-          SLACK_COLOR: ${{ needs.test_deploy.result }} # or a specific color like 'good' or '#ff00ff'
+          SLACK_COLOR: ${{ needs.test_deploy.result == 'success' && needs.test_extra.result == 'success' && 'good' || 'danger' }}# or a specific color like 'good' or '#ff00ff'
           SLACK_ICON: https://github.com/rtCamp.png?size=48
           SLACK_USERNAME: Dataplattform Deployments
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
