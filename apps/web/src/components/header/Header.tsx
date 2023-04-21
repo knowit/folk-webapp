@@ -20,18 +20,6 @@ const useStyles = makeStyles(() =>
       backgroundColor: 'white',
       paddingTop: '30px',
     },
-    appbar: {
-      height: '79px',
-      boxShadow: 'none',
-      borderBottomStyle: 'solid',
-      borderBottomColor: '#FAC0B1',
-      backgroundColor: '#333333',
-    },
-    toolbar: {
-      height: '100%',
-      paddingLeft: '30px',
-      paddingRight: '30px',
-    },
     logo: {
       height: '27px',
     },
@@ -47,8 +35,8 @@ export default function Header() {
 
   return (
     <div className={classes.root}>
-      <AppBar className={classes.appbar} position="relative">
-        <Toolbar component={'nav'} className={classes.toolbar}>
+      <AppBar>
+        <Toolbar component={'nav'}>
           <Link
             data-testid="knowit-logo"
             to={process.env.NODE_ENV === 'development' ? '/debug' : '/'}
