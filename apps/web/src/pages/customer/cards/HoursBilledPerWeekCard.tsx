@@ -17,6 +17,7 @@ import { styled } from '@mui/styles'
 import usePerWeekFilter from '../../../components/charts/chartFilters/usePerWeekFilter'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
+import FlipMove from 'react-flip-move'
 
 const GridContainer = styled('div')({
   display: 'grid',
@@ -39,6 +40,7 @@ const ScrollableDiv = styled('div')({
 const CheckboxFlexWrapper = styled('div')({
   display: 'flex',
   flexDirection: 'column',
+  position: 'relative',
 })
 
 interface HoursBilledPerWeekCardProps {
@@ -108,6 +110,7 @@ const HoursBilledPerWeekCard = ({
             data={filteredData}
             error={error}
             fullSize={true}
+            noDataText="Velg kunder du vil vise i listen til høyre"
             sliceTooltip={HoursBilledPerWeekTooltip}
             extraHeaderContent={
               <FormControl component="fieldset">
@@ -154,38 +157,40 @@ const HoursBilledPerWeekCard = ({
             <ScrollableDiv>
               <GridItemContent>
                 <CheckboxFlexWrapper>
-                  {selectedCustomers.map((customer) => (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={selectedCustomerIds.includes(customer)}
-                          onChange={(event) =>
-                            handleCheckboxChange(event, customer)
-                          }
-                          name={customer}
-                        />
-                      }
-                      label={customer}
-                      labelPlacement="start"
-                      key={customer}
-                    />
-                  ))}
-                  {unselectedCustomers.map((customer) => (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={selectedCustomerIds.includes(customer)}
-                          onChange={(event) =>
-                            handleCheckboxChange(event, customer)
-                          }
-                          name={customer}
-                        />
-                      }
-                      label={customer}
-                      labelPlacement="start"
-                      key={customer}
-                    />
-                  ))}
+                  <FlipMove typeName={null}>
+                    {selectedCustomers.map((customer) => (
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={selectedCustomerIds.includes(customer)}
+                            onChange={(event) =>
+                              handleCheckboxChange(event, customer)
+                            }
+                            name={customer}
+                          />
+                        }
+                        label={customer}
+                        labelPlacement="start"
+                        key={customer}
+                      />
+                    ))}
+                    {unselectedCustomers.map((customer) => (
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={selectedCustomerIds.includes(customer)}
+                            onChange={(event) =>
+                              handleCheckboxChange(event, customer)
+                            }
+                            name={customer}
+                          />
+                        }
+                        label={customer}
+                        labelPlacement="start"
+                        key={customer}
+                      />
+                    ))}
+                  </FlipMove>
                 </CheckboxFlexWrapper>
               </GridItemContent>
             </ScrollableDiv>
