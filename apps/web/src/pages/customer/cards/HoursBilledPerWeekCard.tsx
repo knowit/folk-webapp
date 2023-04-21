@@ -17,7 +17,7 @@ import { styled } from '@mui/styles'
 import usePerWeekFilter from '../../../components/charts/chartFilters/usePerWeekFilter'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
-import FlipMove from 'react-flip-move'
+import { motion, LayoutGroup } from 'framer-motion'
 
 const GridContainer = styled('div')({
   display: 'grid',
@@ -47,6 +47,8 @@ interface HoursBilledPerWeekCardProps {
   selectedCustomerIds: string[]
   setSelectedCustomerIds: (ids: string[]) => void
 }
+
+const easingFunction = { ease: [0.33, 0, 1, 0.62], duration: 1 }
 
 const HoursBilledPerWeekCard = ({
   selectedCustomerIds,
@@ -157,40 +159,54 @@ const HoursBilledPerWeekCard = ({
             <ScrollableDiv>
               <GridItemContent>
                 <CheckboxFlexWrapper>
-                  <FlipMove typeName={null}>
+                  <LayoutGroup>
                     {selectedCustomers.map((customer) => (
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={selectedCustomerIds.includes(customer)}
-                            onChange={(event) =>
-                              handleCheckboxChange(event, customer)
-                            }
-                            name={customer}
-                          />
-                        }
-                        label={customer}
-                        labelPlacement="start"
+                      <motion.div
+                        layoutId={customer}
                         key={customer}
-                      />
+                        initial={false}
+                        transition={easingFunction}
+                      >
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={selectedCustomerIds.includes(customer)}
+                              onChange={(event) =>
+                                handleCheckboxChange(event, customer)
+                              }
+                              name={customer}
+                            />
+                          }
+                          label={customer}
+                          labelPlacement="start"
+                          key={customer}
+                        />
+                      </motion.div>
                     ))}
                     {unselectedCustomers.map((customer) => (
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={selectedCustomerIds.includes(customer)}
-                            onChange={(event) =>
-                              handleCheckboxChange(event, customer)
-                            }
-                            name={customer}
-                          />
-                        }
-                        label={customer}
-                        labelPlacement="start"
+                      <motion.div
+                        layoutId={customer}
                         key={customer}
-                      />
+                        initial={false}
+                        transition={easingFunction}
+                      >
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={selectedCustomerIds?.includes(customer)}
+                              onChange={(event) =>
+                                handleCheckboxChange(event, customer)
+                              }
+                              name={customer}
+                            />
+                          }
+                          label={customer}
+                          labelPlacement="start"
+                          key={customer}
+                        />
+                      </motion.div>
                     ))}
-                  </FlipMove>
+                  </LayoutGroup>
                 </CheckboxFlexWrapper>
               </GridItemContent>
             </ScrollableDiv>
