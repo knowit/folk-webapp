@@ -3,7 +3,7 @@ name: Deploy - Dev
 on:
   push:
     branches:
-      - 390-slackvarsling-for-deploy
+      - master
   workflow_dispatch:
 
 jobs:
@@ -73,7 +73,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_CHANNEL: folk_deployments
-          SLACK_COLOR: ${{ needs.deploy_server.result == 'success' && needs.deploy_web.result == 'success' && 'good' || 'danger' }}
+          SLACK_COLOR: ${{ (needs.deploy_server.result == 'success' && needs.deploy_web.result == 'success') && '#00FF00' || '#FF0000' }}
           SLACK_ICON: https://github.com/rtCamp.png?size=48
           SLACK_USERNAME: Folk Deployments
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
