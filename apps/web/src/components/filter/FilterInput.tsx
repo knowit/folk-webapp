@@ -43,9 +43,6 @@ const useStyles = makeStyles({
       color: 'black',
     },
   },
-  autocomplete: {
-    paddingRight: '10px',
-  },
 })
 
 interface Props {
@@ -87,7 +84,6 @@ export default function FilterInput({
       }
       multiple
       disableCloseOnSelect
-      className={classes.autocomplete}
       onChange={handleCategoryChange}
       renderOption={(props, option, state) => (
         <li className={classes.option} {...props}>

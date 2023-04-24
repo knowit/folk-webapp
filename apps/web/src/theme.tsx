@@ -68,6 +68,11 @@ export const theme = createTheme({
         },
       },
     },
+    MuiAutocomplete: {
+      styleOverrides: {
+        root: { paddingRight: '10px' },
+      },
+    },
     MuiSlider: {
       styleOverrides: {
         root: {
