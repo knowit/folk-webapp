@@ -80,7 +80,7 @@ export default function CustomerList() {
     }
 
     return filteredData
-      .sort((a, b) => b.employees.length - b.employees.length)
+      .sort((a, b) => b.employees.length - a.employees.length)
       .map(({ customer_name, employees }) => (
         <CustomerAccordion
           key={customer_name}
