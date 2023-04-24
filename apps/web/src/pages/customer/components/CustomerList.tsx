@@ -80,10 +80,7 @@ export default function CustomerList() {
     }
 
     return filteredData
-      .sort(
-        ({ customer_name: aCustomerName }, { customer_name: bCustomerName }) =>
-          String(aCustomerName).localeCompare(bCustomerName)
-      )
+      .sort((a, b) => b.employees.length - b.employees.length)
       .map(({ customer_name, employees }) => (
         <CustomerAccordion
           key={customer_name}
