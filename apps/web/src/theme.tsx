@@ -1,6 +1,7 @@
 import { createTheme } from '@mui/material/styles'
 
 const colours = {
+  beige: '#E4E1DB',
   black: '#333333',
   lightGrey: '#b8b8b6',
   rose: '#FAC0B1',
@@ -11,7 +12,7 @@ export const theme = createTheme({
   palette: {
     primary: {
       main: '#707070',
-      light: '#E4E1DB',
+      light: colours.beige,
     },
     secondary: {
       main: '#ff0000',
@@ -36,6 +37,23 @@ export const theme = createTheme({
     fontWeightRegular: 'normal',
   },
   components: {
+    MuiAccordion: {
+      styleOverrides: {
+        root: { marginTop: '5px', width: '100%' },
+      },
+    },
+    MuiAccordionDetails: {
+      styleOverrides: { root: { padding: '0px' } },
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          width: '100%',
+          backgroundColor: colours.beige,
+          fontSize: '18px',
+        },
+      },
+    },
     MuiAppBar: {
       defaultProps: {
         position: 'relative',
