@@ -61,19 +61,3 @@ jobs:
       - name: Update invalidation
         working-directory: apps/web
         run: yarn postdeploy:dev
-
-  slackNotification:
-    if: ${{ always() }}
-    needs: [deploy_server, deploy_web]
-    name: Slack Notification
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_CHANNEL: folk_deployments
-          SLACK_COLOR: ${{ (needs.deploy_server.result == 'success' && needs.deploy_web.result == 'success') && '#00FF00' || '#FF0000' }}
-          SLACK_ICON: https://github.com/rtCamp.png?size=48
-          SLACK_USERNAME: Folk Deployments
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
