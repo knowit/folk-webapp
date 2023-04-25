@@ -1,18 +1,16 @@
 import * as React from 'react'
 import { WorkExperience } from '../../../api/data/employee/employeeApiTypes'
 import { formatMonthYearRange } from '../utils/format-month-year-range'
-import { makeStyles } from '@mui/styles'
+import { styled } from '@mui/styles'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { FallbackMessage } from './FallbackMessage'
 import { ExperienceList } from './ExperienceList'
 import { ExperienceListItem } from './ExperienceListItem'
 import { compareExperienceDesc } from '../utils/compare-experience-desc'
 
-const useStyles = makeStyles({
-  timeRange: {
-    fontWeight: 'bold',
-  },
-})
+const TimeStyled = styled('time')(() => ({
+  fontWeight: 'bold',
+}))
 
 interface Props {
   workExperience?: WorkExperience[]
@@ -25,8 +23,6 @@ export function WorkExperienceList({
   isLoading,
   error,
 }: Props) {
-  const classes = useStyles()
-
   if (error) {
     return <FallbackMessage error={error} />
   }
@@ -53,7 +49,7 @@ export function WorkExperienceList({
 
         return (
           <ExperienceListItem key={job.employer + job.year_from}>
-            <time className={classes.timeRange}>{timeRange}</time>
+            <TimeStyled>{timeRange}</TimeStyled>
             {': '}
             {job.employer}
           </ExperienceListItem>
