@@ -20,18 +20,6 @@ const useStyles = makeStyles(() =>
       backgroundColor: 'white',
       paddingTop: '30px',
     },
-    appbar: {
-      height: '79px',
-      boxShadow: 'none',
-      borderBottomStyle: 'solid',
-      borderBottomColor: '#FAC0B1',
-      backgroundColor: '#333333',
-    },
-    toolbar: {
-      height: '100%',
-      paddingLeft: '30px',
-      paddingRight: '30px',
-    },
     logo: {
       height: '27px',
     },
@@ -47,12 +35,9 @@ export default function Header() {
 
   return (
     <div className={classes.root}>
-      <AppBar className={classes.appbar} position="relative">
-        <Toolbar component={'nav'} className={classes.toolbar}>
-          <Link
-            data-testid="knowit-logo"
-            to={process.env.NODE_ENV === 'development' ? '/debug' : '/'}
-          >
+      <AppBar>
+        <Toolbar component={'nav'}>
+          <Link data-testid="knowit-logo" to="/">
             <KnowitLogo title="knowit-logo" className={classes.logo} />
           </Link>
           <NavMenu>
@@ -62,8 +47,8 @@ export default function Header() {
                 <NavMenuItem label="Kunder" to="/kunder" />
                 <NavMenuItem label="Kompetanse" to="/kompetanse" />
                 <NavMenuItem label="Organisasjonsstruktur" to="/organisasjon" />
-                <NavMenuItem label="Arbeidsmiljø" to="/arbeidsmiljo" />
-                <NavMenuItem label="Rekruttering" to="/rekruttering" />
+                {/* <NavMenuItem label="Arbeidsmiljø" to="/arbeidsmiljo" />
+                <NavMenuItem label="Rekruttering" to="/rekruttering" /> */}
               </>
             )}
           </NavMenu>

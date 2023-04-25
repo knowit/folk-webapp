@@ -1,7 +1,8 @@
 import React from 'react'
 import { Avatar, Button } from '@mui/material'
 import { TableCell } from '@mui/material'
-import { createStyles, makeStyles, DefaultTheme, withStyles } from '@mui/styles'
+import { createStyles, makeStyles, DefaultTheme } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import { ReactComponent as FallbackUserIcon } from '../../../assets/fallback_user.svg'
 import CharacterLimitBox from '../components/CharacterLimitBox'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -62,41 +63,30 @@ const useCompetenceMappingStyles = makeStyles((theme: DefaultTheme) =>
     },
   })
 )
-const TableCellNoBorders = withStyles({
-  root: {
-    borderBottom: '1px solid #F1F0ED',
+const TableCellNoBorders = styled(TableCell)(() => ({
+  borderBottom: '1px solid #F1F0ED',
+}))
+const ExpandMoreIconWithStyles = styled(ExpandMoreIcon)(() => ({
+  color: '#707070',
+  cursor: 'pointer',
+  '&:hover': {
+    color: '#333333',
   },
-})(TableCell)
-
-const ExpandMoreIconWithStyles = withStyles({
-  root: {
-    color: '#707070',
-    cursor: 'pointer',
-    '&:hover': {
-      color: '#333333',
-    },
+}))
+const ExpandLessIconWithStyles = styled(ExpandLessIcon)(() => ({
+  color: '#707070',
+  cursor: 'pointer',
+  '&:hover': {
+    color: '#333333',
   },
-})(ExpandMoreIcon)
-
-const ExpandLessIconWithStyles = withStyles({
-  root: {
-    color: '#707070',
-    cursor: 'pointer',
-    '&:hover': {
-      color: '#333333',
-    },
+}))
+export const OpenInNewWithStyles = styled(OpenInNew)(() => ({
+  color: '#707070',
+  cursor: 'pointer',
+  '&:hover': {
+    color: '#333333',
   },
-})(ExpandLessIcon)
-
-export const OpenInNewStyled = withStyles({
-  root: {
-    color: '#707070',
-    cursor: 'pointer',
-    '&:hover': {
-      color: '#333333',
-    },
-  },
-})(OpenInNew)
+}))
 
 interface ConsultantCellProps {
   data: ConsultantInfo
@@ -156,7 +146,7 @@ export default function ConsultantCell({
             <ExpandMoreIconWithStyles />
           )}
           <Link to={'/ansatt/' + consultant.email} target="_blank">
-            <OpenInNewStyled />
+            <OpenInNewWithStyles />
           </Link>
         </div>
       </Button>

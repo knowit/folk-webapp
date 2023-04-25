@@ -4,11 +4,13 @@ import { Grid } from '@mui/material'
 import { HoursBilledPerWeekCard } from '../cards'
 
 export const CustomerOverview = () => {
-  const [selectedCustomerIds, setSelectedCustomerIds] = useState([])
+  const [selectedCustomerIds, setSelectedCustomerIds] = useState(null)
   useEffect(() => {
     const selectedCustomerIds = localStorage.getItem('selectedCustomerIds')
     if (selectedCustomerIds) {
       setSelectedCustomerIds(JSON.parse(selectedCustomerIds))
+    } else {
+      setSelectedCustomerIds([])
     }
   }, [])
   useEffect(() => {

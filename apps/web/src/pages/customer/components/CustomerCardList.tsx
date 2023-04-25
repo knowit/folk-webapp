@@ -18,9 +18,14 @@ const CustomerCardList = () => {
       </>
     )
   }
+
+  const sortedData = data.sort(
+    (a, b) => b.billedLastPeriod - a.billedLastPeriod
+  )
+
   return (
     <>
-      {data.map((customer) => (
+      {sortedData.map((customer) => (
         <CustomerCard key={customer.customer} data={customer} />
       ))}
     </>

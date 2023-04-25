@@ -43,9 +43,6 @@ const useStyles = makeStyles({
       color: 'black',
     },
   },
-  autocomplete: {
-    paddingRight: '10px',
-  },
 })
 
 interface Props {
@@ -87,16 +84,15 @@ export default function FilterInput({
       }
       multiple
       disableCloseOnSelect
-      className={classes.autocomplete}
       onChange={handleCategoryChange}
       renderOption={(props, option, state) => (
-        <div className={classes.option}>
+        <li className={classes.option} {...props}>
           <StyledCheckBox
             className={classes.checkbox}
             checked={state.selected}
           />
           {option.category}
-        </div>
+        </li>
       )}
       renderInput={(params: any) => (
         <div ref={params.InputProps.ref}>
