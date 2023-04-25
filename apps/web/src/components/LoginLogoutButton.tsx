@@ -4,7 +4,7 @@ import React from 'react'
 import { clearLocalStorage } from '../api/auth/authHelpers'
 import { useUserInfo } from '../context/UserInfoContext'
 
-const ButtonBaseWithStyles = styled(ButtonBase)(() => ({
+const ButtonBaseStyled = styled(ButtonBase)(() => ({
   fontSize: '15px',
   fontWeight: 'bold',
   color: '#F1F0ED',
@@ -35,9 +35,5 @@ export const LoginLogoutButton = () => {
     }
   }
 
-  return (
-    <ButtonBaseWithStyles onClick={handleClick}>
-      {buttonText}
-    </ButtonBaseWithStyles>
-  )
+  return <ButtonBaseStyled onClick={handleClick}>{buttonText}</ButtonBaseStyled>
 }

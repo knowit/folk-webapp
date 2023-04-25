@@ -80,7 +80,7 @@ const ExpandLessIconWithStyles = styled(ExpandLessIcon)(() => ({
     color: '#333333',
   },
 }))
-export const OpenInNewWithStyles = styled(OpenInNew)(() => ({
+export const OpenInNewStyled = styled(OpenInNew)(() => ({
   color: '#707070',
   cursor: 'pointer',
   '&:hover': {
@@ -146,7 +146,7 @@ export default function ConsultantCell({
             <ExpandMoreIconWithStyles />
           )}
           <Link to={'/ansatt/' + consultant.email} target="_blank">
-            <OpenInNewWithStyles />
+            <OpenInNewStyled />
           </Link>
         </div>
       </Button>
