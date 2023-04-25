@@ -5,6 +5,9 @@ import { HoursBilledPerWeekCard } from '../cards'
 
 export const CustomerOverview = () => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState(null)
+  const [startDate, setStartDate] = useState(null)
+  const [endDate, setEndDate] = useState(null)
+
   useEffect(() => {
     const selectedCustomerIds = localStorage.getItem('selectedCustomerIds')
     if (selectedCustomerIds) {
@@ -14,10 +17,12 @@ export const CustomerOverview = () => {
     }
   }, [])
   useEffect(() => {
-    localStorage.setItem(
-      'selectedCustomerIds',
-      JSON.stringify(selectedCustomerIds)
-    )
+    if (selectedCustomerIds !== null) {
+      localStorage.setItem(
+        'selectedCustomerIds',
+        JSON.stringify(selectedCustomerIds)
+      )
+    }
   }, [selectedCustomerIds])
 
   return (
@@ -25,6 +30,15 @@ export const CustomerOverview = () => {
       <HoursBilledPerWeekCard
         selectedCustomerIds={selectedCustomerIds}
         setSelectedCustomerIds={setSelectedCustomerIds}
+        startDate={startDate}
+        endDate={endDate}
+        handleDateRangeChange={function (
+          startDate?: Date,
+          endDate?: Date
+        ): void {
+          setStartDate(startDate)
+          setEndDate(endDate)
+        }}
       />
       <CustomerCardList />
     </Grid>

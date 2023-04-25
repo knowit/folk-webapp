@@ -11,11 +11,15 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }))
 
 type DateRangePickerButtonProps = {
+  startDate: Date
+  endDate: Date
   onComplete: (startDate?: Date, endDate?: Date) => void
 }
 
 export const DateRangePickerButton: FC<DateRangePickerButtonProps> = ({
   onComplete,
+  startDate,
+  endDate,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
@@ -43,7 +47,9 @@ export const DateRangePickerButton: FC<DateRangePickerButtonProps> = ({
         onClick={handleClick}
         startIcon={<CalendarTodayIcon />}
       >
-        Angi periode
+        {startDate && endDate
+          ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+          : 'Angi periode'}
       </StyledButton>
       <Popover
         id={id}
@@ -59,7 +65,11 @@ export const DateRangePickerButton: FC<DateRangePickerButtonProps> = ({
           horizontal: 'right',
         }}
       >
-        <DateRangePicker onSubmit={onSubmit} />
+        <DateRangePicker
+          startDate={startDate}
+          endDate={endDate}
+          onSubmit={onSubmit}
+        />
       </Popover>
     </>
   )

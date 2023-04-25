@@ -1,6 +1,6 @@
 import { Box, Button, styled } from '@mui/material'
 import React, { FC } from 'react'
-import { Dayjs } from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import { DateField } from '@mui/x-date-pickers/DateField'
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
@@ -16,12 +16,22 @@ const StyledDateCalendar = styled(DateCalendar<Dayjs>)(({ theme }) => ({
 }))
 
 type DateRangePickerProps = {
+  startDate: Date
+  endDate: Date
   onSubmit: (startDate?: Date, endDate?: Date) => void
 }
 
-export const DateRangePicker: FC<DateRangePickerProps> = ({ onSubmit }) => {
-  const [startDate, setStartDate] = React.useState<Dayjs | null>(null)
-  const [endDate, setEndDate] = React.useState<Dayjs | null>(null)
+export const DateRangePicker: FC<DateRangePickerProps> = ({
+  onSubmit,
+  startDate: initialStartDate,
+  endDate: initialEndDate,
+}) => {
+  const [startDate, setStartDate] = React.useState<Dayjs | null>(
+    initialStartDate ? dayjs(initialStartDate) : null
+  )
+  const [endDate, setEndDate] = React.useState<Dayjs | null>(
+    initialEndDate ? dayjs(initialEndDate) : null
+  )
 
   const submitButtonFn = () => {
     // Submit the dates
