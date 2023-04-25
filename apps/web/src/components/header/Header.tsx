@@ -37,10 +37,7 @@ export default function Header() {
     <div className={classes.root}>
       <AppBar>
         <Toolbar component={'nav'}>
-          <Link
-            data-testid="knowit-logo"
-            to={process.env.NODE_ENV === 'development' ? '/debug' : '/'}
-          >
+          <Link data-testid="knowit-logo" to="/">
             <KnowitLogo title="knowit-logo" className={classes.logo} />
           </Link>
           <NavMenu>
@@ -50,8 +47,8 @@ export default function Header() {
                 <NavMenuItem label="Kunder" to="/kunder" />
                 <NavMenuItem label="Kompetanse" to="/kompetanse" />
                 <NavMenuItem label="Organisasjonsstruktur" to="/organisasjon" />
-                <NavMenuItem label="Arbeidsmiljø" to="/arbeidsmiljo" />
-                <NavMenuItem label="Rekruttering" to="/rekruttering" />
+                {/* <NavMenuItem label="Arbeidsmiljø" to="/arbeidsmiljo" />
+                <NavMenuItem label="Rekruttering" to="/rekruttering" /> */}
               </>
             )}
           </NavMenu>
