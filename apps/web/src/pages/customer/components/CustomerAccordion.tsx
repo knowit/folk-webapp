@@ -4,25 +4,11 @@ import {
   AccordionDetails,
   Box,
 } from '@mui/material'
-import { createStyles, makeStyles } from '@mui/styles'
 import { Minimize, Add, OpenInNew } from '@mui/icons-material'
 import React, { useState } from 'react'
 import { EmployeeForCustomerList } from '../../../api/data/customer/customerApiTypes'
 import DataTable from '../../../components/table/DataTable'
 import { Column } from '../../../components/table/tableTypes'
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    accordionSummary: {
-      width: '100%',
-      backgroundColor: '#E4E1DB',
-      fontSize: '18px',
-    },
-    accordionDetails: {
-      padding: '0px',
-    },
-  })
-)
 
 interface CustomerDropdownProps {
   customerName: string
@@ -38,7 +24,6 @@ export function CustomerAccordion({
   columns,
 }: CustomerDropdownProps) {
   const [expanded, setExpanded] = useState(expand)
-  const classes = useStyles()
 
   return (
     <Box
@@ -51,15 +36,11 @@ export function CustomerAccordion({
       }}
     >
       <Accordion
-        style={{ marginTop: '5px', width: '100%' }}
         expanded={expanded}
         onChange={() => setExpanded(!expanded)}
         square={true}
       >
-        <AccordionSummary
-          className={classes.accordionSummary}
-          expandIcon={expanded ? <Minimize /> : <Add />}
-        >
+        <AccordionSummary expandIcon={expanded ? <Minimize /> : <Add />}>
           <Box
             sx={{
               display: 'flex',
@@ -81,7 +62,7 @@ export function CustomerAccordion({
             <div>Antall konsulenter: {employees.length}</div>
           </Box>
         </AccordionSummary>
-        <AccordionDetails className={classes.accordionDetails}>
+        <AccordionDetails>
           <DataTable columns={columns} rows={employees} />
         </AccordionDetails>
       </Accordion>

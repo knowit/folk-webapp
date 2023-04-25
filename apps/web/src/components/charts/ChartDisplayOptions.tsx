@@ -1,7 +1,7 @@
 import React from 'react'
 import { ToggleButton, ToggleButtonGroup } from '@mui/material'
 import { BarChart, PieChart, ShowChart, DonutLarge } from '@mui/icons-material'
-import { makeStyles, createStyles } from '@mui/styles'
+import { styled } from '@mui/styles'
 import { SvgIcon } from '@mui/material'
 import { ReactComponent as RadarLogo } from '../../assets/RadarChart.svg'
 import { ChartType, ChartVariant } from '../table/tableTypes'
@@ -76,23 +76,19 @@ export function ChartVariantToggle({
   )
 }
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    chartDisplayOptions: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignContent: 'flex-start',
-      alignItems: 'flex-start',
-    },
-  })
-)
+const ChartDisplayOptionsWithStyles = styled('div')(() => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignContent: 'flex-start',
+  alignItems: 'flex-start',
+}))
 
 interface ChartDisplayOptionsProps {
   children: React.ReactNode | React.ReactNode[]
 }
 
 export function ChartDisplayOptions({ children }: ChartDisplayOptionsProps) {
-  const classes = useStyles()
-
-  return <div className={classes.chartDisplayOptions}>{children}</div>
+  return (
+    <ChartDisplayOptionsWithStyles>{children}</ChartDisplayOptionsWithStyles>
+  )
 }
