@@ -73,6 +73,15 @@ export const theme = createTheme({
         root: { paddingRight: '10px' },
       },
     },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: colours.white,
+          borderRadius: 0,
+          padding: '1rem',
+        },
+      },
+    },
     MuiSlider: {
       styleOverrides: {
         root: {
