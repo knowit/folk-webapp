@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { GridItem } from '../../../components/gridItem/GridItem'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
-import { OpenInNewWithStyles } from '../../../components/table/cells/ConsultantCell'
+import { OpenInNewStyled } from '../../../components/table/cells/ConsultantCell'
 import { styled } from '@mui/material/styles'
 
 export type CustomerData = {
@@ -36,7 +36,7 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ data }) => {
     <GridItem>
       <GridItemHeader title={customer}>
         <Link to={'#'}>
-          <OpenInNewWithStyles />
+          <OpenInNewStyled />
         </Link>
       </GridItemHeader>
       <GridItemContent>

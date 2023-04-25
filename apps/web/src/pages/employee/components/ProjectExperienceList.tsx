@@ -8,10 +8,10 @@ import { ExperienceListItem } from './ExperienceListItem'
 import { ProjectExperience } from '../../../api/data/employee/employeeApiTypes'
 import { compareExperienceDesc } from '../utils/compare-experience-desc'
 
-const TimeStyled = styled('time')(() => ({
+const ExperienceListTime = styled('time')(() => ({
   fontWeight: 'bold',
 }))
-const SpanStyled = styled('span')(() => ({
+const ExperienceListProject = styled('span')(() => ({
   fontStyle: 'italic',
 }))
 
@@ -50,13 +50,13 @@ export function ProjectExperienceList({
       {projectsSortedByDateDesc.map(
         ({ customer, project, year_to, month_to, year_from, month_from }) => (
           <ExperienceListItem key={project + year_from + month_from}>
-            <TimeStyled>
+            <ExperienceListTime>
               {formatMonthYearRange(month_from, year_from, month_to, year_to)}
-            </TimeStyled>
+            </ExperienceListTime>
             {': '}
             {customer}
             {' – '}
-            <SpanStyled>{project}</SpanStyled>
+            <ExperienceListProject>{project}</ExperienceListProject>
           </ExperienceListItem>
         )
       )}

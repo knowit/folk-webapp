@@ -8,7 +8,7 @@ import { ExperienceList } from './ExperienceList'
 import { ExperienceListItem } from './ExperienceListItem'
 import { compareExperienceDesc } from '../utils/compare-experience-desc'
 
-const TimeStyled = styled('time')(() => ({
+const ExperienceListTime = styled('time')(() => ({
   fontWeight: 'bold',
 }))
 
@@ -49,7 +49,7 @@ export function WorkExperienceList({
 
         return (
           <ExperienceListItem key={job.employer + job.year_from}>
-            <TimeStyled>{timeRange}</TimeStyled>
+            <ExperienceListTime>{timeRange}</ExperienceListTime>
             {': '}
             {job.employer}
           </ExperienceListItem>
