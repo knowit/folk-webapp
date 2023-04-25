@@ -11,19 +11,18 @@ import {
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { makeStyles, withStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import { CvLinks } from '../../../api/data/employee/employeeApiTypes'
 
-const DialogBox = withStyles(() => ({
-  paper: {
-    backgroundColor: '#f1f0ed',
+const DialogStyled = styled(Dialog)(() => ({
+  '& .MuiDialog-paper': {
     width: '600px',
     height: '360px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    borderRadius: '0px',
   },
-}))(Dialog)
+}))
 
 const GreenButton = withStyles(() => ({
   root: {
@@ -156,7 +155,7 @@ export default function CvDialog({ onClose, data, open, name }: CVDialogProps) {
 
   const classes = useDialogStyle()
   return (
-    <DialogBox
+    <DialogStyled
       onClose={() => onClose()}
       aria-labelledby="simple-dialog-title"
       open={open}
@@ -216,6 +215,6 @@ export default function CvDialog({ onClose, data, open, name }: CVDialogProps) {
           Last ned
         </GreenButton>
       </div>
-    </DialogBox>
+    </DialogStyled>
   )
 }
