@@ -17,12 +17,12 @@ interface CustomerDropdownProps {
   columns: Column[]
 }
 
-export function CustomerAccordion({
+const CustomerAccordion = ({
   customerName,
   employees,
   expand = false,
   columns,
-}: CustomerDropdownProps) {
+}: CustomerDropdownProps) => {
   const [expanded, setExpanded] = useState(expand)
 
   return (
@@ -43,10 +43,10 @@ export function CustomerAccordion({
         <AccordionSummary expandIcon={expanded ? <Minimize /> : <Add />}>
           <Box
             sx={{
-              display: 'flex',
+              display: 'grid',
               flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: '65%',
+              width: '85%',
+              gridTemplateColumns: '1fr 1fr',
             }}
           >
             <div>
@@ -59,7 +59,9 @@ export function CustomerAccordion({
                 }}
               />
             </div>
-            <div>Antall konsulenter: {employees.length}</div>
+            <div style={{ marginLeft: '15px' }}>
+              Antall konsulenter: {employees.length}
+            </div>
           </Box>
         </AccordionSummary>
         <AccordionDetails>
@@ -69,3 +71,5 @@ export function CustomerAccordion({
     </Box>
   )
 }
+
+export default React.memo(CustomerAccordion)

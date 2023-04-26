@@ -19,6 +19,10 @@ export interface CustomerWithEmployees {
   employees: EmployeeForCustomerList[]
 }
 
+export interface CustomerWithAccordion extends CustomerWithEmployees {
+  accordion: JSX.Element
+}
+
 export type EmployeeForCustomerList = TableRow<CustomerListTableRowData>
 
 export type CustomerListTableRowData = [
