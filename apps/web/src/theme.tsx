@@ -170,6 +170,22 @@ export const theme = createTheme(colourTheme, {
         },
       },
     },
+    MuiTooltip: {
+      styleOverrides: {
+        arrow: {
+          color: colourTheme.palette.primary.light,
+          '&:before': {
+            border: `1px solid ${colourTheme.palette.primary.main}`,
+          },
+        },
+        tooltip: {
+          color: colourTheme.palette.text.primary,
+          background: colourTheme.palette.primary.light,
+          fontSize: 14,
+          border: `1px solid ${colourTheme.palette.primary.main}`,
+        },
+      },
+    },
     MuiTab: {
       styleOverrides: {
         root: {
