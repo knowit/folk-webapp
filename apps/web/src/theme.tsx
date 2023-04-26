@@ -140,6 +140,13 @@ export const theme = createTheme(colourTheme, {
         },
       },
     },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          color: colourTheme.palette.text.primary,
+        },
+      },
+    },
     MuiRadio: {
       styleOverrides: {
         root: {
