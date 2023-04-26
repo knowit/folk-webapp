@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import { DateRangePicker } from './DateRangePicker'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 
-const StyledButton = styled(Button)(({ theme }) => ({
+const StyledButton = styled(Button)(() => ({
   borderRadius: '50px',
   whiteSpace: 'nowrap',
   padding: '8px 12px',

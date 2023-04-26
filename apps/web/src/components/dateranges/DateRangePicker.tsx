@@ -6,12 +6,12 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
-const StyledDateField = styled(DateField<Dayjs>)(({ theme }) => ({
+const StyledDateField = styled(DateField<Dayjs>)(() => ({
   backgroundColor: 'white',
   width: '100%',
 }))
 
-const StyledDateCalendar = styled(DateCalendar<Dayjs>)(({ theme }) => ({
+const StyledDateCalendar = styled(DateCalendar<Dayjs>)(() => ({
   backgroundColor: 'white',
 }))
 
