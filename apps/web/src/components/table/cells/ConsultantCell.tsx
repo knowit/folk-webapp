@@ -63,9 +63,7 @@ const useCompetenceMappingStyles = makeStyles((theme: DefaultTheme) =>
     },
   })
 )
-const TableCellNoBorders = styled(TableCell)(() => ({
-  borderBottom: '1px solid #F1F0ED',
-}))
+
 const ExpandMoreIconWithStyles = styled(ExpandMoreIcon)(() => ({
   color: '#707070',
   cursor: 'pointer',
@@ -104,7 +102,7 @@ export default function ConsultantCell({
   const classes = useCompetenceMappingStyles()
   const openStyle = isExpanded ? classes.bolderText : ''
   return (
-    <TableCellNoBorders
+    <TableCell
       component="div"
       className={[classes.flexContainer, classes.column, classes.borders].join(
         ' '
@@ -150,6 +148,6 @@ export default function ConsultantCell({
           </Link>
         </div>
       </Button>
-    </TableCellNoBorders>
+    </TableCell>
   )
 }
