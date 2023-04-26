@@ -7,7 +7,6 @@ import { useUserInfo } from '../context/UserInfoContext'
 const ButtonBaseStyled = styled(ButtonBase)(() => ({
   fontSize: '15px',
   fontWeight: 'bold',
-  color: '#F1F0ED',
   paddingLeft: '13.75px',
   paddingRight: '13.75px',
   marginLeft: '13.75px',

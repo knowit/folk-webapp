@@ -1,37 +1,70 @@
 import { createTheme } from '@mui/material/styles'
+import { PaletteMode } from '@mui/material'
 
-const colours = {
-  beige: '#E4E1DB',
-  black: '#333333',
-  lightGrey: '#b8b8b6',
-  rose: '#FAC0B1',
-  white: '#F1F0ED',
+declare module '@mui/material/styles' {
+  interface TypeBackground {
+    darker?: string
+  }
+  interface SimplePaletteColorOptions {
+    darker?: string
+  }
+  interface Palette {
+    tertiary?: Palette['primary']
+  }
+  interface PaletteOptions {
+    tertiary?: PaletteOptions['primary']
+  }
 }
 
-export const theme = createTheme({
+const getDesignTokens = (mode: PaletteMode) => ({
   palette: {
+    mode,
     primary: {
-      main: '#707070',
-      light: colours.beige,
+      ...(mode === 'light'
+        ? {
+            main: '#333',
+            light: '#b8b8b6',
+            contrastText: '#E4E1DB',
+          }
+        : {
+            main: '#707070',
+            light: '#E4E1DB',
+          }),
     },
     secondary: {
-      main: '#ff0000',
+      ...(mode === 'light' ? { main: '#FAC0B1' } : { main: '#ff0000' }),
+    },
+    tertiary: {
+      ...(mode === 'light' ? { main: '#FAC0B1' } : { main: '#ff0000' }),
     },
     background: {
-      default: '#FFFFFF',
-      paper: colours.white,
+      ...(mode === 'light'
+        ? {
+            default: '#FFFFFF',
+            paper: '#F1F0ED',
+            darker: '#E4E1DB',
+          }
+        : {
+            default: '#FFFFFF',
+            paper: '#F1F0ED',
+          }),
     },
     text: {
-      primary: colours.black,
+      ...(mode === 'light'
+        ? { primary: '#333', secondary: '#F1F0ED' }
+        : { primary: '#F1F0ED', secondary: '#333' }),
     },
     error: {
-      main: '#802826',
+      ...(mode === 'light' ? { main: '#802826' } : { main: '#802826' }),
     },
     success: {
-      main: '#1e561f',
+      ...(mode === 'light' ? { main: '#1e561f' } : { main: '#1e561f' }),
     },
   },
-  spacing: 22.5,
+})
+const colourTheme = createTheme(getDesignTokens('light'))
+
+export const theme = createTheme(colourTheme, {
   typography: {
     fontFamily: 'Arial, Helvetica Neue, Helvetica, sans-serif',
     fontWeightRegular: 'normal',
@@ -49,7 +82,8 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           width: '100%',
-          backgroundColor: colours.beige,
+          backgroundColor: colourTheme.palette.background.darker,
+          color: colourTheme.palette.text.primary,
           fontSize: '18px',
         },
       },
@@ -60,8 +94,8 @@ export const theme = createTheme({
       },
       styleOverrides: {
         root: {
-          backgroundColor: colours.black,
-          borderBottomColor: colours.rose,
+          backgroundColor: colourTheme.palette.primary.main,
+          borderBottomColor: colourTheme.palette.secondary.main,
           borderBottomStyle: 'solid',
           boxShadow: 'none',
           height: '79px',
@@ -71,14 +105,45 @@ export const theme = createTheme({
     MuiAutocomplete: {
       styleOverrides: {
         root: { paddingRight: '10px' },
+        groupLabel: {
+          color: colourTheme.palette.text.primary,
+        },
+      },
+    },
+    MuiButtonBase: {
+      styleOverrides: {
+        root: {
+          color: colourTheme.palette.primary.contrastText,
+        },
+      },
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: colourTheme.palette.text.primary,
+        },
       },
     },
     MuiDialog: {
       styleOverrides: {
         paper: {
-          backgroundColor: colours.white,
+          backgroundColor: colourTheme.palette.background.paper,
           borderRadius: 0,
           padding: '1rem',
+        },
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          color: colourTheme.palette.text.primary,
+        },
+      },
+    },
+    MuiRadio: {
+      styleOverrides: {
+        root: {
+          color: colourTheme.palette.text.primary,
         },
       },
     },
@@ -86,6 +151,13 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           minWidth: '150px',
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          borderWidth: 0,
         },
       },
     },
@@ -102,13 +174,13 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           padding: '0',
-          color: colours.black,
+          color: colourTheme.palette.text.primary,
           fontSize: '32px',
           display: 'flex',
           alignItems: 'stretch',
           textTransform: 'none',
           borderRadius: '5px',
-          backgroundColor: colours.lightGrey,
+          backgroundColor: colourTheme.palette.primary.light,
           lineHeight: '1',
           marginLeft: '10px',
           marginRight: '10px',
@@ -119,15 +191,15 @@ export const theme = createTheme({
     MuiTabs: {
       styleOverrides: {
         root: {
+          backgroundColor: colourTheme.palette.primary.main,
           marginTop: '-10px',
           marginBottom: '20px',
           display: 'flex',
           flexWrap: 'wrap',
-          backgroundColor: colours.black,
           padding: '10px 25px 0px 25px',
           '& .MuiTabs-indicator': { display: 'none' },
           '& .Mui-selected': {
-            backgroundColor: colours.white,
+            backgroundColor: colourTheme.palette.background.paper,
           },
         },
       },
