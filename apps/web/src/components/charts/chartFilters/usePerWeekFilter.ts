@@ -31,15 +31,12 @@ export type PerWeekFilteredData = {
   setSelectedFilter: Dispatch<SetStateAction<PerWeekFilterOptions>>
   weeklyData: SingularChartData
   monthlyData: SingularChartData
-  setDateRange
 }
 
 const usePerWeekFilter = (data: SingularChartData): PerWeekFilteredData => {
   const filterOptions: PerWeekFilterOptions[] = ['Uke', 'Måned']
 
   const [selectedFilter, setSelectedFilter] = useState(filterOptions[0])
-
-  const setDateRange = useState
 
   const groupDataByTimePeriod = (
     data: SingularChartData,
@@ -51,7 +48,6 @@ const usePerWeekFilter = (data: SingularChartData): PerWeekFilteredData => {
           .map((v) => {
             const date = getDateDisplay(v.x)
             const value = { ...v, date: date.date }
-            //
             switch (period) {
               case 'Uke':
                 return { ...value, x: date.week }
@@ -106,7 +102,6 @@ const usePerWeekFilter = (data: SingularChartData): PerWeekFilteredData => {
     setSelectedFilter,
     weeklyData,
     monthlyData,
-    setDateRange,
   }
 }
 
