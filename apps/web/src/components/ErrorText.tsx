@@ -1,48 +1,42 @@
 import React from 'react'
-import { createStyles, makeStyles, DefaultTheme } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 
-const useErrorStyle = makeStyles((theme: DefaultTheme) =>
-  createStyles({
-    root: {
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: ({ height }: { height: number }) => height,
-      color: theme.palette.error.main,
-    },
-    titleText: {
-      fontSize: '18px',
-      fontWeight: 'bold',
-      lineHeight: 1.28,
-    },
-    text: {
-      fontSize: '16px',
-      lineHeight: 1.5,
-    },
-  })
-)
+const ComponentRoot = styled('div')(({ theme }) => ({
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  color: theme.palette.error.main,
+  height: 280,
+}))
+const ComponentTitle = styled('div')(() => ({
+  fontSize: 18,
+  fontWeight: 'bold',
+  lineHeight: 1.28,
+}))
+const ComponentText = styled('div')(() => ({
+  fontSize: 16,
+  lineHeight: 1.5,
+}))
 
 export const NoData = () => <span title="Data ikke tilgjengelig">-</span>
 
-export const ErrorText = ({ height = 280 }: { height?: number }) => {
-  const classes = useErrorStyle({ height })
+export const ErrorText = () => {
   return (
-    <div className={classes.root}>
-      <div className={classes.titleText}> Oida, en feil har oppstått</div>
-      <div className={classes.text}> Data kan ikke vises for dette valget</div>
-      <div className={classes.text}> Vennligst logg inn igjen :) </div>
-    </div>
+    <ComponentRoot>
+      <ComponentTitle> Oida, en feil har oppstått</ComponentTitle>
+      <ComponentText> Data kan ikke vises for dette valget</ComponentText>
+      <ComponentText> Vennligst logg inn igjen :) </ComponentText>
+    </ComponentRoot>
   )
 }
 
-export const LoggedOutErrorText = ({ height = 280 }: { height?: number }) => {
-  const classes = useErrorStyle({ height })
+export const LoggedOutErrorText = () => {
   return (
-    <div className={classes.root}>
-      <div className={classes.titleText}> Velkommen til Knowit Folk</div>
-      <div className={classes.text}> Vennligst logg inn :) </div>
-    </div>
+    <ComponentRoot>
+      <ComponentTitle> Velkommen til Knowit Folk</ComponentTitle>
+      <ComponentText> Vennligst logg inn :) </ComponentText>
+    </ComponentRoot>
   )
 }
