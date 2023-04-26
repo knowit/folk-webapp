@@ -136,11 +136,9 @@ const HoursBilledPerWeekCard = ({
     startDate,
     (a, b) => a - b
   )
-  const endIdx = binarySearch(
-    filteredData?.data[0]?.data,
-    endDate,
-    (a, b) => a - (b - 1)
-  )
+  const endIdx =
+    binarySearch(filteredData?.data[0]?.data, endDate, (a, b) => a - (b - 1)) -
+    1
 
   const timeFilteredData =
     filteredData === undefined
