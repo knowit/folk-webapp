@@ -1,25 +1,19 @@
-import { createStyles, makeStyles, DefaultTheme } from '@mui/styles'
 import React from 'react'
+import { styled } from '@mui/material/styles'
 import { usePrivacyPolicy } from '../api/other/otherQueries'
 
-const useStyles = makeStyles((theme: DefaultTheme) =>
-  createStyles({
-    footer: {
-      width: '100%',
-      paddingTop: '40px',
-      textAlign: 'center',
-      fontSize: '12px',
-      color: theme.palette.text.primary,
-    },
-    link: {
-      color: theme.palette.text.primary,
-    },
-  })
-)
+const FooterStyled = styled('footer')(({ theme }) => ({
+  width: '100%',
+  paddingTop: 40,
+  textAlign: 'center',
+  fontSize: 12,
+  color: theme.palette.text.primary,
+}))
+const LinkStyled = styled('a')(({ theme }) => ({
+  color: theme.palette.text.primary,
+}))
 
 export default function Footer() {
-  const classes = useStyles()
-
   const domain = '.no'
   const improvementsEmail =
     'dataplattform' + String.fromCharCode(64) + `knowit${domain}`
@@ -31,26 +25,24 @@ export default function Footer() {
   const { data: policyUrl } = usePrivacyPolicy()
 
   return (
-    <footer className={classes.footer}>
+    <FooterStyled>
       <p>
         Knowit Folk. Universitetsgata 1, 0164 Oslo &ensp;|&ensp; Tlf. 02486
         &ensp;| &ensp;
-        <a className={classes.link} href={improvementsHref}>
+        <LinkStyled href={improvementsHref}>
           Kontakt og tilbakemeldinger
-        </a>
+        </LinkStyled>
         &ensp; | &ensp;
-        <a className={classes.link} href={correctionHref}>
-          Meld om datafeil
-        </a>
+        <LinkStyled href={correctionHref}>Meld om datafeil</LinkStyled>
         {policyUrl ? (
           <>
             &ensp; | &ensp;
-            <a className={classes.link} href={policyUrl.urlname} download>
+            <LinkStyled href={policyUrl.urlname} download>
               Personvernserklæring
-            </a>
+            </LinkStyled>
           </>
         ) : null}
       </p>
-    </footer>
+    </FooterStyled>
   )
 }
