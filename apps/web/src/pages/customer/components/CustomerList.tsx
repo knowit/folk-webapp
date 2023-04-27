@@ -32,6 +32,7 @@ const AccordionHeaderListWrapper = styled('div')(({ theme }) => ({
 }))
 const AccordionListHeader = styled('div')({
   justifyContent: 'space-between',
+  cursor: 'pointer',
 })
 
 const customerColumns: Column[] = [
