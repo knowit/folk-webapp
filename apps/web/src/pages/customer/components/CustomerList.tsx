@@ -21,8 +21,15 @@ import { EmployeeTableExpandedInfo } from '../../employee/table/EmployeeTableExp
 import { FallbackMessage } from '../../employee/components/FallbackMessage'
 import { tableStyles } from '../../../components/table/DataTable'
 import { ArrowDownward, ArrowUpward } from '@mui/icons-material'
-import styled from '@emotion/styled'
+import { styled } from '@mui/styles'
 
+const AccordionHeaderListWrapper = styled('div')(({ theme }) => ({
+  width: '100%',
+  background: 'white',
+  paddingLeft: '45px',
+  paddingRight: '69px',
+  backgroundColor: theme.palette.primary.light,
+}))
 const AccordionListHeader = styled('div')({
   justifyContent: 'space-between',
 })
@@ -153,14 +160,7 @@ export default function CustomerList() {
       <RowCount>
         Viser {filteredData?.length || 0} av {data?.length || 0} kunder
       </RowCount>
-      <div
-        style={{
-          width: '100%',
-          background: 'white',
-          paddingLeft: '45px',
-          paddingRight: '69px',
-        }}
-      >
+      <AccordionHeaderListWrapper>
         <Box
           sx={{
             display: 'grid',
@@ -176,6 +176,8 @@ export default function CustomerList() {
               padding: '10px 0',
               fontSize: '18px',
               borderLeft: '0px solid white',
+              paddingTop: '14px',
+              paddingBottom: '14px',
             }}
             onClick={() => switchSort(0)}
           >
@@ -195,7 +197,7 @@ export default function CustomerList() {
             {sortIcon(1, sortIndex, sortOrder)}
           </AccordionListHeader>
         </Box>
-      </div>
+      </AccordionHeaderListWrapper>
       {getCustomerAccordions()}
     </Box>
   )
