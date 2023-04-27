@@ -1,19 +1,13 @@
 import React from 'react'
-import { createStyles, makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      display: 'flex',
-      margin: '0 auto',
-      height: '100%',
-      overflow: 'hidden',
-    },
-  })
-)
+const ComponentRoot = styled('ul')(() => ({
+  display: 'flex',
+  margin: '0 auto',
+  height: '100%',
+  overflow: 'hidden',
+}))
 
 export function NavMenu({ children }: { children: React.ReactNode }) {
-  const classes = useStyles()
-
-  return <ul className={classes.root}>{children}</ul>
+  return <ComponentRoot>{children}</ComponentRoot>
 }

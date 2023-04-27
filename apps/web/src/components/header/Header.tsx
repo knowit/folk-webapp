@@ -1,13 +1,12 @@
 import React from 'react'
-import { AppBar, Toolbar, Avatar } from '@mui/material'
+import { AppBar, Toolbar, Avatar, Tabs, Tab } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
-import { Link } from 'react-router-dom'
+import { NavLink, Link, useLocation } from 'react-router-dom'
 import { NavMenu } from './NavMenu'
 import { ReactComponent as KnowitLogo } from '../../assets/logo.svg'
 import { ReactComponent as FallbackUserIcon } from '../../assets/fallback_user.svg'
 import { LoginLogoutButton } from '../LoginLogoutButton'
 import { useUserInfo } from '../../context/UserInfoContext'
-import { NavMenuItem } from './NavMenuItem'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -32,6 +31,7 @@ const useStyles = makeStyles(() =>
 export default function Header() {
   const classes = useStyles()
   const { user } = useUserInfo()
+  const activePage = useLocation().pathname
 
   return (
     <div className={classes.root}>
@@ -42,14 +42,32 @@ export default function Header() {
           </Link>
           <NavMenu>
             {user && (
-              <>
-                <NavMenuItem label="Ansatte" to="/ansatte" />
-                <NavMenuItem label="Kunder" to="/kunder" />
-                <NavMenuItem label="Kompetanse" to="/kompetanse" />
-                <NavMenuItem label="Organisasjonsstruktur" to="/organisasjon" />
-                {/* <NavMenuItem label="Arbeidsmiljø" to="/arbeidsmiljo" />
-                <NavMenuItem label="Rekruttering" to="/rekruttering" /> */}
-              </>
+              <Tabs value={activePage}>
+                <Tab
+                  label={'Ansatte'}
+                  value={'/ansatte'}
+                  to={'/ansatte'}
+                  component={NavLink}
+                />
+                <Tab
+                  label={'Kunder'}
+                  value={'/kunder'}
+                  to={'/kunder'}
+                  component={NavLink}
+                />
+                <Tab
+                  label={'Kompetanse'}
+                  value={'/kompetanse'}
+                  to={'/kompetanse'}
+                  component={NavLink}
+                />
+                <Tab
+                  label={'Organisasjonsstruktur'}
+                  value={'/organisasjon'}
+                  to={'/organisasjon'}
+                  component={NavLink}
+                />
+              </Tabs>
             )}
           </NavMenu>
           <LoginLogoutButton />
