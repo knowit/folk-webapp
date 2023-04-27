@@ -52,7 +52,7 @@ const getDesignTokens = (mode: PaletteMode) => ({
     text: {
       ...(mode === 'light'
         ? { primary: '#333', secondary: '#F1F0ED' }
-        : { primary: '#F1F0ED', secondary: '#333' }),
+        : { primary: '#333', secondary: '#F1F0ED' }),
     },
     error: {
       ...(mode === 'light' ? { main: '#802826' } : { main: '#802826' }),
@@ -194,36 +194,28 @@ export const theme = createTheme(colourTheme, {
       },
     },
     MuiTab: {
+      defaultProps: {
+        disableRipple: true,
+      },
       styleOverrides: {
         root: {
-          padding: '0',
-          color: colourTheme.palette.text.primary,
-          fontSize: '32px',
-          display: 'flex',
-          alignItems: 'stretch',
+          fontSize: 21,
           textTransform: 'none',
-          borderRadius: '5px',
-          backgroundColor: colourTheme.palette.primary.light,
-          lineHeight: '1',
-          marginLeft: '10px',
-          marginRight: '10px',
-          marginBottom: '10px',
+          display: 'flex',
+          margin: 10,
         },
       },
     },
     MuiTabs: {
+      defaultProps: {
+        indicatorColor: 'secondary',
+        textColor: 'secondary',
+      },
       styleOverrides: {
         root: {
           backgroundColor: colourTheme.palette.primary.main,
-          marginTop: '-10px',
-          marginBottom: '20px',
           display: 'flex',
           flexWrap: 'wrap',
-          padding: '10px 25px 0px 25px',
-          '& .MuiTabs-indicator': { display: 'none' },
-          '& .Mui-selected': {
-            backgroundColor: colourTheme.palette.background.paper,
-          },
         },
       },
     },
