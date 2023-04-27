@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import { InputBase, InputAdornment, Theme } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import SearchIcon from '@mui/icons-material/Search'
-import { makeStyles } from '@mui/styles'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 
@@ -14,23 +13,22 @@ const InputBaseStyled = styled(InputBase)(({ theme }) => ({
   paddingRight: 15,
   fontSize: 16,
 }))
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    backgroundColor: 'white',
-    height: 43,
-    minWidth: 303,
-    paddingLeft: 15,
-    paddingRight: 15,
-    fontSize: 16,
+const SearchIconStyled = styled(SearchIcon)(({ theme }) => ({
+  color: theme.palette.primary.main,
+  borderRadius: 0,
+  transition: 'none',
+  padding: 0,
+  '&:hover': {
+    backgroundColor: 'transparent',
   },
-  icon: {
-    color: theme.palette.primary.main,
-    borderRadius: 0,
-    transition: 'none',
-    padding: 0,
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
+}))
+const IconButtonStyled = styled(IconButton)(({ theme }) => ({
+  color: theme.palette.primary.main,
+  borderRadius: 0,
+  transition: 'none',
+  padding: 0,
+  '&:hover': {
+    backgroundColor: 'transparent',
   },
 }))
 
@@ -49,7 +47,6 @@ export default function SearchInput({
   placeholder,
   debounceDelay = 250,
 }: Props) {
-  const classes = useStyles()
   const [searchValue, setSearchValue] = useState(currentSearchValue)
   const searchRef = useRef('')
   const previousSearchRef = useRef('')
@@ -96,17 +93,16 @@ export default function SearchInput({
         endAdornment={
           <InputAdornment position="end">
             {searchValue === '' ? (
-              <SearchIcon className={classes.icon} />
+              <SearchIconStyled />
             ) : (
-              <IconButton
+              <IconButtonStyled
                 color="inherit"
-                className={classes.icon}
                 aria-label="Tøm"
                 onClick={clearInput}
                 title="Tøm"
               >
                 <CloseIcon />
-              </IconButton>
+              </IconButtonStyled>
             )}
           </InputAdornment>
         }
