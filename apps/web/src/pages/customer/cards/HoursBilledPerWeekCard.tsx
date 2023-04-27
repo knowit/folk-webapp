@@ -49,7 +49,7 @@ interface HoursBilledPerWeekCardProps {
   setSelectedCustomerIds: (ids: string[]) => void
   startDate: Date
   endDate: Date
-  handleDateRangeChange: (startDate?: Date, endDate?: Date) => void
+  handleDateRangeChange: (startDate?: string, endDate?: string) => void
 }
 
 const easingFunction = { ease: [0.33, 0, 1, 0.62], duration: 1 }
