@@ -47,8 +47,9 @@ export const DateRangePickerButton: FC<DateRangePickerButtonProps> = ({
         onClick={handleClick}
         startIcon={<CalendarTodayIcon />}
       >
-        {startDate && endDate
-          ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+        {startDate || endDate
+          ? `${startDate ? startDate?.toLocaleDateString() : 'udefinert'} - 
+          ${endDate ? endDate?.toLocaleDateString() : 'udefinert'}`
           : 'Angi periode'}
       </StyledButton>
       <Popover

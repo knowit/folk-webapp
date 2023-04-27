@@ -35,10 +35,14 @@ export const DateRangePicker: FC<DateRangePickerProps> = ({
 
   const submitButtonFn = () => {
     // Submit the dates
-    const start = startDate?.toDate() || undefined
-    const end = endDate?.toDate() || undefined
+    const start = startDate?.toDate() || null
+    const end = endDate?.toDate() || null
 
     onSubmit(start, end)
+  }
+
+  const resetButtonFn = () => {
+    onSubmit(null, null)
   }
 
   return (
@@ -82,6 +86,9 @@ export const DateRangePicker: FC<DateRangePickerProps> = ({
         </Box>
         <Button variant="contained" onClick={submitButtonFn}>
           Lagre
+        </Button>
+        <Button variant="contained" onClick={resetButtonFn}>
+          Nullstill
         </Button>
       </Box>
     </LocalizationProvider>

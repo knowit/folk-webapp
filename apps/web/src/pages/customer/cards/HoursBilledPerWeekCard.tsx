@@ -49,7 +49,7 @@ interface HoursBilledPerWeekCardProps {
   setSelectedCustomerIds: (ids: string[]) => void
   startDate: Date
   endDate: Date
-  handleDateRangeChange: (startDate?: string, endDate?: string) => void
+  handleDateRangeChange: (startDate?: Date, endDate?: Date) => void
 }
 
 const easingFunction = { ease: [0.33, 0, 1, 0.62], duration: 1 }
@@ -131,14 +131,17 @@ const HoursBilledPerWeekCard = ({
     }
     return start
   }
-  const startIdx = binarySearch(
-    filteredData?.data[0]?.data,
-    startDate,
-    (a, b) => a - b
-  )
-  const endIdx =
-    binarySearch(filteredData?.data[0]?.data, endDate, (a, b) => a - (b - 1)) -
-    1
+  const startIdx = startDate
+    ? binarySearch(
+        filteredData?.data[0]?.data,
+        startDate,
+        (a, b) => a - b + 1
+      ) - 1
+    : 0
+
+  const endIdx = endDate
+    ? binarySearch(filteredData?.data[0]?.data, endDate, (a, b) => a - b)
+    : filteredData?.data[0]?.length
 
   const timeFilteredData =
     filteredData === undefined

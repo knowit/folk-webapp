@@ -36,6 +36,10 @@ export const CustomerOverview = () => {
   useEffect(() => {
     if (startDate !== null) {
       localStorage.setItem('startDate', JSON.stringify(startDate))
+    } else {
+      if (localStorage.getItem('startDate')) {
+        localStorage.removeItem('startDate')
+      }
     }
   }, [startDate])
 
@@ -50,6 +54,10 @@ export const CustomerOverview = () => {
   useEffect(() => {
     if (endDate !== null) {
       localStorage.setItem('endDate', JSON.stringify(endDate))
+    } else {
+      if (localStorage.getItem('endDate')) {
+        localStorage.removeItem('endDate')
+      }
     }
   }, [endDate])
 
@@ -61,8 +69,8 @@ export const CustomerOverview = () => {
         startDate={startDate}
         endDate={endDate}
         handleDateRangeChange={function (
-          startDate?: string,
-          endDate?: string
+          startDate?: Date,
+          endDate?: Date
         ): void {
           setStartDate(startDate)
           setEndDate(endDate)
