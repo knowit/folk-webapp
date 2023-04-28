@@ -50,7 +50,7 @@ export const CustomerOverview = () => {
 
   useEffect(() => {
     const selectedPeriodEndDate = localStorage.getItem('selectedPeriodEndDate')
-    if (setSelectedPeriodEndDate) {
+    if (selectedPeriodEndDate) {
       setSelectedPeriodEndDate(new Date(JSON.parse(selectedPeriodEndDate)))
     } else {
       setSelectedPeriodEndDate(null)
