@@ -1,49 +1,36 @@
 import React, { ChangeEvent } from 'react'
 import Checkbox from '@mui/material/Checkbox'
-import { makeStyles, withStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import { InputBase, Autocomplete } from '@mui/material'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import { CategoryWithGroup } from './FilterUtil'
 
-const StyledCheckBox = withStyles(() => ({
-  root: {
-    height: '15px',
-    width: '15px',
-    margin: '5px',
-    color: 'black',
-    '&$checked': {
-      color: 'black',
-    },
-  },
-  checked: {},
-}))(Checkbox)
+const CheckBoxStyled = styled(Checkbox)(({ theme }) => ({
+  height: 15,
+  width: 15,
+  margin: 5,
+  color: theme.palette.text.primary,
+}))
 
-const useStyles = makeStyles({
-  input: {
-    height: '43px',
-    width: '260px',
-    fontSize: '16px',
-    lineHeight: '18px',
-    backgroundColor: 'white',
-    border: 'none',
-    padding: '0px 15px 0px 15px',
-    '&:hover, &:focus, &:active': {
-      outline: 0,
-    },
+const InputBaseStyled = styled(InputBase)(({ theme }) => ({
+  height: 43,
+  width: 260,
+  fontSize: 16,
+  lineHeight: 18,
+  backgroundColor: theme.palette.background.paper,
+  border: 'none',
+  padding: '0px 15px 0px 15px',
+  '&:hover, &:focus, &:active': {
+    outline: 0,
   },
-  option: {
-    fontSize: '14px',
-    width: '100%',
-    margin: 0,
-    color: '#000000',
-  },
-  checkbox: {
-    color: 'black',
-    '&:checked': {
-      color: 'black',
-    },
-  },
-})
+}))
+
+const OptionItem = styled('li')(({ theme }) => ({
+  fontSize: 14,
+  width: '100%',
+  margin: 0,
+  color: theme.palette.text.primary,
+}))
 
 interface Props {
   filterList: string[]
@@ -59,7 +46,6 @@ export default function FilterInput({
   fetchFilterCategories,
 }: Props) {
   const categoriesWithGroup = fetchFilterCategories()
-  const classes = useStyles()
 
   const activeCategories = categoriesWithGroup.filter((categoryWithGroup) =>
     filterList.includes(categoryWithGroup.category)
@@ -86,20 +72,16 @@ export default function FilterInput({
       disableCloseOnSelect
       onChange={handleCategoryChange}
       renderOption={(props, option, state) => (
-        <li className={classes.option} {...props}>
-          <StyledCheckBox
-            className={classes.checkbox}
-            checked={state.selected}
-          />
+        <OptionItem {...props}>
+          <CheckBoxStyled checked={state.selected} />
           {option.category}
-        </li>
+        </OptionItem>
       )}
       renderInput={(params: any) => (
         <div ref={params.InputProps.ref}>
-          <InputBase
+          <InputBaseStyled
             type="text"
             inputProps={{ ...params.inputProps }}
-            className={classes.input}
             placeholder={placeholder}
             endAdornment={<FilterListIcon />}
           />
