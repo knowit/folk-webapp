@@ -5,8 +5,8 @@ import { HoursBilledPerWeekCard } from '../cards'
 
 export const CustomerOverview = () => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState(null)
-  const [startDate, setStartDate] = useState(null)
-  const [endDate, setEndDate] = useState(null)
+  const [selectedPeriodStartDate, setSelectedPeriodStartDate] = useState(null)
+  const [selectedPeriodEndDate, setSelectedPeriodEndDate] = useState(null)
 
   useEffect(() => {
     const selectedCustomerIds = localStorage.getItem('selectedCustomerIds')
@@ -26,54 +26,59 @@ export const CustomerOverview = () => {
   }, [selectedCustomerIds])
 
   useEffect(() => {
-    const startDate = localStorage.getItem('startDate')
-    if (startDate) {
-      setStartDate(new Date(JSON.parse(startDate)))
+    const selectedPeriodStartDate = localStorage.getItem(
+      'selectedPeriodStartDate'
+    )
+    if (selectedPeriodStartDate) {
+      setSelectedPeriodStartDate(new Date(JSON.parse(selectedPeriodStartDate)))
     } else {
-      setStartDate(null)
+      setSelectedPeriodStartDate(null)
     }
   }, [])
   useEffect(() => {
-    if (startDate !== null) {
-      localStorage.setItem('startDate', JSON.stringify(startDate))
+    if (selectedPeriodStartDate !== null) {
+      localStorage.setItem(
+        'selectedPeriodStartDate',
+        JSON.stringify(selectedPeriodStartDate)
+      )
     } else {
-      if (localStorage.getItem('startDate')) {
-        localStorage.removeItem('startDate')
+      if (localStorage.getItem('selectedPeriodStartDate')) {
+        localStorage.removeItem('selectedPeriodStartDate')
       }
     }
-  }, [startDate])
+  }, [selectedPeriodStartDate])
 
   useEffect(() => {
     const endDate = localStorage.getItem('endDate')
     if (endDate) {
-      setEndDate(new Date(JSON.parse(endDate)))
+      setSelectedPeriodEndDate(new Date(JSON.parse(endDate)))
     } else {
-      setEndDate(null)
+      setSelectedPeriodEndDate(null)
     }
   }, [])
   useEffect(() => {
-    if (endDate !== null) {
-      localStorage.setItem('endDate', JSON.stringify(endDate))
+    if (selectedPeriodEndDate !== null) {
+      localStorage.setItem('endDate', JSON.stringify(selectedPeriodEndDate))
     } else {
       if (localStorage.getItem('endDate')) {
         localStorage.removeItem('endDate')
       }
     }
-  }, [endDate])
+  }, [selectedPeriodEndDate])
 
   return (
     <Grid container spacing={2}>
       <HoursBilledPerWeekCard
         selectedCustomerIds={selectedCustomerIds}
         setSelectedCustomerIds={setSelectedCustomerIds}
-        startDate={startDate}
-        endDate={endDate}
+        selectedPeriodStartDate={selectedPeriodStartDate}
+        selectedPeriodEndDate={selectedPeriodEndDate}
         handleDateRangeChange={function (
           startDate?: Date,
           endDate?: Date
         ): void {
-          setStartDate(startDate)
-          setEndDate(endDate)
+          setSelectedPeriodStartDate(startDate)
+          setSelectedPeriodEndDate(endDate)
         }}
       />
       <CustomerCardList />

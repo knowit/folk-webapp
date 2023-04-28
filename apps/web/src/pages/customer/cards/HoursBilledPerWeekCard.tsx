@@ -47,9 +47,12 @@ const CheckboxFlexWrapper = styled('div')({
 interface HoursBilledPerWeekCardProps {
   selectedCustomerIds: string[]
   setSelectedCustomerIds: (ids: string[]) => void
-  startDate: Date
-  endDate: Date
-  handleDateRangeChange: (startDate?: Date, endDate?: Date) => void
+  selectedPeriodStartDate: Date
+  selectedPeriodEndDate: Date
+  handleDateRangeChange: (
+    selectedPeriodStartDate?: Date,
+    selectedPeriodEndDate?: Date
+  ) => void
 }
 
 const easingFunction = { ease: [0.33, 0, 1, 0.62], duration: 1 }
@@ -57,8 +60,8 @@ const easingFunction = { ease: [0.33, 0, 1, 0.62], duration: 1 }
 const HoursBilledPerWeekCard = ({
   selectedCustomerIds,
   setSelectedCustomerIds,
-  startDate,
-  endDate,
+  selectedPeriodStartDate: selectedPeriodStartDate,
+  selectedPeriodEndDate: selectedPeriodEndDate,
   handleDateRangeChange,
 }: HoursBilledPerWeekCardProps) => {
   const { data, error } = useHoursBilledPerWeekCharts()
@@ -131,16 +134,20 @@ const HoursBilledPerWeekCard = ({
     }
     return start
   }
-  const startIdx = startDate
+  const startIdx = selectedPeriodStartDate
     ? binarySearch(
         filteredData?.data[0]?.data,
-        startDate,
+        selectedPeriodStartDate,
         (a, b) => a - b + 1
       ) - 1
     : 0
 
-  const endIdx = endDate
-    ? binarySearch(filteredData?.data[0]?.data, endDate, (a, b) => a - b)
+  const endIdx = selectedPeriodEndDate
+    ? binarySearch(
+        filteredData?.data[0]?.data,
+        selectedPeriodEndDate,
+        (a, b) => a - b
+      )
     : filteredData?.data[0]?.length
 
   const timeFilteredData =
@@ -195,8 +202,8 @@ const HoursBilledPerWeekCard = ({
                   </RadioGroup>
 
                   <DateRangePickerButton
-                    startDate={startDate}
-                    endDate={endDate}
+                    startDate={selectedPeriodStartDate}
+                    endDate={selectedPeriodEndDate}
                     onComplete={(startDate, endDate) =>
                       setDateRange(startDate, endDate)
                     }
