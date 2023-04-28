@@ -49,19 +49,22 @@ export const CustomerOverview = () => {
   }, [selectedPeriodStartDate])
 
   useEffect(() => {
-    const endDate = localStorage.getItem('endDate')
-    if (endDate) {
-      setSelectedPeriodEndDate(new Date(JSON.parse(endDate)))
+    const selectedPeriodEndDate = localStorage.getItem('selectedPeriodEndDate')
+    if (setSelectedPeriodEndDate) {
+      setSelectedPeriodEndDate(new Date(JSON.parse(selectedPeriodEndDate)))
     } else {
       setSelectedPeriodEndDate(null)
     }
   }, [])
   useEffect(() => {
     if (selectedPeriodEndDate !== null) {
-      localStorage.setItem('endDate', JSON.stringify(selectedPeriodEndDate))
+      localStorage.setItem(
+        'selectedPeriodEndDate',
+        JSON.stringify(selectedPeriodEndDate)
+      )
     } else {
-      if (localStorage.getItem('endDate')) {
-        localStorage.removeItem('endDate')
+      if (localStorage.getItem('selectedPeriodEndDate')) {
+        localStorage.removeItem('selectedPeriodEndDate')
       }
     }
   }, [selectedPeriodEndDate])

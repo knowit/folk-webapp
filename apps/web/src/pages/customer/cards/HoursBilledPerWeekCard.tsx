@@ -60,8 +60,8 @@ const easingFunction = { ease: [0.33, 0, 1, 0.62], duration: 1 }
 const HoursBilledPerWeekCard = ({
   selectedCustomerIds,
   setSelectedCustomerIds,
-  selectedPeriodStartDate: selectedPeriodStartDate,
-  selectedPeriodEndDate: selectedPeriodEndDate,
+  selectedPeriodStartDate: startDate,
+  selectedPeriodEndDate: endDate,
   handleDateRangeChange,
 }: HoursBilledPerWeekCardProps) => {
   const { data, error } = useHoursBilledPerWeekCharts()
@@ -134,20 +134,16 @@ const HoursBilledPerWeekCard = ({
     }
     return start
   }
-  const startIdx = selectedPeriodStartDate
+  const startIdx = startDate
     ? binarySearch(
         filteredData?.data[0]?.data,
-        selectedPeriodStartDate,
+        startDate,
         (a, b) => a - b + 1
       ) - 1
     : 0
 
-  const endIdx = selectedPeriodEndDate
-    ? binarySearch(
-        filteredData?.data[0]?.data,
-        selectedPeriodEndDate,
-        (a, b) => a - b
-      )
+  const endIdx = endDate
+    ? binarySearch(filteredData?.data[0]?.data, endDate, (a, b) => a - b)
     : filteredData?.data[0]?.length
 
   const timeFilteredData =
@@ -202,8 +198,8 @@ const HoursBilledPerWeekCard = ({
                   </RadioGroup>
 
                   <DateRangePickerButton
-                    startDate={selectedPeriodStartDate}
-                    endDate={selectedPeriodEndDate}
+                    startDate={startDate}
+                    endDate={endDate}
                     onComplete={(startDate, endDate) =>
                       setDateRange(startDate, endDate)
                     }
