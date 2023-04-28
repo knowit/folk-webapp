@@ -1,6 +1,6 @@
 import React from 'react'
 import { AppBar, Toolbar, Avatar, Tabs, Tab } from '@mui/material'
-import { createStyles, makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import { NavMenu } from './NavMenu'
 import { ReactComponent as KnowitLogo } from '../../assets/logo.svg'
@@ -8,37 +8,34 @@ import { ReactComponent as FallbackUserIcon } from '../../assets/fallback_user.s
 import { LoginLogoutButton } from '../LoginLogoutButton'
 import { useUserInfo } from '../../context/UserInfoContext'
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      top: 0,
-      left: 'auto',
-      right: 0,
-      position: 'sticky',
-      zIndex: 1100,
-      backgroundColor: 'white',
-      paddingTop: '30px',
-    },
-    logo: {
-      height: '27px',
-    },
-    userAvatar: {
-      height: '40px',
-    },
-  })
-)
+const ComponentRoot = styled('div')(({ theme }) => ({
+  top: 0,
+  left: 'auto',
+  right: 0,
+  position: 'sticky',
+  zIndex: 1100,
+  backgroundColor: theme.palette.background.paper,
+  paddingTop: 30,
+}))
+
+const KnowitLogoStyled = styled(KnowitLogo)(() => ({
+  height: 27,
+}))
+
+const AvatarStyled = styled(Avatar)(() => ({
+  height: 40,
+}))
 
 export default function Header() {
-  const classes = useStyles()
   const { user } = useUserInfo()
   const activePage = useLocation().pathname
 
   return (
-    <div className={classes.root}>
+    <ComponentRoot>
       <AppBar>
         <Toolbar component={'nav'}>
           <Link data-testid="knowit-logo" to={'/debug'}>
-            <KnowitLogo title="knowit-logo" className={classes.logo} />
+            <KnowitLogoStyled title="knowit-logo" />
           </Link>
           <NavMenu>
             {user && (
@@ -71,15 +68,11 @@ export default function Header() {
             )}
           </NavMenu>
           <LoginLogoutButton />
-          <Avatar
-            alt={user?.name}
-            src={user?.picture}
-            className={classes.userAvatar}
-          >
+          <AvatarStyled alt={user?.name} src={user?.picture}>
             <FallbackUserIcon />
-          </Avatar>
+          </AvatarStyled>
         </Toolbar>
       </AppBar>
-    </div>
+    </ComponentRoot>
   )
 }
