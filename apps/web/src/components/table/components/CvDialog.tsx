@@ -9,8 +9,7 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
-import { makeStyles, withStyles } from '@mui/styles'
+import { CloseIcon } from '../../../assets/Icons'
 import { styled } from '@mui/material/styles'
 import { CvLinks } from '../../../api/data/employee/employeeApiTypes'
 
@@ -23,108 +22,81 @@ const DialogStyled = styled(Dialog)(() => ({
     alignItems: 'center',
   },
 }))
-
-const GreenButton = withStyles(() => ({
-  root: {
-    backgroundColor: '#4b6455',
-    '&:hover': {
-      backgroundColor: '#435A4C',
-    },
-    width: '106px',
-    borderRadius: '5px',
+const RadioStyledBlack = styled(Radio)(({ theme }) => ({
+  height: 20,
+  width: 20,
+  margin: 5,
+  color: theme.palette.text.primary,
+  '&$checked': {
+    color: theme.palette.text.primary,
   },
-  label: {
-    fontFamily: 'Arial',
-    fontSize: '16px',
-    fontWeight: 'bold',
-    textTransform: 'none',
-    color: '#f1f0ed',
+}))
+const CardStyled = styled(Card)(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
+  width: 323.2,
+  height: 132,
+  borderRadius: 10,
+  display: 'flex',
+  justifyContent: 'space-around',
+  flexDirection: 'row',
+  boxShadow: `0 4px 10px 0 ${theme.palette.text.primary}05`,
+  border: `solid 1px ${theme.palette.background.darker}`,
+  padding: 21,
+}))
+const FormControlLabelStyled = styled(FormControlLabel)(() => ({
+  margin: 0,
+  padding: 0,
+  fontSize: 14,
+}))
+const ButtonGreenStyled = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.success.main,
+  borderRadius: 5,
+  color: theme.palette.primary.contrastText,
+  width: 106,
+  '&:hover': {
+    backgroundColor: theme.palette.success.dark,
   },
-}))(Button)
-
-const GreyButton = withStyles(() => ({
-  root: {
-    color: '#919191',
-    width: '106px',
-    borderRadius: '5px',
+}))
+const ButtonGreyStyled = styled(Button)(({ theme }) => ({
+  backgroundColor: 'none',
+  border: `1px solid ${theme.palette.info.main}`,
+  borderRadius: 5,
+  color: theme.palette.info.dark,
+  width: 106,
+  '&:hover': {
+    border: `1px solid ${theme.palette.info.main}`,
   },
-  label: {
-    fontFamily: 'Arial',
-    fontSize: '16px',
-    fontWeight: 'bold',
-    textTransform: 'none',
-  },
-}))(Button)
-
-const DialogCard = withStyles(() => ({
-  root: {
-    backgroundColor: '#ffffff',
-    width: '323.2px',
-    height: '132px',
-    borderRadius: '10px',
-    display: 'flex',
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-    boxShadow: '0 4px 10px 0 rgba(0, 0, 0, 0.07)',
-    border: 'solid 1px #e0ded7',
-    padding: '21px',
-  },
-}))(Card)
-
-const BlackRadio = withStyles(() => ({
-  root: {
-    height: '20px',
-    width: '20px',
-    margin: '5px',
-    color: 'black',
-    '&$checked': {
-      color: 'black',
-    },
-  },
-  checked: {},
-}))(Radio)
-
-const FormControlLabelStyled = withStyles(() => ({
-  label: {
-    margin: '0px',
-    padding: '0px',
-    fontSize: '14px',
-  },
-}))(FormControlLabel)
-
-const useDialogStyle = makeStyles({
-  closeIcon: {
-    position: 'absolute',
-    alignSelf: 'flex-end',
-    marginRight: '15px',
-    marginTop: '15px',
-    width: '24px',
-    height: '24px',
-    cursor: 'pointer',
-  },
-  title: {
-    fontSize: '18px',
-    lineHeight: '23px',
-    color: '#333333',
-    fontFamily: 'Arial',
-    fontWeight: 'bold',
-    marginTop: '44px',
-    marginBottom: '40px',
-  },
-  radioTitle: {
-    fontFamily: 'Arial',
-    fontSize: '16px',
-    lineHeight: '23px',
-    color: '#333333',
-    marginBottom: '11px',
-  },
-  buttonLine: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    width: '42.6%',
-    margin: 'auto',
-  },
-})
+}))
+const CloseIconContainer = styled('div')(() => ({
+  position: 'absolute',
+  alignSelf: 'flex-end',
+  marginRight: 15,
+  marginTop: 15,
+  width: 24,
+  height: 24,
+}))
+const DialogTitle = styled('p')(({ theme }) => ({
+  fontSize: 18,
+  // lineHeight: 23,
+  color: theme.palette.text.primary,
+  fontFamily: 'Arial',
+  fontWeight: 'bold',
+  marginTop: 44,
+  marginBottom: 40,
+}))
+const DialogSubtitle = styled('div')(({ theme }) => ({
+  fontFamily: 'Arial',
+  fontSize: 16,
+  // lineHeight: 23,
+  color: theme.palette.text.primary,
+  marginBottom: 11,
+}))
+const DialogActions = styled('div')(() => ({
+  display: 'flex',
+  justifyContent: 'space-around',
+  width: '50%',
+  margin: 'auto',
+}))
 
 interface CVDialogProps {
   data: CvLinks
@@ -153,20 +125,19 @@ export default function CvDialog({ onClose, data, open, name }: CVDialogProps) {
     setFileType(event.target.value)
   }
 
-  const classes = useDialogStyle()
   return (
     <DialogStyled
       onClose={() => onClose()}
       aria-labelledby="simple-dialog-title"
       open={open}
     >
-      <p className={classes.title}>Last ned CV for {name}</p>
-      <div className={classes.closeIcon} onClick={() => onClose()} title="Lukk">
+      <DialogTitle>Last ned CV for {name}</DialogTitle>
+      <CloseIconContainer onClick={() => onClose()} title="Lukk">
         <CloseIcon />
-      </div>
-      <DialogCard>
+      </CloseIconContainer>
+      <CardStyled>
         <FormControl component="fieldset">
-          <div className={classes.radioTitle}>Velg filtype</div>
+          <DialogSubtitle>Velg filtype</DialogSubtitle>
           <RadioGroup
             aria-label="Velg filtype"
             name="filtypevalg"
@@ -175,19 +146,19 @@ export default function CvDialog({ onClose, data, open, name }: CVDialogProps) {
           >
             <FormControlLabelStyled
               value=".docx"
-              control={<BlackRadio />}
+              control={<RadioStyledBlack />}
               label=".docx"
             />
             <FormControlLabelStyled
               value=".pdf"
-              control={<BlackRadio />}
+              control={<RadioStyledBlack />}
               label=".pdf"
             />
           </RadioGroup>
         </FormControl>
         <Divider orientation="vertical" />
         <FormControl component="fieldset">
-          <div className={classes.radioTitle}>Velg språk</div>
+          <DialogSubtitle>Velg språk</DialogSubtitle>
           <RadioGroup
             aria-label="Velg filtype"
             name="filtypevalg"
@@ -196,25 +167,25 @@ export default function CvDialog({ onClose, data, open, name }: CVDialogProps) {
           >
             <FormControlLabelStyled
               value="Norsk"
-              control={<BlackRadio />}
+              control={<RadioStyledBlack />}
               label="Norsk"
             />
             <FormControlLabelStyled
               value="Engelsk"
-              control={<BlackRadio />}
+              control={<RadioStyledBlack />}
               label="Engelsk"
             />
           </RadioGroup>
         </FormControl>
-      </DialogCard>
-      <div className={classes.buttonLine}>
-        <GreyButton variant="outlined" onClick={() => onClose()}>
+      </CardStyled>
+      <DialogActions>
+        <ButtonGreyStyled variant="outlined" onClick={() => onClose()}>
           Avbryt
-        </GreyButton>
-        <GreenButton variant="contained" href={downloadLink}>
+        </ButtonGreyStyled>
+        <ButtonGreenStyled variant="contained" href={downloadLink}>
           Last ned
-        </GreenButton>
-      </div>
+        </ButtonGreenStyled>
+      </DialogActions>
     </DialogStyled>
   )
 }

@@ -57,11 +57,34 @@ const getDesignTokens = (mode: PaletteMode) => ({
         ? { primary: '#333', secondary: '#707070', tertiary: '#F1F0ED' }
         : { primary: '#333', secondary: '#F1F0ED' }),
     },
+    info: {
+      ...(mode === 'light'
+        ? {
+            light: '#bbb',
+            main: '#999',
+            dark: '#777',
+          }
+        : {
+            light: '#eee',
+            main: '#ddd',
+            dark: '#ccc',
+          }),
+    },
     error: {
       ...(mode === 'light' ? { main: '#802826' } : { main: '#802826' }),
     },
     success: {
-      ...(mode === 'light' ? { main: '#1e561f' } : { main: '#1e561f' }),
+      ...(mode === 'light'
+        ? {
+            light: '#494',
+            main: '#383',
+            dark: '#272',
+          }
+        : {
+            light: '#494',
+            main: '#383',
+            dark: '#272',
+          }),
     },
   },
 })

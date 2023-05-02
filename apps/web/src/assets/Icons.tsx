@@ -1,5 +1,5 @@
 import { styled, useTheme } from '@mui/material/styles'
-import { GetApp } from '@mui/icons-material'
+import { Close, GetApp } from '@mui/icons-material'
 
 const BaseStyle = () => {
   const theme = useTheme()
@@ -12,4 +12,5 @@ const BaseStyle = () => {
   }
 }
 
+export const CloseIcon = styled(Close)(() => BaseStyle)
 export const DownloadIcon = styled(GetApp)(() => BaseStyle)
