@@ -48,12 +48,14 @@ const usePerWeekFilter = (data: SingularChartData): PerWeekFilteredData => {
           .map((v) => {
             const date = getDateDisplay(v.x)
             const value = { ...v, date: date.date }
-
             switch (period) {
               case 'Uke':
                 return { ...value, x: date.week }
-              case 'Måned':
-                return { ...value, x: date.month }
+              case 'Måned': {
+                const monthDate = new Date(date.date)
+                monthDate.setDate(1)
+                return { ...value, x: date.month, date: monthDate }
+              }
               default:
                 return value
             }

@@ -18,6 +18,7 @@ import usePerWeekFilter from '../../../components/charts/chartFilters/usePerWeek
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { motion, LayoutGroup } from 'framer-motion'
+import { DateRangePickerButton } from '../../../components/dateranges/DateRangePickerButton'
 
 const GridContainer = styled('div')({
   display: 'grid',
@@ -46,6 +47,12 @@ const CheckboxFlexWrapper = styled('div')({
 interface HoursBilledPerWeekCardProps {
   selectedCustomerIds: string[]
   setSelectedCustomerIds: (ids: string[]) => void
+  selectedPeriodStartDate: Date
+  selectedPeriodEndDate: Date
+  handleDateRangeChange: (
+    selectedPeriodStartDate?: Date,
+    selectedPeriodEndDate?: Date
+  ) => void
 }
 
 const easingFunction = { ease: [0.33, 0, 1, 0.62], duration: 1 }
@@ -53,6 +60,9 @@ const easingFunction = { ease: [0.33, 0, 1, 0.62], duration: 1 }
 const HoursBilledPerWeekCard = ({
   selectedCustomerIds,
   setSelectedCustomerIds,
+  selectedPeriodStartDate: startDate,
+  selectedPeriodEndDate: endDate,
+  handleDateRangeChange,
 }: HoursBilledPerWeekCardProps) => {
   const { data, error } = useHoursBilledPerWeekCharts()
   const {
@@ -89,6 +99,10 @@ const HoursBilledPerWeekCard = ({
     }
   }
 
+  const setDateRange = (startDate, endDate) => {
+    handleDateRangeChange(startDate, endDate)
+  }
+
   const chartData = selectedFilter === 'Uke' ? weeklyData : monthlyData
   const filteredData =
     data === undefined
@@ -100,6 +114,49 @@ const HoursBilledPerWeekCard = ({
           }),
         }
 
+  function binarySearch(data, date, compareFn) {
+    if (!data) {
+      return undefined
+    }
+    let start = 0
+    let end = data.length - 1
+    let mid
+    while (start <= end) {
+      mid = Math.floor((start + end) / 2)
+      const cmp = compareFn(date, data[mid].date)
+      if (cmp > 0) {
+        start = mid + 1
+      } else if (cmp < 0) {
+        end = mid - 1
+      } else {
+        return mid
+      }
+    }
+    return start
+  }
+  const startIdx = startDate
+    ? binarySearch(
+        filteredData?.data[0]?.data,
+        startDate,
+        (a, b) => a - b + 1
+      ) - 1
+    : 0
+
+  const endIdx = endDate
+    ? binarySearch(filteredData?.data[0]?.data, endDate, (a, b) => a - b)
+    : filteredData?.data[0]?.length
+
+  const timeFilteredData =
+    filteredData === undefined
+      ? undefined
+      : {
+          ...filteredData,
+          data: filteredData.data.map((customer) => ({
+            ...customer,
+            data: customer.data.slice(startIdx, endIdx),
+          })),
+        }
+
   return (
     <GridItem fullSize>
       {filteredData === undefined || selectedCustomerIds === null ? (
@@ -109,7 +166,7 @@ const HoursBilledPerWeekCard = ({
           <ChartCard
             title="Timer brukt per periode"
             description={POSSIBLE_OLD_DATA_WARNING}
-            data={filteredData}
+            data={timeFilteredData}
             error={error}
             fullSize={true}
             noDataText="Bruk listen til høyre for å velge hvilke kunder du vil vise i grafen"
@@ -139,6 +196,14 @@ const HoursBilledPerWeekCard = ({
                       />
                     ))}
                   </RadioGroup>
+
+                  <DateRangePickerButton
+                    startDate={startDate}
+                    endDate={endDate}
+                    onComplete={(startDate, endDate) =>
+                      setDateRange(startDate, endDate)
+                    }
+                  ></DateRangePickerButton>
                 </Box>
               </FormControl>
             }
