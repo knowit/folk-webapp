@@ -1,6 +1,5 @@
-import { styled } from '@mui/material/styles'
+import { styled, useTheme } from '@mui/material/styles'
 import { GetApp } from '@mui/icons-material'
-import { useTheme } from '@mui/material/styles'
 
 const BaseStyle = () => {
   const theme = useTheme()
