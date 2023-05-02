@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { withStyles } from '@mui/styles'
 import { Tooltip } from '@mui/material'
+import { styled } from '@mui/material/styles'
 import { NoData } from '../../ErrorText'
 
-const HtmlTooltip = withStyles((theme) => ({
-  tooltip: {
-    backgroundColor: '#F2F2F2',
-    color: '#333333',
-    fontSize: theme.typography.pxToRem(12),
-    border: '1px solid #E4E1DB',
+const TooltipStyled = styled(Tooltip)(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
+  color: theme.palette.text.primary,
+  fontSize: theme.typography.pxToRem(14),
+  border: 'none',
+  '& .MuiTooltip-arrow': {
+    color: theme.palette.background.default,
   },
-  arrow: {
-    color: '#F2F2F2',
-  },
-}))(Tooltip)
+}))
 
 function isEllipsisActive(e: HTMLSpanElement | null | undefined): boolean {
   if (e === null || e === undefined) {
@@ -43,14 +41,14 @@ export default function CharacterLimitBox({ text }: { text: string }) {
       }}
       ref={setRef}
     >
-      <HtmlTooltip
+      <TooltipStyled
         title={text}
         arrow
         placement="top"
         disableHoverListener={!overflowActive}
       >
         <span>{text === '-' ? <NoData /> : text}</span>
-      </HtmlTooltip>
+      </TooltipStyled>
     </div>
   )
 }

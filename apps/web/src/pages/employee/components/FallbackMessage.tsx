@@ -1,7 +1,19 @@
 import * as React from 'react'
 import { makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import { Tooltip } from '@mui/material'
 import { InfoRounded } from '@mui/icons-material'
+
+const TooltipStyled = styled(Tooltip)(() => ({
+  marginLeft: 5,
+  '& .MuiTooltip-tooltip': {
+    width: 'fit-content',
+    maxWidth: '100%',
+    fontSize: '1rem',
+    borderWidth: 1,
+    borderStyle: 'solid',
+  },
+}))
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -11,17 +23,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     color: ({ isError }: { isError?: boolean }) =>
       isError ? theme.palette.error.main : 'inherit',
-  },
-  tooltip: {
-    maxWidth: '100%',
-    fontSize: '1rem',
-    backgroundColor: theme.palette.background.paper,
-    borderColor: theme.palette.primary.main,
-    borderWidth: '1px',
-    borderStyle: 'solid',
-  },
-  icon: {
-    marginLeft: '5px',
   },
 }))
 
@@ -44,13 +45,9 @@ export function FallbackMessage({
     <pre className={classes.root}>{JSON.stringify(error, null, 2)}</pre>
   )
   const help = () => (
-    <Tooltip
-      className={classes.icon}
-      classes={{ tooltip: classes.tooltip }}
-      title={detailMessage}
-    >
+    <TooltipStyled title={detailMessage}>
       <InfoRounded />
-    </Tooltip>
+    </TooltipStyled>
   )
 
   return (

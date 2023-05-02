@@ -187,10 +187,37 @@ export const theme = createTheme(colourTheme, {
         },
       },
     },
+    MuiTab: {
+      defaultProps: {
+        disableRipple: true,
+      },
+      styleOverrides: {
+        root: {
+          color: colourTheme.palette.text.tertiary,
+          fontSize: 21,
+          textTransform: 'none',
+          display: 'flex',
+          margin: 10,
+        },
+      },
+    },
     MuiTableCell: {
       styleOverrides: {
         root: {
           borderWidth: 0,
+        },
+      },
+    },
+    MuiTabs: {
+      defaultProps: {
+        indicatorColor: 'secondary',
+        textColor: 'secondary',
+      },
+      styleOverrides: {
+        root: {
+          backgroundColor: colourTheme.palette.primary.main,
+          display: 'flex',
+          flexWrap: 'wrap',
         },
       },
     },
@@ -212,37 +239,11 @@ export const theme = createTheme(colourTheme, {
           },
         },
         tooltip: {
+          maxWidth: '100%',
           color: colourTheme.palette.text.primary,
           background: colourTheme.palette.primary.light,
           fontSize: 14,
           border: `1px solid ${colourTheme.palette.primary.main}`,
-        },
-      },
-    },
-    MuiTab: {
-      defaultProps: {
-        disableRipple: true,
-      },
-      styleOverrides: {
-        root: {
-          color: colourTheme.palette.text.tertiary,
-          fontSize: 21,
-          textTransform: 'none',
-          display: 'flex',
-          margin: 10,
-        },
-      },
-    },
-    MuiTabs: {
-      defaultProps: {
-        indicatorColor: 'secondary',
-        textColor: 'secondary',
-      },
-      styleOverrides: {
-        root: {
-          backgroundColor: colourTheme.palette.primary.main,
-          display: 'flex',
-          flexWrap: 'wrap',
         },
       },
     },
