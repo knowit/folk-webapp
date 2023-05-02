@@ -1,27 +1,15 @@
 import React, { useState } from 'react'
-import GetApp from '@mui/icons-material/GetApp'
-import { makeStyles, withStyles } from '@mui/styles'
+import { DownloadIcon } from '../../../assets/Icons'
+import { styled } from '@mui/material/styles'
 import { NoData } from '../../ErrorText'
 import CvDialog from '../components/CvDialog'
 import { CvLinks } from '../../../api/data/employee/employeeApiTypes'
 
-const useStyles = makeStyles({
-  root: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-  },
-})
-
-const DownloadIcon = withStyles({
-  root: {
-    color: '#707070',
-    cursor: 'pointer',
-    '&:hover': {
-      color: '#333333',
-    },
-  },
-})(GetApp)
+const CvDownloadStyled = styled('div')(() => ({
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+}))
 
 interface CVCellProps {
   data: CvLinks
@@ -36,12 +24,11 @@ export default function CvCell({ data, name }: CVCellProps) {
   const handleClose = () => {
     setOpen(false)
   }
-  const classes = useStyles()
   return data ? (
     <>
-      <div className={classes.root} title="Last ned CV">
+      <CvDownloadStyled title="Last ned CV">
         <DownloadIcon onClick={handleClickOpen} />
-      </div>
+      </CvDownloadStyled>
       <CvDialog open={open} onClose={handleClose} name={name} data={data} />
     </>
   ) : (

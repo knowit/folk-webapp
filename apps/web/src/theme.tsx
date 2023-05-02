@@ -5,6 +5,9 @@ declare module '@mui/material/styles' {
   interface TypeBackground {
     darker?: string
   }
+  interface TypeText {
+    tertiary?: string
+  }
   interface SimplePaletteColorOptions {
     darker?: string
   }
@@ -51,7 +54,7 @@ const getDesignTokens = (mode: PaletteMode) => ({
     },
     text: {
       ...(mode === 'light'
-        ? { primary: '#333', secondary: '#F1F0ED' }
+        ? { primary: '#333', secondary: '#707070', tertiary: '#F1F0ED' }
         : { primary: '#333', secondary: '#F1F0ED' }),
     },
     error: {
@@ -199,6 +202,7 @@ export const theme = createTheme(colourTheme, {
       },
       styleOverrides: {
         root: {
+          color: colourTheme.palette.text.tertiary,
           fontSize: 21,
           textTransform: 'none',
           display: 'flex',
