@@ -9375,7 +9375,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "folk-webapp@workspace:."
   dependencies:
-    dayjs: ^1.11.7
     eslint: ^8.30.0
     husky: ^8.0.2
     prettier: ^2.8.1
@@ -17430,6 +17429,7 @@ __metadata:
     browserslist: ^4.21.4
     cross-env: ^7.0.3
     d3: ^7.8.2
+    dayjs: ^1.11.7
     dotenv: ^16.0.3
     eslint-plugin-react: ^7.31.11
     eslint-plugin-react-hooks: ^4.6.0
