@@ -34,8 +34,8 @@ export default function Header() {
     <ComponentRoot>
       <AppBar>
         <Toolbar component={'nav'}>
-          <Link data-testid="knowit-logo" to="/">
-            <KnowitLogo title="knowit-logo" className={classes.logo} />
+          <Link data-testid="knowit-logo" to={'/debug'}>
+            <KnowitLogoStyled title="knowit-logo" />
           </Link>
           <NavMenu>
             {user && (
