@@ -1,24 +1,22 @@
 import React from 'react'
 import { Avatar } from '@mui/material'
-import { makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import { ReactComponent as FallbackUserIcon } from '../../../assets/fallback_user.svg'
 import { CircleSkeleton } from '../../../components/skeletons/CircleSkeleton'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '150px',
-    height: '150px',
-  },
-  avatar: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: theme.palette.background.default,
-  },
-  avatarFallback: {
-    width: '70%',
-    height: '70%',
-    '& circle': { fill: 'transparent' },
-  },
+const ComponentRoot = styled('div')(() => ({
+  width: '150px',
+  height: '150px',
+}))
+const AvatarStyled = styled(Avatar)(({ theme }) => ({
+  width: '100%',
+  height: '100%',
+  backgroundColor: theme.palette.background.default,
+}))
+const AvatarFallbackStyled = styled(FallbackUserIcon)(() => ({
+  width: '70%',
+  height: '70%',
+  '& circle': { fill: 'transparent' },
 }))
 
 interface Props {
@@ -27,17 +25,15 @@ interface Props {
 }
 
 export function EmployeeAvatar({ imageUrl, isLoading }: Props) {
-  const classes = useStyles()
-
   return (
-    <div className={classes.root}>
+    <ComponentRoot>
       {isLoading ? (
         <CircleSkeleton height="100%" width="100%" />
       ) : (
-        <Avatar src={imageUrl} className={classes.avatar} alt="">
-          <FallbackUserIcon className={classes.avatarFallback} />
-        </Avatar>
+        <AvatarStyled src={imageUrl} alt="">
+          <AvatarFallbackStyled />
+        </AvatarStyled>
       )}
-    </div>
+    </ComponentRoot>
   )
 }
