@@ -1,29 +1,27 @@
 import * as React from 'react'
-import { makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import { EmployeeProfileResponse } from '../../../api/data/employee/employeeApiTypes'
 import { LineSkeleton } from '../../../components/skeletons/LineSkeleton'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { pageTitle } from '../../../utils/pagetitle'
 
-const useStyles = makeStyles((theme) => ({
-  name: {
-    fontSize: '2rem',
-    margin: '15px 0',
-  },
-  jobTitle: {
-    fontWeight: 'bold',
-    fontSize: '1.5rem',
-    margin: '0',
-  },
-  contactInfo: {
-    margin: '0',
-    marginTop: '10px',
-    lineHeight: '1.5rem',
-    '& dt, dd': { display: 'inline', margin: 0 },
-  },
-  link: {
-    color: theme.palette.text.primary,
-  },
+const EmployeeNameStyled = styled('h1')(() => ({
+  fontSize: '2rem',
+  margin: '15px 0',
+}))
+const EmployeeJobTitleStyled = styled('p')(() => ({
+  fontWeight: 'bold',
+  fontSize: '1.5rem',
+  margin: 0,
+}))
+const EmployeeContactInfoStyled = styled('dl')(() => ({
+  margin: 0,
+  marginTop: 10,
+  lineHeight: '1.5rem',
+  '& dt, dd': { display: 'inline', margin: 0 },
+}))
+const LinkStyled = styled('a')(({ theme }) => ({
+  color: theme.palette.text.primary,
 }))
 
 interface Props {
@@ -32,15 +30,13 @@ interface Props {
 }
 
 export function EmployeeByline({ employee, isLoading }: Props) {
-  const classes = useStyles()
-
   employee && pageTitle(employee?.name)
 
   const EmployeeName = () => {
     if (isLoading) {
       return <LineSkeleton width="50%" height="3em" />
     }
-    return <h1 className={classes.name}>{employee?.name}</h1>
+    return <EmployeeNameStyled>{employee?.name}</EmployeeNameStyled>
   }
 
   const EmployeeJobTitle = () => {
@@ -48,7 +44,7 @@ export function EmployeeByline({ employee, isLoading }: Props) {
       return <LineSkeleton width="40%" height="1.5em" />
     }
     if (employee?.title) {
-      return <p className={classes.jobTitle}>{employee?.title}</p>
+      return <EmployeeJobTitleStyled>{employee?.title}</EmployeeJobTitleStyled>
     }
     return null
   }
@@ -58,13 +54,13 @@ export function EmployeeByline({ employee, isLoading }: Props) {
       return <MultiLineSkeleton lines={2} maxWidth="45%" lineHeight="1.5em" />
     }
     return (
-      <dl className={classes.contactInfo}>
+      <EmployeeContactInfoStyled>
         <div>
           <dt>E-post:&nbsp;</dt>
           <dd>
-            <a className={classes.link} href={`mailto:${employee?.email}`}>
+            <LinkStyled href={`mailto:${employee?.email}`}>
               {employee?.email}
-            </a>
+            </LinkStyled>
           </dd>
         </div>
         {employee?.phone ? (
@@ -73,7 +69,7 @@ export function EmployeeByline({ employee, isLoading }: Props) {
             <dd>{employee?.phone}</dd>
           </div>
         ) : null}
-      </dl>
+      </EmployeeContactInfoStyled>
     )
   }
 
