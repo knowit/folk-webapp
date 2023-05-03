@@ -3,7 +3,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { styled } from '@mui/material/styles'
 import { InputBase, Autocomplete } from '@mui/material'
 import FilterListIcon from '@mui/icons-material/FilterList'
-import { CategoryWithGroup } from './FilterUtil'
+import { CategoryWithGroup, FilterEntry } from './FilterUtil'
 
 const CheckBoxStyled = styled(Checkbox)(({ theme }) => ({
   height: 15,
@@ -33,7 +33,7 @@ const OptionItem = styled('li')(({ theme }) => ({
 }))
 
 interface Props {
-  filterList: string[]
+  filterList: FilterEntry[]
   placeholder: string
   onSelect: (value: string[]) => void
   fetchFilterCategories: () => CategoryWithGroup[]
@@ -48,7 +48,9 @@ export default function FilterInput({
   const categoriesWithGroup = fetchFilterCategories()
 
   const activeCategories = categoriesWithGroup.filter((categoryWithGroup) =>
-    filterList.includes(categoryWithGroup.category)
+    filterList.some(
+      (filterEntry) => filterEntry.value == categoryWithGroup.category
+    )
   )
 
   const handleCategoryChange = (
