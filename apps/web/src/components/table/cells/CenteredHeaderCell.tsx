@@ -1,22 +1,21 @@
 import React from 'react'
-import { tableStyles } from '../DataTable'
-import { createStyles, makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 
-const centeredStyle = makeStyles(() =>
-  createStyles({
-    centered: {
-      justifyContent: 'center',
-    },
-  })
-)
+const ComponentRoot = styled('div')(({ theme }) => ({
+  fontWeight: 'bold',
+  fontSize: 16,
+  display: 'flex',
+  alignItems: 'center',
+  height: '100%',
+  width: '100%',
+  borderBottom: `1px solid ${theme.palette.background.paper}`,
+  borderLeft: `1px solid ${theme.palette.background.paper}`,
+  padding: 0,
+  paddingRight: 15,
+  paddingLeft: 15,
+  justifyContent: 'center',
+}))
 
 export default function CenteredHeaderCell({ title }: { title: string }) {
-  const classes = tableStyles()
-  const centerClass = centeredStyle()
-
-  return (
-    <div className={[classes.tableHead, centerClass.centered].join(' ')}>
-      {title}
-    </div>
-  )
+  return <ComponentRoot>{title}</ComponentRoot>
 }

@@ -1,30 +1,61 @@
 import { createStyles, makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import React from 'react'
 import CloseIcon from '@mui/icons-material/Close'
-import { Slider } from '@mui/material'
+import { Chip, Slider } from '@mui/material'
 import { EmployeeTableColumnMapping } from './FilterUtil'
+
+const ComponentRoot = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
+  borderBottom: `solid 1px ${theme.palette.background.darker}`,
+  padding: '0 15px',
+  display: 'flex',
+  justifyContent: 'flex-start',
+  width: '100%',
+}))
+const ComponentTitle = styled('div')(() => ({
+  paddingTop: 20,
+  fontWeight: 'bold',
+}))
+const ComponentTagsContainer = styled('div')(() => ({
+  padding: 15,
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'flex-start',
+  flex: 'auto',
+}))
+const ComponentRemoveAllTag = styled('div')(({ theme }) => ({
+  padding: '1px 15px 1px 1px',
+  display: 'flex',
+  alignItems: 'center',
+  height: 24,
+  margin: 2,
+  lineHeight: 22,
+  backgroundColor: theme.palette.info.light,
+  border: `1px solid ${theme.palette.info.main}`,
+  boxSizing: 'content-box',
+  outline: 0,
+  overflow: 'hidden',
+  '&:hover': {
+    borderColor: theme.palette.info.dark,
+    backgroundColor: theme.palette.info.main,
+  },
+  '&:span': {
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+  },
+  '&:svg': {
+    fontSize: 12,
+    cursor: 'pointer',
+    padding: 4,
+  },
+}))
+
+// const ComponentSkillTag = styled()
 
 const useStyles = makeStyles(() =>
   createStyles({
-    filterHeaderRoot: {
-      backgroundColor: '#ffffff',
-      borderBottom: 'solid 1px #e0ded7',
-      padding: '0 15px',
-      display: 'flex',
-      justifyContent: 'flex-start',
-      width: '100%',
-    },
-    filterHeaderTitle: {
-      paddingTop: '20px',
-      fontWeight: 'bold',
-    },
-    filterTagsContainer: {
-      padding: '15px',
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'flex-start',
-      flex: 'auto',
-    },
     removeAllTag: {
       padding: '1px 15px 1px 1px',
     },
@@ -99,13 +130,11 @@ const Tag = ({ label, onDelete }: { label: string; onDelete: () => void }) => {
 const RemoveAllTag = (onDelete: { onDelete: () => void }) => {
   const classes = useStyles()
   return (
-    <div
-      className={[classes.tag, classes.removeAllTag].join(' ')}
-      onClick={onDelete.onDelete}
-    >
-      <CloseIcon />
-      <span>Fjern alle</span>
-    </div>
+    <Chip label="Fjern alle" onClick={onDelete.onDelete} icon={<CloseIcon />} />
+    // <Chip onClick={onDelete.onDelete}>
+    //   <CloseIcon />
+    //   <span>Fjern alle</span>
+    // </Chip>
   )
 }
 
@@ -155,9 +184,9 @@ export function FilterHeader({
   ]
 
   return (
-    <div className={classes.filterHeaderRoot}>
-      <div className={classes.filterHeaderTitle}>{title}</div>
-      <div className={classes.filterTagsContainer}>
+    <ComponentRoot>
+      <ComponentTitle>{title}</ComponentTitle>
+      <ComponentTagsContainer>
         {filterList.length > 1 && (
           <RemoveAllTag onDelete={() => onSkillClick([])} />
         )}
@@ -170,7 +199,7 @@ export function FilterHeader({
             }
           />
         ))}
-      </div>
+      </ComponentTagsContainer>
       {type != EmployeeTableColumnMapping.CUSTOMER ? (
         <div className={classes.filterThresholdContainer}>
           <label
@@ -195,6 +224,6 @@ export function FilterHeader({
           />
         </div>
       ) : null}
-    </div>
+    </ComponentRoot>
   )
 }
