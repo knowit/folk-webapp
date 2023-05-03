@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, DefaultTheme } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import * as React from 'react'
 import { useEmployeeCompetence } from '../../../api/data/employee/employeeQueries'
 import { CompetenceSummary } from '../components/CompetenceSummary'
@@ -6,42 +6,41 @@ import EmployeeCompetenceCard from '../cards/EmployeeMotivationAndCompetenceCard
 import { ProjectExperienceList } from '../components/ProjectExperienceList'
 import { WorkExperienceList } from '../components/WorkExperienceList'
 
-const useStyles = makeStyles((theme: DefaultTheme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      flexDirection: 'row',
-      background: `${theme.palette.background.paper}`,
-      fontSize: '13px',
-      height: '450px',
-    },
-    column: {
-      padding: '15px',
-      borderRight: '1px solid white',
-      overflowY: 'auto',
-    },
-    summary: {
-      width: '385px',
-      lineHeight: '1.5em',
-    },
-    experience: {
-      width: '365px',
-      '& > *': {
-        paddingBottom: '1em',
-      },
-      '& > h3': {
-        margin: '0',
-        padding: '0',
-        fontSize: '1.2em',
-        paddingBottom: '0.5em',
-      },
-    },
-    competenceMotivation: {
-      width: '390px',
-      padding: '0',
-    },
-  })
-)
+const ComponentRoot = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  background: theme.palette.background.default,
+  fontSize: 13,
+  height: 450,
+}))
+const ComponentSummary = styled('section')(() => ({
+  padding: 15,
+  borderRight: '1px solid white',
+  overflowY: 'auto',
+  width: 385,
+  lineHeight: '1.5em',
+}))
+const ComponentExperience = styled('section')(() => ({
+  padding: 15,
+  borderRight: '1px solid white',
+  overflowY: 'auto',
+  width: 365,
+  '& > *': {
+    paddingBottom: '1em',
+  },
+  '& > h3': {
+    margin: 0,
+    padding: 0,
+    fontSize: '1.2em',
+    paddingBottom: '0.5em',
+  },
+}))
+const ComponentCompetence = styled('div')(() => ({
+  borderRight: '1px solid white',
+  overflowY: 'auto',
+  width: 390,
+  padding: 0,
+}))
 
 interface Props {
   data: {
@@ -50,21 +49,19 @@ interface Props {
 }
 
 export function EmployeeTableExpandedInfo({ data }: Props) {
-  const classes = useStyles()
-
   const { data: employee, error } = useEmployeeCompetence(data.email)
   const isLoading = !employee
 
   return (
-    <div className={classes.root}>
-      <section className={[classes.column, classes.summary].join(' ')}>
+    <ComponentRoot>
+      <ComponentSummary>
         <CompetenceSummary
           employee={employee}
           isLoading={isLoading}
           error={error}
         />
-      </section>
-      <section className={[classes.column, classes.experience].join(' ')}>
+      </ComponentSummary>
+      <ComponentExperience>
         <h3>Arbeidserfaring</h3>
         <WorkExperienceList
           workExperience={employee?.workExperience}
@@ -77,10 +74,10 @@ export function EmployeeTableExpandedInfo({ data }: Props) {
           isLoading={isLoading}
           error={error}
         />
-      </section>
-      <div className={[classes.column, classes.competenceMotivation].join(' ')}>
+      </ComponentExperience>
+      <ComponentCompetence>
         <EmployeeCompetenceCard employeeEmail={data.email} />
-      </div>
-    </div>
+      </ComponentCompetence>
+    </ComponentRoot>
   )
 }
