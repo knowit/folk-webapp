@@ -134,12 +134,14 @@ const HoursBilledPerWeekCard = ({
     }
     return start
   }
+
+  function getStartIndex(data, date, compareFn) {
+    const index = binarySearch(data, date, compareFn) - 1
+    return index >= 0 ? index : 0
+  }
+
   const startIdx = startDate
-    ? binarySearch(
-        filteredData?.data[0]?.data,
-        startDate,
-        (a, b) => a - b + 1
-      ) - 1
+    ? getStartIndex(filteredData?.data[0]?.data, startDate, (a, b) => a - b + 1)
     : 0
 
   const endIdx = endDate

@@ -35,8 +35,8 @@ export const DateRangePicker: FC<DateRangePickerProps> = ({
 
   const submitButtonFn = () => {
     // Submit the dates
-    const start = startDate?.toDate() || null
-    const end = endDate?.toDate() || null
+    const start = startDate?.add(1, 'hour').toDate() || null
+    const end = endDate?.add(1, 'hour').toDate() || null
 
     onSubmit(start, end)
   }
