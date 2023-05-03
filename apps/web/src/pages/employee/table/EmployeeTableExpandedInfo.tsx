@@ -15,14 +15,14 @@ const ComponentRoot = styled('div')(({ theme }) => ({
 }))
 const ComponentSummary = styled('section')(() => ({
   padding: 15,
-  borderRight: '1px solid white',
+  borderRight: '1px solid rgba(0, 0, 0, 0)',
   overflowY: 'auto',
   width: 385,
   lineHeight: '1.5em',
 }))
 const ComponentExperience = styled('section')(() => ({
   padding: 15,
-  borderRight: '1px solid white',
+  borderRight: '1px solid rgba(0, 0, 0, 0)',
   overflowY: 'auto',
   width: 365,
   '& > *': {
@@ -36,7 +36,7 @@ const ComponentExperience = styled('section')(() => ({
   },
 }))
 const ComponentCompetence = styled('div')(() => ({
-  borderRight: '1px solid white',
+  borderRight: '1px solid rgba(0, 0, 0, 0)',
   overflowY: 'auto',
   width: 390,
   padding: 0,
