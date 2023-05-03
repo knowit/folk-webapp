@@ -1,6 +1,6 @@
 import React from 'react'
 import { Theme } from '@mui/material/styles'
-import { createStyles, makeStyles, DefaultTheme } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import Header from './components/header/Header'
 import Content from './components/Content'
 import Footer from './components/Footer'
@@ -11,35 +11,26 @@ declare module '@mui/styles/defaultTheme' {
   interface DefaultTheme extends Theme {}
 }
 
-const useStyles = makeStyles((theme: DefaultTheme) =>
-  createStyles({
-    container: {
-      minHeight: '100vh',
-      width: '1215px',
-      margin: 'auto',
-      paddingBottom: '30px',
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    contentContainer: {
-      padding: '30px',
-      backgroundColor: theme.palette.background.paper,
-      borderRadius: '0px 0px 10px 10px',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      flexGrow: 1,
-    },
-    mainContent: {
-      width: '100%',
-      height: '100%',
-    },
-  })
-)
+const AppContainer = styled('div')(() => ({
+  minHeight: '100vh',
+  width: '1215px',
+  margin: 'auto',
+  paddingBottom: '30px',
+  display: 'flex',
+  flexDirection: 'column',
+}))
+const AppContentContainer = styled('div')(({ theme }) => ({
+  padding: '30px',
+  backgroundColor: theme.palette.background.paper,
+  borderRadius: '0px 0px 10px 10px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  flexGrow: 1,
+}))
+const AppMainContent = styled('main')(() => ({ width: '100%', height: '100%' }))
 
 export default function App() {
-  const classes = useStyles()
-
   const url = new URL(window.location.href)
   if (url.searchParams.has('login')) {
     localStorage.setItem('login', 'true')
@@ -51,14 +42,14 @@ export default function App() {
   if (user === undefined) return null
 
   return (
-    <div className={classes.container}>
+    <AppContainer>
       <Header />
-      <div className={classes.contentContainer}>
-        <main className={classes.mainContent}>
+      <AppContentContainer>
+        <AppMainContent>
           <Content />
-        </main>
+        </AppMainContent>
         <Footer />
-      </div>
-    </div>
+      </AppContentContainer>
+    </AppContainer>
   )
 }

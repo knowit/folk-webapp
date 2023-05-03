@@ -1,17 +1,15 @@
 import * as React from 'react'
-import { makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import { EmployeeCompetenceResponse } from '../../../api/data/employee/employeeApiTypes'
 import { getStartedInKnowit } from '../utils/get-started-in-knowit'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { CompetenceSummaryItem } from './CompetenceSummaryItem'
 import { FallbackMessage } from './FallbackMessage'
 
-const useStyles = makeStyles({
-  root: {
-    padding: '0',
-    margin: '0',
-  },
-})
+const ComponentRoot = styled('dl')(() => ({
+  padding: 0,
+  margin: 0,
+}))
 
 interface Props {
   employee?: EmployeeCompetenceResponse
@@ -20,8 +18,6 @@ interface Props {
 }
 
 export function CompetenceSummary({ employee, isLoading, error }: Props) {
-  const classes = useStyles()
-
   if (error) {
     return <FallbackMessage error={error} />
   }
@@ -31,7 +27,7 @@ export function CompetenceSummary({ employee, isLoading, error }: Props) {
   }
 
   return (
-    <dl className={classes.root}>
+    <ComponentRoot>
       <CompetenceSummaryItem label="Utdanning" value={employee?.degree} />
       <CompetenceSummaryItem
         label="Hovedkompetanse"
@@ -55,6 +51,6 @@ export function CompetenceSummary({ employee, isLoading, error }: Props) {
         value={employee?.tags.languages.join(', ')}
       />
       <CompetenceSummaryItem label="Nærmeste leder" value={employee?.manager} />
-    </dl>
+    </ComponentRoot>
   )
 }

@@ -1,14 +1,12 @@
 import React from 'react'
 import Dialog from '@mui/material/Dialog'
-import { withStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 
-const DialogBox = withStyles(() => ({
-  paper: {
+const DialogStyled = styled(Dialog)(() => ({
+  '& .MuiDialog-paper': {
     width: '950px',
-    borderRadius: '0px',
-    padding: '2rem',
   },
-}))(Dialog)
+}))
 
 interface BigChartInterface {
   open: boolean
@@ -18,14 +16,14 @@ interface BigChartInterface {
 
 const BigChart = ({ onClose, open, children }: BigChartInterface) => {
   return (
-    <DialogBox
+    <DialogStyled
       scroll="body"
       onClose={() => onClose()}
       open={open}
       maxWidth={false}
     >
       {children}
-    </DialogBox>
+    </DialogStyled>
   )
 }
 

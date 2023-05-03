@@ -63,9 +63,7 @@ const useCompetenceMappingStyles = makeStyles((theme: DefaultTheme) =>
     },
   })
 )
-const TableCellNoBorders = styled(TableCell)(() => ({
-  borderBottom: '1px solid #F1F0ED',
-}))
+
 const ExpandMoreIconWithStyles = styled(ExpandMoreIcon)(() => ({
   color: '#707070',
   cursor: 'pointer',
@@ -80,7 +78,7 @@ const ExpandLessIconWithStyles = styled(ExpandLessIcon)(() => ({
     color: '#333333',
   },
 }))
-export const OpenInNewWithStyles = styled(OpenInNew)(() => ({
+export const OpenInNewStyled = styled(OpenInNew)(() => ({
   color: '#707070',
   cursor: 'pointer',
   '&:hover': {
@@ -104,7 +102,7 @@ export default function ConsultantCell({
   const classes = useCompetenceMappingStyles()
   const openStyle = isExpanded ? classes.bolderText : ''
   return (
-    <TableCellNoBorders
+    <TableCell
       component="div"
       className={[classes.flexContainer, classes.column, classes.borders].join(
         ' '
@@ -146,10 +144,10 @@ export default function ConsultantCell({
             <ExpandMoreIconWithStyles />
           )}
           <Link to={'/ansatt/' + consultant.email} target="_blank">
-            <OpenInNewWithStyles />
+            <OpenInNewStyled />
           </Link>
         </div>
       </Button>
-    </TableCellNoBorders>
+    </TableCell>
   )
 }

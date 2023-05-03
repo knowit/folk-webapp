@@ -28,7 +28,7 @@ const AccordionHeaderListWrapper = styled('div')(({ theme }) => ({
   background: 'white',
   paddingLeft: '45px',
   paddingRight: '69px',
-  backgroundColor: theme.palette.primary.light,
+  backgroundColor: theme.palette.background.darker,
 }))
 const AccordionListHeader = styled('div')({
   justifyContent: 'space-between',

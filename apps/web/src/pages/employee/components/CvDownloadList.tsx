@@ -1,29 +1,24 @@
 import * as React from 'react'
 import { CvLinks } from '../../../api/data/employee/employeeApiTypes'
-import { makeStyles, withStyles } from '@mui/styles'
-import GetApp from '@mui/icons-material/GetApp'
+import { styled } from '@mui/material/styles'
+import { DownloadIcon } from '../../../assets/Icons'
 import { FallbackMessage } from './FallbackMessage'
 import { ExperienceList } from './ExperienceList'
 import { ExperienceListItem } from './ExperienceListItem'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { mapLinkKeyToLabel } from '../utils/cv-link-helpers'
 
-const useStyles = makeStyles((theme) => ({
-  link: {
-    display: 'inline-flex',
-    color: theme.palette.text.primary,
-    textDecoration: 'none',
-  },
-  linkText: {
-    textDecoration: 'underline',
-  },
+const LinkStyled = styled('a')(({ theme }) => ({
+  display: 'inline-flex',
+  color: theme.palette.text.primary,
+  textDecoration: 'none',
 }))
-
-const DownloadIcon = withStyles({
-  root: {
-    marginRight: '0.2em',
-  },
-})(GetApp)
+const LinkTextStyled = styled('span')(() => ({
+  textDecoration: 'underline',
+}))
+const DownloadIconStyled = styled(DownloadIcon)(() => ({
+  marginRight: '0.2em',
+}))
 
 interface Props {
   links?: CvLinks
@@ -31,8 +26,6 @@ interface Props {
 }
 
 export function CvDownloadList({ links, isLoading }: Props) {
-  const classes = useStyles()
-
   if (isLoading) {
     return <MultiLineSkeleton />
   }
@@ -47,12 +40,10 @@ export function CvDownloadList({ links, isLoading }: Props) {
     <ExperienceList>
       {downloadLinks.map(([linkKey, linkUrl]) => (
         <ExperienceListItem key={linkKey}>
-          <a href={linkUrl} download className={classes.link}>
-            <DownloadIcon />
-            <span className={classes.linkText}>
-              {mapLinkKeyToLabel(linkKey)}
-            </span>
-          </a>
+          <LinkStyled href={linkUrl} download>
+            <DownloadIconStyled />
+            <LinkTextStyled>{mapLinkKeyToLabel(linkKey)}</LinkTextStyled>
+          </LinkStyled>
         </ExperienceListItem>
       ))}
     </ExperienceList>

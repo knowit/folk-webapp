@@ -1,15 +1,13 @@
 import React from 'react'
 import { Grid } from '@mui/material'
-import { makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 
-const useStyles = makeStyles({
-  root: {
-    boxShadow: '0px 4px 10px #00000012',
-    borderRadius: '0px 0px 6px 6px',
-    overflow: 'hidden',
-    height: '100%',
-  },
-})
+const GridItemContainer = styled('div')(({ theme }) => ({
+  boxShadow: `0px 4px 10px ${theme.palette.text.primary}12`,
+  borderRadius: '0px 0px 6px 6px',
+  overflow: 'hidden',
+  height: '100%',
+}))
 
 interface GridItemProps {
   fullSize?: boolean
@@ -17,11 +15,9 @@ interface GridItemProps {
 }
 
 export function GridItem({ children, fullSize = false }: GridItemProps) {
-  const classes = useStyles()
-
   return (
     <Grid item xs={fullSize ? 12 : 6}>
-      <div className={classes.root}>{children}</div>
+      <GridItemContainer>{children}</GridItemContainer>
     </Grid>
   )
 }

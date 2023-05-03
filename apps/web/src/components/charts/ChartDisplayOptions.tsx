@@ -76,7 +76,7 @@ export function ChartVariantToggle({
   )
 }
 
-const ChartDisplayOptionsWithStyles = styled('div')(() => ({
+const ChartDisplayOptionsStyled = styled('div')(() => ({
   display: 'flex',
   justifyContent: 'space-between',
   alignContent: 'flex-start',
@@ -88,7 +88,5 @@ interface ChartDisplayOptionsProps {
 }
 
 export function ChartDisplayOptions({ children }: ChartDisplayOptionsProps) {
-  return (
-    <ChartDisplayOptionsWithStyles>{children}</ChartDisplayOptionsWithStyles>
-  )
+  return <ChartDisplayOptionsStyled>{children}</ChartDisplayOptionsStyled>
 }
