@@ -71,7 +71,17 @@ const getDesignTokens = (mode: PaletteMode) => ({
           }),
     },
     error: {
-      ...(mode === 'light' ? { main: '#802826' } : { main: '#802826' }),
+      ...(mode === 'light'
+        ? {
+            light: '#b44',
+            main: '#a33',
+            dark: '#922',
+          }
+        : {
+            light: '#944',
+            main: '#833',
+            dark: '#722',
+          }),
     },
     success: {
       ...(mode === 'light'
@@ -147,6 +157,18 @@ export const theme = createTheme(colourTheme, {
       styleOverrides: {
         root: {
           color: colourTheme.palette.text.primary,
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          margin: 5,
+        },
+        deletable: {
+          '& .MuiChip-deleteIcon': {
+            '&:hover': { color: colourTheme.palette.error.light },
+          },
         },
       },
     },
