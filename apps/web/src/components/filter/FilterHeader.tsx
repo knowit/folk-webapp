@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles'
 import React from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import { Chip, Slider } from '@mui/material'
-import { EmployeeTableColumnMapping } from './FilterUtil'
+import { EmployeeTableColumnMapping, FilterEntry } from './FilterUtil'
 
 const ComponentRoot = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
@@ -64,10 +64,9 @@ const RemoveAllTag = (onDelete: { onDelete: () => void }) => {
 
 interface Props {
   title: string
-  filterList: string[]
-  filterThreshold: number
-  onThresholdUpdate: (value: number) => void
-  onSkillClick: (value: string[]) => void
+  filterList: FilterEntry[]
+  onThresholdUpdate: (value: string, threshold: number) => void
+  onSkillClick: (value: string, threshold: number) => void
   type: EmployeeTableColumnMapping
 }
 
@@ -79,7 +78,6 @@ interface Mark {
 export function FilterHeader({
   title,
   filterList,
-  filterThreshold,
   onThresholdUpdate,
   onSkillClick,
   type,
