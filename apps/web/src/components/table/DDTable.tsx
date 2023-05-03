@@ -6,7 +6,7 @@ import SearchInput from '../SearchInput'
 import FilterInput from '../filter/FilterInput'
 import { RowCount } from './RowCount'
 import { Column, DDTableProps, GetColumnValueFn } from './tableTypes'
-import { makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import {
   filterNonCustomer,
   FilterObject,
@@ -20,14 +20,12 @@ export interface SearchableColumn {
   getSearchValue: GetColumnValueFn
 }
 
-const useStyles = makeStyles({
-  searchBars: {
-    flexDirection: 'row',
-    display: 'flex',
-    justifyContent: 'space-around',
-    width: '900px',
-  },
-})
+const FilterContainer = styled('div')(() => ({
+  flexDirection: 'row',
+  display: 'flex',
+  justifyContent: 'space-around',
+  width: 900,
+}))
 
 export function getSearchableColumns(columns: Column[]): SearchableColumn[] {
   const result: SearchableColumn[] = []
@@ -68,8 +66,6 @@ export default function DDTable({
   const NonProject = displayNonProject
     ? filterNonCustomer(filteredRows)
     : filteredRows
-
-  const classes = useStyles()
 
   const filterInputs = filters.map(
     ({ values, placeholder, datafetch }, index) => (
@@ -119,7 +115,7 @@ export default function DDTable({
   return (
     <>
       <GridItemHeader title={title}>
-        <div className={classes.searchBars}>
+        <FilterContainer>
           {filterInputs}
           <SearchInput
             placeholder={'Søk konsulent, kunde, etc...'}
@@ -128,7 +124,7 @@ export default function DDTable({
             }}
             onClear={() => setSearchTerm('')}
           />
-        </div>
+        </FilterContainer>
       </GridItemHeader>
       {filterHeaders}
       <RowCount>
