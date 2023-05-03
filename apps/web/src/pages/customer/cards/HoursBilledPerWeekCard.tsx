@@ -13,7 +13,7 @@ import {
   FormControl,
   Checkbox,
 } from '@mui/material'
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import usePerWeekFilter from '../../../components/charts/chartFilters/usePerWeekFilter'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
@@ -26,23 +26,23 @@ const GridContainer = styled('div')({
   gridGap: '1rem',
 })
 
-const CustomerFilterWrapper = styled('div')({
+const CustomerFilterWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  height: '420px',
+  height: 420,
   textAlign: 'right',
-  background: 'white',
-})
+  background: theme.palette.background.default,
+}))
 
-const ScrollableDiv = styled('div')({
+const ScrollableDiv = styled('div')(() => ({
   overflowY: 'scroll',
-})
+}))
 
-const CheckboxFlexWrapper = styled('div')({
+const CheckboxFlexWrapper = styled('div')(() => ({
   display: 'flex',
   flexDirection: 'column',
   position: 'relative',
-})
+}))
 
 interface HoursBilledPerWeekCardProps {
   selectedCustomerIds: string[]
