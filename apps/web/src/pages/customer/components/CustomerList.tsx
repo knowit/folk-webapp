@@ -21,13 +21,13 @@ import { EmployeeTableExpandedInfo } from '../../employee/table/EmployeeTableExp
 import { FallbackMessage } from '../../employee/components/FallbackMessage'
 import { tableStyles } from '../../../components/table/DataTable'
 import { ArrowDownward, ArrowUpward } from '@mui/icons-material'
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 
 const AccordionHeaderListWrapper = styled('div')(({ theme }) => ({
   width: '100%',
-  background: 'white',
-  paddingLeft: '45px',
-  paddingRight: '69px',
+  background: theme.palette.background.default,
+  paddingLeft: 45,
+  paddingRight: 69,
   backgroundColor: theme.palette.background.darker,
 }))
 const AccordionListHeader = styled('div')({
