@@ -3,29 +3,32 @@ import { Avatar, Button } from '@mui/material'
 import { TableCell } from '@mui/material'
 import { createStyles, makeStyles, DefaultTheme } from '@mui/styles'
 import { styled } from '@mui/material/styles'
+import { ExpandLessIcon, ExpandMoreIcon } from '../../../assets/Icons'
 import { ReactComponent as FallbackUserIcon } from '../../../assets/fallback_user.svg'
 import CharacterLimitBox from '../components/CharacterLimitBox'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ExpandLessIcon from '@mui/icons-material/ExpandLess'
-import { OpenInNew } from '@mui/icons-material'
+import { OpenIneNewIcon } from '../../../assets/Icons'
 import { Link } from 'react-router-dom'
 import { ConsultantInfo } from '../../../api/data/employee/employeeApiTypes'
 
+const ButtonSubRoot = styled('div')(() => ({
+  display: 'flex',
+  alignItems: 'center',
+}))
+const EmployeeName = styled('span')(() => ({
+  marginTop: 'auto',
+  marginBottom: 'auto',
+  marginLeft: 15,
+}))
+const AvatarStyled = styled(Avatar)(() => ({
+  width: 50,
+  height: 50,
+}))
+const FallbackUserIconStyled = styled(FallbackUserIcon)(() => ({
+  width: 50,
+  height: 50,
+}))
 const useCompetenceMappingStyles = makeStyles((theme: DefaultTheme) =>
   createStyles({
-    root: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-    image: {
-      width: 50,
-      height: 50,
-    },
-    text: {
-      marginTop: 'auto',
-      marginBottom: 'auto',
-      marginLeft: 15,
-    },
     cellExpandable: {
       display: 'flex',
       justifyContent: 'space-between',
@@ -64,28 +67,6 @@ const useCompetenceMappingStyles = makeStyles((theme: DefaultTheme) =>
   })
 )
 
-const ExpandMoreIconWithStyles = styled(ExpandMoreIcon)(() => ({
-  color: '#707070',
-  cursor: 'pointer',
-  '&:hover': {
-    color: '#333333',
-  },
-}))
-const ExpandLessIconWithStyles = styled(ExpandLessIcon)(() => ({
-  color: '#707070',
-  cursor: 'pointer',
-  '&:hover': {
-    color: '#333333',
-  },
-}))
-export const OpenInNewStyled = styled(OpenInNew)(() => ({
-  color: '#707070',
-  cursor: 'pointer',
-  '&:hover': {
-    color: '#333333',
-  },
-}))
-
 interface ConsultantCellProps {
   data: ConsultantInfo
   id: string
@@ -121,32 +102,24 @@ export default function ConsultantCell({
         ].join(' ')}
         onClick={() => toggleExpand(id)}
       >
-        <div className={classes.root}>
+        <ButtonSubRoot>
           {consultant.image_url ? (
-            <Avatar
-              alt={consultant.name}
-              className={classes.image}
-              src={consultant.image_url}
-            />
+            <AvatarStyled alt={consultant.name} src={consultant.image_url} />
           ) : (
-            <Avatar alt={consultant.name} className={classes.image}>
-              <FallbackUserIcon className={classes.image} />
-            </Avatar>
+            <AvatarStyled alt={consultant.name}>
+              <FallbackUserIconStyled />
+            </AvatarStyled>
           )}
-          <span className={classes.text}>
+          <EmployeeName>
             <CharacterLimitBox text={consultant.name} />
-          </span>
-        </div>
-        <div className={classes.root}>
-          {isExpanded ? (
-            <ExpandLessIconWithStyles />
-          ) : (
-            <ExpandMoreIconWithStyles />
-          )}
+          </EmployeeName>
+        </ButtonSubRoot>
+        <ButtonSubRoot>
+          {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           <Link to={'/ansatt/' + consultant.email} target="_blank">
-            <OpenInNewStyled />
+            <OpenIneNewIcon />
           </Link>
-        </div>
+        </ButtonSubRoot>
       </Button>
     </TableCell>
   )

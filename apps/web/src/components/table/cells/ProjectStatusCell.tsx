@@ -1,44 +1,31 @@
 import * as React from 'react'
 import { Tooltip, TooltipProps } from '@mui/material'
-import { makeStyles, withStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import { ProjectStatus } from '../../../api/data/employee/employeeApiTypes'
 
+const ComponentRoot = styled('div')(() => ({
+  display: 'flex',
+  justifyContent: 'center',
+  width: '100%',
+}))
+const TooltipStyled = styled(Tooltip)(({ theme }) => ({
+  backgroundColor: 'none',
+  fontSize: theme.typography.pxToRem(13),
+  border: 'none',
+}))
 const StatusCircle = ({ color }: { color: string }) => {
-  const Circle = withStyles(() => ({
-    colorPrimary: { color },
-    root: {
-      width: '30px',
-      height: '30px',
-    },
-  }))(FiberManualRecordIcon)
-
-  return <Circle color="primary" />
+  const Circle = styled(FiberManualRecordIcon)(({ theme }) => ({
+    backgroundColor: theme.palette.background.default,
+    color: color,
+    width: 30,
+    height: 30,
+  }))
+  return <Circle />
 }
 
-const useStyles = makeStyles({
-  root: {
-    display: 'flex',
-    justifyContent: 'center',
-    width: '100%',
-  },
-})
-
-const toolTipStyles = makeStyles((theme) => ({
-  arrow: {
-    color: '#F2F2F2',
-  },
-  tooltip: {
-    backgroundColor: '#F2F2F2',
-    color: '#333333',
-    fontSize: theme.typography.pxToRem(13),
-    border: '1px solid #E4E1DB',
-  },
-}))
-
 function StatusTooltip(props: TooltipProps) {
-  const classes = toolTipStyles()
-  return <Tooltip arrow classes={classes} {...props} />
+  return <TooltipStyled arrow {...props} />
 }
 
 type StatusDisplayDetails = Record<
@@ -77,17 +64,15 @@ interface ProjectStatusCellProps {
 }
 
 export default function ProjectStatusCell(props: ProjectStatusCellProps) {
-  const classes = useStyles()
-
   const statusDisplay = statusDisplayDetails[props.data]
 
   return (
-    <div className={classes.root}>
+    <ComponentRoot>
       <StatusTooltip arrow placement="bottom" title={statusDisplay.label}>
         <div>
           <StatusCircle color={statusDisplay.color} />
         </div>
       </StatusTooltip>
-    </div>
+    </ComponentRoot>
   )
 }
