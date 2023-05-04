@@ -1,50 +1,44 @@
 import React from 'react'
-import { ArrowDownward, ArrowUpward } from '@mui/icons-material'
-import { createStyles, makeStyles, DefaultTheme, withStyles } from '@mui/styles'
-import { Checkbox, CheckboxProps, FormControlLabel } from '@mui/material'
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  IconBaseStyle,
+} from '../../../assets/Icons'
+import { styled } from '@mui/material/styles'
+import { Checkbox, FormControlLabel } from '@mui/material'
 import { CheckBoxHeader } from '../DataTable'
 import { Column, ColumnSort } from '../tableTypes'
 
-const useSortableHeaderStyles = makeStyles((theme: DefaultTheme) =>
-  createStyles({
-    label: {
-      marginRight: 0,
-    },
-    position: {
-      display: 'flex',
-      alignItems: 'center',
-      fontWeight: 'bold',
-      fontSize: '16px',
-      height: '100%',
-      width: '100%',
-      borderBottom: `1px solid ${theme.palette.background.paper}`,
-      borderLeft: `1px solid ${theme.palette.background.paper}`,
-      padding: 0,
-      paddingLeft: '15px',
-      cursor: 'pointer',
-    },
-    positionChild: {
-      justifyContent: 'space-between',
-      display: 'flex',
-      width: '100%',
-      paddingRight: '15px',
-    },
-    checkBox: {
-      width: '60%',
-    },
-  })
-)
+const ComponentRoot = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  fontWeight: 'bold',
+  fontSize: 16,
+  height: '100%',
+  width: '100%',
+  borderBottom: `1px solid ${theme.palette.background.paper}`,
+  borderLeft: `1px solid ${theme.palette.background.paper}`,
+  padding: 0,
+  paddingLeft: 15,
+  cursor: 'pointer',
+}))
 
-const BlackCheckBox = withStyles({
-  root: {
-    color: '#333333',
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
-  },
-})((props: CheckboxProps) => (
-  <Checkbox color="default" disableRipple {...props} />
-))
+const HeaderTitle = styled('div')(() => ({
+  justifyContent: 'space-between',
+  display: 'flex',
+  width: '100%',
+  paddingRight: 15,
+}))
+
+const CheckboxContainer = styled('div')(() => ({
+  width: '60%',
+}))
+
+const FormControlLabelStyled = styled(FormControlLabel)(() => ({
+  marginRight: 0,
+}))
+
+const CheckboxStyled = styled(Checkbox)(() => IconBaseStyle)
 
 interface SortableHeaderCellProps {
   title: string
@@ -65,8 +59,6 @@ export default function SortableHeaderCell({
   checkBox,
   sortOrderUnchanged,
 }: SortableHeaderCellProps) {
-  const classes = useSortableHeaderStyles()
-
   const sortClick = () => {
     const newOrder =
       columnIndex == 0 && sortOrderUnchanged
@@ -85,33 +77,34 @@ export default function SortableHeaderCell({
   const sortIcon = () => {
     switch (currentOrder) {
       case 'DESC':
-        return <ArrowUpward />
+        return <ArrowUpIcon />
       case 'ASC':
-        return <ArrowDownward />
+        return <ArrowDownIcon />
       case 'NONE':
       default:
         if (columnIndex == 0 && sortOrderUnchanged) {
-          return <ArrowDownward />
+          return <ArrowDownIcon />
         } else return null
     }
   }
 
   return (
-    <div className={classes.position}>
-      <div className={classes.positionChild} onClick={sortClick}>
+    <ComponentRoot>
+      <HeaderTitle onClick={sortClick}>
         {title}
         {sortIcon()}
-      </div>
+      </HeaderTitle>
       {columnIndex == 0 && checkBox ? (
-        <div className={classes.checkBox}>
-          <FormControlLabel
-            className={classes.label}
-            control={<BlackCheckBox onChange={checkBox.changeHandler} />}
+        <CheckboxContainer>
+          <FormControlLabelStyled
+            control={
+              <CheckboxStyled disableRipple onChange={checkBox.changeHandler} />
+            }
             label={checkBox.label}
             checked={checkBox.checked}
           />
-        </div>
+        </CheckboxContainer>
       ) : null}
-    </div>
+    </ComponentRoot>
   )
 }
