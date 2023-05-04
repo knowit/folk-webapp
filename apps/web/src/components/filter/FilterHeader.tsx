@@ -3,6 +3,7 @@ import React from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import { Chip, Slider } from '@mui/material'
 import { EmployeeTableColumnMapping, FilterEntry } from './FilterUtil'
+import { Filter } from 'http-proxy-middleware'
 
 const ComponentRoot = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
@@ -66,7 +67,7 @@ interface Props {
   title: string
   filterList: FilterEntry[]
   onThresholdUpdate: (value: string, threshold: number) => void
-  onSkillClick: (value: string, threshold: number) => void
+  onSkillClick: (value: string[]) => void
   type: EmployeeTableColumnMapping
 }
 
@@ -82,17 +83,21 @@ export function FilterHeader({
   onSkillClick,
   type,
 }: Props) {
-  const threshold = filterThreshold
-
   function handleThresholdSliderChange(
     _event: object,
-    value: number | number[]
+    value: string,
+    threshold: number | number[]
   ) {
-    if (Array.isArray(value)) {
-      value = value?.[0]
+    if (Array.isArray(threshold)) {
+      threshold = threshold?.[0]
     }
-    if (value !== filterThreshold) {
-      onThresholdUpdate(value)
+
+    const filterIndex = filterList.findIndex((filter) => filter.value == value)
+
+    if (filterIndex >= 0) {
+      if (threshold != filterList[filterIndex].threshold) {
+        onThresholdUpdate(value, threshold)
+      }
     }
   }
 
@@ -113,35 +118,38 @@ export function FilterHeader({
         )}
         {filterList.map((skill) => (
           <Tag
-            key={skill}
-            label={skill}
+            key={skill.threshold}
+            label={skill.value}
             onDelete={() =>
-              onSkillClick(filterList.filter((item) => item !== skill))
+              onSkillClick(
+                filterList
+                  .filter((item) => item !== skill)
+                  .map((filter) => filter.value)
+              )
             }
           />
         ))}
       </ComponentTagsContainer>
-      {type != EmployeeTableColumnMapping.CUSTOMER ? (
+      {/* {type != EmployeeTableColumnMapping.CUSTOMER ? (
         <FilterThresholdContainer>
           <FilterThresholdTitle htmlFor={`${type}-threshold-slider`}>
             Terskel:
           </FilterThresholdTitle>
           <Slider
             id={`${type}-threshold-slider`}
-            value={threshold}
             step={1}
-            valueLabelDisplay="auto"
+            thresholdLabelDisplay="auto"
             marks={thresholdLabels}
-            valueLabelFormat={(value) =>
-              thresholdLabels.find((mark) => mark.value === value)?.label ??
-              value
+            thresholdLabelFormat={(threshold) =>
+              thresholdLabels.find((mark) => mark.value === threshold)?.label ??
+              threshold
             }
             min={1}
             max={5}
             onChange={handleThresholdSliderChange}
           />
         </FilterThresholdContainer>
-      ) : null}
+      ) : null} */}
     </ComponentRoot>
   )
 }
