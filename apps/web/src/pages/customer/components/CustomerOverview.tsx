@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import CustomerCardList from './CustomerCardList'
+import CustomerCardListOverview from './CustomerCardListOverview'
 import { Grid } from '@mui/material'
 import { HoursBilledPerWeekCard } from '../cards'
+import { useCustomerCards } from '../../../api/data/customer/customerQueries'
 
 export const CustomerOverview = () => {
+  const { data } = useCustomerCards()
+  const customers = data?.map((item) => item.customer)
+  const [showHistoricCustomer, setShowHistoricCustomer] = useState(false)
   const [selectedCustomerIds, setSelectedCustomerIds] = useState(null)
   const [selectedPeriodStartDate, setSelectedPeriodStartDate] = useState(null)
   const [selectedPeriodEndDate, setSelectedPeriodEndDate] = useState(null)
@@ -69,6 +73,10 @@ export const CustomerOverview = () => {
     }
   }, [selectedPeriodEndDate])
 
+  const handleCustomerHistory = () => {
+    setShowHistoricCustomer(!showHistoricCustomer)
+  }
+
   return (
     <Grid container spacing={2}>
       <HoursBilledPerWeekCard
@@ -83,8 +91,15 @@ export const CustomerOverview = () => {
           setSelectedPeriodStartDate(startDate)
           setSelectedPeriodEndDate(endDate)
         }}
+        customersWithConsultants={customers}
+        customerHistory={showHistoricCustomer}
+        handleCustomerHistory={handleCustomerHistory}
       />
-      <CustomerCardList />
+      <CustomerCardListOverview
+        selectedCustomerIds={selectedCustomerIds}
+        showHistoricalData={showHistoricCustomer}
+        customersWithConsultants={customers}
+      />
     </Grid>
   )
 }

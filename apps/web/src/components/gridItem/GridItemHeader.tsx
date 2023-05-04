@@ -1,7 +1,8 @@
 import * as React from 'react'
-import { Grid } from '@mui/material'
-import { createStyles, makeStyles } from '@mui/styles'
+import { CheckboxProps, FormControlLabel, Grid, Checkbox } from '@mui/material'
+import { createStyles, makeStyles, styled, withStyles } from '@mui/styles'
 import { InfoTooltip } from '../InfoTooltip'
+import { CheckBoxHeader } from '../table/DataTable'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -43,12 +44,32 @@ const useStyles = makeStyles(() =>
   })
 )
 
+const CheckboxWrapper = styled('div')({
+  height: '0px',
+  position: 'relative',
+  marginRight: '20px',
+  marginTop: '5px',
+  display: 'flex',
+})
+
+const BlackCheckBox = withStyles({
+  root: {
+    color: '#333333',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
+})((props: CheckboxProps) => (
+  <Checkbox color="default" disableRipple {...props} />
+))
+
 interface GridItemHeaderProps {
   title: string
   description?: string
   children?: React.ReactNode | React.ReactNode[]
   big?: boolean
   green?: boolean
+  checkBox?: CheckBoxHeader
 }
 
 export function GridItemHeader({
@@ -57,6 +78,7 @@ export function GridItemHeader({
   children = null,
   big,
   green = false,
+  checkBox,
 }: GridItemHeaderProps) {
   const classes = useStyles()
   const headerHeight = big ? classes.bigGridHeaderRoot : null
@@ -75,6 +97,15 @@ export function GridItemHeader({
           )}
         >
           {title}
+          {checkBox && (
+            <CheckboxWrapper>
+              <FormControlLabel
+                label={checkBox.label}
+                checked={checkBox.checked}
+                control={<BlackCheckBox onChange={checkBox.changeHandler} />}
+              />
+            </CheckboxWrapper>
+          )}
         </h2>
         {description ? (
           <InfoTooltip description={description} placement="right" />

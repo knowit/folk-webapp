@@ -53,6 +53,9 @@ interface HoursBilledPerWeekCardProps {
     selectedPeriodStartDate?: Date,
     selectedPeriodEndDate?: Date
   ) => void
+  customersWithConsultants: string[]
+  customerHistory: boolean
+  handleCustomerHistory: () => void
 }
 
 const easingFunction = { ease: [0.33, 0, 1, 0.62], duration: 1 }
@@ -63,6 +66,9 @@ const HoursBilledPerWeekCard = ({
   selectedPeriodStartDate: startDate,
   selectedPeriodEndDate: endDate,
   handleDateRangeChange,
+  customersWithConsultants,
+  customerHistory,
+  handleCustomerHistory,
 }: HoursBilledPerWeekCardProps) => {
   const { data, error } = useHoursBilledPerWeekCharts()
   const {
@@ -73,8 +79,16 @@ const HoursBilledPerWeekCard = ({
     monthlyData,
   } = usePerWeekFilter(data)
 
-  const customers =
+  const customerData =
     data === undefined ? [] : data?.data?.map((item) => item.id as string)
+
+  const customers = customerHistory
+    ? customerData
+    : customersWithConsultants
+    ? customerData.filter((customer) =>
+        customersWithConsultants.includes(customer)
+      )
+    : customerData
 
   const selectedCustomers = customers.filter((customer) =>
     selectedCustomerIds?.includes(customer)
@@ -157,6 +171,16 @@ const HoursBilledPerWeekCard = ({
           })),
         }
 
+  function toggleDisplayHistory() {
+    handleCustomerHistory()
+  }
+
+  const checkBox = {
+    label: 'Vis historikk',
+    changeHandler: toggleDisplayHistory,
+    checked: customerHistory,
+  }
+
   return (
     <GridItem fullSize>
       {filteredData === undefined || selectedCustomerIds === null ? (
@@ -209,7 +233,7 @@ const HoursBilledPerWeekCard = ({
             }
           />
           <CustomerFilterWrapper>
-            <GridItemHeader title="Filtrer kunder">
+            <GridItemHeader title="Filtrer kunder" checkBox={checkBox}>
               <Checkbox
                 checked={selectedCustomerIds?.length === customers.length}
                 onChange={
