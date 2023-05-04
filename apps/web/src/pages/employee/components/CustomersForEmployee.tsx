@@ -1,16 +1,14 @@
 import * as React from 'react'
 import { Customer } from '../../../api/data/employee/employeeApiTypes'
-import { makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { FallbackMessage } from './FallbackMessage'
 import { ExperienceList } from './ExperienceList'
 import { ExperienceListItem } from './ExperienceListItem'
 
-const useStyles = makeStyles({
-  customerName: {
-    fontWeight: 'bold',
-  },
-})
+const CustomerName = styled('span')(() => ({
+  fontWeight: 'bold',
+}))
 
 interface Props {
   customers?: Customer[]
@@ -19,8 +17,6 @@ interface Props {
 }
 
 export function CustomersForEmployee({ customers, isLoading, error }: Props) {
-  const classes = useStyles()
-
   if (error) {
     return <FallbackMessage error={error} />
   }
@@ -43,7 +39,7 @@ export function CustomersForEmployee({ customers, isLoading, error }: Props) {
         <ExperienceListItem
           key={customer.customer + customer.workOrderDescription}
         >
-          <span className={classes.customerName}>{customer.customer}: </span>
+          <CustomerName>{customer.customer}: </CustomerName>
           {customer.workOrderDescription}
         </ExperienceListItem>
       ))}
