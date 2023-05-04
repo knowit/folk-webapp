@@ -112,29 +112,52 @@ export function filterNonCustomer(rows: EmployeeTableRow[]) {
   })
 }
 
-export function handleFilterAdd(
+export function handleFilterChange(
   prevFilters: FilterObject[],
-  newFilterValue: FilterEntry,
+  newFilterValues: string[],
   index: number
 ) {
-  prevFilters[index].filters.push(newFilterValue)
+  const filters = prevFilters[index].filters.map((filterRow) => filterRow.value)
+  const newFilters: FilterEntry[] = []
+  newFilterValues.forEach((element) => {
+    if (!filters.includes(element)) {
+      const entry: FilterEntry = { value: element, threshold: 1 }
+      newFilters.push(entry)
+    }
+
+    if (filters.includes(element)) {
+      const filterIndex = filters.indexOf(element)
+      newFilters.push(prevFilters[index].filters[filterIndex])
+    }
+  })
+  prevFilters[index].filters = newFilters
   return [...prevFilters]
 }
 
-export function handleFilterRemoval(
-  prevFilters: FilterObject[],
-  filterValue: string,
-  index: number
-) {
-  const filterIndex = prevFilters[index].filters.findIndex(
-    (filter) => filter.value == filterValue
-  )
-  if (filterIndex >= 0) {
-    const filters = prevFilters[index].filters.splice(filterIndex, 1)
-    prevFilters[index].filters = filters
-  }
-  return [...prevFilters]
-}
+// export function handleFilterAdd(
+//   prevFilters: FilterObject[],
+//   newFilterValue: string,
+//   index: number
+// ) {
+//   const entry: FilterEntry = { value: newFilterValue, threshold: 1 }
+//   prevFilters[index].filters.push(entry)
+//   return [...prevFilters]
+// }
+
+// export function handleFilterRemoval(
+//   prevFilters: FilterObject[],
+//   filterValue: string,
+//   index: number
+// ) {
+//   const filterIndex = prevFilters[index].filters.findIndex(
+//     (filter) => filter.value == filterValue
+//   )
+//   if (filterIndex >= 0) {
+//     const filters = prevFilters[index].filters.splice(filterIndex, 1)
+//     prevFilters[index].filters = filters
+//   }
+//   return [...prevFilters]
+// }
 
 export function handleThresholdChange(
   prevFilters: FilterObject[],

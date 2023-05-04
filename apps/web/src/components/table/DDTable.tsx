@@ -10,8 +10,7 @@ import { styled } from '@mui/material/styles'
 import {
   filterNonCustomer,
   FilterObject,
-  handleFilterAdd,
-  handleFilterRemoval,
+  handleFilterChange,
   handleThresholdChange,
   searchAndFilter,
 } from '../filter/FilterUtil'
@@ -74,9 +73,9 @@ export default function DDTable({
         key={placeholder}
         filterList={filters}
         placeholder={placeholder}
-        onSelect={(newFilterValue) =>
+        onSelect={(newFilterValues) =>
           setFilters((prevFilters) =>
-            handleFilterAdd(prevFilters, newFilterValue, index)
+            handleFilterChange(prevFilters, newFilterValues, index)
           )
         }
         fetchFilterCategories={datafetch}
@@ -97,9 +96,9 @@ export default function DDTable({
               handleThresholdChange(prevFilters, value, threshold, index)
             )
           }}
-          onSkillClick={(value, threshold) => {
+          onSkillClick={(values) => {
             setFilters((prevFilters) =>
-              handleFilterChange(prevFilters, value, index)
+              handleFilterChange(prevFilters, values, index)
             )
           }}
         />
