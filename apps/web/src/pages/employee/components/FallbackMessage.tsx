@@ -3,33 +3,25 @@ import { styled } from '@mui/material/styles'
 import { Tooltip } from '@mui/material'
 import { InfoRounded } from '@mui/icons-material'
 
+const MessageStyles = ({ theme, isError }) => ({
+  fontStyle: 'italic',
+  margin: 0,
+  display: 'flex',
+  alignItems: 'center',
+  color: isError ? theme.palette.error.main : 'inherit',
+})
+
 const ComponentRoot = styled('p', {
   shouldForwardProp: (prop) => prop !== 'isError',
-})<{ isError: boolean }>(({ theme, isError }) => ({
-  fontStyle: 'italic',
-  margin: 0,
-  display: 'flex',
-  alignItems: 'center',
-  color: isError ? theme.palette.error.main : 'inherit',
-}))
+})<{ isError: boolean }>(MessageStyles)
+
 const ComponentHeadline = styled('h3', {
   shouldForwardProp: (prop) => prop !== 'isError',
-})<{ isError: boolean }>(({ theme, isError }) => ({
-  fontStyle: 'italic',
-  margin: 0,
-  display: 'flex',
-  alignItems: 'center',
-  color: isError ? theme.palette.error.main : 'inherit',
-}))
+})<{ isError: boolean }>(MessageStyles)
+
 const PreStyled = styled('pre', {
   shouldForwardProp: (prop) => prop !== 'isError',
-})<{ isError: boolean }>(({ theme, isError }) => ({
-  fontStyle: 'italic',
-  margin: 0,
-  display: 'flex',
-  alignItems: 'center',
-  color: isError ? theme.palette.error.main : 'inherit',
-}))
+})<{ isError: boolean }>(MessageStyles)
 
 const TooltipStyled = styled(Tooltip)(() => ({
   marginLeft: 5,
