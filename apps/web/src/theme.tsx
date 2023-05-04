@@ -192,6 +192,7 @@ export const theme = createTheme(colourTheme, {
       styleOverrides: {
         root: {
           color: colourTheme.palette.text.primary,
+          backgroundColor: colourTheme.palette.background.default,
         },
       },
     },

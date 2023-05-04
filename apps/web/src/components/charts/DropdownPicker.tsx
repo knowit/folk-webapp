@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { Fade, InputBase, MenuItem, Select } from '@mui/material'
-import { makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 
 type ValueType = { displayValue: string; value: any } | string
 
@@ -11,99 +11,38 @@ interface DropdownPickerProps {
   big?: boolean
 }
 
-const useStyles = makeStyles({
-  root: ({ width }: { width: number }) => ({
-    backgroundColor: '#F1F0ED',
-    fontSize: 16,
-    border: '1px solid white',
-    width,
-  }),
-  input: {
-    paddingLeft: 12,
-    paddingTop: 0,
-    paddingBottom: 0,
-    lineHeight: '43px',
-    height: 'inherit',
-    display: 'flex',
-    alignItems: 'center',
+const ComponentRoot = styled(Select, {
+  shouldForwardProp: (prop) => prop !== 'width' && prop !== 'big',
+})<{ width: number; big: boolean }>(({ theme, width, big }) => ({
+  backgroundColor: theme.palette.background.default,
+  fontSize: big ? 25 : 16,
+  border: '1px solid white',
+  width,
+  marginRight: big && 10,
+  '& .MuiSelect-icon': {
+    right: 5,
+    height: big && 45.2,
+    width: big && 45.2,
+    top: big && 15,
   },
-  menu: {},
-  menuPaper: ({ width }: { width: number }) => ({
-    borderRadius: 0,
-    width,
-    backgroundColor: '#F1F0ED',
-    marginLeft: -1,
-  }),
-  menuList: {
-    borderLeft: '1px solid white',
-    borderRight: '1px solid white',
-    borderTop: '1px solid white',
-  },
-  menuItem: {
-    fontSize: 14,
-    borderBottom: '1px solid white',
+  '& .MuiSelect-select': {
     paddingLeft: 12,
   },
-})
+}))
+const InputBaseStyled = styled(InputBase)(() => ({
+  padding: 0,
+  alignItems: 'center',
+  display: 'flex',
+  lineHeight: 2,
+}))
 
-const useBigStyles = makeStyles({
-  root: ({ width }: { width: number }) => ({
-    backgroundColor: '#F1F0ED',
-    fontSize: 25,
-    border: '1px solid white',
-    width,
-    marginRight: 10,
-  }),
-  input: {
-    height: 77,
-    paddingLeft: 12,
-    paddingTop: 0,
-    paddingBottom: 0,
-    lineHeight: '43px',
-    display: 'flex',
-    alignItems: 'center',
-  },
-  menu: {},
-  menuPaper: ({ width }: { width: number }) => ({
-    borderRadius: 0,
-    width,
-    backgroundColor: '#F1F0ED',
-    marginLeft: -1,
-  }),
-  menuList: {
-    borderLeft: '1px solid white',
-    borderRight: '1px solid white',
-    borderTop: '1px solid white',
-  },
-  menuItem: {
-    fontSize: 25,
-    borderBottom: '1px solid white',
-    paddingLeft: 12,
-  },
-})
-
-const useMuiOverrideStyles = makeStyles({
-  icon: {
-    color: '#333333',
-    right: 10,
-  },
-  select: {
-    backgroundColor: '#F1F0ED !important',
-  },
-})
-
-const useMuiOverrideStylesBig = makeStyles({
-  icon: {
-    color: '#333333',
-    right: 10,
-    height: '45.2px',
-    width: '45.2px',
-    top: 15,
-  },
-  select: {
-    backgroundColor: '#F1F0ED !important',
-  },
-})
+const MenuItemStyled = styled(MenuItem, {
+  shouldForwardProp: (prop) => prop !== 'big',
+})<{ big: boolean }>(({ theme, big }) => ({
+  borderBottom: `1px solid ${theme.palette.background.default}`,
+  paddingLeft: 12,
+  fontSize: big ? 25 : 14,
+}))
 
 const getDisplayValue = (value: ValueType): string =>
   typeof value === 'string' ? value : value.displayValue
@@ -135,38 +74,23 @@ export default function DropdownPicker({
         .reduce((prev, next) => (prev.length > next.length ? prev : next), ''),
       big ? '25pt arial' : '19pt arial'
     ) + 46
-  const smallClasses = useStyles({ width })
-  const bigClasses = useBigStyles({ width })
-  const classes = big ? bigClasses : smallClasses
-  const overrideClasses = useMuiOverrideStyles()
-  const overrideClassesBig = useMuiOverrideStylesBig()
-  const sizeOverrideClasses = big ? overrideClassesBig : overrideClasses
   const selectRef = useRef<HTMLElement | null>()
-
   const defaultValue = selected || values.length > 0 ? values[0] : ''
   return (
-    <Select
-      className={classes.root}
-      classes={sizeOverrideClasses}
+    <ComponentRoot
+      width={width}
+      big={big}
       variant="standard"
       inputRef={selectRef}
       autoWidth
       onChange={({ target: { value } }) => onChange(value)}
-      input={<InputBase />}
+      input={<InputBaseStyled />}
       defaultValue={defaultValue}
-      inputProps={{
-        className: classes.input,
-      }}
       value={selected}
       MenuProps={{
         TransitionComponent: Fade,
-        className: classes.menu,
         MenuListProps: {
           disablePadding: true,
-          className: classes.menuList,
-        },
-        PaperProps: {
-          className: classes.menuPaper,
         },
         anchorOrigin: {
           vertical: 'bottom',
@@ -180,14 +104,14 @@ export default function DropdownPicker({
       }}
     >
       {values.map((value: ValueType) => (
-        <MenuItem
+        <MenuItemStyled
+          big={big}
           key={`${getValue(value)}`}
-          className={classes.menuItem}
           value={getValue(value)}
         >
           {getDisplayValue(value)}
-        </MenuItem>
+        </MenuItemStyled>
       ))}
-    </Select>
+    </ComponentRoot>
   )
 }
