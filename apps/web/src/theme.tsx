@@ -107,17 +107,24 @@ export const theme = createTheme(colourTheme, {
   },
   components: {
     MuiAccordion: {
+      defaultProps: {
+        disableGutters: true,
+      },
       styleOverrides: {
-        root: { marginTop: '5px', width: '100%' },
+        root: {
+          marginTop: 10,
+          '&.Mui-expanded:last-of-type': {
+            marginTop: 10,
+          },
+        },
       },
     },
     MuiAccordionDetails: {
-      styleOverrides: { root: { padding: '0px' } },
+      styleOverrides: { root: { padding: 0, border: 'none' } },
     },
     MuiAccordionSummary: {
       styleOverrides: {
         root: {
-          width: '100%',
           backgroundColor: colourTheme.palette.background.darker,
           color: colourTheme.palette.text.primary,
           fontSize: '18px',
@@ -192,6 +199,7 @@ export const theme = createTheme(colourTheme, {
       styleOverrides: {
         root: {
           color: colourTheme.palette.text.primary,
+          backgroundColor: colourTheme.palette.background.default,
         },
       },
     },

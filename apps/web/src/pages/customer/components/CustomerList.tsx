@@ -19,7 +19,6 @@ import { RowCount } from '../../../components/table/RowCount'
 import { ConsultantInfo } from '../../../api/data/employee/employeeApiTypes'
 import { EmployeeTableExpandedInfo } from '../../employee/table/EmployeeTableExpandedInfo'
 import { FallbackMessage } from '../../employee/components/FallbackMessage'
-import { tableStyles } from '../../../components/table/DataTable'
 import { ArrowDownward, ArrowUpward } from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
 
@@ -30,10 +29,21 @@ const AccordionHeaderListWrapper = styled('div')(({ theme }) => ({
   paddingRight: 69,
   backgroundColor: theme.palette.background.darker,
 }))
-const AccordionListHeader = styled('div')({
+const AccordionListHeader = styled('div')(({ theme }) => ({
   justifyContent: 'space-between',
   cursor: 'pointer',
-})
+  fontWeight: 'bold',
+  fontSize: 16,
+  display: 'flex',
+  alignItems: 'center',
+  height: '100%',
+  width: '100%',
+  borderBottom: `1px solid ${theme.palette.background.paper}`,
+  borderLeft: `1px solid ${theme.palette.background.paper}`,
+  padding: 0,
+  paddingRight: 15,
+  paddingLeft: 15,
+}))
 
 const customerColumns: Column[] = [
   {
@@ -68,7 +78,6 @@ export default function CustomerList() {
   const [searchTerm, setSearchTerm] = useState('')
   const { data, error } = useEmployeesByCustomer()
   const isLoading = !data
-  const classes = tableStyles()
   const [sortIndex, setSortIndex] = React.useState(0)
   const [sortOrder, setSortOrder] = React.useState<'ASC' | 'DESC'>('ASC')
 
@@ -172,7 +181,6 @@ export default function CustomerList() {
           }}
         >
           <AccordionListHeader
-            className={classes.tableHead}
             style={{
               padding: '10px 0',
               fontSize: '18px',
@@ -186,7 +194,6 @@ export default function CustomerList() {
             {sortIcon(0, sortIndex, sortOrder)}
           </AccordionListHeader>
           <AccordionListHeader
-            className={classes.tableHead}
             style={{
               padding: '10px 0',
               fontSize: '18px',

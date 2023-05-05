@@ -9,7 +9,7 @@ import { WorkExperienceList } from '../components/WorkExperienceList'
 const ComponentRoot = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'row',
-  background: theme.palette.background.default,
+  background: theme.palette.background.paper,
   fontSize: 13,
   height: 450,
 }))

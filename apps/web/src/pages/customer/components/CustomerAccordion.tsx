@@ -28,6 +28,7 @@ const CustomerAccordion = ({
   return (
     <Box
       sx={{
+        margin: 0,
         display: 'flex',
         flexDirection: 'column',
         height: 'max-content',
@@ -43,6 +44,7 @@ const CustomerAccordion = ({
         <AccordionSummary expandIcon={expanded ? <Minimize /> : <Add />}>
           <Box
             sx={{
+              margin: 0,
               display: 'grid',
               flexDirection: 'row',
               width: '85%',
@@ -53,13 +55,13 @@ const CustomerAccordion = ({
               {customerName}
               <OpenInNew
                 className={'openNewIconAccordion'}
-                style={{ marginLeft: '15px' }}
+                style={{ marginLeft: 15 }}
                 onClick={(e) => {
                   e.stopPropagation() /* todo show kundeflik */
                 }}
               />
             </div>
-            <div style={{ marginLeft: '15px' }}>
+            <div style={{ marginLeft: 15 }}>
               Antall konsulenter: {employees.length}
             </div>
           </Box>

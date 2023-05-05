@@ -11,7 +11,7 @@ import {
   SingularChartData,
 } from '../../../../../packages/folk-common/types/chartTypes'
 import { SingularChart } from './ChartCard'
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 
 interface MultipleChartCardProps {
   title: string
