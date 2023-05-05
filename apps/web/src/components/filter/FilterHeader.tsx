@@ -23,8 +23,11 @@ const ComponentTagsContainer = styled('div')(() => ({
   justifyContent: 'flex-start',
   flex: 'auto',
 }))
-const StyledRating = styled(Rating)(() => ({
+const RatingStyled = styled(Rating)(() => ({
   color: 'black',
+}))
+const DividerStyled = styled(Divider)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
 }))
 
 const Tag = ({
@@ -40,17 +43,18 @@ const Tag = ({
 }) => {
   return (
     <Chip
+      color="primary"
       size="small"
       variant="outlined"
       label={
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {label}
-          <Divider
+          <DividerStyled
             orientation="vertical"
-            style={{ marginLeft: '2px', marginRight: '2px' }}
+            style={{ marginLeft: '3px', marginRight: '3px' }}
             flexItem
           />
-          <StyledRating
+          <RatingStyled
             size="small"
             value={threshold}
             onChange={(_, value) => onThresholdChange(value)}
@@ -95,10 +99,10 @@ export function FilterHeader({
         {filterList.length > 1 && (
           <RemoveAllTag onDelete={() => onSkillClick([])} />
         )}
-        {filterList.map((skill) => (
+        {filterList.map((skill, index) => (
           <Tag
             threshold={skill.threshold}
-            key={skill.value}
+            key={index}
             label={skill.value}
             onThresholdChange={(value: number) =>
               onThresholdUpdate(skill.value, value)
