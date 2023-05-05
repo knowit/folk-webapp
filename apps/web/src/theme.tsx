@@ -120,7 +120,7 @@ export const theme = createTheme(colourTheme, {
       },
     },
     MuiAccordionDetails: {
-      styleOverrides: { root: { padding: 0 } },
+      styleOverrides: { root: { padding: 0, border: 'none' } },
     },
     MuiAccordionSummary: {
       styleOverrides: {

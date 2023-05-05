@@ -272,6 +272,7 @@ export function VirtualizedTable({
 
   return (
     <Paper
+      elevation={0}
       style={{
         height: getTableHeight(),
         width: '100%',
@@ -325,6 +326,7 @@ export default function DataTable(props: DataTableProps) {
 
   return (
     <Paper
+      elevation={0}
       style={{
         height: '100%',
         width: '100%',
