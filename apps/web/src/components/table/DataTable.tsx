@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { FC, useEffect, useRef, useState } from 'react'
-import { createStyles, makeStyles, DefaultTheme, withStyles } from '@mui/styles'
+import { createStyles, makeStyles } from '@mui/styles'
 import { Paper, TableCell } from '@mui/material'
+import { styled } from '@mui/material/styles'
 import {
   AutoSizer as _AutoSizer,
   AutoSizerProps,
@@ -58,56 +59,54 @@ export interface CheckBoxHeader {
   checked: boolean
 }
 
-const TableCellNoBorders = withStyles({
-  root: {
-    borderBottom: '1px solid #F1F0ED',
-  },
-})(TableCell)
+const CellTableCell = styled(TableCell)(({ theme }) => ({
+  borderBottom: `1px solid ${theme.palette.background.paper}`,
+  display: 'flex',
+  padding: 0,
+}))
+const CellTableCellChild = styled('div')(({ theme }) => ({
+  width: '100%',
+  height: 70,
+  display: 'flex',
+  alignItems: 'center',
+  paddingRight: 15,
+  paddingLeft: 15,
+  borderLeft: `1px solid ${theme.palette.background.paper}`,
+  borderTop: `1px solid ${theme.palette.background.paper}`,
+}))
+const HeaderTableCell = styled(TableCell)(({ theme }) => ({
+  fontWeight: 'bold',
+  fontSize: 16,
+  display: 'flex',
+  alignItems: 'center',
+  height: '100%',
+  width: '100%',
+  borderBottom: `1px solid ${theme.palette.background.paper}`,
+  borderLeft: `1px solid ${theme.palette.background.paper}`,
+  padding: 0,
+  paddingRight: 15,
+  paddingLeft: 15,
+}))
+const RowRoot = styled('div')(() => ({
+  flexDirection: 'column',
+  display: 'flex',
+  padding: 0,
+}))
+const RowTableCell = styled(TableCell)(({ theme }) => ({
+  borderBottom: `1px solid ${theme.palette.background.paper}`,
+  borderLeft: `1px solid ${theme.palette.background.paper}`,
+  width: 1155,
+}))
+const RowRootChild = styled('div')(() => ({
+  display: 'flex',
+  padding: 0,
+}))
 
-export const tableStyles = makeStyles((theme: DefaultTheme) =>
+const tableStyles = makeStyles(() =>
   createStyles({
-    tableHead: {
-      fontWeight: 'bold',
-      fontSize: '16px',
-      display: 'flex',
-      alignItems: 'center',
-      height: '100%',
-      width: '100%',
-      borderBottom: `1px solid ${theme.palette.background.paper}`,
-      borderLeft: `1px solid ${theme.palette.background.paper}`,
-      padding: 0,
-      paddingRight: '15px',
-      paddingLeft: '15px',
-    },
     flexContainer: {
       display: 'flex',
       padding: 0,
-    },
-    standardSize: {
-      width: '100%',
-      height: '70px',
-      display: 'flex',
-      alignItems: 'center',
-      paddingRight: '15px',
-      paddingLeft: '15px',
-    },
-    column: {
-      flexDirection: 'column',
-    },
-    borders: {
-      borderLeft: `1px solid ${theme.palette.background.paper}`,
-      borderTop: `1px solid ${theme.palette.background.paper}`,
-    },
-    emptyTable: {
-      borderBottom: `1px solid ${theme.palette.background.paper}`,
-      borderLeft: `1px solid ${theme.palette.background.paper}`,
-      width: '1155px',
-    },
-    noFocus: {
-      outline: 0,
-      '&:hover, &:focus, &:active': {
-        outline: 0,
-      },
     },
   })
 )
@@ -184,28 +183,24 @@ export function VirtualizedTable({
       )
     }
     return (
-      <TableCellNoBorders
-        component="div"
-        className={classes.flexContainer}
-        align="left"
-      >
-        <div className={[classes.standardSize, classes.borders].join(' ')}>
+      <CellTableCell component="div" align="left">
+        <CellTableCellChild>
           {CellType ? (
             <CellType data={cellData} name={name} />
           ) : (
             <CharacterLimitBox text={`${cellData}` ?? '-'} />
           )}
-        </div>
-      </TableCellNoBorders>
+        </CellTableCellChild>
+      </CellTableCell>
     )
   }
 
-  function Row({ className, index, key, rowData, style }: TableRowProps) {
+  function Row({ index, key, rowData, style }: TableRowProps) {
     const rowId = rows[index].rowId
     const ExpandedRowComponent = columns[0]?.renderExpanded
     return (
-      <div key={key} className={classes.column} style={style}>
-        <div className={className}>
+      <RowRoot key={key} style={style}>
+        <RowRootChild>
           {columns.map((column, columnIndex) => (
             <div key={columnIndex} style={{ width: column.width }}>
               <Cell
@@ -218,11 +213,11 @@ export function VirtualizedTable({
               />
             </div>
           ))}
-        </div>
+        </RowRootChild>
         {rowIsExpanded(rowId) && ExpandedRowComponent ? (
           <ExpandedRowComponent data={rowData[0]} id={rowId} />
         ) : null}
-      </div>
+      </RowRoot>
     )
   }
 
@@ -252,27 +247,17 @@ export function VirtualizedTable({
     }
 
     return (
-      <TableCell
-        component="div"
-        className={classes.tableHead}
-        variant="head"
-        align="left"
-      >
+      <HeaderTableCell component="div" variant="head" align="left">
         {title}
-      </TableCell>
+      </HeaderTableCell>
     )
   }
 
   function EmptyRow() {
     return (
-      <TableCell
-        className={classes.emptyTable}
-        component="div"
-        align="center"
-        colSpan={4}
-      >
+      <RowTableCell component="div" align="center" colSpan={4}>
         Ingen resultater
-      </TableCell>
+      </RowTableCell>
     )
   }
 
@@ -306,7 +291,6 @@ export function VirtualizedTable({
             rowGetter={getRowData}
             rowClassName={classes.flexContainer}
             noRowsRenderer={EmptyRow}
-            gridClassName={classes.noFocus}
           >
             {columns.map((column, index) => (
               <VirtualizedColumn
@@ -320,7 +304,6 @@ export function VirtualizedTable({
                     checkBox
                   )
                 }
-                className={classes.flexContainer}
                 dataKey={String(index)}
                 width={column.width}
               />
