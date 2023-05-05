@@ -113,10 +113,8 @@ export const theme = createTheme(colourTheme, {
       styleOverrides: {
         root: {
           marginTop: 10,
-          border: 'none',
-          '& .Mui-expanded': {
+          '&.Mui-expanded:last-of-type': {
             marginTop: 10,
-            border: 'none',
           },
         },
       },
