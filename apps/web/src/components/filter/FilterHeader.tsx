@@ -1,9 +1,8 @@
 import { styled } from '@mui/material/styles'
 import React from 'react'
 import CloseIcon from '@mui/icons-material/Close'
-import { Chip, Slider } from '@mui/material'
+import { Chip, Rating } from '@mui/material'
 import { EmployeeTableColumnMapping, FilterEntry } from './FilterUtil'
-import { Filter } from 'http-proxy-middleware'
 
 const ComponentRoot = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
@@ -24,28 +23,35 @@ const ComponentTagsContainer = styled('div')(() => ({
   justifyContent: 'flex-start',
   flex: 'auto',
 }))
-const FilterThresholdContainer = styled('div')(() => ({
-  display: 'flex',
-  justifyContents: 'flex-start',
-  alignItems: 'center',
-  borderLeft: 'solid 1px #e0ded7',
-  padding: 5,
+const StyledRating = styled(Rating)(() => ({
+  color: 'black',
 }))
 
-const FilterThresholdTitle = styled('label')(() => ({
-  padding: 10,
-  paddingTop: 6,
-  paddingLeft: 5,
-  fontStyle: 'italic',
-  alignSelf: 'flex-start',
-}))
-
-const Tag = ({ label, onDelete }: { label: string; onDelete: () => void }) => {
+const Tag = ({
+  label,
+  threshold,
+  onDelete,
+  onThresholdChange,
+}: {
+  label: string
+  threshold: number
+  onDelete: () => void
+  onThresholdChange: (value) => void
+}) => {
   return (
     <Chip
       size="small"
       variant="outlined"
-      label={label}
+      label={
+        <>
+          {label}
+          <StyledRating
+            size="small"
+            value={threshold}
+            onChange={(event, value) => onThresholdChange(value)}
+          />
+        </>
+      }
       onDelete={onDelete}
       deleteIcon={<CloseIcon />}
     />
@@ -71,44 +77,12 @@ interface Props {
   type: EmployeeTableColumnMapping
 }
 
-interface Mark {
-  value: number
-  label: string
-}
-
 export function FilterHeader({
   title,
   filterList,
   onThresholdUpdate,
   onSkillClick,
-  type,
 }: Props) {
-  function handleThresholdSliderChange(
-    _event: object,
-    value: string,
-    threshold: number | number[]
-  ) {
-    if (Array.isArray(threshold)) {
-      threshold = threshold?.[0]
-    }
-
-    const filterIndex = filterList.findIndex((filter) => filter.value == value)
-
-    if (filterIndex >= 0) {
-      if (threshold != filterList[filterIndex].threshold) {
-        onThresholdUpdate(value, threshold)
-      }
-    }
-  }
-
-  const thresholdLabels: Mark[] = [
-    { value: 1, label: '1+' },
-    { value: 2, label: '2+' },
-    { value: 3, label: '3+' },
-    { value: 4, label: '4+' },
-    { value: 5, label: '5' },
-  ]
-
   return (
     <ComponentRoot>
       <ComponentTitle>{title}</ComponentTitle>
@@ -118,8 +92,11 @@ export function FilterHeader({
         )}
         {filterList.map((skill) => (
           <Tag
-            key={skill.threshold}
+            threshold={skill.threshold}
             label={skill.value}
+            onThresholdChange={(value: number) =>
+              onThresholdUpdate(skill.value, value)
+            }
             onDelete={() =>
               onSkillClick(
                 filterList
@@ -130,26 +107,6 @@ export function FilterHeader({
           />
         ))}
       </ComponentTagsContainer>
-      {/* {type != EmployeeTableColumnMapping.CUSTOMER ? (
-        <FilterThresholdContainer>
-          <FilterThresholdTitle htmlFor={`${type}-threshold-slider`}>
-            Terskel:
-          </FilterThresholdTitle>
-          <Slider
-            id={`${type}-threshold-slider`}
-            step={1}
-            thresholdLabelDisplay="auto"
-            marks={thresholdLabels}
-            thresholdLabelFormat={(threshold) =>
-              thresholdLabels.find((mark) => mark.value === threshold)?.label ??
-              threshold
-            }
-            min={1}
-            max={5}
-            onChange={handleThresholdSliderChange}
-          />
-        </FilterThresholdContainer>
-      ) : null} */}
     </ComponentRoot>
   )
 }
