@@ -7,12 +7,17 @@ interface Props {
   selectedCustomerIds: string[]
   showHistoricalData: boolean
   customersWithConsultants: string[]
+  handleCheckboxChange: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    customerId: string
+  ) => void
 }
 
 const CustomerCardListOverview = ({
   selectedCustomerIds,
   showHistoricalData,
   customersWithConsultants,
+  handleCheckboxChange,
 }: Props) => {
   const { data } = useHoursBilledPerCustomerCharts()
   const [historicalCustomers, setHistoricalCustomers] = useState<
@@ -43,6 +48,7 @@ const CustomerCardListOverview = ({
       selectedCustomerIds={selectedCustomerIds}
       showHistoricalData={showHistoricalData}
       historicalCustomers={historicalCustomers}
+      handleCheckboxChange={handleCheckboxChange}
     />
   )
 }

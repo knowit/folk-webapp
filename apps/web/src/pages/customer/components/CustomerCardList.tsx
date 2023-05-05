@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { useCustomerCards } from '../../../api/data/customer/customerQueries'
 import CustomerCard, { CustomerData } from '../cards/CustomerCard'
@@ -22,14 +22,46 @@ interface Props {
   selectedCustomerIds: string[]
   showHistoricalData: boolean
   historicalCustomers: CustomerData[]
+  handleCheckboxChange: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    customerId: string
+  ) => void
 }
 
 const CustomerCardList = ({
   selectedCustomerIds,
   historicalCustomers,
+  handleCheckboxChange,
 }: Props) => {
   const { data } = useCustomerCards()
   const classes = useStyles()
+
+  const [customersInGraph, setCustomersInGraph] = useState([])
+  const [otherCustomers, setOtherCustomers] = useState([])
+
+  useEffect(() => {
+    if (data) {
+      const all_customer = data.concat(historicalCustomers)
+
+      const customers_in_graph =
+        selectedCustomerIds !== null &&
+        selectedCustomerIds.length > 0 &&
+        all_customer.filter(({ customer }) =>
+          selectedCustomerIds.includes(customer)
+        )
+
+      const other_customers =
+        selectedCustomerIds !== null && selectedCustomerIds.length === 0
+          ? all_customer
+          : all_customer.filter(
+              ({ customer }) =>
+                selectedCustomerIds && !selectedCustomerIds.includes(customer)
+            )
+
+      setCustomersInGraph(customers_in_graph)
+      setOtherCustomers(other_customers)
+    }
+  }, [data, historicalCustomers, selectedCustomerIds])
 
   if (!data) {
     return (
@@ -43,24 +75,9 @@ const CustomerCardList = ({
     )
   }
 
-  const all_customer = data.concat(historicalCustomers)
-
-  const customers_in_graph =
-    selectedCustomerIds.length > 0 &&
-    all_customer.filter(({ customer }) =>
-      selectedCustomerIds.includes(customer)
-    )
-
-  const other_customers =
-    selectedCustomerIds.length === 0
-      ? all_customer
-      : all_customer.filter(
-          ({ customer }) => !selectedCustomerIds.includes(customer)
-        )
-
   return (
     <>
-      {customers_in_graph && (
+      {customersInGraph && (
         <>
           <Grid item xs={12}>
             <div className={classes.root}>
@@ -68,13 +85,22 @@ const CustomerCardList = ({
             </div>
           </Grid>
 
-          {customers_in_graph.map((customer) => (
-            <CustomerCard key={customer.customer} data={customer} />
+          {customersInGraph.map((customer) => (
+            <CustomerCard
+              key={customer.customer}
+              data={customer}
+              handleCheckboxChange={handleCheckboxChange}
+              selectedCustomerIds={selectedCustomerIds}
+            />
           ))}
         </>
       )}
       <>
-        <CustomerCardSort data={other_customers} />
+        <CustomerCardSort
+          data={otherCustomers}
+          handleCheckboxChange={handleCheckboxChange}
+          selectedCustomerIds={selectedCustomerIds}
+        />
       </>
     </>
   )

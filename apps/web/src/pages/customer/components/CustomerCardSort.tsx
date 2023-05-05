@@ -9,6 +9,11 @@ import { SortCustomerCards } from '../util/sort-customer-cards'
 
 interface Props {
   data: CustomerData[]
+  handleCheckboxChange: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    customerId: string
+  ) => void
+  selectedCustomerIds: string[]
 }
 
 const ButtonWrapper = styled('div')({
@@ -27,7 +32,11 @@ const useStyles = makeStyles({
   },
 })
 
-const CustomerCardSort = ({ data }: Props) => {
+const CustomerCardSort = ({
+  data,
+  handleCheckboxChange,
+  selectedCustomerIds,
+}: Props) => {
   const classes = useStyles()
   const [searchTerm, setSearchTerm] = useState('')
   const [activeSortButton, setActiveSortBotton] = useState('Alfabetisk')
@@ -87,7 +96,12 @@ const CustomerCardSort = ({ data }: Props) => {
       </Grid>
 
       {sortedData.map((customer) => (
-        <CustomerCard key={customer.customer} data={customer} />
+        <CustomerCard
+          key={customer.customer}
+          data={customer}
+          handleCheckboxChange={handleCheckboxChange}
+          selectedCustomerIds={selectedCustomerIds}
+        />
       ))}
     </>
   )

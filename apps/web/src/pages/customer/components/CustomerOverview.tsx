@@ -77,11 +77,25 @@ export const CustomerOverview = () => {
     setShowHistoricCustomer(!showHistoricCustomer)
   }
 
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    customerId: string
+  ) => {
+    if (event.target.checked) {
+      setSelectedCustomerIds([...selectedCustomerIds, customerId])
+    } else {
+      setSelectedCustomerIds(
+        selectedCustomerIds.filter((id) => id !== customerId)
+      )
+    }
+  }
+
   return (
     <Grid container spacing={2}>
       <HoursBilledPerWeekCard
         selectedCustomerIds={selectedCustomerIds}
         setSelectedCustomerIds={setSelectedCustomerIds}
+        handleCheckboxChange={handleCheckboxChange}
         selectedPeriodStartDate={selectedPeriodStartDate}
         selectedPeriodEndDate={selectedPeriodEndDate}
         handleDateRangeChange={function (
@@ -99,6 +113,7 @@ export const CustomerOverview = () => {
         selectedCustomerIds={selectedCustomerIds}
         showHistoricalData={showHistoricCustomer}
         customersWithConsultants={customers}
+        handleCheckboxChange={handleCheckboxChange}
       />
     </Grid>
   )

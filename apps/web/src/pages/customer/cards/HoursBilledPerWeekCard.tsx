@@ -53,6 +53,10 @@ interface HoursBilledPerWeekCardProps {
     selectedPeriodStartDate?: Date,
     selectedPeriodEndDate?: Date
   ) => void
+  handleCheckboxChange: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    customerId: string
+  ) => void
   customersWithConsultants: string[]
   customerHistory: boolean
   handleCustomerHistory: () => void
@@ -69,6 +73,7 @@ const HoursBilledPerWeekCard = ({
   customersWithConsultants,
   customerHistory,
   handleCustomerHistory,
+  handleCheckboxChange,
 }: HoursBilledPerWeekCardProps) => {
   const { data, error } = useHoursBilledPerWeekCharts()
   const {
@@ -101,16 +106,6 @@ const HoursBilledPerWeekCard = ({
   }
   const handleSelectNone = () => {
     setSelectedCustomerIds([])
-  }
-
-  const handleCheckboxChange = (event, customerId) => {
-    if (event.target.checked) {
-      setSelectedCustomerIds([...selectedCustomerIds, customerId])
-    } else {
-      setSelectedCustomerIds(
-        selectedCustomerIds.filter((id) => id !== customerId)
-      )
-    }
   }
 
   const setDateRange = (startDate, endDate) => {
