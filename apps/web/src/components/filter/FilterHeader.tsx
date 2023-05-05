@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles'
 import React from 'react'
 import CloseIcon from '@mui/icons-material/Close'
-import { Chip, Rating } from '@mui/material'
+import { Chip, Rating, Divider } from '@mui/material'
 import { EmployeeTableColumnMapping, FilterEntry } from './FilterUtil'
 
 const ComponentRoot = styled('div')(({ theme }) => ({
@@ -43,14 +43,19 @@ const Tag = ({
       size="small"
       variant="outlined"
       label={
-        <>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           {label}
+          <Divider
+            orientation="vertical"
+            style={{ marginLeft: '2px', marginRight: '2px' }}
+            flexItem
+          />
           <StyledRating
             size="small"
             value={threshold}
-            onChange={(event, value) => onThresholdChange(value)}
+            onChange={(_, value) => onThresholdChange(value)}
           />
-        </>
+        </div>
       }
       onDelete={onDelete}
       deleteIcon={<CloseIcon />}
@@ -93,6 +98,7 @@ export function FilterHeader({
         {filterList.map((skill) => (
           <Tag
             threshold={skill.threshold}
+            key={skill.value}
             label={skill.value}
             onThresholdChange={(value: number) =>
               onThresholdUpdate(skill.value, value)
