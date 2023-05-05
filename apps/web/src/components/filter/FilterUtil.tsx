@@ -8,13 +8,17 @@ export interface CategoryWithGroup {
   group: string
 }
 
+export interface FilterEntry {
+  value: string
+  threshold: number
+}
+
 export interface FilterObject {
   column:
     | EmployeeTableColumnMapping.MOTIVATION
     | EmployeeTableColumnMapping.COMPETENCE
   label: string
-  values: string[]
-  threshold: number
+  filters: FilterEntry[]
   placeholder: string
   datafetch: () => CategoryWithGroup[]
 }
@@ -63,14 +67,10 @@ function normalizeWord(word: string) {
 
 function filterRow(
   columnValue: Record<string, number>,
-  filters: string[],
+  filterValue: string,
   filterThreshold: number
 ) {
-  return filters
-    .map((filterKey) => {
-      return columnValue?.[filterKey] >= filterThreshold
-    })
-    .reduce((a, b) => a && b)
+  return columnValue?.[filterValue] >= filterThreshold
 }
 
 export const searchAndFilter = (
@@ -87,14 +87,19 @@ export const searchAndFilter = (
 
     let rowMatchesFilters = true
 
-    filters.forEach((filter) => {
-      if (filter.values.length > 0) {
-        rowMatchesFilters =
-          rowMatchesFilters &&
-          filterRow(row.rowData[filter.column], filter.values, filter.threshold)
-      }
-    })
-
+    if (filters.length > 0) {
+      filters.forEach((filterObject) => {
+        filterObject.filters.forEach((filterEntry) => {
+          rowMatchesFilters =
+            rowMatchesFilters &&
+            filterRow(
+              row.rowData[filterObject.column],
+              filterEntry.value,
+              filterEntry.threshold
+            )
+        })
+      })
+    }
     return rowMatchesSearchTerm && rowMatchesFilters
   })
 }
@@ -112,16 +117,35 @@ export function handleFilterChange(
   newFilterValues: string[],
   index: number
 ) {
-  prevFilters[index].values = newFilterValues
+  const filters = prevFilters[index].filters.map((filterRow) => filterRow.value)
+  const newFilters: FilterEntry[] = []
+  newFilterValues.forEach((element) => {
+    if (!filters.includes(element)) {
+      const entry: FilterEntry = { value: element, threshold: 1 }
+      newFilters.push(entry)
+    }
+
+    if (filters.includes(element)) {
+      const filterIndex = filters.indexOf(element)
+      newFilters.push(prevFilters[index].filters[filterIndex])
+    }
+  })
+  prevFilters[index].filters = newFilters
   return [...prevFilters]
 }
 
 export function handleThresholdChange(
   prevFilters: FilterObject[],
-  threshold: number,
+  filterValue: string,
+  filterThreshold: number,
   index: number
 ) {
-  prevFilters[index].threshold = threshold
+  const filterIndex = prevFilters[index].filters.findIndex(
+    (filter) => filter.value == filterValue
+  )
+  if (filterIndex >= 0) {
+    prevFilters[index].filters[filterIndex].threshold = filterThreshold
+  }
   return [...prevFilters]
 }
 

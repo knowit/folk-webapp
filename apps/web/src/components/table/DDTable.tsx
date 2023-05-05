@@ -68,14 +68,14 @@ export default function DDTable({
     : filteredRows
 
   const filterInputs = filters.map(
-    ({ values, placeholder, datafetch }, index) => (
+    ({ filters, placeholder, datafetch }, index) => (
       <FilterInput
         key={placeholder}
-        filterList={values}
+        filterList={filters}
         placeholder={placeholder}
-        onSelect={(filter) =>
+        onSelect={(newFilterValues) =>
           setFilters((prevFilters) =>
-            handleFilterChange(prevFilters, filter, index)
+            handleFilterChange(prevFilters, newFilterValues, index)
           )
         }
         fetchFilterCategories={datafetch}
@@ -84,22 +84,21 @@ export default function DDTable({
   )
 
   const filterHeaders = filters.map(
-    ({ values, threshold, column, label }, index) =>
-      values.length > 0 && (
+    ({ filters, column, label }, index) =>
+      filters.length > 0 && (
         <FilterHeader
           key={column}
           title={label}
           type={column}
-          filterList={values}
-          filterThreshold={threshold}
-          onThresholdUpdate={(value) => {
+          filterList={filters}
+          onThresholdUpdate={(value, threshold) => {
             setFilters((prevFilters) =>
-              handleThresholdChange(prevFilters, value, index)
+              handleThresholdChange(prevFilters, value, threshold, index)
             )
           }}
-          onSkillClick={(value) => {
+          onSkillClick={(values) => {
             setFilters((prevFilters) =>
-              handleFilterChange(prevFilters, value, index)
+              handleFilterChange(prevFilters, values, index)
             )
           }}
         />
