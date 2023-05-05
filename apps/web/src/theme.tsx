@@ -107,6 +107,9 @@ export const theme = createTheme(colourTheme, {
   },
   components: {
     MuiAccordion: {
+      defaultProps: {
+        disableGutters: true,
+      },
       styleOverrides: {
         root: { marginTop: '5px', width: '100%' },
       },
