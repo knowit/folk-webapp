@@ -111,16 +111,22 @@ export const theme = createTheme(colourTheme, {
         disableGutters: true,
       },
       styleOverrides: {
-        root: { marginTop: '5px', width: '100%' },
+        root: {
+          marginTop: 10,
+          border: 'none',
+          '& .Mui-expanded': {
+            marginTop: 10,
+            border: 'none',
+          },
+        },
       },
     },
     MuiAccordionDetails: {
-      styleOverrides: { root: { padding: '0px' } },
+      styleOverrides: { root: { padding: 0 } },
     },
     MuiAccordionSummary: {
       styleOverrides: {
         root: {
-          width: '100%',
           backgroundColor: colourTheme.palette.background.darker,
           color: colourTheme.palette.text.primary,
           fontSize: '18px',
