@@ -5,6 +5,7 @@ import { useUserInfo } from '../context/UserInfoContext'
 import {
   CompetencePage,
   CustomerPage,
+  CustomerSitePage,
   EmployeePage,
   EmployeeProfilePage,
   NotFoundPage,
@@ -35,6 +36,7 @@ export default function Content() {
       <Route path="/ansatte" element={<EmployeePage />} />
       <Route path="/ansatt/:id" element={<EmployeeProfilePage />} />
       <Route path="/kunder" element={<CustomerPage />} />
+      <Route path="/kunder/:id" element={<CustomerSitePage />} />
       <Route path="/kompetanse" element={<CompetencePage />} />
       <Route path="/organisasjon" element={<OrganizationStructurePage />} />
       <Route path="/arbeidsmiljo" element={<UnderConstructionPage />} />

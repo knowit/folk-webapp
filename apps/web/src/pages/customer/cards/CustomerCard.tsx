@@ -5,6 +5,8 @@ import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
 import { styled } from '@mui/material/styles'
 import { Checkbox } from '@mui/material'
+import { Link } from 'react-router-dom'
+import { OpenIneNewIcon } from '../../../assets/Icons'
 
 export type CustomerData = {
   customer: string
@@ -60,6 +62,9 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
   return (
     <GridItem>
       <GridItemHeader title={customer} card={true}>
+        <Link to={'/kunder/' + customer}>
+          <OpenIneNewIcon />
+        </Link>
         <CheckboxWrapper>
           <Text>Vis kunde i graf</Text>
           <Checkbox

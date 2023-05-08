@@ -4,11 +4,14 @@ import {
   AccordionDetails,
   Box,
 } from '@mui/material'
-import { Minimize, Add, OpenInNew } from '@mui/icons-material'
+
+import { Minimize, Add } from '@mui/icons-material'
 import React, { useState } from 'react'
 import { EmployeeForCustomerList } from '../../../api/data/customer/customerApiTypes'
 import DataTable from '../../../components/table/DataTable'
 import { Column } from '../../../components/table/tableTypes'
+import { Link } from 'react-router-dom'
+import { OpenIneNewIcon } from '../../../assets/Icons'
 
 interface CustomerDropdownProps {
   customerName: string
@@ -53,13 +56,11 @@ const CustomerAccordion = ({
           >
             <div>
               {customerName}
-              <OpenInNew
-                className={'openNewIconAccordion'}
-                style={{ marginLeft: 15 }}
-                onClick={(e) => {
-                  e.stopPropagation() /* todo show kundeflik */
-                }}
-              />
+              {customerName != 'Uten prosjekt' && (
+                <Link to={'/kunder/' + customerName}>
+                  <OpenIneNewIcon />
+                </Link>
+              )}
             </div>
             <div style={{ marginLeft: 15 }}>
               Antall konsulenter: {employees.length}
