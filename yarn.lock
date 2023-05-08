@@ -2280,6 +2280,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jonkoops/matomo-tracker-react@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "@jonkoops/matomo-tracker-react@npm:0.7.0"
+  dependencies:
+    "@jonkoops/matomo-tracker": ^0.7.0
+  peerDependencies:
+    react: ">= 16.8.0"
+  checksum: 515503f2cf0e2909832e3cb51eb44d7301fa23d3804bd3938374cfe65d8faa14b22e51c252f7c4da07678424ba90a34d32b0f1ec4ecb0d6def4c991770dfb67a
+  languageName: node
+  linkType: hard
+
+"@jonkoops/matomo-tracker@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "@jonkoops/matomo-tracker@npm:0.7.0"
+  checksum: 63a4ef6c205676cead3b30d1c161c51c9516de49fe215e864f9b7e462c1bae781342ad19830fc25904d731b0cca4da71144a1f9338949e45fe6f0f24c0168eb0
+  languageName: node
+  linkType: hard
+
 "@jridgewell/gen-mapping@npm:^0.1.0":
   version: 0.1.1
   resolution: "@jridgewell/gen-mapping@npm:0.1.1"
@@ -17408,6 +17426,8 @@ __metadata:
     "@emotion/styled": ^11.10.6
     "@folk/common": "workspace:^"
     "@folk/prettier-config": "workspace:^"
+    "@jonkoops/matomo-tracker": ^0.7.0
+    "@jonkoops/matomo-tracker-react": ^0.7.0
     "@mui/icons-material": ^5.11.16
     "@mui/lab": ^5.0.0-alpha.126
     "@mui/material": ^5.12.0
