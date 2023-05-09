@@ -13,21 +13,17 @@ const useStyles = makeStyles(() =>
     button: {
       marginRight: '10px',
       marginLeft: '10px',
-      width: 'fit-content',
       whiteSpace: 'nowrap',
-      height: '40px',
       boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
       display: 'flex',
       cursor: 'pointer',
-      alignItems: 'center',
       padding: '8px 12px',
-      gap: '8px',
     },
     active: {
       background: '#FFFFFF',
     },
     inactive: {
-      background: '#F1F0ED;',
+      background: '#F1F0ED',
     },
   })
 )
@@ -36,7 +32,7 @@ const SortButton = ({ title, order, active, onClick }: Props) => {
   const classes = useStyles()
 
   const sortClick = () => {
-    if (order && order === 'DESC') {
+    if (order === 'DESC') {
       return <ArrowUpward />
     } else {
       return <ArrowDownward />
@@ -53,7 +49,7 @@ const SortButton = ({ title, order, active, onClick }: Props) => {
         active ? classes.active : classes.inactive,
       ].join(' ')}
     >
-      {title} {order && sortClick()}{' '}
+      {title} {title === 'Alfabetisk' && sortClick()}
     </div>
   )
 }

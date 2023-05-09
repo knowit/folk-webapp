@@ -8,11 +8,6 @@ import { Grid } from '@mui/material'
 import CustomerCardSort from './CustomerCardSort'
 
 const useStyles = makeStyles({
-  root: {
-    borderRadius: '0px 0px 6px 6px',
-    overflow: 'hidden',
-    height: '100%',
-  },
   title: {
     marginBottom: '0',
   },
@@ -80,9 +75,7 @@ const CustomerCardList = ({
       {customersInGraph.length > 0 && (
         <>
           <Grid item xs={12}>
-            <div className={classes.root}>
-              <h2 className={classes.title}>Kunder i graf i angitt periode</h2>
-            </div>
+            <h2 className={classes.title}>Kunder i graf i angitt periode</h2>
           </Grid>
 
           {customersInGraph.map((customer) => (

@@ -4,7 +4,6 @@ import SearchInput from '../../../components/SearchInput'
 import SortButton from '../cards/SortButton'
 import { Grid, styled } from '@mui/material'
 import CustomerCard, { CustomerData } from '../cards/CustomerCard'
-import { makeStyles } from '@mui/styles'
 import { SortCustomerCards } from '../util/sort-customer-cards'
 
 interface Props {
@@ -21,23 +20,11 @@ const ButtonWrapper = styled('div')({
   paddingRight: '260px;',
 })
 
-const useStyles = makeStyles({
-  root: {
-    borderRadius: '0px 0px 6px 6px',
-    overflow: 'hidden',
-    height: '100%',
-  },
-  title: {
-    height: 10,
-  },
-})
-
 const CustomerCardSort = ({
   data,
   handleCheckboxChange,
   selectedCustomerIds,
 }: Props) => {
-  const classes = useStyles()
   const [searchTerm, setSearchTerm] = useState('')
   const [activeSortButton, setActiveSortBotton] = useState('Alfabetisk')
   const [sortOrder, setSortOrder] = useState('ASC')
@@ -46,13 +33,16 @@ const CustomerCardSort = ({
   const buttons = ['Alfabetisk', 'Antall konsulenter', 'Antall timer']
 
   const changeSortType = (type: string) => {
-    if (type === activeSortButton && activeSortButton === 'Alfabetisk') {
-      sortOrder === 'ASC' ? setSortOrder('DESC') : setSortOrder('ASC')
-    } else {
-      setSortOrder('ASC')
-    }
+    const order =
+      type === activeSortButton && activeSortButton === 'Alfabetisk'
+        ? sortOrder === 'ASC'
+          ? 'DESC'
+          : 'ASC'
+        : 'ASC'
+
+    setSortOrder(order)
     setActiveSortBotton(type)
-    setSortedData(SortCustomerCards(data, type, sortOrder))
+    setSortedData(SortCustomerCards(data, type, order))
   }
 
   useEffect(() => {
@@ -63,36 +53,34 @@ const CustomerCardSort = ({
   }, [searchTerm, data])
 
   useEffect(() => {
-    setSortedData(SortCustomerCards(data, 'Alfabetisk', 'ASC'))
-  }, [data])
+    setSortedData(SortCustomerCards(data, activeSortButton, sortOrder))
+  }, [data, activeSortButton, sortOrder])
 
   return (
     <>
       <Grid item xs={12}>
-        <div className={classes.root}>
-          <h2>Øvrige kunder</h2>
-          <GridItemHeader title="Sortering: ">
-            <ButtonWrapper>
-              {buttons.map((title) => (
-                <SortButton
-                  key={title}
-                  title={title}
-                  order={title === 'Alfabetisk' && sortOrder}
-                  active={title === activeSortButton}
-                  onClick={changeSortType}
-                />
-              ))}
-            </ButtonWrapper>
+        <h2>Øvrige kunder</h2>
+        <GridItemHeader title="Sortering:">
+          <ButtonWrapper>
+            {buttons.map((title) => (
+              <SortButton
+                key={title}
+                title={title}
+                order={sortOrder}
+                active={title === activeSortButton}
+                onClick={changeSortType}
+              />
+            ))}
+          </ButtonWrapper>
 
-            <SearchInput
-              placeholder={'Søk i kunder'}
-              onSearch={(searchTerm) => {
-                setSearchTerm(searchTerm)
-              }}
-              onClear={() => setSearchTerm('')}
-            />
-          </GridItemHeader>
-        </div>
+          <SearchInput
+            placeholder={'Søk i kunder'}
+            onSearch={(searchTerm) => {
+              setSearchTerm(searchTerm)
+            }}
+            onClear={() => setSearchTerm('')}
+          />
+        </GridItemHeader>
       </Grid>
 
       {sortedData.map((customer) => (

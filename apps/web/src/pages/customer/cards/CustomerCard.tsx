@@ -79,7 +79,7 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
           <BoxInfo>
             Fakturerte timer siste periode:
             <BoxInfoNumbers>
-              {billedLastPeriod ? billedLastPeriod : '-'}
+              {billedLastPeriod ? billedLastPeriod : '0'}
             </BoxInfoNumbers>
           </BoxInfo>
           <BoxInfo>
