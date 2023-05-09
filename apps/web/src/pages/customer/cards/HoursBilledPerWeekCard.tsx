@@ -85,16 +85,16 @@ const HoursBilledPerWeekCard = ({
     monthlyData,
   } = usePerWeekFilter(data)
 
-  const customerData =
+  const customersUnfiltered =
     data === undefined ? [] : data?.data?.map((item) => item.id as string)
 
   const customers = customerHistory
-    ? customerData
+    ? customersUnfiltered
     : customersWithConsultants
-    ? customerData.filter((customer) =>
+    ? customersUnfiltered.filter((customer) =>
         customersWithConsultants.includes(customer)
       )
-    : customerData
+    : customersUnfiltered
 
   const selectedCustomers = customers.filter((customer) =>
     selectedCustomerIds?.includes(customer)
@@ -120,7 +120,7 @@ const HoursBilledPerWeekCard = ({
       : {
           ...data,
           data: chartData?.data?.filter((customer) => {
-            return selectedCustomerIds?.includes(customer.id as string)
+            return selectedCustomers?.includes(customer.id as string)
           }),
         }
 
