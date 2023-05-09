@@ -1,5 +1,14 @@
 import { makeStyles } from '@mui/styles'
 import * as React from 'react'
+import {
+  useCustomerCards,
+  useEmployeesByCustomer,
+} from '../../../api/data/customer/customerQueries'
+import { EmployeesForCustomer } from './EmployeesForCustomer'
+
+import { EmployeeNotFound } from '../../employee/components/EmployeeNotFound'
+import { HoursBilledPerCustomerCard, HoursBilledPerWeekCard } from '../cards'
+import { CustomerSpecificHoursBilledGraph } from './CustomerSpesificHoursBilledGraph'
 
 const useStyles = makeStyles({
   root: {
@@ -27,8 +36,8 @@ const useStyles = makeStyles({
     },
   },
   column: {
-    flexGrow: 1,
-    flexBasis: '50%',
+    flexGrow: 5,
+    flexBasis: '10%',
     maxWidth: '50%', // Chart does not honor flexBasis
     '&:not(:first-child)': {
       marginLeft: '50px',
@@ -43,13 +52,46 @@ interface Props {
 export function CustomerSiteContent({ customerId }: Props) {
   const classes = useStyles()
 
+  const { data, error } = useEmployeesByCustomer()
+  const { data: cardData } = useCustomerCards()
+  const isLoading = !data
+
+  const hoursData = cardData?.find((data) => data.customer == customerId)
+
+  const customerData = data?.filter((data) => data.customer_name == customerId)
+
+  if (customerData?.length == 0) {
+    return <EmployeeNotFound employeeId={customerId} />
+  }
+
   return (
     <article className={classes.root}>
       <div className={classes.header}>
         <h1> {customerId} </h1>
       </div>
       <div className={classes.body}>
-        <div className={classes.column}></div>
+        <div className={classes.column}>
+          <section>
+            <h2>Konsulenter på Prosjekt</h2>
+            <EmployeesForCustomer
+              employees={customerData ? customerData[0]?.employees : null}
+              isLoading={isLoading}
+              error={error}
+            />
+          </section>
+        </div>
+        <div className={classes.column}>
+          <h2>Timer brukt per periode</h2>
+          <CustomerSpecificHoursBilledGraph
+            customerId={customerId}
+          ></CustomerSpecificHoursBilledGraph>
+          <section>
+            <strong>Antall timer siste perioden:</strong>{' '}
+            {hoursData?.billedLastPeriod}
+            <br />
+            <strong>Antall timer totalt:</strong> {hoursData?.billedTotal}
+          </section>
+        </div>
       </div>
     </article>
   )

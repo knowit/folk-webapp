@@ -47,7 +47,7 @@ const CheckboxFlexWrapper = styled('div')(() => ({
 
 interface HoursBilledPerWeekCardProps {
   selectedCustomerIds: string[]
-  setSelectedCustomerIds: (ids: string[]) => void
+  setSelectedCustomerIds?: (ids: string[]) => void
   selectedPeriodStartDate: Date
   selectedPeriodEndDate: Date
   handleDateRangeChange: (
@@ -61,6 +61,7 @@ interface HoursBilledPerWeekCardProps {
   customersWithConsultants: string[]
   customerHistory: boolean
   handleCustomerHistory: () => void
+  customerSpecificGraph: boolean
 }
 
 const easingFunction = { ease: [0.33, 0, 1, 0.62], duration: 1 }
@@ -75,6 +76,7 @@ const HoursBilledPerWeekCard = ({
   customerHistory,
   handleCustomerHistory,
   handleCheckboxChange,
+  customerSpecificGraph,
 }: HoursBilledPerWeekCardProps) => {
   const { data, error } = useHoursBilledPerWeekCharts()
   const {
@@ -202,12 +204,16 @@ const HoursBilledPerWeekCard = ({
       ) : (
         <GridContainer>
           <ChartCard
-            title="Timer brukt per periode"
+            title={customerSpecificGraph ? '' : 'Timer brukt per periode'}
             description={POSSIBLE_OLD_DATA_WARNING}
             data={timeFilteredData}
             error={error}
             fullSize={true}
-            noDataText="Bruk listen til høyre for å velge hvilke kunder du vil vise i grafen"
+            noDataText={
+              customerSpecificGraph
+                ? 'Manglende timelistedata for gitt kunde'
+                : 'Bruk listen til høyre for å velge hvilke kunder du vil vise i grafen'
+            }
             sliceTooltip={HoursBilledPerWeekTooltip}
             extraHeaderContent={
               <FormControl component="fieldset">
@@ -246,69 +252,73 @@ const HoursBilledPerWeekCard = ({
               </FormControl>
             }
           />
-          <CustomerFilterWrapper>
-            <GridItemHeader title="Filtrer kunder">
-              <CustomerGraphFilter
-                checkBox1={selectAll}
-                checkBox2={showHistoricCustomer}
-              />
-            </GridItemHeader>
+          {setSelectedCustomerIds && (
+            <CustomerFilterWrapper>
+              <GridItemHeader title="Filtrer kunder">
+                <CustomerGraphFilter
+                  checkBox1={selectAll}
+                  checkBox2={showHistoricCustomer}
+                />
+              </GridItemHeader>
 
-            <ScrollableDiv>
-              <GridItemContent>
-                <CheckboxFlexWrapper>
-                  <LayoutGroup>
-                    {selectedCustomers.map((customer) => (
-                      <motion.div
-                        layoutId={customer}
-                        key={customer}
-                        initial={false}
-                        transition={easingFunction}
-                      >
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={selectedCustomerIds.includes(customer)}
-                              onChange={(event) =>
-                                handleCheckboxChange(event, customer)
-                              }
-                              name={customer}
-                            />
-                          }
-                          label={customer}
-                          labelPlacement="start"
+              <ScrollableDiv>
+                <GridItemContent>
+                  <CheckboxFlexWrapper>
+                    <LayoutGroup>
+                      {selectedCustomers.map((customer) => (
+                        <motion.div
+                          layoutId={customer}
                           key={customer}
-                        />
-                      </motion.div>
-                    ))}
-                    {unselectedCustomers.map((customer) => (
-                      <motion.div
-                        layoutId={customer}
-                        key={customer}
-                        initial={false}
-                        transition={easingFunction}
-                      >
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={selectedCustomerIds?.includes(customer)}
-                              onChange={(event) =>
-                                handleCheckboxChange(event, customer)
-                              }
-                              name={customer}
-                            />
-                          }
-                          label={customer}
-                          labelPlacement="start"
+                          initial={false}
+                          transition={easingFunction}
+                        >
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={selectedCustomerIds.includes(customer)}
+                                onChange={(event) =>
+                                  handleCheckboxChange(event, customer)
+                                }
+                                name={customer}
+                              />
+                            }
+                            label={customer}
+                            labelPlacement="start"
+                            key={customer}
+                          />
+                        </motion.div>
+                      ))}
+                      {unselectedCustomers.map((customer) => (
+                        <motion.div
+                          layoutId={customer}
                           key={customer}
-                        />
-                      </motion.div>
-                    ))}
-                  </LayoutGroup>
-                </CheckboxFlexWrapper>
-              </GridItemContent>
-            </ScrollableDiv>
-          </CustomerFilterWrapper>
+                          initial={false}
+                          transition={easingFunction}
+                        >
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={selectedCustomerIds?.includes(
+                                  customer
+                                )}
+                                onChange={(event) =>
+                                  handleCheckboxChange(event, customer)
+                                }
+                                name={customer}
+                              />
+                            }
+                            label={customer}
+                            labelPlacement="start"
+                            key={customer}
+                          />
+                        </motion.div>
+                      ))}
+                    </LayoutGroup>
+                  </CheckboxFlexWrapper>
+                </GridItemContent>
+              </ScrollableDiv>
+            </CustomerFilterWrapper>
+          )}
         </GridContainer>
       )}
     </GridItem>
