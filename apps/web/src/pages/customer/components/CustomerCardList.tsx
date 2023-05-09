@@ -14,7 +14,7 @@ const useStyles = makeStyles({
     height: '100%',
   },
   title: {
-    height: 20,
+    marginBottom: '0',
   },
 })
 
@@ -77,7 +77,7 @@ const CustomerCardList = ({
 
   return (
     <>
-      {customersInGraph && (
+      {customersInGraph.length > 0 && (
         <>
           <Grid item xs={12}>
             <div className={classes.root}>

@@ -19,6 +19,7 @@ import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { motion, LayoutGroup } from 'framer-motion'
 import { DateRangePickerButton } from '../../../components/dateranges/DateRangePickerButton'
+import CustomerGraphFilter from '../components/CustomerGraphFilter'
 
 const GridContainer = styled('div')({
   display: 'grid',
@@ -166,14 +167,30 @@ const HoursBilledPerWeekCard = ({
           })),
         }
 
-  function toggleDisplayHistory() {
-    handleCustomerHistory()
+  function toggleSelectAll() {
+    selectedCustomerIds?.length === customers.length
+      ? handleSelectNone()
+      : handleSelectAll()
   }
 
-  const checkBox = {
-    label: 'Vis historikk',
-    changeHandler: toggleDisplayHistory,
+  function toggleShowHistoricCustomer() {
+    handleCustomerHistory()
+
+    if (selectAll.checked === true) {
+      toggleSelectAll()
+    }
+  }
+
+  const showHistoricCustomer = {
+    label: 'Vis kunder uten aktive prosjekter',
+    changeHandler: toggleShowHistoricCustomer,
     checked: customerHistory,
+  }
+
+  const selectAll = {
+    label: 'Marker alle kunder',
+    changeHandler: toggleSelectAll,
+    checked: selectedCustomerIds?.length === customers.length,
   }
 
   return (
@@ -228,15 +245,10 @@ const HoursBilledPerWeekCard = ({
             }
           />
           <CustomerFilterWrapper>
-            <GridItemHeader title="Filtrer kunder" checkBox={checkBox}>
-              <Checkbox
-                checked={selectedCustomerIds?.length === customers.length}
-                onChange={
-                  selectedCustomerIds?.length === customers.length
-                    ? handleSelectNone
-                    : handleSelectAll
-                }
-                name="select-all"
+            <GridItemHeader title="Filtrer kunder">
+              <CustomerGraphFilter
+                checkBox1={selectAll}
+                checkBox2={showHistoricCustomer}
               />
             </GridItemHeader>
 
