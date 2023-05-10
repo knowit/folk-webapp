@@ -40,6 +40,12 @@ const useStyles = makeStyles(() =>
       color: '#FFFFFF',
       fontWeight: 'bold',
     },
+    cardGridHeaderRoot: {
+      height: '70px',
+    },
+    smallHeaderText: {
+      fontSize: '20px',
+    },
   })
 )
 
@@ -49,6 +55,7 @@ interface GridItemHeaderProps {
   children?: React.ReactNode | React.ReactNode[]
   big?: boolean
   green?: boolean
+  card?: boolean
 }
 
 export function GridItemHeader({
@@ -57,12 +64,18 @@ export function GridItemHeader({
   children = null,
   big,
   green = false,
+  card = false,
 }: GridItemHeaderProps) {
   const classes = useStyles()
-  const headerHeight = big ? classes.bigGridHeaderRoot : null
+  const headerHeight = big
+    ? classes.bigGridHeaderRoot
+    : card
+    ? classes.cardGridHeaderRoot
+    : null
   const fontSize = big ? classes.bigGridHeaderTitle : null
   const knowitGreen = green ? classes.knowitGreen : null
   const knowitGreenTitle = green ? classes.knowitGreenTitle : null
+  const textLength = title.length > 25 ? classes.smallHeaderText : null
 
   return (
     <div
@@ -70,9 +83,12 @@ export function GridItemHeader({
     >
       <Grid container direction="row" alignItems="center">
         <h2
-          className={[classes.gridHeaderTitle, fontSize, knowitGreenTitle].join(
-            ' '
-          )}
+          className={[
+            classes.gridHeaderTitle,
+            fontSize,
+            knowitGreenTitle,
+            card && textLength,
+          ].join(' ')}
         >
           {title}
         </h2>

@@ -1,7 +1,5 @@
 import { Box } from '@mui/material'
 import React from 'react'
-//import { Link } from 'react-router-dom'
-//import { OpenInNewWithStyles } from '../../../components/table/cells/ConsultantCell'
 import { GridItem } from '../../../components/gridItem/GridItem'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
@@ -56,9 +54,13 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
 }) => {
   const { customer, consultants, billedLastPeriod, billedTotal } = data
 
+  const billedTotalFixedNumber = Number.isInteger(billedTotal)
+    ? billedTotal
+    : billedTotal.toFixed(1)
+
   return (
     <GridItem>
-      <GridItemHeader title={customer}>
+      <GridItemHeader title={customer} card={true}>
         <CheckboxWrapper>
           <Text>Vis kunde i graf</Text>
           <Checkbox
@@ -66,9 +68,6 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
             onChange={(event) => handleCheckboxChange(event, customer)}
           />
         </CheckboxWrapper>
-        {/** <Link to={'#'}>
-          <OpenInNewWithStyles />
-        </Link> */}
       </GridItemHeader>
       <GridItemContent>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -84,7 +83,7 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
           </BoxInfo>
           <BoxInfo>
             Totalt fakturerte timer:
-            <BoxInfoNumbers>{billedTotal}</BoxInfoNumbers>
+            <BoxInfoNumbers>{billedTotalFixedNumber}</BoxInfoNumbers>
           </BoxInfo>
         </Box>
       </GridItemContent>
