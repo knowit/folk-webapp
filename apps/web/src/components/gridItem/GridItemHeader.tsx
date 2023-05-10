@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Grid } from '@mui/material'
-import { styled } from '@mui/material'
+import { styled, useTheme } from '@mui/material/styles'
 import { InfoTooltip } from '../InfoTooltip'
-import { createStyles, makeStyles } from '@mui/styles'
+import { Link } from 'react-router-dom'
 
 const ComponentRoot = styled('div', {
   shouldForwardProp: (prop) => prop !== 'big' && prop !== 'green',
@@ -49,13 +49,26 @@ export function GridItemHeader({
   green = false,
   card = false,
 }: GridItemHeaderProps) {
+  const LinkStyle = () => {
+    const theme = useTheme()
+    return {
+      textDecoration: 'none',
+      color: theme.palette.text.primary,
+      cursor: 'pointer',
+      '&:hover': {
+        color: theme.palette.text.secondary,
+      },
+    }
+  }
+
+  const OpenInNewLink = styled(Link)(() => LinkStyle)
   const textLength = title.length > 25
 
   return (
     <ComponentRoot big={big} green={green} card={card}>
       <Grid container direction="row" alignItems="center">
         <GridHeaderTitle big={big} green={green} textLength={textLength}>
-          {title}
+          {card ? <OpenInNewLink to={'#'}>{title}</OpenInNewLink> : title}
         </GridHeaderTitle>
         {description ? (
           <InfoTooltip description={description} placement="right" />
