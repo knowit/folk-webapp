@@ -1,13 +1,18 @@
-import { Button, Popover, styled } from '@mui/material'
+import { Button, Popover } from '@mui/material'
+import { styled } from '@mui/material/styles'
 import React, { FC } from 'react'
 import { DateRangePicker } from './DateRangePicker'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 
-const StyledButton = styled(Button)(() => ({
-  borderRadius: '50px',
+const StyledButton = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.info.dark,
+  borderRadius: 50,
   whiteSpace: 'nowrap',
   padding: '8px 12px',
   height: '2rem',
+  '&:hover': {
+    backgroundColor: theme.palette.info.dark,
+  },
 }))
 
 type DateRangePickerButtonProps = {

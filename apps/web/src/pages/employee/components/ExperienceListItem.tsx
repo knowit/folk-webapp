@@ -1,18 +1,14 @@
 import * as React from 'react'
-import { makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 
-const useStyles = makeStyles({
-  listItem: {
-    paddingBottom: '0.25em',
-  },
-})
+const ListItemStyled = styled('li')(() => ({
+  paddingBottom: '0.25em',
+}))
 
 interface Props {
   children: React.ReactNode
 }
 
 export function ExperienceListItem({ children }: Props) {
-  const classes = useStyles()
-
-  return <li className={classes.listItem}>{children}</li>
+  return <ListItemStyled>{children}</ListItemStyled>
 }

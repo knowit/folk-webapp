@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Tab, Tabs } from '@mui/material'
+import { styled } from '@mui/material/styles'
 import { pageTitle } from '../../utils/pagetitle'
 
 interface NavTabContent {
@@ -10,6 +11,22 @@ interface NavTabContent {
 interface NavTabProps {
   contentList: NavTabContent[]
 }
+
+const TabStyled = styled(Tab)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  // fontSize: 26,
+  backgroundColor: theme.palette.primary.light,
+  padding: 0,
+  alignItems: 'stretch',
+  borderRadius: 5,
+}))
+const TabsStyled = styled(Tabs)(({ theme }) => ({
+  marginBottom: 20,
+  '& .MuiTabs-indicator': { display: 'none' },
+  '& .Mui-selected': {
+    backgroundColor: theme.palette.background.paper,
+  },
+}))
 
 const localStorageKey = 'ClientPageCurrentTab'
 const getCurrentTabValue = () => {
@@ -29,7 +46,7 @@ export default function NavTab(props: NavTabProps) {
 
   const createTabs = () => {
     return props.contentList.map((content, index) => (
-      <Tab
+      <TabStyled
         value={index}
         key={`navigation-tab-${content.title}`}
         label={content.title}
@@ -39,9 +56,14 @@ export default function NavTab(props: NavTabProps) {
 
   return (
     <>
-      <Tabs value={value} onChange={handleChange} variant="fullWidth">
+      <TabsStyled
+        textColor="primary"
+        value={value}
+        onChange={handleChange}
+        variant="fullWidth"
+      >
         {createTabs()}
-      </Tabs>
+      </TabsStyled>
       {props.contentList[value].content}
     </>
   )

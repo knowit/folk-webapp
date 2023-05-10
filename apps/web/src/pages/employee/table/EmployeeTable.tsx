@@ -77,16 +77,14 @@ export function EmployeeTable() {
             {
               label: 'Kompetanse',
               column: EmployeeTableColumnMapping.COMPETENCE,
-              values: [],
-              threshold: 3,
+              filters: [],
               placeholder: 'Filtrer på kompetanse...',
               datafetch: useCategories,
             },
             {
               label: 'Motivasjon',
               column: EmployeeTableColumnMapping.MOTIVATION,
-              values: [],
-              threshold: 4,
+              filters: [],
               placeholder: 'Filtrer på motivasjon...',
               datafetch: useCategories,
             },

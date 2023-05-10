@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { formatMonthYearRange } from '../utils/format-month-year-range'
-import { makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import { MultiLineSkeleton } from '../../../components/skeletons/MultiLineSkeleton'
 import { FallbackMessage } from './FallbackMessage'
 import { ExperienceList } from './ExperienceList'
@@ -8,14 +8,12 @@ import { ExperienceListItem } from './ExperienceListItem'
 import { ProjectExperience } from '../../../api/data/employee/employeeApiTypes'
 import { compareExperienceDesc } from '../utils/compare-experience-desc'
 
-const useStyles = makeStyles({
-  timeRange: {
-    fontWeight: 'bold',
-  },
-  projectTitle: {
-    fontStyle: 'italic',
-  },
-})
+const ExperienceListTime = styled('time')(() => ({
+  fontWeight: 'bold',
+}))
+const ExperienceListProject = styled('span')(() => ({
+  fontStyle: 'italic',
+}))
 
 interface Props {
   projectExperience?: ProjectExperience[]
@@ -28,8 +26,6 @@ export function ProjectExperienceList({
   isLoading,
   error,
 }: Props) {
-  const classes = useStyles()
-
   if (error) {
     return (
       <FallbackMessage
@@ -54,13 +50,13 @@ export function ProjectExperienceList({
       {projectsSortedByDateDesc.map(
         ({ customer, project, year_to, month_to, year_from, month_from }) => (
           <ExperienceListItem key={project + year_from + month_from}>
-            <time className={classes.timeRange}>
+            <ExperienceListTime>
               {formatMonthYearRange(month_from, year_from, month_to, year_to)}
-            </time>
+            </ExperienceListTime>
             {': '}
             {customer}
             {' – '}
-            <span className={classes.projectTitle}>{project}</span>
+            <ExperienceListProject>{project}</ExperienceListProject>
           </ExperienceListItem>
         )
       )}

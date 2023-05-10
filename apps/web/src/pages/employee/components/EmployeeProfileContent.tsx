@@ -1,4 +1,4 @@
-import { makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import * as React from 'react'
 import { useEmployeeProfile } from '../../../api/data/employee/employeeQueries'
 import { CompetenceSummary } from './CompetenceSummary'
@@ -12,48 +12,44 @@ import { FallbackMessage } from './FallbackMessage'
 import { ProjectExperienceList } from './ProjectExperienceList'
 import { WorkExperienceList } from './WorkExperienceList'
 
-const useStyles = makeStyles({
-  root: {
-    display: 'flex',
-    lineHeight: '1.25em',
-    fontSize: '16px',
-    flexDirection: 'column',
-    padding: '10px',
-  },
-  header: {
-    display: 'flex',
-    flexFlow: 'row wrap',
-    alignItems: 'center',
-    '& > *:not(:first-child)': {
-      marginLeft: '25px',
-      flexGrow: 1,
-    },
-  },
-  body: {
-    display: 'flex',
-    padding: '10px',
-    flexDirection: 'row',
-    '& section': {
-      marginTop: '25px',
-    },
-  },
-  column: {
+const ComponentRoot = styled('article')(() => ({
+  display: 'flex',
+  lineHeight: '1.25em',
+  fontSize: 16,
+  flexDirection: 'column',
+  padding: 10,
+}))
+const ComponentHeader = styled('div')(() => ({
+  display: 'flex',
+  flexFlow: 'row wrap',
+  alignItems: 'center',
+  '& > *:not(:first-child)': {
+    marginLeft: 25,
     flexGrow: 1,
-    flexBasis: '50%',
-    maxWidth: '50%', // Chart does not honor flexBasis
-    '&:not(:first-child)': {
-      marginLeft: '50px',
-    },
   },
-})
+}))
+const ComponentBody = styled('div')(() => ({
+  display: 'flex',
+  padding: 10,
+  flexDirection: 'row',
+  '& section': {
+    marginTop: 25,
+  },
+}))
+const ComponentColumn = styled('div')(() => ({
+  flexGrow: 1,
+  flexBasis: '50%',
+  maxWidth: '50%', // Chart does not honor flexBasis
+  '&:not(:first-child)': {
+    marginLeft: 50,
+  },
+}))
 
 interface Props {
   employeeEmail: string
 }
 
 export function EmployeeProfileContent({ employeeEmail }: Props) {
-  const classes = useStyles()
-
   const { data: employee, error } = useEmployeeProfile(employeeEmail)
   const isLoading = !employee
 
@@ -66,13 +62,13 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
   }
 
   return (
-    <article className={classes.root}>
-      <div className={classes.header}>
+    <ComponentRoot>
+      <ComponentHeader>
         <EmployeeAvatar imageUrl={employee?.image} isLoading={isLoading} />
         <EmployeeByline employee={employee} isLoading={isLoading} />
-      </div>
-      <div className={classes.body}>
-        <div className={classes.column}>
+      </ComponentHeader>
+      <ComponentBody>
+        <ComponentColumn>
           <section>
             <CompetenceSummary employee={employee} isLoading={isLoading} />
           </section>
@@ -104,11 +100,11 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
             <h2>Last ned CV</h2>
             <CvDownloadList links={employee?.links} isLoading={isLoading} />
           </section>
-        </div>
-        <div className={classes.column}>
+        </ComponentColumn>
+        <ComponentColumn>
           <EmployeeCompetenceCard employeeEmail={employeeEmail} />
-        </div>
-      </div>
-    </article>
+        </ComponentColumn>
+      </ComponentBody>
+    </ComponentRoot>
   )
 }

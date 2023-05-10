@@ -8,7 +8,7 @@ import { ToggleBigChartButton } from './ToggleBigChartButton'
 import BigChart from './BigChart'
 import { SingularChart } from './ChartCard'
 import { SliceTooltip } from '@nivo/line'
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 
 interface SingularChartCardProps {
   title: string

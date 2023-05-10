@@ -1,28 +1,26 @@
 import * as React from 'react'
-import { makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import { InfoTooltip } from '../../../components/InfoTooltip'
 
-const useStyles = makeStyles({
-  item: {
-    paddingBottom: '0.8em',
+const CompetenceRow = styled('div')(() => ({
+  paddingBottom: '0.8em',
+}))
+const CompetenceRowLabel = styled('dt')(() => ({
+  display: 'inline-flex',
+  alignItems: 'center',
+  fontWeight: 'bold',
+  '&:after': {
+    content: "':'",
+    marginRight: '0.3em',
   },
-  itemLabel: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    fontWeight: 'bold',
-    '&:after': {
-      content: "':'",
-      marginRight: '0.3em',
-    },
-  },
-  itemValue: {
-    display: 'inline',
-    margin: 0,
-  },
-  fallbackMessage: {
-    fontStyle: 'italic',
-  },
-})
+}))
+const CompetenceRowValue = styled('dd')(() => ({
+  display: 'inline',
+  margin: 0,
+}))
+const CompetenceRowFallbackMessage = styled('span')(() => ({
+  fontStyle: 'italic',
+}))
 
 interface Props {
   label: string
@@ -31,23 +29,21 @@ interface Props {
 }
 
 export function CompetenceSummaryItem({ label, value, description }: Props) {
-  const classes = useStyles()
-
   return (
-    <div className={classes.item}>
-      <dt className={classes.itemLabel}>
+    <CompetenceRow>
+      <CompetenceRowLabel>
         {label}
         {description ? <InfoTooltip description={description} /> : null}
-      </dt>
-      <dd className={classes.itemValue}>
+      </CompetenceRowLabel>
+      <CompetenceRowValue>
         {value ? (
           value
         ) : (
-          <span className={classes.fallbackMessage}>
+          <CompetenceRowFallbackMessage>
             fant ingen informasjon
-          </span>
+          </CompetenceRowFallbackMessage>
         )}
-      </dd>
-    </div>
+      </CompetenceRowValue>
+    </CompetenceRow>
   )
 }

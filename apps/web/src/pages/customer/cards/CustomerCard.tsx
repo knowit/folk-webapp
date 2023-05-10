@@ -44,7 +44,6 @@ const Text = styled('div')({
   fontWeight: '400',
   fontSize: '14px',
   lineHeight: '40px',
-  width: '97px',
 })
 
 const CustomerCard: React.FC<CustomerCardProps> = ({
@@ -56,7 +55,7 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
 
   const billedTotalFixedNumber = Number.isInteger(billedTotal)
     ? billedTotal
-    : billedTotal.toFixed(1)
+    : billedTotal.toFixed(2)
 
   return (
     <GridItem>

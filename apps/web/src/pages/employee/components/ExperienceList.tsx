@@ -1,20 +1,16 @@
 import * as React from 'react'
-import { makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 
-const useStyles = makeStyles({
-  list: {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
-  },
-})
+const ComponentRoot = styled('ul')(() => ({
+  listStyle: 'none',
+  padding: 0,
+  margin: 0,
+}))
 
 interface Props {
   children: React.ReactNode
 }
 
 export function ExperienceList({ children }: Props) {
-  const classes = useStyles()
-
-  return <ul className={classes.list}>{children}</ul>
+  return <ComponentRoot>{children}</ComponentRoot>
 }

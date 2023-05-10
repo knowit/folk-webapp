@@ -1,30 +1,28 @@
-import { DefaultTheme, withStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import IconButton from '@mui/material/IconButton'
-import { Fullscreen, FullscreenExit } from '@mui/icons-material'
+import { FullscreenIcon, FullscreenExitIcon } from '../../assets/Icons'
 import React from 'react'
 
-const FullscreenIconButton = withStyles((theme: DefaultTheme) => ({
-  root: {
-    marginLeft: 'auto',
-    padding: 0,
-    borderRadius: 0,
-    cursor: 'pointer',
-    '& svg': {
-      color: theme.palette.primary.main,
-      '&:hover': {
-        color: theme.palette.text.primary,
-      },
+const FullscreenIconButton = styled(IconButton)(({ theme }) => ({
+  marginLeft: 'auto',
+  padding: 0,
+  borderRadius: 0,
+  cursor: 'pointer',
+  '& svg': {
+    color: theme.palette.primary.main,
+    '&:hover': {
+      color: theme.palette.text.primary,
     },
   },
-}))(IconButton)
-
-const CloseFullscreenIcon = withStyles({
-  root: { height: '42px', width: '42px' },
-})(FullscreenExit)
-
-const OpenFullscreenIcon = withStyles({
-  root: { height: '42px', width: '42px' },
-})(Fullscreen)
+}))
+const FullscreenIconStyled = styled(FullscreenIcon)(() => ({
+  height: 42,
+  width: 42,
+}))
+const FullscreenExitIconStyled = styled(FullscreenExitIcon)(() => ({
+  height: 42,
+  width: 42,
+}))
 
 interface ToggleBigChartButtonProps {
   big: boolean
@@ -45,7 +43,7 @@ export function ToggleBigChartButton({
       disableRipple
       size="small"
     >
-      {big ? <CloseFullscreenIcon /> : <OpenFullscreenIcon />}
+      {big ? <FullscreenIconStyled /> : <FullscreenExitIconStyled />}
     </FullscreenIconButton>
   )
 }
