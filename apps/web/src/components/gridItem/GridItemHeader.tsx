@@ -5,7 +5,8 @@ import { InfoTooltip } from '../InfoTooltip'
 import { Link } from 'react-router-dom'
 
 const ComponentRoot = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'big' && prop !== 'green',
+  shouldForwardProp: (prop) =>
+    prop !== 'big' && prop !== 'green' && prop !== 'card',
 })<{ big: boolean; green: boolean; card: boolean }>(
   ({ theme, big, green, card }) => ({
     color: green ? '#FFFFFF' : theme.palette.text.primary,
@@ -22,7 +23,8 @@ const ComponentRoot = styled('div', {
 )
 
 const GridHeaderTitle = styled('h2', {
-  shouldForwardProp: (prop) => prop !== 'big' && prop !== 'green',
+  shouldForwardProp: (prop) =>
+    prop !== 'big' && prop !== 'green' && prop !== 'longTitleText',
 })<{ big: boolean; green: boolean; longTitleText: boolean }>(
   ({ big, green, longTitleText }) => ({
     fontSize: big ? 30 : longTitleText ? 20 : 24,
