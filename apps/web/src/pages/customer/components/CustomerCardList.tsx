@@ -3,14 +3,12 @@ import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { useCustomerCards } from '../../../api/data/customer/customerQueries'
 import CustomerCard, { CustomerData } from '../cards/CustomerCard'
 import { GridItem } from 'web/src/components/gridItem/GridItem'
-import { makeStyles } from '@mui/styles'
 import { Grid } from '@mui/material'
 import CustomerCardSort from './CustomerCardSort'
+import { styled } from '@mui/material/styles'
 
-const useStyles = makeStyles({
-  title: {
-    marginBottom: '0',
-  },
+const Title = styled('h2')({
+  marginBottom: '2px',
 })
 
 interface Props {
@@ -29,8 +27,6 @@ const CustomerCardList = ({
   handleCheckboxChange,
 }: Props) => {
   const { data } = useCustomerCards()
-  const classes = useStyles()
-
   const [customersInGraph, setCustomersInGraph] = useState([])
   const [otherCustomers, setOtherCustomers] = useState([])
 
@@ -75,7 +71,7 @@ const CustomerCardList = ({
       {customersInGraph.length > 0 && (
         <>
           <Grid item xs={12}>
-            <h2 className={classes.title}>Kunder i graf i angitt periode</h2>
+            <Title>Kunder i graf i angitt periode</Title>
           </Grid>
 
           {customersInGraph.map((customer) => (

@@ -1,24 +1,14 @@
-import { withStyles } from '@mui/styles'
-import { CheckboxProps, Checkbox, FormControlLabel } from '@mui/material'
+import { Checkbox, FormControlLabel } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useState } from 'react'
 import FilterListIcon from '@mui/icons-material/FilterList'
-
-const BlackCheckBox = withStyles({
-  root: {
-    color: '#333333',
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
-  },
-})((props: CheckboxProps) => (
-  <Checkbox color="default" disableRipple {...props} />
-))
+import { IconBaseStyle } from '../../../assets/Icons'
 
 const IconWrapper = styled('div')({ cursor: 'pointer', paddingTop: '5px' })
 
+const CheckboxStyled = styled(Checkbox)(() => IconBaseStyle)
 interface Props {
   checkBox1: any
   checkBox2: any
@@ -51,14 +41,24 @@ const CustomerGraphFilter = ({ checkBox1, checkBox2 }: Props) => {
           <FormControlLabel
             label={checkBox1.label}
             checked={checkBox1.checked}
-            control={<BlackCheckBox onChange={checkBox1.changeHandler} />}
+            control={
+              <CheckboxStyled
+                disableRipple
+                onChange={checkBox1.changeHandler}
+              />
+            }
           />
         </MenuItem>
         <MenuItem>
           <FormControlLabel
             label={checkBox2.label}
             checked={checkBox2.checked}
-            control={<BlackCheckBox onChange={checkBox2.changeHandler} />}
+            control={
+              <CheckboxStyled
+                disableRipple
+                onChange={checkBox2.changeHandler}
+              />
+            }
           />
         </MenuItem>
       </Menu>

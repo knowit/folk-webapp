@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Grid } from '@mui/material'
-import { styled, useTheme } from '@mui/material/styles'
+import { styled } from '@mui/material/styles'
 import { InfoTooltip } from '../InfoTooltip'
 import { Link } from 'react-router-dom'
 
@@ -23,14 +23,23 @@ const ComponentRoot = styled('div', {
 
 const GridHeaderTitle = styled('h2', {
   shouldForwardProp: (prop) => prop !== 'big' && prop !== 'green',
-})<{ big: boolean; green: boolean; textLength }>(
-  ({ big, green, textLength }) => ({
-    fontSize: big ? 30 : textLength ? 20 : 24,
+})<{ big: boolean; green: boolean; longTitleText: boolean }>(
+  ({ big, green, longTitleText }) => ({
+    fontSize: big ? 30 : longTitleText ? 20 : 24,
     fontWeight: green ? 'bold' : big ? 'normal' : 700,
     paddingLeft: big && 11,
     color: green && '#FFFFFF',
   })
 )
+
+const OpenInNewLink = styled(Link)(({ theme }) => ({
+  textDecoration: 'none',
+  color: theme.palette.text.primary,
+  cursor: 'pointer',
+  '&:hover': {
+    color: theme.palette.text.secondary,
+  },
+}))
 
 interface GridItemHeaderProps {
   title: string
@@ -49,25 +58,12 @@ export function GridItemHeader({
   green = false,
   card = false,
 }: GridItemHeaderProps) {
-  const LinkStyle = () => {
-    const theme = useTheme()
-    return {
-      textDecoration: 'none',
-      color: theme.palette.text.primary,
-      cursor: 'pointer',
-      '&:hover': {
-        color: theme.palette.text.secondary,
-      },
-    }
-  }
-
-  const OpenInNewLink = styled(Link)(() => LinkStyle)
-  const textLength = title.length > 25
+  const longTitleText = title.length > 25
 
   return (
     <ComponentRoot big={big} green={green} card={card}>
       <Grid container direction="row" alignItems="center">
-        <GridHeaderTitle big={big} green={green} textLength={textLength}>
+        <GridHeaderTitle big={big} green={green} longTitleText={longTitleText}>
           {card ? <OpenInNewLink to={'#'}>{title}</OpenInNewLink> : title}
         </GridHeaderTitle>
         {description ? (

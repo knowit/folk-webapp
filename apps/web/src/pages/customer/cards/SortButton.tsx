@@ -1,5 +1,18 @@
-import { ArrowDownward, ArrowUpward } from '@mui/icons-material'
-import { createStyles, makeStyles } from '@mui/styles'
+import { ArrowDownIcon, ArrowUpIcon } from '../../../assets/Icons'
+import { styled } from '@mui/material/styles'
+
+const Button = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'active',
+})<{ active: boolean }>(({ active }) => ({
+  marginRight: '10px',
+  marginLeft: '10px',
+  whiteSpace: 'nowrap',
+  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
+  display: 'flex',
+  cursor: 'pointer',
+  padding: '8px 12px',
+  background: active ? '#FFFFFF' : '#F1F0ED',
+}))
 
 interface Props {
   title: string
@@ -8,49 +21,18 @@ interface Props {
   onClick: (type: string) => void
 }
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    button: {
-      marginRight: '10px',
-      marginLeft: '10px',
-      whiteSpace: 'nowrap',
-      boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
-      display: 'flex',
-      cursor: 'pointer',
-      padding: '8px 12px',
-    },
-    active: {
-      background: '#FFFFFF',
-    },
-    inactive: {
-      background: '#F1F0ED',
-    },
-  })
-)
-
 const SortButton = ({ title, order, active, onClick }: Props) => {
-  const classes = useStyles()
-
-  const sortClick = () => {
-    if (order === 'DESC') {
-      return <ArrowUpward />
-    } else {
-      return <ArrowDownward />
-    }
-  }
+  const sortIcon = order === 'DESC' ? <ArrowDownIcon /> : <ArrowUpIcon />
 
   return (
-    <div
+    <Button
       onClick={() => {
         onClick(title)
       }}
-      className={[
-        classes.button,
-        active ? classes.active : classes.inactive,
-      ].join(' ')}
+      active={active}
     >
-      {title} {title === 'Alfabetisk' && sortClick()}
-    </div>
+      {title} {title === 'Alfabetisk' && sortIcon}
+    </Button>
   )
 }
 
