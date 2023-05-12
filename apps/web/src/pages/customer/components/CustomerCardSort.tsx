@@ -31,6 +31,7 @@ const CustomerCardSort = ({
   const [sortedData, setSortedData] = useState<CustomerData[]>([])
 
   const buttons = ['Alfabetisk', 'Antall konsulenter', 'Antall timer']
+  const showHeader = selectedCustomerIds.length > 0
 
   const changeSortType = (type: string) => {
     const order =
@@ -59,7 +60,7 @@ const CustomerCardSort = ({
   return (
     <>
       <Grid item xs={12}>
-        <h2>Øvrige kunder</h2>
+        {showHeader && <h2>Øvrige kunder</h2>}
         <GridItemHeader title="Sortering:">
           <ButtonWrapper>
             {buttons.map((title) => (
