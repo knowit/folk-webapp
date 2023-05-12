@@ -20,6 +20,9 @@ import {
 } from '../../../components/filter/FilterUtil'
 import { GridItem } from '../../../components/gridItem/GridItem'
 import { FallbackMessage } from '../components/FallbackMessage'
+import { EmployeeTableResponse } from 'server/routers/employees/employeesTypes'
+import { TableRow } from 'server/routers/datatypes/typeData'
+import { EmployeeTableRowData } from 'server/routers/employees/employeesTypes'
 
 interface Props {
   customerSpecific?: boolean
@@ -33,10 +36,9 @@ export function EmployeeTable({ customerSpecific, customerId }: Props) {
 
   // eslint-disable-next-line prefer-const
   let { data: employeeData, error } = useEmployeeTable()
-  employeeData
   if (employeeData && customerSpecific) {
     employeeData = employeeData.filter(
-      (row) => row.rowData[3].customer == customerId
+      (row) => row['rowData'][3].customer == customerId
     )
   }
 

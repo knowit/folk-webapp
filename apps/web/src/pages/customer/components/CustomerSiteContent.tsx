@@ -1,15 +1,10 @@
 import { makeStyles } from '@mui/styles'
 import * as React from 'react'
-import {
-  useCustomerCards,
-  useEmployeesByCustomer,
-} from '../../../api/data/customer/customerQueries'
-import { EmployeesForCustomer } from './EmployeesForCustomer'
-import { EmployeeNotFound } from '../../employee/components/EmployeeNotFound'
+import { useCustomerCards } from '../../../api/data/customer/customerQueries'
 import { CustomerSpecificHoursBilledGraph } from './CustomerSpesificHoursBilledGraph'
 import CustomerCard from '../cards/CustomerCard'
-import { ConsultantInfo } from '../../../api/data/employee/employeeApiTypes'
 import { EmployeeTable } from '../../employee/table/EmployeeTable'
+import { CustomerNotFound } from './CustomerNotFound'
 
 const useStyles = makeStyles({
   root: {
@@ -54,24 +49,12 @@ interface Props {
 export function CustomerSiteContent({ customerId }: Props) {
   const classes = useStyles()
 
-  const { data, error } = useEmployeesByCustomer()
   const { data: cardData } = useCustomerCards()
-  const isLoading = !data
 
-  const hoursData = cardData?.find((data) => data.customer == customerId)
+  const customerData = cardData?.find((data) => data.customer == customerId)
 
-  const customerData = data?.filter((data) => data.customer_name == customerId)
-
-  if (customerData?.length == 0) {
-    return <EmployeeNotFound employeeId={customerId} />
-  }
-
-  const consultantInfo: ConsultantInfo[] = []
-
-  if (customerData) {
-    customerData[0].employees.forEach((employee) => {
-      consultantInfo.push(employee.rowData[0])
-    })
+  if (!customerData) {
+    return <CustomerNotFound customerId={customerId} />
   }
 
   return (
@@ -86,22 +69,19 @@ export function CustomerSiteContent({ customerId }: Props) {
         </div>
         <div className={classes.customerCard}>
           <h2>Fakturerte timer</h2>
-          {hoursData ? <CustomerCard key={customerId} data={hoursData} /> : ''}
+          {customerData ? (
+            <CustomerCard key={customerId} data={customerData} />
+          ) : (
+            ''
+          )}
         </div>
       </div>
       <div>
-        {
-          customerData ? (
-            <EmployeeTable customerSpecific={true} customerId={customerId} />
-          ) : (
-            ''
-          )
-          // <EmployeesForCustomer
-          //   employees={customerData ? customerData[0]?.employees : null}
-          //   isLoading={isLoading}
-          //   error={error}
-          // />
-        }
+        {customerData ? (
+          <EmployeeTable customerSpecific={true} customerId={customerId} />
+        ) : (
+          ''
+        )}
       </div>
     </article>
   )
