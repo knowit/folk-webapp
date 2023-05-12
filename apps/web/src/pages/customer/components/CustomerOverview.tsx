@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import CustomerCardList from './CustomerCardList'
+import CustomerCardListOverview from './CustomerCardListOverview'
 import { Grid } from '@mui/material'
 import { HoursBilledPerWeekCard } from '../cards'
+import { useCustomerCards } from '../../../api/data/customer/customerQueries'
 
 export const CustomerOverview = () => {
+  const { data } = useCustomerCards()
+  const customers = data?.map((item) => item.customer)
+  const [showHistoricCustomer, setShowHistoricCustomer] = useState(false)
   const [selectedCustomerIds, setSelectedCustomerIds] = useState(null)
   const [selectedPeriodStartDate, setSelectedPeriodStartDate] = useState(null)
   const [selectedPeriodEndDate, setSelectedPeriodEndDate] = useState(null)
@@ -69,11 +73,29 @@ export const CustomerOverview = () => {
     }
   }, [selectedPeriodEndDate])
 
+  const handleCustomerHistory = () => {
+    setShowHistoricCustomer(!showHistoricCustomer)
+  }
+
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    customerId: string
+  ) => {
+    if (event.target.checked) {
+      setSelectedCustomerIds([...selectedCustomerIds, customerId])
+    } else {
+      setSelectedCustomerIds(
+        selectedCustomerIds.filter((id) => id !== customerId)
+      )
+    }
+  }
+
   return (
     <Grid container spacing={2}>
       <HoursBilledPerWeekCard
         selectedCustomerIds={selectedCustomerIds}
         setSelectedCustomerIds={setSelectedCustomerIds}
+        handleCheckboxChange={handleCheckboxChange}
         selectedPeriodStartDate={selectedPeriodStartDate}
         selectedPeriodEndDate={selectedPeriodEndDate}
         handleDateRangeChange={function (
@@ -83,8 +105,16 @@ export const CustomerOverview = () => {
           setSelectedPeriodStartDate(startDate)
           setSelectedPeriodEndDate(endDate)
         }}
+        customersWithConsultants={customers}
+        customerHistory={showHistoricCustomer}
+        handleCustomerHistory={handleCustomerHistory}
       />
-      <CustomerCardList />
+      <CustomerCardListOverview
+        selectedCustomerIds={selectedCustomerIds}
+        showHistoricalData={showHistoricCustomer}
+        customersWithConsultants={customers}
+        handleCheckboxChange={handleCheckboxChange}
+      />
     </Grid>
   )
 }

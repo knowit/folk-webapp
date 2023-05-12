@@ -1,11 +1,10 @@
 import { Box } from '@mui/material'
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { GridItem } from '../../../components/gridItem/GridItem'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
-import { OpenIneNewIcon } from '../../../assets/Icons'
 import { styled } from '@mui/material/styles'
+import { Checkbox } from '@mui/material'
 
 export type CustomerData = {
   customer: string
@@ -16,6 +15,11 @@ export type CustomerData = {
 
 interface CustomerCardProps {
   data: CustomerData
+  selectedCustomerIds: string[]
+  handleCheckboxChange: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    customerId: string
+  ) => void
 }
 const BoxInfo = styled(Box)({
   width: '25%',
@@ -30,14 +34,39 @@ const BoxInfoNumbers = styled(Box)({
   fontWeight: 700,
 })
 
-const CustomerCard: React.FC<CustomerCardProps> = ({ data }) => {
+const CheckboxWrapper = styled('div')({
+  display: 'flex',
+  width: '300px',
+  justifyContent: 'flex-end',
+})
+
+const Text = styled('div')({
+  fontWeight: '400',
+  fontSize: '14px',
+  lineHeight: '40px',
+})
+
+const CustomerCard: React.FC<CustomerCardProps> = ({
+  data,
+  handleCheckboxChange,
+  selectedCustomerIds,
+}) => {
   const { customer, consultants, billedLastPeriod, billedTotal } = data
+
+  const billedTotalFixedNumber = Number.isInteger(billedTotal)
+    ? billedTotal
+    : billedTotal.toFixed(2)
+
   return (
     <GridItem>
-      <GridItemHeader title={customer}>
-        <Link to={'#'}>
-          <OpenIneNewIcon />
-        </Link>
+      <GridItemHeader title={customer} card={true}>
+        <CheckboxWrapper>
+          <Text>Vis kunde i graf</Text>
+          <Checkbox
+            checked={selectedCustomerIds.includes(customer)}
+            onChange={(event) => handleCheckboxChange(event, customer)}
+          />
+        </CheckboxWrapper>
       </GridItemHeader>
       <GridItemContent>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -47,11 +76,13 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ data }) => {
           </BoxInfo>
           <BoxInfo>
             Fakturerte timer siste periode:
-            <BoxInfoNumbers>{billedLastPeriod}</BoxInfoNumbers>
+            <BoxInfoNumbers>
+              {billedLastPeriod ? billedLastPeriod : '0'}
+            </BoxInfoNumbers>
           </BoxInfo>
           <BoxInfo>
             Totalt fakturerte timer:
-            <BoxInfoNumbers>{billedTotal}</BoxInfoNumbers>
+            <BoxInfoNumbers>{billedTotalFixedNumber}</BoxInfoNumbers>
           </BoxInfo>
         </Box>
       </GridItemContent>

@@ -17,7 +17,7 @@ const InputBaseStyled = styled(InputBase)(({ theme }) => ({
   width: 260,
   fontSize: 16,
   lineHeight: 18,
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: theme.palette.background.default,
   border: 'none',
   padding: '0px 15px 0px 15px',
   '&:hover, &:focus, &:active': {

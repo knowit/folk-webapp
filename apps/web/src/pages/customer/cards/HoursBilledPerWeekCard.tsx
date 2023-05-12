@@ -19,6 +19,7 @@ import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { motion, LayoutGroup } from 'framer-motion'
 import { DateRangePickerButton } from '../../../components/dateranges/DateRangePickerButton'
+import CustomerGraphFilter from '../components/CustomerGraphFilter'
 
 const GridContainer = styled('div')({
   display: 'grid',
@@ -53,6 +54,13 @@ interface HoursBilledPerWeekCardProps {
     selectedPeriodStartDate?: Date,
     selectedPeriodEndDate?: Date
   ) => void
+  handleCheckboxChange: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    customerId: string
+  ) => void
+  customersWithConsultants: string[]
+  customerHistory: boolean
+  handleCustomerHistory: () => void
 }
 
 const easingFunction = { ease: [0.33, 0, 1, 0.62], duration: 1 }
@@ -63,6 +71,10 @@ const HoursBilledPerWeekCard = ({
   selectedPeriodStartDate: startDate,
   selectedPeriodEndDate: endDate,
   handleDateRangeChange,
+  customersWithConsultants,
+  customerHistory,
+  handleCustomerHistory,
+  handleCheckboxChange,
 }: HoursBilledPerWeekCardProps) => {
   const { data, error } = useHoursBilledPerWeekCharts()
   const {
@@ -73,8 +85,16 @@ const HoursBilledPerWeekCard = ({
     monthlyData,
   } = usePerWeekFilter(data)
 
-  const customers =
+  const customersUnfiltered =
     data === undefined ? [] : data?.data?.map((item) => item.id as string)
+
+  const customers = customerHistory
+    ? customersUnfiltered
+    : customersWithConsultants
+    ? customersUnfiltered.filter((customer) =>
+        customersWithConsultants.includes(customer)
+      )
+    : customersUnfiltered
 
   const selectedCustomers = customers.filter((customer) =>
     selectedCustomerIds?.includes(customer)
@@ -89,16 +109,6 @@ const HoursBilledPerWeekCard = ({
     setSelectedCustomerIds([])
   }
 
-  const handleCheckboxChange = (event, customerId) => {
-    if (event.target.checked) {
-      setSelectedCustomerIds([...selectedCustomerIds, customerId])
-    } else {
-      setSelectedCustomerIds(
-        selectedCustomerIds.filter((id) => id !== customerId)
-      )
-    }
-  }
-
   const setDateRange = (startDate, endDate) => {
     handleDateRangeChange(startDate, endDate)
   }
@@ -110,7 +120,7 @@ const HoursBilledPerWeekCard = ({
       : {
           ...data,
           data: chartData?.data?.filter((customer) => {
-            return selectedCustomerIds?.includes(customer.id as string)
+            return selectedCustomers?.includes(customer.id as string)
           }),
         }
 
@@ -158,6 +168,32 @@ const HoursBilledPerWeekCard = ({
             data: customer.data.slice(startIdx, endIdx),
           })),
         }
+
+  function toggleSelectAll() {
+    selectedCustomerIds?.length === customers.length
+      ? handleSelectNone()
+      : handleSelectAll()
+  }
+
+  function toggleShowHistoricCustomer() {
+    handleCustomerHistory()
+
+    if (selectAll.checked === true) {
+      toggleSelectAll()
+    }
+  }
+
+  const showHistoricCustomer = {
+    label: 'Inkluder kunder uten aktive prosjekter i listen',
+    changeHandler: toggleShowHistoricCustomer,
+    checked: customerHistory,
+  }
+
+  const selectAll = {
+    label: 'Marker alle kunder',
+    changeHandler: toggleSelectAll,
+    checked: selectedCustomerIds?.length === customers.length,
+  }
 
   return (
     <GridItem fullSize>
@@ -212,14 +248,9 @@ const HoursBilledPerWeekCard = ({
           />
           <CustomerFilterWrapper>
             <GridItemHeader title="Filtrer kunder">
-              <Checkbox
-                checked={selectedCustomerIds?.length === customers.length}
-                onChange={
-                  selectedCustomerIds?.length === customers.length
-                    ? handleSelectNone
-                    : handleSelectAll
-                }
-                name="select-all"
+              <CustomerGraphFilter
+                checkBox1={selectAll}
+                checkBox2={showHistoricCustomer}
               />
             </GridItemHeader>
 
