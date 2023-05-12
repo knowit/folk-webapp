@@ -184,7 +184,7 @@ const HoursBilledPerWeekCard = ({
   }
 
   const showHistoricCustomer = {
-    label: 'Vis kunder uten aktive prosjekter',
+    label: 'Inkluder kunder uten aktive prosjekter i listen',
     changeHandler: toggleShowHistoricCustomer,
     checked: customerHistory,
   }

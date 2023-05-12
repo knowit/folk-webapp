@@ -31,7 +31,8 @@ const CustomerCardSort = ({
   const [sortedData, setSortedData] = useState<CustomerData[]>([])
 
   const buttons = ['Alfabetisk', 'Antall konsulenter', 'Antall timer']
-  const showHeader = selectedCustomerIds.length > 0
+  const showHeader =
+    selectedCustomerIds !== null && selectedCustomerIds.length > 0
 
   const changeSortType = (type: string) => {
     const order =

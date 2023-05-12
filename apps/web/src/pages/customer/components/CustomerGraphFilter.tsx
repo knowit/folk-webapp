@@ -3,8 +3,7 @@ import { styled } from '@mui/material/styles'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useState } from 'react'
-import FilterListIcon from '@mui/icons-material/FilterList'
-import { IconBaseStyle } from '../../../assets/Icons'
+import { FilterListIcon, IconBaseStyle } from '../../../assets/Icons'
 
 const IconWrapper = styled('div')({ cursor: 'pointer', paddingTop: '5px' })
 
@@ -13,6 +12,12 @@ interface Props {
   checkBox1: any
   checkBox2: any
 }
+
+const MenuStyled = styled(Menu)(({ theme }) => ({
+  '& .MuiMenu-paper': {
+    backgroundColor: theme.palette.background.default,
+  },
+}))
 
 const CustomerGraphFilter = ({ checkBox1, checkBox2 }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -31,7 +36,7 @@ const CustomerGraphFilter = ({ checkBox1, checkBox2 }: Props) => {
       <IconWrapper onClick={(e: any) => handleClick(e)}>
         <FilterListIcon />
       </IconWrapper>
-      <Menu
+      <MenuStyled
         id="customer-graph-filter"
         anchorEl={anchorEl}
         open={open}
@@ -61,7 +66,7 @@ const CustomerGraphFilter = ({ checkBox1, checkBox2 }: Props) => {
             }
           />
         </MenuItem>
-      </Menu>
+      </MenuStyled>
     </>
   )
 }
