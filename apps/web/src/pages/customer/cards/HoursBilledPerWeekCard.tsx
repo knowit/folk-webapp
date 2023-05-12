@@ -201,6 +201,59 @@ const HoursBilledPerWeekCard = ({
     <GridItem fullSize>
       {filteredData === undefined || selectedCustomerIds === null ? (
         <BaseSkeleton variant="rectangular" height={420}></BaseSkeleton>
+      ) : customerSpecificGraph ? (
+        <div>
+          {' '}
+          <ChartCard
+            title={customerSpecificGraph ? '' : 'Timer brukt per periode'}
+            description={POSSIBLE_OLD_DATA_WARNING}
+            data={timeFilteredData}
+            error={error}
+            fullSize={true}
+            noDataText={
+              customerSpecificGraph
+                ? 'Manglende timelistedata for gitt kunde'
+                : 'Bruk listen til høyre for å velge hvilke kunder du vil vise i grafen'
+            }
+            sliceTooltip={HoursBilledPerWeekTooltip}
+            extraHeaderContent={
+              <FormControl component="fieldset">
+                <FormLabel>Grupper etter</FormLabel>
+                <Box display="flex" flexWrap="nowrap" width="100%">
+                  <RadioGroup
+                    style={{ flexWrap: 'nowrap' }}
+                    row
+                    value={selectedFilter}
+                    onChange={(event) => {
+                      const option = filterOptions.find(
+                        (option) => option === event.target.value
+                      )
+                      setSelectedFilter(option)
+                    }}
+                  >
+                    {filterOptions.map((option) => (
+                      <FormControlLabel
+                        key={option}
+                        value={option}
+                        control={<Radio color="primary" />}
+                        label={option}
+                        style={{ flexGrow: 1 }}
+                      />
+                    ))}
+                  </RadioGroup>
+
+                  <DateRangePickerButton
+                    startDate={startDate}
+                    endDate={endDate}
+                    onComplete={(startDate, endDate) =>
+                      setDateRange(startDate, endDate)
+                    }
+                  ></DateRangePickerButton>
+                </Box>
+              </FormControl>
+            }
+          />
+        </div>
       ) : (
         <GridContainer>
           <ChartCard
@@ -252,7 +305,7 @@ const HoursBilledPerWeekCard = ({
               </FormControl>
             }
           />
-          {setSelectedCustomerIds && (
+          {customerSpecificGraph ? null : (
             <CustomerFilterWrapper>
               <GridItemHeader title="Filtrer kunder">
                 <CustomerGraphFilter

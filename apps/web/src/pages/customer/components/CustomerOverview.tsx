@@ -108,13 +108,13 @@ export const CustomerOverview = () => {
         customersWithConsultants={customers}
         customerHistory={showHistoricCustomer}
         handleCustomerHistory={handleCustomerHistory}
+        customerSpecificGraph={false}
       />
       <CustomerCardListOverview
         selectedCustomerIds={selectedCustomerIds}
         showHistoricalData={showHistoricCustomer}
         customersWithConsultants={customers}
         handleCheckboxChange={handleCheckboxChange}
-        customerSpecificGraph={false}
       />
     </Grid>
   )

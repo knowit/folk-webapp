@@ -5,10 +5,11 @@ import {
   useEmployeesByCustomer,
 } from '../../../api/data/customer/customerQueries'
 import { EmployeesForCustomer } from './EmployeesForCustomer'
-
 import { EmployeeNotFound } from '../../employee/components/EmployeeNotFound'
-import { HoursBilledPerCustomerCard, HoursBilledPerWeekCard } from '../cards'
 import { CustomerSpecificHoursBilledGraph } from './CustomerSpesificHoursBilledGraph'
+import CustomerCard from '../cards/CustomerCard'
+import { ConsultantInfo } from '../../../api/data/employee/employeeApiTypes'
+import { EmployeeTable } from '../../employee/table/EmployeeTable'
 
 const useStyles = makeStyles({
   root: {
@@ -35,13 +36,14 @@ const useStyles = makeStyles({
       marginTop: '25px',
     },
   },
-  column: {
-    flexGrow: 5,
-    flexBasis: '10%',
-    maxWidth: '50%', // Chart does not honor flexBasis
-    '&:not(:first-child)': {
-      marginLeft: '50px',
-    },
+
+  graph: {
+    width: '70%',
+    marginRight: '5%',
+  },
+
+  customerCard: {
+    width: '25%',
   },
 })
 
@@ -64,34 +66,42 @@ export function CustomerSiteContent({ customerId }: Props) {
     return <EmployeeNotFound employeeId={customerId} />
   }
 
+  const consultantInfo: ConsultantInfo[] = []
+
+  if (customerData) {
+    customerData[0].employees.forEach((employee) => {
+      consultantInfo.push(employee.rowData[0])
+    })
+  }
+
   return (
     <article className={classes.root}>
       <div className={classes.header}>
         <h1> {customerId} </h1>
       </div>
       <div className={classes.body}>
-        <div className={classes.column}>
-          <section>
-            <h2>Konsulenter på Prosjekt</h2>
-            <EmployeesForCustomer
-              employees={customerData ? customerData[0]?.employees : null}
-              isLoading={isLoading}
-              error={error}
-            />
-          </section>
-        </div>
-        <div className={classes.column}>
+        <div className={classes.graph}>
           <h2>Timer brukt per periode</h2>
-          <CustomerSpecificHoursBilledGraph
-            customerId={customerId}
-          ></CustomerSpecificHoursBilledGraph>
-          <section>
-            <strong>Antall timer siste perioden:</strong>{' '}
-            {hoursData?.billedLastPeriod}
-            <br />
-            <strong>Antall timer totalt:</strong> {hoursData?.billedTotal}
-          </section>
+          <CustomerSpecificHoursBilledGraph customerId={customerId} />
         </div>
+        <div className={classes.customerCard}>
+          <h2>Fakturerte timer</h2>
+          {hoursData ? <CustomerCard key={customerId} data={hoursData} /> : ''}
+        </div>
+      </div>
+      <div>
+        {
+          customerData ? (
+            <EmployeeTable customerSpecific={true} customerId={customerId} />
+          ) : (
+            ''
+          )
+          // <EmployeesForCustomer
+          //   employees={customerData ? customerData[0]?.employees : null}
+          //   isLoading={isLoading}
+          //   error={error}
+          // />
+        }
       </div>
     </article>
   )
