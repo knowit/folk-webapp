@@ -72,6 +72,8 @@ export const CustomerSpecificHoursBilledGraph = ({ customerId }) => {
           setSelectedPeriodEndDate(endDate)
         }}
         customerSpecificGraph={true}
+        customersWithConsultants={new Array(customerId)}
+        customerHistory={true}
       />
     </Grid>
   )

@@ -70,7 +70,12 @@ export function CustomerSiteContent({ customerId }: Props) {
         <div className={classes.customerCard}>
           <h2>Fakturerte timer</h2>
           {customerData ? (
-            <CustomerCard key={customerId} data={customerData} />
+            <CustomerCard
+              key={customerId}
+              data={customerData}
+              selectedCustomerIds={new Array(customerId)}
+              customerSpecificCard={true}
+            />
           ) : (
             ''
           )}

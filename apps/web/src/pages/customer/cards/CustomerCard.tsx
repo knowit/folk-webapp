@@ -18,10 +18,11 @@ export type CustomerData = {
 interface CustomerCardProps {
   data: CustomerData
   selectedCustomerIds: string[]
-  handleCheckboxChange: (
+  handleCheckboxChange?: (
     event: React.ChangeEvent<HTMLInputElement>,
     customerId: string
   ) => void
+  customerSpecificCard?: boolean
 }
 const BoxInfo = styled(Box)({
   width: '25%',
@@ -52,6 +53,7 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
   data,
   handleCheckboxChange,
   selectedCustomerIds,
+  customerSpecificCard,
 }) => {
   const { customer, consultants, billedLastPeriod, billedTotal } = data
 
@@ -62,16 +64,24 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
   return (
     <GridItem>
       <GridItemHeader title={customer} card={true}>
-        <Link to={'/kunder/' + customer}>
-          <OpenIneNewIcon />
-        </Link>
-        <CheckboxWrapper>
-          <Text>Vis kunde i graf</Text>
-          <Checkbox
-            checked={selectedCustomerIds.includes(customer)}
-            onChange={(event) => handleCheckboxChange(event, customer)}
-          />
-        </CheckboxWrapper>
+        {customerSpecificCard ? (
+          ''
+        ) : (
+          <Link to={'/kunder/' + customer}>
+            <OpenIneNewIcon />
+          </Link>
+        )}
+        {customerSpecificCard ? (
+          ''
+        ) : (
+          <CheckboxWrapper>
+            <Text>Vis kunde i graf</Text>
+            <Checkbox
+              checked={selectedCustomerIds.includes(customer)}
+              onChange={(event) => handleCheckboxChange(event, customer)}
+            />
+          </CheckboxWrapper>
+        )}
       </GridItemHeader>
       <GridItemContent>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

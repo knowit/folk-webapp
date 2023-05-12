@@ -54,13 +54,13 @@ interface HoursBilledPerWeekCardProps {
     selectedPeriodStartDate?: Date,
     selectedPeriodEndDate?: Date
   ) => void
-  handleCheckboxChange: (
+  handleCheckboxChange?: (
     event: React.ChangeEvent<HTMLInputElement>,
     customerId: string
   ) => void
   customersWithConsultants: string[]
   customerHistory: boolean
-  handleCustomerHistory: () => void
+  handleCustomerHistory?: () => void
   customerSpecificGraph: boolean
 }
 
