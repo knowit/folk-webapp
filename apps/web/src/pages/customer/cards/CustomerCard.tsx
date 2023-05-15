@@ -23,7 +23,7 @@ interface CustomerCardProps {
     customerId: string
   ) => void
   customerSpecificCard?: boolean
-  horizontal?: boolean
+  horizontalCard?: boolean
 }
 const BoxInfo = styled(Box)({
   width: '25%',
@@ -55,6 +55,7 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
   handleCheckboxChange,
   selectedCustomerIds,
   customerSpecificCard,
+  horizontalCard,
 }) => {
   const { customer, consultants, billedLastPeriod, billedTotal } = data
 
@@ -85,22 +86,52 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
         )}
       </GridItemHeader>
       <GridItemContent>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <BoxInfo>
-            Antall konsulenter:
-            <BoxInfoNumbers>{consultants}</BoxInfoNumbers>
-          </BoxInfo>
-          <BoxInfo>
-            Fakturerte timer siste periode:
-            <BoxInfoNumbers>
-              {billedLastPeriod ? billedLastPeriod : '0'}
-            </BoxInfoNumbers>
-          </BoxInfo>
-          <BoxInfo>
-            Totalt fakturerte timer:
-            <BoxInfoNumbers>{billedTotalFixedNumber}</BoxInfoNumbers>
-          </BoxInfo>
-        </Box>
+        {horizontalCard ? (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
+            }}
+          >
+            <BoxInfo>
+              Antall konsulenter:
+              <BoxInfoNumbers>{consultants}</BoxInfoNumbers>
+            </BoxInfo>
+            <br />
+            <BoxInfo>
+              Fakturerte timer siste periode:
+              <BoxInfoNumbers>
+                {billedLastPeriod ? billedLastPeriod : '0'}
+              </BoxInfoNumbers>
+            </BoxInfo>
+            <br />
+            <BoxInfo>
+              Totalt fakturerte timer:
+              <BoxInfoNumbers>{billedTotalFixedNumber}</BoxInfoNumbers>
+            </BoxInfo>
+          </Box>
+        ) : (
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <BoxInfo>
+              Antall konsulenter:
+              <BoxInfoNumbers>{consultants}</BoxInfoNumbers>
+            </BoxInfo>
+            <br />
+            <BoxInfo>
+              Fakturerte timer siste periode:
+              <BoxInfoNumbers>
+                {billedLastPeriod ? billedLastPeriod : '0'}
+              </BoxInfoNumbers>
+            </BoxInfo>
+            <br />
+            <BoxInfo>
+              Totalt fakturerte timer:
+              <BoxInfoNumbers>{billedTotalFixedNumber}</BoxInfoNumbers>
+            </BoxInfo>
+          </Box>
+        )}
       </GridItemContent>
     </GridItem>
   )

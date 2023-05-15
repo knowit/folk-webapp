@@ -36,12 +36,12 @@ const useStyles = makeStyles({
   },
 
   graph: {
-    width: '50%',
-    marginRight: '3%',
+    width: '70%',
+    marginRight: '5%',
   },
 
   customerCard: {
-    width: '40%',
+    width: '30%',
   },
 })
 
@@ -96,7 +96,7 @@ export function CustomerSiteContent({ customerId }: Props) {
               data={cardData}
               selectedCustomerIds={[customerId]}
               customerSpecificCard={true}
-              horizontal={true}
+              horizontalCard={true}
             />
           ) : historicalCustomer ? (
             <CustomerCard
@@ -104,7 +104,7 @@ export function CustomerSiteContent({ customerId }: Props) {
               data={historicalCustomerData}
               selectedCustomerIds={[customerId]}
               customerSpecificCard={true}
-              horizontal={true}
+              horizontalCard={true}
             />
           ) : null}
         </div>
