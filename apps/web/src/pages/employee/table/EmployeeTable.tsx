@@ -20,9 +20,6 @@ import {
 } from '../../../components/filter/FilterUtil'
 import { GridItem } from '../../../components/gridItem/GridItem'
 import { FallbackMessage } from '../components/FallbackMessage'
-import { EmployeeTableResponse } from 'server/routers/employees/employeesTypes'
-import { TableRow } from 'server/routers/datatypes/typeData'
-import { EmployeeTableRowData } from 'server/routers/employees/employeesTypes'
 
 interface Props {
   customerSpecific?: boolean
