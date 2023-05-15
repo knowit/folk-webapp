@@ -205,7 +205,7 @@ const HoursBilledPerWeekCard = ({
         <div>
           {' '}
           <ChartCard
-            title={customerSpecificGraph ? '' : 'Timer brukt per periode'}
+            title={'Timer brukt per periode'}
             description={POSSIBLE_OLD_DATA_WARNING}
             data={timeFilteredData}
             error={error}

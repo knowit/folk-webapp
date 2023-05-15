@@ -23,7 +23,6 @@ interface CustomerCardProps {
     customerId: string
   ) => void
   customerSpecificCard?: boolean
-  horizontalCard?: boolean
 }
 const BoxInfo = styled(Box)({
   width: '25%',
@@ -55,7 +54,6 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
   handleCheckboxChange,
   selectedCustomerIds,
   customerSpecificCard,
-  horizontalCard,
 }) => {
   const { customer, consultants, billedLastPeriod, billedTotal } = data
 
@@ -65,17 +63,13 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
 
   return (
     <GridItem>
-      <GridItemHeader title={customer} card={true}>
-        {customerSpecificCard ? (
-          ''
-        ) : (
+      {customerSpecificCard ? (
+        <GridItemHeader title={'Fakturerte timer'} card={true}></GridItemHeader>
+      ) : (
+        <GridItemHeader title={customer} card={true}>
           <Link to={'/kunder/' + customer}>
             <OpenIneNewIcon />
           </Link>
-        )}
-        {customerSpecificCard ? (
-          ''
-        ) : (
           <CheckboxWrapper>
             <Text>Vis kunde i graf</Text>
             <Checkbox
@@ -83,10 +77,10 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
               onChange={(event) => handleCheckboxChange(event, customer)}
             />
           </CheckboxWrapper>
-        )}
-      </GridItemHeader>
+        </GridItemHeader>
+      )}
       <GridItemContent>
-        {horizontalCard ? (
+        {customerSpecificCard ? (
           <Box
             sx={{
               display: 'flex',
