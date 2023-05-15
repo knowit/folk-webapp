@@ -33,11 +33,6 @@ export function EmployeeTable({ customerSpecific, customerId }: Props) {
 
   // eslint-disable-next-line prefer-const
   let { data: employeeData, error } = useEmployeeTable()
-  if (employeeData && customerSpecific) {
-    employeeData = employeeData.filter(
-      (row) => row['rowData'][3].customer == customerId
-    )
-  }
 
   return (
     <GridItem fullSize={true}>
@@ -45,7 +40,13 @@ export function EmployeeTable({ customerSpecific, customerId }: Props) {
       {employeeData ? (
         <DDTable
           title="Prosjektstatus"
-          payload={employeeData}
+          payload={
+            customerSpecific
+              ? employeeData.filter(
+                  (row) => row['rowData'][3].customer == customerId
+                )
+              : employeeData
+          }
           props={{
             columns: [
               {

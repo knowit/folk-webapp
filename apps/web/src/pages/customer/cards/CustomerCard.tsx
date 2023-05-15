@@ -25,7 +25,7 @@ interface CustomerCardProps {
   customerSpecificCard?: boolean
 }
 const BoxInfo = styled(Box)({
-  width: '25%',
+  width: '70%',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -36,6 +36,8 @@ const BoxInfoNumbers = styled(Box)({
   fontSize: 32,
   fontWeight: 700,
   justifyContent: 'center',
+  marginTop: '10px',
+  marginBottom: '35px',
   display: 'flex',
 })
 
@@ -63,6 +65,14 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
     ? billedTotal
     : billedTotal.toFixed(2)
 
+  const sx = customerSpecificCard
+    ? {
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+      }
+    : { display: 'flex', justifyContent: 'space-between' }
+
   return (
     <GridItem>
       {customerSpecificCard ? (
@@ -82,51 +92,22 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
         </GridItemHeader>
       )}
       <GridItemContent>
-        {customerSpecificCard ? (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'column',
-            }}
-          >
-            <BoxInfo>
-              Antall konsulenter:
-              <BoxInfoNumbers>{consultants}</BoxInfoNumbers>
-            </BoxInfo>
-            <br />
-            <BoxInfo>
-              Fakturerte timer siste periode:
-              <BoxInfoNumbers>
-                {billedLastPeriod ? billedLastPeriod : '0'}
-              </BoxInfoNumbers>
-            </BoxInfo>
-            <br />
-            <BoxInfo>
-              Totalt fakturerte timer:
-              <BoxInfoNumbers>{billedTotalFixedNumber}</BoxInfoNumbers>
-            </BoxInfo>
-          </Box>
-        ) : (
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <BoxInfo>
-              Antall konsulenter:
-              <BoxInfoNumbers>{consultants}</BoxInfoNumbers>
-            </BoxInfo>
-            <br />
-            <BoxInfo>
-              Fakturerte timer siste periode:
-              <BoxInfoNumbers>
-                {billedLastPeriod ? billedLastPeriod : '0'}
-              </BoxInfoNumbers>
-            </BoxInfo>
-            <br />
-            <BoxInfo>
-              Totalt fakturerte timer:
-              <BoxInfoNumbers>{billedTotalFixedNumber}</BoxInfoNumbers>
-            </BoxInfo>
-          </Box>
-        )}
+        <Box sx={sx}>
+          <BoxInfo>
+            Antall konsulenter:
+            <BoxInfoNumbers>{consultants}</BoxInfoNumbers>
+          </BoxInfo>
+          <BoxInfo>
+            Fakturerte timer siste periode:
+            <BoxInfoNumbers>
+              {billedLastPeriod ? billedLastPeriod : '0'}
+            </BoxInfoNumbers>
+          </BoxInfo>
+          <BoxInfo>
+            Totalt fakturerte timer:
+            <BoxInfoNumbers>{billedTotalFixedNumber}</BoxInfoNumbers>
+          </BoxInfo>
+        </Box>
       </GridItemContent>
     </GridItem>
   )
