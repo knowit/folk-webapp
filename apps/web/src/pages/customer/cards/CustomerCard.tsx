@@ -35,6 +35,8 @@ const BoxInfo = styled(Box)({
 const BoxInfoNumbers = styled(Box)({
   fontSize: 32,
   fontWeight: 700,
+  justifyContent: 'center',
+  display: 'flex',
 })
 
 const CheckboxWrapper = styled('div')({
@@ -84,7 +86,6 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
           <Box
             sx={{
               display: 'flex',
-              justifyContent: 'center',
               alignItems: 'center',
               flexDirection: 'column',
             }}
