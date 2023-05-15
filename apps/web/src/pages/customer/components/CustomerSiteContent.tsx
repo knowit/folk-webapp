@@ -1,6 +1,9 @@
 import { makeStyles } from '@mui/styles'
 import * as React from 'react'
-import { useCustomerCards } from '../../../api/data/customer/customerQueries'
+import {
+  useCustomerCards,
+  useHoursBilledPerCustomerCharts,
+} from '../../../api/data/customer/customerQueries'
 import { CustomerSpecificHoursBilledGraph } from './CustomerSpesificHoursBilledGraph'
 import CustomerCard from '../cards/CustomerCard'
 import { EmployeeTable } from '../../employee/table/EmployeeTable'
@@ -33,12 +36,12 @@ const useStyles = makeStyles({
   },
 
   graph: {
-    width: '70%',
-    marginRight: '5%',
+    width: '50%',
+    marginRight: '3%',
   },
 
   customerCard: {
-    width: '25%',
+    width: '40%',
   },
 })
 
@@ -49,12 +52,30 @@ interface Props {
 export function CustomerSiteContent({ customerId }: Props) {
   const classes = useStyles()
 
-  const { data: cardData } = useCustomerCards()
+  const { data: customerCards } = useCustomerCards()
+  const { data: hoursBilledData } = useHoursBilledPerCustomerCharts()
+  const isLoading = !hoursBilledData
 
-  const customerData = cardData?.find((data) => data.customer == customerId)
+  let historicalCustomer = false
 
-  if (!customerData) {
+  const cardData = customerCards?.find((data) => data.customer == customerId)
+
+  const customerData = hoursBilledData?.data?.find(
+    (data) => data.customer == customerId
+  )
+  let historicalCustomerData = null
+
+  if (!customerData && !isLoading) {
     return <CustomerNotFound customerId={customerId} />
+  }
+
+  if (customerData && !cardData) {
+    historicalCustomer = true
+    historicalCustomerData = {
+      customer: customerData.customer,
+      consultants: 0,
+      billedTotal: customerData.hours,
+    }
   }
 
   return (
@@ -69,16 +90,23 @@ export function CustomerSiteContent({ customerId }: Props) {
         </div>
         <div className={classes.customerCard}>
           <h2>Fakturerte timer</h2>
-          {customerData ? (
+          {cardData ? (
             <CustomerCard
               key={customerId}
-              data={customerData}
-              selectedCustomerIds={new Array(customerId)}
+              data={cardData}
+              selectedCustomerIds={[customerId]}
               customerSpecificCard={true}
+              horizontal={true}
             />
-          ) : (
-            ''
-          )}
+          ) : historicalCustomer ? (
+            <CustomerCard
+              key={customerId}
+              data={historicalCustomerData}
+              selectedCustomerIds={[customerId]}
+              customerSpecificCard={true}
+              horizontal={true}
+            />
+          ) : null}
         </div>
       </div>
       <div>

@@ -45,7 +45,6 @@ export default function DDTable({
   title,
   initialFilters,
   props,
-  searchable,
 }: DDTableProps) {
   const allRows = payload
   const [filters, setFilters] = useState<FilterObject[]>(initialFilters)

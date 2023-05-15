@@ -23,6 +23,7 @@ interface CustomerCardProps {
     customerId: string
   ) => void
   customerSpecificCard?: boolean
+  horizontal?: boolean
 }
 const BoxInfo = styled(Box)({
   width: '25%',
