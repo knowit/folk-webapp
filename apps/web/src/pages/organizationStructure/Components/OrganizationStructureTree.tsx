@@ -1,82 +1,32 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { EmployeeNode } from 'server/routers/employees/employeesTypes'
-import { hierarchy, cluster, HierarchyNode, HierarchyLink } from 'd3-hierarchy'
+import { hierarchy, cluster } from 'd3-hierarchy'
 import { descending } from 'd3-array'
 import { linkRadial } from 'd3-shape'
 import { zoom } from 'd3-zoom'
 import { select } from 'd3-selection'
 import { useTheme } from '@mui/material'
+import OrganizationStructureTreeAll from './OrganizationStructureTreeAll'
+import OrganizationStructureTreeLeaders from './OrganizationSteuctureTreeLeaders'
+import { linkColor, toCartesian, hierchyLevel, size } from '../util'
+import { Link, Node } from '../type'
 
 interface Props {
   data: EmployeeNode
   width: number
   height: number
   margin: number
+  collapsChildren: boolean
 }
 
-function toCartesian(x: number, y: number) {
-  return [y * Math.cos(x), y * Math.sin(x)]
-}
-
-const rightSide = (radians: number) =>
-  radians < Math.PI / 2 || radians > (3 * Math.PI) / 2
-
-const nodeFillColors = [
-  'rgb(75, 100, 85)',
-  'rgb(165, 177, 170)',
-  'rgb(183, 222, 189)',
-  'rgb(219, 238, 222)',
-]
-
-const nodeStrokeColors = [
-  'rgb(52, 70, 60)',
-  'rgb(116, 124, 119)',
-  'rgb(128, 155, 132)',
-  'rgb(153, 167, 155)',
-]
-
-const linkColors = [
-  'rgb(75, 100, 85)',
-  ' rgb(132, 142, 136)',
-  ' rgb(146, 178, 151)',
-  ' rgb(175, 190, 178)',
-]
-
-const size = [15, 10, 6, 5]
-
-const hierchyLevel = (d) => {
-  if (d.depth === 0) return 0
-  if (!d.children) return 3
-  if (d.depth === 1 || d.height > 1) return 1
-  if (d.children) return 2
-  return 3
-}
-
-const linkColor = (d) => linkColors[hierchyLevel(d)]
-const nodeSize = (d) => size[hierchyLevel(d)]
-const fill = (d) => nodeFillColors[hierchyLevel(d)]
-const nodeStroke = (d) => nodeStrokeColors[hierchyLevel(d)]
-
-type Node = HierarchyNode<EmployeeNode> & {
-  x: number
-  y: number
-}
-
-type Link = HierarchyLink<EmployeeNode> & {
-  inverted: boolean
-  path: string
-  innerLink: boolean
-  source: Node & {
-    cartX: number
-    cartY: number
-  }
-  target: Node & {
-    cartX: number
-    cartY: number
-  }
-}
-
-const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
+const OrganizationStructureTree = ({
+  data,
+  width,
+  height,
+  margin,
+  collapsChildren,
+}: Props) => {
+  console.log(data)
   const theme = useTheme()
   const halo = theme.palette.background.paper // Stroke around the labels in case they overlap with a link
   const haloWidth = 0.2
@@ -87,6 +37,13 @@ const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
   const root = hierarchy(data)
   root.sort((a, b) => descending(a.height, b.height))
   const descendants = root.descendants() as Node[]
+
+  const [clickedParent, setClickedParent] = useState<Node>(null)
+  const showChilden = (node: Node) => {
+    setClickedParent(node)
+    console.log(node)
+    clickedParent && console.log(clickedParent)
+  }
 
   const marginTop = margin
   const marginRight = margin
@@ -120,22 +77,25 @@ const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
   })
 
   const links = root.links() as Link[]
+
+  //depth === 1 henter ut barn direkte fra innerste node, deeepth===0 gjør ikke det
   links.forEach((d: Link) => {
     if (
       d.target.height !== 0 ||
-      d.target.depth === 1 ||
+      d.target.depth === 1 /** ===0 */ ||
       (d.target.height === 0 &&
-        d.source.children.filter((child) => child.height != 0).length > 3)
+        d.source.children.filter(
+          (child) => child.height != 0 /**child.height === 2 */
+        ).length > 3)
     ) {
       d.innerLink = true
+      const offsetTarget = size[hierchyLevel(d.target)]
+      const offsetSource = size[hierchyLevel(d.source)]
       const [x1, y1] = toCartesian(d.source.x, d.source.y)
       const [x2, y2] = toCartesian(d.target.x, d.target.y)
 
       const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
       const u = [(x2 - x1) / distance, (y2 - y1) / distance]
-
-      const offsetTarget = size[hierchyLevel(d.target)]
-      const offsetSource = size[hierchyLevel(d.source)]
 
       const x4 = x1 + (distance - offsetTarget) * u[0]
       const y4 = y1 + (distance - offsetTarget) * u[1]
@@ -156,9 +116,15 @@ const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
       }
     } else {
       d.innerLink = false
-      d.path = linkRadial()
-        .angle((d: any) => d.x + Math.PI / 2)
-        .radius((d: any) => d.y)(d as any)
+      if (
+        !collapsChildren ||
+        (clickedParent &&
+          clickedParent.data.employee.name === d.source.data.employee.name)
+      ) {
+        d.path = linkRadial()
+          .angle((d: any) => d.x + Math.PI / 2)
+          .radius((d: any) => d.y)(d as any)
+      }
     }
   })
 
@@ -225,28 +191,21 @@ const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
                   node.y
                 })`}
               >
-                <circle
-                  fill={fill(node)}
-                  stroke={nodeStroke(node)}
-                  strokeWidth={1}
-                  r={nodeSize(node)}
-                />
-                <text
-                  transform={`rotate(${rightSide(node.x) ? 0 : 180})`}
-                  dy={node.depth === 0 ? '10px' : '0.32em'}
-                  x={
-                    rightSide(node.x) ? nodeSize(node) + 3 : -nodeSize(node) - 3
-                  }
-                  textAnchor={rightSide(node.x) ? 'start' : 'end'}
-                  paintOrder="stroke"
-                  stroke={halo}
-                  fill={theme.palette.text.primary}
-                  strokeWidth={haloWidth}
-                >
-                  {node.children && node.depth !== 0
-                    ? ''
-                    : node.data.employee.name}
-                </text>
+                {!collapsChildren ? (
+                  <OrganizationStructureTreeAll
+                    node={node}
+                    halo={halo}
+                    theme={theme}
+                  />
+                ) : (
+                  <OrganizationStructureTreeLeaders
+                    node={node}
+                    halo={halo}
+                    theme={theme}
+                    clickedParent={clickedParent}
+                    showChilden={showChilden}
+                  />
+                )}
               </g>
             )
           })}
