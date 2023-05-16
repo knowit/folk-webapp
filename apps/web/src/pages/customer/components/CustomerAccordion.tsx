@@ -11,7 +11,8 @@ import { EmployeeForCustomerList } from '../../../api/data/customer/customerApiT
 import DataTable from '../../../components/table/DataTable'
 import { Column } from '../../../components/table/tableTypes'
 import { Link } from 'react-router-dom'
-import { OpenIneNewIcon } from '../../../assets/Icons'
+import { OpenInNewIcon } from '../../../assets/Icons'
+import { styled } from '@mui/material/styles'
 
 interface CustomerDropdownProps {
   customerName: string
@@ -19,6 +20,12 @@ interface CustomerDropdownProps {
   expand?: boolean
   columns: Column[]
 }
+
+const CustomerColumn = styled('div')(() => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+}))
 
 const CustomerAccordion = ({
   customerName,
@@ -54,14 +61,14 @@ const CustomerAccordion = ({
               gridTemplateColumns: '1fr 1fr',
             }}
           >
-            <div>
+            <CustomerColumn>
               {customerName}
               {customerName != 'Uten prosjekt' && (
                 <Link to={'/kunder/' + customerName} target="_blank">
-                  <OpenIneNewIcon />
+                  <OpenInNewIcon />
                 </Link>
               )}
-            </div>
+            </CustomerColumn>
             <div style={{ marginLeft: 15 }}>
               Antall konsulenter: {employees.length}
             </div>

@@ -1,4 +1,6 @@
-import { Box } from '@mui/material'
+import { Grid } from '@mui/material'
+import { Link } from 'react-router-dom'
+import { OpenInNewIcon } from '../../../assets/Icons'
 import React from 'react'
 import { GridItem } from '../../../components/gridItem/GridItem'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
@@ -21,41 +23,117 @@ interface CustomerCardProps {
     customerId: string
   ) => void
   customerSpecificCard?: boolean
+  vertical?: boolean
 }
-const BoxInfo = styled(Box)({
-  width: '70%',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  textAlign: 'center',
-})
-
-const BoxInfoNumbers = styled(Box)({
-  fontSize: 32,
-  fontWeight: 700,
-  justifyContent: 'center',
-  marginTop: '10px',
-  marginBottom: '35px',
-  display: 'flex',
-})
+interface CustomerCardContent {
+  consultants: number
+  billedLastPeriod: number
+  billedTotal: number | string
+  vertical?: boolean
+}
 
 const CheckboxWrapper = styled('div')({
   display: 'flex',
-  width: '300px',
-  justifyContent: 'flex-end',
+  width: 300,
+  justifyContent: 'end',
+  alignItems: 'center',
 })
 
-const Text = styled('div')({
+const Text = styled('label')({
   fontWeight: '400',
-  fontSize: '14px',
-  lineHeight: '40px',
+  fontSize: 14,
 })
+
+const LinkStyled = styled(Link)(() => ({
+  display: 'flex',
+}))
+
+const CustomerCardContent: React.FC<CustomerCardContent> = ({
+  vertical = false,
+  consultants,
+  billedLastPeriod,
+  billedTotal,
+}) => {
+  const ComponentRoot = styled(Grid, {
+    shouldForwardProp: (prop) => prop !== 'vertical',
+  })<{ vertical?: boolean }>(({ vertical }) => ({
+    display: 'flex',
+    flexDirection: vertical ? 'column' : 'row',
+    justifyContent: vertical ? 'center' : 'space-between',
+    textAlign: 'center',
+  }))
+
+  const GridStyled = styled(Grid)(() => ({
+    display: 'flex',
+    justifyContent: 'end',
+    flexDirection: 'column',
+  }))
+
+  const GridHeadline = styled('p')(() => ({
+    margin: 5,
+  }))
+
+  const GridValue = styled('p', {
+    shouldForwardProp: (prop) => prop !== 'vertical',
+  })<{ vertical?: boolean }>(({ vertical }) => ({
+    fontSize: 32,
+    fontWeight: 700,
+    margin: vertical ? 10 : 0,
+  }))
+
+  if (vertical) {
+    return (
+      <>
+        <ComponentRoot vertical>
+          <GridHeadline>Antall konsulenter</GridHeadline>
+          <GridValue vertical>{consultants}</GridValue>
+        </ComponentRoot>
+        <ComponentRoot vertical>
+          <GridHeadline>Fakturerte timer siste periode</GridHeadline>
+          <GridValue vertical>{billedLastPeriod}</GridValue>
+        </ComponentRoot>
+        <ComponentRoot vertical>
+          <GridHeadline>Totalt fakturerte timer</GridHeadline>
+          <GridValue vertical>{billedTotal}</GridValue>
+        </ComponentRoot>
+      </>
+    )
+  } else {
+    return (
+      <>
+        <ComponentRoot>
+          <GridStyled xs={3}>
+            <GridHeadline>Antall konsulenter</GridHeadline>
+          </GridStyled>
+          <GridStyled xs={3}>
+            <GridHeadline>Fakturerte timer siste periode</GridHeadline>
+          </GridStyled>
+          <GridStyled xs={3}>
+            <GridHeadline>Totalt fakturerte timer</GridHeadline>
+          </GridStyled>
+        </ComponentRoot>
+        <ComponentRoot>
+          <GridStyled xs={3}>
+            <GridValue>{consultants}</GridValue>
+          </GridStyled>
+          <GridStyled xs={3}>
+            <GridValue>{billedLastPeriod}</GridValue>
+          </GridStyled>
+          <GridStyled xs={3}>
+            <GridValue>{billedTotal}</GridValue>
+          </GridStyled>
+        </ComponentRoot>
+      </>
+    )
+  }
+}
 
 const CustomerCard: React.FC<CustomerCardProps> = ({
   data,
   handleCheckboxChange,
   selectedCustomerIds,
   customerSpecificCard,
+  vertical = false,
 }) => {
   const { customer, consultants, billedLastPeriod, billedTotal } = data
 
@@ -63,46 +141,34 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
     ? billedTotal
     : billedTotal.toFixed(2)
 
-  const sx = customerSpecificCard
-    ? {
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'column',
-      }
-    : { display: 'flex', justifyContent: 'space-between' }
-
   return (
     <GridItem>
-      {customerSpecificCard ? (
-        <GridItemHeader title={'Fakturerte timer'} card={true}></GridItemHeader>
-      ) : (
-        <GridItemHeader title={customer} card={true} clickable={true}>
+      <GridItemHeader
+        title={customerSpecificCard ? 'Verdi' : customer}
+        card={true}
+        clickable={customerSpecificCard ? false : true}
+      >
+        {customerSpecificCard ? null : (
           <CheckboxWrapper>
-            <Text>Vis kunde i graf</Text>
+            <Text htmlFor={'chk' + customer}>Vis kunde i graf</Text>
             <Checkbox
+              id={'chk' + customer}
               checked={selectedCustomerIds.includes(customer)}
               onChange={(event) => handleCheckboxChange(event, customer)}
             />
+            <LinkStyled to={'/kunder/' + customer}>
+              <OpenInNewIcon />
+            </LinkStyled>
           </CheckboxWrapper>
-        </GridItemHeader>
-      )}
+        )}
+      </GridItemHeader>
       <GridItemContent>
-        <Box sx={sx}>
-          <BoxInfo>
-            Antall konsulenter:
-            <BoxInfoNumbers>{consultants}</BoxInfoNumbers>
-          </BoxInfo>
-          <BoxInfo>
-            Fakturerte timer siste periode:
-            <BoxInfoNumbers>
-              {billedLastPeriod ? billedLastPeriod : '0'}
-            </BoxInfoNumbers>
-          </BoxInfo>
-          <BoxInfo>
-            Totalt fakturerte timer:
-            <BoxInfoNumbers>{billedTotalFixedNumber}</BoxInfoNumbers>
-          </BoxInfo>
-        </Box>
+        <CustomerCardContent
+          vertical={vertical}
+          consultants={consultants}
+          billedLastPeriod={billedLastPeriod}
+          billedTotal={billedTotalFixedNumber}
+        />
       </GridItemContent>
     </GridItem>
   )

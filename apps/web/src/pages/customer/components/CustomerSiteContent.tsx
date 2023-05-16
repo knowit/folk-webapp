@@ -88,19 +88,13 @@ export function CustomerSiteContent({ customerId }: Props) {
           <CustomerSpecificHoursBilledGraph customerId={customerId} />
         </div>
         <div className={classes.customerCard}>
-          {cardData ? (
+          {cardData || historicalCustomer ? (
             <CustomerCard
               key={customerId}
-              data={cardData}
+              data={cardData ? cardData : historicalCustomerData}
               selectedCustomerIds={[customerId]}
               customerSpecificCard={true}
-            />
-          ) : historicalCustomer ? (
-            <CustomerCard
-              key={customerId}
-              data={historicalCustomerData}
-              selectedCustomerIds={[customerId]}
-              customerSpecificCard={true}
+              vertical={true}
             />
           ) : null}
         </div>
