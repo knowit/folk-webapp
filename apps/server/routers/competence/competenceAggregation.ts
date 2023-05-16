@@ -17,48 +17,52 @@ import { AggregatedData } from '../datatypes/typeData'
 export const experienceMapping = (
   data: YearsWorkingDistributionCount[]
 ): AggregatedData<ExperienceDistributionData[]> => {
-  const groupedListData = [
-    { years: '1 til 2 år', count: 0 },
-    { years: '3 til 5 år', count: 0 },
-    { years: '6 til 10 år', count: 0 },
-    { years: 'over 10 år', count: 0 },
-    { years: 'Ukjent erfaring', count: 0 },
-  ]
+  const getCount = (list: YearsWorkingDistributionCount[], range: number[]) => {
+    return list
+      .filter(
+        (item) =>
+          item.years_working >= range[0] && item.years_working <= range[1]
+      )
+      .reduce((sum, item) => sum + item.count, 0)
+  }
 
-  const detailedGroupedListData = [
-    { years: 'Under 2 år', count: 0 },
-    { years: '2 til 5 år', count: 0 },
-    { years: '6 til 10 år', count: 0 },
-    { years: '11 til 15 år', count: 0 },
-    { years: '16 til 20 år', count: 0 },
-    { years: '21 til 25 år', count: 0 },
-    { years: '26 til 30 år', count: 0 },
-    { years: 'over 31 år', count: 0 },
-    { years: 'Ukjent erfaring', count: 0 },
-  ]
+  const setInGroups = (list: YearsWorkingDistributionCount[]) => {
+    const groupedListData = [
+      { years: 'Under 2 år', range: [1, 1] },
+      { years: '2 til 5 år', range: [2, 5] },
+      { years: '6 til 10 år', range: [6, 10] },
+      { years: 'over 10 år', range: [11, 99] },
+      { years: 'Ukjent erfaring', range: [0, 0] },
+    ]
 
-  data.forEach((entry) => {
-    const years = +entry.years_working
-    const count = +entry.count
-    let indexes = [0, 0]
-    if (years === 0) indexes = [8, 4]
-    else if (years === 1) indexes = [0, 0]
-    else if (years === 2) indexes = [1, 0]
-    else if (years > 2 && years < 6) indexes = [1, 1]
-    else if (years > 5 && years < 11) indexes = [2, 2]
-    else if (years > 10 && years < 16) indexes = [3, 3]
-    else if (years > 15 && years < 21) indexes = [4, 3]
-    else if (years > 20 && years < 26) indexes = [5, 3]
-    else if (years > 25 && years < 31) indexes = [6, 3]
-    else if (years > 30) indexes = [7, 3]
+    const detailedGroupedListData = [
+      ...groupedListData.slice(0, 3),
+      { years: '11 til 15 år', range: [11, 15] },
+      { years: '16 til 20 år', range: [16, 20] },
+      { years: '21 til 25 år', range: [21, 25] },
+      { years: '26 til 30 år', range: [26, 30] },
+      { years: 'over 31 år', range: [31, 99] },
+      { years: 'Ukjent erfaring', range: [0, 0] },
+    ]
 
-    detailedGroupedListData[indexes[0]].count += count
-    groupedListData[indexes[1]].count += count
-  })
+    return [
+      groupedListData.map((group) => ({
+        years: group.years,
+        count: getCount(list, group.range),
+      })),
+      detailedGroupedListData.map((group) => ({
+        years: group.years,
+        count: getCount(list, group.range),
+      })),
+    ]
+  }
+
+  const experience = data
+  const [groups, detailedGroups] = setInGroups(experience)
 
   return {
-    Erfaring: { data: groupedListData },
-    'Detaljert oversikt': { data: detailedGroupedListData },
+    Erfaring: { data: groups },
+    'Detaljert oversikt': { data: detailedGroups },
   }
 }
 
