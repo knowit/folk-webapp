@@ -5,8 +5,6 @@ import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
 import { styled } from '@mui/material/styles'
 import { Checkbox } from '@mui/material'
-import { Link } from 'react-router-dom'
-import { OpenIneNewIcon } from '../../../assets/Icons'
 
 export type CustomerData = {
   customer: string

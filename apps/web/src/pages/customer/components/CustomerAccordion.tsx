@@ -5,7 +5,7 @@ import {
   Box,
 } from '@mui/material'
 
-import { Minimize, Add, OpenInNew } from '@mui/icons-material'
+import { Minimize, Add } from '@mui/icons-material'
 import React, { useState } from 'react'
 import { EmployeeForCustomerList } from '../../../api/data/customer/customerApiTypes'
 import DataTable from '../../../components/table/DataTable'
