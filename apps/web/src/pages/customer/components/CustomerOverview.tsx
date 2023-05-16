@@ -3,22 +3,29 @@ import CustomerCardListOverview from './CustomerCardListOverview'
 import { Grid } from '@mui/material'
 import { HoursBilledPerWeekCard } from '../cards'
 import { useCustomerCards } from '../../../api/data/customer/customerQueries'
+import storageTokens from '../util/local-storage-tokens'
 
 export const CustomerOverview = () => {
   const { data } = useCustomerCards()
   const customers = data?.map((item) => item.customer)
   const [showHistoricCustomer, setShowHistoricCustomer] = useState(false)
   const [selectedCustomerIds, setSelectedCustomerIds] = useState(null)
-  const [selectedPeriodStartDate, setSelectedPeriodStartDate] = useState(null)
-  const [selectedPeriodEndDate, setSelectedPeriodEndDate] = useState(null)
+  const [selectedPeriodStartDate, setPeriodStartDate] = useState(null)
+  const [selectedPeriodEndDate, setPeriodEndDate] = useState(null)
 
   useEffect(() => {
     const selectedCustomerIds = localStorage.getItem('selectedCustomerIds')
+    const startDate = storageTokens.getPeriodStartDate()
+    const endDate = storageTokens.getPeriodEndDate()
+
     if (selectedCustomerIds) {
       setSelectedCustomerIds(JSON.parse(selectedCustomerIds))
     } else {
       setSelectedCustomerIds([])
     }
+
+    setPeriodStartDate(startDate)
+    setPeriodEndDate(endDate)
   }, [])
   useEffect(() => {
     if (selectedCustomerIds !== null) {
@@ -30,47 +37,11 @@ export const CustomerOverview = () => {
   }, [selectedCustomerIds])
 
   useEffect(() => {
-    const selectedPeriodStartDate = localStorage.getItem(
-      'selectedPeriodStartDate'
-    )
-    if (selectedPeriodStartDate) {
-      setSelectedPeriodStartDate(new Date(JSON.parse(selectedPeriodStartDate)))
-    } else {
-      setSelectedPeriodStartDate(null)
-    }
-  }, [])
-  useEffect(() => {
-    if (selectedPeriodStartDate !== null) {
-      localStorage.setItem(
-        'selectedPeriodStartDate',
-        JSON.stringify(selectedPeriodStartDate)
-      )
-    } else {
-      if (localStorage.getItem('selectedPeriodStartDate')) {
-        localStorage.removeItem('selectedPeriodStartDate')
-      }
-    }
+    storageTokens.setPeriodStartDate(selectedPeriodStartDate)
   }, [selectedPeriodStartDate])
 
   useEffect(() => {
-    const selectedPeriodEndDate = localStorage.getItem('selectedPeriodEndDate')
-    if (selectedPeriodEndDate) {
-      setSelectedPeriodEndDate(new Date(JSON.parse(selectedPeriodEndDate)))
-    } else {
-      setSelectedPeriodEndDate(null)
-    }
-  }, [])
-  useEffect(() => {
-    if (selectedPeriodEndDate !== null) {
-      localStorage.setItem(
-        'selectedPeriodEndDate',
-        JSON.stringify(selectedPeriodEndDate)
-      )
-    } else {
-      if (localStorage.getItem('selectedPeriodEndDate')) {
-        localStorage.removeItem('selectedPeriodEndDate')
-      }
-    }
+    storageTokens.setPeriodEndDate(selectedPeriodEndDate)
   }, [selectedPeriodEndDate])
 
   const handleCustomerHistory = () => {
@@ -102,8 +73,8 @@ export const CustomerOverview = () => {
           startDate?: Date,
           endDate?: Date
         ): void {
-          setSelectedPeriodStartDate(startDate)
-          setSelectedPeriodEndDate(endDate)
+          setPeriodStartDate(startDate)
+          setPeriodEndDate(endDate)
         }}
         customersWithConsultants={customers}
         customerHistory={showHistoricCustomer}

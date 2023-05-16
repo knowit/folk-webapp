@@ -1,75 +1,39 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Grid } from '@mui/material'
 import { HoursBilledPerWeekCard } from '../cards'
+import storageTokens from '../util/local-storage-tokens'
 
 export const CustomerSpecificHoursBilledGraph = ({ customerId }) => {
-  const [specificSelectedPeriodStartDate, setSelectedPeriodStartDate] =
-    useState(null)
-  const [specificSelectedPeriodEndDate, setSelectedPeriodEndDate] =
-    useState(null)
+  const [selectedPeriodStartDate, setPeriodStartDate] = useState(null)
+  const [selectedPeriodEndDate, setPeriodEndDate] = useState(null)
 
   useEffect(() => {
-    const specificSelectedPeriodStartDate = localStorage.getItem(
-      'specificSelectedPeriodStartDate'
-    )
-    if (specificSelectedPeriodStartDate) {
-      setSelectedPeriodStartDate(
-        new Date(JSON.parse(specificSelectedPeriodStartDate))
-      )
-    } else {
-      setSelectedPeriodStartDate(null)
-    }
+    const startDate = storageTokens.getPeriodStartDate()
+    const endDate = storageTokens.getPeriodEndDate()
+
+    setPeriodStartDate(startDate)
+    setPeriodEndDate(endDate)
   }, [])
   useEffect(() => {
-    if (specificSelectedPeriodStartDate !== null) {
-      localStorage.setItem(
-        'specificSelectedPeriodStartDate',
-        JSON.stringify(specificSelectedPeriodStartDate)
-      )
-    } else {
-      if (localStorage.getItem('specificSelectedPeriodStartDate')) {
-        localStorage.removeItem('specificSelectedPeriodStartDate')
-      }
-    }
-  }, [specificSelectedPeriodStartDate])
+    storageTokens.setPeriodStartDate(selectedPeriodStartDate)
+  }, [selectedPeriodStartDate])
 
   useEffect(() => {
-    const specificSelectedPeriodEndDate = localStorage.getItem(
-      'specificSelectedPeriodEndDate'
-    )
-    if (specificSelectedPeriodEndDate) {
-      setSelectedPeriodEndDate(
-        new Date(JSON.parse(specificSelectedPeriodEndDate))
-      )
-    } else {
-      setSelectedPeriodEndDate(null)
-    }
-  }, [])
-  useEffect(() => {
-    if (specificSelectedPeriodEndDate !== null) {
-      localStorage.setItem(
-        'specificSelectedPeriodEndDate',
-        JSON.stringify(specificSelectedPeriodEndDate)
-      )
-    } else {
-      if (localStorage.getItem('specificSelectedPeriodEndDate')) {
-        localStorage.removeItem('specificSelectedPeriodEndDate')
-      }
-    }
-  }, [specificSelectedPeriodEndDate])
+    storageTokens.setPeriodEndDate(selectedPeriodEndDate)
+  }, [selectedPeriodEndDate])
 
   return (
     <Grid container spacing={2}>
       <HoursBilledPerWeekCard
         selectedCustomerIds={new Array(customerId)}
-        selectedPeriodStartDate={specificSelectedPeriodStartDate}
-        selectedPeriodEndDate={specificSelectedPeriodEndDate}
+        selectedPeriodStartDate={selectedPeriodStartDate}
+        selectedPeriodEndDate={selectedPeriodEndDate}
         handleDateRangeChange={function (
           startDate?: Date,
           endDate?: Date
         ): void {
-          setSelectedPeriodStartDate(startDate)
-          setSelectedPeriodEndDate(endDate)
+          setPeriodStartDate(startDate)
+          setPeriodEndDate(endDate)
         }}
         customerSpecificGraph={true}
         customersWithConsultants={new Array(customerId)}

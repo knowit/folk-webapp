@@ -31,8 +31,7 @@ export function EmployeeTable({ customerSpecific, customerId }: Props) {
     <BaseSkeleton variant="rectangular" height={780} />
   )
 
-  // eslint-disable-next-line prefer-const
-  let { data: employeeData, error } = useEmployeeTable()
+  const { data: employeeData, error } = useEmployeeTable()
 
   return (
     <GridItem fullSize={true}>
