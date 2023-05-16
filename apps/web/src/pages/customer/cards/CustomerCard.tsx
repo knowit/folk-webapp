@@ -78,10 +78,7 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
       {customerSpecificCard ? (
         <GridItemHeader title={'Fakturerte timer'} card={true}></GridItemHeader>
       ) : (
-        <GridItemHeader title={customer} card={true}>
-          <Link to={'/kunder/' + customer}>
-            <OpenIneNewIcon />
-          </Link>
+        <GridItemHeader title={customer} card={true} clickable={true}>
           <CheckboxWrapper>
             <Text>Vis kunde i graf</Text>
             <Checkbox

@@ -50,6 +50,7 @@ interface GridItemHeaderProps {
   big?: boolean
   green?: boolean
   card?: boolean
+  clickable?: boolean
 }
 
 export function GridItemHeader({
@@ -59,6 +60,7 @@ export function GridItemHeader({
   big,
   green = false,
   card = false,
+  clickable = false,
 }: GridItemHeaderProps) {
   const longTitleText = title.length > 25
 
@@ -66,7 +68,13 @@ export function GridItemHeader({
     <ComponentRoot big={big} green={green} card={card}>
       <Grid container direction="row" alignItems="center">
         <GridHeaderTitle big={big} green={green} longTitleText={longTitleText}>
-          {card ? <OpenInNewLink to={'#'}>{title}</OpenInNewLink> : title}
+          {card && clickable ? (
+            <OpenInNewLink to={'/kunder/' + title} target="_blank">
+              {title}
+            </OpenInNewLink>
+          ) : (
+            title
+          )}
         </GridHeaderTitle>
         {description ? (
           <InfoTooltip description={description} placement="right" />
