@@ -8,8 +8,8 @@ custom:
     API_URL: ${ssm:/${self:custom.stage}/folk-webapp/DATAPLATTFORM_API_URL}
     OAUTH_URL: ${ssm:/${self:custom.stage}/folk-webapp/DATAPLATTFORM_AUTH_URL}
     STORAGE_URL: ${ssm:/${self:custom.stage}/folk-webapp/DATAPLATTFORM_RAW_STORAGE_URL}
-    CLIENT_ID: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_ID~true}
-    CLIENT_SECRET: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_SECRET~true}
+    CLIENT_ID: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_ID}
+    CLIENT_SECRET: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_SECRET}
     PRIVACY_POLICY_KEY: ${ssm:/${self:custom.stage}/folk-webapp/PRIVACY_POLICY_KEY}
   allowedMethods:
     - GET
@@ -24,15 +24,13 @@ custom:
     prod: folk.knowit.no
   domain: ${self:custom.stageDomains.${self:custom.stage}}
   serverlessPluginTypescript:
-    tsConfigFileLocation: './backend/tsconfig.json'
-
-
+    tsConfigFileLocation: "./apps/server/tsconfig.json"
 
 provider:
   name: aws
   stage: dev
   region: eu-central-1
-  runtime: nodejs14.x
+  runtime: nodejs18.x
   stackName: ${self:custom.service}
   timeout: 25
   httpApi:
@@ -40,15 +38,17 @@ provider:
     payload: "2.0"
 
 package:
+  excludeDevDependencies: false
   include:
-    - backend/**
-  exclude:
-    - "*/**"
+    - apps/server/**
+    - packages/**/*
+  # exclude:
+  #   - "*/**"
   individually: true
 
 functions:
   proxyLambda:
-    handler: backend/lambda.handler
+    handler: apps/server/lambda.handler
     name: ${self:custom.service}-express-proxy
     environment: ${self:custom.env}
     role: LambdaRole
@@ -57,6 +57,7 @@ functions:
 
 plugins:
   - serverless-plugin-typescript
+  - serverless-plugin-monorepo
 
 resources:
   Resources:

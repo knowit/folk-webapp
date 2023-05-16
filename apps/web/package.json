@@ -1,0 +1,79 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "prettier": "@folk/prettier-config",
+  "proxy": "https://dev.folk.knowit.no/",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "dev:local": "cross-env PROXY_URL=http://localhost:3010 react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject",
+    "predeploy:dev": "yarn build",
+    "predeploy:prod": "yarn build",
+    "deploy:dev": "aws s3 sync build s3://dev-folk-webapp-static-web",
+    "deploy:prod": "aws s3 sync build s3://prod-folk-webapp-static-web",
+    "postdeploy:dev": "aws cloudfront create-invalidation --distribution-id E215UYR726ILDS --paths /",
+    "postdeploy:prod": "aws cloudfront create-invalidation --distribution-id E16SNX0CEZ21PY --paths /",
+    "format": "run -T prettier --write ./src",
+    "format:check": "run -T prettier --check ./src",
+    "lint": "run -T eslint .",
+    "lint:fix": "run -T eslint --fix ./src/**/*.{ts,tsx}"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@jonkoops/matomo-tracker": "^0.7.0",
+    "@jonkoops/matomo-tracker-react": "^0.7.0",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/lab": "^5.0.0-alpha.126",
+    "@mui/material": "^5.12.0",
+    "@mui/styles": "^5.12.0",
+    "@mui/x-date-pickers": "^6.2.1",
+    "@nivo/bar": "^0.80.0",
+    "@nivo/core": "^0.80.0",
+    "@nivo/line": "^0.80.0",
+    "@nivo/network": "^0.80.0",
+    "@nivo/pie": "^0.80.0",
+    "@nivo/radar": "^0.80.0",
+    "@nivo/sunburst": "^0.80.0",
+    "@types/d3": "^7.4.0",
+    "axios": "^1.2.1",
+    "browserslist": "^4.21.4",
+    "d3": "^7.8.2",
+    "dayjs": "^1.11.7",
+    "framer-motion": "^10.12.4",
+    "http-proxy-middleware": "^2.0.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.5.0",
+    "react-scripts": "^5.0.1",
+    "react-virtualized": "^9.22.3",
+    "swr": "^2.0.0",
+    "typescript": "^4.9.4"
+  },
+  "devDependencies": {
+    "@folk/common": "workspace:^",
+    "@folk/prettier-config": "workspace:^",
+    "@types/react": "^18.0.26",
+    "@types/react-dom": "^18.0.9",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/react-virtualized": "^9.21.21",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
+    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-react-hooks": "^4.6.0"
+  }
+}

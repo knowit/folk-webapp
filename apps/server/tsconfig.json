@@ -1,0 +1,29 @@
+{
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    // "incremental": true,
+    "typeRoots": ["@types"],
+    "composite": false,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "inlineSources": false,
+    "isolatedModules": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "preserveWatchOutput": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "lib": ["es2020"],
+    "module": "CommonJS",
+    "target": "es2020",
+    "preserveConstEnums": true,
+    // "strictNullChecks": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "outDir": ".build",
+    "moduleResolution": "node",
+    "rootDir": "./"
+  }
+}
