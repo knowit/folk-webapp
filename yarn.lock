@@ -9393,8 +9393,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "folk-webapp@workspace:."
   dependencies:
-    "@nivo/core": ^0.80.0
-    "@nivo/network": ^0.80.0
     eslint: ^8.30.0
     husky: ^8.0.2
     prettier: ^2.8.1
