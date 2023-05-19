@@ -4,6 +4,10 @@ import Header from './components/header/Header'
 import Content from './components/Content'
 import Footer from './components/Footer'
 import { useUserInfo } from './context/UserInfoContext'
+import CssBaseline from '@mui/material/CssBaseline'
+import { ThemeProvider } from '@mui/material/styles'
+import { StyledEngineProvider } from '@mui/material/styles'
+import { updateTheme } from './theme'
 
 declare module '@mui/styles/defaultTheme' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -31,10 +35,16 @@ const AppMainContent = styled('main')(() => ({ width: '100%', height: '100%' }))
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false)
+  const [activeTheme, setActiveTheme] = useState<Theme | undefined>()
   const url = new URL(window.location.href)
 
   useEffect(() => {
-    setDarkMode(localStorage.getItem('mode') === 'true')
+    setDarkMode(localStorage.getItem('darkMode') === 'true')
+    setActiveTheme(
+      updateTheme(
+        localStorage.getItem('darkMode') === 'true' ? 'dark' : 'light'
+      )
+    )
   }, [])
 
   if (url.searchParams.has('login')) {
@@ -49,17 +59,27 @@ export default function App() {
   const handleModeChange = () => {
     localStorage.setItem('darkMode', (!darkMode).toString())
     setDarkMode(!darkMode)
+    setActiveTheme(
+      updateTheme(
+        localStorage.getItem('darkMode') === 'true' ? 'dark' : 'light'
+      )
+    )
   }
 
   return (
-    <AppContainer>
-      <Header darkMode={darkMode} onChangeMode={handleModeChange} />
-      <AppContentContainer>
-        <AppMainContent>
-          <Content />
-        </AppMainContent>
-        <Footer />
-      </AppContentContainer>
-    </AppContainer>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={activeTheme}>
+        <CssBaseline />
+        <AppContainer>
+          <Header darkMode={darkMode} onChangeMode={handleModeChange} />
+          <AppContentContainer>
+            <AppMainContent>
+              <Content />
+            </AppMainContent>
+            <Footer />
+          </AppContentContainer>
+        </AppContainer>
+      </ThemeProvider>
+    </StyledEngineProvider>
   )
 }
