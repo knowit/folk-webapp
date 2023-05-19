@@ -98,6 +98,7 @@ const getDesignTokens = (mode: PaletteMode) => ({
     },
   },
 })
+
 const colourTheme = createTheme(getDesignTokens('light'))
 
 export const theme = createTheme(colourTheme, {

@@ -1,5 +1,20 @@
-import React from 'react'
-import { AppBar, Toolbar, Avatar, Tabs, Tab } from '@mui/material'
+import React, { useState, FunctionComponent } from 'react'
+import {
+  AppBar,
+  Avatar,
+  Button,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Tabs,
+  Tab,
+  Toolbar,
+} from '@mui/material'
+import {
+  DarkMode as DarkModeIcon,
+  LightMode as LightModeIcon,
+} from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import { NavMenu } from './NavMenu'
@@ -26,9 +41,29 @@ const AvatarStyled = styled(Avatar)(() => ({
   height: 40,
 }))
 
-export default function Header() {
+interface HeaderProps {
+  darkMode: boolean
+  onChangeMode: () => void
+}
+
+export const Header: FunctionComponent<HeaderProps> = ({
+  darkMode,
+  onChangeMode,
+}) => {
+  // export default function Header<HeaderProps>({ mode }) {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
   const { user } = useUserInfo()
   const activePage = useLocation().pathname
+
+  const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleMenuClick = () => {
+    setAnchorEl(null)
+    onChangeMode()
+  }
 
   return (
     <ComponentRoot>
@@ -68,11 +103,28 @@ export default function Header() {
             )}
           </NavMenu>
           <LoginLogoutButton />
-          <AvatarStyled alt={user?.name} src={user?.picture}>
-            <FallbackUserIcon />
-          </AvatarStyled>
+          <Button aria-label="Brukerinnstillinger" onClick={handleOpenMenu}>
+            <AvatarStyled id="userAvatar" alt={user?.name} src={user?.picture}>
+              <FallbackUserIcon />
+            </AvatarStyled>
+          </Button>
+          <Menu anchorEl={anchorEl} open={open}>
+            <MenuItem
+              aria-label={darkMode ? 'Skru på Light mode' : 'Skru på Dark mode'}
+              onClick={handleMenuClick}
+            >
+              <ListItemIcon>
+                {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+              </ListItemIcon>
+              <ListItemText>
+                {darkMode ? 'Light mode' : 'Dark Mode'}
+              </ListItemText>
+            </MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
     </ComponentRoot>
   )
 }
+
+export default Header

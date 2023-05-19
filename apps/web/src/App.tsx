@@ -1,6 +1,5 @@
-import React from 'react'
-import { Theme } from '@mui/material/styles'
-import { styled } from '@mui/material/styles'
+import React, { useEffect, useState } from 'react'
+import { Theme, styled } from '@mui/material/styles'
 import Header from './components/header/Header'
 import Content from './components/Content'
 import Footer from './components/Footer'
@@ -31,7 +30,13 @@ const AppContentContainer = styled('div')(({ theme }) => ({
 const AppMainContent = styled('main')(() => ({ width: '100%', height: '100%' }))
 
 export default function App() {
+  const [darkMode, setDarkMode] = useState(false)
   const url = new URL(window.location.href)
+
+  useEffect(() => {
+    setDarkMode(localStorage.getItem('mode') === 'true')
+  }, [])
+
   if (url.searchParams.has('login')) {
     localStorage.setItem('login', 'true')
     url.searchParams.delete('login')
@@ -41,9 +46,14 @@ export default function App() {
   const { user } = useUserInfo()
   if (user === undefined) return null
 
+  const handleModeChange = () => {
+    localStorage.setItem('darkMode', (!darkMode).toString())
+    setDarkMode(!darkMode)
+  }
+
   return (
     <AppContainer>
-      <Header />
+      <Header darkMode={darkMode} onChangeMode={handleModeChange} />
       <AppContentContainer>
         <AppMainContent>
           <Content />
