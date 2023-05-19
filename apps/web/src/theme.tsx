@@ -30,15 +30,16 @@ export const themeColours = (mode: PaletteMode) => ({
             contrastText: '#E4E1DB',
           }
         : {
-            main: '#707070',
-            light: '#E4E1DB',
+            main: '#222',
+            light: '#b8b8b6',
+            contrastText: '#E4E1DB',
           }),
     },
     secondary: {
-      ...(mode === 'light' ? { main: '#FAC0B1' } : { main: '#ff0000' }),
+      ...(mode === 'light' ? { main: '#FAC0B1' } : { main: '#FAC0B1' }),
     },
     tertiary: {
-      ...(mode === 'light' ? { main: '#FAC0B1' } : { main: '#ff0000' }),
+      ...(mode === 'light' ? { main: '#FAC0B1' } : { main: '#FAC0B1' }),
     },
     background: {
       ...(mode === 'light'
@@ -48,14 +49,15 @@ export const themeColours = (mode: PaletteMode) => ({
             darker: '#E4E1DB',
           }
         : {
-            default: '#FFFFFF',
-            paper: '#F1F0ED',
+            default: '#333',
+            paper: '#333',
+            darker: '#111',
           }),
     },
     text: {
       ...(mode === 'light'
         ? { primary: '#333', secondary: '#707070', tertiary: '#F1F0ED' }
-        : { primary: '#333', secondary: '#F1F0ED' }),
+        : { primary: '#E4E1DB', secondary: '#F1F0ED' }),
     },
     info: {
       ...(mode === 'light'
@@ -139,7 +141,7 @@ export const updateTheme = (mode) => {
         },
         styleOverrides: {
           root: {
-            backgroundColor: colourTheme.palette.primary.main,
+            backgroundColor: '#333 !important',
             borderBottomColor: colourTheme.palette.secondary.main,
             borderBottomStyle: 'solid',
             boxShadow: 'none',

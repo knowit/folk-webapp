@@ -68,7 +68,7 @@ export const Header: FunctionComponent<HeaderProps> = ({
   return (
     <ComponentRoot>
       <AppBar>
-        <Toolbar component={'nav'}>
+        <Toolbar component={'nav'} sx={{ backgroundColor: 'primary.main' }}>
           <Link data-testid="knowit-logo" to={'/'}>
             <KnowitLogoStyled title="knowit-logo" />
           </Link>
