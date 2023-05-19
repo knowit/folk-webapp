@@ -49,9 +49,9 @@ export const themeColours = (mode: PaletteMode) => ({
             darker: '#E4E1DB',
           }
         : {
-            default: '#333',
+            default: '#181818',
             paper: '#333',
-            darker: '#111',
+            darker: '#222',
           }),
     },
     text: {
@@ -141,7 +141,6 @@ export const updateTheme = (mode) => {
         },
         styleOverrides: {
           root: {
-            backgroundColor: '#333 !important',
             borderBottomColor: colourTheme.palette.secondary.main,
             borderBottomStyle: 'solid',
             boxShadow: 'none',

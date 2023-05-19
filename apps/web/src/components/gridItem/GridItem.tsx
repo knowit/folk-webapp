@@ -2,8 +2,7 @@ import React from 'react'
 import { Grid } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
-const GridItemContainer = styled('div')(({ theme }) => ({
-  boxShadow: `0px 4px 10px ${theme.palette.text.primary}12`,
+const GridItemContainer = styled('div')(() => ({
   borderRadius: '0px 0px 6px 6px',
   overflow: 'hidden',
   height: '100%',
