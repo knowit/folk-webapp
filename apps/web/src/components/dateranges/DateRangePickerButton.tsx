@@ -5,13 +5,15 @@ import { DateRangePicker } from './DateRangePicker'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 
 const StyledButton = styled(Button)(({ theme }) => ({
-  backgroundColor: theme.palette.info.dark,
+  backgroundColor: 'transparent',
+  color: theme.palette.text.primary,
+  border: `1px solid ${theme.palette.text.primary}`,
   borderRadius: 50,
   whiteSpace: 'nowrap',
   padding: '8px 12px',
   height: '2rem',
   '&:hover': {
-    backgroundColor: theme.palette.info.dark,
+    backgroundColor: theme.palette.background.paper,
   },
 }))
 
@@ -53,7 +55,7 @@ export const DateRangePickerButton: FC<DateRangePickerButtonProps> = ({
         startIcon={<CalendarTodayIcon />}
       >
         {startDate || endDate
-          ? `${startDate ? startDate?.toLocaleDateString() : 'udefinert'} - 
+          ? `${startDate ? startDate?.toLocaleDateString() : 'udefinert'} -
           ${endDate ? endDate?.toLocaleDateString() : 'udefinert'}`
           : 'Angi periode'}
       </StyledButton>

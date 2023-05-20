@@ -9,8 +9,10 @@ const FullscreenIconButton = styled(IconButton)(({ theme }) => ({
   borderRadius: 0,
   cursor: 'pointer',
   '& svg': {
-    color: theme.palette.primary.main,
+    opacity: 0.5,
+    color: theme.palette.text.primary,
     '&:hover': {
+      opacity: 1,
       color: theme.palette.text.primary,
     },
   },

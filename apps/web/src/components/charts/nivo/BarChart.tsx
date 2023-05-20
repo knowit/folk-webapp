@@ -2,6 +2,7 @@ import { BarDatum, BarSvgProps, ResponsiveBar } from '@nivo/bar'
 import React, { useEffect, useState } from 'react'
 import { Translation } from '../../../utils/translation'
 import { chartColors, IsBigProps } from './common'
+import TooltipContainer from './TooltipContainer'
 
 const splitText = (longText: string | number) => {
   const maxLength = 10
@@ -28,11 +29,11 @@ const CustomTick = (tick: any) => {
     <g transform={`translate(${tick.x},${tick.y + 22})`}>
       <line stroke="rgb(119,119,119)" strokeWidth={1.5} y1={-22} y2={y} />
       <text
+        fill="#888"
         y={y + 5}
         textAnchor="middle"
         dominantBaseline="middle"
         style={{
-          fill: '#333',
           fontSize: 10,
         }}
       >
@@ -80,9 +81,19 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
 
   const bigLeftMargin = Math.floor(maxY) >= 10000
 
+  const chartTheme = {
+    textColor: '#888',
+  }
+
   return (
-    <div style={{ width: '100%', height: isBig ? '400px' : '300px' }}>
+    <div
+      style={{
+        width: '100%',
+        height: isBig ? '400px' : '300px',
+      }}
+    >
       <ResponsiveBar
+        theme={chartTheme}
         margin={{
           top: 40,
           right: 20,
@@ -120,35 +131,19 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
             const totalEmployees = dataSet ? dataSet[objectKey] : 0
 
             return (
-              <div
-                style={{
-                  padding: '6px',
-                  backgroundColor: 'white',
-                  borderRadius: '4px',
-                  boxShadow:
-                    '1px 1px rgba(0,0,0,0.1), -1px 0px 1px rgba(0,0,0,0.1)',
-                }}
-              >
+              <TooltipContainer>
                 <b>{indexValue}:</b>
                 <br /> <b>{Translation[key] ?? key}</b>
                 <br /> Antall ansatte: {totalEmployees}
                 <br /> Andel: {value?.toFixed(1)}%
-              </div>
+              </TooltipContainer>
             )
           } else {
             return (
-              <div
-                style={{
-                  padding: '6px',
-                  backgroundColor: 'white',
-                  borderRadius: '4px',
-                  boxShadow:
-                    '1px 1px rgba(0,0,0,0.1), -1px 0px 1px rgba(0,0,0,0.1)',
-                }}
-              >
+              <TooltipContainer>
                 <b>{indexValue}:</b>
                 <br /> {Translation[id] ?? id}: {value.toFixed(1)}
-              </div>
+              </TooltipContainer>
             )
           }
         }}
@@ -164,6 +159,7 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
             itemWidth: 130,
             translateY: -25,
             itemsSpacing: 15,
+            itemTextColor: '#888',
           },
         ]}
         {...props}

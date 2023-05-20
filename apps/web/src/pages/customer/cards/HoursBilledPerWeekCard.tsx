@@ -37,12 +37,15 @@ const CustomerFilterWrapper = styled('div')(({ theme }) => ({
 
 const ScrollableDiv = styled('div')(() => ({
   overflowY: 'scroll',
+  height: '100%',
 }))
 
 const CheckboxFlexWrapper = styled('div')(() => ({
   display: 'flex',
   flexDirection: 'column',
   position: 'relative',
+  height: 324,
+  maxHeight: 324,
 }))
 
 interface HoursBilledPerWeekCardProps {
@@ -235,7 +238,7 @@ const HoursBilledPerWeekCard = ({
                       <FormControlLabel
                         key={option}
                         value={option}
-                        control={<Radio color="primary" />}
+                        control={<Radio />}
                         label={option}
                         style={{ flexGrow: 1 }}
                       />
@@ -287,7 +290,7 @@ const HoursBilledPerWeekCard = ({
                       <FormControlLabel
                         key={option}
                         value={option}
-                        control={<Radio color="primary" />}
+                        control={<Radio />}
                         label={option}
                         style={{ flexGrow: 1 }}
                       />

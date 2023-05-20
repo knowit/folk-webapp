@@ -6,13 +6,20 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
-const StyledDateField = styled(DateField<Dayjs>)(() => ({
-  backgroundColor: 'white',
+const StyledDateField = styled(DateField<Dayjs>)(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
+  color: theme.palette.text.primary,
   width: '100%',
 }))
 
-const StyledDateCalendar = styled(DateCalendar<Dayjs>)(() => ({
-  backgroundColor: 'white',
+const StyledDateCalendar = styled(DateCalendar<Dayjs>)(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
+  color: theme.palette.text.primary,
+}))
+
+const ComponentRoot = styled(Box)(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  padding: 10,
 }))
 
 type DateRangePickerProps = {
@@ -47,7 +54,7 @@ export const DateRangePicker: FC<DateRangePickerProps> = ({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box padding={'0.5rem'}>
+      <ComponentRoot>
         <Box
           display={'flex'}
           gap={'10px'}
@@ -90,7 +97,7 @@ export const DateRangePicker: FC<DateRangePickerProps> = ({
         <Button variant="contained" onClick={resetButtonFn}>
           Nullstill
         </Button>
-      </Box>
+      </ComponentRoot>
     </LocalizationProvider>
   )
 }

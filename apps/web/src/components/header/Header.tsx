@@ -74,7 +74,7 @@ export const Header: FunctionComponent<HeaderProps> = ({
           </Link>
           <NavMenu>
             {user && (
-              <Tabs value={activePage}>
+              <Tabs value={activePage} textColor="secondary">
                 <Tab
                   label={'Ansatte'}
                   value={'/ansatte'}

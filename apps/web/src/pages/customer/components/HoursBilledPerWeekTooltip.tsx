@@ -1,24 +1,46 @@
 import { memo } from 'react'
+import { Grid } from '@mui/material'
 import PropTypes from 'prop-types'
-import { useTheme } from '@nivo/core'
-import { Chip, TableTooltip } from '@nivo/tooltip'
+import { Chip } from '@nivo/tooltip'
+import TooltipContainer from '../../../components/charts/nivo/TooltipContainer'
 
 const HoursBilledPerWeekTooltip = ({ slice, axis }) => {
-  const theme = useTheme()
   const otherAxis = axis === 'x' ? 'y' : 'x'
 
   const filtered = slice.points.filter((point) => point.data[otherAxis] !== 0)
 
   return (
-    <TableTooltip
-      rows={filtered.map((point) => [
-        <Chip key="chip" color={point.serieColor} style={theme.tooltip.chip} />,
-        point.serieId,
-        <span key="value" style={theme.tooltip.tableCellValue}>
-          {point.data[`${otherAxis}Formatted`]}
-        </span>,
+    <TooltipContainer>
+      {filtered.map((point) => [
+        <Grid
+          container
+          spacing={2}
+          style={{
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Grid
+            item
+            rowGap={1}
+            spacing={2}
+            sx={{
+              alignItems: 'center',
+              display: 'flex',
+            }}
+          >
+            <Grid item sx={{ marginRight: 1 }}>
+              <Chip key="chip" color={point.serieColor} />
+            </Grid>
+            <Grid item>{point.serieId}</Grid>
+          </Grid>
+          <Grid item>
+            <strong>{point.data[`${otherAxis}Formatted`]}</strong>
+          </Grid>
+        </Grid>,
       ])}
-    />
+    </TooltipContainer>
   )
 }
 

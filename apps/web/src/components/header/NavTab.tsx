@@ -14,17 +14,20 @@ interface NavTabProps {
 
 const TabStyled = styled(Tab)(({ theme }) => ({
   color: theme.palette.text.primary,
-  // fontSize: 26,
-  backgroundColor: theme.palette.primary.light,
+  backgroundColor: theme.palette.background.paper,
   padding: 0,
   alignItems: 'stretch',
   borderRadius: 5,
+  opacity: 0.25,
 }))
 const TabsStyled = styled(Tabs)(({ theme }) => ({
+  color: theme.palette.text.primary,
   marginBottom: 20,
   '& .MuiTabs-indicator': { display: 'none' },
   '& .Mui-selected': {
+    color: theme.palette.text.primary,
     backgroundColor: theme.palette.background.paper,
+    opacity: 1,
   },
 }))
 
@@ -57,10 +60,10 @@ export default function NavTab(props: NavTabProps) {
   return (
     <>
       <TabsStyled
-        textColor="primary"
         value={value}
         onChange={handleChange}
         variant="fullWidth"
+        textColor="inherit"
       >
         {createTabs()}
       </TabsStyled>

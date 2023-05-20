@@ -3,12 +3,13 @@ import { Avatar } from '@mui/material'
 import { ResponsiveNetwork } from '@nivo/network'
 import { animated, to } from '@react-spring/web'
 import { ReactComponent as FallbackUserIcon } from '../../../assets/fallback_user.svg'
+import TooltipContainer from './TooltipContainer'
 // responsive component, otherwise height will be 0 and
 // no chart will be rendered.
 
 export const Network = ({ data }) => {
   return (
-    <div style={{ width: '100%', height: '80vh' }}>
+    <div style={{ width: '100%', height: '80vh', color: '#888' }}>
       <ResponsiveNetwork
         data={data}
         margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
@@ -75,15 +76,12 @@ export const Network = ({ data }) => {
         nodeTooltip={function (n: any) {
           const consultant = n.node.data
           return (
-            <div
-              style={{
-                display: 'flex',
-                height: '100px',
-                background: '#FFFFFF',
-                border: '2px solid #000000',
-                padding: '0 15px 0 15px',
-                alignItems: 'center',
-              }}
+            <TooltipContainer
+            // sx={{
+            //   display: 'flex',
+            //   height: '100px',
+            //   alignItems: 'center',
+            // }}
             >
               <div style={{ paddingRight: '7px' }}>
                 {consultant.image_url ? (
@@ -106,7 +104,7 @@ export const Network = ({ data }) => {
                   consultant.managerName ?? 'ingen'
                 }`}</text>
               </div>
-            </div>
+            </TooltipContainer>
           )
         }}
       />

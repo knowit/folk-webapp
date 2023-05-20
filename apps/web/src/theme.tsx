@@ -25,13 +25,15 @@ export const themeColours = (mode: PaletteMode) => ({
     primary: {
       ...(mode === 'light'
         ? {
+            light: '#404040',
             main: '#333',
-            light: '#b8b8b6',
+            dark: '#252525',
             contrastText: '#E4E1DB',
           }
         : {
+            light: '#303030',
             main: '#222',
-            light: '#b8b8b6',
+            dark: '#151515',
             contrastText: '#E4E1DB',
           }),
     },
@@ -57,7 +59,7 @@ export const themeColours = (mode: PaletteMode) => ({
     text: {
       ...(mode === 'light'
         ? { primary: '#333', secondary: '#707070', tertiary: '#F1F0ED' }
-        : { primary: '#E4E1DB', secondary: '#F1F0ED' }),
+        : { primary: '#E4E1DB', secondary: '#F1F0ED', tertiary: '#F1F0ED' }),
     },
     info: {
       ...(mode === 'light'
@@ -167,6 +169,9 @@ export const updateTheme = (mode) => {
         styleOverrides: {
           root: {
             color: colourTheme.palette.text.primary,
+            '&.Mui-checked': {
+              color: colourTheme.palette.text.primary,
+            },
           },
         },
       },
@@ -195,6 +200,9 @@ export const updateTheme = (mode) => {
         styleOverrides: {
           root: {
             color: colourTheme.palette.text.primary,
+            '&.Mui-focused': {
+              color: colourTheme.palette.text.primary,
+            },
           },
         },
       },
@@ -210,6 +218,9 @@ export const updateTheme = (mode) => {
         styleOverrides: {
           root: {
             color: colourTheme.palette.text.primary,
+            '&.Mui-checked': {
+              color: colourTheme.palette.text.primary,
+            },
           },
         },
       },
@@ -226,7 +237,7 @@ export const updateTheme = (mode) => {
         },
         styleOverrides: {
           root: {
-            color: colourTheme.palette.text.tertiary,
+            color: colourTheme.palette.primary.contrastText,
             fontSize: 21,
             textTransform: 'none',
             display: 'flex',
@@ -244,7 +255,6 @@ export const updateTheme = (mode) => {
       MuiTabs: {
         defaultProps: {
           indicatorColor: 'secondary',
-          textColor: 'secondary',
         },
         styleOverrides: {
           root: {
@@ -266,7 +276,7 @@ export const updateTheme = (mode) => {
       MuiTooltip: {
         styleOverrides: {
           arrow: {
-            color: colourTheme.palette.primary.light,
+            color: colourTheme.palette.background.paper,
             '&:before': {
               border: `1px solid ${colourTheme.palette.primary.main}`,
             },
@@ -274,7 +284,7 @@ export const updateTheme = (mode) => {
           tooltip: {
             maxWidth: '100%',
             color: colourTheme.palette.text.primary,
-            background: colourTheme.palette.primary.light,
+            background: colourTheme.palette.background.paper,
             fontSize: 14,
             border: `1px solid ${colourTheme.palette.primary.main}`,
           },
