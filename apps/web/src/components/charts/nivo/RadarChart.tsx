@@ -32,7 +32,7 @@ const RadarChart: React.FC<Props<any>> = ({ isBig = false, ...props }) => {
         dotBorderWidth={2}
         dotColor={{ theme: 'background' }}
         colors={chartColors}
-        blendMode="multiply"
+        blendMode="normal"
         valueFormat={(v: any) => v?.toFixed(2)}
         sliceTooltip={(data) => {
           // This is to make
