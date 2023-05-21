@@ -60,6 +60,10 @@ export const Header: FunctionComponent<HeaderProps> = ({
     setAnchorEl(event.currentTarget)
   }
 
+  const handleCloseMenu = () => {
+    setAnchorEl(null)
+  }
+
   const handleMenuClick = () => {
     setAnchorEl(null)
     onChangeMode()
@@ -108,7 +112,7 @@ export const Header: FunctionComponent<HeaderProps> = ({
               <FallbackUserIcon />
             </AvatarStyled>
           </Button>
-          <Menu anchorEl={anchorEl} open={open}>
+          <Menu anchorEl={anchorEl} open={open} onClose={handleCloseMenu}>
             <MenuItem
               aria-label={darkMode ? 'Skru på Light mode' : 'Skru på Dark mode'}
               onClick={handleMenuClick}
