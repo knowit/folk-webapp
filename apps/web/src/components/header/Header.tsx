@@ -37,7 +37,12 @@ export const Header: FunctionComponent<HeaderProps> = ({
   onChangeMode,
 }) => {
   const { user } = useUserInfo()
+  const availablePages = ['/ansatte', '/kunder', '/kompetanse', '/organisasjon']
   const activePage = useLocation().pathname
+  let tabsVisiblePage: string | boolean
+  availablePages.includes(activePage)
+    ? (tabsVisiblePage = activePage)
+    : (tabsVisiblePage = false)
 
   const handleModeSwitch = () => {
     onChangeMode()
@@ -52,7 +57,7 @@ export const Header: FunctionComponent<HeaderProps> = ({
           </Link>
           <NavMenu>
             {user && (
-              <Tabs value={activePage} textColor="secondary">
+              <Tabs value={tabsVisiblePage} textColor="secondary">
                 <Tab
                   label={'Ansatte'}
                   value={'/ansatte'}

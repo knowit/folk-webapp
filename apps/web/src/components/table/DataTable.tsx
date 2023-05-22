@@ -277,7 +277,7 @@ export function VirtualizedTable({
         height: getTableHeight(),
         width: '100%',
       }}
-      sx={{ background: 'background.default' }}
+      sx={{ backgroundColor: 'background.default' }}
     >
       <AutoSizer>
         {({ height, width }) => (

@@ -18,7 +18,7 @@ const TabStyled = styled(Tab)(({ theme }) => ({
   padding: 0,
   alignItems: 'stretch',
   borderRadius: 5,
-  opacity: 0.25,
+  opacity: 0.5,
 }))
 const TabsStyled = styled(Tabs)(({ theme }) => ({
   color: theme.palette.text.primary,
