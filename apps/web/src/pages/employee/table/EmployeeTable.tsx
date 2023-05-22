@@ -21,7 +21,12 @@ import {
 import { GridItem } from '../../../components/gridItem/GridItem'
 import { FallbackMessage } from '../components/FallbackMessage'
 
-export function EmployeeTable() {
+interface Props {
+  customerSpecific?: boolean
+  customerId?: string
+}
+
+export function EmployeeTable({ customerSpecific, customerId }: Props) {
   const TableSkeleton = () => (
     <BaseSkeleton variant="rectangular" height={780} />
   )
@@ -34,7 +39,13 @@ export function EmployeeTable() {
       {employeeData ? (
         <DDTable
           title="Prosjektstatus"
-          payload={employeeData}
+          payload={
+            customerSpecific
+              ? employeeData.filter(
+                  (row) => row['rowData'][3].customer == customerId
+                )
+              : employeeData
+          }
           props={{
             columns: [
               {
