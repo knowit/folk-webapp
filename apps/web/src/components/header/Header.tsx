@@ -1,20 +1,5 @@
-import React, { useState, FunctionComponent } from 'react'
-import {
-  AppBar,
-  Avatar,
-  Button,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Tabs,
-  Tab,
-  Toolbar,
-} from '@mui/material'
-import {
-  DarkMode as DarkModeIcon,
-  LightMode as LightModeIcon,
-} from '@mui/icons-material'
+import React, { FunctionComponent } from 'react'
+import { AppBar, Avatar, Tabs, Tab, Toolbar } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import { NavMenu } from './NavMenu'
@@ -22,6 +7,7 @@ import { ReactComponent as KnowitLogo } from '../../assets/logo.svg'
 import { ReactComponent as FallbackUserIcon } from '../../assets/fallback_user.svg'
 import { LoginLogoutButton } from '../LoginLogoutButton'
 import { useUserInfo } from '../../context/UserInfoContext'
+import ModeSwitch from './ModeSwitch'
 
 const ComponentRoot = styled('div')(({ theme }) => ({
   top: 0,
@@ -50,22 +36,10 @@ export const Header: FunctionComponent<HeaderProps> = ({
   darkMode,
   onChangeMode,
 }) => {
-  // export default function Header<HeaderProps>({ mode }) {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
   const { user } = useUserInfo()
   const activePage = useLocation().pathname
 
-  const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null)
-  }
-
-  const handleMenuClick = () => {
-    setAnchorEl(null)
+  const handleModeSwitch = () => {
     onChangeMode()
   }
 
@@ -107,24 +81,10 @@ export const Header: FunctionComponent<HeaderProps> = ({
             )}
           </NavMenu>
           <LoginLogoutButton />
-          <Button aria-label="Brukerinnstillinger" onClick={handleOpenMenu}>
-            <AvatarStyled id="userAvatar" alt={user?.name} src={user?.picture}>
-              <FallbackUserIcon />
-            </AvatarStyled>
-          </Button>
-          <Menu anchorEl={anchorEl} open={open} onClose={handleCloseMenu}>
-            <MenuItem
-              aria-label={darkMode ? 'Skru på Light mode' : 'Skru på Dark mode'}
-              onClick={handleMenuClick}
-            >
-              <ListItemIcon>
-                {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
-              </ListItemIcon>
-              <ListItemText>
-                {darkMode ? 'Light mode' : 'Dark Mode'}
-              </ListItemText>
-            </MenuItem>
-          </Menu>
+          <AvatarStyled id="userAvatar" alt={user?.name} src={user?.picture}>
+            <FallbackUserIcon />
+          </AvatarStyled>
+          <ModeSwitch onChange={handleModeSwitch} checked={darkMode} />
         </Toolbar>
       </AppBar>
     </ComponentRoot>
