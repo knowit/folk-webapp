@@ -17,12 +17,19 @@ const SwitchStyled = styled((props: SwitchProps) => (
     margin: 2,
     transitionDuration: '300ms',
     '&.Mui-checked': {
-      color: '#fff',
       '& + .MuiSwitch-track': {
         backgroundColor: 'black',
         border: `1.5px solid grey`,
         opacity: 1,
       },
+      '& .MuiSwitch-thumb': {
+        transition: 'transform 0.3s',
+        transform: 'rotate(360deg)',
+      },
+    },
+    '& .MuiSwitch-thumb': {
+      transition: 'transform 0.3s',
+      transform: 'rotate(0deg)',
     },
   },
   '& .MuiSwitch-thumb': {
@@ -36,7 +43,7 @@ const SwitchStyled = styled((props: SwitchProps) => (
     backgroundColor: theme.palette.background.default,
     opacity: 1,
     transition: theme.transitions.create(['background-color'], {
-      duration: 500,
+      duration: 300,
     }),
   },
 }))
@@ -56,20 +63,26 @@ const SwitchComponent: FunctionComponent<SwitchProps> = ({
             backgroundColor: 'white',
             borderRadius: '20px',
             padding: '2px',
+            transition: 'transform 0.3s',
+            transform: 'rotate(-90deg)',
           }}
         />
       }
       checkedIcon={
-        <DarkMode
+        <LightMode
           sx={{
             color: 'white',
             backgroundColor: 'black',
             borderRadius: '20px',
             padding: '2px',
+            transition: 'transform 0.3s',
+            transform: 'rotate(0deg)',
           }}
         />
       }
-      sx={{ margin: '3px' }}
+      sx={{
+        margin: '3px',
+      }}
     />
   )
 }
