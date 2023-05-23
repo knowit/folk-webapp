@@ -25,6 +25,14 @@ const KnowitLogoStyled = styled(KnowitLogo)(() => ({
 
 const AvatarStyled = styled(Avatar)(() => ({
   height: 40,
+  margin: 20,
+}))
+
+const ActionsContainer = styled('div')(() => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  flexDirection: 'row',
 }))
 
 interface HeaderProps {
@@ -85,11 +93,13 @@ export const Header: FunctionComponent<HeaderProps> = ({
               </Tabs>
             )}
           </NavMenu>
-          <LoginLogoutButton />
-          <AvatarStyled id="userAvatar" alt={user?.name} src={user?.picture}>
-            <FallbackUserIcon />
-          </AvatarStyled>
-          <ModeSwitch onChange={handleModeSwitch} checked={darkMode} />
+          <ActionsContainer>
+            <LoginLogoutButton />
+            <AvatarStyled id="userAvatar" alt={user?.name} src={user?.picture}>
+              <FallbackUserIcon />
+            </AvatarStyled>
+            <ModeSwitch onChange={handleModeSwitch} checked={darkMode} />
+          </ActionsContainer>
         </Toolbar>
       </AppBar>
     </ComponentRoot>

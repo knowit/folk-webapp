@@ -67,7 +67,6 @@ const SwitchComponent: FunctionComponent<SwitchProps> = ({
           }}
         />
       }
-      sx={{ margin: 1 }}
     />
   )
 }
