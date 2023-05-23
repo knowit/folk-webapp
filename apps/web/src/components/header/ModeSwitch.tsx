@@ -55,6 +55,7 @@ const SwitchComponent: FunctionComponent<SwitchProps> = ({
             color: 'black',
             backgroundColor: 'white',
             borderRadius: '20px',
+            padding: '2px',
           }}
         />
       }
@@ -64,6 +65,7 @@ const SwitchComponent: FunctionComponent<SwitchProps> = ({
             color: 'white',
             backgroundColor: 'black',
             borderRadius: '20px',
+            padding: '2px',
           }}
         />
       }
