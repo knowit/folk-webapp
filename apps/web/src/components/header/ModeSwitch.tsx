@@ -1,10 +1,7 @@
 import { FunctionComponent } from 'react'
 import { styled } from '@mui/material/styles'
 import { Switch, SwitchProps } from '@mui/material'
-import {
-  DarkModeOutlined as DarkMode,
-  LightModeOutlined as LightMode,
-} from '@mui/icons-material'
+import { LightModeOutlined as LightMode } from '@mui/icons-material'
 
 const SwitchStyled = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -15,7 +12,7 @@ const SwitchStyled = styled((props: SwitchProps) => (
   '& .MuiSwitch-switchBase': {
     padding: 0,
     margin: 2,
-    transitionDuration: '300ms',
+    transitionDuration: '350ms',
     '&.Mui-checked': {
       '& + .MuiSwitch-track': {
         backgroundColor: 'black',
@@ -43,7 +40,7 @@ const SwitchStyled = styled((props: SwitchProps) => (
     backgroundColor: theme.palette.background.default,
     opacity: 1,
     transition: theme.transitions.create(['background-color'], {
-      duration: 300,
+      duration: 350,
     }),
   },
 }))
@@ -63,7 +60,7 @@ const SwitchComponent: FunctionComponent<SwitchProps> = ({
             backgroundColor: 'white',
             borderRadius: '20px',
             padding: '2px',
-            transition: 'transform 0.3s',
+            transition: 'transform 0.35s, background-color 0.35s, color 0.35s',
             transform: 'rotate(-90deg)',
           }}
         />
@@ -75,7 +72,7 @@ const SwitchComponent: FunctionComponent<SwitchProps> = ({
             backgroundColor: 'black',
             borderRadius: '20px',
             padding: '2px',
-            transition: 'transform 0.3s',
+            transition: 'transform 0.35s, background-color 0.35s, color 0.35s',
             transform: 'rotate(0deg)',
           }}
         />
