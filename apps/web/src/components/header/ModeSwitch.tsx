@@ -20,7 +20,7 @@ const SwitchStyled = styled((props: SwitchProps) => (
       color: '#fff',
       '& + .MuiSwitch-track': {
         backgroundColor: 'black',
-        border: `1px solid white`,
+        border: `1.5px solid grey`,
         opacity: 1,
       },
     },
@@ -31,7 +31,7 @@ const SwitchStyled = styled((props: SwitchProps) => (
     height: 22,
   },
   '& .MuiSwitch-track': {
-    border: `1px solid white`,
+    border: `1.5px solid grey`,
     borderRadius: 26 / 2,
     backgroundColor: theme.palette.background.default,
     opacity: 1,
@@ -69,6 +69,7 @@ const SwitchComponent: FunctionComponent<SwitchProps> = ({
           }}
         />
       }
+      sx={{ margin: '3px' }}
     />
   )
 }

@@ -8,6 +8,7 @@ const ButtonBaseStyled = styled(ButtonBase)(() => ({
   fontSize: '15px',
   fontWeight: 'bold',
   height: 'inherit',
+  margin: '3px',
 }))
 
 export const LoginLogoutButton = () => {
