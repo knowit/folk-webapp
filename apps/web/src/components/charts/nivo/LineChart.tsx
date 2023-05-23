@@ -2,13 +2,20 @@ import { LineSvgProps, ResponsiveLine } from '@nivo/line'
 import React from 'react'
 import { chartColors, IsBigProps } from './common'
 import TooltipContainer from './TooltipContainer'
+import { useTheme } from '@mui/material'
 
 const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
   isBig = false,
   ...props
 }) => {
+  const theme = useTheme()
   const chartTheme = {
-    textColor: '#888',
+    textColor: theme.palette.mode === 'light' ? '#444' : '#ddd',
+    grid: {
+      line: {
+        stroke: theme.palette.mode === 'light' ? '#ddd' : '#444',
+      },
+    },
   }
   return (
     <div style={{ width: '100%', height: isBig ? '400px' : '280px' }}>

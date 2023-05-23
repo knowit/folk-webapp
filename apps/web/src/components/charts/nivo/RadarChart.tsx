@@ -3,6 +3,7 @@ import React from 'react'
 import { Translation } from '../../../utils/translation'
 import { chartColors, IsBigProps } from './common'
 import TooltipContainer from './TooltipContainer'
+import { useTheme } from '@mui/material'
 
 type Props<D extends Record<string, unknown>> = Omit<
   RadarSvgProps<D>,
@@ -11,8 +12,15 @@ type Props<D extends Record<string, unknown>> = Omit<
   IsBigProps & { tooltipFormat?: (v: any) => string }
 
 const RadarChart: React.FC<Props<any>> = ({ isBig = false, ...props }) => {
+  const theme = useTheme()
+
   const chartTheme = {
-    textColor: '#888',
+    textColor: theme.palette.mode === 'light' ? '#444' : '#ddd',
+    grid: {
+      line: {
+        stroke: theme.palette.mode === 'light' ? '#ddd' : '#444',
+      },
+    },
   }
 
   return (

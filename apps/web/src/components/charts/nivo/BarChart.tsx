@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Translation } from '../../../utils/translation'
 import { chartColors, IsBigProps } from './common'
 import TooltipContainer from './TooltipContainer'
+import { useTheme } from '@mui/material'
 
 const splitText = (longText: string | number) => {
   const maxLength = 10
@@ -60,6 +61,7 @@ type Props<RawDatum extends BarDatum> = Omit<
 
 const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
   const [maxY, setMaxY] = useState(0)
+  const theme = useTheme()
 
   function getStandardDeviation(array) {
     const n = array.length
@@ -82,7 +84,12 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
   const bigLeftMargin = Math.floor(maxY) >= 10000
 
   const chartTheme = {
-    textColor: '#888',
+    textColor: theme.palette.mode === 'light' ? '#444' : '#ddd',
+    grid: {
+      line: {
+        stroke: theme.palette.mode === 'light' ? '#ddd' : '#444',
+      },
+    },
   }
 
   return (
@@ -159,7 +166,7 @@ const BarChart: React.FC<Props<BarDatum>> = ({ isBig = false, ...props }) => {
             itemWidth: 130,
             translateY: -25,
             itemsSpacing: 15,
-            itemTextColor: '#888',
+            itemTextColor: theme.palette.mode === 'light' ? '#444' : '#ddd',
           },
         ]}
         {...props}

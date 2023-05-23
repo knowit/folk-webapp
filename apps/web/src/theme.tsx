@@ -51,7 +51,7 @@ export const themeColours = (mode: PaletteMode) => ({
             darker: '#E4E1DB',
           }
         : {
-            default: '#181818',
+            default: '#282828',
             paper: '#333',
             darker: '#222',
           }),
