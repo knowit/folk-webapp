@@ -23,8 +23,6 @@ const HoursBilledPerWeekTooltip = ({ slice, axis }) => {
         >
           <Grid
             item
-            rowGap={1}
-            spacing={2}
             sx={{
               alignItems: 'center',
               display: 'flex',
