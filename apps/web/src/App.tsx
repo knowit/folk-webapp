@@ -4,7 +4,7 @@ import Header from './components/header/Header'
 import Content from './components/Content'
 import Footer from './components/Footer'
 import { useUserInfo } from './context/UserInfoContext'
-import CssBaseline from '@mui/material/CssBaseline'
+import { CssBaseline, useMediaQuery } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
 import { StyledEngineProvider } from '@mui/material/styles'
 import { updateTheme } from './theme'
@@ -37,15 +37,21 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(false)
   const [activeTheme, setActiveTheme] = useState<Theme | undefined>()
   const url = new URL(window.location.href)
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
 
   useEffect(() => {
-    setDarkMode(localStorage.getItem('darkMode') === 'true')
-    setActiveTheme(
-      updateTheme(
-        localStorage.getItem('darkMode') === 'true' ? 'dark' : 'light'
+    if (localStorage.getItem('darkMode') === null) {
+      setActiveTheme(updateTheme(prefersDarkMode ? 'dark' : 'light'))
+      setDarkMode(prefersDarkMode)
+    } else {
+      setActiveTheme(
+        updateTheme(
+          localStorage.getItem('darkMode') === 'true' ? 'dark' : 'light'
+        )
       )
-    )
-  }, [])
+      setDarkMode(localStorage.getItem('darkMode') === 'true')
+    }
+  }, [prefersDarkMode])
 
   if (url.searchParams.has('login')) {
     localStorage.setItem('login', 'true')
