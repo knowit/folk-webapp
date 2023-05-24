@@ -15,8 +15,8 @@ const TooltipStyled = styled(Tooltip)(({ theme }) => ({
   border: 'none',
 }))
 const StatusCircle = ({ color }: { color: string }) => {
-  const Circle = styled(FiberManualRecordIcon)(({ theme }) => ({
-    backgroundColor: theme.palette.background.default,
+  const Circle = styled(FiberManualRecordIcon)(() => ({
+    backgroundColor: 'transparent',
     color: color,
     width: 30,
     height: 30,

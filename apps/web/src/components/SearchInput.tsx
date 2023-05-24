@@ -13,8 +13,7 @@ const InputBaseStyled = styled(InputBase)(({ theme }) => ({
   paddingRight: 15,
   fontSize: 16,
 }))
-const SearchIconStyled = styled(SearchIcon)(({ theme }) => ({
-  color: theme.palette.primary.main,
+const SearchIconStyled = styled(SearchIcon)(() => ({
   borderRadius: 0,
   transition: 'none',
   padding: 0,
@@ -22,8 +21,7 @@ const SearchIconStyled = styled(SearchIcon)(({ theme }) => ({
     backgroundColor: 'transparent',
   },
 }))
-const IconButtonStyled = styled(IconButton)(({ theme }) => ({
-  color: theme.palette.primary.main,
+const IconButtonStyled = styled(IconButton)(() => ({
   borderRadius: 0,
   transition: 'none',
   padding: 0,

@@ -102,24 +102,24 @@ const CustomerCardContent: React.FC<CustomerCardContent> = ({
     return (
       <>
         <ComponentRoot>
-          <GridStyled xs={3}>
+          <GridStyled item xs={3}>
             <GridHeadline>Antall konsulenter</GridHeadline>
           </GridStyled>
-          <GridStyled xs={3}>
+          <GridStyled item xs={3}>
             <GridHeadline>Fakturerte timer siste periode</GridHeadline>
           </GridStyled>
-          <GridStyled xs={3}>
+          <GridStyled item xs={3}>
             <GridHeadline>Totalt fakturerte timer</GridHeadline>
           </GridStyled>
         </ComponentRoot>
         <ComponentRoot>
-          <GridStyled xs={3}>
+          <GridStyled item xs={3}>
             <GridValue>{consultants}</GridValue>
           </GridStyled>
-          <GridStyled xs={3}>
+          <GridStyled item xs={3}>
             <GridValue>{billedLastPeriod}</GridValue>
           </GridStyled>
-          <GridStyled xs={3}>
+          <GridStyled item xs={3}>
             <GridValue>{billedTotal}</GridValue>
           </GridStyled>
         </ComponentRoot>

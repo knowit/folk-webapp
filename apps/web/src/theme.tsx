@@ -19,26 +19,29 @@ declare module '@mui/material/styles' {
   }
 }
 
-const getDesignTokens = (mode: PaletteMode) => ({
+export const themeColours = (mode: PaletteMode) => ({
   palette: {
     mode,
     primary: {
       ...(mode === 'light'
         ? {
+            light: '#404040',
             main: '#333',
-            light: '#b8b8b6',
+            dark: '#252525',
             contrastText: '#E4E1DB',
           }
         : {
-            main: '#707070',
-            light: '#E4E1DB',
+            light: '#303030',
+            main: '#222',
+            dark: '#151515',
+            contrastText: '#E4E1DB',
           }),
     },
     secondary: {
-      ...(mode === 'light' ? { main: '#FAC0B1' } : { main: '#ff0000' }),
+      ...(mode === 'light' ? { main: '#FAC0B1' } : { main: '#FAC0B1' }),
     },
     tertiary: {
-      ...(mode === 'light' ? { main: '#FAC0B1' } : { main: '#ff0000' }),
+      ...(mode === 'light' ? { main: '#FAC0B1' } : { main: '#FAC0B1' }),
     },
     background: {
       ...(mode === 'light'
@@ -48,14 +51,15 @@ const getDesignTokens = (mode: PaletteMode) => ({
             darker: '#E4E1DB',
           }
         : {
-            default: '#FFFFFF',
-            paper: '#F1F0ED',
+            default: '#282828',
+            paper: '#333',
+            darker: '#222',
           }),
     },
     text: {
       ...(mode === 'light'
         ? { primary: '#333', secondary: '#707070', tertiary: '#F1F0ED' }
-        : { primary: '#333', secondary: '#F1F0ED' }),
+        : { primary: '#E4E1DB', secondary: '#F1F0ED', tertiary: '#F1F0ED' }),
     },
     info: {
       ...(mode === 'light'
@@ -98,184 +102,196 @@ const getDesignTokens = (mode: PaletteMode) => ({
     },
   },
 })
-const colourTheme = createTheme(getDesignTokens('light'))
 
-export const theme = createTheme(colourTheme, {
-  typography: {
-    fontFamily: 'Arial, Helvetica Neue, Helvetica, sans-serif',
-    fontWeightRegular: 'normal',
-  },
-  components: {
-    MuiAccordion: {
-      defaultProps: {
-        disableGutters: true,
-      },
-      styleOverrides: {
-        root: {
-          marginTop: 10,
-          '&.Mui-expanded:last-of-type': {
+export const updateTheme = (mode) => {
+  const colourTheme = createTheme(themeColours(mode))
+
+  const theme = createTheme(colourTheme, {
+    typography: {
+      fontFamily: 'Arial, Helvetica Neue, Helvetica, sans-serif',
+      fontWeightRegular: 'normal',
+    },
+    components: {
+      MuiAccordion: {
+        defaultProps: {
+          disableGutters: true,
+        },
+        styleOverrides: {
+          root: {
             marginTop: 10,
+            '&.Mui-expanded:last-of-type': {
+              marginTop: 10,
+            },
           },
         },
       },
-    },
-    MuiAccordionDetails: {
-      styleOverrides: { root: { padding: 0, border: 'none' } },
-    },
-    MuiAccordionSummary: {
-      styleOverrides: {
-        root: {
-          backgroundColor: colourTheme.palette.background.darker,
-          color: colourTheme.palette.text.primary,
-          fontSize: '18px',
-        },
+      MuiAccordionDetails: {
+        styleOverrides: { root: { padding: 0, border: 'none' } },
       },
-    },
-    MuiAppBar: {
-      defaultProps: {
-        position: 'relative',
-      },
-      styleOverrides: {
-        root: {
-          backgroundColor: colourTheme.palette.primary.main,
-          borderBottomColor: colourTheme.palette.secondary.main,
-          borderBottomStyle: 'solid',
-          boxShadow: 'none',
-          height: '79px',
-        },
-      },
-    },
-    MuiAutocomplete: {
-      styleOverrides: {
-        root: { paddingRight: '10px' },
-        groupLabel: {
-          color: colourTheme.palette.text.primary,
-        },
-      },
-    },
-    MuiButtonBase: {
-      styleOverrides: {
-        root: {
-          color: colourTheme.palette.primary.contrastText,
-        },
-      },
-    },
-    MuiCheckbox: {
-      styleOverrides: {
-        root: {
-          color: colourTheme.palette.text.primary,
-        },
-      },
-    },
-    MuiChip: {
-      styleOverrides: {
-        root: {
-          margin: 5,
-        },
-        deletable: {
-          '& .MuiChip-deleteIcon': {
-            '&:hover': { color: colourTheme.palette.error.light },
+      MuiAccordionSummary: {
+        styleOverrides: {
+          root: {
+            backgroundColor: colourTheme.palette.background.darker,
+            color: colourTheme.palette.text.primary,
+            fontSize: '18px',
           },
         },
       },
-    },
-    MuiDialog: {
-      styleOverrides: {
-        paper: {
-          backgroundColor: colourTheme.palette.background.paper,
-          borderRadius: 0,
-          padding: '1rem',
+      MuiAppBar: {
+        defaultProps: {
+          position: 'relative',
+        },
+        styleOverrides: {
+          root: {
+            borderBottomColor: colourTheme.palette.secondary.main,
+            borderBottomStyle: 'solid',
+            boxShadow: 'none',
+            height: '79px',
+          },
         },
       },
-    },
-    MuiFormLabel: {
-      styleOverrides: {
-        root: {
-          color: colourTheme.palette.text.primary,
+      MuiAutocomplete: {
+        styleOverrides: {
+          root: { paddingRight: '10px' },
+          groupLabel: {
+            color: colourTheme.palette.text.primary,
+          },
         },
       },
-    },
-    MuiMenuItem: {
-      styleOverrides: {
-        root: {
-          color: colourTheme.palette.text.primary,
-          backgroundColor: colourTheme.palette.background.default,
+      MuiButtonBase: {
+        styleOverrides: {
+          root: {
+            color: colourTheme.palette.primary.contrastText,
+          },
         },
       },
-    },
-    MuiRadio: {
-      styleOverrides: {
-        root: {
-          color: colourTheme.palette.text.primary,
+      MuiCheckbox: {
+        styleOverrides: {
+          root: {
+            color: colourTheme.palette.text.primary,
+            '&.Mui-checked': {
+              color: colourTheme.palette.text.primary,
+            },
+          },
         },
       },
-    },
-    MuiSlider: {
-      styleOverrides: {
-        root: {
-          minWidth: '150px',
+      MuiChip: {
+        styleOverrides: {
+          root: {
+            margin: 5,
+          },
+          deletable: {
+            '& .MuiChip-deleteIcon': {
+              '&:hover': { color: colourTheme.palette.error.light },
+            },
+          },
         },
       },
-    },
-    MuiTab: {
-      defaultProps: {
-        disableRipple: true,
-      },
-      styleOverrides: {
-        root: {
-          color: colourTheme.palette.text.tertiary,
-          fontSize: 21,
-          textTransform: 'none',
-          display: 'flex',
-          margin: 10,
+      MuiDialog: {
+        styleOverrides: {
+          paper: {
+            backgroundColor: colourTheme.palette.background.paper,
+            borderRadius: 0,
+            padding: '1rem',
+          },
         },
       },
-    },
-    MuiTableCell: {
-      styleOverrides: {
-        root: {
-          borderWidth: 0,
+      MuiFormLabel: {
+        styleOverrides: {
+          root: {
+            color: colourTheme.palette.text.primary,
+            '&.Mui-focused': {
+              color: colourTheme.palette.text.primary,
+            },
+          },
         },
       },
-    },
-    MuiTabs: {
-      defaultProps: {
-        indicatorColor: 'secondary',
-        textColor: 'secondary',
-      },
-      styleOverrides: {
-        root: {
-          backgroundColor: colourTheme.palette.primary.main,
-          display: 'flex',
-          flexWrap: 'wrap',
+      MuiMenuItem: {
+        styleOverrides: {
+          root: {
+            color: colourTheme.palette.text.primary,
+            backgroundColor: colourTheme.palette.background.default,
+          },
         },
       },
-    },
-    MuiToolbar: {
-      styleOverrides: {
-        root: {
-          height: '100%',
-          paddingLeft: '30px',
-          paddingRight: '30px',
+      MuiRadio: {
+        styleOverrides: {
+          root: {
+            color: colourTheme.palette.text.primary,
+            '&.Mui-checked': {
+              color: colourTheme.palette.text.primary,
+            },
+          },
         },
       },
-    },
-    MuiTooltip: {
-      styleOverrides: {
-        arrow: {
-          color: colourTheme.palette.primary.light,
-          '&:before': {
+      MuiSlider: {
+        styleOverrides: {
+          root: {
+            minWidth: '150px',
+          },
+        },
+      },
+      MuiTab: {
+        defaultProps: {
+          disableRipple: true,
+        },
+        styleOverrides: {
+          root: {
+            color: colourTheme.palette.primary.contrastText,
+            fontSize: 21,
+            textTransform: 'none',
+            display: 'flex',
+            margin: 10,
+          },
+        },
+      },
+      MuiTableCell: {
+        styleOverrides: {
+          root: {
+            borderWidth: 0,
+          },
+        },
+      },
+      MuiTabs: {
+        defaultProps: {
+          indicatorColor: 'secondary',
+        },
+        styleOverrides: {
+          root: {
+            backgroundColor: colourTheme.palette.primary.main,
+            display: 'flex',
+            flexWrap: 'wrap',
+          },
+        },
+      },
+      MuiToolbar: {
+        styleOverrides: {
+          root: {
+            height: '100%',
+            paddingLeft: '30px',
+            paddingRight: '30px',
+          },
+        },
+      },
+      MuiTooltip: {
+        styleOverrides: {
+          arrow: {
+            color: colourTheme.palette.background.paper,
+            '&:before': {
+              border: `1px solid ${colourTheme.palette.primary.main}`,
+            },
+          },
+          tooltip: {
+            maxWidth: '100%',
+            color: colourTheme.palette.text.primary,
+            background: colourTheme.palette.background.paper,
+            fontSize: 14,
             border: `1px solid ${colourTheme.palette.primary.main}`,
           },
         },
-        tooltip: {
-          maxWidth: '100%',
-          color: colourTheme.palette.text.primary,
-          background: colourTheme.palette.primary.light,
-          fontSize: 14,
-          border: `1px solid ${colourTheme.palette.primary.main}`,
-        },
       },
     },
-  },
-})
+  })
+
+  return theme
+}

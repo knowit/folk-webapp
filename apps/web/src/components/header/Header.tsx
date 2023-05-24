@@ -1,5 +1,5 @@
-import React from 'react'
-import { AppBar, Toolbar, Avatar, Tabs, Tab } from '@mui/material'
+import React, { FunctionComponent } from 'react'
+import { AppBar, Avatar, Tabs, Tab, Toolbar } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import { NavMenu } from './NavMenu'
@@ -7,6 +7,7 @@ import { ReactComponent as KnowitLogo } from '../../assets/logo.svg'
 import { ReactComponent as FallbackUserIcon } from '../../assets/fallback_user.svg'
 import { LoginLogoutButton } from '../LoginLogoutButton'
 import { useUserInfo } from '../../context/UserInfoContext'
+import ModeSwitch from './ModeSwitch'
 
 const ComponentRoot = styled('div')(({ theme }) => ({
   top: 0,
@@ -24,22 +25,47 @@ const KnowitLogoStyled = styled(KnowitLogo)(() => ({
 
 const AvatarStyled = styled(Avatar)(() => ({
   height: 40,
+  margin: 20,
 }))
 
-export default function Header() {
+const ActionsContainer = styled('div')(() => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  flexDirection: 'row',
+}))
+
+interface HeaderProps {
+  darkMode: boolean
+  onChangeMode: () => void
+}
+
+export const Header: FunctionComponent<HeaderProps> = ({
+  darkMode,
+  onChangeMode,
+}) => {
   const { user } = useUserInfo()
+  const availablePages = ['/ansatte', '/kunder', '/kompetanse', '/organisasjon']
   const activePage = useLocation().pathname
+  let tabsVisiblePage: string | boolean
+  availablePages.includes(activePage)
+    ? (tabsVisiblePage = activePage)
+    : (tabsVisiblePage = false)
+
+  const handleModeSwitch = () => {
+    onChangeMode()
+  }
 
   return (
     <ComponentRoot>
       <AppBar>
-        <Toolbar component={'nav'}>
+        <Toolbar component={'nav'} sx={{ backgroundColor: 'primary.main' }}>
           <Link data-testid="knowit-logo" to={'/'}>
             <KnowitLogoStyled title="knowit-logo" />
           </Link>
           <NavMenu>
             {user && (
-              <Tabs value={activePage}>
+              <Tabs value={tabsVisiblePage} textColor="secondary">
                 <Tab
                   label={'Ansatte'}
                   value={'/ansatte'}
@@ -67,12 +93,17 @@ export default function Header() {
               </Tabs>
             )}
           </NavMenu>
-          <LoginLogoutButton />
-          <AvatarStyled alt={user?.name} src={user?.picture}>
-            <FallbackUserIcon />
-          </AvatarStyled>
+          <ActionsContainer>
+            <LoginLogoutButton />
+            <AvatarStyled id="userAvatar" alt={user?.name} src={user?.picture}>
+              <FallbackUserIcon />
+            </AvatarStyled>
+            <ModeSwitch onChange={handleModeSwitch} checked={darkMode} />
+          </ActionsContainer>
         </Toolbar>
       </AppBar>
     </ComponentRoot>
   )
 }
+
+export default Header
