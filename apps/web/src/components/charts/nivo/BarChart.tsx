@@ -24,13 +24,14 @@ const splitText = (longText: string | number) => {
 }
 
 const CustomTick = (tick: any) => {
+  const theme = useTheme()
   const y = tick.tickIndex % 2 === 0 ? 10 : -15
   const values = splitText(tick.value)
   return (
     <g transform={`translate(${tick.x},${tick.y + 22})`}>
       <line stroke="rgb(119,119,119)" strokeWidth={1.5} y1={-22} y2={y} />
       <text
-        fill="#888"
+        fill={theme.palette.mode === 'light' ? '#444' : '#ddd'}
         y={y + 5}
         textAnchor="middle"
         dominantBaseline="middle"

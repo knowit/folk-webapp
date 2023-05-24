@@ -28,7 +28,6 @@ const RadarChart: React.FC<Props<any>> = ({ isBig = false, ...props }) => {
       style={{
         width: '100%',
         height: isBig ? '400px' : '300px',
-        fill: '#888',
       }}
     >
       <ResponsiveRadar
@@ -90,7 +89,7 @@ const RadarChart: React.FC<Props<any>> = ({ isBig = false, ...props }) => {
             translateY: -48,
             itemWidth: 80,
             itemHeight: 20,
-            itemTextColor: '#888',
+            itemTextColor: theme.palette.mode === 'light' ? '#444' : '#ddd',
             symbolSize: 12,
             symbolShape: 'circle',
           },

@@ -2,6 +2,7 @@ import { PieSvgProps, ResponsivePie } from '@nivo/pie'
 import React from 'react'
 import { chartColors, IsBigProps } from './common'
 import TooltipContainer from './TooltipContainer'
+import { useTheme } from '@mui/material'
 
 type Props = Omit<PieSvgProps<any>, 'width' | 'height'> &
   IsBigProps & {
@@ -10,11 +11,13 @@ type Props = Omit<PieSvgProps<any>, 'width' | 'height'> &
   }
 
 const PieChart: React.FC<Props> = ({ isBig = false, ...props }) => {
+  const theme = useTheme()
+
   const chartTheme = {
     axis: {
       ticks: {
         line: {
-          stroke: '#888',
+          stroke: theme.palette.mode === 'light' ? '#444' : '#ddd',
           strokeWidth: 1,
         },
       },
@@ -25,7 +28,6 @@ const PieChart: React.FC<Props> = ({ isBig = false, ...props }) => {
       style={{
         width: '100%',
         height: isBig ? '400px' : '300px',
-        color: '#888',
       }}
     >
       <ResponsivePie
@@ -38,7 +40,9 @@ const PieChart: React.FC<Props> = ({ isBig = false, ...props }) => {
         colors={chartColors}
         borderWidth={1}
         sliceLabelsSkipAngle={10}
-        arcLinkLabelsTextColor="#888"
+        arcLinkLabelsTextColor={
+          theme.palette.mode === 'light' ? '#444' : '#ddd'
+        }
         tooltip={({ datum }) => (
           <TooltipContainer>
             <div style={{ alignItems: 'center', display: 'flex' }}>
