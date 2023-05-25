@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles'
 
 const Button = styled('div', {
   shouldForwardProp: (prop) => prop !== 'active',
-})<{ active: boolean }>(({ active }) => ({
+})<{ active: boolean }>(({ active, theme }) => ({
   marginRight: '10px',
   marginLeft: '10px',
   whiteSpace: 'nowrap',
@@ -11,7 +11,9 @@ const Button = styled('div', {
   display: 'flex',
   cursor: 'pointer',
   padding: '8px 12px',
-  background: active ? '#FFFFFF' : '#F1F0ED',
+  background: active
+    ? theme.palette.background.paper
+    : theme.palette.background.default,
 }))
 
 interface Props {

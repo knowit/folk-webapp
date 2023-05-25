@@ -7,11 +7,8 @@ import { useUserInfo } from '../context/UserInfoContext'
 const ButtonBaseStyled = styled(ButtonBase)(() => ({
   fontSize: '15px',
   fontWeight: 'bold',
-  paddingLeft: '13.75px',
-  paddingRight: '13.75px',
-  marginLeft: '13.75px',
-  marginRight: '13.75px',
   height: 'inherit',
+  margin: '3px',
 }))
 
 export const LoginLogoutButton = () => {

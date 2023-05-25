@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles'
 import { ExpandLessIcon, ExpandMoreIcon } from '../../../assets/Icons'
 import { ReactComponent as FallbackUserIcon } from '../../../assets/fallback_user.svg'
 import CharacterLimitBox from '../components/CharacterLimitBox'
-import { OpenIneNewIcon } from '../../../assets/Icons'
+import { OpenInNewIcon } from '../../../assets/Icons'
 import { Link } from 'react-router-dom'
 import { ConsultantInfo } from '../../../api/data/employee/employeeApiTypes'
 
@@ -88,7 +88,7 @@ export default function ConsultantCell({
         <ButtonSubRoot>
           {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           <Link to={'/ansatt/' + consultant.email} target="_blank">
-            <OpenIneNewIcon />
+            <OpenInNewIcon />
           </Link>
         </ButtonSubRoot>
       </EmployeeCellButton>

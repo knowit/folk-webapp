@@ -38,6 +38,7 @@ export interface DDComponentProps {
   title: string
   description?: string
   fullsize?: boolean
+  searchable?: boolean
 }
 
 export type SortOrder = 'NONE' | 'ASC' | 'DESC'

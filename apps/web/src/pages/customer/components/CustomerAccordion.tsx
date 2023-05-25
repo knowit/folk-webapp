@@ -4,11 +4,15 @@ import {
   AccordionDetails,
   Box,
 } from '@mui/material'
-import { Minimize, Add, OpenInNew } from '@mui/icons-material'
+
+import { Minimize, Add } from '@mui/icons-material'
 import React, { useState } from 'react'
 import { EmployeeForCustomerList } from '../../../api/data/customer/customerApiTypes'
 import DataTable from '../../../components/table/DataTable'
 import { Column } from '../../../components/table/tableTypes'
+import { Link } from 'react-router-dom'
+import { OpenInNewIcon } from '../../../assets/Icons'
+import { styled } from '@mui/material/styles'
 
 interface CustomerDropdownProps {
   customerName: string
@@ -16,6 +20,12 @@ interface CustomerDropdownProps {
   expand?: boolean
   columns: Column[]
 }
+
+const CustomerColumn = styled('div')(() => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+}))
 
 const CustomerAccordion = ({
   customerName,
@@ -51,16 +61,14 @@ const CustomerAccordion = ({
               gridTemplateColumns: '1fr 1fr',
             }}
           >
-            <div>
+            <CustomerColumn>
               {customerName}
-              <OpenInNew
-                className={'openNewIconAccordion'}
-                style={{ marginLeft: 15 }}
-                onClick={(e) => {
-                  e.stopPropagation() /* todo show kundeflik */
-                }}
-              />
-            </div>
+              {customerName != 'Uten prosjekt' && (
+                <Link to={'/kunder/' + customerName} target="_blank">
+                  <OpenInNewIcon />
+                </Link>
+              )}
+            </CustomerColumn>
             <div style={{ marginLeft: 15 }}>
               Antall konsulenter: {employees.length}
             </div>

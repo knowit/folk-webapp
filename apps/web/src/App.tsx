@@ -1,10 +1,13 @@
-import React from 'react'
-import { Theme } from '@mui/material/styles'
-import { styled } from '@mui/material/styles'
+import React, { useEffect, useState } from 'react'
+import { Theme, styled } from '@mui/material/styles'
 import Header from './components/header/Header'
 import Content from './components/Content'
 import Footer from './components/Footer'
 import { useUserInfo } from './context/UserInfoContext'
+import { CssBaseline, useMediaQuery } from '@mui/material'
+import { ThemeProvider } from '@mui/material/styles'
+import { StyledEngineProvider } from '@mui/material/styles'
+import { updateTheme } from './theme'
 
 declare module '@mui/styles/defaultTheme' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -31,7 +34,25 @@ const AppContentContainer = styled('div')(({ theme }) => ({
 const AppMainContent = styled('main')(() => ({ width: '100%', height: '100%' }))
 
 export default function App() {
+  const [darkMode, setDarkMode] = useState(false)
+  const [activeTheme, setActiveTheme] = useState<Theme | undefined>()
   const url = new URL(window.location.href)
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+
+  useEffect(() => {
+    if (localStorage.getItem('darkMode') === null) {
+      setActiveTheme(updateTheme(prefersDarkMode ? 'dark' : 'light'))
+      setDarkMode(prefersDarkMode)
+    } else {
+      setActiveTheme(
+        updateTheme(
+          localStorage.getItem('darkMode') === 'true' ? 'dark' : 'light'
+        )
+      )
+      setDarkMode(localStorage.getItem('darkMode') === 'true')
+    }
+  }, [prefersDarkMode])
+
   if (url.searchParams.has('login')) {
     localStorage.setItem('login', 'true')
     url.searchParams.delete('login')
@@ -41,15 +62,30 @@ export default function App() {
   const { user } = useUserInfo()
   if (user === undefined) return null
 
+  const handleModeChange = () => {
+    localStorage.setItem('darkMode', (!darkMode).toString())
+    setDarkMode(!darkMode)
+    setActiveTheme(
+      updateTheme(
+        localStorage.getItem('darkMode') === 'true' ? 'dark' : 'light'
+      )
+    )
+  }
+
   return (
-    <AppContainer>
-      <Header />
-      <AppContentContainer>
-        <AppMainContent>
-          <Content />
-        </AppMainContent>
-        <Footer />
-      </AppContentContainer>
-    </AppContainer>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={activeTheme}>
+        <CssBaseline />
+        <AppContainer>
+          <Header darkMode={darkMode} onChangeMode={handleModeChange} />
+          <AppContentContainer>
+            <AppMainContent>
+              <Content />
+            </AppMainContent>
+            <Footer />
+          </AppContentContainer>
+        </AppContainer>
+      </ThemeProvider>
+    </StyledEngineProvider>
   )
 }

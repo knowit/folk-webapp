@@ -5,8 +5,7 @@ import { Chip, Rating, Divider } from '@mui/material'
 import { EmployeeTableColumnMapping, FilterEntry } from './FilterUtil'
 
 const ComponentRoot = styled('div')(({ theme }) => ({
-  backgroundColor: theme.palette.background.default,
-  borderBottom: `solid 1px ${theme.palette.background.darker}`,
+  backgroundColor: theme.palette.background.darker,
   padding: '0 15px',
   display: 'flex',
   justifyContent: 'flex-start',
@@ -23,11 +22,16 @@ const ComponentTagsContainer = styled('div')(() => ({
   justifyContent: 'flex-start',
   flex: 'auto',
 }))
-const RatingStyled = styled(Rating)(() => ({
-  color: 'black',
+const RatingStyled = styled(Rating)(({ theme }) => ({
+  color: theme.palette.text.primary,
 }))
 const DividerStyled = styled(Divider)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
+}))
+const ChipStyled = styled(Chip)(({ theme }) => ({
+  backgroundColor: theme.palette.background.darker,
+  border: `1px solid ${theme.palette.text.primary}`,
+  color: theme.palette.text.primary,
 }))
 
 const Tag = ({
@@ -42,8 +46,7 @@ const Tag = ({
   onThresholdChange: (value) => void
 }) => {
   return (
-    <Chip
-      color="primary"
+    <ChipStyled
       size="small"
       variant="outlined"
       label={
@@ -69,7 +72,7 @@ const Tag = ({
 
 const RemoveAllTag = (onDelete: { onDelete: () => void }) => {
   return (
-    <Chip
+    <ChipStyled
       size="small"
       label="Fjern alle"
       onDelete={onDelete.onDelete}

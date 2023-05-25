@@ -4,12 +4,12 @@ import { styled } from '@mui/material/styles'
 import { NoData } from '../../ErrorText'
 
 const TooltipStyled = styled(Tooltip)(({ theme }) => ({
-  backgroundColor: theme.palette.background.default,
+  backgroundColor: 'transparent',
   color: theme.palette.text.primary,
   fontSize: theme.typography.pxToRem(14),
   border: 'none',
   '& .MuiTooltip-arrow': {
-    color: theme.palette.background.default,
+    color: 'transparent',
   },
 }))
 

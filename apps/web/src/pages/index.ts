@@ -1,5 +1,6 @@
 export { default as CompetencePage } from './competence/CompetencePage'
 export { default as CustomerPage } from './customer/CustomerPage'
+export { default as CustomerSitePage } from './customer/CustomerSitePage'
 export { default as EmployeePage } from './employee/EmployeePage'
 export { default as EmployeeProfilePage } from './employee/EmployeeProfilePage'
 export { default as NotFoundPage } from './other/NotFoundPage'

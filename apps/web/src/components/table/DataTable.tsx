@@ -276,8 +276,8 @@ export function VirtualizedTable({
       style={{
         height: getTableHeight(),
         width: '100%',
-        backgroundColor: 'white',
       }}
+      sx={{ backgroundColor: 'background.default' }}
     >
       <AutoSizer>
         {({ height, width }) => (
@@ -330,7 +330,6 @@ export default function DataTable(props: DataTableProps) {
       style={{
         height: '100%',
         width: '100%',
-        backgroundColor: 'white',
       }}
     >
       <VirtualizedTable
