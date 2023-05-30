@@ -53,8 +53,8 @@ const Links = ({ links }: Props) => {
 
   return (
     <g>
-      {links.map((link) => (
-        <LinkElement link={link} />
+      {links.map((link, i) => (
+        <LinkElement link={link} key={i} />
       ))}
     </g>
   )

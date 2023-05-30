@@ -1,12 +1,13 @@
-import { useEffect, useRef } from 'react'
+import { useRef, useState } from 'react'
 import { EmployeeNode } from 'server/routers/employees/employeesTypes'
 import { hierarchy, cluster } from 'd3-hierarchy'
 import { descending } from 'd3-array'
-import { zoom } from 'd3-zoom'
-import { select } from 'd3-selection'
 import { Link, Node } from '../type'
 import Links from './Links/Links'
 import EmployeeTreeNode from './EmployeeTreeNode'
+import Zooming from './Zooming'
+import Rotating from './Rotating'
+
 interface Props {
   data: EmployeeNode
   width: number
@@ -54,36 +55,51 @@ const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
     }
   })
 
-  useEffect(() => {
-    const zoomCall = zoom().on('zoom', (event) => {
-      if (groupRef.current) {
-        groupRef.current.setAttribute('transform', event.transform)
-      }
-    })
-    select(svgRef.current).call(zoomCall)
-  }, [groupRef, svgRef])
+  const [rotateValue, setRotateValue] = useState(0)
+  const [zoomTransformValue, setZoomTransformValue] = useState({
+    k: 1,
+    x: 0,
+    y: 0,
+  })
 
   return (
-    <svg
-      viewBox={`${-marginLeft - radius}  ${
-        -marginTop - radius
-      } ${width} ${height}`}
-      width={width}
-      height={height}
-      style={{ maxWidth: '100%', height: 'auto' }}
-      fontFamily={'sans-serif'}
-      ref={svgRef}
-      fontSize={12}
-    >
-      <g ref={groupRef}>
-        <Links links={links} />
-        <g>
-          {descendants.map((node) => {
-            return <EmployeeTreeNode node={node} />
-          })}
+    <>
+      <div>
+        <Rotating
+          groupRef={groupRef}
+          svgRef={svgRef}
+          zoomTransformValue={zoomTransformValue}
+          setZoomTransformValue={setZoomTransformValue}
+          rotateValue={rotateValue}
+          setRotateValue={setRotateValue}
+        />
+        <Zooming
+          groupRef={groupRef}
+          svgRef={svgRef}
+          zoomTransformValue={zoomTransformValue}
+          setZoomTransformValue={setZoomTransformValue}
+          rotateValue={rotateValue}
+        />
+      </div>
+      <svg
+        viewBox={`${-marginLeft - radius}  ${
+          -marginTop - radius
+        } ${width} ${height}`}
+        style={{ maxWidth: '100%', height: 'auto', cursor: 'pointer' }}
+        fontFamily={'sans-serif'}
+        ref={svgRef}
+        fontSize={12}
+      >
+        <g ref={groupRef}>
+          <Links links={links} />
+          <g>
+            {descendants.map((node, i) => {
+              return <EmployeeTreeNode node={node} key={i} />
+            })}
+          </g>
         </g>
-      </g>
-    </svg>
+      </svg>
+    </>
   )
 }
 
