@@ -19,28 +19,8 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
     },
   }
 
-  const theseLegendValues = {
-    anchor: 'bottom',
-    direction: 'row',
-    justify: false,
-    itemWidth: 100,
-    itemsSpacing: 100,
-    itemHeight: 20,
-    itemOpacity: 0.75,
-    symbolSize: 12,
-    symbolShape: 'circle',
-    effects: [
-      {
-        on: 'hover',
-        style: {
-          itemBackground: 'rgba(0, 0, 0, .03)',
-          itemOpacity: 1,
-        },
-      },
-    ],
-  }
-
   const filteredData = props.data
+
   return (
     <div style={{ width: '100%', height: isBig ? '400px' : '280px' }}>
       <ResponsiveLine
@@ -93,6 +73,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
                   anchor: 'bottom',
                   direction: 'row',
                   justify: false,
+
                   itemWidth: 100,
                   itemsSpacing: 100,
                   itemHeight: 20,
@@ -116,7 +97,6 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
                   anchor: 'bottom',
                   direction: 'row',
                   justify: false,
-
                   itemWidth: 100,
                   itemsSpacing: 100,
                   itemHeight: 20,
