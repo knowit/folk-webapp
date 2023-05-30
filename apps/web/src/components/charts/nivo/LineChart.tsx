@@ -72,7 +72,6 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
                   anchor: 'bottom',
                   direction: 'row',
                   justify: false,
-
                   itemWidth: 100,
                   itemsSpacing: 100,
                   itemHeight: 20,
