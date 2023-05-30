@@ -3,7 +3,6 @@ import React from 'react'
 import { chartColors, IsBigProps } from './common'
 import TooltipContainer from './TooltipContainer'
 import { useTheme } from '@mui/material'
-import { data } from 'browserslist'
 
 const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
   isBig = false,
