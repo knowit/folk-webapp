@@ -1,5 +1,5 @@
-import AWS from 'aws-sdk'
-AWS.config.update({ region: 'eu-central-1' })
+import { config } from 'aws-sdk'
+config.update({ region: 'eu-central-1' })
 
 export const range = (x: number, y: number) =>
   Array.from(
