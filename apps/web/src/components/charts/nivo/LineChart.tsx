@@ -3,6 +3,7 @@ import React from 'react'
 import { chartColors, IsBigProps } from './common'
 import TooltipContainer from './TooltipContainer'
 import { useTheme } from '@mui/material'
+import { data } from 'browserslist'
 
 const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
   isBig = false,
@@ -17,10 +18,34 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
       },
     },
   }
+
+  const theseLegendValues = {
+    anchor: 'bottom',
+    direction: 'row',
+    justify: false,
+    itemWidth: 100,
+    itemsSpacing: 100,
+    itemHeight: 20,
+    itemOpacity: 0.75,
+    symbolSize: 12,
+    symbolShape: 'circle',
+    effects: [
+      {
+        on: 'hover',
+        style: {
+          itemBackground: 'rgba(0, 0, 0, .03)',
+          itemOpacity: 1,
+        },
+      },
+    ],
+  }
+
+  const filteredData = props.data
   return (
     <div style={{ width: '100%', height: isBig ? '400px' : '280px' }}>
       <ResponsiveLine
         theme={chartTheme}
+        data={filteredData}
         margin={{ top: 10, right: 40, bottom: 70, left: 40 }}
         animate={false}
         xScale={{ type: 'point' }}
@@ -59,29 +84,98 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
             ))}
           </TooltipContainer>
         )}
+        pointLabelYOffset={10}
         pointColor={{ theme: 'background' }}
-        legends={[
-          {
-            anchor: 'bottom',
-            direction: 'row',
-            translateY: 50,
-            itemWidth: 100,
-            itemsSpacing: 100,
-            itemHeight: 20,
-            itemOpacity: 0.75,
-            symbolSize: 12,
-            symbolShape: 'circle',
-            effects: [
-              {
-                on: 'hover',
-                style: {
-                  itemBackground: 'rgba(0, 0, 0, .03)',
-                  itemOpacity: 1,
+        legends={
+          filteredData && filteredData.length <= 4
+            ? [
+                {
+                  anchor: 'bottom',
+                  direction: 'row',
+                  justify: false,
+                  itemWidth: 100,
+                  itemsSpacing: 100,
+                  itemHeight: 20,
+                  itemOpacity: 0.75,
+                  symbolSize: 12,
+                  symbolShape: 'circle',
+                  effects: [
+                    {
+                      on: 'hover',
+                      style: {
+                        itemBackground: 'rgba(0, 0, 0, .03)',
+                        itemOpacity: 1,
+                      },
+                    },
+                  ],
+                  translateY: 25,
                 },
-              },
-            ],
-          },
-        ]}
+              ]
+            : [
+                {
+                  anchor: 'bottom',
+                  direction: 'row',
+                  justify: false,
+
+                  itemWidth: 100,
+                  itemsSpacing: 100,
+                  itemHeight: 20,
+                  itemOpacity: 0.75,
+                  symbolSize: 12,
+                  symbolShape: 'circle',
+                  effects: [
+                    {
+                      on: 'hover',
+                      style: {
+                        itemBackground: 'rgba(0, 0, 0, .03)',
+                        itemOpacity: 1,
+                      },
+                    },
+                  ],
+                  translateY: 30,
+                  data: props.data
+                    .slice(0, Math.floor(props.data.length / 2))
+                    .map((cur, index) => ({
+                      id: cur.id,
+                      label: cur.id,
+                      color: chartColors.slice(
+                        0,
+                        Math.floor(filteredData.length / 2)
+                      )[index],
+                    })),
+                },
+                {
+                  anchor: 'bottom',
+                  direction: 'row',
+                  justify: false,
+                  itemWidth: 100,
+                  itemsSpacing: 100,
+                  itemHeight: 20,
+                  itemOpacity: 0.75,
+                  symbolSize: 12,
+                  symbolShape: 'circle',
+                  effects: [
+                    {
+                      on: 'hover',
+                      style: {
+                        itemBackground: 'rgba(0, 0, 0, .03)',
+                        itemOpacity: 1,
+                      },
+                    },
+                  ],
+                  translateY: 50,
+                  data: filteredData
+                    .slice(Math.floor(filteredData.length / 2))
+                    .map((cur, index) => ({
+                      id: cur.id,
+                      label: cur.id,
+                      color: chartColors.slice(
+                        Math.floor(filteredData.length / 2)
+                      )[index],
+                    })),
+                },
+              ]
+        }
         {...props}
       />
     </div>
