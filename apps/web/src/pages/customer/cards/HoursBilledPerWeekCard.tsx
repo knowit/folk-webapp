@@ -20,6 +20,7 @@ import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { motion, LayoutGroup } from 'framer-motion'
 import { DateRangePickerButton } from '../../../components/dateranges/DateRangePickerButton'
 import CustomerGraphFilter from '../components/CustomerGraphFilter'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 const GridContainer = styled('div')({
   display: 'grid',
@@ -89,6 +90,7 @@ const HoursBilledPerWeekCard = ({
     weeklyData,
     monthlyData,
   } = usePerWeekFilter(data)
+  const { trackEvent } = useMatomo()
 
   const customersUnfiltered =
     data === undefined ? [] : data?.data?.map((item) => item.id as string)
@@ -231,6 +233,10 @@ const HoursBilledPerWeekCard = ({
                       const option = filterOptions.find(
                         (option) => option === event.target.value
                       )
+                      trackEvent({
+                        category: `fakturerte-timer-kunde-${option.toLowerCase()}`,
+                        action: 'click-event',
+                      })
                       setSelectedFilter(option)
                     }}
                   >
@@ -283,6 +289,10 @@ const HoursBilledPerWeekCard = ({
                       const option = filterOptions.find(
                         (option) => option === event.target.value
                       )
+                      trackEvent({
+                        category: `fakturerte-timer-${option.toLowerCase()}`,
+                        action: 'click-event',
+                      })
                       setSelectedFilter(option)
                     }}
                   >

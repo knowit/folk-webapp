@@ -40,8 +40,11 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
         enableSlices="x"
         sliceTooltip={({ slice }) => (
           <TooltipContainer>
-            {slice.points.map((value) => (
-              <div style={{ alignItems: 'center', display: 'flex' }}>
+            {slice.points.map((value, index) => (
+              <div
+                key={index}
+                style={{ alignItems: 'center', display: 'flex' }}
+              >
                 <div
                   style={{
                     width: '12px',
