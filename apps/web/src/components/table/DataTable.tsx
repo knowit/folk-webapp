@@ -18,6 +18,7 @@ import { Column, ColumnSort } from './tableTypes'
 import { EmployeeTableRow } from '../../api/data/employee/employeeApiTypes'
 import { EmployeeForCustomerList } from '../../api/data/customer/customerApiTypes'
 import { SortColumnInTable } from './util/sort-column-in-table'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 // Hack to allow upgrade to React 18
 // https://github.com/bvaughn/react-virtualized/issues/1739#issuecomment-1264276522
@@ -125,6 +126,7 @@ export function VirtualizedTable({
   const tableRef = useRef<_Table>(null)
   const [expandedRowIds, setExpandedRowIds] = useState<string[]>([])
   const [sortOrderUnchanged, setSortOrderUnchanged] = useState(true)
+  const { trackEvent } = useMatomo()
 
   useEffect(() => {
     // We need to alert the react-virtualized table that the height of a
@@ -142,6 +144,7 @@ export function VirtualizedTable({
         ...prevState.filter((expandedRowId) => expandedRowId !== rowId),
       ])
     } else {
+      trackEvent({ category: 'user-details', action: 'click-event' })
       setExpandedRowIds((prevState) => [...prevState, rowId])
     }
   }
