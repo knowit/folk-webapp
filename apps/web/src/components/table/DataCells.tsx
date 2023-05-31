@@ -6,6 +6,7 @@ import ProjectStatusCell from './cells/ProjectStatusCell'
 import CustomerStatusCell from './cells/CustomerStatusCell'
 import SortableHeaderCell from './cells/SortableHeaderCell'
 import CenteredHeaderCell from './cells/CenteredHeaderCell'
+import FilteredDownloadCell from './cells/FilteredDownloadCell'
 
 const EducationCell = ({ data }: { data: string | null }) => (
   <CharacterLimitBox text={data || '-'} />
@@ -19,4 +20,5 @@ export {
   CustomerStatusCell,
   SortableHeaderCell,
   CenteredHeaderCell,
+  FilteredDownloadCell,
 }

@@ -12,6 +12,7 @@ import {
 import { CloseIcon } from '../../../assets/Icons'
 import { styled } from '@mui/material/styles'
 import { CvLinks } from '../../../api/data/employee/employeeApiTypes'
+import { FilterEntry } from '../../filter/FilterUtil'
 
 const DialogStyled = styled(Dialog)(() => ({
   '& .MuiDialog-paper': {
@@ -102,10 +103,17 @@ interface CVDialogProps {
   data: CvLinks
   onClose: () => void
   open: boolean
+  filtered?: boolean
   name?: string
 }
 
-export default function CvDialog({ onClose, data, open, name }: CVDialogProps) {
+export default function CvDialog({
+  onClose,
+  data,
+  open,
+  filtered,
+  name,
+}: CVDialogProps) {
   const [fileType, setFileType] = useState('.pdf')
   const [language, setLanguage] = useState('Norsk')
   const [downloadLink, setDownloadLink] = useState(data.int_pdf)
@@ -131,31 +139,53 @@ export default function CvDialog({ onClose, data, open, name }: CVDialogProps) {
       aria-labelledby="simple-dialog-title"
       open={open}
     >
-      <DialogTitle>Last ned CV for {name}</DialogTitle>
+      {filtered ? (
+        <DialogTitle>Last ned filtrert ansattliste </DialogTitle>
+      ) : (
+        <DialogTitle>Last ned CV for {name}</DialogTitle>
+      )}
       <CloseIconContainer onClick={() => onClose()} title="Lukk">
         <CloseIcon />
       </CloseIconContainer>
       <CardStyled>
-        <FormControl component="fieldset">
-          <DialogSubtitle>Velg filtype</DialogSubtitle>
-          <RadioGroup
-            aria-label="Velg filtype"
-            name="filtypevalg"
-            value={fileType}
-            onChange={handleFileTypeChange}
-          >
-            <FormControlLabelStyled
-              value=".docx"
-              control={<RadioStyledBlack />}
-              label=".docx"
-            />
-            <FormControlLabelStyled
-              value=".pdf"
-              control={<RadioStyledBlack />}
-              label=".pdf"
-            />
-          </RadioGroup>
-        </FormControl>
+        {filtered ? (
+          <FormControl component="fieldset">
+            <DialogSubtitle>Velg filtype</DialogSubtitle>
+            <RadioGroup
+              aria-label="Velg filtype"
+              name="filtypevalg"
+              value={fileType}
+              onChange={handleFileTypeChange}
+            >
+              <FormControlLabelStyled
+                value=".xls"
+                control={<RadioStyledBlack />}
+                label=".xls"
+              />
+            </RadioGroup>
+          </FormControl>
+        ) : (
+          <FormControl component="fieldset">
+            <DialogSubtitle>Velg filtype</DialogSubtitle>
+            <RadioGroup
+              aria-label="Velg filtype"
+              name="filtypevalg"
+              value={fileType}
+              onChange={handleFileTypeChange}
+            >
+              <FormControlLabelStyled
+                value=".docx"
+                control={<RadioStyledBlack />}
+                label=".docx"
+              />
+              <FormControlLabelStyled
+                value=".pdf"
+                control={<RadioStyledBlack />}
+                label=".pdf"
+              />
+            </RadioGroup>
+          </FormControl>
+        )}
         <Divider orientation="vertical" />
         <FormControl component="fieldset">
           <DialogSubtitle>Velg språk</DialogSubtitle>

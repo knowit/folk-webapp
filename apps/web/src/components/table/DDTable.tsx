@@ -14,6 +14,7 @@ import {
   handleThresholdChange,
   searchAndFilter,
 } from '../filter/FilterUtil'
+import { FilteredDownloadCell } from './DataCells'
 
 export interface SearchableColumn {
   columnIndex: number
@@ -128,6 +129,12 @@ export default function DDTable({
       {filterHeaders}
       <RowCount>
         Viser {NonProject.length} av {allRows.length} ansatte
+        {
+          <FilteredDownloadCell
+            filters={filters ? filters : []}
+            names={NonProject.map((row) => row['rowData'][0].name)}
+          />
+        }
       </RowCount>
       <DataTable
         checkBox={checkBox}
