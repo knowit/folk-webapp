@@ -52,7 +52,10 @@ export default function FilteredDownloadCell({
       }
     })
   rows.push([])
-  consultants.forEach((consultant) => rows.push(consultant))
+  rows.push(['Navn', 'Tittel', 'Prosjektstatus', 'Kunde'])
+  consultants.forEach((consultant) => {
+    rows.push(consultant)
+  })
 
   return filters.some((filter) => filter.filters.length > 0) &&
     consultants.length > 0 ? (

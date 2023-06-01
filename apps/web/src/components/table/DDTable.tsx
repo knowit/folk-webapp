@@ -15,7 +15,7 @@ import {
   searchAndFilter,
 } from '../filter/FilterUtil'
 import { FilteredDownloadCell } from './DataCells'
-import { filter } from 'd3'
+import { statusDisplayDetails } from './cells/ProjectStatusCell'
 
 export interface SearchableColumn {
   columnIndex: number
@@ -133,6 +133,7 @@ export default function DDTable({
         consultants={NonProject.map((row) => [
           row['rowData'][0].name,
           row['rowData'][1],
+          statusDisplayDetails[row['rowData'][2]]?.label,
           row['rowData'][3].customer,
         ])}
       />

@@ -124,7 +124,7 @@ export default function CvDialog({
   const [language, setLanguage] = useState('Norsk')
   const [downloadLink, setDownloadLink] = useState(data?.int_pdf)
   const [fileNameChoice, setFileNameChoice] = useState(false)
-  const [fileName, setFileName] = useState('default')
+  const [fileName, setFileName] = useState('filterOutput')
 
   useEffect(() => {
     if (fileType === '.pdf') {
@@ -147,7 +147,7 @@ export default function CvDialog({
     setFileNameChoice(fileNameChoiceBool)
 
     if (!fileNameChoiceBool) {
-      setFileName('default')
+      setFileName('filterOutput')
     }
   }
 
@@ -263,8 +263,8 @@ export default function CvDialog({
 export function createXlsLinks(rows: string[][], filename: string) {
   const workbook = new ExcelJS.Workbook()
   const worksheet = workbook.addWorksheet('Sheet 1')
-  // rows.forEach((row) => worksheet.addRow(row))
   worksheet.addRows(rows)
+  worksheet.columns.forEach((column) => (column.width = 30))
   workbook.xlsx.writeBuffer().then((buffer) => {
     const blob = new Blob([buffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
