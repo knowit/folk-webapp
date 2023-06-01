@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import { Fade, InputBase, MenuItem, Select } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 type ValueType = { displayValue: string; value: any } | string
 
@@ -75,6 +76,7 @@ export default function DropdownPicker({
       big ? '25pt arial' : '19pt arial'
     ) + 46
   const selectRef = useRef<HTMLElement | null>()
+  const { trackEvent } = useMatomo()
   const defaultValue = selected || values.length > 0 ? values[0] : ''
   return (
     <ComponentRoot
@@ -83,7 +85,10 @@ export default function DropdownPicker({
       variant="standard"
       inputRef={selectRef}
       autoWidth
-      onChange={({ target: { value } }) => onChange(value)}
+      onChange={({ target: { value } }) => {
+        trackEvent({ category: 'graf-datasett', action: 'click-event' })
+        return onChange(value)
+      }}
       input={<InputBaseStyled />}
       defaultValue={defaultValue}
       value={selected}

@@ -117,6 +117,7 @@ const HoursBilledPerWeekCard = ({
   }
 
   const setDateRange = (startDate, endDate) => {
+    trackEvent({ category: 'filter-dato', action: 'click-event' })
     handleDateRangeChange(startDate, endDate)
   }
 
