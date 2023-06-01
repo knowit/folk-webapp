@@ -44,17 +44,24 @@ const usePerWeekFilter = (data: SingularChartData): PerWeekFilteredData => {
   ): SingularChartData => {
     if (data && data.type === 'LineChart') {
       const filteredData = data.data.map((customer) => {
+        let monthValue = 0
+        let month = null
         const filteredData = customer.data
           .map((v) => {
             const date = getDateDisplay(v.x)
             const value = { ...v, date: date.date }
+            if (!month || date.month != month) {
+              month = date.month
+              monthValue = 0
+            }
+            monthValue += value.y
             switch (period) {
               case 'Uke':
                 return { ...value, x: date.week }
               case 'Måned': {
                 const monthDate = new Date(date.date)
                 monthDate.setDate(1)
-                return { ...value, x: date.month, date: monthDate }
+                return { date: monthDate, x: date.month, y: monthValue }
               }
               default:
                 return value
