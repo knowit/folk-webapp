@@ -10,8 +10,7 @@ import { MatomoProvider, createInstance } from '@jonkoops/matomo-tracker-react'
 const instance = createInstance({
   urlBase: 'https://objectnet-dataplattform.matomo.cloud/',
   siteId: 1,
-  // disabled: !process.env.NODE_ENV || process.env.NODE_ENV === 'development',
-  disabled: false,
+  disabled: !process.env.NODE_ENV || process.env.NODE_ENV === 'development',
   heartBeat: {
     active: true, // optional, default value: true
     seconds: 10, // optional, default value: `15
