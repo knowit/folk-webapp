@@ -15,6 +15,7 @@ import {
   searchAndFilter,
 } from '../filter/FilterUtil'
 import { FilteredDownloadCell } from './DataCells'
+import { filter } from 'd3'
 
 export interface SearchableColumn {
   columnIndex: number
@@ -126,15 +127,17 @@ export default function DDTable({
           />
         </FilterContainer>
       </GridItemHeader>
-      {filterHeaders}
+      {filterHeaders ? filterHeaders : null}
+      <FilteredDownloadCell
+        filters={filters ? filters : []}
+        consultants={NonProject.map((row) => [
+          row['rowData'][0].name,
+          row['rowData'][1],
+          row['rowData'][3].customer,
+        ])}
+      />
       <RowCount>
         Viser {NonProject.length} av {allRows.length} ansatte
-        {
-          <FilteredDownloadCell
-            filters={filters ? filters : []}
-            names={NonProject.map((row) => row['rowData'][0].name)}
-          />
-        }
       </RowCount>
       <DataTable
         checkBox={checkBox}

@@ -2,65 +2,73 @@ import React, { useState } from 'react'
 import { DownloadIcon } from '../../../assets/Icons'
 import { styled } from '@mui/material/styles'
 import { NoData } from '../../ErrorText'
-import * as ExcelJS from 'exceljs'
 import { FilterObject } from '../../filter/FilterUtil'
+import CvDialog from '../components/CvDialog'
 
-const DownloadStyled = styled('div')(() => ({
-  width: '100%',
+const ComponentRoot = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.background.darker,
+  padding: '0px 15px 15px',
   display: 'flex',
-  justifyContent: 'left',
+  width: '100%',
+  fontWeight: 'bold',
+}))
+
+const ButtonContainer = styled('div')(({ theme }) => ({
+  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
+  display: 'flex',
+  padding: '8px 12px',
+  marginBottom: '5px',
+  background: theme.palette.background.default,
 }))
 
 interface FilteredDownloadProps {
   filters: FilterObject[]
-  names: string[]
+  consultants: string[][]
 }
 
 export default function FilteredDownloadCell({
   filters,
-  names,
+  consultants,
 }: FilteredDownloadProps) {
-  const handleDownload = () => {
-    createXlsLinks(rows, 'title')
+  const [open, setOpen] = useState(false)
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+  const handleClose = () => {
+    setOpen(false)
   }
 
   const rows = []
-  filters.forEach((filter) => {
-    const columns: string[] = []
-    columns.push(filter.label)
-    filter.filters.forEach((entry) => {
-      columns.push(entry.value + ':' + entry.threshold)
+  filters
+    .filter((filter) => filter.filters.length > 0)
+    .forEach((filter) => {
+      if (filter.filters.length > 0) {
+        const columns: string[] = []
+        columns.push(filter.label)
+        filter.filters.forEach((entry) => {
+          columns.push(entry.value + ':' + entry.threshold)
+        })
+        rows.push(columns)
+      }
     })
-    rows.push(columns)
-  })
   rows.push([])
-  rows.push(names)
+  consultants.forEach((consultant) => rows.push(consultant))
 
-  return filters ? (
-    <>
-      <DownloadStyled>
-        Last ned filtertreff
-        <DownloadIcon onClick={handleDownload} />
-      </DownloadStyled>
-    </>
+  return filters.some((filter) => filter.filters.length > 0) &&
+    consultants.length > 0 ? (
+    <ComponentRoot>
+      <ButtonContainer>
+        Last ned som excel-fil
+        <DownloadIcon onClick={handleClickOpen} />
+        <CvDialog
+          open={open}
+          onClose={handleClose}
+          rows={rows}
+          filtered={true}
+        />
+      </ButtonContainer>
+    </ComponentRoot>
   ) : (
     <NoData />
   )
-}
-
-export function createXlsLinks(rows: string[][], filename: string) {
-  const workbook = new ExcelJS.Workbook()
-  const worksheet = workbook.addWorksheet('Sheet 1')
-  // rows.forEach((row) => worksheet.addRow(row))
-  worksheet.addRows(rows)
-  workbook.xlsx.writeBuffer().then((buffer) => {
-    const blob = new Blob([buffer], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    })
-    const url = window.URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = filename + '.xlsx'
-    link.click()
-  })
 }
