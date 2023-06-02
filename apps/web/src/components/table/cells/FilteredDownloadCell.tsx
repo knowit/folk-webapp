@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { DownloadIcon } from '../../../assets/Icons'
 import { styled } from '@mui/material/styles'
-import { NoData } from '../../ErrorText'
 import { FilterObject } from '../../filter/FilterUtil'
 import CvDialog from '../components/CvDialog'
 import { Button } from '@mui/material'
