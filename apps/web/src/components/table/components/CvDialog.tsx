@@ -147,7 +147,9 @@ export default function CvDialog({
     setFileNameChoice(fileNameChoiceBool)
 
     if (!fileNameChoiceBool) {
-      setFileName('filterOutput')
+      setFileName('ansatte')
+    } else {
+      setFileName('')
     }
   }
 
@@ -192,6 +194,7 @@ export default function CvDialog({
           </FormControl>
           {fileNameChoice == true ? (
             <TextField
+              id="fileNameTextField"
               placeholder="Angi filnavn"
               onChange={(event) => setFileName(event.target.value)}
             ></TextField>
@@ -247,7 +250,10 @@ export default function CvDialog({
           Avbryt
         </ButtonGreyStyled>
         {filtered ? (
-          <ButtonGreenStyled onClick={handleDownload}>
+          <ButtonGreenStyled
+            onClick={handleDownload}
+            disabled={fileName == '' && fileNameChoice}
+          >
             Last ned
           </ButtonGreenStyled>
         ) : (
