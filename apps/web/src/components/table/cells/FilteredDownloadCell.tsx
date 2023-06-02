@@ -14,7 +14,7 @@ const ComponentRoot = styled('div')(({ theme }) => ({
   fontWeight: 'bold',
 }))
 
-const ButtonContainer = styled(Button)(({ theme }) => ({
+const ButtonStyled = styled(Button)(({ theme }) => ({
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
   color: theme.palette.text.primary,
   display: 'flex',
@@ -63,13 +63,13 @@ export default function FilteredDownloadCell({
   return filters.some((filter) => filter.filters.length > 0) &&
     consultants.length > 0 ? (
     <ComponentRoot>
-      <ButtonContainer
+      <ButtonStyled
         onClick={handleClickOpen}
         aria-label="Last ned som excel-fil"
+        endIcon={<DownloadIcon />}
       >
         Last ned som excel-fil
-        <DownloadIcon />
-      </ButtonContainer>
+      </ButtonStyled>
       <CvDialog open={open} onClose={handleClose} rows={rows} filtered={true} />
     </ComponentRoot>
   ) : (
