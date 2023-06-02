@@ -72,7 +72,5 @@ export default function FilteredDownloadCell({
       </ButtonStyled>
       <CvDialog open={open} onClose={handleClose} rows={rows} filtered={true} />
     </ComponentRoot>
-  ) : (
-    <NoData />
-  )
+  ) : null
 }

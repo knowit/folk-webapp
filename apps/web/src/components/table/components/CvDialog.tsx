@@ -124,7 +124,7 @@ export default function CvDialog({
   const [language, setLanguage] = useState('Norsk')
   const [downloadLink, setDownloadLink] = useState(data?.int_pdf)
   const [fileNameChoice, setFileNameChoice] = useState(false)
-  const [fileName, setFileName] = useState('filterOutput')
+  const [fileName, setFileName] = useState('ansatte')
 
   useEffect(() => {
     if (fileType === '.pdf') {
@@ -181,12 +181,12 @@ export default function CvDialog({
               <FormControlLabelStyled
                 value="false"
                 control={<RadioStyledBlack />}
-                label="Bruk default"
+                label="Last ned som ansatte.xlsx"
               />
               <FormControlLabelStyled
                 value="true"
                 control={<RadioStyledBlack />}
-                label="Angi filnavn"
+                label="Angi annet filnavn (uten .xlsx)"
               />
             </RadioGroup>
           </FormControl>
