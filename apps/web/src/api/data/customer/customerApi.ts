@@ -16,3 +16,6 @@ export const getHoursBilledPerCustomerCharts = () =>
 
 export const getHoursBilledPerWeekCharts = () =>
   getAtApiV2<LineChartData>('/customer/hoursBilledPerWeek')
+
+export const getEmployeesPerWeekCharts = () =>
+  getAtApiV2<LineChartData>('/customer/employeesPerWeek')

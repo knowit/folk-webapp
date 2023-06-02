@@ -33,7 +33,9 @@ export type PerWeekFilteredData = {
   monthlyData: SingularChartData
 }
 
-const usePerWeekFilter = (data: SingularChartData): PerWeekFilteredData => {
+export const usePerWeekFilter = (
+  data: SingularChartData
+): PerWeekFilteredData => {
   const filterOptions: PerWeekFilterOptions[] = ['Uke', 'Måned']
 
   const [selectedFilter, setSelectedFilter] = useState(filterOptions[0])
@@ -105,4 +107,71 @@ const usePerWeekFilter = (data: SingularChartData): PerWeekFilteredData => {
   }
 }
 
-export default usePerWeekFilter
+export const useGraphData = (
+  data: SingularChartData
+): { weeklyData: SingularChartData; monthlyData: SingularChartData } => {
+  const groupDataByTimePeriod = (
+    data: SingularChartData,
+    period: PerWeekFilterOptions
+  ): SingularChartData => {
+    if (data && data.type === 'LineChart') {
+      const filteredData = data.data.map((customer) => {
+        const filteredData = customer.data
+          .map((v) => {
+            const date = getDateDisplay(v.x)
+            const value = { ...v, date: date.date }
+            switch (period) {
+              case 'Uke':
+                return { ...value, x: date.week }
+              case 'Måned': {
+                const monthDate = new Date(date.date)
+                monthDate.setDate(1)
+                return { ...value, x: date.month, date: monthDate }
+              }
+              default:
+                return value
+            }
+          })
+          .reduce((list, value) => {
+            const sum = list
+              .filter((o) => o.x === value)
+              .reduce((v, o) => o.y + v, 0)
+
+            return [
+              ...list.filter((o) => o.x !== value.x),
+              { ...value, y: sum + value.y },
+            ]
+          }, [])
+          .sort((a, b) => a.date - b.date)
+
+        // Filter out empty data
+        return filteredData.length
+          ? {
+              ...customer,
+              data: filteredData,
+            }
+          : null
+      })
+
+      return {
+        ...data,
+        data: filteredData,
+      }
+    } else {
+      return data
+    }
+  }
+
+  const weeklyData = useMemo(() => groupDataByTimePeriod(data, 'Uke'), [data])
+  const monthlyData = useMemo(
+    () => groupDataByTimePeriod(data, 'Måned'),
+    [data]
+  )
+
+  return {
+    weeklyData,
+    monthlyData,
+  }
+}
+
+export default { usePerWeekFilter, useGraphData }

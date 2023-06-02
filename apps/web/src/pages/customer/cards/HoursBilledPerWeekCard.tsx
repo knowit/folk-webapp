@@ -1,5 +1,8 @@
 import ChartCard from '../../../components/charts/ChartCard'
-import { useHoursBilledPerWeekCharts } from '../../../api/data/customer/customerQueries'
+import {
+  useEmployeesPerWeekCharts,
+  useHoursBilledPerWeekCharts,
+} from '../../../api/data/customer/customerQueries'
 import { POSSIBLE_OLD_DATA_WARNING } from './messages'
 import HoursBilledPerWeekTooltip from '../components/HoursBilledPerWeekTooltip'
 import { GridItem } from '../../../components/gridItem/GridItem'
@@ -14,12 +17,17 @@ import {
   Checkbox,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import usePerWeekFilter from '../../../components/charts/chartFilters/usePerWeekFilter'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { motion, LayoutGroup } from 'framer-motion'
 import { DateRangePickerButton } from '../../../components/dateranges/DateRangePickerButton'
 import CustomerGraphFilter from '../components/CustomerGraphFilter'
+import {
+  usePerWeekFilter,
+  useGraphData,
+} from '../../../components/charts/chartFilters/usePerWeekFilter'
+import { LineChartData } from '@folk/common/types/chartTypes'
+import { useState } from 'react'
 
 const GridContainer = styled('div')({
   display: 'grid',
@@ -46,6 +54,13 @@ const CheckboxFlexWrapper = styled('div')(() => ({
   position: 'relative',
   height: 324,
   maxHeight: 324,
+}))
+
+const AnotherCheckboxFlexWrapper = styled('div')(() => ({
+  display: 'flex',
+  height: '100%',
+  position: 'relative',
+  marginRight: '20px',
 }))
 
 interface HoursBilledPerWeekCardProps {
@@ -82,6 +97,8 @@ const HoursBilledPerWeekCard = ({
   customerSpecificGraph,
 }: HoursBilledPerWeekCardProps) => {
   const { data, error } = useHoursBilledPerWeekCharts()
+  const { data: employeeData, error: employeeError } =
+    useEmployeesPerWeekCharts()
   const {
     filterOptions,
     selectedFilter,
@@ -89,6 +106,9 @@ const HoursBilledPerWeekCard = ({
     weeklyData,
     monthlyData,
   } = usePerWeekFilter(data)
+  const { weeklyData: employeeWeeklyData, monthlyData: employeeMonthlyData } =
+    useGraphData(employeeData)
+  const [hoursDisplay, setHoursDisplay] = useState(true)
 
   const customersUnfiltered =
     data === undefined ? [] : data?.data?.map((item) => item.id as string)
@@ -118,7 +138,19 @@ const HoursBilledPerWeekCard = ({
     handleDateRangeChange(startDate, endDate)
   }
 
-  const chartData = selectedFilter === 'Uke' ? weeklyData : monthlyData
+  const handleEmployeeCheckboxChange = () => {
+    setHoursDisplay(!hoursDisplay)
+  }
+
+  const chartData =
+    hoursDisplay === true
+      ? selectedFilter === 'Uke'
+        ? weeklyData
+        : monthlyData
+      : selectedFilter === 'Uke'
+      ? employeeWeeklyData
+      : employeeMonthlyData
+
   const filteredData =
     data === undefined
       ? undefined
@@ -245,6 +277,9 @@ const HoursBilledPerWeekCard = ({
                     ))}
                   </RadioGroup>
 
+                  <AnotherCheckboxFlexWrapper>
+                    <Checkbox onClick={handleEmployeeCheckboxChange}></Checkbox>
+                  </AnotherCheckboxFlexWrapper>
                   <DateRangePickerButton
                     startDate={startDate}
                     endDate={endDate}
@@ -260,7 +295,7 @@ const HoursBilledPerWeekCard = ({
       ) : (
         <GridContainer>
           <ChartCard
-            title={customerSpecificGraph ? '' : 'Timer brukt per periode'}
+            title={'Timer brukt per periode'}
             description={POSSIBLE_OLD_DATA_WARNING}
             data={timeFilteredData}
             error={error}
@@ -296,7 +331,10 @@ const HoursBilledPerWeekCard = ({
                       />
                     ))}
                   </RadioGroup>
-
+                  <AnotherCheckboxFlexWrapper>
+                    Vis graf over ansatte
+                    <Checkbox onClick={handleEmployeeCheckboxChange}></Checkbox>
+                  </AnotherCheckboxFlexWrapper>
                   <DateRangePickerButton
                     startDate={startDate}
                     endDate={endDate}
