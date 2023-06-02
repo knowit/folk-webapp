@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles'
 import { NoData } from '../../ErrorText'
 import { FilterObject } from '../../filter/FilterUtil'
 import CvDialog from '../components/CvDialog'
+import { Button } from '@mui/material'
 
 const ComponentRoot = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.darker,
@@ -13,12 +14,14 @@ const ComponentRoot = styled('div')(({ theme }) => ({
   fontWeight: 'bold',
 }))
 
-const ButtonContainer = styled('div')(({ theme }) => ({
+const ButtonContainer = styled(Button)(({ theme }) => ({
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
+  color: theme.palette.text.primary,
   display: 'flex',
   padding: '8px 12px',
+  textTransform: 'inherit',
   marginBottom: '5px',
-  background: theme.palette.background.default,
+  backgroundColor: theme.palette.background.default,
 }))
 
 interface FilteredDownloadProps {
@@ -60,16 +63,14 @@ export default function FilteredDownloadCell({
   return filters.some((filter) => filter.filters.length > 0) &&
     consultants.length > 0 ? (
     <ComponentRoot>
-      <ButtonContainer>
+      <ButtonContainer
+        onClick={handleClickOpen}
+        aria-label="Last ned som excel-fil"
+      >
         Last ned som excel-fil
-        <DownloadIcon onClick={handleClickOpen} />
-        <CvDialog
-          open={open}
-          onClose={handleClose}
-          rows={rows}
-          filtered={true}
-        />
+        <DownloadIcon />
       </ButtonContainer>
+      <CvDialog open={open} onClose={handleClose} rows={rows} filtered={true} />
     </ComponentRoot>
   ) : (
     <NoData />
