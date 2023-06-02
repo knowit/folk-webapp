@@ -7,6 +7,7 @@ import {
 import {
   hoursBilledPerCustomer,
   hoursBilledPerWeek,
+  employeesPerWeek,
 } from './customerChartConversion'
 import {
   BilledCustomerHours,
@@ -38,6 +39,20 @@ router.get('/hoursBilledPerWeek', async (req, res, next) => {
     })
 
     const aggregatedData = hoursBilledPerWeek(data)
+    res.send(aggregatedData)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/employeesPerWeek', async (req, res, next) => {
+  try {
+    const data = await getReport<BilledCustomerHours[]>({
+      accessToken: req.accessToken,
+      reportName: 'perProject',
+    })
+
+    const aggregatedData = employeesPerWeek(data)
     res.send(aggregatedData)
   } catch (error) {
     next(error)

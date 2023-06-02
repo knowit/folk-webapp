@@ -1,25 +1,43 @@
 import { BarChartData, LineChartData } from '../chartTypes'
 import { BilledCustomerHours } from './customerTypes'
 
-function getHoursBilledPerWeek(
-  data: BilledCustomerHours[]
+function getHoursBilledOrEmployeesPerWeek(
+  data: BilledCustomerHours[],
+  hoursBilled: boolean
 ): LineChartData['data'] {
   const aggregationMap: Record<string, Record<string, number>> = {}
   const regPeriodsSet = new Set()
 
-  // Build map of customers and aggregate all hours for all weeks
-  for (const { customer, reg_period, hours } of data) {
-    if (!(customer in aggregationMap)) {
-      aggregationMap[customer] = {}
-    }
+  if (hoursBilled) {
+    // Build map of customers and aggregate for all weeks
+    for (const { customer, reg_period, hours } of data) {
+      if (!(customer in aggregationMap)) {
+        aggregationMap[customer] = {}
+      }
 
-    if (!(reg_period in aggregationMap[customer])) {
-      aggregationMap[customer][reg_period] = hours
-    } else {
-      aggregationMap[customer][reg_period] += hours
-    }
+      if (!(reg_period in aggregationMap[customer])) {
+        aggregationMap[customer][reg_period] = hours
+      } else {
+        aggregationMap[customer][reg_period] += hours
+      }
 
-    regPeriodsSet.add(reg_period)
+      regPeriodsSet.add(reg_period)
+    }
+  } else {
+    // Build map of customers and aggregate for all weeks
+    for (const { customer, reg_period, employees } of data) {
+      if (!(customer in aggregationMap)) {
+        aggregationMap[customer] = {}
+      }
+
+      if (!(reg_period in aggregationMap[customer])) {
+        aggregationMap[customer][reg_period] = employees
+      } else {
+        aggregationMap[customer][reg_period] += employees
+      }
+
+      regPeriodsSet.add(reg_period)
+    }
   }
 
   const sortedRegPeriods = Array.from(regPeriodsSet).sort()
@@ -59,7 +77,10 @@ export const hoursBilledPerCustomer = (
     }
   }
 
-  const weeklyData: LineChartData['data'] = getHoursBilledPerWeek(data)
+  const weeklyData: LineChartData['data'] = getHoursBilledOrEmployeesPerWeek(
+    data,
+    true
+  )
   const lineChartData: LineChartData = { type: 'LineChart', data: weeklyData }
   const output: BarChartData = {
     type: 'BarChart',
@@ -75,7 +96,21 @@ export const hoursBilledPerCustomer = (
 export const hoursBilledPerWeek = (
   data: BilledCustomerHours[]
 ): LineChartData => {
-  const output: LineChartData['data'] = getHoursBilledPerWeek(data)
+  const output: LineChartData['data'] = getHoursBilledOrEmployeesPerWeek(
+    data,
+    true
+  )
+
+  return { type: 'LineChart', data: output }
+}
+
+export const employeesPerWeek = (
+  data: BilledCustomerHours[]
+): LineChartData => {
+  const output: LineChartData['data'] = getHoursBilledOrEmployeesPerWeek(
+    data,
+    false
+  )
 
   return { type: 'LineChart', data: output }
 }
