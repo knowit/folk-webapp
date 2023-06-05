@@ -36,7 +36,7 @@ type StatusDisplayDetails = Record<
   }
 >
 
-const statusDisplayDetails: StatusDisplayDetails = {
+export const statusDisplayDetails: StatusDisplayDetails = {
   [ProjectStatus.ExternalProject]: {
     color: '#4C8E00',
     label: 'Opptatt i ekstern prosjekt',
