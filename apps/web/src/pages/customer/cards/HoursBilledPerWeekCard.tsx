@@ -26,7 +26,6 @@ import {
   usePerWeekFilter,
   useGraphData,
 } from '../../../components/charts/chartFilters/usePerWeekFilter'
-import { LineChartData } from '@folk/common/types/chartTypes'
 import { useState } from 'react'
 
 const GridContainer = styled('div')({
@@ -54,13 +53,6 @@ const CheckboxFlexWrapper = styled('div')(() => ({
   position: 'relative',
   height: 324,
   maxHeight: 324,
-}))
-
-const AnotherCheckboxFlexWrapper = styled('div')(() => ({
-  display: 'flex',
-  height: '100%',
-  position: 'relative',
-  marginRight: '20px',
 }))
 
 interface HoursBilledPerWeekCardProps {
@@ -97,8 +89,7 @@ const HoursBilledPerWeekCard = ({
   customerSpecificGraph,
 }: HoursBilledPerWeekCardProps) => {
   const { data, error } = useHoursBilledPerWeekCharts()
-  const { data: employeeData, error: employeeError } =
-    useEmployeesPerWeekCharts()
+  const { data: employeeData } = useEmployeesPerWeekCharts()
   const {
     filterOptions,
     selectedFilter,
@@ -108,7 +99,7 @@ const HoursBilledPerWeekCard = ({
   } = usePerWeekFilter(data)
   const { weeklyData: employeeWeeklyData, monthlyData: employeeMonthlyData } =
     useGraphData(employeeData)
-  const [hoursDisplay, setHoursDisplay] = useState(true)
+  const [graphView, setGraphView] = useState('hoursBilled')
 
   const customersUnfiltered =
     data === undefined ? [] : data?.data?.map((item) => item.id as string)
@@ -138,12 +129,14 @@ const HoursBilledPerWeekCard = ({
     handleDateRangeChange(startDate, endDate)
   }
 
-  const handleEmployeeCheckboxChange = () => {
-    setHoursDisplay(!hoursDisplay)
+  const handleGraphViewChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setGraphView(event.target.value)
   }
 
   const chartData =
-    hoursDisplay === true
+    graphView === 'hoursBilled'
       ? selectedFilter === 'Uke'
         ? weeklyData
         : monthlyData
@@ -254,7 +247,7 @@ const HoursBilledPerWeekCard = ({
             extraHeaderContent={
               <FormControl component="fieldset">
                 <FormLabel>Grupper etter</FormLabel>
-                <Box display="flex" flexWrap="nowrap" width="100%">
+                <Box display="inline-flex" flexWrap="nowrap" width="100%">
                   <RadioGroup
                     style={{ flexWrap: 'nowrap' }}
                     row
@@ -276,10 +269,6 @@ const HoursBilledPerWeekCard = ({
                       />
                     ))}
                   </RadioGroup>
-
-                  <AnotherCheckboxFlexWrapper>
-                    <Checkbox onClick={handleEmployeeCheckboxChange}></Checkbox>
-                  </AnotherCheckboxFlexWrapper>
                   <DateRangePickerButton
                     startDate={startDate}
                     endDate={endDate}
@@ -295,7 +284,11 @@ const HoursBilledPerWeekCard = ({
       ) : (
         <GridContainer>
           <ChartCard
-            title={'Timer brukt per periode'}
+            title={
+              graphView == 'hoursBilled'
+                ? 'Timer brukt per periode'
+                : 'Konsulenter per periode'
+            }
             description={POSSIBLE_OLD_DATA_WARNING}
             data={timeFilteredData}
             error={error}
@@ -308,33 +301,60 @@ const HoursBilledPerWeekCard = ({
             sliceTooltip={HoursBilledPerWeekTooltip}
             extraHeaderContent={
               <FormControl component="fieldset">
-                <FormLabel>Grupper etter</FormLabel>
-                <Box display="flex" flexWrap="nowrap" width="100%">
-                  <RadioGroup
-                    style={{ flexWrap: 'nowrap' }}
-                    row
-                    value={selectedFilter}
-                    onChange={(event) => {
-                      const option = filterOptions.find(
-                        (option) => option === event.target.value
-                      )
-                      setSelectedFilter(option)
-                    }}
-                  >
-                    {filterOptions.map((option) => (
+                <Box
+                  display="flex"
+                  flexWrap="nowrap"
+                  width="100%"
+                  alignItems="center"
+                >
+                  <div>
+                    <FormLabel>Grupper etter</FormLabel>
+                    <RadioGroup
+                      style={{ flexWrap: 'nowrap' }}
+                      row
+                      value={selectedFilter}
+                      onChange={(event) => {
+                        const option = filterOptions.find(
+                          (option) => option === event.target.value
+                        )
+                        setSelectedFilter(option)
+                      }}
+                    >
+                      {filterOptions.map((option) => (
+                        <FormControlLabel
+                          key={option}
+                          value={option}
+                          control={<Radio />}
+                          label={option}
+                          style={{ flexGrow: 1 }}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </div>
+                  <div>
+                    <FormLabel>Visning</FormLabel>
+                    <RadioGroup
+                      aria-label="Velg filtype"
+                      name="grafVisning"
+                      row
+                      value={graphView}
+                      onChange={handleGraphViewChange}
+                      style={{ flexWrap: 'nowrap' }}
+                    >
                       <FormControlLabel
-                        key={option}
-                        value={option}
+                        value="hoursBilled"
                         control={<Radio />}
-                        label={option}
+                        label="Timer"
                         style={{ flexGrow: 1 }}
                       />
-                    ))}
-                  </RadioGroup>
-                  <AnotherCheckboxFlexWrapper>
-                    Vis graf over ansatte
-                    <Checkbox onClick={handleEmployeeCheckboxChange}></Checkbox>
-                  </AnotherCheckboxFlexWrapper>
+                      <FormControlLabel
+                        value="employees"
+                        control={<Radio />}
+                        label="Konsulenter"
+                        style={{ flexGrow: 1 }}
+                      />
+                    </RadioGroup>
+                  </div>
                   <DateRangePickerButton
                     startDate={startDate}
                     endDate={endDate}
@@ -346,73 +366,69 @@ const HoursBilledPerWeekCard = ({
               </FormControl>
             }
           />
-          {customerSpecificGraph ? null : (
-            <CustomerFilterWrapper>
-              <GridItemHeader title="Filtrer kunder">
-                <CustomerGraphFilter
-                  checkBox1={selectAll}
-                  checkBox2={showHistoricCustomer}
-                />
-              </GridItemHeader>
+          <CustomerFilterWrapper>
+            <GridItemHeader title="Filtrer kunder">
+              <CustomerGraphFilter
+                checkBox1={selectAll}
+                checkBox2={showHistoricCustomer}
+              />
+            </GridItemHeader>
 
-              <ScrollableDiv>
-                <GridItemContent>
-                  <CheckboxFlexWrapper>
-                    <LayoutGroup>
-                      {selectedCustomers.map((customer) => (
-                        <motion.div
-                          layoutId={customer}
+            <ScrollableDiv>
+              <GridItemContent>
+                <CheckboxFlexWrapper>
+                  <LayoutGroup>
+                    {selectedCustomers.map((customer) => (
+                      <motion.div
+                        layoutId={customer}
+                        key={customer}
+                        initial={false}
+                        transition={easingFunction}
+                      >
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={selectedCustomerIds.includes(customer)}
+                              onChange={(event) =>
+                                handleCheckboxChange(event, customer)
+                              }
+                              name={customer}
+                            />
+                          }
+                          label={customer}
+                          labelPlacement="start"
                           key={customer}
-                          initial={false}
-                          transition={easingFunction}
-                        >
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={selectedCustomerIds.includes(customer)}
-                                onChange={(event) =>
-                                  handleCheckboxChange(event, customer)
-                                }
-                                name={customer}
-                              />
-                            }
-                            label={customer}
-                            labelPlacement="start"
-                            key={customer}
-                          />
-                        </motion.div>
-                      ))}
-                      {unselectedCustomers.map((customer) => (
-                        <motion.div
-                          layoutId={customer}
+                        />
+                      </motion.div>
+                    ))}
+                    {unselectedCustomers.map((customer) => (
+                      <motion.div
+                        layoutId={customer}
+                        key={customer}
+                        initial={false}
+                        transition={easingFunction}
+                      >
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={selectedCustomerIds?.includes(customer)}
+                              onChange={(event) =>
+                                handleCheckboxChange(event, customer)
+                              }
+                              name={customer}
+                            />
+                          }
+                          label={customer}
+                          labelPlacement="start"
                           key={customer}
-                          initial={false}
-                          transition={easingFunction}
-                        >
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={selectedCustomerIds?.includes(
-                                  customer
-                                )}
-                                onChange={(event) =>
-                                  handleCheckboxChange(event, customer)
-                                }
-                                name={customer}
-                              />
-                            }
-                            label={customer}
-                            labelPlacement="start"
-                            key={customer}
-                          />
-                        </motion.div>
-                      ))}
-                    </LayoutGroup>
-                  </CheckboxFlexWrapper>
-                </GridItemContent>
-              </ScrollableDiv>
-            </CustomerFilterWrapper>
-          )}
+                        />
+                      </motion.div>
+                    ))}
+                  </LayoutGroup>
+                </CheckboxFlexWrapper>
+              </GridItemContent>
+            </ScrollableDiv>
+          </CustomerFilterWrapper>
         </GridContainer>
       )}
     </GridItem>
