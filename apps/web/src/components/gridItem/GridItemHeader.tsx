@@ -62,7 +62,7 @@ export function GridItemHeader({
   card = false,
   clickable = false,
 }: GridItemHeaderProps) {
-  const longTitleText = title.length > 20
+  const longTitleText = title.length > 25
 
   return (
     <ComponentRoot big={big} green={green} card={card}>
@@ -75,8 +75,10 @@ export function GridItemHeader({
           ) : (
             title
           )}
-          {description ? <InfoTooltip description={description} /> : null}
         </GridHeaderTitle>
+        {description ? (
+          <InfoTooltip description={description} placement="right" />
+        ) : null}
       </Grid>
       {children}
     </ComponentRoot>

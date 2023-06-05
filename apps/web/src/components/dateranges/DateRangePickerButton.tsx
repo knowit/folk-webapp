@@ -11,6 +11,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
   borderRadius: 50,
   whiteSpace: 'nowrap',
   padding: '8px 12px',
+  textTransform: 'inherit',
   height: '2rem',
   '&:hover': {
     backgroundColor: theme.palette.background.paper,

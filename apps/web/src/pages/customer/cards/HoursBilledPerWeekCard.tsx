@@ -9,12 +9,11 @@ import { GridItem } from '../../../components/gridItem/GridItem'
 import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
 import {
   Box,
-  RadioGroup,
-  FormLabel,
   FormControlLabel,
-  Radio,
   FormControl,
   Checkbox,
+  ButtonGroup,
+  Button,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
@@ -45,6 +44,29 @@ const CustomerFilterWrapper = styled('div')(({ theme }) => ({
 const ScrollableDiv = styled('div')(() => ({
   overflowY: 'scroll',
   height: '100%',
+}))
+
+const StyledButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== 'active',
+})<{ active?: boolean }>(({ active, theme }) => ({
+  backgroundColor: 'transparent',
+  color: theme.palette.text.primary,
+  border: `1px solid ${theme.palette.text.primary}`,
+  borderRadius: 50,
+  whiteSpace: 'nowrap',
+  padding: '8px 12px',
+  height: '2rem',
+  textTransform: 'inherit',
+  '&:hover': {
+    backgroundColor: theme.palette.background.paper,
+  },
+  background: active
+    ? theme.palette.background.darker
+    : theme.palette.background.default,
+}))
+
+const StyledButtonGroup = styled(ButtonGroup)(() => ({
+  margin: '5px',
 }))
 
 const CheckboxFlexWrapper = styled('div')(() => ({
@@ -129,10 +151,8 @@ const HoursBilledPerWeekCard = ({
     handleDateRangeChange(startDate, endDate)
   }
 
-  const handleGraphViewChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setGraphView(event.target.value)
+  const handleGraphViewChange = (value: string) => {
+    setGraphView(value)
   }
 
   const chartData =
@@ -246,36 +266,29 @@ const HoursBilledPerWeekCard = ({
             sliceTooltip={HoursBilledPerWeekTooltip}
             extraHeaderContent={
               <FormControl component="fieldset">
-                <FormLabel>Grupper etter</FormLabel>
                 <Box display="inline-flex" flexWrap="nowrap" width="100%">
-                  <RadioGroup
-                    style={{ flexWrap: 'nowrap' }}
-                    row
-                    value={selectedFilter}
-                    onChange={(event) => {
-                      const option = filterOptions.find(
-                        (option) => option === event.target.value
-                      )
-                      setSelectedFilter(option)
-                    }}
-                  >
+                  <StyledButtonGroup aria-label="Grupper etter">
                     {filterOptions.map((option) => (
-                      <FormControlLabel
+                      <StyledButton
                         key={option}
                         value={option}
-                        control={<Radio />}
-                        label={option}
-                        style={{ flexGrow: 1 }}
-                      />
+                        variant="contained"
+                        active={selectedFilter == option}
+                        onClick={() => setSelectedFilter(option)}
+                      >
+                        {option}
+                      </StyledButton>
                     ))}
-                  </RadioGroup>
-                  <DateRangePickerButton
-                    startDate={startDate}
-                    endDate={endDate}
-                    onComplete={(startDate, endDate) =>
-                      setDateRange(startDate, endDate)
-                    }
-                  ></DateRangePickerButton>
+                  </StyledButtonGroup>
+                  <StyledButtonGroup>
+                    <DateRangePickerButton
+                      startDate={startDate}
+                      endDate={endDate}
+                      onComplete={(startDate, endDate) =>
+                        setDateRange(startDate, endDate)
+                      }
+                    ></DateRangePickerButton>
+                  </StyledButtonGroup>
                 </Box>
               </FormControl>
             }
@@ -307,61 +320,47 @@ const HoursBilledPerWeekCard = ({
                   width="100%"
                   alignItems="center"
                 >
-                  <div>
-                    <FormLabel>Grupper etter</FormLabel>
-                    <RadioGroup
-                      style={{ flexWrap: 'nowrap' }}
-                      row
-                      value={selectedFilter}
-                      onChange={(event) => {
-                        const option = filterOptions.find(
-                          (option) => option === event.target.value
-                        )
-                        setSelectedFilter(option)
-                      }}
+                  <StyledButtonGroup aria-label="Grupper etter">
+                    {filterOptions.map((option) => (
+                      <StyledButton
+                        key={option}
+                        value={option}
+                        variant="contained"
+                        active={selectedFilter == option}
+                        onClick={() => setSelectedFilter(option)}
+                      >
+                        {option}
+                      </StyledButton>
+                    ))}
+                  </StyledButtonGroup>
+                  <StyledButtonGroup aria-label="Visning">
+                    <StyledButton
+                      key="hoursBilled"
+                      value="hoursBilled"
+                      variant="contained"
+                      active={graphView == 'hoursBilled'}
+                      onClick={() => handleGraphViewChange('hoursBilled')}
                     >
-                      {filterOptions.map((option) => (
-                        <FormControlLabel
-                          key={option}
-                          value={option}
-                          control={<Radio />}
-                          label={option}
-                          style={{ flexGrow: 1 }}
-                        />
-                      ))}
-                    </RadioGroup>
-                  </div>
-                  <div>
-                    <FormLabel>Visning</FormLabel>
-                    <RadioGroup
-                      aria-label="Velg filtype"
-                      name="grafVisning"
-                      row
-                      value={graphView}
-                      onChange={handleGraphViewChange}
-                      style={{ flexWrap: 'nowrap' }}
+                      Timer
+                    </StyledButton>
+                    <StyledButton
+                      key="employees"
+                      value="employees"
+                      active={graphView == 'employees'}
+                      onClick={() => handleGraphViewChange('employees')}
                     >
-                      <FormControlLabel
-                        value="hoursBilled"
-                        control={<Radio />}
-                        label="Timer"
-                        style={{ flexGrow: 1 }}
-                      />
-                      <FormControlLabel
-                        value="employees"
-                        control={<Radio />}
-                        label="Konsulenter"
-                        style={{ flexGrow: 1 }}
-                      />
-                    </RadioGroup>
-                  </div>
-                  <DateRangePickerButton
-                    startDate={startDate}
-                    endDate={endDate}
-                    onComplete={(startDate, endDate) =>
-                      setDateRange(startDate, endDate)
-                    }
-                  ></DateRangePickerButton>
+                      Konsulenter
+                    </StyledButton>
+                  </StyledButtonGroup>
+                  <StyledButtonGroup>
+                    <DateRangePickerButton
+                      startDate={startDate}
+                      endDate={endDate}
+                      onComplete={(startDate, endDate) =>
+                        setDateRange(startDate, endDate)
+                      }
+                    ></DateRangePickerButton>
+                  </StyledButtonGroup>
                 </Box>
               </FormControl>
             }
