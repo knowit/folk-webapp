@@ -5,6 +5,7 @@ import SortButton from '../cards/SortButton'
 import { Grid, styled } from '@mui/material'
 import CustomerCard, { CustomerData } from '../cards/CustomerCard'
 import { SortCustomerCards } from '../util/sort-customer-cards'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 interface Props {
   data: CustomerData[]
@@ -29,12 +30,17 @@ const CustomerCardSort = ({
   const [activeSortButton, setActiveSortBotton] = useState('Alfabetisk')
   const [sortOrder, setSortOrder] = useState('ASC')
   const [sortedData, setSortedData] = useState<CustomerData[]>([])
+  const { trackEvent } = useMatomo()
 
   const buttons = ['Alfabetisk', 'Antall konsulenter', 'Antall timer']
   const showHeader =
     selectedCustomerIds !== null && selectedCustomerIds.length > 0
 
   const changeSortType = (type: string) => {
+    trackEvent({
+      category: `sortering-kunder-${type.replace(/\s/g, '').toLowerCase()}`,
+      action: 'click-event',
+    })
     const order =
       type === activeSortButton && activeSortButton === 'Alfabetisk'
         ? sortOrder === 'ASC'

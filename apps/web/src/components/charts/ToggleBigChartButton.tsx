@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles'
 import IconButton from '@mui/material/IconButton'
 import { FullscreenIcon, FullscreenExitIcon } from '../../assets/Icons'
 import React from 'react'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 const FullscreenIconButton = styled(IconButton)(({ theme }) => ({
   marginLeft: 'auto',
@@ -35,6 +36,8 @@ export function ToggleBigChartButton({
   big,
   onChange,
 }: ToggleBigChartButtonProps) {
+  const { trackEvent } = useMatomo()
+  big && trackEvent({ category: 'graf-stor', action: 'click-event' })
   const altText = big ? 'Lukk stor størrelse' : 'Utvid til stor størrelse'
 
   return (
