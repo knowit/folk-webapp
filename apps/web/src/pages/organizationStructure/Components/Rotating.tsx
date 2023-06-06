@@ -8,31 +8,35 @@ interface Props {
   svgRef: React.MutableRefObject<SVGGElement>
   zoomTransformValue: any
   setZoomTransformValue: any
-  rotateValue: number
-  setRotateValue: any
+  handleRotateValueChange: (value: number) => void
 }
 
 const Wrapper = styled('div')({
   width: '200px',
 })
 
-const Rotating = ({ groupRef, zoomTransformValue, setRotateValue }: Props) => {
+const Rotating = ({
+  groupRef,
+  zoomTransformValue,
+  handleRotateValueChange,
+}: Props) => {
   const [sliderValue, setSliderValue] = useState(50)
-  const rotateLeft = (value) => {
-    const newValue = (value - 50) * 4 - 10
-    setRotateValue(newValue)
+
+  const rotateLeft = (currentSliderValue) => {
+    const newValue = ((currentSliderValue - 50) / 1) * 7.2
     select(groupRef.current).attr(
       'transform',
       `translate(${zoomTransformValue.x},${zoomTransformValue.y}) scale(${zoomTransformValue.k}), rotate(${newValue})`
     )
+    handleRotateValueChange(newValue)
   }
-  const rotateRight = (value) => {
-    const newValue = (value - 50) * 4 + 10
-    setRotateValue(newValue)
+  const rotateRight = (currentSliderValue) => {
+    const newValue = ((currentSliderValue - 50) / 1) * 7.2
     select(groupRef.current).attr(
       'transform',
       `translate(${zoomTransformValue.x},${zoomTransformValue.y}) scale(${zoomTransformValue.k}), rotate(${newValue})`
     )
+    handleRotateValueChange(newValue)
   }
 
   const handleChange = (e) => {

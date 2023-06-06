@@ -10,6 +10,8 @@ import {
   GetApp,
   OpenInNew,
   FilterList,
+  Add,
+  Remove,
 } from '@mui/icons-material'
 
 export const IconBaseStyle = () => {
@@ -33,3 +35,5 @@ export const FilterListIcon = styled(FilterList)(() => IconBaseStyle)
 export const FullscreenIcon = styled(Fullscreen)(() => IconBaseStyle)
 export const FullscreenExitIcon = styled(FullscreenExit)(() => IconBaseStyle)
 export const OpenInNewIcon = styled(OpenInNew)(() => IconBaseStyle)
+export const AddIcon = styled(Add)(() => IconBaseStyle)
+export const RemoveIcon = styled(Remove)(() => IconBaseStyle)

@@ -34,8 +34,15 @@ export function toCartesian(x: number, y: number) {
   return [y * Math.cos(x), y * Math.sin(x)]
 }
 
-export const rightSide = (radians: number) =>
-  radians < Math.PI / 2 || radians > (3 * Math.PI) / 2
+export const rightSide = (radians: number) => radians >= 0 && radians < 195
+
+export const checkRotateDegree = (degree, rotateValue) => {
+  const rotateDegree = degree + rotateValue
+
+  if (rotateDegree > 360) {
+    return rightSide(rotateDegree - 360)
+  } else return rightSide(rotateDegree)
+}
 
 export const linkColor = (d) => linkColors[hierchyLevel(d)]
 export const nodeSize = (d) => size[hierchyLevel(d)]
