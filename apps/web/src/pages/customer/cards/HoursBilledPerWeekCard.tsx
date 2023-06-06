@@ -21,6 +21,7 @@ import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { motion, LayoutGroup } from 'framer-motion'
 import { DateRangePickerButton } from '../../../components/dateranges/DateRangePickerButton'
 import CustomerGraphFilter from '../components/CustomerGraphFilter'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 import {
   usePerWeekFilter,
   useGraphData,
@@ -124,6 +125,7 @@ const HoursBilledPerWeekCard = ({
   const { weeklyData: employeeWeeklyData, monthlyData: employeeMonthlyData } =
     useGraphData(employeeData)
   const [graphView, setGraphView] = useState('hoursBilled')
+  const { trackEvent } = useMatomo()
 
   const customersUnfiltered =
     data === undefined ? [] : data?.data?.map((item) => item.id as string)
@@ -150,6 +152,7 @@ const HoursBilledPerWeekCard = ({
   }
 
   const setDateRange = (startDate, endDate) => {
+    trackEvent({ category: 'filter-dato', action: 'click-event' })
     handleDateRangeChange(startDate, endDate)
   }
 
@@ -279,7 +282,15 @@ const HoursBilledPerWeekCard = ({
                         value={option}
                         variant="contained"
                         active={selectedFilter == option}
-                        onClick={() => setSelectedFilter(option)}
+                        onClick={() => {
+                          trackEvent({
+                            category: customerSpecificGraph
+                              ? `fakturerte-timer-kunde-${option.toLowerCase()}`
+                              : `fakturerte-timer-${option.toLowerCase()}`,
+                            action: 'click-event',
+                          })
+                          setSelectedFilter(option)
+                        }}
                       >
                         {option}
                       </StyledButton>
@@ -291,7 +302,15 @@ const HoursBilledPerWeekCard = ({
                       value="hoursBilled"
                       variant="contained"
                       active={graphView == 'hoursBilled'}
-                      onClick={() => handleGraphViewChange('hoursBilled')}
+                      onClick={() => {
+                        trackEvent({
+                          category: customerSpecificGraph
+                            ? `fakturerte-timer-kunde-hoursBilled`
+                            : `fakturerte-timer-hoursBilled`,
+                          action: 'click-event',
+                        })
+                        handleGraphViewChange('hoursBilled')
+                      }}
                     >
                       Timer
                     </StyledButton>
@@ -299,7 +318,15 @@ const HoursBilledPerWeekCard = ({
                       key="employees"
                       value="employees"
                       active={graphView == 'employees'}
-                      onClick={() => handleGraphViewChange('employees')}
+                      onClick={() => {
+                        trackEvent({
+                          category: customerSpecificGraph
+                            ? `fakturerte-timer-kunde-employees`
+                            : `fakturerte-timer-employees`,
+                          action: 'click-event',
+                        })
+                        handleGraphViewChange('employees')
+                      }}
                     >
                       Konsulenter
                     </StyledButton>
