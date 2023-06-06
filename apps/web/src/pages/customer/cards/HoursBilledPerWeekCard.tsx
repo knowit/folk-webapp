@@ -124,8 +124,9 @@ const HoursBilledPerWeekCard = ({
   } = usePerWeekFilter(data)
   const { weeklyData: employeeWeeklyData, monthlyData: employeeMonthlyData } =
     useGraphData(employeeData)
-  const [graphView, setGraphView] = useState('hoursBilled')
+  const [graphView, setGraphView] = useState('Timer')
   const { trackEvent } = useMatomo()
+  const graphViewOptions = ['Timer', 'Konsulenter']
 
   const customersUnfiltered =
     data === undefined ? [] : data?.data?.map((item) => item.id as string)
@@ -161,7 +162,7 @@ const HoursBilledPerWeekCard = ({
   }
 
   const chartData =
-    graphView === 'hoursBilled'
+    graphView === 'Timer'
       ? selectedFilter === 'Uke'
         ? weeklyData
         : monthlyData
@@ -258,7 +259,7 @@ const HoursBilledPerWeekCard = ({
         <GridContainer customerFiltered={customerSpecificGraph}>
           <ChartCard
             title={
-              graphView == 'hoursBilled'
+              graphView == 'Timer'
                 ? 'Timer brukt per periode'
                 : 'Konsulenter per periode'
             }
@@ -285,8 +286,8 @@ const HoursBilledPerWeekCard = ({
                         onClick={() => {
                           trackEvent({
                             category: customerSpecificGraph
-                              ? `fakturerte-timer-kunde-${option.toLowerCase()}`
-                              : `fakturerte-timer-${option.toLowerCase()}`,
+                              ? `fakturert-kunde-${option.toLowerCase()}`
+                              : `fakturert-${option.toLowerCase()}`,
                             action: 'click-event',
                           })
                           setSelectedFilter(option)
@@ -297,39 +298,25 @@ const HoursBilledPerWeekCard = ({
                     ))}
                   </StyledButtonGroup>
                   <StyledButtonGroup aria-label="Visning">
-                    <StyledButton
-                      key="hoursBilled"
-                      value="hoursBilled"
-                      variant="contained"
-                      active={graphView == 'hoursBilled'}
-                      onClick={() => {
-                        trackEvent({
-                          category: customerSpecificGraph
-                            ? `fakturerte-timer-kunde-hoursBilled`
-                            : `fakturerte-timer-hoursBilled`,
-                          action: 'click-event',
-                        })
-                        handleGraphViewChange('hoursBilled')
-                      }}
-                    >
-                      Timer
-                    </StyledButton>
-                    <StyledButton
-                      key="employees"
-                      value="employees"
-                      active={graphView == 'employees'}
-                      onClick={() => {
-                        trackEvent({
-                          category: customerSpecificGraph
-                            ? `fakturerte-timer-kunde-employees`
-                            : `fakturerte-timer-employees`,
-                          action: 'click-event',
-                        })
-                        handleGraphViewChange('employees')
-                      }}
-                    >
-                      Konsulenter
-                    </StyledButton>
+                    {graphViewOptions.map((option) => (
+                      <StyledButton
+                        key={option}
+                        value={option}
+                        variant="contained"
+                        active={graphView == option}
+                        onClick={() => {
+                          trackEvent({
+                            category: customerSpecificGraph
+                              ? `fakturert-kunde-${option.toLowerCase()}`
+                              : `fakturert-${option.toLowerCase()}`,
+                            action: 'click-event',
+                          })
+                          handleGraphViewChange(option)
+                        }}
+                      >
+                        {option}
+                      </StyledButton>
+                    ))}
                   </StyledButtonGroup>
                   <StyledButtonGroup>
                     <DateRangePickerButton
