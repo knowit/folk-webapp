@@ -62,7 +62,7 @@ export function GridItemHeader({
   card = false,
   clickable = false,
 }: GridItemHeaderProps) {
-  const longTitleText = title.length > 25
+  const longTitleText = title.length > 22
 
   return (
     <ComponentRoot big={big} green={green} card={card}>
