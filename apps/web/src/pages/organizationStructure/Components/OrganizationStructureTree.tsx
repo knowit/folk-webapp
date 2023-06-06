@@ -16,6 +16,17 @@ interface Props {
 }
 
 const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
+  const [rotateValue, setRotateValue] = useState(0)
+  const [zoomTransformValue, setZoomTransformValue] = useState({
+    k: 1,
+    x: 0,
+    y: 0,
+  })
+
+  const handleRotateValueChange = (value: number) => {
+    setRotateValue(value)
+  }
+
   const svgRef = useRef<SVGSVGElement>(null)
   const groupRef = useRef<SVGGElement>(null)
 
@@ -55,12 +66,17 @@ const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
     }
   })
 
-  const [rotateValue, setRotateValue] = useState(0)
-  const [zoomTransformValue, setZoomTransformValue] = useState({
-    k: 1,
-    x: 0,
-    y: 0,
-  })
+  // Sort descendants by x-values, and splice it up som the lowest x-value starts at degree 0
+  const descendantsWithChildren = descendants.filter((node) => node.children)
+
+  const descendantsWithoutChildren = descendants
+    .filter((node) => !node.children)
+    .sort((a, b) => a.x - b.x)
+
+  const antall = 360 / descendantsWithoutChildren.length
+  const indexes = Math.floor(descendantsWithoutChildren.length / 4)
+  const lastQuarter = descendantsWithoutChildren.splice(-indexes)
+  const descendantsSorted = lastQuarter.concat(descendantsWithoutChildren)
 
   return (
     <>
@@ -70,8 +86,7 @@ const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
           svgRef={svgRef}
           zoomTransformValue={zoomTransformValue}
           setZoomTransformValue={setZoomTransformValue}
-          rotateValue={rotateValue}
-          setRotateValue={setRotateValue}
+          handleRotateValueChange={handleRotateValueChange}
         />
         <Zooming
           groupRef={groupRef}
@@ -93,8 +108,24 @@ const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
         <g ref={groupRef}>
           <Links links={links} />
           <g>
-            {descendants.map((node, i) => {
-              return <EmployeeTreeNode node={node} key={i} />
+            {descendantsSorted.map((node, i) => {
+              return (
+                <EmployeeTreeNode
+                  node={node}
+                  key={i}
+                  rotateValue={rotateValue}
+                  degree={i * antall}
+                />
+              )
+            })}
+            {descendantsWithChildren.map((node, i) => {
+              return (
+                <EmployeeTreeNode
+                  node={node}
+                  key={i}
+                  rotateValue={rotateValue}
+                />
+              )
             })}
           </g>
         </g>

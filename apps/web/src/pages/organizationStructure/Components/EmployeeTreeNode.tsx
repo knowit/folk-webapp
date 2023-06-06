@@ -1,16 +1,27 @@
-import React from 'react'
 import { Node } from '../type'
 import { useTheme } from '@mui/material'
-import { fill, haloWidth, nodeSize, nodeStroke, rightSide } from '../util'
-import { styled } from '@mui/material/styles'
+import {
+  checkRotateDegree,
+  fill,
+  haloWidth,
+  nodeSize,
+  nodeStroke,
+} from '../util'
 
 interface Props {
   node: Node
+  rotateValue: number
+  degree?: number
 }
 
-const EmployeeTreeNode = ({ node }: Props) => {
+const EmployeeTreeNode = ({ node, rotateValue, degree }: Props) => {
   const theme = useTheme()
   const halo = theme.palette.background.paper
+
+  const rotate =
+    !node.children && node.depth !== 0
+      ? checkRotateDegree(degree, rotateValue)
+      : true
 
   return (
     <g
@@ -24,10 +35,10 @@ const EmployeeTreeNode = ({ node }: Props) => {
         r={nodeSize(node)}
       />
       <text
-        transform={`rotate(${rightSide(node.x) ? 0 : 180})`}
+        transform={`rotate(${rotate ? 0 : 180})`}
         dy={node.depth === 0 ? '10px' : '0.32em'}
-        x={rightSide(node.x) ? nodeSize(node) + 3 : -nodeSize(node) - 3}
-        textAnchor={rightSide(node.x) ? 'start' : 'end'}
+        x={rotate ? nodeSize(node) + 3 : -nodeSize(node) - 3}
+        textAnchor={rotate ? 'start' : 'end'}
         paintOrder="stroke"
         stroke={halo}
         fill={theme.palette.text.primary}

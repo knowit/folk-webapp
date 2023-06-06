@@ -2,6 +2,9 @@ import { styled } from '@mui/material/styles'
 import { useEffect } from 'react'
 import { zoom } from 'd3-zoom'
 import { select } from 'd3-selection'
+import { Button } from '@mui/material'
+import { AddIcon, RemoveIcon } from '../../../assets/Icons'
+import { useTheme } from '@mui/material/styles'
 
 interface Props {
   groupRef: React.MutableRefObject<SVGGElement>
@@ -15,21 +18,33 @@ const ButtonWrapper = styled('div')({
   border: '1px solid #000000',
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
   borderRadius: '4px',
-  width: '134px',
+  width: '200px',
   display: 'flex',
-  justifyContent: 'space-between',
-  '& button': {
-    paddingLeft: '10px',
-    paddingRight: '10px',
-    border: 'none',
-    color: '#333333',
-    fontSize: '28px',
-  },
+  justifyContent: 'center',
 })
 
 const Percent = styled('div')({
   fontSize: '24px',
 })
+
+const ZoomButton = styled(AddIcon)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  cursor: 'pointer',
+  '&:hover': {
+    color: theme.palette.text.secondary,
+  },
+}))
+
+export const IconBaseStyle = () => {
+  const theme = useTheme()
+  return {
+    color: theme.palette.text.secondary,
+    cursor: 'pointer',
+    '&:hover': {
+      color: theme.palette.text.primary,
+    },
+  }
+}
 
 const Zooming = ({
   groupRef,
@@ -38,7 +53,10 @@ const Zooming = ({
   zoomTransformValue,
   rotateValue,
 }: Props) => {
+  const zoom_in = zoomTransformValue.k + 0.1
+  const zoom_out = zoomTransformValue.k - 0.1
   const zoomCall = zoom().scaleExtent([0.5, 3]).on('zoom', handleZoom)
+
   useEffect(() => {
     const zoomCall = zoom()
       .scaleExtent([0.5, 3])
@@ -65,32 +83,27 @@ const Zooming = ({
   }
 
   const zoomIn = () => {
-    select(svgRef.current) /*.transition()*/
-      .call(zoomCall.scaleBy, 1.1)
+    select(svgRef.current).transition().call(zoomCall.scaleTo, zoom_in)
   }
 
   const zoomOut = () => {
-    select(svgRef.current) /*.transition()*/
-      .call(zoomCall.scaleBy, 0.9)
+    select(svgRef.current).transition().call(zoomCall.scaleTo, zoom_out)
   }
-  const numberFixed = Math.floor(zoomTransformValue.k * 10) / 10
-  //TODO fikse prosent, feil
+
   const getPercent = () => {
-    const p = 1 - numberFixed
-    const x = (p / 1) * 100
-    const prosent = 100 - x
+    const prosent = 100 - ((1 - zoomTransformValue.k.toFixed(1)) / 1) * 100
     return prosent.toFixed(0)
   }
 
   return (
     <ButtonWrapper>
-      <button id="zoom_in" onClick={zoomIn} className="button">
-        +
-      </button>
+      <Button onClick={zoomIn}>
+        <ZoomButton />
+      </Button>
       <Percent>{getPercent()}%</Percent>
-      <button id="zoom_out" onClick={zoomOut}>
-        -
-      </button>
+      <Button onClick={zoomOut}>
+        <RemoveIcon />
+      </Button>
     </ButtonWrapper>
   )
 }
