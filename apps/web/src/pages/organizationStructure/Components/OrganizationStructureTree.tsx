@@ -66,19 +66,20 @@ const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
     }
   })
 
-  // Sort descendants by x-values, and splice it up so the node that starts at 0 degree is first
   const descendantsWithChildren = descendants.filter((node) => node.children)
+
+  // Sort descendants by x-values, and splice it up som the node that starts at 0 degree is first
   const descendantsWithoutChildren = descendants
     .filter((node) => !node.children)
     .sort((a, b) => a.x - b.x)
+
   const indexes = Math.floor(descendantsWithoutChildren.length / 4)
   const lastQuarter = descendantsWithoutChildren.splice(-indexes)
   const descendantsSorted = lastQuarter.concat(descendantsWithoutChildren)
 
-  // Used to give each node a degree inbetween 0-360 when maped for EmployeeTreeNode
+  // Used to give each node a degree from 0-360 when mapped for EmployeeTreeNode
   const antall = 360 / descendantsWithoutChildren.length
 
-  console.log(descendantsSorted)
   return (
     <>
       <div>
