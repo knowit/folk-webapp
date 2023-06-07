@@ -15,7 +15,7 @@ interface Props {
 }
 
 const ButtonWrapper = styled('div')({
-  border: '1px solid #000000',
+  border: '1px solid',
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
   borderRadius: '4px',
   width: '200px',

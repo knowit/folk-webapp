@@ -15,6 +15,10 @@ const Wrapper = styled('div')({
   width: '200px',
 })
 
+const StyledSlider = styled(Slider)(({ theme }) => ({
+  color: theme.palette.text.primary,
+}))
+
 const Rotating = ({
   groupRef,
   zoomTransformValue,
@@ -51,7 +55,7 @@ const Rotating = ({
 
   return (
     <Wrapper>
-      <Slider
+      <StyledSlider
         valueLabelDisplay="auto"
         track={false}
         defaultValue={50}
