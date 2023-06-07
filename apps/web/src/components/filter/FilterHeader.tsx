@@ -1,8 +1,9 @@
 import { styled } from '@mui/material/styles'
-import React from 'react'
+import React, { useEffect } from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import { Chip, Rating, Divider } from '@mui/material'
 import { EmployeeTableColumnMapping, FilterEntry } from './FilterUtil'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 const ComponentRoot = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.darker,
@@ -95,6 +96,24 @@ export function FilterHeader({
   onThresholdUpdate,
   onSkillClick,
 }: Props) {
+  const { trackEvent } = useMatomo()
+  const higherThreshold = filterList.some((item) => item.threshold > 1)
+
+  useEffect(() => {
+    trackEvent({
+      category: `filter-${title.toLowerCase()}`,
+      action: 'click-event',
+    })
+  }, [title, trackEvent])
+
+  useEffect(() => {
+    higherThreshold &&
+      trackEvent({
+        category: `filter-${title.toLowerCase()}-grense`,
+        action: 'click-event',
+      })
+  }, [title, trackEvent, higherThreshold])
+
   return (
     <ComponentRoot>
       <ComponentTitle>{title}</ComponentTitle>

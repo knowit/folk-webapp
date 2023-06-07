@@ -13,6 +13,7 @@ import {
 import { IconBaseStyle } from '../../assets/Icons'
 import { ReactNode, useState } from 'react'
 import { CheckBoxHeader, MUITableConfig, MUITableProps } from './tableTypes'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 export const HeaderRoot = styled('div')(() => ({
   display: 'flex',
@@ -70,8 +71,12 @@ function Row<T>(props: {
 }) {
   const { collapsable, config, rowData, keyFn } = props
   const [open, setOpen] = useState(false)
+  const { trackEvent } = useMatomo()
 
   const toggle = () => {
+    if (!open) {
+      trackEvent({ category: 'user-details', action: 'click-event' })
+    }
     setOpen((prev) => !prev)
   }
   const style = {

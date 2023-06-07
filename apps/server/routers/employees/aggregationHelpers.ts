@@ -160,8 +160,8 @@ export function createCvLinks(linkTemplate: string): CvLinks {
   return {
     no_pdf: createCvLink('no', 'pdf', linkTemplate),
     int_pdf: createCvLink('int', 'pdf', linkTemplate),
-    no_word: createCvLink('no', 'word', linkTemplate),
-    int_word: createCvLink('int', 'word', linkTemplate),
+    no_word: createCvLink('no', 'docx', linkTemplate),
+    int_word: createCvLink('int', 'docx', linkTemplate),
   }
 }
 

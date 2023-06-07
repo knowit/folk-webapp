@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles'
 import { SvgIcon } from '@mui/material'
 import { ReactComponent as RadarLogo } from '../../assets/RadarChart.svg'
 import { ChartType, ChartVariant } from '../table/tableTypes'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 const chartVariantInfo: {
   [key in ChartType]: {
@@ -40,10 +41,13 @@ export function ChartVariantToggle({
   onChange,
   big = false,
 }: ChartVariantToggleProps) {
+  const { trackEvent } = useMatomo()
+
   const handleChartVariantChange = (
     event: React.MouseEvent,
     newChartIndex: number | null
   ) => {
+    trackEvent({ category: 'graf-type', action: 'click-event' })
     if (typeof newChartIndex === 'number') {
       onChange(newChartIndex)
     }

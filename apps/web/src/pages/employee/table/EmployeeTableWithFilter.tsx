@@ -22,6 +22,8 @@ import {
 
 import { Paper } from '@mui/material'
 import { RowCount } from '../../../components/sortableTable/RowCount'
+import { FilteredDownloadCell } from '../../../components/sortableTable/DataCells'
+import { statusDisplayDetails } from '../../../components/sortableTable/cells/ProjectStatusCell'
 
 export interface SearchableColumn {
   columnIndex: number
@@ -119,7 +121,16 @@ export default function EmployeeTableWithFilter({
           />
         </FilterContainer>
       </GridItemHeader>
-      {filterHeaders}
+      {filterHeaders ? filterHeaders : null}
+      <FilteredDownloadCell
+        filters={filters ? filters : []}
+        consultants={NonProject.map((row) => [
+          row['rowData'][0].name,
+          row['rowData'][1],
+          statusDisplayDetails[row['rowData'][2]]?.label,
+          row['rowData'][3].customer,
+        ])}
+      />
       <RowCount>
         Viser {NonProject.length} av {allRows.length} ansatte
       </RowCount>

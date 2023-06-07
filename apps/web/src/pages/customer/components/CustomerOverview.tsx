@@ -4,6 +4,7 @@ import { Grid } from '@mui/material'
 import { HoursBilledPerWeekCard } from '../cards'
 import { useCustomerCards } from '../../../api/data/customer/customerQueries'
 import storageTokens from '../util/local-storage-tokens'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 export const CustomerOverview = () => {
   const { data } = useCustomerCards()
@@ -12,6 +13,7 @@ export const CustomerOverview = () => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState(null)
   const [selectedPeriodStartDate, setPeriodStartDate] = useState(null)
   const [selectedPeriodEndDate, setPeriodEndDate] = useState(null)
+  const { trackEvent } = useMatomo()
 
   useEffect(() => {
     const selectedCustomerIds = localStorage.getItem('selectedCustomerIds')
@@ -52,6 +54,7 @@ export const CustomerOverview = () => {
     event: React.ChangeEvent<HTMLInputElement>,
     customerId: string
   ) => {
+    trackEvent({ category: 'filter-kunde', action: 'click-event' })
     if (event.target.checked) {
       setSelectedCustomerIds([...selectedCustomerIds, customerId])
     } else {

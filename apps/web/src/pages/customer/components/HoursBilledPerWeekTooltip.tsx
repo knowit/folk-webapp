@@ -11,8 +11,9 @@ const HoursBilledPerWeekTooltip = ({ slice, axis }) => {
 
   return (
     <TooltipContainer>
-      {filtered.map((point) => [
+      {filtered.map((point, index) => [
         <Grid
+          key={index}
           container
           spacing={2}
           style={{
