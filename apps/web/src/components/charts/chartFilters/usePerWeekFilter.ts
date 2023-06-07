@@ -114,7 +114,7 @@ export const usePerWeekFilter = (
   }
 }
 
-export const useGraphData = (
+export const useEmployeeGraphData = (
   data: SingularChartData
 ): { weeklyData: SingularChartData; monthlyData: SingularChartData } => {
   const groupDataByTimePeriod = (
@@ -123,17 +123,25 @@ export const useGraphData = (
   ): SingularChartData => {
     if (data && data.type === 'LineChart') {
       const filteredData = data.data.map((customer) => {
+        let monthValue = 0
+        let month = null
         const filteredData = customer.data
           .map((v) => {
             const date = getDateDisplay(v.x)
             const value = { ...v, date: date.date }
+            if (!month || date.month != month) {
+              month = date.month
+              monthValue = value.y
+            } else {
+              monthValue = Math.max(monthValue, value.y)
+            }
             switch (period) {
               case 'Uke':
                 return { ...value, x: date.week }
               case 'Måned': {
                 const monthDate = new Date(date.date)
                 monthDate.setDate(1)
-                return { ...value, x: date.month, date: monthDate }
+                return { x: date.month, date: monthDate, y: monthValue }
               }
               default:
                 return value
@@ -181,4 +189,4 @@ export const useGraphData = (
   }
 }
 
-export default { usePerWeekFilter, useGraphData }
+export default { usePerWeekFilter, useEmployeeGraphData }

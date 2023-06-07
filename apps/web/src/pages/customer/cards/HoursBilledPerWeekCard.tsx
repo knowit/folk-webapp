@@ -24,7 +24,7 @@ import CustomerGraphFilter from '../components/CustomerGraphFilter'
 import { useMatomo } from '@jonkoops/matomo-tracker-react'
 import {
   usePerWeekFilter,
-  useGraphData,
+  useEmployeeGraphData,
 } from '../../../components/charts/chartFilters/usePerWeekFilter'
 import { useState } from 'react'
 
@@ -123,7 +123,7 @@ const HoursBilledPerWeekCard = ({
     monthlyData,
   } = usePerWeekFilter(data)
   const { weeklyData: employeeWeeklyData, monthlyData: employeeMonthlyData } =
-    useGraphData(employeeData)
+    useEmployeeGraphData(employeeData)
   const [graphView, setGraphView] = useState('Timer')
   const { trackEvent } = useMatomo()
   const graphViewOptions = ['Timer', 'Konsulenter']
