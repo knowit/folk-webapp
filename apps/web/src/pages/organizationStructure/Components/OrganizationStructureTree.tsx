@@ -73,12 +73,12 @@ const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
     .filter((node) => !node.children)
     .sort((a, b) => a.x - b.x)
 
+  // Used to give each node a degree from 0-360 when mapped for EmployeeTreeNode
+  const antall = 360 / descendantsWithoutChildren.length
+
   const indexes = Math.floor(descendantsWithoutChildren.length / 4)
   const lastQuarter = descendantsWithoutChildren.splice(-indexes)
   const descendantsSorted = lastQuarter.concat(descendantsWithoutChildren)
-
-  // Used to give each node a degree from 0-360 when mapped for EmployeeTreeNode
-  const antall = 360 / descendantsWithoutChildren.length
 
   return (
     <>
