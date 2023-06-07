@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { GridItemHeader } from '../gridItem/GridItemHeader'
-import { FilterHeader } from '../filter/FilterHeader'
-import DataTable from './DataTable'
-import SearchInput from '../SearchInput'
-import FilterInput from '../filter/FilterInput'
-import { RowCount } from './RowCount'
-import { Column, DDTableProps, GetColumnValueFn } from './tableTypes'
+import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
+import { FilterHeader } from '../../../components/filter/FilterHeader'
+import SearchInput from '../../../components/SearchInput'
+import FilterInput from '../../../components/filter/FilterInput'
+import {
+  DDTableProps,
+  GetColumnValueFn,
+} from '../../../components/sortableTable/tableTypes'
 import { styled } from '@mui/material/styles'
 import {
   filterNonCustomer,
@@ -13,7 +14,14 @@ import {
   handleFilterChange,
   handleThresholdChange,
   searchAndFilter,
-} from '../filter/FilterUtil'
+} from '../../../components/filter/FilterUtil'
+import {
+  SortableEmployeeTable,
+  getEmployeeSearchableColumns,
+} from './SortableEmployeeTable'
+
+import { Paper } from '@mui/material'
+import { RowCount } from '../../../components/sortableTable/RowCount'
 
 export interface SearchableColumn {
   columnIndex: number
@@ -27,24 +35,10 @@ const FilterContainer = styled('div')(() => ({
   width: 900,
 }))
 
-export function getSearchableColumns(columns: Column[]): SearchableColumn[] {
-  const result: SearchableColumn[] = []
-  columns.forEach((column, index) => {
-    if (column.getValue) {
-      result.push({
-        columnIndex: index,
-        getSearchValue: column.getValue,
-      })
-    }
-  })
-  return result
-}
-
-export default function DDTable({
+export default function EmployeeTableWithFilter({
   payload,
   title,
   initialFilters,
-  props,
 }: DDTableProps) {
   const allRows = payload
   const [filters, setFilters] = useState<FilterObject[]>(initialFilters)
@@ -55,7 +49,7 @@ export default function DDTable({
     setDisplayNonProject(!displayNonProject)
   }
 
-  const searchableColumns = getSearchableColumns(props.columns)
+  const searchableColumns = getEmployeeSearchableColumns()
   const filteredRows = searchAndFilter(
     allRows,
     searchableColumns,
@@ -129,11 +123,16 @@ export default function DDTable({
       <RowCount>
         Viser {NonProject.length} av {allRows.length} ansatte
       </RowCount>
-      <DataTable
-        checkBox={checkBox}
-        rows={NonProject}
-        columns={props.columns}
-      />
+      <Paper
+        elevation={0}
+        style={{
+          height: '100%',
+          width: '100%',
+        }}
+        sx={{ backgroundColor: 'background.default' }}
+      >
+        <SortableEmployeeTable checkBox={checkBox} data={NonProject} />
+      </Paper>
     </>
   )
 }

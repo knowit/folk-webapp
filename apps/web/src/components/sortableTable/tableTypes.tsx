@@ -1,7 +1,7 @@
 import { SingularChartData } from '@folk/common/types/chartTypes'
-import * as React from 'react'
 import { SWRResponse } from 'swr'
 import { FilterObject } from '../filter/FilterUtil'
+import { ReactNode } from 'react'
 
 export type DDPayload = { [key: string]: any }
 
@@ -19,16 +19,44 @@ export type ChartVariant = {
   }
 }
 
-export type Column = {
-  title: string
-  width: number
-  isExpandable?: boolean
-  checkBoxLabel?: string
-  getValue?: GetColumnValueFn
-  renderCell?: (props: any) => JSX.Element
-  renderExpanded?: (props: any) => JSX.Element
-  headerCell?: (props: any) => JSX.Element
-  checkBoxChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void
+export enum SortOrder {
+  Asc = 'Asc',
+  Desc = 'Desc',
+}
+
+export type sortValueFn<T> = (rowData: T) => string | number | undefined | null
+
+export interface MUITableConfig<T> {
+  label: string
+  render: (
+    rowData: T,
+    toggle?: (id: string) => void,
+    toggled?: boolean
+  ) => ReactNode
+  width?: number
+  header?: () => ReactNode
+  checkBox?: CheckBoxHeader
+  sortValue?: sortValueFn<T>
+  sortFn?: (a: T, b: T) => number
+}
+
+export interface MUITableProps<T> {
+  data: T[]
+  config: MUITableConfig<T>[]
+  keyFn: (rowData: T) => string
+  collapsable?: (rowData: T) => ReactNode
+  initialSort?: { sortOrder: SortOrder | null; sortBy: string | null }
+}
+
+export interface SearchableColumn<T> {
+  columnIndex: number
+  getSearchValue: sortValueFn<T>
+}
+
+export interface CheckBoxHeader {
+  label: string
+  changeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
+  checked: boolean
 }
 
 export type GetColumnValueFn = (data: any) => string | number | undefined | null
@@ -41,18 +69,7 @@ export interface DDComponentProps {
   searchable?: boolean
 }
 
-export type SortOrder = 'NONE' | 'ASC' | 'DESC'
-
-export interface ColumnSort {
-  sortOrder: SortOrder
-  columnIndex: number
-  getSortValue?: GetColumnValueFn
-}
-
 export interface DDTableProps extends DDComponentProps {
-  props: {
-    columns: Column[]
-  }
   initialFilters: FilterObject[]
 }
 

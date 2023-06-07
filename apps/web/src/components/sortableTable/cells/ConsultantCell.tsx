@@ -4,17 +4,15 @@ import { TableCell } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { ExpandLessIcon, ExpandMoreIcon } from '../../../assets/Icons'
 import { ReactComponent as FallbackUserIcon } from '../../../assets/fallback_user.svg'
-import CharacterLimitBox from '../components/CharacterLimitBox'
 import { OpenInNewIcon } from '../../../assets/Icons'
 import { Link } from 'react-router-dom'
 import { ConsultantInfo } from '../../../api/data/employee/employeeApiTypes'
+import CharacterLimitBox from '../components/CharacterLimitBox'
 
-const ComponentRoot = styled(TableCell)(({ theme }) => ({
+const ComponentRoot = styled(TableCell)(() => ({
   flexDirection: 'column',
   display: 'flex',
   padding: 0,
-  borderLeft: `1px solid ${theme.palette.background.paper}`,
-  borderTop: `1px solid ${theme.palette.background.paper}`,
 }))
 
 const ButtonSubRoot = styled('div')(() => ({
