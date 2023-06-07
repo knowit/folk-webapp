@@ -6,6 +6,7 @@ import { useTheme } from '@mui/material'
 
 const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
   isBig = false,
+  data,
   ...props
 }) => {
   const theme = useTheme()
@@ -18,13 +19,17 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
     },
   }
 
-  const filteredData = props.data
+  const maxLength = data.reduce((previous, current) => {
+    return previous > current.id.toString().length + 2
+      ? previous
+      : current.id.toString().length + 2
+  }, 0)
 
   return (
     <div style={{ width: '100%', height: isBig ? '400px' : '280px' }}>
       <ResponsiveLine
         theme={chartTheme}
-        data={filteredData}
+        data={data}
         margin={{ top: 10, right: 40, bottom: 70, left: 40 }}
         animate={false}
         xScale={{ type: 'point' }}
@@ -52,7 +57,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
                     height: '12px',
                     backgroundColor: value.serieColor,
                     display: 'inline-block',
-                    margin: '5px',
+                    margin: '2px',
                   }}
                 ></div>
                 <div style={{ margin: '5px' }}>
@@ -66,14 +71,13 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
         pointLabelYOffset={10}
         pointColor={{ theme: 'background' }}
         legends={
-          filteredData && filteredData.length <= 4
+          data && data.length <= 4
             ? [
                 {
                   anchor: 'bottom',
                   direction: 'row',
                   justify: false,
-                  itemWidth: 100,
-                  itemsSpacing: 100,
+                  itemWidth: maxLength * 6,
                   itemHeight: 20,
                   itemOpacity: 0.75,
                   symbolSize: 12,
@@ -95,8 +99,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
                   anchor: 'bottom',
                   direction: 'row',
                   justify: false,
-                  itemWidth: 100,
-                  itemsSpacing: 100,
+                  itemWidth: maxLength * 6,
                   itemHeight: 20,
                   itemOpacity: 0.75,
                   symbolSize: 12,
@@ -111,23 +114,21 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
                     },
                   ],
                   translateY: 30,
-                  data: props.data
-                    .slice(0, Math.floor(props.data.length / 2))
+                  data: data
+                    .slice(0, Math.floor(data.length / 2))
                     .map((cur, index) => ({
                       id: cur.id,
                       label: cur.id,
-                      color: chartColors.slice(
-                        0,
-                        Math.floor(filteredData.length / 2)
-                      )[index],
+                      color: chartColors.slice(0, Math.floor(data.length / 2))[
+                        index
+                      ],
                     })),
                 },
                 {
                   anchor: 'bottom',
                   direction: 'row',
                   justify: false,
-                  itemWidth: 100,
-                  itemsSpacing: 100,
+                  itemWidth: maxLength * 6,
                   itemHeight: 20,
                   itemOpacity: 0.75,
                   symbolSize: 12,
@@ -142,14 +143,14 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
                     },
                   ],
                   translateY: 50,
-                  data: filteredData
-                    .slice(Math.floor(filteredData.length / 2))
+                  data: data
+                    .slice(Math.floor(data.length / 2))
                     .map((cur, index) => ({
                       id: cur.id,
                       label: cur.id,
-                      color: chartColors.slice(
-                        Math.floor(filteredData.length / 2)
-                      )[index],
+                      color: chartColors.slice(Math.floor(data.length / 2))[
+                        index
+                      ],
                     })),
                 },
               ]
