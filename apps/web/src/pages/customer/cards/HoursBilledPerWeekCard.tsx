@@ -64,8 +64,8 @@ const StyledButton = styled(Button, {
     backgroundColor: theme.palette.background.default,
   },
   background: active
-    ? theme.palette.background.darker
-    : theme.palette.background.paper,
+    ? theme.palette.background.paper
+    : theme.palette.background.darker,
 }))
 
 const StyledButtonGroup = styled(ButtonGroup)(() => ({
