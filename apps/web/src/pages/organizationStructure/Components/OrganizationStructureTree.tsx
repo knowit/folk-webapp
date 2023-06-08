@@ -76,7 +76,7 @@ const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
   // Used to give each node a degree from 0-360 when mapped for EmployeeTreeNode
   const antall = 360 / descendantsWithoutChildren.length
 
-  const indexes = Math.floor(descendantsWithoutChildren.length / 4)
+  const indexes = Math.ceil(descendantsWithoutChildren.length / 4)
   const lastQuarter = descendantsWithoutChildren.splice(-indexes)
   const descendantsSorted = lastQuarter.concat(descendantsWithoutChildren)
 

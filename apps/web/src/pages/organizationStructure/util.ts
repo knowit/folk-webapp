@@ -34,7 +34,7 @@ export function toCartesian(x: number, y: number) {
   return [y * Math.cos(x), y * Math.sin(x)]
 }
 
-export const rightSide = (radians: number) => radians >= 0 && radians < 195
+export const rightSide = (radians: number) => radians >= 0 && radians < 180
 
 export const checkRotateDegree = (degree, rotateValue) => {
   const rotateDegree =
