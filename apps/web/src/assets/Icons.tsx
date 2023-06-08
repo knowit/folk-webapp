@@ -25,6 +25,7 @@ export const IconBaseStyle = () => {
   }
 }
 
+export const AddIcon = styled(Add)(() => IconBaseStyle)
 export const ArrowDownIcon = styled(ArrowDownward)(() => IconBaseStyle)
 export const ArrowUpIcon = styled(ArrowUpward)(() => IconBaseStyle)
 export const CloseIcon = styled(Close)(() => IconBaseStyle)
@@ -35,5 +36,4 @@ export const FilterListIcon = styled(FilterList)(() => IconBaseStyle)
 export const FullscreenIcon = styled(Fullscreen)(() => IconBaseStyle)
 export const FullscreenExitIcon = styled(FullscreenExit)(() => IconBaseStyle)
 export const OpenInNewIcon = styled(OpenInNew)(() => IconBaseStyle)
-export const AddIcon = styled(Add)(() => IconBaseStyle)
 export const RemoveIcon = styled(Remove)(() => IconBaseStyle)
