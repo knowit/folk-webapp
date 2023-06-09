@@ -34,6 +34,7 @@ export interface MUITableConfig<T> {
     toggled?: boolean
   ) => ReactNode
   width?: number
+  additionalCellStyle?: React.CSSProperties
   header?: () => ReactNode
   checkBox?: CheckBoxHeader
   sortValue?: sortValueFn<T>

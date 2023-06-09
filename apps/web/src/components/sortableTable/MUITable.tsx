@@ -79,16 +79,30 @@ function Row<T>(props: {
     }
     setOpen((prev) => !prev)
   }
-  const style = {
+  const rowStyle = {
     height: '70px',
+  }
+
+  const additionalCellStyle = (column: MUITableConfig<T>) => {
+    let style: React.CSSProperties = {}
+
+    if (column.additionalCellStyle) {
+      style = { ...column.additionalCellStyle }
+    }
+
+    if (column.width) {
+      style.width = `${column.width}px`
+    }
+
+    return style
   }
 
   return (
     <>
-      <TableRow style={{ ...style }} key={keyFn(rowData)}>
+      <TableRow style={{ ...rowStyle }} key={keyFn(rowData)}>
         {(config || []).map((column, index) => (
           <TableCellStyled
-            style={column.width ? { width: `${column.width}px` } : {}}
+            style={additionalCellStyle(column)}
             key={column.label}
           >
             {column.render(rowData, index === 0 ? toggle : null, open)}

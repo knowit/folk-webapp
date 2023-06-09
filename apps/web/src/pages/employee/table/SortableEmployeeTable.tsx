@@ -57,6 +57,10 @@ export const getEmployeeTableConfig = (checkBox?: CheckBoxHeader) =>
         )
       },
       width: 395,
+      additionalCellStyle: {
+        paddingLeft: 0,
+        paddingRight: 0,
+      },
       checkBox: checkBox,
       sortValue: (row: EmployeeRow) => row.employeeInfo.name,
     },
