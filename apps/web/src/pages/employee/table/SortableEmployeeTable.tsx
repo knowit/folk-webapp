@@ -119,19 +119,19 @@ const employeeForCustomerConfig = [
       )
     },
     width: 395,
-    sortValue: (row: EmployeeCustomerRow) => row.employeeInfo.name,
+    sortValue: (column: ConsultantInfo) => column.name,
   },
   {
     label: 'Tittel',
     width: 222,
     render: (row: EmployeeCustomerRow) => row.jobTitle,
-    sortValue: (row: EmployeeCustomerRow) => row.jobTitle,
+    sortValue: (title: string) => title,
   },
   {
     label: 'Kunde',
     render: (row: EmployeeCustomerRow) => row.customerAndProject,
     width: 337,
-    sortValue: (row: EmployeeCustomerRow) => row.customerAndProject ?? '',
+    sortValue: (customer: string) => customer ?? '',
   },
   {
     label: 'CV',
@@ -167,6 +167,7 @@ export const SortableEmployeeTable = (props: {
 
 export const getEmployeeForCustomerSearchableColumns = () =>
   getSearchableColumns(employeeForCustomerConfig)
+
 export const EmployeeTableForCustomer = (props: {
   data: EmployeeForCustomerList[]
 }) => {
