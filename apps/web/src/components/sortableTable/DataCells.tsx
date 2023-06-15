@@ -1,11 +1,10 @@
 import React from 'react'
-import CharacterLimitBox from './components/CharacterLimitBox'
+
 import ConsultantCell from './cells/ConsultantCell'
-import CvCell from './cells/CvCell'
 import ProjectStatusCell from './cells/ProjectStatusCell'
+import CharacterLimitBox from './components/CharacterLimitBox'
+import CvCell from './cells/CvCell'
 import CustomerStatusCell from './cells/CustomerStatusCell'
-import SortableHeaderCell from './cells/SortableHeaderCell'
-import CenteredHeaderCell from './cells/CenteredHeaderCell'
 import FilteredDownloadCell from './cells/FilteredDownloadCell'
 
 const EducationCell = ({ data }: { data: string | null }) => (
@@ -18,7 +17,5 @@ export {
   CvCell,
   ProjectStatusCell,
   CustomerStatusCell,
-  SortableHeaderCell,
-  CenteredHeaderCell,
   FilteredDownloadCell,
 }

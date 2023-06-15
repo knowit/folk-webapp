@@ -1,5 +1,5 @@
 import { CustomerWithAccordion } from '../../../api/data/customer/customerApiTypes'
-import { SearchableColumn } from '../../../components/table/DDTable'
+import { SearchableColumn } from '../../employee/table/EmployeeTableWithFilter'
 import { searchRow } from '../../../components/filter/FilterUtil'
 
 export function searchEmployeesByCustomer(

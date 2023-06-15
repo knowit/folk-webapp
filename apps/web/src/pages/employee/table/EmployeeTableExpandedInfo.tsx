@@ -17,14 +17,14 @@ const ComponentSummary = styled('section')(() => ({
   padding: 15,
   borderRight: '1px solid rgba(0, 0, 0, 0)',
   overflowY: 'auto',
-  width: 385,
+  width: 395,
   lineHeight: '1.5em',
 }))
 const ComponentExperience = styled('section')(() => ({
   padding: 15,
   borderRight: '1px solid rgba(0, 0, 0, 0)',
   overflowY: 'auto',
-  width: 365,
+  width: 369,
   '& > *': {
     paddingBottom: '1em',
   },

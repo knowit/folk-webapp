@@ -3,22 +3,21 @@ import {
   AccordionSummary,
   AccordionDetails,
   Box,
+  Paper,
 } from '@mui/material'
 
 import { Minimize, Add } from '@mui/icons-material'
 import React, { useState } from 'react'
 import { EmployeeForCustomerList } from '../../../api/data/customer/customerApiTypes'
-import DataTable from '../../../components/table/DataTable'
-import { Column } from '../../../components/table/tableTypes'
 import { Link } from 'react-router-dom'
 import { OpenInNewIcon } from '../../../assets/Icons'
 import { styled } from '@mui/material/styles'
+import { EmployeeTableForCustomer } from '../../employee/table/SortableEmployeeTable'
 
 interface CustomerDropdownProps {
   customerName: string
   employees: EmployeeForCustomerList[]
   expand?: boolean
-  columns: Column[]
 }
 
 const CustomerColumn = styled('div')(() => ({
@@ -31,7 +30,6 @@ const CustomerAccordion = ({
   customerName,
   employees,
   expand = false,
-  columns,
 }: CustomerDropdownProps) => {
   const [expanded, setExpanded] = useState(expand)
 
@@ -75,7 +73,16 @@ const CustomerAccordion = ({
           </Box>
         </AccordionSummary>
         <AccordionDetails>
-          <DataTable columns={columns} rows={employees} />
+          <Paper
+            elevation={0}
+            style={{
+              height: '100%',
+              width: '100%',
+            }}
+            sx={{ backgroundColor: 'background.default' }}
+          >
+            <EmployeeTableForCustomer data={employees} />
+          </Paper>
         </AccordionDetails>
       </Accordion>
     </Box>

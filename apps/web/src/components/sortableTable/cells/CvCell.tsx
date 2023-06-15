@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { DownloadIcon } from '../../../assets/Icons'
 import { styled } from '@mui/material/styles'
 import { NoData } from '../../ErrorText'
-import CvDialog from '../components/CvDialog'
 import { CvLinks } from '../../../api/data/employee/employeeApiTypes'
+import CvDialog from '../components/CvDialog'
 
 const CvDownloadStyled = styled('div')(() => ({
   width: '100%',

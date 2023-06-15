@@ -4,8 +4,9 @@ import { BarChart, PieChart, ShowChart, DonutLarge } from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
 import { SvgIcon } from '@mui/material'
 import { ReactComponent as RadarLogo } from '../../assets/RadarChart.svg'
-import { ChartType, ChartVariant } from '../table/tableTypes'
+
 import { useMatomo } from '@jonkoops/matomo-tracker-react'
+import { ChartType, ChartVariant } from '../sortableTable/tableTypes'
 
 const chartVariantInfo: {
   [key in ChartType]: {
