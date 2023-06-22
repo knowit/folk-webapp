@@ -6,14 +6,25 @@ import LinkElement from './LinkElement'
 
 interface Props {
   links: Link[]
+  clickedParents: any
 }
 
-const Links = ({ links }: Props) => {
+const Links = ({ links, clickedParents }: Props) => {
   links.forEach((d: Link) => {
+    const childsFromDepartmentManager =
+      d.target.depth === 2 &&
+      d.target.height === 0 &&
+      d.source.depth === 1 &&
+      d.source.height === 3 &&
+      clickedParents.some(
+        (employee) => employee === d.source.data.employee.email
+      )
     if (
       d.target.height !== 0 ||
-      d.target.depth === 1 ||
-      (d.target.height === 0 &&
+      d.target.depth === 0 ||
+      childsFromDepartmentManager ||
+      (childsFromDepartmentManager &&
+        d.target.height === 0 &&
         d.source.children.filter((child) => child.height != 0).length > 3)
     ) {
       d.innerLink = true
@@ -45,9 +56,15 @@ const Links = ({ links }: Props) => {
       }
     } else {
       d.innerLink = false
-      d.path = linkRadial()
-        .angle((d: any) => d.x + Math.PI / 2)
-        .radius((d: any) => d.y)(d as any)
+      if (
+        clickedParents.some(
+          (employee) => employee === d.source.data.employee.email
+        )
+      ) {
+        d.path = linkRadial()
+          .angle((d: any) => d.x + Math.PI / 2)
+          .radius((d: any) => d.y)(d as any)
+      }
     }
   })
 
