@@ -61,7 +61,7 @@ const OrganizationStructureTree = ({
       d.y = 175
     }
     if (d.depth === 2 && d.height == 2) {
-      d.y -= 30
+      d.y -= 60
     }
   })
 
