@@ -7,6 +7,7 @@ export type Node = HierarchyNode<EmployeeNode> & {
 }
 
 export type Link = HierarchyLink<EmployeeNode> & {
+  degree?: number
   inverted: boolean
   path: string
   innerLink: boolean

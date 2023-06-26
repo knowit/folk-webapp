@@ -8,6 +8,7 @@ import Zooming from './Zooming'
 import Rotating from './Rotating'
 import LeadersOverview from '../LeadersOverview'
 import EmployeeTreeNode from './Nodes/EmployeeTreeNode'
+import { spliceArray } from '../util'
 
 interface Props {
   data: EmployeeNode
@@ -66,6 +67,7 @@ const OrganizationStructureTree = ({
 
   //Sort descentants with children
   const descendantsWithChildren = descendants.filter((node) => node.children)
+  descendantsWithChildren.sort((a, b) => a.x - b.x)
 
   // Sort descendants by x-values, and splice it up som the node that starts at 0 degree is first
   const descendantsWithoutChildren = descendants
@@ -74,9 +76,12 @@ const OrganizationStructureTree = ({
 
   // Used to give each node a degree from 0-360 when mapped for EmployeeTreeNode
   const countChildren = 360 / descendantsWithoutChildren.length
-  const indexes = Math.ceil(descendantsWithoutChildren.length / 4)
-  const lastQuarter = descendantsWithoutChildren.splice(-indexes)
-  const descendantsSorted = lastQuarter.concat(descendantsWithoutChildren)
+  const descendantsWithoutChildrenSorted = spliceArray(
+    descendantsWithoutChildren
+  )
+
+  links.sort((a, b) => a.target.x - b.target.x)
+  const linksSorted = spliceArray(links)
 
   return (
     <>
@@ -102,9 +107,13 @@ const OrganizationStructureTree = ({
         fontSize={12}
       >
         <g ref={groupRef}>
-          <Links links={links} clickedParents={clickedParents} />
+          <Links
+            links={linksSorted}
+            clickedParents={clickedParents}
+            rotateValue={rotateValue}
+          />
           <g>
-            {descendantsSorted.map((node, i) => {
+            {descendantsWithoutChildrenSorted.map((node, i) => {
               return (
                 <EmployeeTreeNode
                   node={node}

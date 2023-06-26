@@ -28,6 +28,8 @@ export const hierchyLevel = (d) => {
 }
 
 export const size = [15, 10, 6, 5]
+export const size2 = [18, 14, 12, 5]
+
 export const haloWidth = 0.2
 
 export function toCartesian(x: number, y: number) {
@@ -47,5 +49,14 @@ export const checkRotateDegree = (degree, rotateValue) => {
 
 export const linkColor = (d) => linkColors[hierchyLevel(d)]
 export const nodeSize = (d) => size[hierchyLevel(d)]
+export const nodeSize2 = (d) => size2[hierchyLevel(d)]
 export const fill = (d) => nodeFillColors[hierchyLevel(d)]
 export const nodeStroke = (d) => nodeStrokeColors[hierchyLevel(d)]
+
+export const spliceArray = (descendants) => {
+  //put the last quarter of the array in the front
+  const indexes = Math.floor(descendants.length / 4)
+  const lastQuarter = descendants.splice(-indexes)
+  const t = lastQuarter.concat(descendants)
+  return t
+}

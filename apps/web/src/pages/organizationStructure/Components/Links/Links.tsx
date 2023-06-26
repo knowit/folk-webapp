@@ -3,14 +3,18 @@ import { Link } from '../../type'
 import { toCartesian, hierchyLevel, size } from '../../util'
 import { linkRadial } from 'd3-shape'
 import LinkElement from './LinkElement'
+import { checkRotateDegree } from '../Nodes/util'
 
 interface Props {
   links: Link[]
   clickedParents: any
+  rotateValue: number
 }
 
-const Links = ({ links, clickedParents }: Props) => {
-  links.forEach((d: Link) => {
+const Links = ({ links, clickedParents, rotateValue }: Props) => {
+  const LinksCount = 360 / links.length
+
+  links.forEach((d: Link, i: number) => {
     const childsFromDepartmentManager =
       d.target.depth === 2 &&
       d.target.height === 0 &&
@@ -27,6 +31,7 @@ const Links = ({ links, clickedParents }: Props) => {
         d.target.height === 0 &&
         d.source.children.filter((child) => child.height != 0).length > 3)
     ) {
+      d.degree = i * LinksCount
       d.innerLink = true
       const [x1, y1] = toCartesian(d.source.x, d.source.y)
       const [x2, y2] = toCartesian(d.target.x, d.target.y)
@@ -47,7 +52,7 @@ const Links = ({ links, clickedParents }: Props) => {
       d.target.cartY = y3
       d.source.cartX = x4
       d.source.cartY = y4
-      if (x4 > x3) {
+      if (checkRotateDegree(d.degree, rotateValue)) {
         d.inverted = true
         d.path = `M ${x3},${y3} L ${x4},${y4}`
       } else {
