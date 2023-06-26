@@ -1,6 +1,7 @@
+import LeaderTreeNode from './Components/Nodes/LeaderTreeNode'
 import { Node } from './type'
 import { useEffect } from 'react'
-import LeaderTreeNode from './Components/Nodes/LeaderTreeNode'
+import { spliceArray } from './util'
 
 interface Props {
   descendants: Node[]
@@ -13,8 +14,12 @@ const LeadersOverview = ({
   descendants,
   clickedParents,
   setClickedParents,
+  rotateValue,
   hideEmployeesWithoutChildren,
 }: Props) => {
+  const antallParents = 360 / descendants.length
+  const descendantsWithChildrenSorted = spliceArray(descendants)
+
   //Hide and show children in the outer layer i the graph.
   const handleRemoveItem = (node) => {
     setClickedParents(
@@ -36,7 +41,7 @@ const LeadersOverview = ({
     if (hideEmployeesWithoutChildren) {
       setClickedParents([])
     } else {
-      descendants.map((node) => {
+      descendantsWithChildrenSorted.map((node) => {
         setClickedParents((employees) => [
           ...employees,
           node.data.employee.email,
@@ -48,8 +53,17 @@ const LeadersOverview = ({
 
   return (
     <>
-      {descendants.map((node, i) => {
-        return <LeaderTreeNode key={i} node={node} showChildren={showChilden} />
+      {descendantsWithChildrenSorted.map((node, i) => {
+        return (
+          <LeaderTreeNode
+            key={i}
+            node={node}
+            showChildren={showChilden}
+            clickedParents={clickedParents}
+            degree={(i + 1) * antallParents}
+            rotateValue={rotateValue}
+          />
+        )
       })}
     </>
   )

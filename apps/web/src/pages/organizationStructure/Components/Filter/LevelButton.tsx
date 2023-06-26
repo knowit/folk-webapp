@@ -36,7 +36,7 @@ const CircleButton = ({ index, title, onClick }: Props) => {
   const [clicked, setClicked] = useState(false)
 
   const nodeFillColors = ['rgb(219, 238, 222)']
-  const nodeFillColorsClicked = ['grey'] //TODO
+  const nodeFillColorsClicked = ['rgb(160, 160, 160)']
   const nodeStrokeColors = ['rgb(153, 167, 155)']
 
   return (

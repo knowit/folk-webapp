@@ -8,6 +8,7 @@ import {
   nodeSize2,
   nodeStroke,
 } from '../../util'
+import ChildrenCount from './ChildrenCount'
 
 interface Props {
   node: Node
@@ -64,6 +65,12 @@ const LeaderTreeNode = ({
             {node.data.employee.name}
           </text>
         )}
+        <ChildrenCount
+          node={node}
+          showHiddenChildsCount={showHiddenChildsCount}
+          degree={degree}
+          rotateValue={rotateValue}
+        />
       </g>
     </>
   )
