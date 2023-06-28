@@ -3,7 +3,7 @@ import { Link } from '../../type'
 import { toCartesian, hierarchyLevel, sizeNormal } from '../../util'
 import { linkRadial } from 'd3-shape'
 import LinkElement from './LinkElement'
-import { checkRotateDegree, rightSideName } from '../Nodes/util'
+import { checkRotateDegree } from '../Nodes/util'
 
 interface Props {
   links: Link[]

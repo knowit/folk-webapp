@@ -1,7 +1,7 @@
 import { Node } from '../../type'
 import { useTheme } from '@mui/material'
 import { haloWidth } from '../../util'
-import { checkRotateDegree, rightSideNumber, setXValue } from './util'
+import { checkRotateDegree, setXValue } from './util'
 
 interface Props {
   node: Node
