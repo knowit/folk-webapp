@@ -9,6 +9,7 @@ import {
   nodeStroke,
 } from '../../util'
 import ChildrenCount from './ChildrenCount'
+import { styled } from '@mui/material'
 
 interface Props {
   node: Node
@@ -17,6 +18,20 @@ interface Props {
   degree: number
   rotateValue: number
 }
+
+const StyledNode = styled('circle', {
+  shouldForwardProp: (prop) => prop !== 'node' && prop !== 'showCount',
+})<{ node?: Node; showCount: boolean }>(({ node, showCount }) => ({
+  fill: fill(node),
+  stroke: nodeStroke(node),
+  strokeWidth: showCount ? 1 : 2,
+  r: showCount ? nodeSizeNormal(node) : nodeSizeBig(node),
+  cx: !showCount ? (node.depth > 1 ? '5' : '3') : '0',
+  cursor: 'pointer',
+  '&:hover': {
+    fill: nodeStroke(node),
+  },
+}))
 
 const LeaderTreeNode = ({
   node,
@@ -34,18 +49,11 @@ const LeaderTreeNode = ({
 
   return (
     <g
-      style={{ cursor: 'pointer', paddingRight: '100px' }}
       key={node.data.employee.email}
       transform={`rotate(${(node.x * 180) / Math.PI}) translate(${node.y})`}
       onClick={() => showChildren(node)}
     >
-      <circle
-        fill={fill(node)}
-        stroke={nodeStroke(node)}
-        strokeWidth={showHiddenChildsCount ? 1 : 2}
-        r={!showHiddenChildsCount ? nodeSizeBig(node) : nodeSizeNormal(node)}
-        cx={!showHiddenChildsCount ? (node.depth > 1 ? '5' : '3') : '0'}
-      />
+      <StyledNode node={node} showCount={showHiddenChildsCount} />
       {node.depth === 0 && (
         <text
           transform={`rotate(${
