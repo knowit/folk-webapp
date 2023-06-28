@@ -1,7 +1,6 @@
 export const rightSideNumber = (radians: number) =>
   (radians >= 20 && radians < 210) || radians > 360
-export const rightSideName = (radians: number) =>
-  (radians >= 0 && radians < 210) || radians >= 360
+export const rightSideName = (radians: number) => radians >= 0 && radians < 210
 
 export const checkRotateDegree = (
   degree: number,

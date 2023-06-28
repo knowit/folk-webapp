@@ -24,7 +24,7 @@ const StyledNode = styled('circle', {
 })<{ node?: Node; showCount: boolean }>(({ node, showCount }) => ({
   fill: fill(node),
   stroke: nodeStroke(node),
-  strokeWidth: showCount ? 1 : 2,
+  strokeWidth: showCount ? 1 : 1.5,
   r: showCount ? nodeSizeNormal(node) : nodeSizeBig(node),
   cx: !showCount ? (node.depth > 1 ? '5' : '3') : '0',
   cursor: 'pointer',
