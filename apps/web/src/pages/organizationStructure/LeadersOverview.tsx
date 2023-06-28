@@ -9,6 +9,7 @@ interface Props {
   setClickedParents: any
   rotateValue: number
   hideEmployeesWithoutChildren: boolean
+  searchTerm: string
 }
 const LeadersOverview = ({
   descendants,
@@ -16,6 +17,7 @@ const LeadersOverview = ({
   setClickedParents,
   rotateValue,
   hideEmployeesWithoutChildren,
+  searchTerm,
 }: Props) => {
   const antallParents = 360 / descendants.length
   const descendantsWithChildrenSorted = spliceArray(descendants)
@@ -62,6 +64,7 @@ const LeadersOverview = ({
             clickedParents={clickedParents}
             degree={(i + 1) * antallParents}
             rotateValue={rotateValue}
+            searchTerm={searchTerm}
           />
         )
       })}

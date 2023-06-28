@@ -13,6 +13,7 @@ interface Props {
   rotateValue: number
   degree: number
   clickedParents: string[]
+  searchTerm: string
 }
 
 const EmployeeTreeNode = ({
@@ -20,6 +21,7 @@ const EmployeeTreeNode = ({
   rotateValue,
   degree,
   clickedParents,
+  searchTerm,
 }: Props) => {
   const theme = useTheme()
   const halo = theme.palette.background.paper
@@ -55,6 +57,12 @@ const EmployeeTreeNode = ({
             stroke={halo}
             fill={theme.palette.text.primary}
             strokeWidth={haloWidth}
+            fontWeight={
+              node.data.employee.name.toLowerCase().includes(searchTerm) &&
+              searchTerm.length > 0
+                ? 'bold'
+                : 'italic'
+            }
           >
             {node.data.employee.name}
           </text>

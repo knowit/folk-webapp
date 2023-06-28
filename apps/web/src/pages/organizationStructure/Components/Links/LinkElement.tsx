@@ -5,9 +5,10 @@ import { useTheme } from '@mui/material'
 
 interface Props {
   link: Link
+  searchTerm: string
 }
 
-const LinkElement = ({ link }: Props) => {
+const LinkElement = ({ link, searchTerm }: Props) => {
   const theme = useTheme()
   const halo = theme.palette.background.paper // Stroke around the labels in case they overlap with a link
   const haloWidth = 0.2
@@ -25,6 +26,12 @@ const LinkElement = ({ link }: Props) => {
           strokeWidth={haloWidth}
           paintOrder="stroke"
           fill={theme.palette.text.primary}
+          fontWeight={
+            link.target.data.employee.name.toLowerCase().includes(searchTerm) &&
+            searchTerm.length > 0
+              ? 'bold'
+              : 'italic'
+          }
         >
           <textPath
             xlinkHref={'#' + link.target.data.employee.email}

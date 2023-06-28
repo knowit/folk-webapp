@@ -16,6 +16,7 @@ interface Props {
   height: number
   margin: number
   hideEmployeesWithoutChildren: boolean
+  searchTerm: string
 }
 
 const OrganizationStructureTree = ({
@@ -24,6 +25,7 @@ const OrganizationStructureTree = ({
   height,
   margin,
   hideEmployeesWithoutChildren,
+  searchTerm,
 }: Props) => {
   const [clickedParents, setClickedParents] = useState<string[]>([])
   const [rotateValue, setRotateValue] = useState(0)
@@ -111,6 +113,7 @@ const OrganizationStructureTree = ({
             links={linksSorted}
             clickedParents={clickedParents}
             rotateValue={rotateValue}
+            searchTerm={searchTerm}
           />
           <g>
             {descendantsWithoutChildrenSorted.map((node, i) => {
@@ -121,6 +124,7 @@ const OrganizationStructureTree = ({
                   rotateValue={rotateValue}
                   degree={(i + 1) * countChildren}
                   clickedParents={clickedParents}
+                  searchTerm={searchTerm}
                 />
               )
             })}
@@ -130,6 +134,7 @@ const OrganizationStructureTree = ({
               clickedParents={clickedParents}
               setClickedParents={setClickedParents}
               rotateValue={rotateValue}
+              searchTerm={searchTerm}
             />
           </g>
         </g>
