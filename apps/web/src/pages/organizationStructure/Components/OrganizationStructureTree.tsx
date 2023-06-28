@@ -9,6 +9,7 @@ import Rotating from './Rotating'
 import LeadersOverview from '../LeadersOverview'
 import EmployeeTreeNode from './Nodes/EmployeeTreeNode'
 import { spliceArray } from '../util'
+import SearchInput from '../../../components/SearchInput'
 
 interface Props {
   data: EmployeeNode
@@ -16,7 +17,6 @@ interface Props {
   height: number
   margin: number
   hideEmployeesWithoutChildren: boolean
-  searchTerm: string
 }
 
 const OrganizationStructureTree = ({
@@ -25,7 +25,6 @@ const OrganizationStructureTree = ({
   height,
   margin,
   hideEmployeesWithoutChildren,
-  searchTerm,
 }: Props) => {
   const [clickedParents, setClickedParents] = useState<string[]>([])
   const [rotateValue, setRotateValue] = useState(0)
@@ -34,6 +33,7 @@ const OrganizationStructureTree = ({
     x: 0,
     y: 0,
   })
+  const [searchTerm, setSearchTerm] = useState('')
   const svgRef = useRef<SVGSVGElement>(null)
   const groupRef = useRef<SVGGElement>(null)
   const root = hierarchy(data)
@@ -88,6 +88,13 @@ const OrganizationStructureTree = ({
   return (
     <>
       <div>
+        <SearchInput
+          placeholder={'Søk i ansatte'}
+          onSearch={(searchTerm) => {
+            setSearchTerm(searchTerm)
+          }}
+          onClear={() => setSearchTerm('')}
+        />
         <Rotating
           groupRef={groupRef}
           zoomTransformValue={zoomTransformValue}
