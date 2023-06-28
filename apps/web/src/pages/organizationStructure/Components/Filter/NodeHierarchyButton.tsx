@@ -2,7 +2,6 @@ import { styled } from '@mui/material'
 import { useState } from 'react'
 
 interface Props {
-  index: number
   title: string
   onClick: () => void
 }
@@ -12,7 +11,7 @@ const Wrapper = styled('div')({
   alignItems: 'center',
 })
 
-const Svg = styled('svg')({
+const StyledSvg = styled('svg')({
   width: '80px',
   height: '40px',
   display: 'flex',
@@ -20,7 +19,7 @@ const Svg = styled('svg')({
   marginTop: '5px',
 })
 
-const Circle = styled('circle')({
+const StyledCircle = styled('circle')({
   width: '36px',
   height: '36px',
   display: 'flex',
@@ -32,31 +31,31 @@ const Text = styled('div')({
   padingTop: '1px',
 })
 
-const CircleButton = ({ index, title, onClick }: Props) => {
-  const [clicked, setClicked] = useState(false)
+const NodeHierarchyButton = ({ title, onClick }: Props) => {
+  const [hideClickedCategory, setHideClickedCategory] = useState(false)
 
-  const nodeFillColors = ['rgb(219, 238, 222)']
-  const nodeFillColorsClicked = ['rgb(160, 160, 160)']
-  const nodeStrokeColors = ['rgb(153, 167, 155)']
+  const nodeFillColors = 'rgb(219, 238, 222)'
+  const nodeFillColorsClicked = 'rgb(160, 160, 160)'
+  const nodeStrokeColors = 'rgb(153, 167, 155)'
 
   return (
     <Wrapper>
-      <Svg>
-        <Circle
+      <StyledSvg>
+        <StyledCircle
           onClick={() => {
             onClick()
-            setClicked(!clicked)
+            setHideClickedCategory(!hideClickedCategory)
           }}
           cx="40"
           cy="20"
           r="18"
           strokeWidth={1}
-          fill={clicked ? nodeFillColorsClicked[0] : nodeFillColors[index]}
-          stroke={nodeStrokeColors[index]}
+          fill={hideClickedCategory ? nodeFillColorsClicked : nodeFillColors}
+          stroke={nodeStrokeColors}
         />
-      </Svg>
+      </StyledSvg>
       <Text>{title}</Text>
     </Wrapper>
   )
 }
-export default CircleButton
+export default NodeHierarchyButton

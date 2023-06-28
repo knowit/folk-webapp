@@ -4,8 +4,8 @@ import {
   checkRotateDegree,
   fill,
   haloWidth,
-  nodeSize,
-  nodeSize2,
+  nodeSizeNormal,
+  nodeSizeBig,
   nodeStroke,
 } from '../../util'
 import ChildrenCount from './ChildrenCount'
@@ -33,46 +33,42 @@ const LeaderTreeNode = ({
   )
 
   return (
-    <>
-      <g
-        key={node.data.employee.email}
-        transform={`rotate(${(node.x * 180) / Math.PI}) translate(${node.y})`}
-        onClick={() => showChildren(node)}
-        style={{ cursor: 'pointer', paddingRight: '100px' }}
-      >
-        <circle
-          fill={fill(node)}
-          stroke={nodeStroke(node)}
-          strokeWidth={showHiddenChildsCount ? 1 : 2}
-          r={!showHiddenChildsCount ? nodeSize2(node) : nodeSize(node)}
-          cx={!showHiddenChildsCount ? (node.depth > 1 ? '5' : '3') : '0'}
-        />
-        {node.depth === 0 && (
-          <text
-            transform={`rotate(${
-              checkRotateDegree(degree, rotateValue) ? 0 : 180
-            })`}
-            dy={checkRotateDegree(degree, rotateValue) ? '10' : '-5'}
-            x={checkRotateDegree(degree, rotateValue) ? 22 : -22}
-            textAnchor={
-              checkRotateDegree(degree, rotateValue) ? 'start' : 'end'
-            }
-            paintOrder="stroke"
-            stroke={halo}
-            fill={theme.palette.text.primary}
-            strokeWidth={haloWidth}
-          >
-            {node.data.employee.name}
-          </text>
-        )}
-        <ChildrenCount
-          node={node}
-          showHiddenChildsCount={showHiddenChildsCount}
-          degree={degree}
-          rotateValue={rotateValue}
-        />
-      </g>
-    </>
+    <g
+      style={{ cursor: 'pointer', paddingRight: '100px' }}
+      key={node.data.employee.email}
+      transform={`rotate(${(node.x * 180) / Math.PI}) translate(${node.y})`}
+      onClick={() => showChildren(node)}
+    >
+      <circle
+        fill={fill(node)}
+        stroke={nodeStroke(node)}
+        strokeWidth={showHiddenChildsCount ? 1 : 2}
+        r={!showHiddenChildsCount ? nodeSizeBig(node) : nodeSizeNormal(node)}
+        cx={!showHiddenChildsCount ? (node.depth > 1 ? '5' : '3') : '0'}
+      />
+      {node.depth === 0 && (
+        <text
+          transform={`rotate(${
+            checkRotateDegree(degree, rotateValue) ? 0 : 180
+          })`}
+          dy={checkRotateDegree(degree, rotateValue) ? '10' : '-5'}
+          x={checkRotateDegree(degree, rotateValue) ? 22 : -22}
+          textAnchor={checkRotateDegree(degree, rotateValue) ? 'start' : 'end'}
+          paintOrder="stroke"
+          stroke={halo}
+          fill={theme.palette.text.primary}
+          strokeWidth={haloWidth}
+        >
+          {node.data.employee.name}
+        </text>
+      )}
+      <ChildrenCount
+        node={node}
+        showHiddenChildsCount={showHiddenChildsCount}
+        degree={degree}
+        rotateValue={rotateValue}
+      />
+    </g>
   )
 }
 

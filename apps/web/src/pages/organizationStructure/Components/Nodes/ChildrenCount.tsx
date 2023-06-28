@@ -1,7 +1,7 @@
 import { Node } from '../../type'
 import { useTheme } from '@mui/material'
 import { haloWidth } from '../../util'
-import { checkRotateDegree, setXValue } from './util'
+import { checkRotateDegree, rightSideNumber, setXValue } from './util'
 
 interface Props {
   node: Node
@@ -19,7 +19,7 @@ const ChildrenCount = ({
   const theme = useTheme()
   const halo = theme.palette.background.paper
 
-  const childrenOuterLayer = () => {
+  const childrenOuterLayerCount = () => {
     const newArray = node.children.filter((node) => !node.children)
     return newArray.length
   }
@@ -32,15 +32,16 @@ const ChildrenCount = ({
             checkRotateDegree(degree, rotateValue) ? 0 : 180
           })`}
           dy={3}
-          x={setXValue(childrenOuterLayer(), degree, rotateValue, node.depth)}
+          x={setXValue(
+            childrenOuterLayerCount(),
+            degree,
+            rotateValue,
+            node.depth
+          )}
           textAnchor={checkRotateDegree(degree, rotateValue) ? 'start' : 'end'}
           paintOrder="stroke"
           stroke={halo}
-          fill={
-            node.depth === 0
-              ? theme.palette.text.tertiary
-              : theme.palette.text.primary
-          }
+          fill={node.depth === 0 ? theme.palette.text.tertiary : '#333'}
           strokeWidth={haloWidth}
           style={{
             fontSize: '10px',
@@ -48,7 +49,7 @@ const ChildrenCount = ({
             cursor: 'pointer',
           }}
         >
-          +{childrenOuterLayer()}
+          {childrenOuterLayerCount() > 0 && '+' + childrenOuterLayerCount()}
         </text>
       )}
     </g>

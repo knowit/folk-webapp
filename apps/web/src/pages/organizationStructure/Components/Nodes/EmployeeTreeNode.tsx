@@ -4,7 +4,7 @@ import {
   checkRotateDegree,
   fill,
   haloWidth,
-  nodeSize,
+  nodeSizeNormal,
   nodeStroke,
 } from '../../util'
 
@@ -44,12 +44,12 @@ const EmployeeTreeNode = ({
             fill={fill(node)}
             stroke={nodeStroke(node)}
             strokeWidth={1}
-            r={nodeSize(node)}
+            r={nodeSizeNormal(node)}
           />
           <text
             transform={`rotate(${rotate ? 0 : 180})`}
             dy={node.depth === 0 ? '10px' : '0.32em'}
-            x={rotate ? nodeSize(node) + 3 : -nodeSize(node) - 3}
+            x={rotate ? nodeSizeNormal(node) + 3 : -nodeSizeNormal(node) - 3}
             textAnchor={rotate ? 'start' : 'end'}
             paintOrder="stroke"
             stroke={halo}

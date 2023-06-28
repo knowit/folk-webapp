@@ -19,7 +19,7 @@ const linkColors = [
   ' rgb(175, 190, 178)',
 ]
 
-export const hierchyLevel = (d) => {
+export const hierarchyLevel = (d) => {
   if (d.depth === 0) return 0
   if (!d.children) return 3
   if (d.depth === 1 || d.height > 1) return 1
@@ -27,8 +27,8 @@ export const hierchyLevel = (d) => {
   return 3
 }
 
-export const size = [15, 10, 6, 5]
-export const size2 = [18, 14, 12, 5]
+export const sizeNormal = [15, 10, 6, 5]
+export const sizeBig = [18, 14, 12, 5]
 
 export const haloWidth = 0.2
 
@@ -47,11 +47,11 @@ export const checkRotateDegree = (degree, rotateValue) => {
   } else return rightSide(rotateDegree)
 }
 
-export const linkColor = (d) => linkColors[hierchyLevel(d)]
-export const nodeSize = (d) => size[hierchyLevel(d)]
-export const nodeSize2 = (d) => size2[hierchyLevel(d)]
-export const fill = (d) => nodeFillColors[hierchyLevel(d)]
-export const nodeStroke = (d) => nodeStrokeColors[hierchyLevel(d)]
+export const linkColor = (d) => linkColors[hierarchyLevel(d)]
+export const nodeSizeNormal = (d) => sizeNormal[hierarchyLevel(d)]
+export const nodeSizeBig = (d) => sizeBig[hierarchyLevel(d)]
+export const fill = (d) => nodeFillColors[hierarchyLevel(d)]
+export const nodeStroke = (d) => nodeStrokeColors[hierarchyLevel(d)]
 
 export const spliceArray = (descendants) => {
   //put the last quarter of the array in the front
