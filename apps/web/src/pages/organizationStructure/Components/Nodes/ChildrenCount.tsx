@@ -8,6 +8,7 @@ interface Props {
   showHiddenChildsCount: boolean
   degree: number
   rotateValue: number
+  childrenOuterLayerCount: number
 }
 
 const ChildrenCount = ({
@@ -15,14 +16,10 @@ const ChildrenCount = ({
   showHiddenChildsCount,
   degree,
   rotateValue,
+  childrenOuterLayerCount,
 }: Props) => {
   const theme = useTheme()
   const halo = theme.palette.background.paper
-
-  const childrenOuterLayerCount = () => {
-    const newArray = node.children.filter((node) => !node.children)
-    return newArray.length
-  }
 
   return (
     <g>
@@ -33,7 +30,7 @@ const ChildrenCount = ({
           })`}
           dy={3}
           x={setXValue(
-            childrenOuterLayerCount(),
+            childrenOuterLayerCount,
             degree,
             rotateValue,
             node.depth
@@ -49,7 +46,7 @@ const ChildrenCount = ({
             cursor: 'pointer',
           }}
         >
-          {childrenOuterLayerCount() > 0 && '+' + childrenOuterLayerCount()}
+          {childrenOuterLayerCount > 0 && '+' + childrenOuterLayerCount}
         </text>
       )}
     </g>

@@ -1,7 +1,9 @@
 export const rightSideNumber = (radians: number) =>
   (radians >= 20 && radians < 210) || radians > 360
-export const rightSideName = (radians: number) => radians >= 0 && radians < 210
-
+export const rightSideName = (radians: number, rotateValue: number) => {
+  const checkRotateValue = rotateValue <= -100 && rotateValue >= -160
+  return radians >= 0 && checkRotateValue ? radians < 170 : radians < 210
+}
 export const checkRotateDegree = (
   degree: number,
   rotateValue: number,
@@ -12,10 +14,12 @@ export const checkRotateDegree = (
 
   if (rotateDegree > 360) {
     return text
-      ? rightSideName(rotateDegree - 360)
+      ? rightSideName(rotateDegree - 360, rotateValue)
       : rightSideNumber(rotateDegree - 360)
   } else
-    return text ? rightSideName(rotateDegree) : rightSideNumber(rotateDegree)
+    return text
+      ? rightSideName(rotateDegree, rotateValue)
+      : rightSideNumber(rotateDegree)
 }
 
 export const setXValue = (

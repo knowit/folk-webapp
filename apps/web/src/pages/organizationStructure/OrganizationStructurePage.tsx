@@ -8,11 +8,10 @@ import Filter from './Components/Filter/Filter'
 
 export default function OrganizationStructurePage() {
   const { data, isLoading, error } = useEmployeeStructure()
-  const [hideEmployeesWithoutChildren, setHideEmployeesWithoutChildren] =
-    useState(false)
+  const [hideChildNodes, setHideChildNodes] = useState(false)
 
   function toggleEmployees() {
-    setHideEmployeesWithoutChildren(!hideEmployeesWithoutChildren)
+    setHideChildNodes(!hideChildNodes)
   }
 
   pageTitle('Organisasjonsstruktur')
@@ -29,12 +28,9 @@ export default function OrganizationStructurePage() {
 
   return (
     <>
-      <Filter
-        hideEmployeesWithoutChildren={hideEmployeesWithoutChildren}
-        toggleEmployees={toggleEmployees}
-      />
+      <Filter toggleEmployees={toggleEmployees} />
       <OrganizationStructureTree
-        hideEmployeesWithoutChildren={hideEmployeesWithoutChildren}
+        hideChildNodes={hideChildNodes}
         data={data}
         width={1215}
         height={1200}

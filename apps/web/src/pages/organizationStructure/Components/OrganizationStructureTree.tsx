@@ -15,7 +15,7 @@ interface Props {
   width: number
   height: number
   margin: number
-  hideEmployeesWithoutChildren: boolean
+  hideChildNodes: boolean
 }
 
 const OrganizationStructureTree = ({
@@ -23,7 +23,7 @@ const OrganizationStructureTree = ({
   width,
   height,
   margin,
-  hideEmployeesWithoutChildren,
+  hideChildNodes,
 }: Props) => {
   const [clickedParents, setClickedParents] = useState<string[]>([])
   const [rotateValue, setRotateValue] = useState(0)
@@ -125,7 +125,7 @@ const OrganizationStructureTree = ({
               )
             })}
             <LeadersOverview
-              hideEmployeesWithoutChildren={hideEmployeesWithoutChildren}
+              hideChildNodes={hideChildNodes}
               descendants={descendantsWithChildren}
               clickedParents={clickedParents}
               setClickedParents={setClickedParents}

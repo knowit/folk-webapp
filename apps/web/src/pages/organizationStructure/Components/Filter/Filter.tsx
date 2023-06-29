@@ -27,7 +27,6 @@ const HeaderText = styled('h4')({
 
 interface Props {
   toggleEmployees: () => void
-  hideEmployeesWithoutChildren: boolean
 }
 
 const Filter = ({ toggleEmployees }: Props) => {
