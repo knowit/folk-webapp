@@ -4,46 +4,45 @@ import { hierarchy, cluster } from 'd3-hierarchy'
 import { descending } from 'd3-array'
 import { Link, Node } from '../type'
 import Links from './Links/Links'
-import EmployeeTreeNode from './EmployeeTreeNode'
 import Zooming from './Zooming'
 import Rotating from './Rotating'
+import LeadersOverview from '../LeadersOverview'
+import EmployeeTreeNode from './Nodes/EmployeeTreeNode'
+import { spliceArray } from '../util'
 
 interface Props {
   data: EmployeeNode
   width: number
   height: number
   margin: number
+  hideChildNodes: boolean
 }
 
-const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
+const OrganizationStructureTree = ({
+  data,
+  width,
+  height,
+  margin,
+  hideChildNodes,
+}: Props) => {
+  const [clickedParents, setClickedParents] = useState<string[]>([])
   const [rotateValue, setRotateValue] = useState(0)
   const [zoomTransformValue, setZoomTransformValue] = useState({
     k: 1,
     x: 0,
     y: 0,
   })
-
-  const handleRotateValueChange = (value: number) => {
-    setRotateValue(value)
-  }
-
   const svgRef = useRef<SVGSVGElement>(null)
   const groupRef = useRef<SVGGElement>(null)
-
   const root = hierarchy(data)
   root.sort((a, b) => descending(a.height, b.height))
   const descendants = root.descendants() as Node[]
   const links = root.links() as Link[]
+  const radius = Math.min(width - margin - margin, height - margin - margin) / 2
 
-  const marginTop = margin
-  const marginRight = margin
-  const marginBottom = margin
-  const marginLeft = margin
-  const radius =
-    Math.min(
-      width - marginLeft - marginRight,
-      height - marginTop - marginBottom
-    ) / 2
+  const handleRotateValueChange = (value: number) => {
+    setRotateValue(value)
+  }
 
   // Compute the layout.
   cluster()
@@ -62,11 +61,13 @@ const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
       d.y = 175
     }
     if (d.depth === 2 && d.height == 2) {
-      d.y -= 30
+      d.y -= 60
     }
   })
 
+  //Sort descentants with children
   const descendantsWithChildren = descendants.filter((node) => node.children)
+  descendantsWithChildren.sort((a, b) => a.x - b.x)
 
   // Sort descendants by x-values, and splice it up som the node that starts at 0 degree is first
   const descendantsWithoutChildren = descendants
@@ -74,20 +75,20 @@ const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
     .sort((a, b) => a.x - b.x)
 
   // Used to give each node a degree from 0-360 when mapped for EmployeeTreeNode
-  const antall = 360 / descendantsWithoutChildren.length
+  const countChildren = 360 / descendantsWithoutChildren.length
+  const descendantsWithoutChildrenSorted = spliceArray(
+    descendantsWithoutChildren
+  )
 
-  const indexes = Math.ceil(descendantsWithoutChildren.length / 4)
-  const lastQuarter = descendantsWithoutChildren.splice(-indexes)
-  const descendantsSorted = lastQuarter.concat(descendantsWithoutChildren)
+  links.sort((a, b) => a.target.x - b.target.x)
+  const linksSorted = spliceArray(links)
 
   return (
     <>
       <div>
         <Rotating
           groupRef={groupRef}
-          svgRef={svgRef}
           zoomTransformValue={zoomTransformValue}
-          setZoomTransformValue={setZoomTransformValue}
           handleRotateValueChange={handleRotateValueChange}
         />
         <Zooming
@@ -99,36 +100,37 @@ const OrganizationStructureTree = ({ data, width, height, margin }: Props) => {
         />
       </div>
       <svg
-        viewBox={`${-marginLeft - radius}  ${
-          -marginTop - radius
-        } ${width} ${height}`}
-        style={{ maxWidth: '100%', height: 'auto', cursor: 'pointer' }}
+        viewBox={`${-margin - radius}  ${-margin - radius} ${width} ${height}`}
+        style={{ maxWidth: '100%', height: 'auto' }}
         fontFamily={'sans-serif'}
         ref={svgRef}
         fontSize={12}
       >
         <g ref={groupRef}>
-          <Links links={links} />
+          <Links
+            links={linksSorted}
+            clickedParents={clickedParents}
+            rotateValue={rotateValue}
+          />
           <g>
-            {descendantsSorted.map((node, i) => {
+            {descendantsWithoutChildrenSorted.map((node, i) => {
               return (
                 <EmployeeTreeNode
                   node={node}
                   key={i}
                   rotateValue={rotateValue}
-                  degree={i * antall}
+                  degree={(i + 1) * countChildren}
+                  clickedParents={clickedParents}
                 />
               )
             })}
-            {descendantsWithChildren.map((node, i) => {
-              return (
-                <EmployeeTreeNode
-                  node={node}
-                  key={i}
-                  rotateValue={rotateValue}
-                />
-              )
-            })}
+            <LeadersOverview
+              hideChildNodes={hideChildNodes}
+              descendants={descendantsWithChildren}
+              clickedParents={clickedParents}
+              setClickedParents={setClickedParents}
+              rotateValue={rotateValue}
+            />
           </g>
         </g>
       </svg>

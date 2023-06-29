@@ -3,9 +3,16 @@ import OrganizationStructureTree from './Components/OrganizationStructureTree'
 import { BaseSkeleton } from '../../components/skeletons/BaseSkeleton'
 import { FallbackMessage } from '../employee/components/FallbackMessage'
 import { pageTitle } from '../../utils/pagetitle'
+import { useState } from 'react'
+import Filter from './Components/Filter/Filter'
 
 export default function OrganizationStructurePage() {
   const { data, isLoading, error } = useEmployeeStructure()
+  const [hideChildNodes, setHideChildNodes] = useState(false)
+
+  function toggleEmployees() {
+    setHideChildNodes(!hideChildNodes)
+  }
 
   pageTitle('Organisasjonsstruktur')
 
@@ -20,11 +27,15 @@ export default function OrganizationStructurePage() {
   }
 
   return (
-    <OrganizationStructureTree
-      data={data}
-      width={1215}
-      height={1200}
-      margin={140}
-    />
+    <>
+      <Filter toggleEmployees={toggleEmployees} />
+      <OrganizationStructureTree
+        hideChildNodes={hideChildNodes}
+        data={data}
+        width={1215}
+        height={1200}
+        margin={140}
+      />
+    </>
   )
 }

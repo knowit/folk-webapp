@@ -10,6 +10,7 @@ import {
   Fullscreen,
   FullscreenExit,
   GetApp,
+  Info,
   OpenInNew,
   Remove,
 } from '@mui/icons-material'
@@ -35,5 +36,6 @@ export const ExpandMoreIcon = styled(ExpandMore)(() => IconBaseStyle)
 export const FilterListIcon = styled(FilterList)(() => IconBaseStyle)
 export const FullscreenIcon = styled(Fullscreen)(() => IconBaseStyle)
 export const FullscreenExitIcon = styled(FullscreenExit)(() => IconBaseStyle)
+export const InfoIcon = styled(Info)(() => IconBaseStyle)
 export const OpenInNewIcon = styled(OpenInNew)(() => IconBaseStyle)
 export const RemoveIcon = styled(Remove)(() => IconBaseStyle)

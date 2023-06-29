@@ -57,6 +57,9 @@ const Zooming = ({
   const zoom_out = zoomTransformValue.k - 0.1
   const zoomCall = zoom().scaleExtent([0.5, 3]).on('zoom', handleZoom)
 
+  //Disable zoom when click
+  select(svgRef.current).call(zoom).on('dblclick.zoom', null)
+
   useEffect(() => {
     const zoomCall = zoom()
       .scaleExtent([0.5, 3])
@@ -97,12 +100,12 @@ const Zooming = ({
 
   return (
     <ButtonWrapper>
-      <Button onClick={zoomIn}>
-        <ZoomButton />
-      </Button>
-      <Percent>{getPercent()}%</Percent>
       <Button onClick={zoomOut}>
         <RemoveIcon />
+      </Button>
+      <Percent>{getPercent()}%</Percent>
+      <Button onClick={zoomIn}>
+        <ZoomButton />
       </Button>
     </ButtonWrapper>
   )

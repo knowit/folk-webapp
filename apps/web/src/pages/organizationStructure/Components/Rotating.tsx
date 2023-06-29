@@ -5,9 +5,7 @@ import { styled } from '@mui/material/styles'
 
 interface Props {
   groupRef: React.MutableRefObject<SVGGElement>
-  svgRef: React.MutableRefObject<SVGGElement>
   zoomTransformValue: any
-  setZoomTransformValue: any
   handleRotateValueChange: (value: number) => void
 }
 

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Tooltip, TooltipProps } from '@mui/material'
+import { Tooltip, TooltipProps, tooltipClasses } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import InfoIcon from '@mui/icons-material/Info'
 
@@ -20,14 +20,22 @@ interface Props extends Pick<TooltipProps, 'placement'> {
   trigger?: React.ReactElement
 }
 
+const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))({
+  [`& .${tooltipClasses.tooltip}`]: {
+    maxWidth: 500,
+  },
+})
+
 export function InfoTooltip({
   description,
   placement = 'bottom',
   trigger = <InfoIcon />,
 }: Props) {
   return (
-    <Tooltip arrow title={description} placement={placement}>
+    <CustomWidthTooltip arrow title={description} placement={placement}>
       <TriggerButton>{React.cloneElement(trigger)}</TriggerButton>
-    </Tooltip>
+    </CustomWidthTooltip>
   )
 }
