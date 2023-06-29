@@ -12,6 +12,7 @@ const InputBaseStyled = styled(InputBase)(({ theme }) => ({
   paddingLeft: 15,
   paddingRight: 15,
   fontSize: 16,
+  border: `1px solid ${theme.palette.background.darker}`,
 }))
 const SearchIconStyled = styled(SearchIcon)(() => ({
   borderRadius: 0,

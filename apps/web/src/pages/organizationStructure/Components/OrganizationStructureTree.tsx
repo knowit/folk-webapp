@@ -12,12 +12,8 @@ import { spliceArray } from '../util'
 import SearchInput from '../../../components/SearchInput'
 import { styled } from '@mui/material/styles'
 
-const SearchFieldStyled = styled('div')(({ theme }) => ({
-  background: theme.palette.background.default,
-  border: '1px solid',
-  padding: '4px 7px',
-  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
-  width: '320px',
+const SearchFieldStyled = styled('div')(() => ({
+  marginBottom: '5px',
 }))
 
 interface Props {
@@ -96,16 +92,16 @@ const OrganizationStructureTree = ({
 
   return (
     <>
-      <SearchFieldStyled>
-        <SearchInput
-          placeholder={'Søk i ansatte'}
-          onSearch={(searchTerm) => {
-            setSearchTerm(searchTerm.toLowerCase())
-          }}
-          onClear={() => setSearchTerm('')}
-        />
-      </SearchFieldStyled>
       <div>
+        <SearchFieldStyled>
+          <SearchInput
+            placeholder={'Søk i ansatte'}
+            onSearch={(searchTerm) => {
+              setSearchTerm(searchTerm.toLowerCase())
+            }}
+            onClear={() => setSearchTerm('')}
+          />
+        </SearchFieldStyled>
         <Rotating
           groupRef={groupRef}
           zoomTransformValue={zoomTransformValue}
