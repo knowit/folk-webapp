@@ -8,16 +8,16 @@ interface Props {
   clickedParents: string[]
   setClickedParents: any
   rotateValue: number
-  hideEmployeesWithoutChildren: boolean
   searchTerm: string
+  hideChildNodes: boolean
 }
 const LeadersOverview = ({
   descendants,
   clickedParents,
   setClickedParents,
   rotateValue,
-  hideEmployeesWithoutChildren,
   searchTerm,
+  hideChildNodes,
 }: Props) => {
   const antallParents = 360 / descendants.length
   const descendantsWithChildrenSorted = spliceArray(descendants)
@@ -40,7 +40,7 @@ const LeadersOverview = ({
   }
 
   useEffect(() => {
-    if (hideEmployeesWithoutChildren) {
+    if (hideChildNodes) {
       setClickedParents([])
     } else {
       descendantsWithChildrenSorted.map((node) => {
@@ -51,7 +51,7 @@ const LeadersOverview = ({
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hideEmployeesWithoutChildren])
+  }, [hideChildNodes])
 
   return (
     <>
