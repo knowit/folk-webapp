@@ -60,11 +60,12 @@ const LeaderTreeNode = ({
           stroke={halo}
           fill={theme.palette.text.primary}
           strokeWidth={haloWidth}
-          fontWeight={
-            node.data.employee.name.toLowerCase().includes(searchTerm) &&
-            searchTerm.length > 0
-              ? 'bold'
-              : 'italic'
+          opacity={
+            searchTerm.length < 0
+              ? 1
+              : node.data.employee.name.toLowerCase().includes(searchTerm)
+              ? 1
+              : 0.3
           }
         >
           {node.data.employee.name}

@@ -26,11 +26,14 @@ const LinkElement = ({ link, searchTerm }: Props) => {
           strokeWidth={haloWidth}
           paintOrder="stroke"
           fill={theme.palette.text.primary}
-          fontWeight={
-            link.target.data.employee.name.toLowerCase().includes(searchTerm) &&
-            searchTerm.length > 0
-              ? 'bold'
-              : 'italic'
+          opacity={
+            searchTerm.length < 0
+              ? 1
+              : link.target.data.employee.name
+                  .toLowerCase()
+                  .includes(searchTerm)
+              ? 1
+              : 0.3
           }
         >
           <textPath
