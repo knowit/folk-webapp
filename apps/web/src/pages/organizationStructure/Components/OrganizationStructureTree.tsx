@@ -9,6 +9,12 @@ import Rotating from './Rotating'
 import LeadersOverview from '../LeadersOverview'
 import EmployeeTreeNode from './Nodes/EmployeeTreeNode'
 import { spliceArray } from '../util'
+import SearchInput from '../../../components/SearchInput'
+import { styled } from '@mui/material/styles'
+
+const SearchFieldStyled = styled('div')(() => ({
+  marginBottom: '5px',
+}))
 
 interface Props {
   data: EmployeeNode
@@ -32,6 +38,7 @@ const OrganizationStructureTree = ({
     x: 0,
     y: 0,
   })
+  const [searchTerm, setSearchTerm] = useState('')
   const svgRef = useRef<SVGSVGElement>(null)
   const groupRef = useRef<SVGGElement>(null)
   const root = hierarchy(data)
@@ -86,6 +93,15 @@ const OrganizationStructureTree = ({
   return (
     <>
       <div>
+        <SearchFieldStyled>
+          <SearchInput
+            placeholder={'Søk i ansatte'}
+            onSearch={(searchTerm) => {
+              setSearchTerm(searchTerm.toLowerCase())
+            }}
+            onClear={() => setSearchTerm('')}
+          />
+        </SearchFieldStyled>
         <Rotating
           groupRef={groupRef}
           zoomTransformValue={zoomTransformValue}
@@ -111,6 +127,7 @@ const OrganizationStructureTree = ({
             links={linksSorted}
             clickedParents={clickedParents}
             rotateValue={rotateValue}
+            searchTerm={searchTerm}
           />
           <g>
             {descendantsWithoutChildrenSorted.map((node, i) => {
@@ -121,6 +138,7 @@ const OrganizationStructureTree = ({
                   rotateValue={rotateValue}
                   degree={(i + 1) * countChildren}
                   clickedParents={clickedParents}
+                  searchTerm={searchTerm}
                 />
               )
             })}
@@ -130,6 +148,7 @@ const OrganizationStructureTree = ({
               clickedParents={clickedParents}
               setClickedParents={setClickedParents}
               rotateValue={rotateValue}
+              searchTerm={searchTerm}
             />
           </g>
         </g>

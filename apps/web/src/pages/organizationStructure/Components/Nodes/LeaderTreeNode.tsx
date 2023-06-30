@@ -17,6 +17,7 @@ interface Props {
   showChildren: (node: Node) => void
   degree: number
   rotateValue: number
+  searchTerm: string
 }
 
 const StyledNode = styled('circle', {
@@ -42,6 +43,7 @@ const LeaderTreeNode = ({
   clickedParents,
   degree,
   rotateValue,
+  searchTerm,
 }: Props) => {
   const theme = useTheme()
   const halo = theme.palette.background.paper
@@ -79,6 +81,13 @@ const LeaderTreeNode = ({
           stroke={halo}
           fill={theme.palette.text.primary}
           strokeWidth={haloWidth}
+          opacity={
+            searchTerm.length < 0
+              ? 1
+              : node.data.employee.name.toLowerCase().includes(searchTerm)
+              ? 1
+              : 0.3
+          }
         >
           {node.data.employee.name}
         </text>

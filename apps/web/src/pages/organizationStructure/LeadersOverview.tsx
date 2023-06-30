@@ -8,6 +8,7 @@ interface Props {
   clickedParents: string[]
   setClickedParents: any
   rotateValue: number
+  searchTerm: string
   hideChildNodes: boolean
 }
 const LeadersOverview = ({
@@ -15,6 +16,7 @@ const LeadersOverview = ({
   clickedParents,
   setClickedParents,
   rotateValue,
+  searchTerm,
   hideChildNodes,
 }: Props) => {
   const antallParents = 360 / descendants.length
@@ -62,6 +64,7 @@ const LeadersOverview = ({
             clickedParents={clickedParents}
             degree={(i + 1) * antallParents}
             rotateValue={rotateValue}
+            searchTerm={searchTerm}
           />
         )
       })}

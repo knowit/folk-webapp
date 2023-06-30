@@ -9,9 +9,10 @@ interface Props {
   links: Link[]
   clickedParents: any
   rotateValue: number
+  searchTerm: string
 }
 
-const Links = ({ links, clickedParents, rotateValue }: Props) => {
+const Links = ({ links, clickedParents, rotateValue, searchTerm }: Props) => {
   const LinksCount = 360 / links.length
 
   links.forEach((d: Link, i: number) => {
@@ -77,7 +78,7 @@ const Links = ({ links, clickedParents, rotateValue }: Props) => {
   return (
     <g>
       {links.map((link, i) => (
-        <LinkElement link={link} key={i} />
+        <LinkElement link={link} key={i} searchTerm={searchTerm} />
       ))}
     </g>
   )
