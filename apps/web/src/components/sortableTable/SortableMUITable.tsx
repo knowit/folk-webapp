@@ -22,7 +22,7 @@ export function getSearchableColumns<T>(
     if (column.sortValue) {
       result.push({
         columnIndex: index,
-        getSearchValue: column.sortValue,
+        getSearchValue: column.searchValue,
       })
     }
   })
