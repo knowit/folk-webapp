@@ -112,14 +112,14 @@ export const aggregateEmployeeCompetenceAndMotivation = (
 
     categoriesMap[category][subCategory] = {
       category: subCategory,
-      motivation: Math.max(0, subCategoryMotivation),
-      competence: Math.max(0, subCategoryCompetence),
+      motivation: subCategoryMotivation,
+      competence: subCategoryCompetence,
     }
 
     categoriesMap['Hovedkategorier'][category] = {
       category,
-      motivation: Math.max(0, categoryMotivationAvg),
-      competence: Math.max(0, categoryCompetenceAvg),
+      motivation: categoryMotivationAvg,
+      competence: categoryCompetenceAvg,
     }
   })
 
