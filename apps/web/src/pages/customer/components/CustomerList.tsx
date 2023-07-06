@@ -101,7 +101,15 @@ export default function CustomerList() {
       }
     })
 
-    return sortedData.map((customer) => customer.accordion)
+    return sortedData.map(
+      (customer) =>
+        (customer.accordion = (
+          <CustomerAccordion
+            customerName={customer.customer_name}
+            employees={customer.employees}
+          ></CustomerAccordion>
+        ))
+    )
   }
 
   const sortIcon = (columnIndex, sortIndex, currentOrder) => {
