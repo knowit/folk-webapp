@@ -123,18 +123,21 @@ const employeeForCustomerConfig = [
     },
     width: 395,
     sortValue: (column: ConsultantInfo) => column.name,
+    searchValue: (consultant: ConsultantInfo) => consultant.name,
   },
   {
     label: 'Tittel',
     width: 222,
     render: (row: EmployeeCustomerRow) => row.jobTitle,
     sortValue: (title: string) => title,
+    searchValue: (jobTitle: string) => jobTitle,
   },
   {
     label: 'Kunde',
     render: (row: EmployeeCustomerRow) => row.customerAndProject,
     width: 337,
     sortValue: (customer: string) => customer ?? '',
+    searchValue: (customer: string) => customer ?? '',
   },
   {
     label: 'CV',
