@@ -63,12 +63,14 @@ export const getEmployeeTableConfig = (checkBox?: CheckBoxHeader) =>
       },
       checkBox: checkBox,
       sortValue: (row: EmployeeRow) => row.employeeInfo.name,
+      searchValue: (consultant: ConsultantInfo) => consultant.name,
     },
     {
       label: 'Tittel',
       width: 222,
       render: (row: EmployeeRow) => row.jobTitle,
       sortValue: (row: EmployeeRow) => row.jobTitle,
+      searchValue: (jobTitle: string) => jobTitle,
     },
     {
       label: 'Prosjektstatus',
@@ -84,6 +86,7 @@ export const getEmployeeTableConfig = (checkBox?: CheckBoxHeader) =>
       ),
       width: 337,
       sortValue: (row: EmployeeRow) => row.primaryCustomer.customer ?? '',
+      searchValue: (customerProject: Customer) => customerProject.customer,
     },
     {
       label: 'CV',
@@ -120,18 +123,21 @@ const employeeForCustomerConfig = [
     },
     width: 395,
     sortValue: (column: ConsultantInfo) => column.name,
+    searchValue: (consultant: ConsultantInfo) => consultant.name,
   },
   {
     label: 'Tittel',
     width: 222,
     render: (row: EmployeeCustomerRow) => row.jobTitle,
     sortValue: (title: string) => title,
+    searchValue: (jobTitle: string) => jobTitle,
   },
   {
     label: 'Kunde',
     render: (row: EmployeeCustomerRow) => row.customerAndProject,
     width: 337,
     sortValue: (customer: string) => customer ?? '',
+    searchValue: (customer: string) => customer ?? '',
   },
   {
     label: 'CV',
