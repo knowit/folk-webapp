@@ -38,6 +38,7 @@ export interface MUITableConfig<T> {
   header?: () => ReactNode
   checkBox?: CheckBoxHeader
   sortValue?: sortValueFn<T>
+  searchValue?: GetColumnValueFn
   sortFn?: (a: T, b: T) => number
 }
 

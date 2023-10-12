@@ -19,10 +19,10 @@ export function getSearchableColumns<T>(
 ): SearchableColumn<T>[] {
   const result: SearchableColumn<T>[] = []
   columns.forEach((column, index) => {
-    if (column.sortValue) {
+    if (column.searchValue) {
       result.push({
         columnIndex: index,
-        getSearchValue: column.sortValue,
+        getSearchValue: column.searchValue,
       })
     }
   })
