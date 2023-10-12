@@ -1,9 +1,9 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
-import { fromIni } from '@aws-sdk/credential-providers'
+// import { fromIni } from '@aws-sdk/credential-providers'
 
 const client = new S3Client({
   region: 'eu-west-1',
-  credentials: fromIni({ profile: '216105769281_AdministratorAccess' }),
+  // credentials: fromIni({ profile: '216105769281_AdministratorAccess' }),
 })
 
 export async function getFileFromS3(report: string): Promise<string> {
