@@ -1,9 +1,11 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 // import { fromIni } from '@aws-sdk/credential-providers'
+import axios from 'axios'
+import { ApiError } from '../middlewares/errorHandling'
 
 const client = new S3Client({
   region: 'eu-west-1',
-  // credentials: fromIni({ profile: '216105769281_AdministratorAccess' }),
+  // credentials: fromIni({ profile: '723164513951_DataplattformDeveloper' }),
 })
 
 export async function getFileFromS3(report: string): Promise<string> {
@@ -23,8 +25,17 @@ export async function getFileFromS3(report: string): Promise<string> {
     } else {
       throw new Error('Error: Call returned empty')
     }
-  } catch (err) {
-    console.log(err)
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      const err: ApiError = {
+        status: e.response?.status ?? 400,
+        errorType: 'API',
+        error: e,
+        message: e.response?.data['message'] ?? 'Could not fetch data.',
+      }
+      return Promise.reject(err)
+    }
+    return Promise.reject(e)
   }
   return Promise.resolve(ndjsonToJson(res))
 }
