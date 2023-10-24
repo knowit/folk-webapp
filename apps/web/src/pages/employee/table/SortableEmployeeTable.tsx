@@ -220,7 +220,6 @@ function transformEmployeeForCustomerList(row: EmployeeForCustomerList) {
 
 function transformEmployeeTableRow(employeeTableRow: EmployeeTableRow) {
   const rowData = employeeTableRow['rowData']
-  console.log(rowData)
   const rowId = employeeTableRow['rowId']
   return {
     rowId,
