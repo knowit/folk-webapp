@@ -30,6 +30,8 @@ export type BasicEmployeeInformation = {
   image_key?: string
   primary_customer?: string
   primary_work_order_description?: string
+  role: string
+  city: string
 }
 
 export type JobRotationInformationReport = JobRotationInformation[]
@@ -130,6 +132,7 @@ export enum ProjectStatus {
   NoProject = 'NO_PROJECT',
   WantChange = 'WANT_CHANGE',
   OpenForChange = 'OPEN_FOR_CHANGE',
+  NotBillable = 'NOT_BILLABLE',
 }
 
 export type Customer = {

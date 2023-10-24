@@ -10,16 +10,29 @@ const ComponentRoot = styled('div')(() => ({
 
 interface Props {
   data: Customer | null
+  role: string
 }
 
-export default function CustomerStatusCell(customerData: Props) {
-  const { data } = customerData
+export default function CustomerStatusCell(props: Props) {
+  const { data, role } = props
 
+  const getRoleTitleForEmployee = (role: string) => {
+    switch (role) {
+      case 'Administration':
+        return 'Administrasjon'
+      case 'Sales':
+        return 'Salg'
+      default:
+        return role
+    }
+  }
   return (
     <ComponentRoot>
-      {data?.customer && data.workOrderDescription
-        ? `${data.customer}: ${data.workOrderDescription}`
-        : 'Ikke i prosjekt'}
+      {role === 'Consultant'
+        ? data?.customer && data.workOrderDescription
+          ? `${data.customer}: ${data.workOrderDescription}`
+          : 'Ikke i prosjekt'
+        : getRoleTitleForEmployee(role)}
     </ComponentRoot>
   )
 }

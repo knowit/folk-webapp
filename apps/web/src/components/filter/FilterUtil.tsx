@@ -107,7 +107,9 @@ export const searchAndFilter = (
 export function filterNonCustomer(rows: EmployeeTableRow[]) {
   return rows.filter((row) => {
     const rowDataIndex = EmployeeTableColumnMapping['CUSTOMER']
-    const hasNoCustomer = !row.rowData[rowDataIndex]?.customer
+    const hasNoCustomer =
+      !row.rowData[rowDataIndex]?.customer &&
+      row.rowData[0].role === 'Consultant'
     return hasNoCustomer
   })
 }

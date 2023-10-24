@@ -72,7 +72,8 @@ export function getExperienceForEmployee(
 export const getProjectStatusForEmployee = (
   jobRotationInformation: JobRotationInformation[],
   employeeWorkStatus: EmployeeWorkStatus[],
-  guid: string
+  guid: string,
+  role: string
 ): ProjectStatus => {
   const [wantNewProject, openForNewProject] = jobRotationStatus(
     jobRotationInformation,
@@ -84,22 +85,26 @@ export const getProjectStatusForEmployee = (
   let inProject = false
   let isInternal = false
 
-  if (work) {
-    inProject = true
-    isInternal = !work.project_type.toLowerCase().includes('external')
-  }
+  if (role === 'Consultant') {
+    if (work) {
+      inProject = true
+      isInternal = !work.project_type.toLowerCase().includes('external')
+    }
 
-  if ((wantNewProject || openForNewProject) > 0 && inProject) {
-    return wantNewProject > openForNewProject
-      ? ProjectStatus.WantChange
-      : ProjectStatus.OpenForChange
-  }
+    if ((wantNewProject || openForNewProject) > 0 && inProject) {
+      return wantNewProject > openForNewProject
+        ? ProjectStatus.WantChange
+        : ProjectStatus.OpenForChange
+    }
 
-  return !inProject
-    ? ProjectStatus.NoProject
-    : isInternal
-    ? ProjectStatus.InternalProject
-    : ProjectStatus.ExternalProject
+    return !inProject
+      ? ProjectStatus.NoProject
+      : isInternal
+      ? ProjectStatus.InternalProject
+      : ProjectStatus.ExternalProject
+  } else {
+    return ProjectStatus.NotBillable
+  }
 }
 
 const getEmployeeWork = (
