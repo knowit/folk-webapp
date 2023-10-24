@@ -45,13 +45,15 @@ export const aggregateEmployeeTable = (
           name: employee.name,
           email: employee.email,
           image_url: getStorageUrl(employee.image_key),
+          role: employee.role,
           city: employee.city,
         },
         employee.title || 'Ansatt',
         getProjectStatusForEmployee(
           jobRotationInformation,
           employeeWorkStatus,
-          employee.guid
+          employee.guid,
+          employee.role
         ),
         {
           customer: employee.primary_customer,

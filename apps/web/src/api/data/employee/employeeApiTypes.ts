@@ -24,6 +24,7 @@ export interface ConsultantInfo {
   name: string
   email: string
   image_url?: string
+  role: string
   city: string
 }
 
@@ -33,6 +34,7 @@ export enum ProjectStatus {
   NoProject = 'NO_PROJECT',
   WantChange = 'WANT_CHANGE',
   OpenForChange = 'OPEN_FOR_CHANGE',
+  NotBillable = 'NOT_BILLABLE',
 }
 
 export interface Customer {
