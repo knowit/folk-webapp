@@ -31,6 +31,7 @@ export type EmployeeRow = {
   projectStatus: ProjectStatus
   primaryCustomer: Customer | null
   cvLinks: CvLinks
+  city: string
 }
 
 export type EmployeeCustomerRow = {
@@ -87,6 +88,13 @@ export const getEmployeeTableConfig = (checkBox?: CheckBoxHeader) =>
       width: 337,
       sortValue: (row: EmployeeRow) => row.primaryCustomer.customer ?? '',
       searchValue: (customerProject: Customer) => customerProject.customer,
+    },
+    {
+      label: 'Kontor',
+      width: 53,
+      render: (row: EmployeeRow) => row.city,
+      sortValue: (row: EmployeeRow) => row.city,
+      searchValue: (row: EmployeeRow) => row.city,
     },
     {
       label: 'CV',
@@ -212,6 +220,7 @@ function transformEmployeeForCustomerList(row: EmployeeForCustomerList) {
 
 function transformEmployeeTableRow(employeeTableRow: EmployeeTableRow) {
   const rowData = employeeTableRow['rowData']
+  console.log(rowData)
   const rowId = employeeTableRow['rowId']
   return {
     rowId,
@@ -222,5 +231,6 @@ function transformEmployeeTableRow(employeeTableRow: EmployeeTableRow) {
     primaryCustomer: rowData[3],
     customer: (rowData[3] as Customer)?.customer,
     cvLinks: rowData[4],
+    city: (rowData[0] as ConsultantInfo).city,
   } as EmployeeRow
 }

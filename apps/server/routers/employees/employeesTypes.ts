@@ -30,6 +30,8 @@ export type BasicEmployeeInformation = {
   image_key?: string
   primary_customer?: string
   primary_work_order_description?: string
+  role: string
+  city: string
 }
 
 export type JobRotationInformationReport = JobRotationInformation[]
