@@ -25,6 +25,7 @@ export interface ConsultantInfo {
   email: string
   image_url?: string
   role: string
+  city: string
 }
 
 export enum ProjectStatus {

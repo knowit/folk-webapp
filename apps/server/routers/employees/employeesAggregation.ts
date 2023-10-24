@@ -46,6 +46,7 @@ export const aggregateEmployeeTable = (
           email: employee.email,
           image_url: getStorageUrl(employee.image_key),
           role: employee.role,
+          city: employee.city,
         },
         employee.title || 'Ansatt',
         getProjectStatusForEmployee(
