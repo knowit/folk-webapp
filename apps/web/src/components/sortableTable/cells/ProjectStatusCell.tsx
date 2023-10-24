@@ -57,6 +57,10 @@ export const statusDisplayDetails: StatusDisplayDetails = {
     color: '#004C8E',
     label: 'Opptatt i intern prosjekt',
   },
+  [ProjectStatus.NotBillable]: {
+    color: '#F7DC30',
+    label: 'Salg, administrasjon og ledelse',
+  },
 }
 
 interface ProjectStatusCellProps {

@@ -82,7 +82,10 @@ export const getEmployeeTableConfig = (checkBox?: CheckBoxHeader) =>
     {
       label: 'Kunde',
       render: (row: EmployeeRow) => (
-        <CustomerStatusCell data={row.primaryCustomer} />
+        <CustomerStatusCell
+          data={row.primaryCustomer}
+          role={row.employeeInfo.role}
+        />
       ),
       width: 337,
       sortValue: (row: EmployeeRow) => row.primaryCustomer.customer ?? '',
