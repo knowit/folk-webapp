@@ -138,7 +138,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
         getFileFromS3('employeeSkills').then((skills) => {
           getFileFromS3('workExperience').then((work) => {
             getFileFromS3('projectExperience').then((project) => {
-              getFileFromS3('employeeExperience').then((employee) => {
+              getFileFromS3('employeeCustomers').then((employee) => {
                 let profile_data = JSON.parse(profile)
                 profile_data = profile_data.filter(
                   (i) => i.email == req.query.email
