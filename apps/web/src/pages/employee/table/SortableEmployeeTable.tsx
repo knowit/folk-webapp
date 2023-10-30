@@ -74,8 +74,8 @@ export const getEmployeeTableConfig = (checkBox?: CheckBoxHeader) =>
       searchValue: (jobTitle: string) => jobTitle,
     },
     {
-      label: 'Prosjektstatus',
-      width: 143,
+      label: 'Status',
+      width: 90,
       render: (row: EmployeeRow) => (
         <ProjectStatusCell data={row.projectStatus} />
       ),
