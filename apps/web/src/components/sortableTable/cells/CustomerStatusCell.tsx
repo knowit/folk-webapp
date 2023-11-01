@@ -28,7 +28,7 @@ export default function CustomerStatusCell(props: Props) {
   }
   return (
     <ComponentRoot>
-      {role === 'Consultant'
+      {data.customer || role === 'Consultant'
         ? data?.customer && data.workOrderDescription
           ? `${data.customer}: ${data.workOrderDescription}`
           : 'Ikke i prosjekt'
