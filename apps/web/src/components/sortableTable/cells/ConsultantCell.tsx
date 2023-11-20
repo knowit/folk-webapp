@@ -1,13 +1,18 @@
-import React from 'react'
-import { Avatar, Button } from '@mui/material'
-import { TableCell } from '@mui/material'
+import React, { Suspense, useEffect } from 'react'
+import { Avatar, Button, TableCell } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import { ExpandLessIcon, ExpandMoreIcon } from '../../../assets/Icons'
+import {
+  ExpandLessIcon,
+  ExpandMoreIcon,
+  OpenInNewIcon,
+} from '../../../assets/Icons'
 import { ReactComponent as FallbackUserIcon } from '../../../assets/fallback_user.svg'
-import { OpenInNewIcon } from '../../../assets/Icons'
 import { Link } from 'react-router-dom'
 import { ConsultantInfo } from '../../../api/data/employee/employeeApiTypes'
 import CharacterLimitBox from '../components/CharacterLimitBox'
+import { image } from 'd3'
+import { getSignedImageFromS3 } from 'server/dataplattform/databricksS3Call'
+import { getStorageUrl } from 'server/routers/employees/aggregationHelpers'
 
 const ComponentRoot = styled(TableCell)(() => ({
   flexDirection: 'column',
@@ -57,12 +62,29 @@ interface ConsultantCellProps {
   toggleExpand: (id: string) => void
 }
 
+interface AsyncImageProps {
+  name: string
+  image_url: string
+}
+
 export default function ConsultantCell({
   data: consultant,
   id,
   isExpanded,
   toggleExpand,
 }: ConsultantCellProps) {
+  console.log('Starter asyncimage: ', consultant.image_url)
+
+  const [imagePromise, setImagePromise] = React.useState(null)
+  const [imageUrl, setimageUrl] = React.useState(null)
+
+  React.useEffect(() => {
+    setImagePromise(getStorageUrl(consultant.image_url))
+    imagePromise
+      .then((image) => setimageUrl(image))
+      .catch(() => setimageUrl(null))
+  }, [consultant.image_url, imagePromise])
+
   return (
     <ComponentRoot component="div" align="left">
       <EmployeeCellButton
@@ -72,8 +94,8 @@ export default function ConsultantCell({
         onClick={() => toggleExpand(id)}
       >
         <ButtonSubRoot>
-          {consultant.image_url ? (
-            <AvatarStyled alt={consultant.name} src={consultant.image_url} />
+          {imageUrl ? (
+            <AvatarStyled alt={consultant.name} src={imageUrl} />
           ) : (
             <AvatarStyled alt={consultant.name}>
               <FallbackUserIconStyled />

@@ -14,12 +14,16 @@ import {
   WorkExperience,
   WorkExperienceForProfile,
 } from './employeesTypes'
+import { getSignedImageFromS3 } from '../../dataplattform/databricksS3Call'
 
-export const getStorageUrl = (key?: string) => {
+export const getStorageUrl = async (key?: string) => {
   if (!key) {
     return
   }
-  return `${process.env.STORAGE_URL}/${key}`
+  const tempName = getSignedImageFromS3(key)
+  console.log('Promise: ', tempName, ' With key: ', key)
+
+  return tempName
 }
 
 function getDistinctStringValues(list?: string[]) {

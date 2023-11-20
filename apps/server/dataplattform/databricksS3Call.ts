@@ -1,12 +1,29 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
-// import { fromIni } from '@aws-sdk/credential-providers'
 import axios from 'axios'
 import { ApiError } from '../middlewares/errorHandling'
+import { fromIni } from '@aws-sdk/credential-providers'
+//import { aws_ssm } from "aws-cdk-lib";
+import AWS from 'aws-sdk'
+import { getSignedUrl, S3RequestPresigner } from '@aws-sdk/s3-request-presigner'
 
 const client = new S3Client({
   region: 'eu-west-1',
-  // credentials: fromIni({ profile: '723164513951_DataplattformDeveloper' }),
+  credentials: fromIni({ profile: '723164513951_DataplattformDeveloper' }),
 })
+
+const imageClient = new S3Client({
+  region: 'eu-central-1',
+  credentials: fromIni({ profile: '723164513951_DataplattformDeveloper' }),
+})
+
+//TODO Miderltidig fix, denne skal hentes fra parameters
+const bucketName = 'knowit-databricks-u06vfj-raw-storage-images'
+
+AWS.config.credentials = new AWS.SharedIniFileCredentials({
+  profile: '723164513951_DataplattformDeveloper',
+})
+const ssm = new AWS.SSM({ region: 'eu-west-1' })
+let imageUrl = null
 
 export async function getFileFromS3(report: string): Promise<string> {
   let res: string
@@ -38,6 +55,26 @@ export async function getFileFromS3(report: string): Promise<string> {
     return Promise.reject(e)
   }
   return Promise.resolve(ndjsonToJson(res))
+}
+
+export async function getSignedImageFromS3(imgKey: string): Promise<string> {
+  try {
+    const clientUrl = createPresignedUrlWithClient({
+      bucket: bucketName,
+      key: imgKey,
+    })
+
+    console.log('GetSignedUrl URL with client: ', clientUrl)
+    return clientUrl
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+const createPresignedUrlWithClient = ({ bucket, key }) => {
+  const appendedKey = `some/${key}`
+  const command = new GetObjectCommand({ Bucket: bucket, Key: appendedKey })
+  return getSignedUrl(imageClient, command, { expiresIn: 3600 })
 }
 
 function ndjsonToJson(data: string): string {

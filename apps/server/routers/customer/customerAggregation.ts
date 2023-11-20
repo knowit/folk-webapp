@@ -39,7 +39,7 @@ function createEmployeeForCustomerList(
       {
         name: employee.navn,
         email: employee.email,
-        image_url: getStorageUrl(employee.image_key),
+        image_url: employee.image_key,
         user_id: employee.user_id,
       },
       employee.title || 'Ansatt',
