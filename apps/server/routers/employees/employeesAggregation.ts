@@ -3,6 +3,7 @@ import {
   getCategoryScoresForEmployee,
   getExperienceForEmployee,
   getProjectStatusForEmployee,
+  getStorageUrl,
   mapEmployeeTags,
   mapProjectExperience,
   mapWorkExperience,
@@ -12,6 +13,7 @@ import {
   EmployeeCompetenceResponse,
   EmployeeExperience,
   EmployeeMotivationAndCompetence,
+  EmployeeNode,
   EmployeeProfileInformation,
   EmployeeProfileResponse,
   EmployeeSkills,
@@ -20,50 +22,57 @@ import {
   JobRotationInformation,
   ProjectExperience,
   WorkExperience,
-  EmployeeNode,
 } from './employeesTypes'
 import { EmployeeCustomers } from '../customer/customerTypes'
 import { groupBy } from '../../repository/util'
 
-export const aggregateEmployeeTable = (
+export const aggregateEmployeeTable = async (
   basicEmployeeInformation: BasicEmployeeInformation[],
   employeeMotivationAndCompetence: EmployeeMotivationAndCompetence[],
   jobRotationInformation: JobRotationInformation[],
   employeeWorkStatus: EmployeeWorkStatus[]
-): EmployeeTableResponse => {
-  return basicEmployeeInformation.map((employee) => {
-    const [motivationScores, competenceScores] = getCategoryScoresForEmployee(
-      employee.email,
-      employeeMotivationAndCompetence
-    )
-    return {
-      rowId: employee.email,
-      rowData: [
-        {
-          user_id: employee.user_id,
-          name: employee.name,
-          email: employee.email,
-          image_url: employee.image_key,
-          role: employee.role,
-          city: employee.city,
-        },
-        employee.title || 'Ansatt',
-        getProjectStatusForEmployee(
-          jobRotationInformation,
-          employeeWorkStatus,
-          employee.guid,
-          employee.role
-        ),
-        {
-          customer: employee.primary_customer,
-          workOrderDescription: employee.primary_work_order_description,
-        },
-        createCvLinks(employee.link),
-        motivationScores,
-        competenceScores,
-      ],
+): Promise<EmployeeTableResponse> => {
+  const basicEmployeeInformationPromises = basicEmployeeInformation.map(
+    async (employee) => {
+      const [motivationScores, competenceScores] = getCategoryScoresForEmployee(
+        employee.email,
+        employeeMotivationAndCompetence
+      )
+      return {
+        rowId: employee.email,
+        rowData: [
+          {
+            user_id: employee.user_id,
+            name: employee.name,
+            email: employee.email,
+            image_url: await getStorageUrl(employee.image_key),
+            role: employee.role,
+            city: employee.city,
+          },
+          employee.title || 'Ansatt',
+          getProjectStatusForEmployee(
+            jobRotationInformation,
+            employeeWorkStatus,
+            employee.guid,
+            employee.role
+          ),
+          {
+            customer: employee.primary_customer,
+            workOrderDescription: employee.primary_work_order_description,
+          },
+          createCvLinks(employee.link),
+          motivationScores,
+          competenceScores,
+        ],
+      }
     }
-  })
+  )
+  let awaitedbasicEmployeeInformationPromises
+  await Promise.all(basicEmployeeInformationPromises).then(
+    (results) => (awaitedbasicEmployeeInformationPromises = results)
+  )
+
+  return awaitedbasicEmployeeInformationPromises
 }
 
 export const aggregateEmployeeCompetence = (
@@ -196,7 +205,5 @@ export const aggregateStructure = (
 ): EmployeeNode => {
   const groupedByEmail = groupBy(employeeStructureResponse, (i) => i.email)
 
-  const rootNode = transformEmployees(groupedByEmail)
-
-  return rootNode
+  return transformEmployees(groupedByEmail)
 }

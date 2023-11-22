@@ -1,4 +1,4 @@
-import { getStorageUrl, createCvLinks } from '../employees/aggregationHelpers'
+import { createCvLinks, getStorageUrl } from '../employees/aggregationHelpers'
 import {
   EmployeeForCustomerList,
   CustomerWithEmployees,
@@ -8,19 +8,22 @@ import {
   EmployeeCustomers,
 } from './customerTypes'
 
-export function groupEmployeesByCustomer(
+export async function groupEmployeesByCustomer(
   employeesWithPrimaryCustomer: EmployeeWithPrimaryCustomer[]
-): CustomerWithEmployees[] {
+): Promise<CustomerWithEmployees[]> {
   const customersWithEmployees: Record<string, EmployeeForCustomerList[]> = {}
+  const employeePromises = []
 
-  employeesWithPrimaryCustomer.forEach((employee) => {
+  employeesWithPrimaryCustomer.map(async (employee) => {
     const { customer_name } = employee
     if (!customersWithEmployees[customer_name]) {
       customersWithEmployees[customer_name] = []
     }
     const employeeRow = createEmployeeForCustomerList(employee)
-    customersWithEmployees[customer_name].push(employeeRow)
+    customersWithEmployees[customer_name].push(await employeeRow)
+    employeePromises.push(await employeeRow)
   })
+  await Promise.all(employeePromises)
 
   return Object.entries(customersWithEmployees).map(
     ([customerName, employees]) => ({
@@ -30,16 +33,16 @@ export function groupEmployeesByCustomer(
   )
 }
 
-function createEmployeeForCustomerList(
+async function createEmployeeForCustomerList(
   employee: EmployeeWithPrimaryCustomer
-): EmployeeForCustomerList {
+): Promise<EmployeeForCustomerList> {
   return {
     rowId: employee.email,
     rowData: [
       {
         name: employee.navn,
         email: employee.email,
-        image_url: employee.image_key,
+        image_url: await getStorageUrl(employee.image_key),
         user_id: employee.user_id,
       },
       employee.title || 'Ansatt',

@@ -11,25 +11,12 @@ const client = new S3Client({
   credentials: fromIni({ profile: '723164513951_DataplattformDeveloper' }),
 })
 
-const imageClient = new S3Client({
-  region: 'eu-central-1',
-  credentials: fromIni({ profile: '723164513951_DataplattformDeveloper' }),
-})
-
 //TODO Miderltidig fix, denne skal hentes fra parameters
-const bucketName = 'knowit-databricks-u06vfj-raw-storage-images'
-
-AWS.config.credentials = new AWS.SharedIniFileCredentials({
-  profile: '723164513951_DataplattformDeveloper',
-})
-const ssm = new AWS.SSM({ region: 'eu-west-1' })
-let imageUrl = null
-
+const bucketName = 'knowit-databricks-u06vfj-external'
 export async function getFileFromS3(report: string): Promise<string> {
   let res: string
-  // const key = getFilePath(report)
   const command = new GetObjectCommand({
-    Bucket: 'knowit-databricks-u06vfj-external',
+    Bucket: bucketName,
     Key: 'some/reports/' + report + '.json',
   })
 
@@ -59,22 +46,21 @@ export async function getFileFromS3(report: string): Promise<string> {
 
 export async function getSignedImageFromS3(imgKey: string): Promise<string> {
   try {
-    const clientUrl = createPresignedUrlWithClient({
+    const clientUrl: string = await createPresignedUrlWithClient({
       bucket: bucketName,
       key: imgKey,
     })
 
-    console.log('GetSignedUrl URL with client: ', clientUrl)
     return clientUrl
   } catch (err) {
     console.error(err)
   }
 }
 
-const createPresignedUrlWithClient = ({ bucket, key }) => {
+const createPresignedUrlWithClient = async ({ bucket, key }) => {
   const appendedKey = `some/${key}`
   const command = new GetObjectCommand({ Bucket: bucket, Key: appendedKey })
-  return getSignedUrl(imageClient, command, { expiresIn: 3600 })
+  return await getSignedUrl(client, command, { expiresIn: 3600 })
 }
 
 function ndjsonToJson(data: string): string {

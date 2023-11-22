@@ -16,14 +16,12 @@ import {
 } from './employeesTypes'
 import { getSignedImageFromS3 } from '../../dataplattform/databricksS3Call'
 
-export const getStorageUrl = async (key?: string) => {
+export const getStorageUrl = async (key: string): Promise<string> => {
   if (!key) {
     return
   }
-  const tempName = getSignedImageFromS3(key)
-  console.log('Promise: ', tempName, ' With key: ', key)
 
-  return tempName
+  return await getSignedImageFromS3(key)
 }
 
 function getDistinctStringValues(list?: string[]) {
