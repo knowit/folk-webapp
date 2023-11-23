@@ -12,17 +12,16 @@ export async function groupEmployeesByCustomer(
   employeesWithPrimaryCustomer: EmployeeWithPrimaryCustomer[]
 ): Promise<CustomerWithEmployees[]> {
   const customersWithEmployees: Record<string, EmployeeForCustomerList[]> = {}
-  const employeePromises = []
-
-  employeesWithPrimaryCustomer.map(async (employee) => {
-    const { customer_name } = employee
-    if (!customersWithEmployees[customer_name]) {
-      customersWithEmployees[customer_name] = []
+  const employeePromises = employeesWithPrimaryCustomer.map(
+    async (employee) => {
+      const { customer_name } = employee
+      if (!customersWithEmployees[customer_name]) {
+        customersWithEmployees[customer_name] = []
+      }
+      const employeeRow = createEmployeeForCustomerList(employee)
+      customersWithEmployees[customer_name].push(await employeeRow)
     }
-    const employeeRow = createEmployeeForCustomerList(employee)
-    customersWithEmployees[customer_name].push(await employeeRow)
-    employeePromises.push(await employeeRow)
-  })
+  )
   await Promise.all(employeePromises)
 
   return Object.entries(customersWithEmployees).map(

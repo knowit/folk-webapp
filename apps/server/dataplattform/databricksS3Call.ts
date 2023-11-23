@@ -8,7 +8,7 @@ import { getSignedUrl, S3RequestPresigner } from '@aws-sdk/s3-request-presigner'
 
 const client = new S3Client({
   region: 'eu-west-1',
-  credentials: fromIni({ profile: '723164513951_DataplattformDeveloper' }),
+  //credentials: fromIni({ profile: '723164513951_DataplattformDeveloper' }),
 })
 
 //TODO Miderltidig fix, denne skal hentes fra parameters
