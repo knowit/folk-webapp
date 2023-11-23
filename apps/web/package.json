@@ -50,7 +50,7 @@
     "@nivo/radar": "^0.83.0",
     "@nivo/sunburst": "^0.83.0",
     "@types/d3": "^7.4.0",
-    "axios": "^1.2.1",
+    "axios": "^1.6.0",
     "browserslist": "^4.21.4",
     "d3": "^7.8.2",
     "dayjs": "^1.11.7",
