@@ -1,18 +1,14 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import axios from 'axios'
 import { ApiError } from '../middlewares/errorHandling'
-import { fromIni } from '@aws-sdk/credential-providers'
-//import { aws_ssm } from "aws-cdk-lib";
-import AWS from 'aws-sdk'
-import { getSignedUrl, S3RequestPresigner } from '@aws-sdk/s3-request-presigner'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
 const client = new S3Client({
   region: 'eu-west-1',
   //credentials: fromIni({ profile: '723164513951_DataplattformDeveloper' }),
 })
-
-//TODO Miderltidig fix, denne skal hentes fra parameters
 const bucketName = 'knowit-databricks-u06vfj-external'
+
 export async function getFileFromS3(report: string): Promise<string> {
   let res: string
   const command = new GetObjectCommand({

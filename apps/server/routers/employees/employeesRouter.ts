@@ -101,12 +101,13 @@ router.get<unknown, unknown, unknown, EmailParam>(
         } as ParamError
       }
 
-      getFileFromS3('employeeMotivationAndCompetence').then((result) => {
-        let data = JSON.parse(result)
-        data = data.filter((i) => i.email == req.query.email)
-        const aggregatedData = employeeMotivationAndCompetence(data)
-        res.send(aggregatedData)
-      })
+      const employeeMotivationAndComp = await getFileFromS3(
+        'employeeMotivationAndCompetence'
+      )
+      let data = JSON.parse(employeeMotivationAndComp)
+      data = data.filter((i) => i.email == req.query.email)
+      const aggregatedData = employeeMotivationAndCompetence(data)
+      res.send(aggregatedData)
     } catch (error) {
       next(error)
     }
@@ -160,11 +161,12 @@ router.get<unknown, unknown, unknown, EmailParam>(
 
 router.get('/employeeStructure', async (req, res, next) => {
   try {
-    getFileFromS3('employeeProfileInformation').then((result) => {
-      const data = JSON.parse(result)
-      const aggregatedData = aggregateStructure(data)
-      res.send(aggregatedData)
-    })
+    const employeeProfileInformation = await getFileFromS3(
+      'employeeProfileInformation'
+    )
+    const data = JSON.parse(employeeProfileInformation)
+    const aggregatedData = aggregateStructure(data)
+    res.send(aggregatedData)
   } catch (error) {
     next(error)
   }
