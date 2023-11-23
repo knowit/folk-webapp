@@ -1,10 +1,12 @@
 import React from 'react'
-import { Avatar, Button } from '@mui/material'
-import { TableCell } from '@mui/material'
+import { Avatar, Button, TableCell } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import { ExpandLessIcon, ExpandMoreIcon } from '../../../assets/Icons'
+import {
+  ExpandLessIcon,
+  ExpandMoreIcon,
+  OpenInNewIcon,
+} from '../../../assets/Icons'
 import { ReactComponent as FallbackUserIcon } from '../../../assets/fallback_user.svg'
-import { OpenInNewIcon } from '../../../assets/Icons'
 import { Link } from 'react-router-dom'
 import { ConsultantInfo } from '../../../api/data/employee/employeeApiTypes'
 import CharacterLimitBox from '../components/CharacterLimitBox'

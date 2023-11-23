@@ -42,6 +42,8 @@ export default function CustomerList() {
   const [sortIndex, setSortIndex] = React.useState(0)
   const [sortOrder, setSortOrder] = React.useState<'ASC' | 'DESC'>('ASC')
 
+  console.log(data)
+
   const memoizedData = React.useMemo(() => {
     if (!data) return []
     return data.map((customer) => {
