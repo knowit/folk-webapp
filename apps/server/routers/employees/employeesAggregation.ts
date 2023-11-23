@@ -142,13 +142,13 @@ export const aggregateEmployeeCompetenceAndMotivation = (
   return output
 }
 
-export const aggregateEmployeeProfile = (
+export const aggregateEmployeeProfile = async (
   employeeProfileInformation: EmployeeProfileInformation[],
   employeeSkills: EmployeeSkills[],
   workExperience: WorkExperience[],
   projectExperience: ProjectExperience[],
   employeeCustomers: EmployeeCustomers[]
-): EmployeeProfileResponse => {
+): Promise<EmployeeProfileResponse> => {
   if (employeeProfileInformation.length === 0) {
     return
   }
@@ -163,7 +163,7 @@ export const aggregateEmployeeProfile = (
     phone: employee.phone,
     degree: employee.degree,
     manager: employee.manager,
-    image: employee.image_key,
+    image: await getStorageUrl(employee.image_key),
     tags: mapEmployeeTags(employeeSkills[0]),
     links: createCvLinks(employee.link),
     workExperience: mapWorkExperience(workExperience),

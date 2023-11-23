@@ -145,7 +145,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
       project_data = project_data.filter((i) => i.email == req.query.email)
       let employee_data = JSON.parse(employeeCustomers)
       employee_data = employee_data.filter((i) => i.email == req.query.email)
-      const aggregatedData = aggregateEmployeeProfile(
+      const aggregatedData = await aggregateEmployeeProfile(
         profile_data,
         skills_data,
         work_data,
