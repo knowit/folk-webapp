@@ -1,9 +1,7 @@
 name: Deploy - Dev Force
 
+# configure manual trigger
 on:
-  push:
-    branches:
-      - master
   workflow_dispatch:
 
 jobs:
