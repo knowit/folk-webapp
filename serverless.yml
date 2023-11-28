@@ -11,6 +11,7 @@ custom:
     CLIENT_ID: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_ID}
     CLIENT_SECRET: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_SECRET}
     PRIVACY_POLICY_KEY: ${ssm:/${self:custom.stage}/folk-webapp/PRIVACY_POLICY_KEY}
+    stage: ${opt:stage, self:provider.stage}
   allowedMethods:
     - GET
     - HEAD
