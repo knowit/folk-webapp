@@ -1,6 +1,3 @@
-import { config } from 'aws-sdk'
-config.update({ region: 'eu-central-1' })
-
 export const range = (x: number, y: number) =>
   Array.from(
     (function* () {
