@@ -16,10 +16,7 @@
     "@aws-sdk/s3-request-presigner": "^3.438.0",
     "@folk/common": "workspace:^",
     "@vendia/serverless-express": "^4.10.1",
-    "aws-cdk-lib": "^2.104.0",
-    "aws-sdk": "^2.1384.0",
     "axios": "^1.6.0",
-    "constructs": "^10.0.0",
     "cookie-parser": "^1.4.6",
     "express": "^4.18.2",
     "openid-client": "^4.9.1"
