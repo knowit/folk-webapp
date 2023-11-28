@@ -36,6 +36,8 @@ provider:
   httpApi:
     name: ${self:custom.service}-api
     payload: "2.0"
+  environment:
+    stage: ${opt:stage, self:provider.stage}
 
 package:
   excludeDevDependencies: false
