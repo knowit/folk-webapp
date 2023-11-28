@@ -13,7 +13,7 @@ export async function getFileFromS3(report: string): Promise<string> {
   let res: string
   const command = new GetObjectCommand({
     Bucket: bucketName,
-    Key: 'some/reports/' + report + '.json',
+    Key: `some/${process.env.stage}/reports/` + report + `.json`,
   })
 
   try {
@@ -54,7 +54,7 @@ export async function getSignedImageFromS3(imgKey: string): Promise<string> {
 }
 
 const createPresignedUrlWithClient = async ({ bucket, key }) => {
-  const appendedKey = `some/${key}`
+  const appendedKey = `some/${process.env.stage}/${key}`
   const command = new GetObjectCommand({ Bucket: bucket, Key: appendedKey })
   return await getSignedUrl(client, command, { expiresIn: 3600 })
 }
