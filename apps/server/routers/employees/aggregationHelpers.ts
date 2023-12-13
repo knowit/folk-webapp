@@ -87,24 +87,26 @@ export const getProjectStatusForEmployee = (
   let inProject = false
   let isInternal = false
 
-  if (work) {
-    inProject = true
-    isInternal = !work.project_type.toLowerCase().includes('external')
-  }
+  if (role === 'Consultant') {
+    if (work) {
+      inProject = true
+      isInternal = !work.project_type.toLowerCase().includes('external')
+    }
 
-  if ((wantNewProject || openForNewProject) > 0 && inProject) {
-    return wantNewProject > openForNewProject
-      ? ProjectStatus.WantChange
-      : ProjectStatus.OpenForChange
-  }
+    if ((wantNewProject || openForNewProject) > 0 && inProject) {
+      return wantNewProject > openForNewProject
+        ? ProjectStatus.WantChange
+        : ProjectStatus.OpenForChange
+    }
 
-  return role !== 'Consultant' && !inProject
-    ? ProjectStatus.NotBillable
-    : !inProject
-    ? ProjectStatus.NoProject
-    : isInternal
-    ? ProjectStatus.InternalProject
-    : ProjectStatus.ExternalProject
+    return !inProject
+      ? ProjectStatus.NoProject
+      : isInternal
+      ? ProjectStatus.InternalProject
+      : ProjectStatus.ExternalProject
+  } else {
+    return ProjectStatus.NotBillable
+  }
 }
 
 const getEmployeeWork = (

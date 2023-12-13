@@ -3,9 +3,16 @@ import axios from 'axios'
 import { ApiError } from '../middlewares/errorHandling'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
+const environment = (() => {
+  if (process.env.stage === undefined) {
+    return 'dev'
+  } else {
+    return process.env.stage.toString()
+  }
+})()
+
 const client = new S3Client({
   region: 'eu-west-1',
-  //credentials: fromIni({ profile: '723164513951_DataplattformDeveloper' }),
 })
 const bucketName = 'knowit-databricks-u06vfj-external'
 
@@ -13,7 +20,7 @@ export async function getFileFromS3(report: string): Promise<string> {
   let res: string
   const command = new GetObjectCommand({
     Bucket: bucketName,
-    Key: `some/${process.env.stage}/reports/` + report + `.json`,
+    Key: `some/` + environment + `/reports/` + report + `.json`,
   })
 
   try {
@@ -54,7 +61,7 @@ export async function getSignedImageFromS3(imgKey: string): Promise<string> {
 }
 
 const createPresignedUrlWithClient = async ({ bucket, key }) => {
-  const appendedKey = `some/${process.env.stage}/${key}`
+  const appendedKey = `some/` + environment + `/${key}`
   const command = new GetObjectCommand({ Bucket: bucket, Key: appendedKey })
   return await getSignedUrl(client, command, { expiresIn: 3600 })
 }
