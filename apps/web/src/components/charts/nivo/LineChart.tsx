@@ -45,6 +45,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
         }}
         axisTop={null}
         axisBottom={{ tickValues: mapTicks() }}
+        axisRight={null}
         colors={chartColors}
         curve="monotoneX"
         enableArea={true}
