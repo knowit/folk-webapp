@@ -17,6 +17,18 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
       },
     },
   }
+  const mapTicks = () => {
+    if (!props.data || !props.data[0]) {
+      return null
+    }
+
+    const data = props.data[0].data
+    const tickInterval = Math.round(data.length / 6)
+    return data
+      .filter((point) => data.indexOf(point) % tickInterval === 0)
+      .map((point) => point.x)
+  }
+
   return (
     <div style={{ width: '100%', height: isBig ? '400px' : '280px' }}>
       <ResponsiveLine
@@ -32,8 +44,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
           reverse: false,
         }}
         axisTop={null}
-        axisBottom={isBig ? {} : null}
-        axisRight={null}
+        axisBottom={{ tickValues: mapTicks() }}
         colors={chartColors}
         curve="monotoneX"
         enableArea={true}
