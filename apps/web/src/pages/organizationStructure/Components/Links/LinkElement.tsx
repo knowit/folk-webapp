@@ -20,7 +20,7 @@ const LinkElement = ({ link, searchTerm }: Props) => {
       {link.innerLink && (
         <NameText employee={link.target.data.employee} searchTerm={searchTerm}>
           <textPath
-            xlinkHref={'#' + link.target.data.employee.email}
+            xlinkHref={`#${link.target.data.employee.email}`}
             startOffset={link.inverted ? '100%' : null}
             textAnchor={link.inverted ? 'end' : null}
           >

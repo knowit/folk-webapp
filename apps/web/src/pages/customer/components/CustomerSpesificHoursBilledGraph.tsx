@@ -1,7 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Grid } from '@mui/material'
-import { HoursBilledPerWeekCard } from '../cards'
+import { styled } from '@mui/material/styles'
 import storageTokens from '../util/local-storage-tokens'
+import HoursBilledPerWeekChart from '../cards/HoursBilledPerWeekChart'
+import { GridItem } from '../../../components/gridItem/GridItem'
+
+const GridContainer = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: '3fr',
+  gridGap: '1rem',
+})
 
 export const CustomerSpecificHoursBilledGraph = ({ customerId }) => {
   const [selectedPeriodStartDate, setPeriodStartDate] = useState(null)
@@ -13,7 +21,9 @@ export const CustomerSpecificHoursBilledGraph = ({ customerId }) => {
 
     setPeriodStartDate(startDate)
     setPeriodEndDate(endDate)
-  }, [])
+    localStorage.setItem('selectedCustomerIds', JSON.stringify([customerId]))
+  }, [customerId])
+
   useEffect(() => {
     storageTokens.setPeriodStartDate(selectedPeriodStartDate)
   }, [selectedPeriodStartDate])
@@ -24,21 +34,24 @@ export const CustomerSpecificHoursBilledGraph = ({ customerId }) => {
 
   return (
     <Grid container spacing={2}>
-      <HoursBilledPerWeekCard
-        selectedCustomerIds={new Array(customerId)}
-        selectedPeriodStartDate={selectedPeriodStartDate}
-        selectedPeriodEndDate={selectedPeriodEndDate}
-        handleDateRangeChange={function (
-          startDate?: Date,
-          endDate?: Date
-        ): void {
-          setPeriodStartDate(startDate)
-          setPeriodEndDate(endDate)
-        }}
-        customerSpecificGraph={true}
-        customersWithConsultants={new Array(customerId)}
-        customerHistory={true}
-      />
+      <GridItem fullSize>
+        <GridContainer>
+          <HoursBilledPerWeekChart
+            handleDateRangeChange={function (
+              startDate?: Date,
+              endDate?: Date
+            ): void {
+              setPeriodStartDate(startDate)
+              setPeriodEndDate(endDate)
+            }}
+            startDate={selectedPeriodStartDate}
+            endDate={selectedPeriodEndDate}
+            customersWithConsultants={new Array(customerId)}
+            selectedCustomerIds={new Array(customerId)}
+            specificCustomer
+          />
+        </GridContainer>
+      </GridItem>
     </Grid>
   )
 }

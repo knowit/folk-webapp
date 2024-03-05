@@ -48,7 +48,7 @@ export default function FilteredDownloadCell({
         const columns: string[] = []
         columns.push(filter.label)
         filter.filters.forEach((entry) => {
-          columns.push(entry.value + ':' + entry.threshold)
+          columns.push(`${entry.value}:${entry.threshold}`)
         })
         rows.push(columns)
       }

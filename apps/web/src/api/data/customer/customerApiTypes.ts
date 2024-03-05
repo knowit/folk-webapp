@@ -2,7 +2,7 @@ import { ConsultantInfo, CvLinks } from '../employee/employeeApiTypes'
 import { TableRow } from '../tableResponses'
 
 // customerCards
-interface CustomerCardData {
+export interface CustomerCardData {
   customer: string
   consultants: number
   billedLastPeriod: number

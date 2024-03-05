@@ -88,8 +88,8 @@ export default function ConsultantCell({
         <ButtonSubRoot>
           {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           <Link
-            to={'/ansatt/' + consultant.email}
-            target={'employee_' + consultant.email}
+            to={`/ansatt/${consultant.email}`}
+            target={`employee_${consultant.email}`}
           >
             <OpenInNewIcon />
           </Link>

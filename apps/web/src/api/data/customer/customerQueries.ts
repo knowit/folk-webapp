@@ -6,10 +6,15 @@ import {
   getHoursBilledPerWeekCharts,
 } from './customerApi'
 
-export const useCustomerCards = () =>
+export const useCustomerCardsQuery = () =>
   useSWR('/customerCards', getCustomerCards, {
     revalidateOnFocus: false,
   })
+
+export const useCustomerCards = () => {
+  const { data } = useCustomerCardsQuery()
+  return data || []
+}
 
 export const useEmployeesByCustomer = () =>
   useSWR('/employeesByCustomer', getEmployeesByCustomer, {

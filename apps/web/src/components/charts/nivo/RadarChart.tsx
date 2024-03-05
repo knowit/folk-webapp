@@ -50,7 +50,7 @@ const RadarChart: React.FC<Props<any>> = ({ isBig = false, ...props }) => {
                 <tbody>
                   {data.data.map((dataRow, index) => {
                     return (
-                      <tr key={data.index + ' ' + index}>
+                      <tr key={`${data.index} ${index}`}>
                         <td style={{ padding: '3px 5px' }}>
                           <span
                             style={{

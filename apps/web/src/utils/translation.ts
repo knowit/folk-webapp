@@ -6,4 +6,6 @@ export const Translation: Record<string, string> = {
   competenceProportion: 'Kompetanseandel',
   motivationProportion: 'Motivasjonandel',
   hours: 'Timer',
+  'filter.abc': 'Alfabetisk',
+  'filter.konsulenter': 'Antall konsulenter',
 }

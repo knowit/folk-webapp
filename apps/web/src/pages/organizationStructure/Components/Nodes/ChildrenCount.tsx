@@ -46,7 +46,7 @@ const ChildrenCount = ({
             cursor: 'pointer',
           }}
         >
-          {childrenOuterLayerCount > 0 && '+' + childrenOuterLayerCount}
+          {childrenOuterLayerCount > 0 && `+${childrenOuterLayerCount}`}
         </text>
       )}
     </g>

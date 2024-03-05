@@ -26,13 +26,13 @@ const CustomerCardList = ({
   historicalCustomers,
   handleCheckboxChange,
 }: Props) => {
-  const { data } = useCustomerCards()
+  const customerCards = useCustomerCards()
   const [customersInGraph, setCustomersInGraph] = useState([])
   const [otherCustomers, setOtherCustomers] = useState([])
 
   useEffect(() => {
-    if (data) {
-      const all_customer = data.concat(historicalCustomers)
+    if (customerCards) {
+      const all_customer = customerCards.concat(historicalCustomers)
 
       const customers_in_graph =
         selectedCustomerIds !== null &&
@@ -52,9 +52,9 @@ const CustomerCardList = ({
       setCustomersInGraph(customers_in_graph)
       setOtherCustomers(other_customers)
     }
-  }, [data, historicalCustomers, selectedCustomerIds])
+  }, [customerCards, historicalCustomers, selectedCustomerIds])
 
-  if (!data) {
+  if (!customerCards) {
     return (
       <>
         {[...Array(4)].map((_, index) => (
