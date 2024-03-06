@@ -176,34 +176,27 @@ export const aggregateEmployeeProfile = async (
 }
 
 function buildHierarchy(
-  employees: Record<string, EmployeeProfileInformation[]>,
-  employee: EmployeeProfileInformation
+  employees: EmployeeProfileInformation[],
+  parent: EmployeeProfileInformation
 ): EmployeeNode {
   const children: EmployeeNode[] = []
-  for (const email in employees) {
-    const potentialChild = employees[email][0]
-    if (potentialChild.manager_email === employee.email) {
-      children.push(buildHierarchy(employees, potentialChild))
+  employees.map((em) => {
+    if (em.manager_email === parent.email) {
+      children.push(buildHierarchy(employees, em))
     }
-  }
-  return children.length ? { employee, children } : { employee }
-}
+  })
 
-function transformEmployees(
-  employees: Record<string, EmployeeProfileInformation[]>
-): EmployeeNode {
-  for (const email in employees) {
-    const employee = employees[email][0]
-    if (!employee.manager_email) {
-      return buildHierarchy(employees, employee)
-    }
-  }
+  return children.length ? { employee: parent, children } : { employee: parent }
 }
 
 export const aggregateStructure = (
   employeeStructureResponse: EmployeeProfileInformation[]
-): EmployeeNode => {
-  const groupedByEmail = groupBy(employeeStructureResponse, (i) => i.email)
-
-  return transformEmployees(groupedByEmail)
+): EmployeeNode[] => {
+  const rootNodes = employeeStructureResponse.filter(
+    (em) =>
+      !employeeStructureResponse.find((esr) => esr.email === em.manager_email)
+  )
+  return rootNodes.map((node) =>
+    buildHierarchy(employeeStructureResponse, node)
+  )
 }

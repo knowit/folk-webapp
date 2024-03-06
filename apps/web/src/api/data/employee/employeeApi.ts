@@ -37,5 +37,5 @@ export const getEmployeeExperience = (email: string) =>
   })
 
 export const getEmployeeStructure = () => {
-  return getAtApiV2<EmployeeNode>('/employees/employeeStructure')
+  return getAtApiV2<EmployeeNode[]>('/employees/employeeStructure')
 }
