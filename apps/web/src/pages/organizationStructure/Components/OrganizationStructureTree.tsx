@@ -56,9 +56,6 @@ const OrganizationStructureTree = ({
     .size([2 * Math.PI, radius])
     .separation((a, b) => (a.parent == b.parent ? 1 : 3))(root)
 
-  // Sets the group leader with the most children to start at the 9 o'clock position
-  descendants[0].children[0].x = Math.PI
-
   // Sets the angle of the CEO to 0
   descendants[0].x = 0
 
