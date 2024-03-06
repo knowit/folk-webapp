@@ -17,7 +17,7 @@ const SearchFieldStyled = styled('div')(() => ({
 }))
 
 interface Props {
-  data: EmployeeNode
+  data: EmployeeNode[]
   width: number
   height: number
   margin: number
@@ -41,7 +41,10 @@ const OrganizationStructureTree = ({
   const [searchTerm, setSearchTerm] = useState('')
   const svgRef = useRef<SVGSVGElement>(null)
   const groupRef = useRef<SVGGElement>(null)
-  const root = hierarchy(data)
+
+  const roots = data.map((d) => hierarchy({ ...d }))
+  const root = roots.find((r) => !!r.children)
+
   root.sort((a, b) => descending(a.height, b.height))
   const descendants = root.descendants() as Node[]
   const links = root.links() as Link[]
@@ -142,6 +145,7 @@ const OrganizationStructureTree = ({
                 />
               )
             })}
+
             <LeadersOverview
               hideChildNodes={hideChildNodes}
               descendants={descendantsWithChildren}
