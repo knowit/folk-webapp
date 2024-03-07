@@ -1,15 +1,14 @@
 import { Node } from '../../type'
-import { useTheme } from '@mui/material'
 import {
   checkRotateDegree,
   fill,
-  haloWidth,
   nodeSizeNormal,
   nodeSizeBig,
   nodeStroke,
 } from '../../util'
 import ChildrenCount from './ChildrenCount'
 import { styled } from '@mui/material'
+import NameText from '../NameText'
 
 interface Props {
   node: Node
@@ -45,9 +44,6 @@ const LeaderTreeNode = ({
   rotateValue,
   searchTerm,
 }: Props) => {
-  const theme = useTheme()
-  const halo = theme.palette.background.paper
-
   const showHiddenChildsCount = clickedParents.some(
     (employee) => employee === node.data.employee.email
   )
@@ -70,27 +66,18 @@ const LeaderTreeNode = ({
         hasChildren={childrenOuterLayerCount() > 0}
       />
       {node.depth === 0 && (
-        <text
+        <NameText
+          employee={node.data.employee}
+          searchTerm={searchTerm}
           transform={`rotate(${
             checkRotateDegree(degree, rotateValue) ? 0 : 180
           })`}
           dy={checkRotateDegree(degree, rotateValue) ? '10' : '-5'}
           x={checkRotateDegree(degree, rotateValue) ? 22 : -22}
           textAnchor={checkRotateDegree(degree, rotateValue) ? 'start' : 'end'}
-          paintOrder="stroke"
-          stroke={halo}
-          fill={theme.palette.text.primary}
-          strokeWidth={haloWidth}
-          opacity={
-            searchTerm.length < 0
-              ? 1
-              : node.data.employee.name.toLowerCase().includes(searchTerm)
-              ? 1
-              : 0.3
-          }
         >
           {node.data.employee.name}
-        </text>
+        </NameText>
       )}
       <ChildrenCount
         node={node}

@@ -5,6 +5,7 @@ import { FallbackMessage } from '../employee/components/FallbackMessage'
 import { pageTitle } from '../../utils/pagetitle'
 import { useState } from 'react'
 import Filter from './Components/Filter/Filter'
+import styled from '@emotion/styled'
 
 export default function OrganizationStructurePage() {
   const { data, isLoading, error } = useEmployeeStructure()
@@ -27,7 +28,7 @@ export default function OrganizationStructurePage() {
   }
 
   return (
-    <>
+    <RelativePositionedBox>
       <Filter toggleEmployees={toggleEmployees} />
       <OrganizationStructureTree
         hideChildNodes={hideChildNodes}
@@ -36,6 +37,10 @@ export default function OrganizationStructurePage() {
         height={1200}
         margin={140}
       />
-    </>
+    </RelativePositionedBox>
   )
 }
+
+const RelativePositionedBox = styled('div')({
+  position: 'relative',
+})

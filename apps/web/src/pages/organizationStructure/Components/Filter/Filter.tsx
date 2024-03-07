@@ -8,7 +8,9 @@ const FilterWrapper = styled('div')(({ theme }) => ({
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
   borderRadius: '4px',
   display: 'flex',
-  float: 'right',
+  position: 'absolute',
+  right: 0,
+  'z-index': 5,
 }))
 
 const StyledText = styled('p')({

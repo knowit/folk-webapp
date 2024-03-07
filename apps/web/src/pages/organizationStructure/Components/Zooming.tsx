@@ -14,14 +14,15 @@ interface Props {
   rotateValue: number
 }
 
-const ButtonWrapper = styled('div')({
+const ButtonWrapper = styled('div')(({ theme }) => ({
   border: '1px solid',
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
   borderRadius: '4px',
   width: '200px',
   display: 'flex',
   justifyContent: 'center',
-})
+  backgroundColor: theme.palette.background.default,
+}))
 
 const Percent = styled('div')({
   fontSize: '24px',

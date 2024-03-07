@@ -92,7 +92,7 @@ const OrganizationStructureTree = ({
 
   return (
     <>
-      <div>
+      <AbsolutelyPositionedBox>
         <SearchFieldStyled>
           <SearchInput
             placeholder={'Søk i ansatte'}
@@ -114,10 +114,10 @@ const OrganizationStructureTree = ({
           setZoomTransformValue={setZoomTransformValue}
           rotateValue={rotateValue}
         />
-      </div>
+      </AbsolutelyPositionedBox>
       <svg
         viewBox={`${-margin - radius}  ${-margin - radius} ${width} ${height}`}
-        style={{ maxWidth: '100%', height: 'auto' }}
+        style={{ maxWidth: '100%', height: 'auto', position: 'absolute' }}
         fontFamily={'sans-serif'}
         ref={svgRef}
         fontSize={12}
@@ -159,3 +159,8 @@ const OrganizationStructureTree = ({
 }
 
 export default OrganizationStructureTree
+
+const AbsolutelyPositionedBox = styled('div')({
+  position: 'absolute',
+  'z-index': '5',
+})

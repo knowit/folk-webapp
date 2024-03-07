@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { ArrowDownIcon, ArrowUpIcon } from '../../assets/Icons'
 import useSort from './hooks/use-sort'
 
@@ -36,6 +37,19 @@ const SortableTable = <T extends object>(props: MUITableProps<T>) => {
     config,
     initialSort
   )
+  const getIcon = useCallback(
+    (label: string, sortBy: string | null, sortOrder: SortOrder | null) => {
+      if (label === sortBy) {
+        if (sortOrder === SortOrder.Asc) {
+          return <ArrowDownIcon />
+        } else if (sortOrder === SortOrder.Desc) {
+          return <ArrowUpIcon />
+        }
+      }
+      return undefined
+    },
+    []
+  )
 
   const updatedConfig = config.map((column) => {
     if (!column.sortValue) {
@@ -44,12 +58,12 @@ const SortableTable = <T extends object>(props: MUITableProps<T>) => {
 
     return {
       ...column,
-      header: () => (
+      header: (
         <TableCellStyled key={`head-${column.label}`}>
           <HeaderRoot>
             <HeaderTitle onClick={() => setSortColumn(column.label)}>
               {column.label}
-              {getIcons(column.label, sortBy, sortOrder)}
+              {getIcon(column.label, sortBy, sortOrder)}
             </HeaderTitle>
 
             {column.checkBox ? <CellCheckbox {...column.checkBox} /> : null}
@@ -58,32 +72,6 @@ const SortableTable = <T extends object>(props: MUITableProps<T>) => {
       ),
     }
   })
-
-  const getIcons = (
-    label: string,
-    sortBy: string | null,
-    sortOrder: SortOrder | null
-  ) => {
-    if (label !== sortBy) {
-      return <div></div>
-    }
-
-    if (sortOrder === null) {
-      return <div></div>
-    } else if (sortOrder === SortOrder.Asc) {
-      return (
-        <div>
-          <ArrowDownIcon />
-        </div>
-      )
-    } else if (sortOrder === SortOrder.Desc) {
-      return (
-        <div>
-          <ArrowUpIcon />
-        </div>
-      )
-    }
-  }
 
   return (
     <div>
