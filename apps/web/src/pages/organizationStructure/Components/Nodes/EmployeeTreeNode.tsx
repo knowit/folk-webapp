@@ -1,12 +1,6 @@
 import { Node } from '../../type'
-import { useTheme } from '@mui/material'
-import {
-  checkRotateDegree,
-  fill,
-  haloWidth,
-  nodeSizeNormal,
-  nodeStroke,
-} from '../../util'
+import { checkRotateDegree, fill, nodeSizeNormal, nodeStroke } from '../../util'
+import NameText from '../NameText'
 
 interface Props {
   node: Node
@@ -23,9 +17,6 @@ const EmployeeTreeNode = ({
   clickedParents,
   searchTerm,
 }: Props) => {
-  const theme = useTheme()
-  const halo = theme.palette.background.paper
-
   const rotate =
     !node.children && node.depth !== 0
       ? checkRotateDegree(degree, rotateValue)
@@ -48,25 +39,16 @@ const EmployeeTreeNode = ({
             strokeWidth={1}
             r={nodeSizeNormal(node)}
           />
-          <text
+          <NameText
+            employee={node.data.employee}
+            searchTerm={searchTerm}
             transform={`rotate(${rotate ? 0 : 180})`}
             dy={node.depth === 0 ? '10px' : '0.32em'}
             x={rotate ? nodeSizeNormal(node) + 3 : -nodeSizeNormal(node) - 3}
             textAnchor={rotate ? 'start' : 'end'}
-            paintOrder="stroke"
-            stroke={halo}
-            fill={theme.palette.text.primary}
-            strokeWidth={haloWidth}
-            opacity={
-              searchTerm.length < 0
-                ? 1
-                : node.data.employee.name.toLowerCase().includes(searchTerm)
-                ? 1
-                : 0.3
-            }
           >
             {node.data.employee.name}
-          </text>
+          </NameText>
         </g>
       )}
     </>

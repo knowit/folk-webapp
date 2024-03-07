@@ -137,7 +137,7 @@ const MUITable = <T extends object>({
     >
       {(config || []).map((column, index) =>
         column.header ? (
-          column.header()
+          column.header
         ) : (
           <TableCellStyled key={index}>
             <HeaderRoot>

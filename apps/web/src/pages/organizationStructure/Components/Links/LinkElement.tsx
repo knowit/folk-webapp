@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from '../../type'
 import { linkColor } from '../../util'
-import { useTheme } from '@mui/material'
+import NameText from '../NameText'
 
 interface Props {
   link: Link
@@ -9,9 +9,6 @@ interface Props {
 }
 
 const LinkElement = ({ link, searchTerm }: Props) => {
-  const theme = useTheme()
-  const halo = theme.palette.background.paper // Stroke around the labels in case they overlap with a link
-  const haloWidth = 0.2
   return (
     <React.Fragment key={link.target.data.employee.email}>
       <path
@@ -21,21 +18,7 @@ const LinkElement = ({ link, searchTerm }: Props) => {
         id={link.target.data.employee.email}
       />
       {link.innerLink && (
-        <text
-          stroke={halo}
-          strokeWidth={haloWidth}
-          paintOrder="stroke"
-          fill={theme.palette.text.primary}
-          opacity={
-            searchTerm.length < 0
-              ? 1
-              : link.target.data.employee.name
-                  .toLowerCase()
-                  .includes(searchTerm)
-              ? 1
-              : 0.3
-          }
-        >
+        <NameText employee={link.target.data.employee} searchTerm={searchTerm}>
           <textPath
             xlinkHref={'#' + link.target.data.employee.email}
             startOffset={link.inverted ? '100%' : null}
@@ -45,7 +28,7 @@ const LinkElement = ({ link, searchTerm }: Props) => {
               {link.target.children ? link.target.data.employee.name : ''}
             </tspan>
           </textPath>
-        </text>
+        </NameText>
       )}
     </React.Fragment>
   )

@@ -35,14 +35,14 @@ export interface MUITableConfig<T> {
   ) => ReactNode
   width?: number
   additionalCellStyle?: React.CSSProperties
-  header?: () => ReactNode
+  header?: ReactNode
   checkBox?: CheckBoxHeader
   sortValue?: sortValueFn<T>
   searchValue?: GetColumnValueFn
   sortFn?: (a: T, b: T) => number
 }
 
-export interface MUITableProps<T> {
+export interface MUITableProps<T extends object> {
   data: T[]
   config: MUITableConfig<T>[]
   keyFn: (rowData: T) => string

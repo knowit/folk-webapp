@@ -208,8 +208,7 @@ export const EmployeeTableForCustomer = (props: {
 }
 
 function transformEmployeeForCustomerList(row: EmployeeForCustomerList) {
-  const rowData = row['rowData']
-  const rowId = row['rowId']
+  const { rowId, rowData } = row
 
   return {
     rowId,
