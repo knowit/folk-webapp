@@ -2,8 +2,12 @@ import { styled } from '@mui/material/styles'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { LayoutGroup, motion } from 'framer-motion'
 import { Checkbox, FormControlLabel } from '@mui/material'
-import { useCustomerCards } from '../../../api/data/customer/customerQueries'
+import {
+  useAllCustomerData,
+  useCustomerCards,
+} from '../../../api/data/customer/customerQueries'
 import { CustomerCardData } from '../../../api/data/customer/customerApiTypes'
+import { CustomerData } from '../cards/CustomerCard'
 
 export enum SortMethod {
   abc = 'abc',
@@ -24,20 +28,40 @@ interface Props {
   ) => void
   selectedCustomerIds: string[]
   selectedSortMethod: SortMethod
+  showCustomerHistory: boolean
 }
 
 const CustomerOverviewFilter = ({
   handleCheckboxChange,
   selectedCustomerIds,
   selectedSortMethod,
+  showCustomerHistory,
 }: Props) => {
   const customerCards = useCustomerCards()
-  const sortedSelectedCustomers = customerCards
+  const customerData = useAllCustomerData().map(
+    (cd): CustomerData => ({
+      customer: cd.customer,
+      consultants: 0,
+      billedLastPeriod: 0,
+      billedTotal: 0,
+    })
+  )
+  const historicalCustomerData = customerData.filter(
+    (cd) => !customerCards.find((cc) => cc.customer === cd.customer)
+  )
+  const populatedCustomerCards = [
+    ...customerCards,
+    ...(showCustomerHistory ? historicalCustomerData : []),
+  ]
+  console.log(populatedCustomerCards)
+  const sortedSelectedCustomers = populatedCustomerCards
     .filter((cc) => selectedCustomerIds.includes(cc.customer))
     .sort(sortMethod[selectedSortMethod])
-  const sortedUnselectedCustomers = customerCards
+  const sortedUnselectedCustomers = populatedCustomerCards
     .filter((cc) => !selectedCustomerIds.includes(cc.customer))
     .sort(sortMethod[selectedSortMethod])
+
+  console.log(sortedSelectedCustomers.length, sortedUnselectedCustomers.length)
 
   return (
     <ScrollableDiv>

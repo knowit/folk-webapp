@@ -1,7 +1,7 @@
 import CustomerCardList from './CustomerCardList'
 import {
+  useAllCustomerData,
   useCustomerCards,
-  useHoursBilledPerCustomerCharts,
 } from '../../../api/data/customer/customerQueries'
 
 interface Props {
@@ -21,13 +21,9 @@ const CustomerCardListOverview = ({
   const customersWithConsultants = useCustomerCards().map(
     (customerCard) => customerCard.customer
   )
-  const { data } = useHoursBilledPerCustomerCharts()
-  const historicalCustomers =
-    data && showHistoricalData
-      ? data?.data?.filter(
-          ({ customer }) => !customersWithConsultants.includes(customer)
-        )
-      : []
+  const historicalCustomers = useAllCustomerData().filter(
+    (customerData) => !customersWithConsultants.includes(customerData.customer)
+  )
 
   return (
     <CustomerCardList

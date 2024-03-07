@@ -139,7 +139,7 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
 
   const billedTotalFixedNumber = Number.isInteger(billedTotal)
     ? billedTotal
-    : billedTotal.toFixed(2)
+    : billedTotal?.toFixed(2)
 
   return (
     <GridItem>

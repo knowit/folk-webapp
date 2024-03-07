@@ -17,8 +17,8 @@ const NameText = ({ children, employee, searchTerm, ...rest }: Props) => {
     <text
       onClick={() =>
         window.open(
-          window.location.origin + '/ansatt/' + employee.email,
-          'employee_' + employee.email
+          `${window.location.origin}/ansatt/${employee.email}`,
+          `employee_${employee.email}`
         )
       }
       style={{ cursor: 'hand' }}

@@ -150,6 +150,7 @@ const CustomerHoursPerWeekSection = ({
               selectedCustomerIds={selectedCustomerIds}
               handleCheckboxChange={handleCheckboxChange}
               selectedSortMethod={selectedSortMethod}
+              showCustomerHistory={showCustomerHistory}
             />
           </CustomerFilterWrapper>
         </GridContainer>

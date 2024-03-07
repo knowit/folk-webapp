@@ -5,6 +5,7 @@ import {
   getHoursBilledPerCustomerCharts,
   getHoursBilledPerWeekCharts,
 } from './customerApi'
+import { CustomerData } from '../../../pages/customer/cards/CustomerCard'
 
 export const useCustomerCardsQuery = () =>
   useSWR('/customerCards', getCustomerCards, {
@@ -25,6 +26,11 @@ export const useHoursBilledPerCustomerCharts = () =>
   useSWR('/hoursBilledPerCustomerCharts', getHoursBilledPerCustomerCharts, {
     revalidateOnFocus: false,
   })
+
+export const useAllCustomerData = (): CustomerData[] => {
+  const { data: hoursBilledPerCustomer } = useHoursBilledPerCustomerCharts()
+  return hoursBilledPerCustomer ? hoursBilledPerCustomer?.data : []
+}
 
 export const useHoursBilledPerWeekCharts = () =>
   useSWR('/hoursBilledPerWeekCharts', getHoursBilledPerWeekCharts, {
