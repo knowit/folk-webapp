@@ -139,7 +139,7 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
 
   const billedTotalFixedNumber = Number.isInteger(billedTotal)
     ? billedTotal
-    : billedTotal.toFixed(2)
+    : billedTotal?.toFixed(2)
 
   return (
     <GridItem>
@@ -150,13 +150,13 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
       >
         {customerSpecificCard ? null : (
           <CheckboxWrapper>
-            <Text htmlFor={'chk' + customer}>Vis kunde i graf</Text>
+            <Text htmlFor={`chk${customer}`}>Vis kunde i graf</Text>
             <Checkbox
-              id={'chk' + customer}
+              id={`chk${customer}`}
               checked={selectedCustomerIds.includes(customer)}
               onChange={(event) => handleCheckboxChange(event, customer)}
             />
-            <LinkStyled to={'/kunder/' + customer}>
+            <LinkStyled to={`/kunder/${customer}`}>
               <OpenInNewIcon />
             </LinkStyled>
           </CheckboxWrapper>

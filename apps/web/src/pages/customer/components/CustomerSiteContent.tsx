@@ -52,7 +52,7 @@ interface Props {
 export function CustomerSiteContent({ customerId }: Props) {
   const classes = useStyles()
 
-  const { data: customerCards } = useCustomerCards()
+  const customerCards = useCustomerCards()
   const { data: hoursBilledData } = useHoursBilledPerCustomerCharts()
   const isLoading = !hoursBilledData
 

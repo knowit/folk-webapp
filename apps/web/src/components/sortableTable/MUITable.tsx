@@ -37,7 +37,7 @@ const CheckboxContainer = styled('div')(() => ({
   width: '60%',
 }))
 
-const FormControlLabelStyled = styled(FormControlLabel)(() => ({
+export const FormControlLabelStyled = styled(FormControlLabel)(() => ({
   marginRight: 0,
 }))
 

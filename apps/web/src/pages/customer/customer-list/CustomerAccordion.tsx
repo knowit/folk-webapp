@@ -62,7 +62,7 @@ const CustomerAccordion = ({
             <CustomerColumn>
               {customerName}
               {customerName != 'Uten prosjekt' && (
-                <Link to={'/kunder/' + customerName} target="_blank">
+                <Link to={`/kunder/${customerName}`} target="_blank">
                   <OpenInNewIcon />
                 </Link>
               )}
