@@ -46,20 +46,9 @@ const HoursBilledPerWeekChart = ({
   } = usePerWeekFilter(data)
   const { trackEvent } = useMatomo()
 
-  const customersUnfiltered =
-    data === undefined ? [] : data?.data?.map((item) => item.id as string)
-
-  const customers = showCustomerHistory
-    ? customersUnfiltered
-    : customersWithConsultants
-    ? customersUnfiltered.filter((customer) =>
-        customersWithConsultants.includes(customer)
-      )
-    : customersUnfiltered
-
-  const selectedCustomers = customers.filter((customer) =>
-    selectedCustomerIds?.includes(customer)
-  )
+  const selectedCustomers = showCustomerHistory
+    ? selectedCustomerIds
+    : selectedCustomerIds.filter((sc) => customersWithConsultants.includes(sc))
 
   const setDateRange = (startDate, endDate) => {
     trackEvent({ category: 'filter-dato', action: 'click-event' })

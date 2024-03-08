@@ -119,6 +119,7 @@ const CustomerHoursPerWeekSection = ({
             endDate={endDate}
             customersWithConsultants={customersWithConsultants}
             selectedCustomerIds={selectedCustomerIds}
+            showCustomerHistory={showCustomerHistory}
           />
           <CustomerFilterWrapper>
             <GridItemHeader title="Filtrer kunder">

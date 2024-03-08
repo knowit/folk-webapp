@@ -23,6 +23,7 @@ interface Props {
 
 const CustomerCardList = ({
   selectedCustomerIds,
+  showHistoricalData,
   historicalCustomers,
   handleCheckboxChange,
 }: Props) => {
@@ -32,7 +33,9 @@ const CustomerCardList = ({
 
   useEffect(() => {
     if (customerCards) {
-      const all_customer = customerCards.concat(historicalCustomers)
+      const all_customer = customerCards.concat(
+        showHistoricalData ? historicalCustomers : []
+      )
 
       const customers_in_graph =
         selectedCustomerIds !== null &&
@@ -52,7 +55,12 @@ const CustomerCardList = ({
       setCustomersInGraph(customers_in_graph)
       setOtherCustomers(other_customers)
     }
-  }, [customerCards, historicalCustomers, selectedCustomerIds])
+  }, [
+    customerCards,
+    historicalCustomers,
+    selectedCustomerIds,
+    showHistoricalData,
+  ])
 
   if (!customerCards) {
     return (
