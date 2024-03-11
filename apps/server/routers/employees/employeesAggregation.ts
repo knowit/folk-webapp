@@ -24,7 +24,6 @@ import {
   WorkExperience,
 } from './employeesTypes'
 import { EmployeeCustomers } from '../customer/customerTypes'
-import { groupBy } from '../../repository/util'
 
 export const aggregateEmployeeTable = async (
   basicEmployeeInformation: BasicEmployeeInformation[],

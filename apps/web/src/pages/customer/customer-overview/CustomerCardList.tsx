@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { useCustomerCards } from '../../../api/data/customer/customerQueries'
-import CustomerCard, { CustomerData } from '../cards/CustomerCard'
+import CustomerCard from '../cards/CustomerCard'
 import { GridItem } from 'web/src/components/gridItem/GridItem'
 import { Grid } from '@mui/material'
 import CustomerCardSort from './CustomerCardSort'
 import { styled } from '@mui/material/styles'
+import { CustomerCardData } from '../../../api/data/customer/customerApiTypes'
 
 const Title = styled('h2')({
   marginBottom: '2px',
@@ -14,7 +15,7 @@ const Title = styled('h2')({
 interface Props {
   selectedCustomerIds: string[]
   showHistoricalData: boolean
-  historicalCustomers: CustomerData[]
+  historicalCustomers: CustomerCardData[]
   handleCheckboxChange: (
     event: React.ChangeEvent<HTMLInputElement>,
     customerId: string

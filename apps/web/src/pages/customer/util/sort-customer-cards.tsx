@@ -1,24 +1,24 @@
-import { CustomerData } from '../cards/CustomerCard'
+import { CustomerCardData } from '../../../api/data/customer/customerApiTypes'
 
 export function SortCustomerCards(
-  data: CustomerData[],
+  data: CustomerCardData[],
   currentSort: string,
   sortOrder: string
 ) {
   if (!currentSort) return data
 
-  const getCellValue = (row: CustomerData) => {
+  const getCellValue = (row: CustomerCardData) => {
     switch (currentSort) {
       case 'Alfabetisk':
         return row.customer
       case 'Antall konsulenter':
-        return row.consultants
+        return row.consultantsLastPeriod
       case 'Antall timer':
         return row.billedTotal
     }
   }
 
-  const compare = (a: CustomerData, b: CustomerData) => {
+  const compare = (a: CustomerCardData, b: CustomerCardData) => {
     const aValue = getCellValue(a)
     const bValue = getCellValue(b)
     if (currentSort === 'Alfabetisk') {

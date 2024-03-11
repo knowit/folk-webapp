@@ -37,9 +37,16 @@ router.get('/customerCards', async (req, res, next) => {
   try {
     const perProject = await getFileFromS3('perProject')
     const employeeCustomers = await getFileFromS3('employeeCustomers')
+    const accountManager = await getFileFromS3('accountManager')
     const project_data = JSON.parse(perProject)
     const customer_data = JSON.parse(employeeCustomers)
-    const aggregatedData = createCustomerCardData(project_data, customer_data)
+    const accountManagerTable = JSON.parse(accountManager)
+
+    const aggregatedData = createCustomerCardData(
+      project_data,
+      customer_data,
+      accountManagerTable
+    )
     res.send(aggregatedData)
   } catch (error) {
     next(error)

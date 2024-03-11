@@ -3,12 +3,13 @@ import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
 import SearchInput from '../../../components/SearchInput'
 import SortButton from '../cards/SortButton'
 import { Grid, styled } from '@mui/material'
-import CustomerCard, { CustomerData } from '../cards/CustomerCard'
+import CustomerCard from '../cards/CustomerCard'
 import { SortCustomerCards } from '../util/sort-customer-cards'
 import { useMatomo } from '@jonkoops/matomo-tracker-react'
+import { CustomerCardData } from '../../../api/data/customer/customerApiTypes'
 
 interface Props {
-  data: CustomerData[]
+  data: CustomerCardData[]
   handleCheckboxChange: (
     event: React.ChangeEvent<HTMLInputElement>,
     customerId: string
@@ -29,7 +30,7 @@ const CustomerCardSort = ({
   const [searchTerm, setSearchTerm] = useState('')
   const [activeSortButton, setActiveSortBotton] = useState('Alfabetisk')
   const [sortOrder, setSortOrder] = useState('ASC')
-  const [sortedData, setSortedData] = useState<CustomerData[]>([])
+  const [sortedData, setSortedData] = useState<CustomerCardData[]>([])
   const { trackEvent } = useMatomo()
 
   const buttons = ['Alfabetisk', 'Antall konsulenter', 'Antall timer']

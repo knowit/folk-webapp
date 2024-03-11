@@ -1,4 +1,3 @@
-import React from 'react'
 import NavTab from '../../components/header/NavTab'
 import CustomerList from './customer-list/CustomerList'
 import { CustomerOverview } from './customer-overview/CustomerOverview'

@@ -7,18 +7,11 @@ import {
   useCustomerCards,
 } from '../../../api/data/customer/customerQueries'
 import { CustomerCardData } from '../../../api/data/customer/customerApiTypes'
-import { CustomerData } from '../cards/CustomerCard'
+import { ChartPeriod } from '../../../components/charts/chartFilters/useChartData'
 
 export enum SortMethod {
   abc = 'abc',
   konsulenter = 'konsulenter',
-}
-
-const sortMethod = {
-  [SortMethod.abc]: (a: CustomerCardData, b: CustomerCardData) =>
-    a.customer.localeCompare(b.customer),
-  [SortMethod.konsulenter]: (a: CustomerCardData, b: CustomerCardData) =>
-    b.consultants - a.consultants,
 }
 
 interface Props {
@@ -29,6 +22,7 @@ interface Props {
   selectedCustomerIds: string[]
   selectedSortMethod: SortMethod
   showCustomerHistory: boolean
+  selectedChartPeriod: ChartPeriod
 }
 
 const CustomerOverviewFilter = ({
@@ -36,16 +30,10 @@ const CustomerOverviewFilter = ({
   selectedCustomerIds,
   selectedSortMethod,
   showCustomerHistory,
+  selectedChartPeriod,
 }: Props) => {
   const customerCards = useCustomerCards()
-  const customerData = useAllCustomerData().map(
-    (cd): CustomerData => ({
-      customer: cd.customer,
-      consultants: 0,
-      billedLastPeriod: 0,
-      billedTotal: 0,
-    })
-  )
+  const customerData = useAllCustomerData()
   const historicalCustomerData = customerData.filter(
     (cd) => !customerCards.find((cc) => cc.customer === cd.customer)
   )
@@ -53,15 +41,23 @@ const CustomerOverviewFilter = ({
     ...customerCards,
     ...(showCustomerHistory ? historicalCustomerData : []),
   ]
-  console.log(populatedCustomerCards)
+  const getConsultants = (customer: CustomerCardData) =>
+    selectedChartPeriod === ChartPeriod.WEEK
+      ? customer.consultantsLastPeriod
+      : customer.consultantsLastLongPeriod
+
+  const sortMethod = {
+    [SortMethod.abc]: (a: CustomerCardData, b: CustomerCardData) =>
+      a.customer.localeCompare(b.customer),
+    [SortMethod.konsulenter]: (a: CustomerCardData, b: CustomerCardData) =>
+      getConsultants(b) - getConsultants(a),
+  }
   const sortedSelectedCustomers = populatedCustomerCards
     .filter((cc) => selectedCustomerIds.includes(cc.customer))
     .sort(sortMethod[selectedSortMethod])
   const sortedUnselectedCustomers = populatedCustomerCards
     .filter((cc) => !selectedCustomerIds.includes(cc.customer))
     .sort(sortMethod[selectedSortMethod])
-
-  console.log(sortedSelectedCustomers.length, sortedUnselectedCustomers.length)
 
   return (
     <ScrollableDiv>
@@ -85,7 +81,7 @@ const CustomerOverviewFilter = ({
                       name={customer.customer}
                     />
                   }
-                  label={`${customer.customer} (${customer.consultants})`}
+                  label={`${customer.customer} (${getConsultants(customer)})`}
                   labelPlacement="start"
                   key={customer.customer}
                 />
@@ -108,7 +104,7 @@ const CustomerOverviewFilter = ({
                       name={customer.customer}
                     />
                   }
-                  label={`${customer.customer} (${customer.consultants})`}
+                  label={`${customer.customer} (${getConsultants(customer)})`}
                   labelPlacement="start"
                   key={customer.customer}
                 />

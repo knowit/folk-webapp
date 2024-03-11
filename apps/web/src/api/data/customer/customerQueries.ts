@@ -5,15 +5,12 @@ import {
   getHoursBilledPerCustomerCharts,
   getHoursBilledPerWeekCharts,
 } from './customerApi'
-import { CustomerData } from '../../../pages/customer/cards/CustomerCard'
-
-export const useCustomerCardsQuery = () =>
-  useSWR('/customerCards', getCustomerCards, {
-    revalidateOnFocus: false,
-  })
+import { CustomerCardData } from './customerApiTypes'
 
 export const useCustomerCards = () => {
-  const { data } = useCustomerCardsQuery()
+  const { data } = useSWR('/customerCards', getCustomerCards, {
+    revalidateOnFocus: false,
+  })
   return data || []
 }
 
@@ -27,9 +24,21 @@ export const useHoursBilledPerCustomerCharts = () =>
     revalidateOnFocus: false,
   })
 
-export const useAllCustomerData = (): CustomerData[] => {
+export const useAllCustomerData = (): CustomerCardData[] => {
   const { data: hoursBilledPerCustomer } = useHoursBilledPerCustomerCharts()
-  return hoursBilledPerCustomer ? hoursBilledPerCustomer?.data : []
+  return (
+    hoursBilledPerCustomer?.data?.map(
+      (cd): CustomerCardData => ({
+        customer: cd.customer,
+        accountManager: undefined,
+        consultantsLastPeriod: 0,
+        consultantsLastLongPeriod: 0,
+        billedLastPeriod: 0,
+        billedLastLongPeriod: 0,
+        billedTotal: 0,
+      })
+    ) || []
+  )
 }
 
 export const useHoursBilledPerWeekCharts = () =>

@@ -43,4 +43,5 @@ export default function OrganizationStructurePage() {
 
 const RelativePositionedBox = styled('div')({
   position: 'relative',
+  height: '1140px',
 })

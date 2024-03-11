@@ -5,24 +5,19 @@ import {
 import { GridItem } from '../../../components/gridItem/GridItem'
 import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
 import { styled } from '@mui/material/styles'
-import usePerWeekFilter from '../../../components/charts/chartFilters/usePerWeekFilter'
+import { ChartPeriod } from '../../../components/charts/chartFilters/useChartData'
 import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import CustomerGraphFilter from './CustomerGraphFilter'
 import HoursBilledPerWeekChart from '../cards/HoursBilledPerWeekChart'
 import CustomerOverviewFilter, { SortMethod } from './CustomerOverviewFilter'
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
-import { ChangeEvent, useState } from 'react'
+import { useState } from 'react'
 import { Translation } from '../../../utils/translation'
+import useChartData from '../../../components/charts/chartFilters/useChartData'
 
 interface HoursBilledPerWeekCardProps {
   selectedCustomerIds: string[]
   setSelectedCustomerIds: (ids: string[]) => void
-  selectedPeriodStartDate: Date
-  selectedPeriodEndDate: Date
-  handleDateRangeChange: (
-    selectedPeriodStartDate?: Date,
-    selectedPeriodEndDate?: Date
-  ) => void
   handleCheckboxChange: (
     event: React.ChangeEvent<HTMLInputElement>,
     customerId: string
@@ -34,9 +29,6 @@ interface HoursBilledPerWeekCardProps {
 const CustomerHoursPerWeekSection = ({
   selectedCustomerIds,
   setSelectedCustomerIds,
-  selectedPeriodStartDate: startDate,
-  selectedPeriodEndDate: endDate,
-  handleDateRangeChange,
   handleCheckboxChange,
   showCustomerHistory,
   setShowCustomerHistory,
@@ -46,7 +38,10 @@ const CustomerHoursPerWeekSection = ({
     (customerCard) => customerCard.customer
   )
   const { data } = useHoursBilledPerWeekCharts()
-  const { selectedFilter, weeklyData, monthlyData } = usePerWeekFilter(data)
+  const [selectedChartPeriod, setSelectedChartPeriod] = useState(
+    ChartPeriod.WEEK
+  )
+  const chartData = useChartData(data, selectedChartPeriod)
 
   const customerIdsUnfiltered =
     data === undefined ? [] : data?.data?.map((item) => item.id as string)
@@ -70,7 +65,6 @@ const CustomerHoursPerWeekSection = ({
     setSelectedCustomerIds([])
   }
 
-  const chartData = selectedFilter === 'Uke' ? weeklyData : monthlyData
   const filteredData =
     data === undefined
       ? undefined
@@ -114,12 +108,11 @@ const CustomerHoursPerWeekSection = ({
       ) : (
         <GridContainer>
           <HoursBilledPerWeekChart
-            handleDateRangeChange={handleDateRangeChange}
-            startDate={startDate}
-            endDate={endDate}
             customersWithConsultants={customersWithConsultants}
             selectedCustomerIds={selectedCustomerIds}
             showCustomerHistory={showCustomerHistory}
+            selectedChartPeriod={selectedChartPeriod}
+            setSelectedChartPeriod={setSelectedChartPeriod}
           />
           <CustomerFilterWrapper>
             <GridItemHeader title="Filtrer kunder">
@@ -152,6 +145,7 @@ const CustomerHoursPerWeekSection = ({
               handleCheckboxChange={handleCheckboxChange}
               selectedSortMethod={selectedSortMethod}
               showCustomerHistory={showCustomerHistory}
+              selectedChartPeriod={selectedChartPeriod}
             />
           </CustomerFilterWrapper>
         </GridContainer>

@@ -1,7 +1,7 @@
 import { useMatomo } from '@jonkoops/matomo-tracker-react'
 import { useHoursBilledPerWeekCharts } from '../../../api/data/customer/customerQueries'
 import ChartCard from '../../../components/charts/ChartCard'
-import usePerWeekFilter from '../../../components/charts/chartFilters/usePerWeekFilter'
+import { ChartPeriod } from '../../../components/charts/chartFilters/useChartData'
 import {
   Box,
   FormControl,
@@ -10,40 +10,43 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material'
+import storageTokens from '../util/local-storage-tokens'
 import { DateRangePickerButton } from '../../../components/dateranges/DateRangePickerButton'
 import HoursBilledPerWeekTooltip from '../components/HoursBilledPerWeekTooltip'
 import { POSSIBLE_OLD_DATA_WARNING } from './messages'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import useChartData from '../../../components/charts/chartFilters/useChartData'
 
 interface Props {
-  handleDateRangeChange: (
-    selectedPeriodStartDate?: Date,
-    selectedPeriodEndDate?: Date
-  ) => void
-  startDate: Date
-  endDate: Date
   customersWithConsultants: string[]
   selectedCustomerIds: string[]
   showCustomerHistory?: boolean
   specificCustomer?: boolean
+  selectedChartPeriod: ChartPeriod
+  setSelectedChartPeriod: Dispatch<SetStateAction<ChartPeriod>>
 }
 
 const HoursBilledPerWeekChart = ({
-  handleDateRangeChange,
-  startDate,
-  endDate,
   customersWithConsultants,
   selectedCustomerIds,
   showCustomerHistory,
   specificCustomer,
+  selectedChartPeriod,
+  setSelectedChartPeriod,
 }: Props) => {
+  const [startDate, setStartDate] = useState(storageTokens.getPeriodStartDate())
+  const [endDate, setEndDate] = useState(storageTokens.getPeriodEndDate())
+
+  useEffect(() => {
+    storageTokens.setPeriodStartDate(startDate)
+  }, [startDate])
+
+  useEffect(() => {
+    storageTokens.setPeriodEndDate(endDate)
+  }, [endDate])
+
   const { data, error } = useHoursBilledPerWeekCharts()
-  const {
-    filterOptions,
-    selectedFilter,
-    setSelectedFilter,
-    weeklyData,
-    monthlyData,
-  } = usePerWeekFilter(data)
+  const chartData = useChartData(data, selectedChartPeriod)
   const { trackEvent } = useMatomo()
 
   const selectedCustomers = showCustomerHistory
@@ -52,10 +55,10 @@ const HoursBilledPerWeekChart = ({
 
   const setDateRange = (startDate, endDate) => {
     trackEvent({ category: 'filter-dato', action: 'click-event' })
-    handleDateRangeChange(startDate, endDate)
+    setStartDate(startDate)
+    setEndDate(endDate)
   }
 
-  const chartData = selectedFilter === 'Uke' ? weeklyData : monthlyData
   const filteredData =
     data === undefined
       ? undefined
@@ -134,24 +137,24 @@ const HoursBilledPerWeekChart = ({
             <RadioGroup
               style={{ flexWrap: 'nowrap' }}
               row
-              value={selectedFilter}
+              value={selectedChartPeriod}
               onChange={(event) => {
-                const option = filterOptions.find(
+                const option = Object.keys(ChartPeriod).find(
                   (option) => option === event.target.value
                 )
                 trackEvent({
                   category: `${eventNavn}-${option.toLowerCase()}`,
                   action: 'click-event',
                 })
-                setSelectedFilter(option)
+                setSelectedChartPeriod(ChartPeriod[option])
               }}
             >
-              {filterOptions.map((option) => (
+              {Object.keys(ChartPeriod).map((option: ChartPeriod) => (
                 <FormControlLabel
                   key={option}
                   value={option}
                   control={<Radio />}
-                  label={option}
+                  label={option === ChartPeriod.WEEK ? 'Uker' : 'Måneder'}
                   style={{ flexGrow: 1 }}
                 />
               ))}

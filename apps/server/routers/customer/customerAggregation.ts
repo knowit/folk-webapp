@@ -51,56 +51,64 @@ async function createEmployeeForCustomerList(
   }
 }
 
+const addBy =
+  <T extends string>(
+    key: T
+  ): ((acc: number, cp: { [key in T]: number }) => number) =>
+  (acc, cp) =>
+    acc + cp[key]
+const unique = <T>(list: T[]): T[] => [...new Set(list)]
+const getPeriods = (ec: EmployeeCustomers) =>
+  ec.reg_periods
+    .toString()
+    .split(';')
+    .map((period) => Number(period))
 export function createCustomerCardData(
   projects: BilledCustomerHours[],
-  employeesCustomer: EmployeeCustomers[]
+  employeesCustomer: EmployeeCustomers[],
+  accountManagerTable: { customer: string; account_manager: string }[]
 ): CustomerCardsData[] {
-  const results = {}
-
-  const last_reg_periods = [
-    ...new Set(
-      projects.map(function (o) {
-        return o.reg_period
-      })
-    ),
-  ]
+  const accountManagerMap = accountManagerTable.reduce(
+    (acc, row) => ({
+      ...acc,
+      [row.customer]: row.account_manager,
+    }),
+    {}
+  )
+  const last_reg_periods = unique(projects.map((o) => o.reg_period))
     .sort()
-    .slice(-3)
+    .slice(-4)
 
-  projects.forEach((elem) => {
-    const curr_el = results[elem.customer]
-    if (!curr_el) {
-      results[elem.customer] = {
-        customer: elem.customer,
-        billedLastPeriod: 0,
-        billedTotal: 0,
+  const result = unique(employeesCustomer.map((ec) => ec.customer)).map(
+    (customer) => {
+      const customerProjects = projects.filter((p) => p.customer === customer)
+      const customerEmployees = employeesCustomer.filter(
+        (ec) => ec.customer === customer
+      )
+      const employeesLastPeriod = customerEmployees
+        .filter((ce) => getPeriods(ce).includes(last_reg_periods.at(-1)))
+        .map((ce) => ce.email)
+      const employeesLastLongPeriod = customerEmployees
+        .filter((ce) =>
+          getPeriods(ce).some((period) => last_reg_periods.includes(period))
+        )
+        .map((ce) => ce.email)
+
+      return {
+        customer,
+        accountManager: accountManagerMap[customer],
+        billedLastPeriod: customerProjects
+          .filter((cp) => cp.reg_period === last_reg_periods.at(-1))
+          .reduce(addBy('hours'), 0),
+        billedLastLongPeriod: customerProjects
+          .filter((cp) => last_reg_periods.includes(cp.reg_period))
+          .reduce(addBy('hours'), 0),
+        billedTotal: customerProjects.reduce(addBy('hours'), 0),
+        consultantsLastPeriod: unique(employeesLastPeriod).length,
+        consultantsLastLongPeriod: unique(employeesLastLongPeriod).length,
       }
     }
-    if (elem.reg_period == last_reg_periods[last_reg_periods.length - 1]) {
-      results[elem.customer]['billedLastPeriod'] =
-        results[elem.customer]['billedLastPeriod'] + elem.hours
-    }
-    results[elem.customer]['billedTotal'] =
-      results[elem.customer]['billedTotal'] + elem.hours
-  })
+  )
 
-  Object.keys(results).forEach((customer) => {
-    const consultants = new Set()
-    employeesCustomer.forEach((employeeCustomer) => {
-      if (employeeCustomer.customer == customer) {
-        const reg_periods =
-          employeeCustomer?.reg_periods
-            .toString()
-            .split(';')
-            .map((period) => Number(period)) || []
-        if (last_reg_periods.some((p) => reg_periods.includes(p))) {
-          consultants.add(employeeCustomer.user_id)
-        }
-      }
-    })
-    if (consultants.size === 0) delete results[customer]
-    else results[customer]['consultants'] = consultants.size
-  })
-
-  return Object.values(results)
+  return result
 }

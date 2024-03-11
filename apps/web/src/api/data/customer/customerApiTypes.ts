@@ -4,8 +4,11 @@ import { TableRow } from '../tableResponses'
 // customerCards
 export interface CustomerCardData {
   customer: string
-  consultants: number
+  accountManager: string | undefined
+  consultantsLastPeriod: number
+  consultantsLastLongPeriod: number
   billedLastPeriod: number
+  billedLastLongPeriod: number
   billedTotal: number
 }
 
