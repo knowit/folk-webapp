@@ -132,7 +132,7 @@ const HoursBilledPerWeekChart = ({
       sliceTooltip={HoursBilledPerWeekTooltip}
       extraHeaderContent={
         <FormControl component="fieldset">
-          <FormLabel>Grupper etter</FormLabel>
+          <FormLabel>Grupper etter periode</FormLabel>
           <Box display="flex" flexWrap="nowrap" width="100%">
             <RadioGroup
               style={{ flexWrap: 'nowrap' }}

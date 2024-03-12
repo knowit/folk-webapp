@@ -11,7 +11,7 @@ import CustomerGraphFilter from './CustomerGraphFilter'
 import HoursBilledPerWeekChart from '../cards/HoursBilledPerWeekChart'
 import CustomerOverviewFilter, { SortMethod } from './CustomerOverviewFilter'
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { Translation } from '../../../utils/translation'
 import useChartData from '../../../components/charts/chartFilters/useChartData'
 
@@ -24,6 +24,8 @@ interface HoursBilledPerWeekCardProps {
   ) => void
   showCustomerHistory: boolean
   setShowCustomerHistory: (v: boolean) => void
+  selectedChartPeriod: ChartPeriod
+  setSelectedChartPeriod: Dispatch<SetStateAction<ChartPeriod>>
 }
 
 const CustomerHoursPerWeekSection = ({
@@ -32,15 +34,15 @@ const CustomerHoursPerWeekSection = ({
   handleCheckboxChange,
   showCustomerHistory,
   setShowCustomerHistory,
+  selectedChartPeriod,
+  setSelectedChartPeriod,
 }: HoursBilledPerWeekCardProps) => {
   const [selectedSortMethod, setSelectedSortMethod] = useState(SortMethod.abc)
   const customersWithConsultants = useCustomerCards().map(
     (customerCard) => customerCard.customer
   )
   const { data } = useHoursBilledPerWeekCharts()
-  const [selectedChartPeriod, setSelectedChartPeriod] = useState(
-    ChartPeriod.WEEK
-  )
+
   const chartData = useChartData(data, selectedChartPeriod)
 
   const customerIdsUnfiltered =

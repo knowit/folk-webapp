@@ -79,36 +79,34 @@ export function createCustomerCardData(
     .sort()
     .slice(-4)
 
-  const result = unique(employeesCustomer.map((ec) => ec.customer)).map(
-    (customer) => {
-      const customerProjects = projects.filter((p) => p.customer === customer)
-      const customerEmployees = employeesCustomer.filter(
-        (ec) => ec.customer === customer
+  const result = unique(projects.map((ec) => ec.customer)).map((customer) => {
+    const customerProjects = projects.filter((p) => p.customer === customer)
+    const customerEmployees = employeesCustomer.filter(
+      (ec) => ec.customer === customer
+    )
+    const employeesLastPeriod = customerEmployees
+      .filter((ce) => getPeriods(ce).includes(last_reg_periods.at(-1)))
+      .map((ce) => ce.email)
+    const employeesLastLongPeriod = customerEmployees
+      .filter((ce) =>
+        getPeriods(ce).some((period) => last_reg_periods.includes(period))
       )
-      const employeesLastPeriod = customerEmployees
-        .filter((ce) => getPeriods(ce).includes(last_reg_periods.at(-1)))
-        .map((ce) => ce.email)
-      const employeesLastLongPeriod = customerEmployees
-        .filter((ce) =>
-          getPeriods(ce).some((period) => last_reg_periods.includes(period))
-        )
-        .map((ce) => ce.email)
+      .map((ce) => ce.email)
 
-      return {
-        customer,
-        accountManager: accountManagerMap[customer],
-        billedLastPeriod: customerProjects
-          .filter((cp) => cp.reg_period === last_reg_periods.at(-1))
-          .reduce(addBy('hours'), 0),
-        billedLastLongPeriod: customerProjects
-          .filter((cp) => last_reg_periods.includes(cp.reg_period))
-          .reduce(addBy('hours'), 0),
-        billedTotal: customerProjects.reduce(addBy('hours'), 0),
-        consultantsLastPeriod: unique(employeesLastPeriod).length,
-        consultantsLastLongPeriod: unique(employeesLastLongPeriod).length,
-      }
+    return {
+      customer,
+      accountManager: accountManagerMap[customer],
+      billedLastPeriod: customerProjects
+        .filter((cp) => cp.reg_period === last_reg_periods.at(-1))
+        .reduce(addBy('hours'), 0),
+      billedLastLongPeriod: customerProjects
+        .filter((cp) => last_reg_periods.includes(cp.reg_period))
+        .reduce(addBy('hours'), 0),
+      billedTotal: customerProjects.reduce(addBy('hours'), 0),
+      consultantsLastPeriod: unique(employeesLastPeriod).length,
+      consultantsLastLongPeriod: unique(employeesLastLongPeriod).length,
     }
-  )
+  })
 
   return result
 }

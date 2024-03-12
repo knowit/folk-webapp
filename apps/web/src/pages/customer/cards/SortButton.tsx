@@ -33,7 +33,7 @@ const SortButton = ({ title, order, active, onClick }: Props) => {
       }}
       active={active}
     >
-      {title} {title === 'Alfabetisk' && sortIcon}
+      {title} {active && sortIcon}
     </Button>
   )
 }

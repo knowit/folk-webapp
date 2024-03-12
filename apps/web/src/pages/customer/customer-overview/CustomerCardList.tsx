@@ -6,7 +6,7 @@ import { GridItem } from 'web/src/components/gridItem/GridItem'
 import { Grid } from '@mui/material'
 import CustomerCardSort from './CustomerCardSort'
 import { styled } from '@mui/material/styles'
-import { CustomerCardData } from '../../../api/data/customer/customerApiTypes'
+import { ChartPeriod } from '../../../components/charts/chartFilters/useChartData'
 
 const Title = styled('h2')({
   marginBottom: '2px',
@@ -15,18 +15,18 @@ const Title = styled('h2')({
 interface Props {
   selectedCustomerIds: string[]
   showHistoricalData: boolean
-  historicalCustomers: CustomerCardData[]
   handleCheckboxChange: (
     event: React.ChangeEvent<HTMLInputElement>,
     customerId: string
   ) => void
+  selectedChartPeriod: ChartPeriod
 }
 
 const CustomerCardList = ({
   selectedCustomerIds,
   showHistoricalData,
-  historicalCustomers,
   handleCheckboxChange,
+  selectedChartPeriod,
 }: Props) => {
   const customerCards = useCustomerCards()
   const [customersInGraph, setCustomersInGraph] = useState([])
@@ -34,8 +34,8 @@ const CustomerCardList = ({
 
   useEffect(() => {
     if (customerCards) {
-      const all_customer = customerCards.concat(
-        showHistoricalData ? historicalCustomers : []
+      const all_customer = customerCards.filter(
+        (cc) => showHistoricalData || cc.consultantsLastPeriod > 0
       )
 
       const customers_in_graph =
@@ -56,12 +56,7 @@ const CustomerCardList = ({
       setCustomersInGraph(customers_in_graph)
       setOtherCustomers(other_customers)
     }
-  }, [
-    customerCards,
-    historicalCustomers,
-    selectedCustomerIds,
-    showHistoricalData,
-  ])
+  }, [customerCards, selectedCustomerIds, showHistoricalData])
 
   if (!customerCards) {
     return (
@@ -89,6 +84,7 @@ const CustomerCardList = ({
               data={customer}
               handleCheckboxChange={handleCheckboxChange}
               selectedCustomerIds={selectedCustomerIds}
+              selectedChartPeriod={selectedChartPeriod}
             />
           ))}
         </>
@@ -98,6 +94,7 @@ const CustomerCardList = ({
           data={otherCustomers}
           handleCheckboxChange={handleCheckboxChange}
           selectedCustomerIds={selectedCustomerIds}
+          selectedChartPeriod={selectedChartPeriod}
         />
       </>
     </>

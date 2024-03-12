@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import CustomerCardListOverview from './CustomerCardListOverview'
 import { Grid } from '@mui/material'
 import CustomerHoursPerWeekSection from './CustomerHoursPerWeekSection'
 import { useSelectedCustomerIds } from '../util/local-storage-hooks'
+import CustomerCardList from './CustomerCardList'
+import { ChartPeriod } from '../../../components/charts/chartFilters/useChartData'
 
 export const CustomerOverview = () => {
   const [showHistoricCustomers, setShowHistoricCustomers] = useState(false)
+  const [selectedChartPeriod, setSelectedChartPeriod] = useState(
+    ChartPeriod.WEEK
+  )
   const { selectedCustomerIds, setSelectedCustomerIds } =
     useSelectedCustomerIds()
 
@@ -39,11 +43,14 @@ export const CustomerOverview = () => {
         setSelectedCustomerIds={setSelectedCustomerIds}
         showCustomerHistory={showHistoricCustomers}
         setShowCustomerHistory={setShowHistoricCustomers}
+        selectedChartPeriod={selectedChartPeriod}
+        setSelectedChartPeriod={setSelectedChartPeriod}
       />
-      <CustomerCardListOverview
+      <CustomerCardList
         selectedCustomerIds={selectedCustomerIds}
         showHistoricalData={showHistoricCustomers}
         handleCheckboxChange={handleCheckboxChange}
+        selectedChartPeriod={selectedChartPeriod}
       />
     </Grid>
   )

@@ -48,15 +48,16 @@ const CustomerCardContent: React.FC<CustomerCardContent> = ({
   customer,
   selectedChartPeriod,
 }) => {
-  const billedTotalFixedNumber = Number(customer.billedTotal).toFixed(2)
+  const billedTotalFixedNumber = Number(customer.billedTotal).toFixed(0)
   const consultants =
     selectedChartPeriod === ChartPeriod.WEEK
       ? customer.consultantsLastPeriod
       : customer.consultantsLastLongPeriod
-  const billedLastPeriod =
+  const billedLastPeriod = Number(
     selectedChartPeriod === ChartPeriod.WEEK
       ? customer.billedLastPeriod
       : customer.billedLastLongPeriod
+  ).toFixed(1)
 
   if (vertical) {
     return (
@@ -73,48 +74,44 @@ const CustomerCardContent: React.FC<CustomerCardContent> = ({
           <GridHeadline>Totalt fakturerte timer</GridHeadline>
           <GridValue vertical>{billedTotalFixedNumber}</GridValue>
         </ComponentRoot>
-        {customer.accountManager && (
-          <ComponentRoot vertical>
-            <GridHeadline>Kundeansvarlig:</GridHeadline>
-            <GridHeadline>{customer.accountManager}</GridHeadline>
-          </ComponentRoot>
-        )}
+        <ComponentRoot vertical>
+          <GridHeadline>Kundeansvarlig:</GridHeadline>
+          <GridHeadline>{customer.accountManager || 'Ukjent'}</GridHeadline>
+        </ComponentRoot>
       </>
     )
   } else {
     return (
       <>
         <ComponentRoot>
-          <GridStyled item xs={3}>
-            <GridHeadline>Antall konsulenter</GridHeadline>
+          <GridStyled item xs={4}>
+            <GridHeadline>Antall konsulenter siste periode</GridHeadline>
           </GridStyled>
-          <GridStyled item xs={3}>
+          <GridStyled item xs={4}>
             <GridHeadline>Fakturerte timer siste periode</GridHeadline>
           </GridStyled>
-          <GridStyled item xs={3}>
+          <GridStyled item xs={4}>
             <GridHeadline>Totalt fakturerte timer</GridHeadline>
           </GridStyled>
         </ComponentRoot>
         <ComponentRoot>
-          <GridStyled item xs={3}>
+          <GridStyled item xs={4}>
             <GridValue>{consultants}</GridValue>
           </GridStyled>
-          <GridStyled item xs={3}>
+          <GridStyled item xs={4}>
             <GridValue>{billedLastPeriod}</GridValue>
           </GridStyled>
-          <GridStyled item xs={3}>
-            <GridValue>{customer.billedTotal}</GridValue>
+          <GridStyled item xs={4}>
+            <GridValue>{billedTotalFixedNumber}</GridValue>
           </GridStyled>
         </ComponentRoot>
-        {customer.accountManager && (
-          <ComponentRoot>
-            <GridStyled item xs={12}>
-              <GridHeadline>
-                Kundeansvarlig: {customer.accountManager}
-              </GridHeadline>
-            </GridStyled>
-          </ComponentRoot>
-        )}
+        <ComponentRoot>
+          <GridStyled item xs={12}>
+            <GridHeadline>
+              Kundeansvarlig: {customer.accountManager || 'Ukjent'}
+            </GridHeadline>
+          </GridStyled>
+        </ComponentRoot>
       </>
     )
   }
@@ -176,7 +173,7 @@ const ComponentRoot = styled(Grid, {
 const GridValue = styled('p', {
   shouldForwardProp: (prop) => prop !== 'vertical',
 })<{ vertical?: boolean }>(({ vertical }) => ({
-  fontSize: 32,
+  fontSize: 26,
   fontWeight: 700,
   margin: vertical ? 10 : 0,
 }))

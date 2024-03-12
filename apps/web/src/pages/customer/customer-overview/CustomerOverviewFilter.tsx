@@ -2,10 +2,7 @@ import { styled } from '@mui/material/styles'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { LayoutGroup, motion } from 'framer-motion'
 import { Checkbox, FormControlLabel } from '@mui/material'
-import {
-  useAllCustomerData,
-  useCustomerCards,
-} from '../../../api/data/customer/customerQueries'
+import { useCustomerCards } from '../../../api/data/customer/customerQueries'
 import { CustomerCardData } from '../../../api/data/customer/customerApiTypes'
 import { ChartPeriod } from '../../../components/charts/chartFilters/useChartData'
 
@@ -33,14 +30,11 @@ const CustomerOverviewFilter = ({
   selectedChartPeriod,
 }: Props) => {
   const customerCards = useCustomerCards()
-  const customerData = useAllCustomerData()
-  const historicalCustomerData = customerData.filter(
-    (cd) => !customerCards.find((cc) => cc.customer === cd.customer)
+
+  const filteredCustomerCards = customerCards.filter(
+    (cc) => showCustomerHistory || cc.consultantsLastPeriod > 0
   )
-  const populatedCustomerCards = [
-    ...customerCards,
-    ...(showCustomerHistory ? historicalCustomerData : []),
-  ]
+
   const getConsultants = (customer: CustomerCardData) =>
     selectedChartPeriod === ChartPeriod.WEEK
       ? customer.consultantsLastPeriod
@@ -52,10 +46,10 @@ const CustomerOverviewFilter = ({
     [SortMethod.konsulenter]: (a: CustomerCardData, b: CustomerCardData) =>
       getConsultants(b) - getConsultants(a),
   }
-  const sortedSelectedCustomers = populatedCustomerCards
+  const sortedSelectedCustomers = filteredCustomerCards
     .filter((cc) => selectedCustomerIds.includes(cc.customer))
     .sort(sortMethod[selectedSortMethod])
-  const sortedUnselectedCustomers = populatedCustomerCards
+  const sortedUnselectedCustomers = filteredCustomerCards
     .filter((cc) => !selectedCustomerIds.includes(cc.customer))
     .sort(sortMethod[selectedSortMethod])
 
