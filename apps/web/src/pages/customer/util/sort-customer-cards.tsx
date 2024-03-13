@@ -1,24 +1,28 @@
-import { CustomerData } from '../cards/CustomerCard'
+import { CustomerCardData } from '../../../api/data/customer/customerApiTypes'
+import { ChartPeriod } from '../../../components/charts/chartFilters/useChartData'
 
 export function SortCustomerCards(
-  data: CustomerData[],
+  data: CustomerCardData[],
   currentSort: string,
-  sortOrder: string
+  sortOrder: string,
+  selectedChartPeriod: ChartPeriod
 ) {
   if (!currentSort) return data
 
-  const getCellValue = (row: CustomerData) => {
+  const getCellValue = (row: CustomerCardData) => {
     switch (currentSort) {
       case 'Alfabetisk':
         return row.customer
       case 'Antall konsulenter':
-        return row.consultants
+        return selectedChartPeriod === ChartPeriod.WEEK
+          ? row.consultantsLastPeriod
+          : row.consultantsLastLongPeriod
       case 'Antall timer':
         return row.billedTotal
     }
   }
 
-  const compare = (a: CustomerData, b: CustomerData) => {
+  const compare = (a: CustomerCardData, b: CustomerCardData) => {
     const aValue = getCellValue(a)
     const bValue = getCellValue(b)
     if (currentSort === 'Alfabetisk') {
@@ -30,7 +34,7 @@ export function SortCustomerCards(
     }
   }
 
-  if (currentSort === 'Alfabetisk' && sortOrder === 'ASC') {
+  if (sortOrder === 'ASC') {
     return data.sort((a, b) => compare(a, b))
   } else {
     return data.sort((a, b) => compare(b, a))

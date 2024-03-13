@@ -2,23 +2,13 @@ import { styled } from '@mui/material/styles'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { LayoutGroup, motion } from 'framer-motion'
 import { Checkbox, FormControlLabel } from '@mui/material'
-import {
-  useAllCustomerData,
-  useCustomerCards,
-} from '../../../api/data/customer/customerQueries'
+import { useCustomerCards } from '../../../api/data/customer/customerQueries'
 import { CustomerCardData } from '../../../api/data/customer/customerApiTypes'
-import { CustomerData } from '../cards/CustomerCard'
+import { ChartPeriod } from '../../../components/charts/chartFilters/useChartData'
 
 export enum SortMethod {
   abc = 'abc',
   konsulenter = 'konsulenter',
-}
-
-const sortMethod = {
-  [SortMethod.abc]: (a: CustomerCardData, b: CustomerCardData) =>
-    a.customer.localeCompare(b.customer),
-  [SortMethod.konsulenter]: (a: CustomerCardData, b: CustomerCardData) =>
-    b.consultants - a.consultants,
 }
 
 interface Props {
@@ -29,6 +19,7 @@ interface Props {
   selectedCustomerIds: string[]
   selectedSortMethod: SortMethod
   showCustomerHistory: boolean
+  selectedChartPeriod: ChartPeriod
 }
 
 const CustomerOverviewFilter = ({
@@ -36,32 +27,31 @@ const CustomerOverviewFilter = ({
   selectedCustomerIds,
   selectedSortMethod,
   showCustomerHistory,
+  selectedChartPeriod,
 }: Props) => {
   const customerCards = useCustomerCards()
-  const customerData = useAllCustomerData().map(
-    (cd): CustomerData => ({
-      customer: cd.customer,
-      consultants: 0,
-      billedLastPeriod: 0,
-      billedTotal: 0,
-    })
+
+  const filteredCustomerCards = customerCards.filter(
+    (cc) => showCustomerHistory || cc.consultantsLastPeriod > 0
   )
-  const historicalCustomerData = customerData.filter(
-    (cd) => !customerCards.find((cc) => cc.customer === cd.customer)
-  )
-  const populatedCustomerCards = [
-    ...customerCards,
-    ...(showCustomerHistory ? historicalCustomerData : []),
-  ]
-  console.log(populatedCustomerCards)
-  const sortedSelectedCustomers = populatedCustomerCards
+
+  const getConsultants = (customer: CustomerCardData) =>
+    selectedChartPeriod === ChartPeriod.WEEK
+      ? customer.consultantsLastPeriod
+      : customer.consultantsLastLongPeriod
+
+  const sortMethod = {
+    [SortMethod.abc]: (a: CustomerCardData, b: CustomerCardData) =>
+      a.customer.localeCompare(b.customer),
+    [SortMethod.konsulenter]: (a: CustomerCardData, b: CustomerCardData) =>
+      getConsultants(b) - getConsultants(a),
+  }
+  const sortedSelectedCustomers = filteredCustomerCards
     .filter((cc) => selectedCustomerIds.includes(cc.customer))
     .sort(sortMethod[selectedSortMethod])
-  const sortedUnselectedCustomers = populatedCustomerCards
+  const sortedUnselectedCustomers = filteredCustomerCards
     .filter((cc) => !selectedCustomerIds.includes(cc.customer))
     .sort(sortMethod[selectedSortMethod])
-
-  console.log(sortedSelectedCustomers.length, sortedUnselectedCustomers.length)
 
   return (
     <ScrollableDiv>
@@ -85,7 +75,7 @@ const CustomerOverviewFilter = ({
                       name={customer.customer}
                     />
                   }
-                  label={`${customer.customer} (${customer.consultants})`}
+                  label={`${customer.customer} (${getConsultants(customer)})`}
                   labelPlacement="start"
                   key={customer.customer}
                 />
@@ -108,7 +98,7 @@ const CustomerOverviewFilter = ({
                       name={customer.customer}
                     />
                   }
-                  label={`${customer.customer} (${customer.consultants})`}
+                  label={`${customer.customer} (${getConsultants(customer)})`}
                   labelPlacement="start"
                   key={customer.customer}
                 />

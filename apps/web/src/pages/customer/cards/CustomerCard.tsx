@@ -7,16 +7,11 @@ import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
 import { styled } from '@mui/material/styles'
 import { Checkbox } from '@mui/material'
-
-export type CustomerData = {
-  customer: string
-  consultants: number
-  billedLastPeriod: number
-  billedTotal: number
-}
+import { CustomerCardData } from '../../../api/data/customer/customerApiTypes'
+import { ChartPeriod } from '../../../components/charts/chartFilters/useChartData'
 
 interface CustomerCardProps {
-  data: CustomerData
+  data: CustomerCardData
   selectedCustomerIds: string[]
   handleCheckboxChange?: (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -24,11 +19,11 @@ interface CustomerCardProps {
   ) => void
   customerSpecificCard?: boolean
   vertical?: boolean
+  selectedChartPeriod?: ChartPeriod
 }
 interface CustomerCardContent {
-  consultants: number
-  billedLastPeriod: number
-  billedTotal: number | string
+  customer: CustomerCardData
+  selectedChartPeriod: ChartPeriod
   vertical?: boolean
 }
 
@@ -50,36 +45,19 @@ const LinkStyled = styled(Link)(() => ({
 
 const CustomerCardContent: React.FC<CustomerCardContent> = ({
   vertical = false,
-  consultants,
-  billedLastPeriod,
-  billedTotal,
+  customer,
+  selectedChartPeriod,
 }) => {
-  const ComponentRoot = styled(Grid, {
-    shouldForwardProp: (prop) => prop !== 'vertical',
-  })<{ vertical?: boolean }>(({ vertical }) => ({
-    display: 'flex',
-    flexDirection: vertical ? 'column' : 'row',
-    justifyContent: vertical ? 'center' : 'space-between',
-    textAlign: 'center',
-  }))
-
-  const GridStyled = styled(Grid)(() => ({
-    display: 'flex',
-    justifyContent: 'end',
-    flexDirection: 'column',
-  }))
-
-  const GridHeadline = styled('p')(() => ({
-    margin: 5,
-  }))
-
-  const GridValue = styled('p', {
-    shouldForwardProp: (prop) => prop !== 'vertical',
-  })<{ vertical?: boolean }>(({ vertical }) => ({
-    fontSize: 32,
-    fontWeight: 700,
-    margin: vertical ? 10 : 0,
-  }))
+  const billedTotalFixedNumber = Number(customer.billedTotal).toFixed(0)
+  const consultants =
+    selectedChartPeriod === ChartPeriod.WEEK
+      ? customer.consultantsLastPeriod
+      : customer.consultantsLastLongPeriod
+  const billedLastPeriod = Number(
+    selectedChartPeriod === ChartPeriod.WEEK
+      ? customer.billedLastPeriod
+      : customer.billedLastLongPeriod
+  ).toFixed(1)
 
   if (vertical) {
     return (
@@ -94,7 +72,11 @@ const CustomerCardContent: React.FC<CustomerCardContent> = ({
         </ComponentRoot>
         <ComponentRoot vertical>
           <GridHeadline>Totalt fakturerte timer</GridHeadline>
-          <GridValue vertical>{billedTotal}</GridValue>
+          <GridValue vertical>{billedTotalFixedNumber}</GridValue>
+        </ComponentRoot>
+        <ComponentRoot vertical>
+          <GridHeadline>Kundeansvarlig:</GridHeadline>
+          <GridHeadline>{customer.accountManager || 'Ukjent'}</GridHeadline>
         </ComponentRoot>
       </>
     )
@@ -102,25 +84,32 @@ const CustomerCardContent: React.FC<CustomerCardContent> = ({
     return (
       <>
         <ComponentRoot>
-          <GridStyled item xs={3}>
-            <GridHeadline>Antall konsulenter</GridHeadline>
+          <GridStyled item xs={4}>
+            <GridHeadline>Antall konsulenter siste periode</GridHeadline>
           </GridStyled>
-          <GridStyled item xs={3}>
+          <GridStyled item xs={4}>
             <GridHeadline>Fakturerte timer siste periode</GridHeadline>
           </GridStyled>
-          <GridStyled item xs={3}>
+          <GridStyled item xs={4}>
             <GridHeadline>Totalt fakturerte timer</GridHeadline>
           </GridStyled>
         </ComponentRoot>
         <ComponentRoot>
-          <GridStyled item xs={3}>
+          <GridStyled item xs={4}>
             <GridValue>{consultants}</GridValue>
           </GridStyled>
-          <GridStyled item xs={3}>
+          <GridStyled item xs={4}>
             <GridValue>{billedLastPeriod}</GridValue>
           </GridStyled>
-          <GridStyled item xs={3}>
-            <GridValue>{billedTotal}</GridValue>
+          <GridStyled item xs={4}>
+            <GridValue>{billedTotalFixedNumber}</GridValue>
+          </GridStyled>
+        </ComponentRoot>
+        <ComponentRoot>
+          <GridStyled item xs={12}>
+            <GridHeadline>
+              Kundeansvarlig: {customer.accountManager || 'Ukjent'}
+            </GridHeadline>
           </GridStyled>
         </ComponentRoot>
       </>
@@ -134,12 +123,9 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
   selectedCustomerIds,
   customerSpecificCard,
   vertical = false,
+  selectedChartPeriod = ChartPeriod.WEEK,
 }) => {
-  const { customer, consultants, billedLastPeriod, billedTotal } = data
-
-  const billedTotalFixedNumber = Number.isInteger(billedTotal)
-    ? billedTotal
-    : billedTotal?.toFixed(2)
+  const { customer } = data
 
   return (
     <GridItem>
@@ -165,9 +151,8 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
       <GridItemContent>
         <CustomerCardContent
           vertical={vertical}
-          consultants={consultants}
-          billedLastPeriod={billedLastPeriod}
-          billedTotal={billedTotalFixedNumber}
+          customer={data}
+          selectedChartPeriod={selectedChartPeriod}
         />
       </GridItemContent>
     </GridItem>
@@ -175,3 +160,30 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
 }
 
 export default CustomerCard
+
+const ComponentRoot = styled(Grid, {
+  shouldForwardProp: (prop) => prop !== 'vertical',
+})<{ vertical?: boolean }>(({ vertical }) => ({
+  display: 'flex',
+  flexDirection: vertical ? 'column' : 'row',
+  justifyContent: vertical ? 'center' : 'space-between',
+  textAlign: 'center',
+}))
+
+const GridValue = styled('p', {
+  shouldForwardProp: (prop) => prop !== 'vertical',
+})<{ vertical?: boolean }>(({ vertical }) => ({
+  fontSize: 26,
+  fontWeight: 700,
+  margin: vertical ? 10 : 0,
+}))
+
+const GridStyled = styled(Grid)(() => ({
+  display: 'flex',
+  justifyContent: 'end',
+  flexDirection: 'column',
+}))
+
+const GridHeadline = styled('p')(() => ({
+  margin: 5,
+}))

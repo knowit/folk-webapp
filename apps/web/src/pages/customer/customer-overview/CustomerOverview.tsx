@@ -1,24 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import CustomerCardListOverview from './CustomerCardListOverview'
 import { Grid } from '@mui/material'
-import storageTokens from '../util/local-storage-tokens'
 import CustomerHoursPerWeekSection from './CustomerHoursPerWeekSection'
 import { useSelectedCustomerIds } from '../util/local-storage-hooks'
+import CustomerCardList from './CustomerCardList'
+import { ChartPeriod } from '../../../components/charts/chartFilters/useChartData'
 
 export const CustomerOverview = () => {
   const [showHistoricCustomers, setShowHistoricCustomers] = useState(false)
+  const [selectedChartPeriod, setSelectedChartPeriod] = useState(
+    ChartPeriod.WEEK
+  )
   const { selectedCustomerIds, setSelectedCustomerIds } =
     useSelectedCustomerIds()
-  const [selectedPeriodStartDate, setPeriodStartDate] = useState(null)
-  const [selectedPeriodEndDate, setPeriodEndDate] = useState(null)
 
-  useEffect(() => {
-    const startDate = storageTokens.getPeriodStartDate()
-    const endDate = storageTokens.getPeriodEndDate()
-
-    setPeriodStartDate(startDate)
-    setPeriodEndDate(endDate)
-  }, [])
   useEffect(() => {
     if (selectedCustomerIds !== null) {
       localStorage.setItem(
@@ -27,14 +21,6 @@ export const CustomerOverview = () => {
       )
     }
   }, [selectedCustomerIds])
-
-  useEffect(() => {
-    storageTokens.setPeriodStartDate(selectedPeriodStartDate)
-  }, [selectedPeriodStartDate])
-
-  useEffect(() => {
-    storageTokens.setPeriodEndDate(selectedPeriodEndDate)
-  }, [selectedPeriodEndDate])
 
   const handleCheckboxChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -54,23 +40,17 @@ export const CustomerOverview = () => {
       <CustomerHoursPerWeekSection
         selectedCustomerIds={selectedCustomerIds}
         handleCheckboxChange={handleCheckboxChange}
-        handleDateRangeChange={function (
-          startDate?: Date,
-          endDate?: Date
-        ): void {
-          setPeriodStartDate(startDate)
-          setPeriodEndDate(endDate)
-        }}
-        selectedPeriodStartDate={selectedPeriodStartDate}
-        selectedPeriodEndDate={selectedPeriodEndDate}
         setSelectedCustomerIds={setSelectedCustomerIds}
         showCustomerHistory={showHistoricCustomers}
         setShowCustomerHistory={setShowHistoricCustomers}
+        selectedChartPeriod={selectedChartPeriod}
+        setSelectedChartPeriod={setSelectedChartPeriod}
       />
-      <CustomerCardListOverview
+      <CustomerCardList
         selectedCustomerIds={selectedCustomerIds}
         showHistoricalData={showHistoricCustomers}
         handleCheckboxChange={handleCheckboxChange}
+        selectedChartPeriod={selectedChartPeriod}
       />
     </Grid>
   )

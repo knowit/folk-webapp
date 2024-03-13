@@ -37,8 +37,11 @@ export type EmployeeForCustomerListRowData = [
 
 export type CustomerCardsData = {
   customer: string
-  consultants: number
+  accountManager: string | undefined
+  consultantsLastPeriod: number
+  consultantsLastLongPeriod: number
   billedLastPeriod: number
+  billedLastLongPeriod: number
   billedTotal: number
 }
 

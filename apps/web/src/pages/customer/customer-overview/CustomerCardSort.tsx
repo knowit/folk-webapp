@@ -1,19 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
 import SearchInput from '../../../components/SearchInput'
 import SortButton from '../cards/SortButton'
 import { Grid, styled } from '@mui/material'
-import CustomerCard, { CustomerData } from '../cards/CustomerCard'
+import CustomerCard from '../cards/CustomerCard'
 import { SortCustomerCards } from '../util/sort-customer-cards'
 import { useMatomo } from '@jonkoops/matomo-tracker-react'
+import { CustomerCardData } from '../../../api/data/customer/customerApiTypes'
+import { ChartPeriod } from '../../../components/charts/chartFilters/useChartData'
 
 interface Props {
-  data: CustomerData[]
+  data: CustomerCardData[]
   handleCheckboxChange: (
     event: React.ChangeEvent<HTMLInputElement>,
     customerId: string
   ) => void
   selectedCustomerIds: string[]
+  selectedChartPeriod: ChartPeriod
 }
 
 const ButtonWrapper = styled('div')({
@@ -25,12 +28,22 @@ const CustomerCardSort = ({
   data,
   handleCheckboxChange,
   selectedCustomerIds,
+  selectedChartPeriod,
 }: Props) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [activeSortButton, setActiveSortBotton] = useState('Alfabetisk')
   const [sortOrder, setSortOrder] = useState('ASC')
-  const [sortedData, setSortedData] = useState<CustomerData[]>([])
   const { trackEvent } = useMatomo()
+
+  const filtredRows = data.filter((term) => {
+    return term.customer.toLowerCase().includes(searchTerm.toLowerCase())
+  })
+  const sortedData = SortCustomerCards(
+    filtredRows,
+    activeSortButton,
+    sortOrder,
+    selectedChartPeriod
+  )
 
   const buttons = ['Alfabetisk', 'Antall konsulenter', 'Antall timer']
   const showHeader =
@@ -41,28 +54,16 @@ const CustomerCardSort = ({
       category: `sortering-kunder-${type.replace(/\s/g, '').toLowerCase()}`,
       action: 'click-event',
     })
-    const order =
-      type === activeSortButton && activeSortButton === 'Alfabetisk'
-        ? sortOrder === 'ASC'
-          ? 'DESC'
-          : 'ASC'
-        : 'ASC'
+    if (activeSortButton === type) {
+      const newOrder = sortOrder == 'ASC' ? 'DESC' : 'ASC'
+      setSortOrder(newOrder)
+    } else {
+      const order = type === 'Alfabetisk' ? 'ASC' : 'DESC'
 
-    setSortOrder(order)
-    setActiveSortBotton(type)
-    setSortedData(SortCustomerCards(data, type, order))
+      setSortOrder(order)
+      setActiveSortBotton(type)
+    }
   }
-
-  useEffect(() => {
-    const filtredRows = data.filter((term) => {
-      return term.customer.toLowerCase().includes(searchTerm)
-    })
-    setSortedData(filtredRows)
-  }, [searchTerm, data])
-
-  useEffect(() => {
-    setSortedData(SortCustomerCards(data, activeSortButton, sortOrder))
-  }, [data, activeSortButton, sortOrder])
 
   return (
     <>
@@ -97,6 +98,7 @@ const CustomerCardSort = ({
           data={customer}
           handleCheckboxChange={handleCheckboxChange}
           selectedCustomerIds={selectedCustomerIds}
+          selectedChartPeriod={selectedChartPeriod}
         />
       ))}
     </>

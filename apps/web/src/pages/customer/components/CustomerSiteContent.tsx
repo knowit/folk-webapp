@@ -1,13 +1,16 @@
 import { makeStyles } from '@mui/styles'
-import * as React from 'react'
 import {
   useCustomerCards,
   useHoursBilledPerCustomerCharts,
 } from '../../../api/data/customer/customerQueries'
-import { CustomerSpecificHoursBilledGraph } from './CustomerSpesificHoursBilledGraph'
 import CustomerCard from '../cards/CustomerCard'
 import { EmployeeTable } from '../../employee/table/EmployeeTable'
 import { CustomerNotFound } from './CustomerNotFound'
+import { ChartPeriod } from '../../../components/charts/chartFilters/useChartData'
+import { useState } from 'react'
+import { Grid, styled } from '@mui/material'
+import { GridItem } from '../../../components/gridItem/GridItem'
+import HoursBilledPerWeekChart from '../cards/HoursBilledPerWeekChart'
 
 const useStyles = makeStyles({
   root: {
@@ -51,7 +54,9 @@ interface Props {
 
 export function CustomerSiteContent({ customerId }: Props) {
   const classes = useStyles()
-
+  const [selectedChartPeriod, setSelectedChartPeriod] = useState(
+    ChartPeriod.WEEK
+  )
   const customerCards = useCustomerCards()
   const { data: hoursBilledData } = useHoursBilledPerCustomerCharts()
   const isLoading = !hoursBilledData
@@ -85,7 +90,19 @@ export function CustomerSiteContent({ customerId }: Props) {
       </div>
       <div className={classes.body}>
         <div className={classes.graph}>
-          <CustomerSpecificHoursBilledGraph customerId={customerId} />
+          <Grid container spacing={2}>
+            <GridItem fullSize>
+              <GridContainer>
+                <HoursBilledPerWeekChart
+                  customersWithConsultants={new Array(customerId)}
+                  selectedCustomerIds={new Array(customerId)}
+                  specificCustomer
+                  selectedChartPeriod={selectedChartPeriod}
+                  setSelectedChartPeriod={setSelectedChartPeriod}
+                />
+              </GridContainer>
+            </GridItem>
+          </Grid>
         </div>
         <div className={classes.customerCard}>
           {cardData || historicalCustomer ? (
@@ -95,6 +112,7 @@ export function CustomerSiteContent({ customerId }: Props) {
               selectedCustomerIds={[customerId]}
               customerSpecificCard={true}
               vertical={true}
+              selectedChartPeriod={selectedChartPeriod}
             />
           ) : null}
         </div>
@@ -109,3 +127,9 @@ export function CustomerSiteContent({ customerId }: Props) {
     </article>
   )
 }
+
+const GridContainer = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: '3fr',
+  gridGap: '1rem',
+})
