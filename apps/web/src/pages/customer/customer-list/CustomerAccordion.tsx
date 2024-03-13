@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom'
 import { OpenInNewIcon } from '../../../assets/Icons'
 import { styled } from '@mui/material/styles'
 import { EmployeeTableForCustomer } from '../../employee/table/SortableEmployeeTable'
+import { useCustomerCards } from '../../../api/data/customer/customerQueries'
 
 interface CustomerDropdownProps {
   customerName: string
@@ -31,7 +32,11 @@ const CustomerAccordion = ({
   employees,
   expand = false,
 }: CustomerDropdownProps) => {
+  const customerCards = useCustomerCards()
   const [expanded, setExpanded] = useState(expand)
+  const accountManager = customerCards.find(
+    (cc) => cc.customer === customerName
+  )?.accountManager
 
   return (
     <Box
@@ -55,8 +60,8 @@ const CustomerAccordion = ({
               margin: 0,
               display: 'grid',
               flexDirection: 'row',
-              width: '85%',
-              gridTemplateColumns: '1fr 1fr',
+              width: '100%',
+              gridTemplateColumns: '2fr 1fr 1fr',
             }}
           >
             <CustomerColumn>
@@ -70,6 +75,7 @@ const CustomerAccordion = ({
             <div style={{ marginLeft: 15 }}>
               Antall konsulenter: {employees.length}
             </div>
+            <div style={{ marginLeft: 15 }}>{accountManager || 'Ukjent'}</div>
           </Box>
         </AccordionSummary>
         <AccordionDetails>

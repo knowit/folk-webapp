@@ -76,7 +76,7 @@ const CustomerCardContent: React.FC<CustomerCardContent> = ({
         </ComponentRoot>
         <ComponentRoot vertical>
           <GridHeadline>Kundeansvarlig:</GridHeadline>
-          <GridHeadline>{customer.accountManager || 'Ukjent'}</GridHeadline>
+          <CustomerFocus>{customer.accountManager || 'Ukjent'}</CustomerFocus>
         </ComponentRoot>
       </>
     )
@@ -108,7 +108,10 @@ const CustomerCardContent: React.FC<CustomerCardContent> = ({
         <ComponentRoot>
           <GridStyled item xs={12}>
             <GridHeadline>
-              Kundeansvarlig: {customer.accountManager || 'Ukjent'}
+              Kundeansvarlig:{' '}
+              <CustomerFocus>
+                {customer.accountManager || 'Ukjent'}
+              </CustomerFocus>
             </GridHeadline>
           </GridStyled>
         </ComponentRoot>
@@ -187,3 +190,9 @@ const GridStyled = styled(Grid)(() => ({
 const GridHeadline = styled('p')(() => ({
   margin: 5,
 }))
+
+const CustomerFocus = styled('p')({
+  display: 'inline',
+  margin: 5,
+  fontWeight: 700,
+})
