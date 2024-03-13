@@ -5,11 +5,12 @@ import {
   getHoursBilledPerCustomerCharts,
   getHoursBilledPerWeekCharts,
 } from './customerApi'
-import { CustomerCardData } from './customerApiTypes'
 
 export const useCustomerCards = () => {
   const { data } = useSWR('/customerCards', getCustomerCards, {
     revalidateOnFocus: false,
+    keepPreviousData: true,
+    revalidateIfStale: false,
   })
   return data || []
 }
@@ -17,31 +18,20 @@ export const useCustomerCards = () => {
 export const useEmployeesByCustomer = () =>
   useSWR('/employeesByCustomer', getEmployeesByCustomer, {
     revalidateOnFocus: false,
+    keepPreviousData: true,
+    revalidateIfStale: false,
   })
 
 export const useHoursBilledPerCustomerCharts = () =>
   useSWR('/hoursBilledPerCustomerCharts', getHoursBilledPerCustomerCharts, {
     revalidateOnFocus: false,
+    keepPreviousData: true,
+    revalidateIfStale: false,
   })
-
-export const useAllCustomerData = (): CustomerCardData[] => {
-  const { data: hoursBilledPerCustomer } = useHoursBilledPerCustomerCharts()
-  return (
-    hoursBilledPerCustomer?.data?.map(
-      (cd): CustomerCardData => ({
-        customer: cd.customer,
-        accountManager: undefined,
-        consultantsLastPeriod: 0,
-        consultantsLastLongPeriod: 0,
-        billedLastPeriod: 0,
-        billedLastLongPeriod: 0,
-        billedTotal: 0,
-      })
-    ) || []
-  )
-}
 
 export const useHoursBilledPerWeekCharts = () =>
   useSWR('/hoursBilledPerWeekCharts', getHoursBilledPerWeekCharts, {
     revalidateOnFocus: false,
+    keepPreviousData: true,
+    revalidateIfStale: false,
   })

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Tab, Tabs } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { pageTitle } from '../../utils/pagetitle'
@@ -67,7 +67,9 @@ export default function NavTab(props: NavTabProps) {
       >
         {createTabs()}
       </TabsStyled>
-      {props.contentList[value].content}
+      {props.contentList.map((content, i) =>
+        i === value ? content.content : undefined
+      )}
     </>
   )
 }

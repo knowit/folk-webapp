@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Theme, styled } from '@mui/material/styles'
 import Header from './components/header/Header'
 import Content from './components/Content'

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
 import SearchInput from '../../../components/SearchInput'
 import SortButton from '../cards/SortButton'
@@ -34,15 +34,18 @@ const CustomerCardSort = ({
   const [activeSortButton, setActiveSortBotton] = useState('Alfabetisk')
   const [sortOrder, setSortOrder] = useState('ASC')
   const { trackEvent } = useMatomo()
-
   const filtredRows = data.filter((term) => {
     return term.customer.toLowerCase().includes(searchTerm.toLowerCase())
   })
-  const sortedData = SortCustomerCards(
-    filtredRows,
-    activeSortButton,
-    sortOrder,
-    selectedChartPeriod
+  const sortedData = useMemo(
+    () =>
+      SortCustomerCards(
+        filtredRows,
+        activeSortButton,
+        sortOrder,
+        selectedChartPeriod
+      ),
+    [filtredRows, activeSortButton, sortOrder, selectedChartPeriod]
   )
 
   const buttons = ['Alfabetisk', 'Antall konsulenter', 'Antall timer']

@@ -135,9 +135,9 @@ export default function CustomerList() {
           sx={{
             display: 'grid',
             flexDirection: 'row',
-            gridTemplateColumns: '1fr 1fr',
+            gridTemplateColumns: '2fr 1fr 1fr',
             flex: '1',
-            width: '85%',
+            width: '100%',
           }}
         >
           <AccordionListHeader
@@ -163,6 +163,15 @@ export default function CustomerList() {
           >
             <span>Antall konsulenter</span>
             {sortIcon(1, sortIndex, sortOrder)}
+          </AccordionListHeader>
+          <AccordionListHeader
+            style={{
+              padding: '10px 0',
+              fontSize: '18px',
+              paddingLeft: '15px',
+            }}
+          >
+            <span>Kundeansvarlig</span>
           </AccordionListHeader>
         </Box>
       </AccordionHeaderListWrapper>
