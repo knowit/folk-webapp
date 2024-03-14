@@ -15,6 +15,12 @@ export const useCustomerCards = () => {
   return data || []
 }
 
+export const useCustomerCardData = (customerId) => {
+  const customerCards = useCustomerCards()
+
+  return customerCards.find((cc) => cc.customer === customerId)
+}
+
 export const useEmployeesByCustomer = () =>
   useSWR('/employeesByCustomer', getEmployeesByCustomer, {
     revalidateOnFocus: false,

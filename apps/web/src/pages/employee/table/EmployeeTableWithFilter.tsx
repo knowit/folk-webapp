@@ -132,7 +132,8 @@ export default function EmployeeTableWithFilter({
         ])}
       />
       <RowCount>
-        Viser {NonProject.length} av {allRows.length} ansatte
+        Viser {NonProject.length} av {allRows.length} ansatte aktive i angitt
+        periode
       </RowCount>
       <Paper
         elevation={0}

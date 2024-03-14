@@ -1,4 +1,3 @@
-import React from 'react'
 import EmployeeTableWithFilter from './EmployeeTableWithFilter'
 import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { useEmployeeTable } from '../../../api/data/employee/employeeQueries'
@@ -8,32 +7,42 @@ import {
 } from '../../../components/filter/FilterUtil'
 import { GridItem } from '../../../components/gridItem/GridItem'
 import { FallbackMessage } from '../components/FallbackMessage'
+import { useCustomerCardData } from '../../../api/data/customer/customerQueries'
+import { ChartPeriod } from '../../../components/charts/chartFilters/useChartData'
 
 interface Props {
   customerSpecific?: boolean
   customerId?: string
+  selectedChartPeriod?: ChartPeriod
 }
 
-export function EmployeeTable({ customerSpecific, customerId }: Props) {
+export function EmployeeTable({
+  customerSpecific,
+  customerId,
+  selectedChartPeriod,
+}: Props) {
   const TableSkeleton = () => (
     <BaseSkeleton variant="rectangular" height={780} />
   )
-
   const { data: employeeData, error } = useEmployeeTable()
+  const cardData = useCustomerCardData(customerId)
+  const specificConsultants =
+    selectedChartPeriod === ChartPeriod.WEEK
+      ? cardData?.consultants
+      : cardData?.consultantsLongPeriod
+  const specificEmployees = customerSpecific
+    ? employeeData?.filter((ed) =>
+        specificConsultants.includes(ed['rowData'][0].email)
+      )
+    : employeeData
 
   return (
     <GridItem fullSize={true}>
       {error && <FallbackMessage error={error} />}
-      {employeeData ? (
+      {specificEmployees ? (
         <EmployeeTableWithFilter
           title="Prosjektstatus"
-          payload={
-            customerSpecific
-              ? employeeData.filter(
-                  (row) => row['rowData'][3].customer == customerId
-                )
-              : employeeData
-          }
+          payload={specificEmployees}
           initialFilters={[
             {
               label: 'Kompetanse',

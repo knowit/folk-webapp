@@ -7,6 +7,8 @@ export interface CustomerCardData {
   accountManager: string | undefined
   consultantsLastPeriod: number
   consultantsLastLongPeriod: number
+  consultants: string[]
+  consultantsLongPeriod: string[]
   billedLastPeriod: number
   billedLastLongPeriod: number
   billedTotal: number

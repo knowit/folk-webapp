@@ -70,7 +70,7 @@ export function GridItemHeader({
       <Grid container direction="row" alignItems="center">
         <GridHeaderTitle big={big} green={green} longTitleText={longTitleText}>
           {card && clickable ? (
-            <OpenInNewLink to={`/kunder/${title}`} target="_blank">
+            <OpenInNewLink to={`/kunder/${title}`} target={`customer_${title}`}>
               {title}
             </OpenInNewLink>
           ) : (

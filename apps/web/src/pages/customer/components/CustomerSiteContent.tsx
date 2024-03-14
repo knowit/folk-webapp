@@ -1,6 +1,6 @@
 import { makeStyles } from '@mui/styles'
 import {
-  useCustomerCards,
+  useCustomerCardData,
   useHoursBilledPerCustomerCharts,
 } from '../../../api/data/customer/customerQueries'
 import CustomerCard from '../cards/CustomerCard'
@@ -57,13 +57,12 @@ export function CustomerSiteContent({ customerId }: Props) {
   const [selectedChartPeriod, setSelectedChartPeriod] = useState(
     ChartPeriod.WEEK
   )
-  const customerCards = useCustomerCards()
   const { data: hoursBilledData } = useHoursBilledPerCustomerCharts()
   const isLoading = !hoursBilledData
 
   let historicalCustomer = false
 
-  const cardData = customerCards?.find((data) => data.customer == customerId)
+  const cardData = useCustomerCardData(customerId)
 
   const customerData = hoursBilledData?.data?.find(
     (data) => data.customer == customerId
@@ -119,7 +118,11 @@ export function CustomerSiteContent({ customerId }: Props) {
       </div>
       <div>
         {customerData ? (
-          <EmployeeTable customerSpecific={true} customerId={customerId} />
+          <EmployeeTable
+            customerSpecific
+            customerId={customerId}
+            selectedChartPeriod={selectedChartPeriod}
+          />
         ) : (
           ''
         )}

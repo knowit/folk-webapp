@@ -145,7 +145,10 @@ const CustomerCard: React.FC<CustomerCardProps> = ({
               checked={selectedCustomerIds.includes(customer)}
               onChange={(event) => handleCheckboxChange(event, customer)}
             />
-            <LinkStyled to={`/kunder/${customer}`}>
+            <LinkStyled
+              to={`/kunder/${customer}`}
+              target={`customer_${customer}`}
+            >
               <OpenInNewIcon />
             </LinkStyled>
           </CheckboxWrapper>
