@@ -40,6 +40,8 @@ export type CustomerCardsData = {
   accountManager: string | undefined
   consultantsLastPeriod: number
   consultantsLastLongPeriod: number
+  consultantsLongPeriod: string[]
+  consultants: string[]
   billedLastPeriod: number
   billedLastLongPeriod: number
   billedTotal: number

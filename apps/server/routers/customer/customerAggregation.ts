@@ -103,6 +103,8 @@ export function createCustomerCardData(
         .filter((cp) => last_reg_periods.includes(cp.reg_period))
         .reduce(addBy('hours'), 0),
       billedTotal: customerProjects.reduce(addBy('hours'), 0),
+      consultantsLongPeriod: employeesLastLongPeriod,
+      consultants: employeesLastPeriod,
       consultantsLastPeriod: unique(employeesLastPeriod).length,
       consultantsLastLongPeriod: unique(employeesLastLongPeriod).length,
     }
