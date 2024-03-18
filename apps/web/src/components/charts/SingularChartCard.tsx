@@ -18,6 +18,7 @@ interface SingularChartCardProps {
   sliceTooltip?: SliceTooltip
   extraHeaderContent?: React.ReactNode
   noDataText?: string
+  legendWidth?: number
 }
 
 const NoDataTextWrapper = styled('div')({
@@ -65,7 +66,7 @@ const SingularChartCard = ({
               onChange={() => setIsBig(!isBig)}
             />
           </ChartDisplayOptions>
-          {data.data.length === 0 && noDataText && (
+          {data?.data?.length === 0 && noDataText && (
             <NoDataTextWrapper>{noDataText}</NoDataTextWrapper>
           )}
 

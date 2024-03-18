@@ -129,6 +129,7 @@ const HoursBilledPerWeekChart = ({
           ? 'Manglende timelistedata for gitt kunde'
           : 'Bruk listen til høyre for å velge hvilke kunder du vil vise i grafen'
       }
+      legendWidth={specificCustomer ? 400 : undefined}
       sliceTooltip={HoursBilledPerWeekTooltip}
       extraHeaderContent={
         <FormControl component="fieldset">
