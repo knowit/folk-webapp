@@ -16,4 +16,5 @@ export const chartColors: Colors = [
 export interface IsBigProps {
   isBig: boolean
   setIsBig?: (val: boolean) => void
+  legendWidth?: number
 }

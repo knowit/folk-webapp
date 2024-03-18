@@ -4,8 +4,16 @@ import { chartColors, IsBigProps } from './common'
 import TooltipContainer from './TooltipContainer'
 import { useTheme } from '@mui/material'
 
+const truncate = (string: string, length: number) => {
+  if (string.length > length) {
+    return `${string.slice(0, length - 1)}...`
+  }
+  return string
+}
+
 const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
   isBig = false,
+  legendWidth,
   ...props
 }) => {
   const theme = useTheme()
@@ -23,22 +31,60 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
     }
 
     const data = props.data[0].data
-    const tickInterval = Math.round(data.length / 6)
+    const tickInterval = Math.round(data.length / 7)
     return data
       .filter((point) => data.indexOf(point) % tickInterval === 0)
       .map((point) => point.x)
+  }
+
+  const legendOptions = {
+    anchor: 'bottom-left',
+    direction: 'row',
+    itemDirection: 'left-to-right',
+    translateX: -30,
+    itemWidth: legendWidth || 200,
+    itemHeight: 20,
+    itemOpacity: 0.75,
+    symbolSize: 12,
+    symbolShape: 'circle',
+    effects: [
+      {
+        on: 'hover',
+        style: {
+          itemBackground: 'rgba(0, 0, 0, .03)',
+          itemOpacity: 1,
+        },
+      },
+    ],
+  }
+  const perRow = legendWidth ? 500 / legendWidth : 4
+  const series = props.data
+  const rows = Math.ceil(series.length / perRow)
+  const legendRows = []
+  for (let i = 0; i < rows; i++) {
+    const end = Math.min(i * perRow + perRow, series.length)
+    const rowSeries = series.slice(i * perRow, end)
+    legendRows.push({
+      ...legendOptions,
+      translateY: 50 + i * 15,
+      data: rowSeries.map((cur, j) => ({
+        id: cur.id,
+        label: truncate(String(cur.id), Math.max(34, legendWidth / 6 || 0)),
+        color: chartColors[i * rows + j],
+      })),
+    })
   }
 
   return (
     <div style={{ width: '100%', height: isBig ? '400px' : '280px' }}>
       <ResponsiveLine
         theme={chartTheme}
-        margin={{ top: 10, right: 40, bottom: 70, left: 40 }}
+        margin={{ top: 0, right: 40, bottom: 90, left: 40 }}
         animate={false}
         xScale={{ type: 'point' }}
         yScale={{
           type: 'linear',
-          min: 'auto',
+          min: 0,
           max: 'auto',
           stacked: false,
           reverse: false,
@@ -75,27 +121,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
           </TooltipContainer>
         )}
         pointColor={{ theme: 'background' }}
-        legends={[
-          {
-            anchor: 'bottom',
-            direction: 'row',
-            translateY: 50,
-            itemWidth: 80,
-            itemHeight: 20,
-            itemOpacity: 0.75,
-            symbolSize: 12,
-            symbolShape: 'circle',
-            effects: [
-              {
-                on: 'hover',
-                style: {
-                  itemBackground: 'rgba(0, 0, 0, .03)',
-                  itemOpacity: 1,
-                },
-              },
-            ],
-          },
-        ]}
+        legends={legendRows}
         {...props}
       />
     </div>

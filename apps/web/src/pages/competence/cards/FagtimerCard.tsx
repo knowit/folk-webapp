@@ -9,6 +9,7 @@ const FagtimerCard = () => {
       title="Aktivitet faggrupper"
       description="Hver vertikal akse viser antall unike fag aktiviteter per uke, deulike linjene representerer de ulike årene"
       data={data}
+      legendWidth={100}
       error={error}
     />
   )
