@@ -31,9 +31,7 @@ const CustomerOverviewFilter = ({
 }: Props) => {
   const customerCards = useCustomerCards()
 
-  const filteredCustomerCards = customerCards.filter(
-    (cc) => showCustomerHistory || cc.consultantsLastPeriod > 0
-  )
+  const filteredCustomerCards = customerCards
 
   const getConsultants = (customer: CustomerCardData) =>
     selectedChartPeriod === ChartPeriod.WEEK
@@ -51,6 +49,7 @@ const CustomerOverviewFilter = ({
     .sort(sortMethod[selectedSortMethod])
   const sortedUnselectedCustomers = filteredCustomerCards
     .filter((cc) => !selectedCustomerIds.includes(cc.customer))
+    .filter((cc) => showCustomerHistory || cc.consultantsLastPeriod > 0)
     .sort(sortMethod[selectedSortMethod])
 
   return (

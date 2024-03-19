@@ -17,14 +17,9 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
   ...props
 }) => {
   const theme = useTheme()
-  const chartTheme = {
-    textColor: theme.palette.mode === 'light' ? '#444' : '#ddd',
-    grid: {
-      line: {
-        stroke: theme.palette.mode === 'light' ? '#ddd' : '#444',
-      },
-    },
-  }
+  const darkMode = theme.palette.mode === 'dark'
+  const highlightColor = darkMode ? '#ddd' : '#444'
+
   const mapTicks = () => {
     if (!props.data || !props.data[0]) {
       return null
@@ -59,6 +54,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
   }
   const perRow = legendWidth ? 500 / legendWidth : 4
   const series = props.data
+
   const rows = Math.ceil(series.length / perRow)
   const legendRows = []
   for (let i = 0; i < rows; i++) {
@@ -74,11 +70,32 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
       })),
     })
   }
-
   return (
     <div style={{ width: '100%', height: isBig ? '400px' : '280px' }}>
       <ResponsiveLine
-        theme={chartTheme}
+        {...props}
+        theme={{
+          axis: {
+            ticks: {
+              line: {
+                stroke: '#444444',
+              },
+              text: {
+                fill: highlightColor,
+              },
+            },
+          },
+          legends: {
+            text: {
+              fill: highlightColor,
+            },
+          },
+          grid: {
+            line: {
+              stroke: darkMode ? '#444' : '#ddd',
+            },
+          },
+        }}
         margin={{ top: 0, right: 40, bottom: 90, left: 40 }}
         animate={false}
         xScale={{ type: 'point' }}
@@ -89,15 +106,14 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
           stacked: false,
           reverse: false,
         }}
-        axisTop={null}
         axisBottom={{ tickValues: mapTicks() }}
-        axisRight={null}
         colors={chartColors}
         curve="monotoneX"
         enableArea={true}
         enableSlices="x"
         sliceTooltip={({ slice }) => (
           <TooltipContainer>
+            <strong>{slice.points[0].data.xFormatted}</strong>
             {slice.points.map((value, index) => (
               <div
                 key={index}
@@ -113,7 +129,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
                   }}
                 ></div>
                 <div style={{ margin: '5px' }}>
-                  <strong>{value.serieId}</strong>
+                  <strong>{truncate(String(value.serieId), 30)}</strong>
                 </div>
                 <div style={{ margin: '5px' }}>{value.data.yFormatted}</div>
               </div>
@@ -122,7 +138,6 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
         )}
         pointColor={{ theme: 'background' }}
         legends={legendRows}
-        {...props}
       />
     </div>
   )

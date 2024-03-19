@@ -27,7 +27,7 @@ export const CustomerOverview = () => {
     customerId: string
   ) => {
     if (event.target.checked) {
-      setSelectedCustomerIds([...selectedCustomerIds, customerId].sort())
+      setSelectedCustomerIds((oldIds) => oldIds.concat(customerId))
     } else {
       setSelectedCustomerIds(
         selectedCustomerIds.filter((id) => id !== customerId)
