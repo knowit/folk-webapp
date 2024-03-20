@@ -27,9 +27,7 @@ interface Props {
 }
 
 const HoursBilledPerWeekChart = ({
-  customersWithConsultants,
   selectedCustomerIds,
-  showCustomerHistory,
   specificCustomer,
   selectedChartPeriod,
   setSelectedChartPeriod,
@@ -49,9 +47,7 @@ const HoursBilledPerWeekChart = ({
   const chartData = useChartData(data, selectedChartPeriod)
   const { trackEvent } = useMatomo()
 
-  const selectedCustomers = showCustomerHistory
-    ? selectedCustomerIds
-    : selectedCustomerIds.filter((sc) => customersWithConsultants.includes(sc))
+  const selectedCustomers = selectedCustomerIds
 
   const setDateRange = (startDate, endDate) => {
     trackEvent({ category: 'filter-dato', action: 'click-event' })
@@ -64,9 +60,15 @@ const HoursBilledPerWeekChart = ({
       ? undefined
       : {
           ...data,
-          data: chartData?.data?.filter((customer) => {
-            return selectedCustomers?.includes(customer.id as string)
-          }),
+          data: chartData?.data
+            ?.filter((customer) => {
+              return selectedCustomers?.includes(customer.id as string)
+            })
+            .sort(
+              (a, b) =>
+                selectedCustomers?.findIndex((sc) => sc === a.id) -
+                selectedCustomers?.findIndex((sc) => sc === b.id)
+            ),
         }
 
   function binarySearch(data, date, compareFn) {
