@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Grid } from '@mui/material'
 import CustomerHoursPerWeekSection from './CustomerHoursPerWeekSection'
-import { useSelectedCustomerIds } from '../util/local-storage-hooks'
 import CustomerCardList from './CustomerCardList'
 import { ChartPeriod } from '../../../components/charts/chartFilters/useChartData'
 
@@ -10,8 +9,7 @@ export const CustomerOverview = () => {
   const [selectedChartPeriod, setSelectedChartPeriod] = useState(
     ChartPeriod.WEEK
   )
-  const { selectedCustomerIds, setSelectedCustomerIds } =
-    useSelectedCustomerIds()
+  const [selectedCustomerIds, setSelectedCustomerIds] = useState<string[]>([])
 
   useEffect(() => {
     if (selectedCustomerIds !== null) {
