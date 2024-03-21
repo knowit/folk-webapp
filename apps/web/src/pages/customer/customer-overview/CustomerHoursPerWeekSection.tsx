@@ -38,9 +38,9 @@ const CustomerHoursPerWeekSection = ({
   setSelectedChartPeriod,
 }: HoursBilledPerWeekCardProps) => {
   const [selectedSortMethod, setSelectedSortMethod] = useState(SortMethod.abc)
-  const customersWithConsultants = useCustomerCards().map(
-    (customerCard) => customerCard.customer
-  )
+  const customersWithConsultants = useCustomerCards()
+    .filter((cc) => cc.consultantsLastPeriod > 0)
+    .map((customerCard) => customerCard.customer)
   const { data } = useHoursBilledPerWeekCharts()
 
   const chartData = useChartData(data, selectedChartPeriod)
@@ -48,13 +48,7 @@ const CustomerHoursPerWeekSection = ({
   const customerIdsUnfiltered =
     data === undefined ? [] : data?.data?.map((item) => item.id as string)
 
-  const customers = showCustomerHistory
-    ? customerIdsUnfiltered
-    : customersWithConsultants
-    ? customerIdsUnfiltered.filter((customer) =>
-        customersWithConsultants.includes(customer)
-      )
-    : customerIdsUnfiltered
+  const customers = customerIdsUnfiltered
 
   const selectedCustomers = customers.filter((customer) =>
     selectedCustomerIds?.includes(customer)
