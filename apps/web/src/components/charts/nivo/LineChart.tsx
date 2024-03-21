@@ -1,5 +1,5 @@
 import { LineSvgProps, ResponsiveLine } from '@nivo/line'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { chartColors, IsBigProps } from './common'
 import TooltipContainer from './TooltipContainer'
 import { useTheme } from '@mui/material'
@@ -56,7 +56,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
   const perRow = legendWidth ? 500 / legendWidth : 4
   const series = props.data
 
-  const getNextColor = () => {
+  const getNextColor = useCallback(() => {
     const rotations = Object.values(colorMap).filter(
       (c) => c === chartColors.at(-1)
     ).length
@@ -64,7 +64,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
       (c) =>
         Object.values(colorMap).filter((cmv) => cmv === c).length === rotations
     )
-  }
+  }, [colorMap])
 
   useEffect(() => {
     series.forEach((s) => {
@@ -73,7 +73,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
         setColorMap({ ...colorMap, [s.id]: c })
       }
     })
-  }, [series, colorMap])
+  }, [series, colorMap, getNextColor])
 
   const rows = Math.ceil(series.length / perRow)
   const legendRows = []
