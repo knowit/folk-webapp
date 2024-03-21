@@ -109,9 +109,7 @@ const CustomerCardContent: React.FC<CustomerCardContent> = ({
           <GridStyled item xs={12}>
             <GridHeadline>
               Kundeansvarlig:{' '}
-              <CustomerFocus>
-                {customer.accountManager || 'Ukjent'}
-              </CustomerFocus>
+              <strong>{customer.accountManager || 'Ukjent'}</strong>
             </GridHeadline>
           </GridStyled>
         </ComponentRoot>

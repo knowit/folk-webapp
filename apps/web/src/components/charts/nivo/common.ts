@@ -1,6 +1,4 @@
-import { Colors } from '@nivo/core'
-
-export const chartColors: Colors = [
+export const chartColors = [
   '#918FEB',
   '#E8E578',
   '#7CD6EE',

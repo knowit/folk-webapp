@@ -1,5 +1,5 @@
 import { LineSvgProps, ResponsiveLine } from '@nivo/line'
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { chartColors, IsBigProps } from './common'
 import TooltipContainer from './TooltipContainer'
 import { useTheme } from '@mui/material'
@@ -16,6 +16,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
   legendWidth,
   ...props
 }) => {
+  const [colorMap, setColorMap] = useState({})
   const theme = useTheme()
   const darkMode = theme.palette.mode === 'dark'
   const highlightColor = darkMode ? '#ddd' : '#444'
@@ -55,6 +56,25 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
   const perRow = legendWidth ? 500 / legendWidth : 4
   const series = props.data
 
+  const getNextColor = useCallback(() => {
+    const rotations = Object.values(colorMap).filter(
+      (c) => c === chartColors.at(-1)
+    ).length
+    return chartColors.find(
+      (c) =>
+        Object.values(colorMap).filter((cmv) => cmv === c).length === rotations
+    )
+  }, [colorMap])
+
+  useEffect(() => {
+    series.forEach((s) => {
+      if (!colorMap[s.id]) {
+        const c = getNextColor()
+        setColorMap({ ...colorMap, [s.id]: c })
+      }
+    })
+  }, [series, colorMap, getNextColor])
+
   const rows = Math.ceil(series.length / perRow)
   const legendRows = []
   for (let i = 0; i < rows; i++) {
@@ -63,10 +83,10 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
     legendRows.push({
       ...legendOptions,
       translateY: 50 + i * 15,
-      data: rowSeries.map((cur, j) => ({
+      data: rowSeries.map((cur) => ({
         id: cur.id,
         label: truncate(String(cur.id), Math.max(34, legendWidth / 6 || 0)),
-        color: chartColors[i * rows + j],
+        color: colorMap[cur.id],
       })),
     })
   }
@@ -129,7 +149,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
                   }}
                 ></div>
                 <div style={{ margin: '5px' }}>
-                  <strong>{truncate(String(value.serieId), 30)}</strong>
+                  <strong>{truncate(String(value.serieId), 34)}</strong>
                 </div>
                 <div style={{ margin: '5px' }}>{value.data.yFormatted}</div>
               </div>

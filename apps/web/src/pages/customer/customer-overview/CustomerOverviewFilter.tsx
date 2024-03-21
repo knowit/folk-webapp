@@ -46,6 +46,7 @@ const CustomerOverviewFilter = ({
   }
   const sortedSelectedCustomers = filteredCustomerCards
     .filter((cc) => selectedCustomerIds.includes(cc.customer))
+    .filter((cc) => showCustomerHistory || cc.consultantsLastPeriod > 0)
     .sort(sortMethod[selectedSortMethod])
   const sortedUnselectedCustomers = filteredCustomerCards
     .filter((cc) => !selectedCustomerIds.includes(cc.customer))

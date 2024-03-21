@@ -27,6 +27,8 @@ interface Props {
 }
 
 const HoursBilledPerWeekChart = ({
+  showCustomerHistory,
+  customersWithConsultants,
   selectedCustomerIds,
   specificCustomer,
   selectedChartPeriod,
@@ -47,7 +49,9 @@ const HoursBilledPerWeekChart = ({
   const chartData = useChartData(data, selectedChartPeriod)
   const { trackEvent } = useMatomo()
 
-  const selectedCustomers = selectedCustomerIds
+  const selectedCustomers = showCustomerHistory
+    ? selectedCustomerIds
+    : selectedCustomerIds.filter((sc) => customersWithConsultants.includes(sc))
 
   const setDateRange = (startDate, endDate) => {
     trackEvent({ category: 'filter-dato', action: 'click-event' })

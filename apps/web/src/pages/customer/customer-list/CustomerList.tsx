@@ -3,7 +3,10 @@ import { useState } from 'react'
 import { Box } from '@mui/material'
 import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { GridItem } from '../../../components/gridItem/GridItem'
-import { useEmployeesByCustomer } from '../../../api/data/customer/customerQueries'
+import {
+  useCustomerCards,
+  useEmployeesByCustomer,
+} from '../../../api/data/customer/customerQueries'
 import CustomerAccordion from './CustomerAccordion'
 import { CustomerFilter } from './CustomerFilter'
 import { searchEmployeesByCustomer } from '../util/search-employees-by-customer'
@@ -13,33 +16,18 @@ import { ArrowDownward, ArrowUpward } from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
 import { getEmployeeForCustomerSearchableColumns } from '../../employee/table/SortableEmployeeTable'
 
-const AccordionHeaderListWrapper = styled('div')(({ theme }) => ({
-  width: '100%',
-  background: theme.palette.background.default,
-  paddingLeft: 45,
-  paddingRight: 69,
-  backgroundColor: theme.palette.background.darker,
-}))
-const AccordionListHeader = styled('div')(({ theme }) => ({
-  justifyContent: 'space-between',
-  cursor: 'pointer',
-  fontWeight: 'bold',
-  fontSize: 16,
-  display: 'flex',
-  alignItems: 'center',
-  height: '100%',
-  width: '100%',
-  borderBottom: `1px solid ${theme.palette.background.paper}`,
-  borderLeft: `1px solid ${theme.palette.background.paper}`,
-  padding: 0,
-  paddingRight: 15,
-  paddingLeft: 15,
-}))
+enum ColumnName {
+  KUNDE = 'KUNDE',
+  KONSULENTER = 'KONSULENTER',
+  KUNDEANSVARLIG = 'KUNDEANSVARLIG',
+}
+
 export default function CustomerList() {
+  const customerCards = useCustomerCards()
   const [searchTerm, setSearchTerm] = useState('')
   const { data, error } = useEmployeesByCustomer()
   const isLoading = !data
-  const [sortIndex, setSortIndex] = React.useState(0)
+  const [sortColumn, setSortColumn] = useState(ColumnName.KUNDE)
   const [sortOrder, setSortOrder] = React.useState<'ASC' | 'DESC'>('ASC')
 
   const memoizedData = React.useMemo(() => {
@@ -84,28 +72,34 @@ export default function CustomerList() {
     }
 
     const sortedData = filteredData.sort((a, b) => {
-      if (sortIndex === 1) {
-        return sortOrder === 'ASC'
-          ? a.employees.length - b.employees.length
-          : b.employees.length - a.employees.length
-      } else if (sortIndex === 0) {
-        const nameA = a.customer_name.toUpperCase()
-        const nameB = b.customer_name.toUpperCase()
-        if (nameA < nameB) {
-          return sortOrder === 'ASC' ? -1 : 1
-        }
-        if (nameA > nameB) {
-          return sortOrder === 'ASC' ? 1 : -1
-        }
-        return 0
+      const accountManagerA =
+        customerCards.find((cc) => cc.customer === a.customer_name)
+          ?.accountManager || 'å'
+      const accountManagerB =
+        customerCards.find((cc) => cc.customer === b.customer_name)
+          ?.accountManager || 'å'
+      switch (sortColumn) {
+        case ColumnName.KUNDE:
+          return a.customer_name.localeCompare(b.customer_name, 'no', {
+            ignorePunctuation: true,
+          })
+        case ColumnName.KUNDEANSVARLIG:
+          return accountManagerA.localeCompare(accountManagerB, 'no', {
+            ignorePunctuation: true,
+          })
+        case ColumnName.KONSULENTER:
+          return a.employees.length - b.employees.length
       }
     })
+    if (sortOrder === 'DESC') {
+      sortedData.reverse()
+    }
 
     return sortedData.map((customer) => customer.accordion)
   }
 
-  const sortIcon = (columnIndex, sortIndex, currentOrder) => {
-    if (columnIndex !== sortIndex) return null
+  const sortIcon = (columnName, currentOrder) => {
+    if (sortColumn !== columnName) return null
     switch (currentOrder) {
       case 'DESC':
         return <ArrowUpward />
@@ -115,12 +109,18 @@ export default function CustomerList() {
         return null
     }
   }
-  const switchSort = (columnIndex) => {
-    if (sortIndex === columnIndex) {
+  const switchSort = (columnName: ColumnName) => {
+    if (sortColumn === columnName) {
       setSortOrder(sortOrder === 'ASC' ? 'DESC' : 'ASC')
     } else {
-      setSortIndex(columnIndex)
-      setSortOrder(columnIndex === 0 ? 'ASC' : 'DESC')
+      setSortColumn(columnName)
+      switch (columnName) {
+        case ColumnName.KUNDE:
+        case ColumnName.KUNDEANSVARLIG:
+          return setSortOrder('ASC')
+        default:
+          return setSortOrder('DESC')
+      }
     }
   }
 
@@ -148,10 +148,10 @@ export default function CustomerList() {
               paddingTop: '14px',
               paddingBottom: '14px',
             }}
-            onClick={() => switchSort(0)}
+            onClick={() => switchSort(ColumnName.KUNDE)}
           >
             <span>Kunde</span>
-            {sortIcon(0, sortIndex, sortOrder)}
+            {sortIcon(ColumnName.KUNDE, sortOrder)}
           </AccordionListHeader>
           <AccordionListHeader
             style={{
@@ -159,10 +159,10 @@ export default function CustomerList() {
               fontSize: '18px',
               paddingLeft: '15px',
             }}
-            onClick={() => switchSort(1)}
+            onClick={() => switchSort(ColumnName.KONSULENTER)}
           >
             <span>Antall konsulenter</span>
-            {sortIcon(1, sortIndex, sortOrder)}
+            {sortIcon(ColumnName.KONSULENTER, sortOrder)}
           </AccordionListHeader>
           <AccordionListHeader
             style={{
@@ -170,8 +170,10 @@ export default function CustomerList() {
               fontSize: '18px',
               paddingLeft: '15px',
             }}
+            onClick={() => switchSort(ColumnName.KUNDEANSVARLIG)}
           >
             <span>Kundeansvarlig</span>
+            {sortIcon(ColumnName.KUNDEANSVARLIG, sortOrder)}
           </AccordionListHeader>
         </Box>
       </AccordionHeaderListWrapper>
@@ -179,3 +181,26 @@ export default function CustomerList() {
     </Box>
   )
 }
+
+const AccordionHeaderListWrapper = styled('div')(({ theme }) => ({
+  width: '100%',
+  background: theme.palette.background.default,
+  paddingLeft: 45,
+  paddingRight: 69,
+  backgroundColor: theme.palette.background.darker,
+}))
+const AccordionListHeader = styled('div')(({ theme }) => ({
+  justifyContent: 'space-between',
+  cursor: 'pointer',
+  fontWeight: 'bold',
+  fontSize: 16,
+  display: 'flex',
+  alignItems: 'center',
+  height: '100%',
+  width: '100%',
+  borderBottom: `1px solid ${theme.palette.background.paper}`,
+  borderLeft: `1px solid ${theme.palette.background.paper}`,
+  padding: 0,
+  paddingRight: 15,
+  paddingLeft: 15,
+}))
