@@ -140,14 +140,14 @@ const employeeForCustomerConfig = [
     label: 'Tittel',
     width: 222,
     render: (row: EmployeeCustomerRow) => row.jobTitle,
-    sortValue: (title: string) => title,
+    sortValue: (row: EmployeeCustomerRow) => row.jobTitle,
     searchValue: (jobTitle: string) => jobTitle,
   },
   {
     label: 'Kunde',
     render: (row: EmployeeCustomerRow) => row.customerAndProject,
     width: 337,
-    sortValue: (customer: string) => customer ?? '',
+    sortValue: (row: EmployeeCustomerRow) => row.customerAndProject,
     searchValue: (customer: string) => customer ?? '',
   },
   {
