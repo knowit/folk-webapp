@@ -96,7 +96,7 @@ const NameText = ({ children, employee, searchTerm, ...rest }: Props) => {
     <>
       <text
         onClick={handleOpenEmployeeCard}
-        style={{ cursor: 'hand' }}
+        style={{ cursor: 'pointer' }}
         stroke={halo}
         strokeWidth={haloWidth}
         paintOrder="stroke"
