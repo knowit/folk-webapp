@@ -21,11 +21,11 @@ const style = {
 const EmployeeCard = styled('div')({
   display: 'flex',
   flexDirection: 'column',
-  gap: 16,
+  gap: '1rem',
 })
 
 const EmployeeCardName = styled('div')({
-  fontSize: 20,
+  fontSize: '1.25rem',
   fontWeight: 600,
 })
 
@@ -33,7 +33,7 @@ const EmployeeCardContent = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
-  gap: 16,
+  gap: '1rem',
   width: '100%',
 })
 
@@ -41,7 +41,7 @@ const EmployeeCardContentLeft = styled('div')({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'start',
-  gap: 8,
+  gap: '0.5rem',
   width: '65%',
 })
 
@@ -50,7 +50,7 @@ const EmployeeCardContentRight = styled('div')({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: 16,
+  gap: '1rem',
   width: '35%',
 })
 
@@ -67,7 +67,7 @@ const EmployeeCardFieldLabel = styled('div')({
 const EmployeeCardFieldValue = styled('div')({})
 
 const EmployeeCardImage = styled('img')({
-  borderRadius: 90,
+  borderRadius: '50%',
   width: '100%',
 })
 
