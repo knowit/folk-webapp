@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { isLoggedIn } from '../api/auth/authHelpers'
 import { useUserInfo } from '../context/UserInfoContext'
@@ -14,17 +13,9 @@ import {
   OrganizationStructurePage,
 } from '../pages'
 import LoginPage from '../pages/login/LoginPage'
-import { useMatomo } from '@jonkoops/matomo-tracker-react'
-import { useLocation } from 'react-router-dom'
 
 export default function Content() {
   const { user } = useUserInfo()
-  const { trackPageView } = useMatomo()
-  const location = useLocation()
-
-  useEffect(() => {
-    trackPageView()
-  }, [trackPageView, location.pathname])
 
   if (!isLoggedIn(user)) {
     return <LoginPage />

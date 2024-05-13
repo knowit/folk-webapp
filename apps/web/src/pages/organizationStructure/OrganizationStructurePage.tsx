@@ -2,20 +2,25 @@ import { useEmployeeStructure } from '../../api/data/employee/employeeQueries'
 import OrganizationStructureTree from './Components/OrganizationStructureTree'
 import { BaseSkeleton } from '../../components/skeletons/BaseSkeleton'
 import { FallbackMessage } from '../employee/components/FallbackMessage'
-import { pageTitle } from '../../utils/pagetitle'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Filter from './Components/Filter/Filter'
 import styled from '@emotion/styled'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 export default function OrganizationStructurePage() {
+  const { trackPageView } = useMatomo()
   const { data, isLoading, error } = useEmployeeStructure()
   const [hideChildNodes, setHideChildNodes] = useState(false)
+
+  useEffect(() => {
+    trackPageView({
+      documentTitle: 'Organisasjonsstruktur',
+    })
+  }, [])
 
   function toggleEmployees() {
     setHideChildNodes(!hideChildNodes)
   }
-
-  pageTitle('Organisasjonsstruktur')
 
   if (isLoading) {
     return (

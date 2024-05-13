@@ -1,12 +1,17 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { Typography, Box } from '@mui/material'
 import { useLocation } from 'react-router-dom'
-import { pageTitle } from '../../utils/pagetitle'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 export default function UnderConstruction() {
   const location = useLocation()
+  const { trackPageView } = useMatomo()
 
-  pageTitle(location.pathname.split('/')[1])
+  useEffect(() => {
+    trackPageView({
+      documentTitle: `${location.pathname.split('/')[1]}`,
+    })
+  })
 
   return (
     <Box justifyContent="center">

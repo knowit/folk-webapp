@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material'
-import React from 'react'
+import { useEffect } from 'react'
 import {
   AgeDistributionCard,
   CompetenceAmountCard,
@@ -10,10 +10,17 @@ import {
   FagEventsCard,
   FagtimerCard,
 } from './cards'
-import { pageTitle } from '../../utils/pagetitle'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 export default function CompetencePage() {
-  pageTitle('Kompetanse')
+  const { trackPageView } = useMatomo()
+
+  useEffect(() => {
+    trackPageView({
+      documentTitle: 'Kompetanse',
+    })
+  }, [])
+
   return (
     <Grid container spacing={2}>
       <CompetenceAmountCard />

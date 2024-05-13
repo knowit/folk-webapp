@@ -1,10 +1,17 @@
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 import NavTab from '../../components/header/NavTab'
 import CustomerList from './customer-list/CustomerList'
 import { CustomerOverview } from './customer-overview/CustomerOverview'
-import { pageTitle } from '../../utils/pagetitle'
+import { useEffect } from 'react'
 
 export default function Customer() {
-  pageTitle('Kunder')
+  const { trackPageView } = useMatomo()
+
+  useEffect(() => {
+    trackPageView({
+      documentTitle: 'Kunder',
+    })
+  }, [])
 
   return (
     <NavTab

@@ -1,5 +1,4 @@
-import * as React from 'react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Box } from '@mui/material'
 import { BaseSkeleton } from '../../../components/skeletons/BaseSkeleton'
 import { GridItem } from '../../../components/gridItem/GridItem'
@@ -15,6 +14,7 @@ import { FallbackMessage } from '../../employee/components/FallbackMessage'
 import { ArrowDownward, ArrowUpward } from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
 import { getEmployeeForCustomerSearchableColumns } from '../../employee/table/SortableEmployeeTable'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 enum ColumnName {
   KUNDE = 'KUNDE',
@@ -24,13 +24,13 @@ enum ColumnName {
 
 export default function CustomerList() {
   const customerCards = useCustomerCards()
+  const { trackEvent } = useMatomo()
   const [searchTerm, setSearchTerm] = useState('')
   const { data, error } = useEmployeesByCustomer()
   const isLoading = !data
   const [sortColumn, setSortColumn] = useState(ColumnName.KUNDE)
-  const [sortOrder, setSortOrder] = React.useState<'ASC' | 'DESC'>('ASC')
-
-  const memoizedData = React.useMemo(() => {
+  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC')
+  const memoizedData = useMemo(() => {
     if (!data) return []
     return data.map((customer) => {
       return {
@@ -78,6 +78,7 @@ export default function CustomerList() {
       const accountManagerB =
         customerCards.find((cc) => cc.customer === b.customer_name)
           ?.accountManager || 'å'
+
       switch (sortColumn) {
         case ColumnName.KUNDE:
           return a.customer_name.localeCompare(b.customer_name, 'no', {
@@ -110,6 +111,12 @@ export default function CustomerList() {
     }
   }
   const switchSort = (columnName: ColumnName) => {
+    trackEvent({
+      category: 'Sorting',
+      action: 'Customer list column name clicked',
+      name: `Sorted customer list on ${columnName.toLowerCase()}`,
+    })
+
     if (sortColumn === columnName) {
       setSortOrder(sortOrder === 'ASC' ? 'DESC' : 'ASC')
     } else {

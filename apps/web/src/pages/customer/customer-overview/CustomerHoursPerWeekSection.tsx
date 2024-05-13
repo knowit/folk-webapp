@@ -14,6 +14,7 @@ import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { Translation } from '../../../utils/translation'
 import useChartData from '../../../components/charts/chartFilters/useChartData'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 interface HoursBilledPerWeekCardProps {
   selectedCustomerIds: string[]
@@ -37,12 +38,12 @@ const CustomerHoursPerWeekSection = ({
   selectedChartPeriod,
   setSelectedChartPeriod,
 }: HoursBilledPerWeekCardProps) => {
+  const { trackEvent } = useMatomo()
   const [selectedSortMethod, setSelectedSortMethod] = useState(SortMethod.abc)
   const customersWithConsultants = useCustomerCards()
     .filter((cc) => cc.consultantsLastPeriod > 0)
     .map((customerCard) => customerCard.customer)
   const { data } = useHoursBilledPerWeekCharts()
-
   const chartData = useChartData(data, selectedChartPeriod)
 
   const customerIdsUnfiltered =
@@ -55,9 +56,22 @@ const CustomerHoursPerWeekSection = ({
   )
 
   const handleSelectAll = () => {
+    trackEvent({
+      category: 'Filtering',
+      action: `Filtered customers by using "Select All" checkbox`,
+      name: 'Filter by selecting all',
+    })
+
     setSelectedCustomerIds(customers.sort())
   }
+
   const handleSelectNone = () => {
+    trackEvent({
+      category: 'Filtering',
+      action: `Filtered customers by using "Deselect all" checkbox`,
+      name: 'Filter by deselecting all',
+    })
+
     setSelectedCustomerIds([])
   }
 
@@ -78,6 +92,16 @@ const CustomerHoursPerWeekSection = ({
   }
 
   function toggleShowHistoricCustomer() {
+    trackEvent({
+      category: 'Filtering',
+      action: `Filtered customers by using "Historic customers" checkbox`,
+      name: `Filter by ${
+        !showCustomerHistory
+          ? 'including historic customers'
+          : 'removing historic customers'
+      }`,
+    })
+
     setShowCustomerHistory(!showCustomerHistory)
 
     if (selectAll.checked === true) {
