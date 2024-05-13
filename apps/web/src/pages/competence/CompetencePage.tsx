@@ -19,7 +19,7 @@ export default function CompetencePage() {
     trackPageView({
       documentTitle: 'Kompetanse',
     })
-  }, [])
+  }, [trackPageView])
 
   return (
     <Grid container spacing={2}>

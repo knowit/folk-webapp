@@ -10,7 +10,7 @@ export default function EmployeePage() {
     trackPageView({
       documentTitle: 'Ansatte',
     })
-  }, [])
+  }, [trackPageView])
 
   return (
     <Grid container spacing={2}>

@@ -16,7 +16,7 @@ export default function OrganizationStructurePage() {
     trackPageView({
       documentTitle: 'Organisasjonsstruktur',
     })
-  }, [])
+  }, [trackPageView])
 
   function toggleEmployees() {
     setHideChildNodes(!hideChildNodes)

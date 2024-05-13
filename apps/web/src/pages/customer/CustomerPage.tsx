@@ -11,7 +11,7 @@ export default function Customer() {
     trackPageView({
       documentTitle: 'Kunder',
     })
-  }, [])
+  }, [trackPageView])
 
   return (
     <NavTab
