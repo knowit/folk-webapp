@@ -57,9 +57,9 @@ export default function NavTab(props: NavTabProps) {
         label={content.title}
         onClick={() => {
           trackEvent({
-            category: 'customer-page-view',
-            action: 'tab-navigation',
-            name: `Show ${content.title}`,
+            category: 'On-Page tab navigation',
+            action: 'Switched view on page with tabs',
+            name: `Switched to ${content.title.toLowerCase} view`,
           })
         }}
       />
