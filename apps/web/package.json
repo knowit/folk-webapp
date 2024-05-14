@@ -33,6 +33,7 @@
     "lint:fix": "run -T eslint --fix ./src/**/*.{ts,tsx}"
   },
   "dependencies": {
+    "@aws-amplify/ui-react": "^6.1.9",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@jonkoops/matomo-tracker": "^0.7.0",
@@ -50,6 +51,7 @@
     "@nivo/radar": "^0.83.0",
     "@nivo/sunburst": "^0.83.0",
     "@types/d3": "^7.4.0",
+    "aws-amplify": "^6.3.1",
     "axios": "^1.6.0",
     "browserslist": "^4.21.4",
     "d3": "^7.8.2",
