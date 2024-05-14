@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Tab, Tabs } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { pageTitle } from '../../utils/pagetitle'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 interface NavTabContent {
   content: any
@@ -38,6 +39,7 @@ const getCurrentTabValue = () => {
 }
 
 export default function NavTab(props: NavTabProps) {
+  const { trackEvent } = useMatomo()
   const currentTabValue = getCurrentTabValue()
   const [value, setValue] = useState<number>(currentTabValue)
 
@@ -53,6 +55,13 @@ export default function NavTab(props: NavTabProps) {
         value={index}
         key={`navigation-tab-${content.title}`}
         label={content.title}
+        onClick={() => {
+          trackEvent({
+            category: 'On-Page tab navigation',
+            action: 'Switched view on page with tabs',
+            name: `Switched to ${content.title.toLowerCase} view`,
+          })
+        }}
       />
     ))
   }

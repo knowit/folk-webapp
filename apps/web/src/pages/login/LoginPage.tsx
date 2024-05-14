@@ -1,13 +1,19 @@
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 import { Button } from '@mui/material'
-import { pageTitle } from '../../utils/pagetitle'
+import { useEffect } from 'react'
 
 const LoginPage = () => {
+  const { trackPageView } = useMatomo()
+
   const onClickHandler = () => {
-    console.log('clicked')
     window.location.replace('/auth/login')
   }
 
-  pageTitle('Login')
+  useEffect(() => {
+    trackPageView({
+      documentTitle: 'Login',
+    })
+  })
 
   return (
     <div>

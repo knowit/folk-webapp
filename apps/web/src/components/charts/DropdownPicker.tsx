@@ -10,6 +10,7 @@ interface DropdownPickerProps {
   onChange?: (newValue: any) => void
   selected?: any
   big?: boolean
+  title?: string
 }
 
 const ComponentRoot = styled(Select, {
@@ -66,6 +67,7 @@ export default function DropdownPicker({
   values,
   onChange = () => null,
   selected = '',
+  title,
   big,
 }: DropdownPickerProps) {
   const width =
@@ -86,7 +88,11 @@ export default function DropdownPicker({
       inputRef={selectRef}
       autoWidth
       onChange={({ target: { value } }) => {
-        trackEvent({ category: 'graf-datasett', action: 'click-event' })
+        trackEvent({
+          category: 'Graph category',
+          action: 'Dropdown category changed',
+          name: `Dropdown category changed to ${value} for ${title}`,
+        })
         return onChange(value)
       }}
       input={<InputBaseStyled />}

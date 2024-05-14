@@ -1,8 +1,15 @@
-import React from 'react'
-import { pageTitle } from '../../utils/pagetitle'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
+import { useEffect } from 'react'
 
 const Debug = () => {
-  pageTitle('Debug')
+  const { trackPageView } = useMatomo()
+
+  useEffect(() => {
+    trackPageView({
+      documentTitle: 'Debug',
+    })
+  })
+
   return <div>buggin</div>
 }
 

@@ -54,7 +54,12 @@ const HoursBilledPerWeekChart = ({
     : selectedCustomerIds.filter((sc) => customersWithConsultants.includes(sc))
 
   const setDateRange = (startDate, endDate) => {
-    trackEvent({ category: 'filter-dato', action: 'click-event' })
+    trackEvent({
+      category: 'Billing period',
+      action: 'Period set with DatePicker',
+      name: 'Customer overview graph date period set',
+    })
+
     setStartDate(startDate)
     setEndDate(endDate)
   }
@@ -101,6 +106,18 @@ const HoursBilledPerWeekChart = ({
     return index >= 0 ? index : 0
   }
 
+  function handleRadioButtonChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const option = Object.keys(ChartPeriod).find(
+      (option) => option === event.target.value
+    )
+    trackEvent({
+      category: 'Billing period',
+      action: 'Period change by radio button',
+      name: `${eventNavn} by ${option.toLowerCase()}`,
+    })
+    setSelectedChartPeriod(ChartPeriod[option])
+  }
+
   const startIdx = startDate
     ? getStartIndex(filteredData?.data[0]?.data, startDate, (a, b) => a - b + 1)
     : 0
@@ -121,8 +138,13 @@ const HoursBilledPerWeekChart = ({
         }
 
   const eventNavn = specificCustomer
-    ? 'fakturerte-timer-kunde'
-    : 'fakturerte-timer'
+    ? 'Billed hours for customer'
+    : 'Billed hours'
+
+  const noDataText = specificCustomer
+    ? 'Manglende timelistedata for gitt kunde'
+    : 'Bruk listen til høyre for å velge hvilke kunder du vil vise i grafen'
+
   return (
     <ChartCard
       title={'Timer brukt per periode'}
@@ -130,11 +152,7 @@ const HoursBilledPerWeekChart = ({
       data={timeFilteredData}
       error={error}
       fullSize={true}
-      noDataText={
-        specificCustomer
-          ? 'Manglende timelistedata for gitt kunde'
-          : 'Bruk listen til høyre for å velge hvilke kunder du vil vise i grafen'
-      }
+      noDataText={noDataText}
       legendWidth={specificCustomer ? 400 : undefined}
       sliceTooltip={HoursBilledPerWeekTooltip}
       extraHeaderContent={
@@ -146,14 +164,7 @@ const HoursBilledPerWeekChart = ({
               row
               value={selectedChartPeriod}
               onChange={(event) => {
-                const option = Object.keys(ChartPeriod).find(
-                  (option) => option === event.target.value
-                )
-                trackEvent({
-                  category: `${eventNavn}-${option.toLowerCase()}`,
-                  action: 'click-event',
-                })
-                setSelectedChartPeriod(ChartPeriod[option])
+                handleRadioButtonChange(event)
               }}
             >
               {Object.keys(ChartPeriod).map((option: ChartPeriod) => (

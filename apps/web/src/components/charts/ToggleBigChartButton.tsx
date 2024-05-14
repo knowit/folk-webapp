@@ -29,15 +29,23 @@ const FullscreenExitIconStyled = styled(FullscreenExitIcon)(() => ({
 
 interface ToggleBigChartButtonProps {
   big: boolean
+  title: string
   onChange: () => void
 }
 
 export function ToggleBigChartButton({
   big,
+  title,
   onChange,
 }: ToggleBigChartButtonProps) {
   const { trackEvent } = useMatomo()
-  big && trackEvent({ category: 'graf-stor', action: 'click-event' })
+  big &&
+    trackEvent({
+      category: 'Graph size',
+      action: 'Changed graph size',
+      name: `Graph size changed expanded for ${title}`,
+    })
+
   const altText = big ? 'Lukk stor størrelse' : 'Utvid til stor størrelse'
 
   return (

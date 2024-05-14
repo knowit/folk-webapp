@@ -54,9 +54,11 @@ const CustomerCardSort = ({
 
   const changeSortType = (type: string) => {
     trackEvent({
-      category: `sortering-kunder-${type.replace(/\s/g, '').toLowerCase()}`,
-      action: 'click-event',
+      category: 'Sorting',
+      action: 'Changed customer sorting by button',
+      name: `Sorting by ${type.toLowerCase()}`,
     })
+
     if (activeSortButton === type) {
       const newOrder = sortOrder == 'ASC' ? 'DESC' : 'ASC'
       setSortOrder(newOrder)

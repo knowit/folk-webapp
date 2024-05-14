@@ -63,6 +63,7 @@ const SingularChartCard = ({
           <ChartDisplayOptions>
             <ToggleBigChartButton
               big={isBig}
+              title={title}
               onChange={() => setIsBig(!isBig)}
             />
           </ChartDisplayOptions>

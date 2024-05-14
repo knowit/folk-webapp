@@ -1,9 +1,17 @@
 import { Grid } from '@mui/material'
 import { EmployeeTable } from './table/EmployeeTable'
-import { pageTitle } from '../../utils/pagetitle'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
+import { useEffect } from 'react'
 
 export default function EmployeePage() {
-  pageTitle('Ansatte')
+  const { trackPageView } = useMatomo()
+
+  useEffect(() => {
+    trackPageView({
+      documentTitle: 'Ansatte',
+    })
+  }, [trackPageView])
+
   return (
     <Grid container spacing={2}>
       <EmployeeTable />
