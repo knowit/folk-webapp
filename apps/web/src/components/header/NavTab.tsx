@@ -59,7 +59,7 @@ export default function NavTab(props: NavTabProps) {
           trackEvent({
             category: 'On-Page tab navigation',
             action: 'Switched view on page with tabs',
-            name: `Switched to ${content.title.toLowerCase} view`,
+            name: `Switched to ${content.title.toLowerCase()} view`,
           })
         }}
       />
