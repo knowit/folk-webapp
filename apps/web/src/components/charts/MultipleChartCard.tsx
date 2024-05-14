@@ -51,6 +51,7 @@ const MultipleChartCard = ({
           values={groups.map((group) => group.name)}
           selected={selectedGroupName}
           onChange={setSelectedGroupName}
+          title={title}
         />
       </GridItemHeader>
 
@@ -65,11 +66,13 @@ const MultipleChartCard = ({
                 }))}
                 selected={selectedChartIndex}
                 onChange={setSelectedChartIndex}
+                title={title}
               />
             )}
 
             <ToggleBigChartButton
               big={isBig}
+              title={title}
               onChange={() => setIsBig(!isBig)}
             />
           </ChartDisplayOptions>

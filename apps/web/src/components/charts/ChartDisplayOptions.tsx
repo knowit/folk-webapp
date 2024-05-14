@@ -34,6 +34,7 @@ interface ChartVariantToggleProps {
   selected: number
   onChange: (value: number) => void
   big?: boolean
+  title: string
 }
 
 export function ChartVariantToggle({
@@ -41,6 +42,7 @@ export function ChartVariantToggle({
   selected,
   onChange,
   big = false,
+  title,
 }: ChartVariantToggleProps) {
   const { trackEvent } = useMatomo()
 
@@ -48,7 +50,6 @@ export function ChartVariantToggle({
     event: React.MouseEvent,
     newChartIndex: number | null
   ) => {
-    trackEvent({ category: 'graf-type', action: 'click-event' })
     if (typeof newChartIndex === 'number') {
       onChange(newChartIndex)
     }
@@ -65,6 +66,17 @@ export function ChartVariantToggle({
         const { label, icon: ChartIcon } = chartVariantInfo[chartVariant.type]
         const buttonLabel = `Vis som ${label}`
 
+        const chartOptionChange = (label: string) => {
+          console.log(
+            `Tracked event: Changed chart variant to ${label} for ${title}`
+          )
+          trackEvent({
+            category: 'Graph type',
+            action: 'Changed graph type',
+            name: `Graph type changed to ${label} for ${title}`,
+          })
+        }
+
         return (
           <ToggleButton
             key={label}
@@ -72,6 +84,7 @@ export function ChartVariantToggle({
             disableRipple
             aria-label={buttonLabel}
             title={buttonLabel}
+            onClick={() => chartOptionChange(label)}
           >
             {ChartIcon}
           </ToggleButton>
