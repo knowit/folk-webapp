@@ -67,9 +67,6 @@ export function ChartVariantToggle({
         const buttonLabel = `Vis som ${label}`
 
         const chartOptionChange = (label: string) => {
-          console.log(
-            `Tracked event: Changed chart variant to ${label} for ${title}`
-          )
           trackEvent({
             category: 'Graph type',
             action: 'Changed graph type',

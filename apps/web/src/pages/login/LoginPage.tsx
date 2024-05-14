@@ -6,7 +6,6 @@ const LoginPage = () => {
   const { trackPageView } = useMatomo()
 
   const onClickHandler = () => {
-    console.log('clicked')
     window.location.replace('/auth/login')
   }
 
