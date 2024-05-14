@@ -24,6 +24,7 @@ import { Paper } from '@mui/material'
 import { RowCount } from '../../../components/sortableTable/RowCount'
 import { FilteredDownloadCell } from '../../../components/sortableTable/DataCells'
 import { statusDisplayDetails } from '../../../components/sortableTable/cells/ProjectStatusCell'
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 export interface SearchableColumn {
   columnIndex: number
@@ -46,8 +47,17 @@ export default function EmployeeTableWithFilter({
   const [filters, setFilters] = useState<FilterObject[]>(initialFilters)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [displayNonProject, setDisplayNonProject] = useState(false)
+  const { trackEvent } = useMatomo()
 
   function toggleDisplayNonProject() {
+    if (!displayNonProject) {
+      trackEvent({
+        category: 'Filtering',
+        action: 'Filtered employees by only showing free ones',
+        name: `Filter by only showing free employees`,
+      })
+    }
+
     setDisplayNonProject(!displayNonProject)
   }
 
