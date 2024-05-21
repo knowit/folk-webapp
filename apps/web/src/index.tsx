@@ -1,11 +1,13 @@
+import { Amplify } from 'aws-amplify'
+import { Authenticator } from '@aws-amplify/ui-react'
 import { BrowserRouter } from 'react-router-dom'
-
-import App from './App'
-import { UserInfoProvider } from './context/UserInfoContext'
-
 import { createRoot } from 'react-dom/client'
 import { MatomoProvider, createInstance } from '@jonkoops/matomo-tracker-react'
+import App from './App'
+import config from './config'
+import UserInfoProvider from './context/UserInfoContext'
 
+// MATOMO
 const instance = createInstance({
   urlBase: 'https://objectnet-dataplattform.matomo.cloud/',
   siteId: 1,
@@ -24,13 +26,33 @@ const instance = createInstance({
   },
 })
 
+Amplify.configure({
+  Auth: {
+    Cognito: {
+      userPoolClientId: config.cognito.APP_CLIENT_ID,
+      userPoolId: config.cognito.USER_POOL_ID,
+      loginWith: {
+        oauth: {
+          domain: config.cognito.login.OAUTH_DOMAIN,
+          scopes: config.cognito.login.OAUTH_SCOPES,
+          redirectSignIn: config.cognito.login.OAUTH_REDIRECT_SIGNIN,
+          redirectSignOut: config.cognito.login.OAUTH_REDIRECT_SIGNOUT,
+          responseType: 'code',
+        },
+      },
+    },
+  },
+})
+
 const container = document.getElementById('root')
 createRoot(container).render(
   <MatomoProvider value={instance}>
     <BrowserRouter>
-      <UserInfoProvider>
-        <App />
-      </UserInfoProvider>
+      <Authenticator.Provider>
+        <UserInfoProvider>
+          <App />
+        </UserInfoProvider>
+      </Authenticator.Provider>
     </BrowserRouter>
   </MatomoProvider>
 )

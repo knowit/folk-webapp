@@ -1,11 +1,6 @@
-import axios from 'axios'
-import { renewAuth } from './auth/authClient'
-import {
-  getAccessToken,
-  getAccessTokenExpiresAt,
-  isAccessTokenValid,
-} from './auth/authHelpers'
 import { ApiError } from './errorHandling'
+import { fetchAuthSession } from 'aws-amplify/auth'
+import axios from 'axios'
 
 const BASE_URL = '/'
 
@@ -26,23 +21,13 @@ interface GetOptions {
  * @returns the data at the endpoint
  */
 const getAt = async <T>(endpoint: string, options?: GetOptions) => {
-  const expiresAt = getAccessTokenExpiresAt()
-  // Attempt to renew if a user is present and has a valid token/it is to be forced.
-  if (options?.forceAuth || !isAccessTokenValid(expiresAt)) {
-    try {
-      await renewAuth()
-    } catch (error) {
-      return Promise.reject(error)
-    }
-  }
-
-  const accessToken = getAccessToken()
+  const session = await fetchAuthSession({ forceRefresh: true })
 
   try {
     const res = await instance.get<T>(endpoint, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${session?.tokens?.accessToken.toString()}`,
       },
       params: { ...options?.params },
     })
