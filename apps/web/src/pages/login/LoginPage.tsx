@@ -1,13 +1,9 @@
 import { useMatomo } from '@jonkoops/matomo-tracker-react'
-import { Button } from '@mui/material'
 import { useEffect } from 'react'
+import LoginLogoutButton from '../../components/LoginLogoutButton'
 
 const LoginPage = () => {
   const { trackPageView } = useMatomo()
-
-  const onClickHandler = () => {
-    window.location.replace('/auth/login')
-  }
 
   useEffect(() => {
     trackPageView({
@@ -17,7 +13,7 @@ const LoginPage = () => {
 
   return (
     <div>
-      <Button onClick={onClickHandler}>Logg Inn</Button>
+      <LoginLogoutButton />
     </div>
   )
 }

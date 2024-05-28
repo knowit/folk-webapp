@@ -1,8 +1,8 @@
 import { ButtonBase } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import React from 'react'
-import { clearLocalStorage } from '../api/auth/authHelpers'
-import { useUserInfo } from '../context/UserInfoContext'
+import { signInWithRedirect, signOut } from 'aws-amplify/auth'
+import { useUserInfo } from '../hooks/useUserInfo'
+import { useNavigate } from 'react-router-dom'
 
 const ButtonBaseStyled = styled(ButtonBase)(() => ({
   fontSize: '15px',
@@ -11,25 +11,31 @@ const ButtonBaseStyled = styled(ButtonBase)(() => ({
   margin: '3px',
 }))
 
-export const LoginLogoutButton = () => {
-  const { user, logout } = useUserInfo()
+export default function LoginLogoutButton() {
+  const { setUser, isAuthenticated } = useUserInfo()
+  const navigate = useNavigate()
 
-  let buttonText = ''
-  if (!user) {
-    buttonText = 'Logg inn'
-  } else {
-    buttonText = 'Logg ut'
+  async function handleSignIn() {
+    await signInWithRedirect({
+      provider: {
+        custom: 'AzureAD',
+      },
+    })
+
+    navigate('/ansatte', { replace: true })
   }
 
-  const handleClick = () => {
-    if (!user) {
-      window.location.replace('/auth/login')
-    } else {
-      window.location.replace('/auth/logout')
-      clearLocalStorage()
-      logout()
-    }
+  async function handleSignOut() {
+    await signOut()
+    setUser(null)
+    navigate('/login', { replace: true })
   }
 
-  return <ButtonBaseStyled onClick={handleClick}>{buttonText}</ButtonBaseStyled>
+  return (
+    <ButtonBaseStyled
+      onClick={() => (isAuthenticated ? handleSignOut() : handleSignIn())}
+    >
+      {isAuthenticated ? 'Logg ut' : 'Logg inn'}
+    </ButtonBaseStyled>
+  )
 }

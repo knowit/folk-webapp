@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react'
-import { Theme, styled } from '@mui/material/styles'
+import { updateTheme } from './theme'
+import { useUserInfo } from './hooks/useUserInfo'
+import { fetchAuthSession } from 'aws-amplify/auth'
+import { CssBaseline, useMediaQuery } from '@mui/material'
+import {
+  Theme,
+  ThemeProvider,
+  StyledEngineProvider,
+  styled,
+} from '@mui/material/styles'
 import Header from './components/header/Header'
 import Content from './components/Content'
 import Footer from './components/Footer'
-import { useUserInfo } from './context/UserInfoContext'
-import { CssBaseline, useMediaQuery } from '@mui/material'
-import { ThemeProvider } from '@mui/material/styles'
-import { StyledEngineProvider } from '@mui/material/styles'
-import { updateTheme } from './theme'
 
 declare module '@mui/styles/defaultTheme' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -22,6 +26,7 @@ const AppContainer = styled('div')(() => ({
   display: 'flex',
   flexDirection: 'column',
 }))
+
 const AppContentContainer = styled('div')(({ theme }) => ({
   padding: '30px',
   backgroundColor: theme.palette.background.paper,
@@ -31,13 +36,28 @@ const AppContentContainer = styled('div')(({ theme }) => ({
   justifyContent: 'space-between',
   flexGrow: 1,
 }))
+
 const AppMainContent = styled('main')(() => ({ width: '100%', height: '100%' }))
 
 export default function App() {
+  const [activeTheme, setActiveTheme] = useState<Theme>(updateTheme('light'))
   const [darkMode, setDarkMode] = useState(false)
-  const [activeTheme, setActiveTheme] = useState<Theme | undefined>()
-  const url = new URL(window.location.href)
+  const { user } = useUserInfo()
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+
+  useEffect(() => {
+    const initApp = async () => {
+      try {
+        await fetchAuthSession()
+      } catch (e) {
+        if (e !== 'No current user') {
+          console.warn(e)
+        }
+      }
+    }
+
+    initApp()
+  }, [])
 
   useEffect(() => {
     if (localStorage.getItem('darkMode') === null) {
@@ -53,16 +73,7 @@ export default function App() {
     }
   }, [prefersDarkMode])
 
-  if (url.searchParams.has('login')) {
-    localStorage.setItem('login', 'true')
-    url.searchParams.delete('login')
-    history.replaceState(null, '', url)
-  }
-
-  const { user } = useUserInfo()
-  if (user === undefined) return null
-
-  const handleModeChange = () => {
+  function handleModeChange() {
     localStorage.setItem('darkMode', (!darkMode).toString())
     setDarkMode(!darkMode)
     setActiveTheme(
@@ -73,19 +84,23 @@ export default function App() {
   }
 
   return (
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={activeTheme}>
-        <CssBaseline />
-        <AppContainer>
-          <Header darkMode={darkMode} onChangeMode={handleModeChange} />
-          <AppContentContainer>
-            <AppMainContent>
-              <Content />
-            </AppMainContent>
-            <Footer />
-          </AppContentContainer>
-        </AppContainer>
-      </ThemeProvider>
-    </StyledEngineProvider>
+    <>
+      {user !== undefined && (
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={activeTheme}>
+            <CssBaseline />
+            <AppContainer>
+              <Header darkMode={darkMode} onChangeMode={handleModeChange} />
+              <AppContentContainer>
+                <AppMainContent>
+                  <Content />
+                </AppMainContent>
+                <Footer />
+              </AppContentContainer>
+            </AppContainer>
+          </ThemeProvider>
+        </StyledEngineProvider>
+      )}
+    </>
   )
 }

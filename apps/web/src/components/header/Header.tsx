@@ -5,9 +5,9 @@ import { NavLink, Link, useLocation } from 'react-router-dom'
 import { NavMenu } from './NavMenu'
 import { ReactComponent as KnowitLogo } from '../../assets/logo.svg'
 import { ReactComponent as FallbackUserIcon } from '../../assets/fallback_user.svg'
-import { LoginLogoutButton } from '../LoginLogoutButton'
-import { useUserInfo } from '../../context/UserInfoContext'
 import ModeSwitch from './ModeSwitch'
+import { useUserInfo } from '../../hooks/useUserInfo'
+import LoginLogoutButton from '../LoginLogoutButton'
 
 const ComponentRoot = styled('div')(({ theme }) => ({
   top: 0,
@@ -44,9 +44,10 @@ export const Header: FunctionComponent<HeaderProps> = ({
   darkMode,
   onChangeMode,
 }) => {
-  const { user } = useUserInfo()
+  const { user, isAuthenticated } = useUserInfo()
   const availablePages = ['/ansatte', '/kunder', '/kompetanse', '/organisasjon']
   const activePage = useLocation().pathname
+
   let tabsVisiblePage: string | boolean
   availablePages.includes(activePage)
     ? (tabsVisiblePage = activePage)
@@ -56,6 +57,37 @@ export const Header: FunctionComponent<HeaderProps> = ({
     onChangeMode()
   }
 
+  function HeaderTabs() {
+    return (
+      <Tabs value={tabsVisiblePage} textColor="secondary">
+        <Tab
+          label={'Ansatte'}
+          value={'/ansatte'}
+          to={'/ansatte'}
+          component={NavLink}
+        />
+        <Tab
+          label={'Kunder'}
+          value={'/kunder'}
+          to={'/kunder'}
+          component={NavLink}
+        />
+        <Tab
+          label={'Kompetanse'}
+          value={'/kompetanse'}
+          to={'/kompetanse'}
+          component={NavLink}
+        />
+        <Tab
+          label={'Organisasjonsstruktur'}
+          value={'/organisasjon'}
+          to={'/organisasjon'}
+          component={NavLink}
+        />
+      </Tabs>
+    )
+  }
+
   return (
     <ComponentRoot>
       <AppBar>
@@ -63,36 +95,7 @@ export const Header: FunctionComponent<HeaderProps> = ({
           <Link data-testid="knowit-logo" to={'/'}>
             <KnowitLogoStyled title="knowit-logo" />
           </Link>
-          <NavMenu>
-            {user && (
-              <Tabs value={tabsVisiblePage} textColor="secondary">
-                <Tab
-                  label={'Ansatte'}
-                  value={'/ansatte'}
-                  to={'/ansatte'}
-                  component={NavLink}
-                />
-                <Tab
-                  label={'Kunder'}
-                  value={'/kunder'}
-                  to={'/kunder'}
-                  component={NavLink}
-                />
-                <Tab
-                  label={'Kompetanse'}
-                  value={'/kompetanse'}
-                  to={'/kompetanse'}
-                  component={NavLink}
-                />
-                <Tab
-                  label={'Organisasjonsstruktur'}
-                  value={'/organisasjon'}
-                  to={'/organisasjon'}
-                  component={NavLink}
-                />
-              </Tabs>
-            )}
-          </NavMenu>
+          <NavMenu>{isAuthenticated && <HeaderTabs />}</NavMenu>
           <ActionsContainer>
             <LoginLogoutButton />
             <AvatarStyled id="userAvatar" alt={user?.name} src={user?.picture}>

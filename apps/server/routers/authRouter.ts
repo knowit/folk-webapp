@@ -1,12 +1,10 @@
+import { Issuer } from 'openid-client'
 import express, { Request, Response, Router } from 'express'
-import { Issuer, TokenSet } from 'openid-client'
-import { URL } from 'url'
 import reporting from '../reporting'
-const router: Router = express.Router()
 
+const router: Router = express.Router()
 const authEndpoint = process.env.OAUTH_URL
 const clientId = process.env.CLIENT_ID
-const clientSecret = process.env.CLIENT_SECRET
 
 const dpIssuer = new Issuer({
   issuer: `${authEndpoint}/oauth2/`,
@@ -19,68 +17,9 @@ const dpIssuer = new Issuer({
 const getClient = (applicationUrl = '') =>
   new dpIssuer.Client({
     client_id: clientId,
-    client_secret: clientSecret,
-    redirect_uris: [`${applicationUrl}/auth/callback`],
+    redirect_uris: [`${applicationUrl}`],
     response_types: ['code'],
   })
-
-const getOrigin = (url: string) => {
-  const parsed = new URL(url)
-  return `${parsed.protocol}//${parsed.host}`
-}
-
-const getPath = (url: string) => new URL(url).pathname
-
-router.get('/login', function (req: Request, res: Response) {
-  const { referer } = req.headers
-  const authorizationUrl = getClient(getOrigin(referer)).authorizationUrl({
-    scope: 'email openid profile',
-  })
-
-  res.cookie('authReferer', referer, {
-    path: '/',
-    httpOnly: true,
-    secure: true,
-    sameSite: 'lax',
-  })
-  res.redirect(302, authorizationUrl)
-})
-
-router.get('/logout', async function (req: Request, res: Response) {
-  const { referer } = req.headers
-  const logoutUri = `${getOrigin(referer)}/`
-  const logoutUrl = getClient().endSessionUrl({
-    client_id: clientId,
-    logout_uri: logoutUri,
-  })
-  res.clearCookie('refreshToken')
-  res.redirect(logoutUrl)
-})
-
-router.get('/callback', async function (req: Request, res: Response) {
-  const { authReferer: referer }: { authReferer: string } = req.cookies
-
-  const origin = getOrigin(referer)
-
-  const tokens = await getClient(origin).oauthCallback(
-    `${origin}/auth/callback`,
-    req.query
-  )
-  const cookieSettings = {
-    sameSite: true,
-    secure: true,
-    path: '/',
-  }
-
-  res.cookie('refreshToken', tokens.refresh_token, {
-    httpOnly: true,
-    ...cookieSettings,
-  })
-  res.clearCookie('authReferer')
-  const redirectURL = new URL(referer)
-  redirectURL.searchParams.append('login', 'true')
-  res.redirect(302, redirectURL.toString())
-})
 
 router.get('/userInfo', async function (req: Request, res: Response) {
   const accessToken: string = req.headers.authorization
@@ -98,41 +37,9 @@ router.get('/userInfo', async function (req: Request, res: Response) {
     )
 
   res.send({
-    name: [userInfo.given_name || '', userInfo.family_name || ''].join(' '),
+    name: userInfo.name,
     email: userInfo.email,
-    picture: userInfo.picture,
   })
-})
-
-router.post('/refresh', async function (req: Request, res: Response) {
-  const refreshToken = req.cookies['refreshToken'] || null
-
-  if (!refreshToken) {
-    return (res.statusCode = 403)
-  }
-
-  getClient()
-    .grant({
-      grant_type: 'refresh_token',
-      refresh_token: refreshToken,
-    })
-    .then((tokens: TokenSet) =>
-      res.send({
-        accessToken: tokens.access_token,
-        expiresAt: tokens.expires_at,
-        expiration: tokens.expires_in,
-        sameSite: true,
-        secure: true,
-      })
-    )
-    .catch((err) =>
-      res.send(
-        reporting({
-          message: 'Auth failed grant on /refresh',
-          data: err,
-        })
-      )
-    )
 })
 
 export default router
