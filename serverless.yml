@@ -9,7 +9,6 @@ custom:
     OAUTH_URL: ${ssm:/${self:custom.stage}/folk-webapp/DATAPLATTFORM_AUTH_URL}
     STORAGE_URL: ${ssm:/${self:custom.stage}/folk-webapp/DATAPLATTFORM_RAW_STORAGE_URL}
     CLIENT_ID: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_ID}
-    CLIENT_SECRET: ${ssm:/${self:custom.stage}/folk-webapp/CLIENT_SECRET}
     PRIVACY_POLICY_KEY: ${ssm:/${self:custom.stage}/folk-webapp/PRIVACY_POLICY_KEY}
     stage: ${opt:stage, self:provider.stage}
   allowedMethods:
