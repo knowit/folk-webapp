@@ -9,10 +9,10 @@ import UserInfoProvider from './context/UserInfoContext'
 
 // MATOMO
 const instance = createInstance({
-  urlBase: 'https://objectnet-dataplattform.matomo.cloud/',
+  urlBase: config.matomo.urlBase,
   siteId: 1,
-  trackerUrl: 'https://objectnet-dataplattform.matomo.cloud/matomo.php',
-  srcUrl: 'https://objectnet-dataplattform.matomo.cloud/matomo.js',
+  trackerUrl: `${config.matomo.urlBase}/matomo.php`,
+  srcUrl: `${config.matomo.urlBase}/matomo.js`,
   disabled: !process.env.NODE_ENV || process.env.NODE_ENV === 'development',
   heartBeat: {
     active: true, // optional, default value: true

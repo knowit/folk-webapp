@@ -15,6 +15,9 @@ const config = {
       ],
     },
   },
+  matomo: {
+    urlBase: 'https://objectnet-dataplattform.matomo.cloud/',
+  },
 }
 
 export default config
