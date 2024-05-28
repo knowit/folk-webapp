@@ -5,8 +5,14 @@ const config = {
     login: {
       OAUTH_DOMAIN: 'dev-folk-user-pool.auth.eu-central-1.amazoncognito.com',
       OAUTH_SCOPES: ['email', 'openid', 'profile'],
-      OAUTH_REDIRECT_SIGNIN: ['https://localhost:3000/'],
-      OAUTH_REDIRECT_SIGNOUT: ['https://localhost:3000/'],
+      OAUTH_REDIRECT_SIGNIN: [
+        'https://localhost:3000/',
+        'https://dev.folk.knowit.no/',
+      ],
+      OAUTH_REDIRECT_SIGNOUT: [
+        'https://localhost:3000/',
+        'https://dev.folk.knowit.no/',
+      ],
     },
   },
 }
