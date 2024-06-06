@@ -66,9 +66,9 @@ jobs:
       - name: Create or update .env file
         working-directory: apps/web
         run: |
-          echo "REACT_APP_APP_CLIENT_ID=$APP_CLIENT_ID \n" >> .env
-          echo "REACT_APP_APP_OAUTH_DOMAIN=$APP_OAUTH_DOMAIN \n" >> .env
-          echo "REACT_APP_APP_USER_POOL_ID=$APP_USER_POOL_ID" \n>> .env
+          echo "REACT_APP_APP_CLIENT_ID=$APP_CLIENT_ID" >> .env
+          echo "REACT_APP_APP_OAUTH_DOMAIN=$APP_OAUTH_DOMAIN" >> .env
+          echo "REACT_APP_APP_USER_POOL_ID=$APP_USER_POOL_ID" >> .env
       - name: Build web
         working-directory: apps/web
         run: yarn predeploy:dev
