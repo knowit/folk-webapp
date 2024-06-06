@@ -18,7 +18,7 @@ const config = {
     },
   },
   matomo: {
-    urlBase: 'https://objectnet-dataplattform.matomo.cloud/',
+    urlBase: 'https://objectnet-dataplattform.matomo.cloud',
   },
 }
 
