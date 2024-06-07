@@ -51,8 +51,6 @@ Amplify.configure({
   },
 })
 
-console.log('Environment:', process.env.NODE_ENV)
-
 const container = document.getElementById('root')
 createRoot(container).render(
   <MatomoProvider value={instance}>
