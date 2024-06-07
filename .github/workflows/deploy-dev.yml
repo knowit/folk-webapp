@@ -35,6 +35,10 @@ jobs:
 
   deploy_web:
     runs-on: ubuntu-latest
+    env:
+      COGNITO_APP_CLIENT_ID: ${{ vars.DEV_COGNITO_APP_CLIENT_ID }}
+      COGNITO_APP_OAUTH_DOMAIN: ${{ vars.DEV_COGNITO_APP_OAUTH_DOMAIN }}
+      COGNITO_USER_POOL_ID: ${{ vars.DEV_COGNITO_USER_POOL_ID }}
     needs: deploy_server
     steps:
       - uses: actions/checkout@v4
@@ -56,12 +60,12 @@ jobs:
       - uses: softprops/turnstyle@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create or update .env file
+      - name: Add Cognito variables to .env file
         working-directory: apps/web
         run: |
-          echo "REACT_APP_APP_CLIENT_ID=${{ secrets.DEV_COGNITO_APP_CLIENT_ID }}" >> .env
-          echo "REACT_APP_APP_OAUTH_DOMAIN=${{ secrets.DEV_COGNITO_APP_OAUTH_DOMAIN }}" >> .env
-          echo "REACT_APP_APP_USER_POOL_ID=${{ secrets.DEV_COGNITO_USER_POOL_ID }}" >> .env
+          echo "REACT_APP_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID" >> .env
+          echo "REACT_APP_APP_OAUTH_DOMAIN=$COGNITO_APP_OAUTH_DOMAIN" >> .env
+          echo "REACT_APP_APP_USER_POOL_ID=$COGNITO_USER_POOL_ID" >> .env
       - name: Build web
         working-directory: apps/web
         run: yarn predeploy:dev
