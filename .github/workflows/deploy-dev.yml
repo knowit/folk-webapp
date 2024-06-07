@@ -60,7 +60,7 @@ jobs:
       - uses: softprops/turnstyle@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create or update .env file
+      - name: Add Cognito variables to .env file
         working-directory: apps/web
         run: |
           echo "REACT_APP_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID" >> .env
