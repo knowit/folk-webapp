@@ -26,6 +26,8 @@ const instance = createInstance({
   },
 })
 
+console.log('AppClientID:', process.env.REACT_APP_APP_CLIENT_ID)
+
 Amplify.configure({
   Auth: {
     Cognito: {
