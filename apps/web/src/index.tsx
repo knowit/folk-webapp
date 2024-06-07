@@ -4,15 +4,14 @@ import { BrowserRouter } from 'react-router-dom'
 import { createRoot } from 'react-dom/client'
 import { MatomoProvider, createInstance } from '@jonkoops/matomo-tracker-react'
 import App from './App'
-import config from './config'
 import UserInfoProvider from './context/UserInfoContext'
 
 // MATOMO
 const instance = createInstance({
-  urlBase: config.matomo.urlBase,
+  urlBase: 'https://objectnet-dataplattform.matomo.cloud',
   siteId: 1,
-  trackerUrl: `${config.matomo.urlBase}/matomo.php`,
-  srcUrl: `${config.matomo.urlBase}/matomo.js`,
+  trackerUrl: 'https://objectnet-dataplattform.matomo.cloud/matomo.php',
+  srcUrl: 'https://objectnet-dataplattform.matomo.cloud/matomo.js',
   disabled: !process.env.NODE_ENV || process.env.NODE_ENV === 'development',
   heartBeat: {
     active: true, // optional, default value: true
@@ -29,20 +28,30 @@ const instance = createInstance({
 Amplify.configure({
   Auth: {
     Cognito: {
-      userPoolClientId: config.cognito.APP_CLIENT_ID,
-      userPoolId: config.cognito.USER_POOL_ID,
+      userPoolClientId: '71ra92knndj86vr394ohcds1uc',
+      userPoolId: 'eu-central-1_j53koCuOX',
       loginWith: {
         oauth: {
-          domain: config.cognito.login.OAUTH_DOMAIN,
-          scopes: config.cognito.login.OAUTH_SCOPES,
-          redirectSignIn: config.cognito.login.OAUTH_REDIRECT_SIGNIN,
-          redirectSignOut: config.cognito.login.OAUTH_REDIRECT_SIGNOUT,
+          domain: 'dev-folk-user-pool.auth.eu-central-1.amazoncognito.com',
+          scopes: ['email', 'openid', 'profile'],
+          redirectSignIn: [
+            'https://localhost:3000/',
+            'https://dev.folk.knowit.no/',
+            'https://folk.knowit.no/',
+          ],
+          redirectSignOut: [
+            'https://localhost:3000/',
+            'https://dev.folk.knowit.no/',
+            'https://folk.knowit.no/',
+          ],
           responseType: 'code',
         },
       },
     },
   },
 })
+
+console.log('Environment:', process.env.NODE_ENV)
 
 const container = document.getElementById('root')
 createRoot(container).render(
