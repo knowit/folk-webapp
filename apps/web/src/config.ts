@@ -5,14 +5,16 @@ const config = {
     login: {
       OAUTH_DOMAIN: process.env.REACT_APP_OAUTH_DOMAIN,
       OAUTH_SCOPES: ['email', 'openid', 'profile'],
-      OAUTH_REDIRECT_SIGNIN:
-        process.env.NODE_ENV === 'production'
-          ? ['https://folk.knowit.no/']
-          : ['https://localhost:3000/', 'https://dev.folk.knowit.no/'],
-      OAUTH_REDIRECT_SIGNOUT:
-        process.env.NODE_ENV === 'production'
-          ? ['https://folk.knowit.no/']
-          : ['https://localhost:3000/', 'https://dev.folk.knowit.no/'],
+      OAUTH_REDIRECT_SIGNIN: [
+        'https://localhost:3000/',
+        'https://dev.folk.knowit.no/',
+        'https://folk.knowit.no/',
+      ],
+      OAUTH_REDIRECT_SIGNOUT: [
+        'https://localhost:3000/',
+        'https://dev.folk.knowit.no/',
+        'https://folk.knowit.no/',
+      ],
     },
   },
   matomo: {
