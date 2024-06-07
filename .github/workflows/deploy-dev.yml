@@ -56,9 +56,8 @@ jobs:
       - uses: softprops/turnstyle@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Add variables to .env file
-        working-directory: apps/web
-        run: echo "REACT_APP_ENV=development" >> .env
+      - name: Add env variable to .env file
+        run: echo REACT_APP_ENV=development >> apps/web/.env
       - name: Build web
         working-directory: apps/web
         run: yarn predeploy:dev
