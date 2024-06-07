@@ -1,4 +1,5 @@
 import { Amplify } from 'aws-amplify'
+import { appConfig } from './config'
 import { Authenticator } from '@aws-amplify/ui-react'
 import { BrowserRouter } from 'react-router-dom'
 import { createRoot } from 'react-dom/client'
@@ -28,30 +29,20 @@ const instance = createInstance({
 Amplify.configure({
   Auth: {
     Cognito: {
-      userPoolClientId: '71ra92knndj86vr394ohcds1uc',
-      userPoolId: 'eu-central-1_j53koCuOX',
+      userPoolClientId: appConfig.userPoolClientId,
+      userPoolId: appConfig.userPoolId,
       loginWith: {
         oauth: {
-          domain: 'dev-folk-user-pool.auth.eu-central-1.amazoncognito.com',
+          domain: appConfig.oauthDomain,
           scopes: ['email', 'openid', 'profile'],
-          redirectSignIn: [
-            'https://localhost:3000/',
-            'https://dev.folk.knowit.no/',
-            'https://folk.knowit.no/',
-          ],
-          redirectSignOut: [
-            'https://localhost:3000/',
-            'https://dev.folk.knowit.no/',
-            'https://folk.knowit.no/',
-          ],
+          redirectSignIn: appConfig.redirectUrls,
+          redirectSignOut: appConfig.redirectUrls,
           responseType: 'code',
         },
       },
     },
   },
 })
-
-console.log('Environment:', process.env.NODE_ENV)
 
 const container = document.getElementById('root')
 createRoot(container).render(
