@@ -5,28 +5,37 @@ on:
     types: [published]
   workflow_dispatch:
 
+env:
+  REACT_APP_ENV: production
+
 jobs:
   deploy_server:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up node 18
         uses: actions/setup-node@v3
         with:
           node-version: "18"
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-central-1
+
       - name: Install serverless
         run: npm install -g serverless@3.25.1
+
       - name: Install server dependencies
         run: yarn workspaces focus server
+
       - uses: softprops/turnstyle@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Deploy server
         run: serverless deploy --stage prod
 
@@ -35,28 +44,39 @@ jobs:
     needs: deploy_server
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up node 18
         uses: actions/setup-node@v3
         with:
           node-version: "18"
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-central-1
+
+      - name: Add env variable to .env file
+        working-directory: ./apps/web
+        run: echo "REACT_APP_ENV=$REACT_APP_ENV" >> .env
+
       - name: Install dependencies
         working-directory: apps/web
         run: yarn install
+
       - uses: softprops/turnstyle@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build web
         working-directory: apps/web
         run: yarn predeploy:prod
+
       - name: Deploy web
         working-directory: apps/web
         run: yarn deploy:prod
+
       - name: Update invalidation
         working-directory: apps/web
         run: yarn postdeploy:prod
@@ -68,6 +88,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
         env:
