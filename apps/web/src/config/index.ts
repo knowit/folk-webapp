@@ -12,6 +12,6 @@ function getConfig() {
     case 'development':
       return createDevConfig()
     default:
-      throw new Error(`Invalid NODE_ENV ${process.env.REACT_APP_ENV}`)
+      throw new Error(`Invalid REACT_APP_ENV ${process.env.REACT_APP_ENV}`)
   }
 }

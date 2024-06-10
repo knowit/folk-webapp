@@ -61,7 +61,7 @@ jobs:
 
       - name: Add env variable to .env file
         working-directory: ./apps/web
-        run: echo REACT_APP_ENV=development >> .env
+        run: echo "REACT_APP_ENV=development" >> .env
 
       - name: Install dependencies
         working-directory: apps/web
