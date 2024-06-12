@@ -39,6 +39,10 @@ In addition to the two `apps`, there are `packages` containing shared code and c
 
 Before first launch, or whenever dependencies are changed, run the `yarn install` command _in the root_ of the project. That will bootstrap and [hoist](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting) all the dependencies.
 
+It is also necessary to add a variable to the _.env_ file under _**./apps/web**_.
+
+- `REACT_APP_ENV=development`
+
 When developing locally, there are two options on how to run the application:
 
 ### Option A: running both server and web locally

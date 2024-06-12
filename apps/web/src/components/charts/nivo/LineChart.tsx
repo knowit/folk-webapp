@@ -67,12 +67,12 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
   }, [colorMap])
 
   useEffect(() => {
-    series.forEach((s) => {
-      if (!colorMap[s.id]) {
+    for (let i = series.length - 1; i >= 0; i--) {
+      if (!colorMap[series[i].id]) {
         const c = getNextColor()
-        setColorMap({ ...colorMap, [s.id]: c })
+        setColorMap({ ...colorMap, [series[i].id]: c })
       }
-    })
+    }
   }, [series, colorMap, getNextColor])
 
   const rows = Math.ceil(series.length / perRow)
@@ -143,7 +143,7 @@ const LineChart: React.FC<LineSvgProps & IsBigProps> = ({
                   style={{
                     width: '12px',
                     height: '12px',
-                    backgroundColor: value.serieColor,
+                    backgroundColor: colorMap[value.serieId],
                     display: 'inline-block',
                     margin: '5px',
                   }}
