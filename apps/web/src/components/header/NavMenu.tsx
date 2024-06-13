@@ -8,6 +8,6 @@ const ComponentRoot = styled('ul')(() => ({
   overflow: 'hidden',
 }))
 
-export function NavMenu({ children }: { children: React.ReactNode }) {
+export default function NavMenu({ children }: { children: React.ReactNode }) {
   return <ComponentRoot>{children}</ComponentRoot>
 }
