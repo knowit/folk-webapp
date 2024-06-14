@@ -1,13 +1,12 @@
-import React, { FunctionComponent } from 'react'
+import { NavLink, Link, useLocation } from 'react-router-dom'
 import { AppBar, Avatar, Tabs, Tab, Toolbar } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import { NavLink, Link, useLocation } from 'react-router-dom'
-import { NavMenu } from './NavMenu'
+import NavMenu from './NavMenu'
 import { ReactComponent as KnowitLogo } from '../../assets/logo.svg'
 import { ReactComponent as FallbackUserIcon } from '../../assets/fallback_user.svg'
-import ModeSwitch from './ModeSwitch'
 import { useUserInfo } from '../../hooks/useUserInfo'
 import LoginLogoutButton from '../LoginLogoutButton'
+import ModeSwitch from './ModeSwitch'
 
 const ComponentRoot = styled('div')(({ theme }) => ({
   top: 0,
@@ -40,13 +39,10 @@ interface HeaderProps {
   onChangeMode: () => void
 }
 
-export const Header: FunctionComponent<HeaderProps> = ({
-  darkMode,
-  onChangeMode,
-}) => {
-  const { user, isAuthenticated } = useUserInfo()
+export default function Header({ darkMode, onChangeMode }: HeaderProps) {
   const availablePages = ['/ansatte', '/kunder', '/kompetanse', '/organisasjon']
   const activePage = useLocation().pathname
+  const { isAuthenticated, userEmployeeProfile } = useUserInfo()
 
   let tabsVisiblePage: string | boolean
   availablePages.includes(activePage)
@@ -95,12 +91,19 @@ export const Header: FunctionComponent<HeaderProps> = ({
           <Link data-testid="knowit-logo" to={'/'}>
             <KnowitLogoStyled title="knowit-logo" />
           </Link>
+
           <NavMenu>{isAuthenticated && <HeaderTabs />}</NavMenu>
+
           <ActionsContainer>
             <LoginLogoutButton />
-            <AvatarStyled id="userAvatar" alt={user?.name} src={user?.picture}>
+            <AvatarStyled
+              id="userAvatar"
+              alt={userEmployeeProfile?.name}
+              src={userEmployeeProfile?.image}
+            >
               <FallbackUserIcon />
             </AvatarStyled>
+
             <ModeSwitch onChange={handleModeSwitch} checked={darkMode} />
           </ActionsContainer>
         </Toolbar>
@@ -108,5 +111,3 @@ export const Header: FunctionComponent<HeaderProps> = ({
     </ComponentRoot>
   )
 }
-
-export default Header

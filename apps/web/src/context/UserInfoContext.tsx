@@ -1,11 +1,14 @@
 import { createContext, useEffect, useState } from 'react'
+import { getEmployeeProfile } from '../api/data/employee/employeeApi'
 import { getUserInfo } from '../api/data/user/userApi'
 import { isError } from '../api/errorHandling'
+import { EmployeeProfileResponse } from '../api/data/employee/employeeApiTypes'
 import { UserInfo } from '../api/auth/authApiTypes'
 
 interface UserInfoContextProps {
   user: UserInfo | null | undefined
   setUser: (val: UserInfo | null) => void
+  userEmployeeProfile: EmployeeProfileResponse
 }
 
 export const UserInfoContext = createContext<UserInfoContextProps | null>(null)
@@ -14,23 +17,13 @@ const UserInfoProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
+  const [userEmployeeProfile, setUserEmployeeProfile] =
+    useState<EmployeeProfileResponse>()
 
   useEffect(() => {
-    const fetchUser = async () => {
+    async function fetchUser() {
       try {
-        /* The timeout is to prevent a user which was logged in in previous seesion from seeing the login page for a short flash.
-         * When user is undefined, App component will return null, which will prevent the login page from being rendered. */
-        /*  const timeout = setTimeout(
-          () => {
-            setUserInfo(null)
-          },
-          localStorage.getItem('login') ? 3000 : 0
-        ) */
-
         const user = await getUserInfo()
-
-        /* clearTimeout(timeout) */
-
         setUserInfo(user)
       } catch (error) {
         if (isError(error)) {
@@ -42,8 +35,30 @@ const UserInfoProvider: React.FC<{ children: React.ReactNode }> = ({
     fetchUser()
   }, [])
 
+  useEffect(() => {
+    async function fetchEmployeeProfile() {
+      if (userInfo) {
+        const userEmail = userInfo.email?.toLowerCase()
+        if (userEmail) {
+          const data = await getEmployeeProfile(userEmail)
+          setUserEmployeeProfile(data)
+        }
+      } else {
+        setUserEmployeeProfile(null)
+      }
+    }
+
+    fetchEmployeeProfile()
+  }, [userInfo])
+
   return (
-    <UserInfoContext.Provider value={{ user: userInfo, setUser: setUserInfo }}>
+    <UserInfoContext.Provider
+      value={{
+        user: userInfo,
+        setUser: setUserInfo,
+        userEmployeeProfile,
+      }}
+    >
       {children}
     </UserInfoContext.Provider>
   )

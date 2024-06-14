@@ -13,7 +13,7 @@ import {
 export const getEmployeeTable = () =>
   getAtApiV2<EmployeeTableResponse[]>('/employees/employeeTable')
 
-export const getEmployeeProfile = (url: string, email: string) =>
+export const getEmployeeProfile = (email: string) =>
   getAtApiV2<EmployeeProfileResponse>(`/employees/employeeProfile`, {
     params: { email },
   })

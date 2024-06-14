@@ -6,11 +6,13 @@ export function useUserInfo() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const userInfoContext = useContext(UserInfoContext)
   const { authStatus } = useAuthenticator((context) => [context.authStatus])
-  const { user, setUser } = userInfoContext
+  const { user, setUser, userEmployeeProfile } = userInfoContext
 
   useEffect(() => {
-    setIsAuthenticated(authStatus === 'authenticated')
-  }, [authStatus])
+    if (user) {
+      setIsAuthenticated(authStatus === 'authenticated')
+    }
+  }, [authStatus, user, userEmployeeProfile])
 
-  return { user, setUser, isAuthenticated }
+  return { user, setUser, isAuthenticated, userEmployeeProfile }
 }

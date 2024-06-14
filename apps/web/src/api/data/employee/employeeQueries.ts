@@ -14,13 +14,9 @@ export const useEmployeeTable = () =>
   })
 
 export const useEmployeeProfile = (email: string) =>
-  useSWR(
-    ['/employeeProfile', email],
-    ([url, email]) => getEmployeeProfile(url, email),
-    {
-      revalidateOnFocus: false,
-    }
-  )
+  useSWR(['/employeeProfile', email], ([email]) => getEmployeeProfile(email), {
+    revalidateOnFocus: false,
+  })
 
 export const useEmployeeCompetence = (email: string) =>
   useSWR(
