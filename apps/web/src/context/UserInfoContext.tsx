@@ -38,9 +38,11 @@ const UserInfoProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     async function fetchEmployeeProfile() {
       if (userInfo) {
-        const userEmail = userInfo.email.toLowerCase()
-        const data = await getEmployeeProfile(userEmail)
-        setUserEmployeeProfile(data)
+        const userEmail = userInfo.email?.toLowerCase()
+        if (userEmail) {
+          const data = await getEmployeeProfile(userEmail)
+          setUserEmployeeProfile(data)
+        }
       } else {
         setUserEmployeeProfile(null)
       }

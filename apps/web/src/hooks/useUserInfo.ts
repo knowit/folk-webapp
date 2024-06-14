@@ -9,7 +9,7 @@ export function useUserInfo() {
   const { user, setUser, userEmployeeProfile } = userInfoContext
 
   useEffect(() => {
-    if (user && userEmployeeProfile) {
+    if (user) {
       setIsAuthenticated(authStatus === 'authenticated')
     }
   }, [authStatus, user, userEmployeeProfile])
