@@ -28,8 +28,10 @@ const UserInfoProvider: React.FC<{ children: React.ReactNode }> = ({
 
         if (user) {
           const userEmail = user.email?.toLowerCase()
-          const employeeProfile = await getEmployeeProfile(userEmail)
-          setUserEmployeeProfile(employeeProfile)
+          if (userEmail) {
+            const employeeProfile = await getEmployeeProfile(userEmail)
+            setUserEmployeeProfile(employeeProfile)
+          }
         }
       } catch (error) {
         if (isError(error)) {
