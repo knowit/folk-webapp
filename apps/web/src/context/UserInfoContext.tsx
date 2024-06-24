@@ -25,31 +25,22 @@ const UserInfoProvider: React.FC<{ children: React.ReactNode }> = ({
       try {
         const user = await getUserInfo()
         setUserInfo(user)
+
+        if (user) {
+          const userEmail = user.email?.toLowerCase()
+          const employeeProfile = await getEmployeeProfile(userEmail)
+          setUserEmployeeProfile(employeeProfile)
+        }
       } catch (error) {
         if (isError(error)) {
           setUserInfo(null)
+          setUserEmployeeProfile(null)
         }
       }
     }
 
     fetchUser()
   }, [])
-
-  useEffect(() => {
-    async function fetchEmployeeProfile() {
-      if (userInfo) {
-        const userEmail = userInfo.email?.toLowerCase()
-        if (userEmail) {
-          const data = await getEmployeeProfile(userEmail)
-          setUserEmployeeProfile(data)
-        }
-      } else {
-        setUserEmployeeProfile(null)
-      }
-    }
-
-    fetchEmployeeProfile()
-  }, [userInfo])
 
   return (
     <UserInfoContext.Provider
