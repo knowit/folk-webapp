@@ -11,14 +11,13 @@ import {
   OrganizationStructurePage,
 } from '../pages'
 import { useUserInfo } from '../hooks/useUserInfo'
-import LoginPage from '../pages/login/LoginPage'
 
 export default function Content() {
   const { isAuthenticated } = useUserInfo()
 
   return (
     <>
-      {isAuthenticated ? (
+      {isAuthenticated && (
         <Routes>
           <Route path="/" element={<Navigate replace to="/ansatte" />} />
           <Route path="/ansatte" element={<EmployeePage />} />
@@ -32,8 +31,6 @@ export default function Content() {
           <Route path="/debug" element={<DebugPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
-      ) : (
-        <LoginPage />
       )}
     </>
   )
