@@ -12,7 +12,7 @@ export interface BilledCustomerHours {
 export interface EmployeeWithPrimaryCustomer {
   user_id: string
   guid: string
-  navn: string
+  name: string
   title?: string
   link: string
   email: string
