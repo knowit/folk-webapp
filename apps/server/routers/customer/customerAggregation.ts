@@ -39,7 +39,7 @@ async function createEmployeeForCustomerList(
     rowId: employee.email,
     rowData: [
       {
-        name: employee.navn,
+        name: employee.name,
         email: employee.email,
         image_url: await getStorageUrl(employee.image_key),
         user_id: employee.user_id,
