@@ -22,17 +22,20 @@ router.get('/employeeTable', async (req, res, next) => {
     )
     const jobRotationInformation = await getFileFromS3('jobRotationInformation')
     const employeeWorkStatus = await getFileFromS3('employeeWorkStatus')
+    const employeeExperience = await getFileFromS3('ubwExperience')
 
     const basic_data = JSON.parse(basicEmployeeInformation)
     const motivation_data = JSON.parse(employeeMotivationAndCompetence)
     const rotation_data = JSON.parse(jobRotationInformation)
     const work_data = JSON.parse(employeeWorkStatus)
+    const employee_experience = JSON.parse(employeeExperience)
 
     const aggregatedData = await aggregateEmployeeTable(
       basic_data,
       motivation_data,
       rotation_data,
-      work_data
+      work_data,
+      employee_experience
     )
     res.send(aggregatedData)
   } catch (error) {
