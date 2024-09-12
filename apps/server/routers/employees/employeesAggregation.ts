@@ -3,6 +3,7 @@ import {
   getCategoryScoresForEmployee,
   getExperienceForEmployee,
   getProjectStatusForEmployee,
+  getStartDate,
   getStorageUrl,
   mapEmployeeTags,
   mapProjectExperience,
@@ -29,14 +30,24 @@ export const aggregateEmployeeTable = async (
   basicEmployeeInformation: BasicEmployeeInformation[],
   employeeMotivationAndCompetence: EmployeeMotivationAndCompetence[],
   jobRotationInformation: JobRotationInformation[],
-  employeeWorkStatus: EmployeeWorkStatus[]
+  employeeWorkStatus: EmployeeWorkStatus[],
+  employee_experience: EmployeeExperience[]
 ): Promise<EmployeeTableResponse> => {
-  const basicEmployeeInformationPromises = basicEmployeeInformation.map(
+  // Filters out employees that hasn't started yet
+  const filteredBasicEmployeeInformation = basicEmployeeInformation.filter(
+    (employee) => {
+      const startDate = getStartDate(employee, employee_experience)
+      return Date.parse(startDate) <= Date.now()
+    }
+  )
+
+  const basicEmployeeInformationPromises = filteredBasicEmployeeInformation.map(
     async (employee) => {
       const [motivationScores, competenceScores] = getCategoryScoresForEmployee(
         employee.email,
         employeeMotivationAndCompetence
       )
+
       return {
         rowId: employee.email,
         rowData: [

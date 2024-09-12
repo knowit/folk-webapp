@@ -1,4 +1,5 @@
 import {
+  BasicEmployeeInformation,
   CategoryScores,
   CvLinks,
   EmployeeExperience,
@@ -174,4 +175,16 @@ export function createCvLinks(linkTemplate: string): CvLinks {
 
 function createCvLink(language: string, format: string, linkTemplate: string) {
   return linkTemplate.replace('{LANG}', language).replace('{FORMAT}', format)
+}
+
+export function getStartDate(
+  employee: BasicEmployeeInformation,
+  employeeExperience: EmployeeExperience[]
+) {
+  const employeeExperienceData = employeeExperience.find(
+    (x) =>
+      x.guid == employee.guid &&
+      x.email.toLowerCase() == employee.email.toLowerCase()
+  )
+  return employeeExperienceData?.start_year
 }
