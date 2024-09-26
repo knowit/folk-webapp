@@ -37,7 +37,7 @@ export const aggregateEmployeeTable = async (
   const filteredBasicEmployeeInformation = basicEmployeeInformation.filter(
     (employee) => {
       const startDate = getStartDate(employee, employee_experience)
-      return Date.parse(startDate) <= Date.now()
+      return startDate == null || Date.parse(startDate) <= Date.now()
     }
   )
 
