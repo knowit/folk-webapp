@@ -14,14 +14,18 @@ export const useEmployeeTable = () =>
   })
 
 export const useEmployeeProfile = (email: string) =>
-  useSWR(['/employeeProfile', email], ([email]) => getEmployeeProfile(email), {
-    revalidateOnFocus: false,
-  })
+  useSWR(
+    { url: '/employeeProfile', email: email },
+    (params) => getEmployeeProfile(params.email),
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
 export const useEmployeeCompetence = (email: string) =>
   useSWR(
-    ['/employeeCompetence', email],
-    ([url, email]) => getEmployeeCompetence(url, email),
+    { url: '/employeeCompetence', email: email },
+    (params) => getEmployeeCompetence(params.email),
     {
       revalidateOnFocus: false,
     }
@@ -37,8 +41,10 @@ export const useEmployeeExperience = (email: string) =>
  */
 export const useEmployeeMotivationAndCompetenceCharts = (email?: string) =>
   useSWR(
-    email ? ['/employeeMotivationAndCompetenceCharts', email] : null,
-    ([url, email]) => getEmployeeMotivationAndCompetenceCharts(url, email),
+    email
+      ? { url: '/employeeMotivationAndCompetenceCharts', email: email }
+      : null,
+    (params) => getEmployeeMotivationAndCompetenceCharts(params.email),
     {
       revalidateOnFocus: false,
     }

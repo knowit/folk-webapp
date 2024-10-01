@@ -18,15 +18,12 @@ export const getEmployeeProfile = (email: string) =>
     params: { email },
   })
 
-export const getEmployeeCompetence = (url: string, email: string) =>
+export const getEmployeeCompetence = (email: string) =>
   getAtApiV2<EmployeeCompetenceResponse>(`/employees/employeeCompetence`, {
     params: { email },
   })
 
-export const getEmployeeMotivationAndCompetenceCharts = (
-  url: string,
-  email: string
-) =>
+export const getEmployeeMotivationAndCompetenceCharts = (email: string) =>
   getAtApiV2<ChartData>('/employees/employeeMotivationAndCompetence', {
     params: { email },
   })
