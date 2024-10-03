@@ -11,6 +11,7 @@ import {
   FagtimerCard,
 } from './cards'
 import { useMatomo } from '@jonkoops/matomo-tracker-react'
+import { pageTitle } from '../../utils/pagetitle'
 
 export default function CompetencePage() {
   const { trackPageView } = useMatomo()
@@ -19,6 +20,7 @@ export default function CompetencePage() {
     trackPageView({
       documentTitle: 'Kompetanse',
     })
+    pageTitle('Kompetanse')
   }, [trackPageView])
 
   return (

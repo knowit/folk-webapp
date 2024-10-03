@@ -3,6 +3,7 @@ import NavTab from '../../components/header/NavTab'
 import CustomerList from './customer-list/CustomerList'
 import { CustomerOverview } from './customer-overview/CustomerOverview'
 import { useEffect } from 'react'
+import { pageTitle } from '../../utils/pagetitle'
 
 export default function Customer() {
   const { trackPageView } = useMatomo()
@@ -11,6 +12,7 @@ export default function Customer() {
     trackPageView({
       documentTitle: 'Kunder',
     })
+    pageTitle('Kundeliste')
   }, [trackPageView])
 
   return (

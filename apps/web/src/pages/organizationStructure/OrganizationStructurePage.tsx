@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import Filter from './Components/Filter/Filter'
 import styled from '@emotion/styled'
 import { useMatomo } from '@jonkoops/matomo-tracker-react'
+import { pageTitle } from '../../utils/pagetitle'
 
 export default function OrganizationStructurePage() {
   const { trackPageView } = useMatomo()
@@ -16,6 +17,7 @@ export default function OrganizationStructurePage() {
     trackPageView({
       documentTitle: 'Organisasjonsstruktur',
     })
+    pageTitle('Organisasjonsstruktur')
   }, [trackPageView])
 
   function toggleEmployees() {
