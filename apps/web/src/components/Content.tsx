@@ -12,6 +12,7 @@ import {
   UnderConstructionPage,
 } from '../pages'
 import { useUserInfo } from '../hooks/useUserInfo'
+import GroupPage from '../pages/groups/GroupPage'
 
 export default function Content() {
   const { isAuthenticated } = useUserInfo()
@@ -24,6 +25,7 @@ export default function Content() {
           <Route path="/start" element={<StartPage />} />
           <Route path="/ansatte" element={<EmployeePage />} />
           <Route path="/ansatt/:id" element={<EmployeeProfilePage />} />
+          <Route path="/grupper" element={<GroupPage />} />
           <Route path="/kunder" element={<CustomerPage />} />
           <Route path="/kunder/:id" element={<CustomerSitePage />} />
           <Route path="/kompetanse" element={<CompetencePage />} />

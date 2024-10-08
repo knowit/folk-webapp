@@ -40,7 +40,13 @@ interface HeaderProps {
 }
 
 export default function Header({ darkMode, onChangeMode }: HeaderProps) {
-  const availablePages = ['/ansatte', '/kunder', '/kompetanse', '/organisasjon']
+  const availablePages = [
+    '/ansatte',
+    '/grupper',
+    '/kunder',
+    '/kompetanse',
+    '/organisasjon',
+  ]
   const activePage = useLocation().pathname
   const { isAuthenticated, userEmployeeProfile } = useUserInfo()
 
@@ -60,6 +66,12 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
           label={'Ansatte'}
           value={'/ansatte'}
           to={'/ansatte'}
+          component={NavLink}
+        />
+        <Tab
+          label={'Grupper'}
+          value={'/grupper'}
+          to={'/grupper'}
           component={NavLink}
         />
         <Tab
