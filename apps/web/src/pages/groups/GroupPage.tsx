@@ -65,7 +65,7 @@ export default function GroupPage() {
 
   const styret = [
     { id: 'bha@knowit.no' },
-    { id: 'kmk@knowit.no' },
+    { id: 'ksk@knowit.no' },
     { id: 'mona.hvattum@knowit.no' },
     { id: 'snorre.finanger@knowit.no' },
     { id: 'trygve.bjornstad@knowit.no' },
@@ -77,13 +77,13 @@ export default function GroupPage() {
     { id: 'erik.lund@knowit.no', role: 'vara verneombud' },
     { id: 'even.johansen@knowit.no', role: 'vara' },
     { id: 'hrj@knowit.no', role: 'lederrepresentant' },
-    { id: 'kmk@knowit.no', role: 'lederrepresentant' },
+    { id: 'ksk@knowit.no', role: 'lederrepresentant' },
   ]
 
   const ledergruppa = [
     { id: 'hrj@knowit.no' },
     { id: 'jhg@knowit.no' },
-    { id: 'kmk@knowit.no' },
+    { id: 'ksk@knowit.no' },
     { id: 'lin@knowit.no' },
   ]
 
