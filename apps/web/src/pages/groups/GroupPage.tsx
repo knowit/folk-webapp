@@ -95,15 +95,15 @@ export default function GroupPage() {
 
   return (
     <Grid container spacing={2} alignItems={'stretch'}>
-      <GroupCard members={principals} title={'Principal engineers'} />
-      <GroupCard members={recruitment} title={'Rekruttering'} />
+      <GroupCard members={amu} title={'Arbeidsmiljøutvalg'} />
+      <GroupCard members={drift} title={'Drift'} />
       <GroupCard members={gruppeledere} title={'Gruppeledere'} />
-      <GroupCard members={sales} title={'Salg og rådgivning'} />
       <GroupCard members={julebord} title={'Julebord'} />
       <GroupCard members={ledergruppa} title={'Ledergruppa'} />
-      <GroupCard members={amu} title={'Arbeidsmiljøutvalg'} />
+      <GroupCard members={principals} title={'Principal engineers'} />
+      <GroupCard members={recruitment} title={'Rekruttering'} />
+      <GroupCard members={sales} title={'Salg og rådgivning'} />
       <GroupCard members={styret} title={'Styret'} />
-      <GroupCard members={drift} title={'Drift'} />
       <GroupCard members={okonomi} title={'Økonomi'} />
     </Grid>
   )
