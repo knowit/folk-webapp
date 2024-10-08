@@ -80,11 +80,21 @@ export default function GroupPage() {
     { id: 'kmk@knowit.no', role: 'lederrepresentant' },
   ]
 
-  const ledergruppa = [{ id: 'kmk@knowit.no' }]
+  const ledergruppa = [
+    { id: 'hrj@knowit.no' },
+    { id: 'jhg@knowit.no' },
+    { id: 'kmk@knowit.no' },
+    { id: 'lin@knowit.no' },
+  ]
 
   const okonomi = [{ id: 'kik@knowit.no' }]
 
-  const drift = []
+  const drift = [
+    { id: 'adam.queja@knowit.no' },
+    { id: 'hrj@knowit.no' },
+    { id: 'kacper.rzadkowski@knowit.no' },
+    { id: 'oskar.haukeboe@knowit.no' },
+  ]
 
   useEffect(() => {
     trackPageView({
