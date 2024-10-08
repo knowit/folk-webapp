@@ -3,17 +3,17 @@ import { GridItemHeader } from '../../../components/gridItem/GridItemHeader'
 import { GridItemContent } from '../../../components/gridItem/GridItemContent'
 import GroupMember from '../GroupMember'
 
-const RecruitmentCard = () => {
+const GroupCard = ({ members, title }) => {
   return (
     <GridItem>
-      <GridItemHeader title="Rekruttering" />
+      <GridItemHeader title={title} />
       <GridItemContent>
-        <GroupMember employeeId={'lin@knowit.no'} />
-        <GroupMember employeeId={'tommi.venning@knowit.no'} />
-        <GroupMember employeeId={'daniel.horn@knowit.no'} />
+        {members.map(function (member) {
+          return <GroupMember {...member} />
+        })}
       </GridItemContent>
     </GridItem>
   )
 }
 
-export default RecruitmentCard
+export default GroupCard

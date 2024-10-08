@@ -6,11 +6,24 @@ import CharacterLimitBox from '../../components/sortableTable/components/Charact
 import { OpenInNewIcon } from '../../assets/Icons'
 import { Link } from 'react-router-dom'
 
+export interface Member {
+  id: string
+  role?: string
+}
+
 const EmployeeName = styled('span')(() => ({
   marginTop: 'auto',
   marginBottom: 'auto',
   marginLeft: 15,
 }))
+
+const EmployeeRole = styled('span')(() => ({
+  marginTop: 'auto',
+  marginBottom: 'auto',
+  marginLeft: 15,
+  marginRight: 15,
+}))
+
 const AvatarStyled = styled(Avatar)(() => ({
   width: 50,
   height: 50,
@@ -27,12 +40,12 @@ const ButtonSubRoot = styled('div')(() => ({
   alignItems: 'center',
 }))
 
-const GroupMember = ({ employeeId }) => {
-  const { data: employee, error } = useEmployeeProfile(employeeId)
+function GroupMember(member: Member) {
+  const { data: employee, error } = useEmployeeProfile(member.id)
   const isLoading = !employee
 
   if (error && error.status === 404) {
-    return <EmployeeNotFound employeeId={employeeId} />
+    return <EmployeeNotFound employeeId={member.id} />
   }
 
   if (error) {
@@ -50,7 +63,12 @@ const GroupMember = ({ employeeId }) => {
         <EmployeeName>
           <CharacterLimitBox text={employee.name} />
         </EmployeeName>
-        <Link to={`/ansatt/${employeeId}`} target={`employee_${employeeId}`}>
+        {member.role ? (
+          <EmployeeRole>
+            <CharacterLimitBox text={`(${member.role})`} />
+          </EmployeeRole>
+        ) : null}
+        <Link to={`/ansatt/${member.id}`} target={`employee_${member.id}`}>
           <OpenInNewIcon />
         </Link>
       </ButtonSubRoot>
