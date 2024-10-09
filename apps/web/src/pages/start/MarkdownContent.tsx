@@ -3,6 +3,7 @@ import DOMPurify from 'dompurify'
 import { GridItem } from '../../components/gridItem/GridItem'
 import { GridItemHeader } from '../../components/gridItem/GridItemHeader'
 import { GridItemContent } from '../../components/gridItem/GridItemContent'
+
 interface MarkdownContentProps {
   title: string
   markdown: string
