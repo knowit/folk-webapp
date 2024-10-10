@@ -7,7 +7,6 @@ import {
   CompetenceMappingCard,
   EducationCard,
   ExperienceDistributionCard,
-  FagEventsCard,
   FagtimerCard,
 } from './cards'
 import { useMatomo } from '@jonkoops/matomo-tracker-react'
@@ -30,7 +29,6 @@ export default function CompetencePage() {
       <ExperienceDistributionCard />
       <AgeDistributionCard />
       <FagtimerCard />
-      <FagEventsCard />
       <EducationCard />
       <CompetenceMappingCard />
     </Grid>
