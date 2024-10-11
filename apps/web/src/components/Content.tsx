@@ -3,12 +3,13 @@ import {
   CompetencePage,
   CustomerPage,
   CustomerSitePage,
+  DebugPage,
   EmployeePage,
   EmployeeProfilePage,
   NotFoundPage,
-  UnderConstructionPage,
-  DebugPage,
   OrganizationStructurePage,
+  StartPage,
+  UnderConstructionPage,
 } from '../pages'
 import { useUserInfo } from '../hooks/useUserInfo'
 
@@ -19,7 +20,8 @@ export default function Content() {
     <>
       {isAuthenticated && (
         <Routes>
-          <Route path="/" element={<Navigate replace to="/ansatte" />} />
+          <Route path="/" element={<Navigate replace to="/start" />} />
+          <Route path="/start" element={<StartPage />} />
           <Route path="/ansatte" element={<EmployeePage />} />
           <Route path="/ansatt/:id" element={<EmployeeProfilePage />} />
           <Route path="/kunder" element={<CustomerPage />} />
