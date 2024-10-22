@@ -22,7 +22,7 @@ export default function LoginLogoutButton() {
       },
     })
 
-    navigate('/start', { replace: true })
+    navigate('/', { replace: true })
   }
 
   async function handleSignOut() {
