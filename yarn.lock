@@ -11407,13 +11407,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:^3.1.7":
-  version: 3.1.7
-  resolution: "dompurify@npm:3.1.7"
-  checksum: 0a9b811bbc94f3dba60cf6486962362b0f1a5b4ab789f5e1cbd4749b6ba1a1fad190a677a962dc8850ce28764424765fe425e9d6508e4e93ba648ef15d54bc24
-  languageName: node
-  linkType: hard
-
 "domutils@npm:^1.7.0":
   version: 1.7.0
   resolution: "domutils@npm:1.7.0"
@@ -16007,15 +16000,6 @@ __metadata:
   dependencies:
     tmpl: 1.0.5
   checksum: b38a025a12c8146d6eeea5a7f2bf27d51d8ad6064da8ca9405fcf7bf9b54acd43e3b30ddd7abb9b1bfa4ddb266019133313482570ddb207de568f71ecfcf6060
-  languageName: node
-  linkType: hard
-
-"marked@npm:^14.1.2":
-  version: 14.1.2
-  resolution: "marked@npm:14.1.2"
-  bin:
-    marked: bin/marked.js
-  checksum: 47636a6c4edd2ccfa682826ff139292900a9e179812a4ed8a8007fcb34cab662659e5c27565f5250c82409ee0f8cd3c0c1c23b448bb453c5f3d71d510a75b437
   languageName: node
   linkType: hard
 
@@ -21593,14 +21577,12 @@ __metadata:
     cross-env: ^7.0.3
     d3: ^7.8.2
     dayjs: ^1.11.7
-    dompurify: ^3.1.7
     dotenv: ^16.0.3
     eslint-plugin-react: ^7.31.11
     eslint-plugin-react-hooks: ^4.6.0
     exceljs: ^4.3.0
     framer-motion: ^10.12.4
     http-proxy-middleware: ^2.0.6
-    marked: ^14.1.2
     react: ^18.2.0
     react-dom: ^18.2.0
     react-image: ^4.1.0
