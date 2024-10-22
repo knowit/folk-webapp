@@ -1,0 +1,15 @@
+export const sales = [
+  { id: 'abr@knowit.no' },
+  { id: 'asbjorn.gjerde-lund@knowit.no' },
+  { id: 'atle.prange@knowit.no' },
+  { id: 'hans.frisvold@knowit.no' },
+  { id: 'jhg@knowit.no' },
+  { id: 'jonas.gurrich@knowit.no' },
+  { id: 'kai.eidissen@knowit.no' },
+  { id: 'kristian.pihl@knowit.no' },
+  { id: 'kristoffer.lundnes@knowit.no' },
+  { id: 'lin@knowit.no' },
+  { id: 'llu@knowit.no' },
+  { id: 'margrete.iversen@knowit.no' },
+  { id: 'torbjorn.moen@knowit.no' },
+]
