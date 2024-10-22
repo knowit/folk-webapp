@@ -22,7 +22,7 @@ export default function LoginLogoutButton() {
       },
     })
 
-    navigate('/ansatte', { replace: true })
+    navigate('/', { replace: true })
   }
 
   async function handleSignOut() {

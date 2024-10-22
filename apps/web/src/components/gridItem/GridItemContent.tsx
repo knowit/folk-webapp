@@ -9,4 +9,5 @@ export const GridItemContent = styled('div')(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.background.darker}`,
   borderRight: `1px solid ${theme.palette.background.darker}`,
   borderRadius: '0px 0px 6px 6px',
+  height: '100%',
 }))
