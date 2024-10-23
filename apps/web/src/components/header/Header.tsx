@@ -40,7 +40,13 @@ interface HeaderProps {
 }
 
 export default function Header({ darkMode, onChangeMode }: HeaderProps) {
-  const availablePages = ['/ansatte', '/kunder', '/kompetanse', '/organisasjon']
+  const availablePages = [
+    '/ansatte',
+    '/hjem',
+    '/kunder',
+    '/kompetanse',
+    '/organisasjon',
+  ]
   const activePage = useLocation().pathname
   const { isAuthenticated, userEmployeeProfile } = useUserInfo()
 
@@ -56,6 +62,7 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
   function HeaderTabs() {
     return (
       <Tabs value={tabsVisiblePage} textColor="secondary">
+        <Tab label={'Hjem'} value={'/hjem'} to={'/hjem'} component={NavLink} />
         <Tab
           label={'Ansatte'}
           value={'/ansatte'}
@@ -75,7 +82,7 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
           component={NavLink}
         />
         <Tab
-          label={'Organisasjonsstruktur'}
+          label={'Organisasjon'}
           value={'/organisasjon'}
           to={'/organisasjon'}
           component={NavLink}
