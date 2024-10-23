@@ -9,14 +9,14 @@ import { communicationLinks } from './cards/Communication'
 import { administrationLinks } from './cards/Administration'
 import { otherLinks } from './cards/Other'
 
-export default function StartPage() {
+export default function HomePage() {
   const { trackPageView } = useMatomo()
 
   useEffect(() => {
     trackPageView({
-      documentTitle: 'Start',
+      documentTitle: 'Hjem',
     })
-    pageTitle('Start')
+    pageTitle('Hjem')
   }, [trackPageView])
 
   return (
