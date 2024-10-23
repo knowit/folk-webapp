@@ -6,12 +6,12 @@ import {
   DebugPage,
   EmployeePage,
   EmployeeProfilePage,
+  HomePage,
   NotFoundPage,
   OrganizationStructurePage,
   UnderConstructionPage,
 } from '../pages'
 import { useUserInfo } from '../hooks/useUserInfo'
-import HomePage from '../pages/home/HomePage'
 
 export default function Content() {
   const { isAuthenticated } = useUserInfo()
