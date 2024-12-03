@@ -5323,6 +5323,46 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nlux/core@npm:2.17.1":
+  version: 2.17.1
+  resolution: "@nlux/core@npm:2.17.1"
+  checksum: 74c45030b5e968f17e31786dc20c106648bd67a2144bba6213c0de6ca3e4d68c83a12b949accd99b950209986f20d0b1ba261a1f4b2253b7a77221231e5b1471
+  languageName: node
+  linkType: hard
+
+"@nlux/langchain-react@npm:^2.17.1":
+  version: 2.17.1
+  resolution: "@nlux/langchain-react@npm:2.17.1"
+  dependencies:
+    "@nlux/langchain": 2.17.1
+  peerDependencies:
+    "@nlux/react": 2.17.1
+    react: ^18
+  checksum: f952cd38c8edce187c70f12f7da8147d142bd6f829832d1041e183a3494fd416183f3939b82e763fdac22e42b201a240e82ed9626ea1a76e0928d66ede4eb4e8
+  languageName: node
+  linkType: hard
+
+"@nlux/langchain@npm:2.17.1":
+  version: 2.17.1
+  resolution: "@nlux/langchain@npm:2.17.1"
+  dependencies:
+    "@nlux/core": 2.17.1
+  checksum: 043f82ea794dfbd91f682d1c4da7d733f9ec2e95202138eb5260a11b2151cf0e3de757cd6263ac8864a160eef77c3bbfcba145120f874ed0f2d1fe30d844f6d8
+  languageName: node
+  linkType: hard
+
+"@nlux/react@npm:^2.17.1":
+  version: 2.17.1
+  resolution: "@nlux/react@npm:2.17.1"
+  dependencies:
+    "@nlux/core": 2.17.1
+  peerDependencies:
+    react: ^18
+    react-dom: ^18
+  checksum: 53738eaebe1eefdd1de3cdb37a609e854c098dccc9ec7dbabdec1527a3754cf14036f91d077bb63ed8efd3668224d13c09c136073402a2e29aefb48b89a89bac
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -13855,6 +13895,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "folk-webapp@workspace:."
   dependencies:
+    "@nlux/langchain-react": ^2.17.1
+    "@nlux/react": ^2.17.1
     eslint: ^8.30.0
     husky: ^8.0.2
     prettier: ^2.8.1

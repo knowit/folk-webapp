@@ -87,6 +87,12 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
           to={'/organisasjon'}
           component={NavLink}
         />
+        <Tab
+          label={'KnowitGPT'}
+          value={'/knowitGPT'}
+          to={'/knowitGPT'}
+          component={NavLink}
+        />
       </Tabs>
     )
   }
