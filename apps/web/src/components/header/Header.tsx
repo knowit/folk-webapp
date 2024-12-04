@@ -46,6 +46,7 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
     '/kunder',
     '/kompetanse',
     '/organisasjon',
+    '/knowitGPT',
   ]
   const activePage = useLocation().pathname
   const { isAuthenticated, userEmployeeProfile } = useUserInfo()

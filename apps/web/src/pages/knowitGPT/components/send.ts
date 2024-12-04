@@ -1,47 +1,53 @@
 import { StreamSend, StreamingAdapterObserver } from '@nlux/react'
 
-// A demo API by NLUX that connects to OpenAI
-// and returns a stream of Server-Sent events
-const demoProxyServerUrl = 'https://gptalks.api.nlux.dev/openai/chat/stream'
+const ollamaApiUrl = 'http://localhost:11434/api/chat'
 
-// Function to send query to the server and receive a stream of chunks as response
 export const send: StreamSend = async (
   prompt: string,
   observer: StreamingAdapterObserver
 ) => {
-  const body = { prompt }
-  const response = await fetch(demoProxyServerUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  })
-
-  if (response.status !== 200) {
-    observer.error(new Error('Failed to connect to the server'))
-    return
+  const body = {
+    model: 'llama3.1',
+    messages: [{ role: 'user', content: prompt }],
   }
 
-  if (!response.body) {
-    return
-  }
+  try {
+    const response = await fetch(ollamaApiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
 
-  // Read a stream of server-sent events
-  // and feed them to the observer as they are being generated
-  const reader = response.body.getReader()
-  const textDecoder = new TextDecoder()
-
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    const { value, done } = await reader.read()
-    if (done) {
-      break
+    if (!response.ok) {
+      observer.error(new Error('Failed to connect to Ollama server'))
+      return
     }
 
-    const content = textDecoder.decode(value)
-    if (content) {
-      observer.next(content)
-    }
-  }
+    const reader = response.body?.getReader()
+    const textDecoder = new TextDecoder()
 
-  observer.complete()
+    if (!reader) {
+      observer.error(new Error('No response body'))
+      return
+    }
+
+    // Read and stream Ollama's responses
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const { value, done } = await reader.read()
+      if (done) break
+
+      let content = textDecoder.decode(value)
+      const transformedContent = JSON.parse(content)
+      content = JSON.stringify(transformedContent.message['content'])
+      content = content.slice(1, -1)
+      if (content) {
+        observer.next(content)
+      }
+    }
+
+    observer.complete()
+  } catch (error) {
+    observer.error(error)
+  }
 }

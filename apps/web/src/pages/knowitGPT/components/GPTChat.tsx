@@ -4,11 +4,7 @@ import { AiChat, useAsStreamAdapter } from '@nlux/react'
 import { send } from './send'
 import { personas } from './personas'
 import { FallbackMessage } from '../../employee/components/FallbackMessage'
-
-// const ComponentRoot = styled('dl')(() => ({
-//   padding: 0,
-//   margin: 0,
-// }))
+import '@nlux/themes/nova.css'
 
 interface Props {
   isLoading?: boolean
@@ -27,7 +23,7 @@ export function GPTChat({ isLoading, error }: Props) {
   }
 
   return (
-    <div>
+    <div style={{ width: '60%', minHeight: 350, margin: 'auto' }}>
       <h1>Test</h1>
       <AiChat
         adapter={adapter}

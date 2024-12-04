@@ -48,6 +48,9 @@
   },
   "dependencies": {
     "@nlux/langchain-react": "^2.17.1",
-    "@nlux/react": "^2.17.1"
+    "@nlux/react": "^2.17.1",
+    "@nlux/themes": "^2",
+    "postcss-loader": "^8.1.1",
+    "postcss-normalize": "^13.0.1"
   }
 }
