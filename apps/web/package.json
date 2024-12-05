@@ -4,6 +4,10 @@
   "private": true,
   "prettier": "@folk/prettier-config",
   "proxy": "https://dev.folk.knowit.no/",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "browserslist": {
     "production": [
       ">0.2%",
