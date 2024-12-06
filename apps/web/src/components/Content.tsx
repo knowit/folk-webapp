@@ -6,6 +6,7 @@ import {
   DebugPage,
   EmployeePage,
   EmployeeProfilePage,
+  GPTPage,
   HomePage,
   NotFoundPage,
   OrganizationStructurePage,
@@ -31,6 +32,7 @@ export default function Content() {
           <Route path="/arbeidsmiljo" element={<UnderConstructionPage />} />
           <Route path="/rekruttering" element={<UnderConstructionPage />} />
           <Route path="/debug" element={<DebugPage />} />
+          <Route path="/knowitGPT" element={<GPTPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       )}
