@@ -1,4 +1,3 @@
-/*
 import { AzureOpenAILLMRepositoryImpl } from '../implementations/azure-openai-llm-repository-impl'
 import { LLMRole, LLMMessage, Tool } from '../repository/llm-repository'
 
@@ -170,4 +169,3 @@ test('generateStream with tool uses tool for response', async () => {
   )
   console.log('Response:', response.content)
 }, 20000)
-*/

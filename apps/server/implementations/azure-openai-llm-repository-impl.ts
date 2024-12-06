@@ -1,4 +1,3 @@
-/*
 import {
   ChunkEmbedding,
   LLMChunk,
@@ -224,4 +223,3 @@ Array.prototype.toOpenAIToolCalls = function (): any[] {
     }
   })
 }
-*/
