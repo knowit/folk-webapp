@@ -2,7 +2,7 @@
   "exclude": ["node_modules"],
   "compilerOptions": {
     // "incremental": true,
-    "types": ["express", "jest"],
+    "typeRoots": ["@types"],
     "composite": false,
     "declaration": true,
     "declarationMap": true,

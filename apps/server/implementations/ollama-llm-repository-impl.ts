@@ -1,3 +1,4 @@
+/*
 import {
   ChunkEmbedding,
   LLMChunk,
@@ -31,3 +32,4 @@ class OllamaLLMRepositoryImpl extends LLMClient {
     throw new Error('Method not implemented.')
   }
 }
+*/
