@@ -3,6 +3,7 @@
   "compilerOptions": {
     // "incremental": true,
     "types": ["express", "jest"],
+    "typeRoots": ["./@types", "../../node_modules/@types"],
     "composite": false,
     "declaration": true,
     "declarationMap": true,
@@ -25,5 +26,6 @@
     "outDir": ".build",
     "moduleResolution": "node",
     "rootDir": "./"
-  }
+  },
+  "include": ["./"]
 }
