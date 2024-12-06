@@ -1,7 +1,6 @@
-/*
 // Interface for a generic LLM so we can quickly adapt to changes with differing implementations
 export abstract class LLMClient {
-  /!*
+  /*
    Generates a completed LLM response from whichever LLM we connect
    Args:
     model: The model used by the LLM to give a response
@@ -10,7 +9,7 @@ export abstract class LLMClient {
     options: Any LLM speciic options. These are generally not transferable across LLM's
   Returns:
     a completed LLM response when it is generated
-  *!/
+  */
   abstract generateReply(
     model: string,
     messages: LLMMessage[],
@@ -18,7 +17,7 @@ export abstract class LLMClient {
     options?: Record<string, any>
   ): Promise<LLMResponse>
 
-  /!*
+  /*
    Generates a stream of LLM chunks from whichever LLM we connect
    Args:
     model: The model used by the LLM to give a response
@@ -27,7 +26,7 @@ export abstract class LLMClient {
     options: Any LLM speciic options. These are generally not transferable across LLM's
   Returns:
     A stream of tokens for the LLM response
-  *!/
+  */
   abstract generateStream(
     model: string,
     messages: LLMMessage[],
@@ -35,14 +34,14 @@ export abstract class LLMClient {
     options?: Record<string, any>
   ): AsyncGenerator<LLMChunk>
 
-  /!*
+  /*
   Generates embeddings for the list of chunks sent in, returning the vector spaces in return
   Args:
     model: the embedding model you want to use to embed. Typically openAI uses text-generation-large while ollama uses nomic-embedding
     chunks: the strings you want to embed
   Returns:
     A list of embedded chunks
-  *!/
+  */
   abstract generateEmbedding(
     embeddingModel: string,
     chunks: string[]
@@ -132,4 +131,3 @@ Array.prototype.toFormattedMessages = function (): any[] {
     return payload
   })
 }
-*/
