@@ -2,8 +2,8 @@
   "exclude": ["node_modules"],
   "compilerOptions": {
     // "incremental": true,
-    "types": ["jest"],
-    "typeRoots": ["../../node_modules/@types"],
+    "types": ["express", "jest"],
+    "typeRoots": ["@types", "node_modules/@types"],
     "composite": false,
     "declaration": true,
     "declarationMap": true,
