@@ -53,12 +53,23 @@ export interface ChunkEmbedding {
   vector: number[]
 }
 
-export interface Tool {
+export abstract class Tool {
   name: string
   description: string
-  use: (input: string) => Promise<any>
+  parameters: ToolParam[]
+  abstract use(
+    args: Record<string, any>,
+    options?: Record<string, any>
+  ): Promise<any>
 }
 
+export interface ToolParam {
+  name: string
+  type: string
+  description: string
+  enums?: string[]
+  isRequired?: boolean
+}
 // A given response based on a LLM generation. Ensure that added fields are supported by all implementations
 export interface LLMResponse {
   content: string
@@ -73,23 +84,26 @@ export interface LLMChunk {
 export interface LLMMessage {
   content?: string
   role: LLMRole
-  image?: string
+  images?: string
+  toolCalls?: Record<string, any>
+  toolCallId?: string
 }
 
 // The differing roles an LLMMessage can have
 export enum LLMRole {
   // Response from LLM
-  assistant,
+  assistant = 'assistant',
   // Tool response from LLM
-  tool,
+  tool = 'tool',
   // System prompt, defines LLM handling
-  system,
+  system = 'system',
   // Message from user
-  user,
+  user = 'user',
 }
 
 // Extend Array to include a custom method
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Array<T> {
     toFormattedMessages(): any[]
   }
@@ -98,17 +112,21 @@ declare global {
 // Define the method implementation
 Array.prototype.toFormattedMessages = function (): any[] {
   return this.map((message: LLMMessage) => {
-    const { role, content, image } = message
-
     // Construct the formatted message
     const payload: any = {
-      role: LLMRole[role], // Convert enum to string
+      role: LLMRole[message.role],
     }
-    if (content) {
-      payload.content = content
+    if (message.content) {
+      payload['content'] = message.content
     }
-    if (image) {
-      payload.image_url = { url: image }
+    if (message.images) {
+      payload['image_url'] = message.images
+    }
+    if (message.toolCallId) {
+      payload['tool_call_id'] = message.toolCallId
+    }
+    if (message.toolCalls) {
+      payload['tool_calls'] = message.toolCalls
     }
     return payload
   })
