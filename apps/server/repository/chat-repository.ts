@@ -1,6 +1,7 @@
+/*
 // Repository for communication with KnowitGPT chat and the chats stored in database
 export interface ChatRepository {
-  /* 
+  /!*
   Retrieves a list of chats a user has had with KnowitGPT
   Args:
     user_id: the knowit identifier for the user
@@ -8,7 +9,7 @@ export interface ChatRepository {
     offset: used for pagination combined with limit
   Returns:
     A list of Chat objects
-  */
+  *!/
   fetchChatsForUser(
     user_id: string,
     limit?: number,
@@ -17,11 +18,11 @@ export interface ChatRepository {
 
   // Retrieves the current messages for a given chat_id
   fetchMessagesForChat(chat_id: string): Array<ChatMessage>
-  /*
+  /!*
   Sends a new message from user for a given chat.
   Handling of this includes using RAG as well as communicating with LLM to generate
   a good stream that answers the question
-  */
+  *!/
   sendMessage(
     user_id: string,
     chat_id: string,
@@ -87,3 +88,4 @@ export enum ChatRole {
   // Message from user
   user,
 }
+*/
