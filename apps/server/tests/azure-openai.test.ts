@@ -83,7 +83,7 @@ test('generateReply handles a simple text message', async () => {
     options
   )
   console.log('Test Case 1 Response:', response.content)
-})
+}, 20000)
 
 test('generateStream using simple request', async () => {
   const messages: LLMMessage[] = [
@@ -112,7 +112,7 @@ test('generateStream using simple request', async () => {
     }
   }
   console.log(accumulatedResponse)
-})
+}, 20000)
 
 test('generateReply with tool uses tool for response', async () => {
   const messages: LLMMessage[] = [
@@ -140,7 +140,7 @@ test('generateReply with tool uses tool for response', async () => {
     options
   )
   console.log('Response:', response.content)
-})
+}, 20000)
 
 test('generateStream with tool uses tool for response', async () => {
   const messages: LLMMessage[] = [
