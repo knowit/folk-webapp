@@ -18405,6 +18405,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ollama@npm:0.5.11":
+  version: 0.5.11
+  resolution: "ollama@npm:0.5.11"
+  dependencies:
+    whatwg-fetch: ^3.6.20
+  checksum: 9b55a85f9771e81527b66f169329ed5b3d92de2af495f26a00bf4e9d3f224614ffda6a047135baf4bc9960a122fb18656613b733e5e37db02195ebaf0fba79b4
+  languageName: node
+  linkType: hard
+
 "on-finished@npm:2.4.1":
   version: 2.4.1
   resolution: "on-finished@npm:2.4.1"
@@ -21237,6 +21246,7 @@ __metadata:
     express: ^4.18.2
     jest: ^29.7.0
     nodemon: ^2.0.20
+    ollama: 0.5.11
     openai: 4.75.0
     openid-client: ^4.9.1
     serverless-plugin-monorepo: ^0.11.0
@@ -23581,6 +23591,13 @@ __metadata:
   version: 3.6.2
   resolution: "whatwg-fetch@npm:3.6.2"
   checksum: ee976b7249e7791edb0d0a62cd806b29006ad7ec3a3d89145921ad8c00a3a67e4be8f3fb3ec6bc7b58498724fd568d11aeeeea1f7827e7e1e5eae6c8a275afed
+  languageName: node
+  linkType: hard
+
+"whatwg-fetch@npm:^3.6.20":
+  version: 3.6.20
+  resolution: "whatwg-fetch@npm:3.6.20"
+  checksum: c58851ea2c4efe5c2235f13450f426824cf0253c1d45da28f45900290ae602a20aff2ab43346f16ec58917d5562e159cd691efa368354b2e82918c2146a519c5
   languageName: node
   linkType: hard
 

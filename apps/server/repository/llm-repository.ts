@@ -47,7 +47,6 @@ export abstract class LLMClient {
     chunks: string[]
   ): Promise<ChunkEmbedding[]>
 }
-
 export interface ChunkEmbedding {
   chunk: string
   vector: number[]
@@ -85,7 +84,7 @@ export interface LLMMessage {
   content?: string
   role: LLMRole
   images?: string
-  toolCalls?: Record<string, any>
+  toolCalls?: Record<string, any>[]
   toolCallId?: string
 }
 
