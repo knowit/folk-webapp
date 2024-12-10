@@ -1,11 +1,20 @@
 import React, { useState } from 'react'
 import ChatBubble from './ChatBubble'
+import { AzureOpenAILLMRepositoryImpl } from 'server/implementations/azure-openai-llm-repository-impl'
+import { LLMRole } from 'server/repository/llm-repository'
 
 const ChatWindow: React.FC = () => {
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>(
     []
   )
   const [input, setInput] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const azureClient = new AzureOpenAILLMRepositoryImpl(
+    process.env.AZURE_OPENAI_ENDPOINT,
+    process.env.AZURE_OPENAI_API_KEY,
+    process.env.AZURE_OPENAI_API_VERSION
+  )
 
   const handleSend = async () => {
     if (input.trim()) {
@@ -13,9 +22,34 @@ const ChatWindow: React.FC = () => {
       setMessages((prev) => [...prev, userMessage])
       setInput('')
 
-      // Simulating bot response with a delay
-      const botResponse = { text: `You said: ${input}`, isUser: false }
-      setTimeout(() => setMessages((prev) => [...prev, botResponse]), 500)
+      setLoading(true)
+      try {
+        const llmMessages = [
+          ...messages.map((msg) => ({
+            role: msg.isUser ? LLMRole.user : LLMRole.assistant,
+            content: msg.text,
+          })),
+          { role: LLMRole.user, content: input },
+        ]
+        const options = { seed: 5 }
+        const response = await azureClient.generateReply(
+          'gpt-4o',
+          llmMessages,
+          null,
+          options
+        )
+        const botMessage = { text: response.content, isUser: false }
+        setMessages((prev) => [...prev, botMessage])
+      } catch (error) {
+        console.error('Error generating reply:', error)
+        const errorMessage = {
+          text: 'Something went wrong. Please try again.',
+          isUser: false,
+        }
+        setMessages((prev) => [...prev, errorMessage])
+      } finally {
+        setLoading(false)
+      }
     }
   }
 
