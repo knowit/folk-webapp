@@ -420,3 +420,43 @@ class OllamaV1ChunkToolCallFunction {
     )
   }
 }
+
+export class OllamaEmbedding {
+  constructor(
+    model: string,
+    embeddings: number[][],
+    totalDuration: number,
+    loadDuration: number,
+    promptEvalCount: number
+  ) {
+    this.model = model
+    this.embeddings = embeddings
+    this.totalDuration = totalDuration
+    this.loadDuration = loadDuration
+    this.promptEvalCount = promptEvalCount
+  }
+  model: string
+  embeddings: number[][]
+  totalDuration: number
+  loadDuration: number
+  promptEvalCount: number
+
+  static fromJson(json: Record<string, any>): OllamaEmbedding {
+    return new OllamaEmbedding(
+      json.model,
+      json.embeddings,
+      json.total_duration,
+      json.load_duration,
+      json.prompt_eval_count
+    )
+  }
+  toJson(): Record<string, any> {
+    return {
+      model: this.model,
+      embeddings: this.embeddings,
+      total_duration: this.totalDuration,
+      load_duration: this.loadDuration,
+      promp_eval_count: this.promptEvalCount,
+    }
+  }
+}

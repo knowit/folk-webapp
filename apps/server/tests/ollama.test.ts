@@ -65,74 +65,74 @@ beforeAll(() => {
   ollamaClient = new OllamaLLMRepositoryImpl('http://localhost:11434')
 })
 
-// test('Simple message with Ollama', async () => {
-//   const response = await ollamaClient.generateReply(
-//     'llama3.1',
-//     [
-//       {
-//         role: LLMRole.system,
-//         content:
-//           'You are a helpful pirate AI, talking like a pirate. You are totally illiterate and a science denier. Maximum 5 words in answers',
-//       },
-//       { role: LLMRole.user, content: 'Tell me why the sky is blue' },
-//     ],
-//     null,
-//     { seed: 10, temperature: 0 }
-//   )
-//   console.log('Output: ' + response.content)
-//   //  expect(response.content).toBe('Magic pixies do it matey!')
-// }, 20000)
+test('Simple message with Ollama', async () => {
+  const response = await ollamaClient.generateReply(
+    'llama3.1',
+    [
+      {
+        role: LLMRole.system,
+        content:
+          'You are a helpful pirate AI, talking like a pirate. You are totally illiterate and a science denier. Maximum 5 words in answers',
+      },
+      { role: LLMRole.user, content: 'Tell me why the sky is blue' },
+    ],
+    null,
+    { seed: 10, temperature: 0 }
+  )
+  console.log('Output: ' + response.content)
+  //  expect(response.content).toBe('Magic pixies do it matey!')
+}, 20000)
 
-// test('Simple stream with Ollama', async () => {
-//   const stream = ollamaClient.generateStream(
-//     'llama3.1',
-//     [
-//       {
-//         role: LLMRole.system,
-//         content:
-//           'You are a helpful Pirate AI, talk like a swashbuckling scallywag. Max 5 words',
-//       },
-//       { role: LLMRole.user, content: 'Tell me why the sky is blue' },
-//     ],
-//     null,
-//     { seed: 30, temperature: 0 }
-//   )
+test('Simple stream with Ollama', async () => {
+  const stream = ollamaClient.generateStream(
+    'llama3.1',
+    [
+      {
+        role: LLMRole.system,
+        content:
+          'You are a helpful Pirate AI, talk like a swashbuckling scallywag. Max 5 words',
+      },
+      { role: LLMRole.user, content: 'Tell me why the sky is blue' },
+    ],
+    null,
+    { seed: 30, temperature: 0 }
+  )
 
-//   let accumulatedResponse = ''
+  let accumulatedResponse = ''
 
-//   for await (const chunk of stream) {
-//     if (chunk.content) {
-//       accumulatedResponse += chunk.content ?? ''
-//     }
-//   }
-//   expect(accumulatedResponse.length).toBeGreaterThan(0)
-// }, 20000)
+  for await (const chunk of stream) {
+    if (chunk.content) {
+      accumulatedResponse += chunk.content ?? ''
+    }
+  }
+  expect(accumulatedResponse.length).toBeGreaterThan(0)
+}, 20000)
 
-// test('Create embeddings with Ollama', async () => {
-//   const embeddings = await ollamaClient.generateEmbedding('nomic-embed-text', [
-//     'This is a test',
-//   ])
-//   expect(embeddings.length).toBeGreaterThan(0)
-// }, 20000)
+test('Create embeddings with Ollama', async () => {
+  const embeddings = await ollamaClient.generateEmbedding('nomic-embed-text', [
+    'This is a test',
+  ])
+  expect(embeddings.length).toBeGreaterThan(0)
+}, 20000)
 
-// test('Tool request in Ollama response', async () => {
-//   const response = await ollamaClient.generateReply(
-//     'llama3.1',
-//     [
-//       {
-//         role: LLMRole.system,
-//         content:
-//           'You are a helpful weather AI assistant. If possible use provided tool in response only. Never assume location. Use tool responses',
-//       },
-//       {
-//         role: LLMRole.user,
-//         content: 'What is the weather in Mengele?',
-//       },
-//     ],
-//     [new FakeLocationTool(), new FakeWeatherTool()]
-//   )
-//   console.log('Response: ' + JSON.stringify(response.content, null, 2))
-// }, 20000)
+test('Tool request in Ollama response', async () => {
+  const response = await ollamaClient.generateReply(
+    'llama3.1',
+    [
+      {
+        role: LLMRole.system,
+        content:
+          'You are a helpful weather AI assistant. If possible use provided tool in response only. Never assume location. Use tool responses',
+      },
+      {
+        role: LLMRole.user,
+        content: 'What is the weather in Mengele?',
+      },
+    ],
+    [new FakeLocationTool(), new FakeWeatherTool()]
+  )
+  console.log('Response: ' + JSON.stringify(response.content, null, 2))
+}, 20000)
 
 test('Tool request in Ollama stream', async () => {
   const stream = ollamaClient.generateStream(

@@ -7,7 +7,11 @@ import {
   LLMRole,
   Tool,
 } from '../repository/llm-repository'
-import { OllamaV1Chunk, OllamaV1Response } from './dto/ollama-v1-responses'
+import {
+  OllamaEmbedding,
+  OllamaV1Chunk,
+  OllamaV1Response,
+} from './dto/ollama-v1-responses'
 
 export class OllamaLLMRepositoryImpl extends LLMClient {
   private baseUrl: string
@@ -183,15 +187,27 @@ export class OllamaLLMRepositoryImpl extends LLMClient {
       input: chunks,
       options: options,
     }
-    return []
-    /*const response = await this.ollama.embed({
-      model: embeddingModel,
-      input: chunks,
+    const response = await fetch(`${this.baseUrl}/api/embed`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(body),
     })
-    return response.embeddings.map((embedding: any, index: number) => ({
-      chunk: chunks[index],
-      vector: embedding,
-    }))*/
+    const rawText = await response.text()
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status} - ${rawText}`)
+    }
+    const embeddingsResponse = OllamaEmbedding.fromJson(JSON.parse(rawText))
+    const embeddings: ChunkEmbedding[] = []
+    for (let i = 0; i < chunks.length; i++) {
+      embeddings.push({
+        chunk: chunks[i],
+        vector: embeddingsResponse.embeddings[i],
+      })
+    }
+    return embeddings
   }
 }
 
