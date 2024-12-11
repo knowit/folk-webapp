@@ -1,28 +1,22 @@
 import React, { useState } from 'react'
 import ChatBubble from './ChatBubble'
-import { AzureOpenAILLMRepositoryImpl } from 'server/implementations/azure-openai-llm-repository-impl'
-import { LLMRole } from 'server/repository/llm-repository'
+import { useGenerateLLMReply } from '../../../api/data/llm/llmQueries'
+import { LLMRole } from '../../../api/data/llm/llmApiTypes'
 
 const ChatWindow: React.FC = () => {
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>(
     []
   )
   const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
+  // const [loading, setLoading] = useState(false)
 
-  const azureClient = new AzureOpenAILLMRepositoryImpl(
-    process.env.AZURE_OPENAI_ENDPOINT,
-    process.env.AZURE_OPENAI_API_KEY,
-    process.env.AZURE_OPENAI_API_VERSION
-  )
-
-  const handleSend = async () => {
+  const HandleSend = async () => {
     if (input.trim()) {
       const userMessage = { text: input, isUser: true }
       setMessages((prev) => [...prev, userMessage])
       setInput('')
 
-      setLoading(true)
+      // setLoading(true)
       try {
         const llmMessages = [
           ...messages.map((msg) => ({
@@ -31,14 +25,13 @@ const ChatWindow: React.FC = () => {
           })),
           { role: LLMRole.user, content: input },
         ]
-        const options = { seed: 5 }
-        const response = await azureClient.generateReply(
-          'gpt-4o',
-          llmMessages,
-          null,
-          options
-        )
-        const botMessage = { text: response.content, isUser: false }
+        const { data, error } = useGenerateLLMReply(llmMessages)
+        if (error) {
+          console.error('Error generating reply:', error)
+        }
+        console.log(data)
+
+        const botMessage = { text: data.content, isUser: false }
         setMessages((prev) => [...prev, botMessage])
       } catch (error) {
         console.error('Error generating reply:', error)
@@ -47,16 +40,17 @@ const ChatWindow: React.FC = () => {
           isUser: false,
         }
         setMessages((prev) => [...prev, errorMessage])
-      } finally {
-        setLoading(false)
       }
+      // finally {
+      //   setLoading(false)
+      // }
     }
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault()
-      handleSend()
+      HandleSend()
     }
   }
 
@@ -100,7 +94,7 @@ const ChatWindow: React.FC = () => {
           }}
         />
         <button
-          onClick={handleSend}
+          onClick={HandleSend}
           style={{
             marginLeft: '1%',
             padding: '10px',
