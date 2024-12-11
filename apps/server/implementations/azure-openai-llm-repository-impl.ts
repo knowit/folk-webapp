@@ -5,6 +5,7 @@ import {
   LLMMessage,
   LLMResponse,
   LLMRole,
+  toFormattedMessages,
   Tool,
 } from '../repository/llm-repository'
 import { AzureOpenAI } from 'openai'
@@ -39,7 +40,7 @@ export class AzureOpenAILLMRepositoryImpl extends LLMClient {
         await this.client.chat.completions.create(
           {
             model: model,
-            messages: messages.toFormattedMessages(),
+            messages: toFormattedMessages(messages),
             tools: tools?.toOpenAITools(),
           },
           options
@@ -47,7 +48,6 @@ export class AzureOpenAILLMRepositoryImpl extends LLMClient {
       const toolCalls = response.choices[0].message.tool_calls
       if (toolCalls != null) {
         messages.push({
-          content: '',
           role: LLMRole.assistant,
           toolCalls: toolCalls.toOpenAIToolCalls(),
         })
@@ -87,7 +87,7 @@ export class AzureOpenAILLMRepositoryImpl extends LLMClient {
       const chunkStream: Stream<ChatCompletionChunk> =
         await this.client.chat.completions.create({
           model,
-          messages: messages.toFormattedMessages(),
+          messages: toFormattedMessages(messages),
           tools: tools?.toOpenAITools(),
           stream: true,
           ...options,
@@ -133,7 +133,10 @@ export class AzureOpenAILLMRepositoryImpl extends LLMClient {
         const chunk: ChatCompletionChunk = output
         const toolCalls = chunk.choices[0].delta.tool_calls
         if (toolCalls == null) {
-          yield { content: chunk.choices[0].delta.content }
+          yield {
+            role: chunk.choices[0].delta.role,
+            content: chunk.choices[0].delta.content,
+          }
         } else {
           if (toolCallingChunk == null) {
             toolCallingChunk = chunk

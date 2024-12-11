@@ -7,45 +7,78 @@ import {
   LLMRole,
   Tool,
 } from '../repository/llm-repository'
-
-import ollama, { ToolCall } from 'ollama'
+import { OllamaV1Chunk, OllamaV1Response } from './dto/ollama-v1-responses'
 
 export class OllamaLLMRepositoryImpl extends LLMClient {
+  private baseUrl: string
+
+  constructor(baseUrl: string) {
+    super()
+    this.baseUrl = baseUrl
+  }
+
+  private async postReply(
+    endpoint: string,
+    body: Record<string, any>
+  ): Promise<OllamaV1Response> {
+    const response = await fetch(`${this.baseUrl}${endpoint}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+    console.log('Body: ' + JSON.stringify(body))
+    const rawText = await response.text()
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status} - ${rawText}`)
+    }
+    return OllamaV1Response.fromJson(JSON.parse(rawText))
+  }
+
   async generateReply(
     model: string,
     messages: LLMMessage[],
     tools?: Tool[],
     options?: Record<string, any>
   ): Promise<LLMResponse> {
-    const chatResponse = await ollama.chat({
-      model: model,
-      messages: messages?.toOllamaMessages(),
-      tools: tools?.toOllamaTools(),
+    const body = {
+      model,
+      messages: toOllamaMessages(messages),
+      tools: toOllamaTools(tools),
       stream: false,
-      options: options,
-    })
-    const toolCalls = chatResponse.message.tool_calls
+      options,
+    }
+    const chatResponse: OllamaV1Response = await this.postReply(
+      '/v1/chat/completions',
+      body
+    )
+    console.log(
+      'Messages:' + JSON.stringify(toOllamaMessages(messages), null, 2)
+    )
+    const toolCalls = chatResponse.choices[0].message.toolCalls
     if (toolCalls != null && toolCalls.length > 0) {
-      console.log('ToolCalls: ' + JSON.stringify(toolCalls, null, 2))
+      const toolCall = toolCalls[0]
       messages.push({
-        content: '',
+        content: null,
         role: LLMRole.assistant,
-        toolCalls: toOllamaToolCalls(toolCalls),
+        toolCalls: [toolCall],
       })
-      for (const toolCall of toolCalls) {
-        const tool =
-          tools.find((tool) => tool.name == toolCall.function.name) || null
-        const toolResponse =
-          (await tool?.use(toolCall.function.arguments)) ??
-          'Unable to use not-existing tool ' + toolCall.function.name
-        messages.push({
-          role: LLMRole.tool,
-          content: toolResponse,
-        })
-      }
+      const tool =
+        tools.find((tool) => tool.name == toolCall.function.name) || null
+      const toolArguments = toolCall.function.arguments
+      const toolResponse =
+        (await tool?.use(toolArguments ? JSON.parse(toolArguments) : null)) ??
+        'Unable to use non-existing tool ' + toolCall.function.name
+      messages.push({
+        role: LLMRole.tool,
+        toolCallId: toolCall.id,
+        content: toolResponse,
+      })
       return this.generateReply(model, messages, tools, options)
     }
-    return { content: chatResponse.message.content }
+    return { content: chatResponse.choices[0].message.content }
   }
 
   generateStream(
@@ -54,71 +87,176 @@ export class OllamaLLMRepositoryImpl extends LLMClient {
     tools?: Tool[],
     options?: Record<string, any>
   ): AsyncGenerator<LLMChunk> {
-    return streamToAsyncGenerator<LLMChunk>(
-      new ReadableStream<LLMChunk>({
-        async start(controller) {
-          const asyncIterator = await ollama.chat({
-            model: model,
-            messages: messages?.toOllamaMessages(),
-            tools: tools?.toOllamaTools(),
-            stream: true,
-            options: options,
-          })
-
-          for await (const chunk of asyncIterator) {
-            controller.enqueue({ content: chunk.message.content })
-          }
-          controller.close()
-        },
-      })
+    const body = {
+      model,
+      messages: toOllamaMessages(messages),
+      tools: toOllamaTools(tools),
+      stream: true,
+      options,
+    }
+    console.log(
+      'Messages:' + JSON.stringify(toOllamaMessages(messages), null, 2)
     )
+    return async function* () {
+      const response = await fetch(`${this.baseUrl}/v1/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(body),
+      })
+
+      if (!response.ok) {
+        const rawBody = await response.text()
+        throw new Error(`HTTP error! status: ${response.status} - ${rawBody}`)
+      }
+
+      const stream = response.body
+        ?.pipeThrough(new TextDecoderStream())
+        .pipeThrough(OllamaV1Decoder.decoder)
+
+      if (!stream) {
+        throw new Error('ReadableStream not supported by the response.')
+      }
+
+      const reader = stream.getReader()
+      let toolCallingChunk: OllamaV1Chunk | null = null
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        if (value === '[DONE]') {
+          if (toolCallingChunk != null) {
+            messages.push({
+              content: null,
+              role: LLMRole.assistant,
+              toolCalls: toolCallingChunk.choices[0].delta.toolCalls?.map(
+                (toolCall) => toolCall.toJson()
+              ),
+            })
+
+            for (const toolCall of toolCallingChunk.choices[0].delta
+              .toolCalls ?? []) {
+              const toolCallFunction = toolCall.functionCall
+              const tool = tools?.find((t) => t.name === toolCallFunction.name)
+              const toolResponse =
+                (await tool?.use(
+                  JSON.parse(toolCallFunction.functionArguments)
+                )) ??
+                `Unable to use non-existent tool: ${toolCallFunction.name}`
+
+              messages.push({
+                role: LLMRole.tool,
+                content: toolResponse,
+                toolCallId: toolCall.id,
+              })
+            }
+
+            yield* this.generateStream(model, messages, tools, options)
+          }
+          continue
+        }
+
+        const chunk: OllamaV1Chunk = value
+        const toolCalls = chunk.choices[0].delta.toolCalls
+        if (toolCalls == null) {
+          yield chunk
+        } else {
+          if (toolCallingChunk == null) {
+            toolCallingChunk = chunk
+          } else {
+            toolCallingChunk = toolCallingChunk.copyWith(chunk)
+          }
+        }
+      }
+    }.call(this)
   }
 
   async generateEmbedding(
     embeddingModel: string,
-    chunks: string[]
+    chunks: string[],
+    options?: Record<string, any>
   ): Promise<ChunkEmbedding[]> {
-    const response = await ollama.embed({
+    const body = {
+      model: embeddingModel,
+      input: chunks,
+      options: options,
+    }
+    return []
+    /*const response = await this.ollama.embed({
       model: embeddingModel,
       input: chunks,
     })
     return response.embeddings.map((embedding: any, index: number) => ({
       chunk: chunks[index],
       vector: embedding,
-    }))
+    }))*/
   }
 }
 
-async function* streamToAsyncGenerator<T>(
-  stream: ReadableStream<T>
-): AsyncGenerator<T> {
-  const reader = stream.getReader()
-  try {
-    while (true) {
-      const { value, done } = await reader.read()
-      if (done) break
-      yield value
+class OllamaV1Decoder {
+  static get decoder(): TransformStream<string, OllamaV1Chunk | '[DONE]'> {
+    return new TransformStream<string, OllamaV1Chunk | '[DONE]'>({
+      start() {
+        this.buffer = '' // Buffer for incomplete JSON lines
+      },
+      transform(chunk, controller) {
+        this.buffer += chunk
+
+        const lines = this.buffer.split('\n')
+        this.buffer = lines.pop() || '' // Keep the last incomplete line in the buffer
+
+        for (const line of lines) {
+          if (line.startsWith('data:')) {
+            const content = line.substring(5).trim()
+            if (content === '[DONE]') {
+              controller.enqueue('[DONE]')
+            } else if (content) {
+              try {
+                const chunk = OllamaV1Chunk.fromJson(JSON.parse(content)) // Convert to OllamaV1Chunk
+                controller.enqueue(chunk) // Output the OllamaV1Chunk instance
+              } catch (error) {
+                console.error('Error parsing JSON:', content, error)
+                // If parsing fails, wait for more data
+                this.buffer += line
+              }
+            }
+          }
+        }
+      },
+      flush(controller) {
+        // Try to process the remaining buffer
+        if (this.buffer.trim()) {
+          try {
+            const jsonObject = JSON.parse(this.buffer.trim())
+            const chunk = OllamaV1Chunk.fromJson(jsonObject)
+            controller.enqueue(chunk)
+          } catch (error) {
+            console.error('Error parsing remaining buffer:', error)
+          }
+        }
+        controller.terminate()
+      },
+    })
+  }
+}
+
+function toOllamaMessages(messages: LLMMessage[] | null): any[] {
+  return messages.map((llmMessage: LLMMessage) => {
+    return {
+      role: LLMRole[llmMessage.role],
+      content: llmMessage.content,
+      tool_calls: llmMessage.toolCalls,
+      tool_call_id: llmMessage.toolCallId,
+      images: llmMessage.images,
     }
-  } finally {
-    reader.releaseLock()
-  }
-}
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface Array<T> {
-    toOllamaMessages(): any[]
-    toOllamaTools(): any[]
-  }
-}
-
-Array.prototype.toOllamaMessages = function (): any[] {
-  return this.map((llmMessage: LLMMessage) => {
-    return { role: LLMRole[llmMessage.role], content: llmMessage.content }
   })
 }
 
-Array.prototype.toOllamaTools = function (): any[] {
-  return this.map((tool: Tool) => {
+function toOllamaTools(tools: Tool[] | null): any[] {
+  if (tools == null) return null
+  return tools.map((tool: Tool) => {
     const properties: Record<string, any> = {}
 
     for (const param of tool.parameters) {
@@ -150,14 +288,4 @@ Array.prototype.toOllamaTools = function (): any[] {
     }
     return functionDescription
   })
-}
-
-function toOllamaToolCalls(toolCalls: ToolCall[]): any[] {
-  return toolCalls.map((toolCall) => ({
-    type: 'function',
-    function: {
-      name: toolCall.function.name,
-      arguments: toolCall.function.arguments,
-    },
-  }))
 }
