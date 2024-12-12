@@ -7,8 +7,35 @@ const ChatWindow: React.FC = () => {
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>(
     []
   )
+
   const [input, setInput] = useState('')
-  // const [loading, setLoading] = useState(false)
+  const [pendingMessages, setPendingMessages] = useState<
+    { role: LLMRole; content: string }[]
+  >([])
+
+  // Call useGenerateLLMReply at the top level
+  console.log(pendingMessages)
+  const { data, error } = useGenerateLLMReply(pendingMessages)
+
+  React.useEffect(() => {
+    if (data) {
+      // Add bot reply when data is received
+      const botMessage = { text: data.content, isUser: false }
+      setMessages((prev) => [...prev, botMessage])
+      setPendingMessages([])
+      console.log(data)
+      // Clear pending messages after processing
+    }
+    if (error) {
+      console.error('Error generating reply:', error)
+      const errorMessage = {
+        text: 'Something went wrong. Please try again.',
+        isUser: false,
+      }
+      setMessages((prev) => [...prev, errorMessage])
+      setPendingMessages([]) // Clear pending messages after error
+    }
+  }, [data, error]) // Run effect when data or error changes
 
   const HandleSend = async () => {
     if (input.trim()) {
@@ -16,34 +43,16 @@ const ChatWindow: React.FC = () => {
       setMessages((prev) => [...prev, userMessage])
       setInput('')
 
-      // setLoading(true)
-      try {
-        const llmMessages = [
-          ...messages.map((msg) => ({
-            role: msg.isUser ? LLMRole.user : LLMRole.assistant,
-            content: msg.text,
-          })),
-          { role: LLMRole.user, content: input },
-        ]
-        const { data, error } = useGenerateLLMReply(llmMessages)
-        if (error) {
-          console.error('Error generating reply:', error)
-        }
-        console.log(data)
+      const llmMessages = [
+        ...messages.map((msg) => ({
+          role: msg.isUser ? LLMRole.user : LLMRole.assistant,
+          content: msg.text,
+        })),
+        { role: LLMRole.user, content: input },
+      ]
+      console.log(llmMessages)
 
-        const botMessage = { text: data.content, isUser: false }
-        setMessages((prev) => [...prev, botMessage])
-      } catch (error) {
-        console.error('Error generating reply:', error)
-        const errorMessage = {
-          text: 'Something went wrong. Please try again.',
-          isUser: false,
-        }
-        setMessages((prev) => [...prev, errorMessage])
-      }
-      // finally {
-      //   setLoading(false)
-      // }
+      setPendingMessages(llmMessages) // Trigger the SWR hook to fetch the reply
     }
   }
 
@@ -85,7 +94,7 @@ const ChatWindow: React.FC = () => {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown} // Add this for Enter key support
+          onKeyDown={handleKeyDown}
           style={{
             flex: 1,
             padding: '10px',

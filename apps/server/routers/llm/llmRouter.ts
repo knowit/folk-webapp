@@ -1,6 +1,6 @@
 import express, { Router } from 'express'
 import { AzureOpenAILLMRepositoryImpl } from '../../implementations/azure-openai-llm-repository-impl'
-import { LLMMessage } from './llmTypes'
+import { LLMMessage, LLMResponse, LLMRole } from './llmTypes'
 
 const router: Router = express.Router()
 const client = new AzureOpenAILLMRepositoryImpl(
@@ -12,7 +12,6 @@ const client = new AzureOpenAILLMRepositoryImpl(
 const model = 'gpt-4o'
 
 interface generateParams {
-  model: string
   messages: LLMMessage[]
 }
 
@@ -21,7 +20,7 @@ router.get<unknown, unknown, unknown, generateParams>(
   async (req, res, next) => {
     try {
       const response = await client.generateReply(
-        model,
+        'gpt-4o',
         req.query.messages,
         null,
         null
