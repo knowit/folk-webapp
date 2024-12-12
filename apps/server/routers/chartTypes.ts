@@ -26,6 +26,7 @@ export interface BarChartData {
   indexBy: string
   keys: string[]
   data: any[]
+  maxValue?: number | string
 }
 
 export interface RadarChartData {
@@ -33,6 +34,7 @@ export interface RadarChartData {
   indexBy: string
   keys: string[]
   data: any[]
+  maxValue?: number | string
 }
 
 export type LineChartData = {

@@ -5,6 +5,7 @@ import { CompetenceSummary } from '../components/CompetenceSummary'
 import EmployeeCompetenceCard from '../cards/EmployeeMotivationAndCompetenceCard'
 import { ProjectExperienceList } from '../components/ProjectExperienceList'
 import { WorkExperienceList } from '../components/WorkExperienceList'
+import EmployeeCompetenceScoreCard from '../cards/EmployeeCompetenceScoreCard'
 
 const ComponentRoot = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -77,6 +78,7 @@ export function EmployeeTableExpandedInfo({ data }: Props) {
       </ComponentExperience>
       <ComponentCompetence>
         <EmployeeCompetenceCard employeeEmail={data.email} />
+        <EmployeeCompetenceScoreCard employeeEmail={data.email} />
       </ComponentCompetence>
     </ComponentRoot>
   )

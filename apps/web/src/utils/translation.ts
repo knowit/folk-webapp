@@ -1,6 +1,7 @@
 export const Translation: Record<string, string> = {
   motivation: 'Motivasjon',
   competence: 'Kompetanse',
+  score: 'Score',
   experience: 'Erfaring',
   count: 'Antall',
   competenceProportion: 'Kompetanseandel',
