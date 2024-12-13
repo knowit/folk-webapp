@@ -27,6 +27,7 @@ const ChatWindow: React.FC = () => {
       // Clear pending messages after processing
     }
     if (error) {
+      console.log(error)
       console.error('Error generating reply:', error)
       const errorMessage = {
         text: 'Something went wrong. Please try again.',

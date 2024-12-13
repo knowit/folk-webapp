@@ -4,11 +4,8 @@ import { LLMMessage } from 'server/routers/llm/llmTypes'
 
 export const useGenerateLLMReply = (messages: LLMMessage[]) =>
   useSWR(
-    {
-      url: '/generateReply',
-      messages: messages,
-    },
-    (params) => generateReply(params.messages),
+    messages.length > 0 ? { url: '/generateReply', messages } : null, // Only call if messages exist
+    (params) => generateReply(params?.messages),
     {
       revalidateOnFocus: false,
     }
@@ -16,10 +13,12 @@ export const useGenerateLLMReply = (messages: LLMMessage[]) =>
 
 export const useGenerateLLMStream = (messages: LLMMessage[]) =>
   useSWR(
-    {
-      url: '/generateStream',
-      messages: messages,
-    },
+    messages.length > 0
+      ? {
+          url: '/generateStream',
+          messages: messages,
+        }
+      : null,
     (params) => generateStream(params.messages),
     {
       revalidateOnFocus: false,
