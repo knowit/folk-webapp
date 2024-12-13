@@ -39,15 +39,16 @@ export abstract class LLMClient {
   Args:
     model: the embedding model you want to use to embed. Typically openAI uses text-generation-large while ollama uses nomic-embedding
     chunks: the strings you want to embed
+    options: options for the embeddding
   Returns:
     A list of embedded chunks
   */
   abstract generateEmbedding(
     embeddingModel: string,
-    chunks: string[]
+    chunks: string[],
+    options?: Record<string, any>
   ): Promise<ChunkEmbedding[]>
 }
-
 export interface ChunkEmbedding {
   chunk: string
   vector: number[]
@@ -58,12 +59,12 @@ export abstract class Tool {
   description: string
   parameters: ToolParam[]
   abstract use(
-    args: Record<string, any>,
+    args?: Record<string, any>,
     options?: Record<string, any>
   ): Promise<any>
 }
 
-export interface ToolParam {
+export class ToolParam {
   name: string
   type: string
   description: string
@@ -71,21 +72,29 @@ export interface ToolParam {
   isRequired?: boolean
 }
 // A given response based on a LLM generation. Ensure that added fields are supported by all implementations
-export interface LLMResponse {
+export class LLMResponse {
+  constructor(content: string) {
+    this.content = content
+  }
   content: string
 }
 
 // A given chunk with a single token based on a LLM generation. Ensure that added fields are supported by all implementations
-export interface LLMChunk {
+export class LLMChunk {
+  constructor(role: string, content?: string) {
+    this.content = content
+    this.role = role
+  }
   content?: string
+  role: string
 }
 
 /// A message in a chat history with LLM's. Format is standardized to content, role and image
-export interface LLMMessage {
+export class LLMMessage {
   content?: string
   role: LLMRole
   images?: string
-  toolCalls?: Record<string, any>
+  toolCalls?: Record<string, any>[]
   toolCallId?: string
 }
 
@@ -101,17 +110,9 @@ export enum LLMRole {
   user = 'user',
 }
 
-// Extend Array to include a custom method
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface Array<T> {
-    toFormattedMessages(): any[]
-  }
-}
-
 // Define the method implementation
-Array.prototype.toFormattedMessages = function (): any[] {
-  return this.map((message: LLMMessage) => {
+export function toFormattedMessages(messages: LLMMessage[]): any[] {
+  return messages.map((message: LLMMessage) => {
     // Construct the formatted message
     const payload: any = {
       role: LLMRole[message.role],

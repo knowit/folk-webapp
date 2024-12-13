@@ -57,6 +57,14 @@ class FakeWeatherTool extends Tool {
     )
   }
 }
+let azureClient: AzureOpenAILLMRepositoryImpl
+beforeAll(() => {
+  azureClient = new AzureOpenAILLMRepositoryImpl(
+    process.env.AZURE_OPENAI_ENDPOINT,
+    process.env.AZURE_OPENAI_API_KEY,
+    process.env.AZURE_OPENAI_API_VERSION
+  )
+})
 
 test('generateReply handles a simple text message', async () => {
   const messages: LLMMessage[] = [
@@ -70,11 +78,6 @@ test('generateReply handles a simple text message', async () => {
       content: 'Why is the sky blue?',
     },
   ]
-  const azureClient = new AzureOpenAILLMRepositoryImpl(
-    process.env.AZURE_OPENAI_ENDPOINT,
-    process.env.AZURE_OPENAI_API_KEY,
-    process.env.AZURE_OPENAI_API_VERSION
-  )
   const options = { seed: 5 }
   const response = await azureClient.generateReply(
     'gpt-4o',
@@ -97,11 +100,6 @@ test('generateStream using simple request', async () => {
       content: 'Why is the sky blue?',
     },
   ]
-  const azureClient = new AzureOpenAILLMRepositoryImpl(
-    process.env.AZURE_OPENAI_ENDPOINT,
-    process.env.AZURE_OPENAI_API_KEY,
-    process.env.AZURE_OPENAI_API_VERSION
-  )
   const options = { seed: 5 }
   const stream = azureClient.generateStream('gpt-4o', messages, null, options)
   let accumulatedResponse = 'Stream Response: ' // Start with the prefix
@@ -126,11 +124,6 @@ test('generateReply with tool uses tool for response', async () => {
       content: 'What is the weather in Oslo?',
     },
   ]
-  const azureClient = new AzureOpenAILLMRepositoryImpl(
-    process.env.AZURE_OPENAI_ENDPOINT,
-    process.env.AZURE_OPENAI_API_KEY,
-    process.env.AZURE_OPENAI_API_VERSION
-  )
   const options = { seed: 5 }
   const tools = [new FakeLocationTool(), new FakeWeatherTool()]
   const response = await azureClient.generateReply(
@@ -154,11 +147,46 @@ test('generateStream with tool uses tool for response', async () => {
       content: 'What is the weather in Oslo?',
     },
   ]
-  const azureClient = new AzureOpenAILLMRepositoryImpl(
-    process.env.AZURE_OPENAI_ENDPOINT,
-    process.env.AZURE_OPENAI_API_KEY,
-    process.env.AZURE_OPENAI_API_VERSION
+  const options = { seed: 5 }
+  const tools = [new FakeLocationTool(), new FakeWeatherTool()]
+  const response = await azureClient.generateReply(
+    'gpt-4o',
+    messages,
+    tools,
+    options
   )
+  console.log('Response:', response.content)
+}, 20000)
+
+test('Faked messages', async () => {
+  const messages: LLMMessage[] = [
+    {
+      role: LLMRole.system,
+      content:
+        'You are a helpful weather AI assistant. If possible use provided tool in response only. Never assume location.',
+    },
+    {
+      role: LLMRole.user,
+      content: 'What is the weather in Oslo?',
+    },
+    {
+      role: LLMRole.assistant,
+      toolCalls: [
+        {
+          function: {
+            name: 'get_location',
+            arguments: {
+              location: 'Oslo',
+            },
+          },
+        },
+      ],
+    },
+    {
+      role: LLMRole.tool,
+      content: 'Location of Oslo is at 34.2 latitude, 23.2 longitude',
+    },
+  ]
   const options = { seed: 5 }
   const tools = [new FakeLocationTool(), new FakeWeatherTool()]
   const response = await azureClient.generateReply(
