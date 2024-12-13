@@ -1,5 +1,3 @@
-// Repository connection for all thecommunication with KnowitGPT chat and the chats stored in database
-
 /**
  * Repository for the communication with KnowitGPT in the form of chats and chat messages.
  * This interface defines the classes and methods that are necessary to handle database entries regarding communication
@@ -13,22 +11,22 @@ export interface IChatRepository {
    * @param userId - The identifier of the user.
    * @param message - The text of the chat entry.
    * @param role - The role of the creator of the entry. It is either the user or the assistant.
-   * @returns `true` if successfully created
+   * @returns The created chat message
    */
   addChatMessage(
     chatId: string,
     userId: string,
     message: string,
     role: ChatRole
-  ): boolean
+  ): Promise<ChatMessage>
 
   /**
    * Delete a chat. Only the user can delete their own chat.
    *
    * @param chatId - The identifier for the chat to be deleted.
-   * @returns `true` if successfully deleted, otherwise `false`.
+   * @returns `true` if an entry is deleted, otherwise `false`.
    */
-  deleteChat(chatId: string): boolean
+  deleteChat(chatId: string): Promise<boolean>
 
   /**
    * Retrieve all chats for a user.
@@ -38,7 +36,11 @@ export interface IChatRepository {
    * @param offset - Used for pagination combined with limit.
    * @returns All chats with KnowitGPT for the user.
    */
-  getChatsForUser(userId: string, limit?: number, offset?: number): Array<Chat>
+  getChatsForUser(
+    userId: string,
+    limit?: number,
+    offset?: number
+  ): Promise<Array<Chat>>
 
   /**
    * Retrieve all the chat messages for a chat.

@@ -2,6 +2,7 @@ import express, { Router } from 'express'
 import dataplattform from '../middlewares/dataplattform'
 import { competenceRouter } from './competence/competenceRouter'
 import { customerRouter } from './customer/customerRouter'
+import { databaseRouter } from './databaseRouter'
 import { employeesRouter } from './employees/employeesRouter'
 
 // v2 of API
@@ -18,5 +19,6 @@ apiRouterV2.get('/privacyPolicy', async (req, res) => {
 apiRouterV2.use('/competence', competenceRouter)
 apiRouterV2.use('/employees', employeesRouter)
 apiRouterV2.use('/customer', customerRouter)
+apiRouterV2.use('/database', databaseRouter)
 
 export { apiRouterV2 }
