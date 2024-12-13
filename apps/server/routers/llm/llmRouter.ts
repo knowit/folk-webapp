@@ -1,6 +1,6 @@
 import express, { Router } from 'express'
 import { AzureOpenAILLMRepositoryImpl } from '../../implementations/azure-openai-llm-repository-impl'
-import { LLMMessage, LLMResponse, LLMRole } from './llmTypes'
+import { LLMMessage } from './llmTypes'
 
 const router: Router = express.Router()
 const client = new AzureOpenAILLMRepositoryImpl(
