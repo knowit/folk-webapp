@@ -85,6 +85,25 @@ Therefore, there is a bit of extra work at the moment to set everything up.
 You'll have to create two tables in you newly created database; `chat` and `chat_message`.
 The columns should be as found for the corresponding classes in the file `apps/server/repository/chat-repository.ts`.
 
+Example tables for PostgresSQL
+
+**chat** with columns:
+
+- id: uuid
+- user_id: uuid
+- created: timestamp with timezone (use function now() as default in Postgres)
+- last_updated: timestamp with timezone (use function now() as default in Postgres)
+- title: character varying (255)
+
+**chat_message** with columns:
+
+- id: uuid
+- chat_id: uuid
+- user_id: character varying (255)
+- message: text
+- role: character varying (255)
+- created: timestamp with timezone (use function now() as default in Postgres)
+
 ### Testing
 
 To run tests, run
