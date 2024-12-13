@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import ChatBubble from './ChatBubble'
-import { useGenerateLLMReply } from '../../../api/data/llm/llmQueries'
+import {
+  // useGenerateLLMReply,
+  useGenerateLLMStream,
+} from '../../../api/data/llm/llmQueries'
 import { LLMRole } from '../../../api/data/llm/llmApiTypes'
 
 const ChatWindow: React.FC = () => {
@@ -14,27 +17,31 @@ const ChatWindow: React.FC = () => {
   >([])
 
   // Call useGenerateLLMReply at the top level
-  const { data, error } = useGenerateLLMReply(pendingMessages)
+  const { chunks, error } = useGenerateLLMStream(pendingMessages)
+  console.log(chunks)
 
   React.useEffect(() => {
-    if (data) {
-      // Add bot reply when data is received
-      const botMessage = { text: data.content, isUser: false }
-      setMessages((prev) => [...prev, botMessage])
-      setPendingMessages([])
-      console.log(data)
+    if (chunks.length > 0) {
+      console.log(chunks)
+      chunks.forEach((chunk) => {
+        const message = { text: chunk.content, isUser: false }
+        setMessages((prevMessages) => [...prevMessages, message])
+      })
+
       // Clear pending messages after processing
+      setPendingMessages([])
     }
+
     if (error) {
       console.error('Error generating reply:', error)
       const errorMessage = {
         text: 'Something went wrong. Please try again.',
         isUser: false,
       }
-      setMessages((prev) => [...prev, errorMessage])
+      setMessages((prevMessages) => [...prevMessages, errorMessage])
       setPendingMessages([]) // Clear pending messages after error
     }
-  }, [data, error]) // Run effect when data or error changes
+  }, [chunks, error]) // Run effect when data or error changes
 
   const HandleSend = async () => {
     if (input.trim()) {

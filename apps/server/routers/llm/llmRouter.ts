@@ -20,7 +20,7 @@ router.get<unknown, unknown, unknown, generateParams>(
   async (req, res, next) => {
     try {
       const response = await client.generateReply(
-        'gpt-4o',
+        model,
         req.query.messages,
         null,
         null
@@ -36,15 +36,26 @@ router.get<unknown, unknown, unknown, generateParams>(
   '/generateStream',
   async (req, res, next) => {
     try {
-      const response = await client.generateStream(
-        model,
+      const response = client.generateStream(
+        'gpt-4o',
         req.query.messages,
         null,
         null
       )
-      res.send(response)
+
+      // Set headers for streaming
+      res.setHeader('Content-Type', 'application/json; charset=utf-8')
+      res.setHeader('Transfer-Encoding', 'chunked')
+
+      // Stream the data using an async generator
+      for await (const chunk of response) {
+        res.write(JSON.stringify(chunk) + '\n')
+        console.log(chunk) // Write each chunk as a JSON string with a newline
+      }
+
+      res.end() // End the response
     } catch (error) {
-      next(error)
+      next(error) // Pass errors to the error handler middleware
     }
   }
 )

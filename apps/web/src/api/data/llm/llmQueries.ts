@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 import { generateReply, generateStream } from './llmApi'
-import { LLMMessage } from 'server/routers/llm/llmTypes'
+import { LLMChunk, LLMMessage } from './llmApiTypes'
 
 export const useGenerateLLMReply = (messages: LLMMessage[]) =>
   useSWR(
@@ -11,16 +11,21 @@ export const useGenerateLLMReply = (messages: LLMMessage[]) =>
     }
   )
 
-export const useGenerateLLMStream = (messages: LLMMessage[]) =>
-  useSWR(
-    messages.length > 0
-      ? {
-          url: '/generateStream',
-          messages: messages,
-        }
-      : null,
-    (params) => generateStream(params.messages),
+export const useGenerateLLMStream = (messages: LLMMessage[]) => {
+  const { data, error, isLoading } = useSWR(
+    messages.length > 0 ? '/generateStream' : null,
+    async () => {
+      const chunks: LLMChunk[] = []
+      await generateStream(messages, (chunk) => {
+        chunks.push(chunk)
+      })
+      return chunks
+    },
     {
       revalidateOnFocus: false,
+      refreshInterval: 10000, // Optional: Refresh every 10 seconds
     }
   )
+
+  return { chunks: data || [], error, isLoading }
+}

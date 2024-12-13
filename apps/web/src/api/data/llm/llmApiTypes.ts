@@ -1,6 +1,6 @@
 export type LLMReplyResponse = LLMResponse
 
-export type LLMStreamResponse = LLMChunk
+export type LLMStreamResponse = LLMChunk[]
 
 export enum LLMRole {
   // Response from LLM
