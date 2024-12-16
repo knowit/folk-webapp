@@ -46,7 +46,7 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
     '/kunder',
     '/kompetanse',
     '/organisasjon',
-    '/knowitGPT',
+    // '/knowitGPT',
   ]
   const activePage = useLocation().pathname
   const { isAuthenticated, userEmployeeProfile } = useUserInfo()
@@ -88,12 +88,12 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
           to={'/organisasjon'}
           component={NavLink}
         />
-        <Tab
+        {/* <Tab
           label={'KnowitGPT'}
           value={'/knowitGPT'}
           to={'/knowitGPT'}
           component={NavLink}
-        />
+        /> */}
       </Tabs>
     )
   }
