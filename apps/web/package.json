@@ -56,7 +56,7 @@
     "@nivo/sunburst": "^0.83.0",
     "@types/d3": "^7.4.0",
     "aws-amplify": "^6.3.1",
-    "axios": "^1.6.0",
+    "axios": "^1.7.9",
     "browserslist": "^4.21.4",
     "d3": "^7.8.2",
     "dayjs": "^1.11.7",
