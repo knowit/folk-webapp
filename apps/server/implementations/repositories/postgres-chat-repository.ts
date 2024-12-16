@@ -66,6 +66,20 @@ export class PostgresChatRepository implements IChatRepository {
     }
   }
 
+  async getChat(chatId: string): Promise<Chat> {
+    await this.client.connect()
+    try {
+      const getChatQuery = {
+        text: 'SELECT * FROM chat WHERE chat_id = $1',
+        values: [chatId],
+      }
+      const result = await this.client.query(getChatQuery)
+      return result.rows[0]
+    } catch (error) {
+      console.log('Error occurred when fetching chat.', error)
+    }
+  }
+
   async getChatMessagesForChat(chatId: string): Promise<ChatMessage[]> {
     await this.client.connect()
     try {
@@ -80,20 +94,6 @@ export class PostgresChatRepository implements IChatRepository {
         'Error occurred when fetching chat messages:',
         error.message
       )
-    }
-  }
-
-  async getChat(chatId: string): Promise<Chat> {
-    await this.client.connect()
-    try {
-      const getChatQuery = {
-        text: 'SELECT * FROM chat WHERE chat_id = $1',
-        values: [chatId],
-      }
-      const result = await this.client.query(getChatQuery)
-      return result.rows[0]
-    } catch (error) {
-      console.log('Error occurred when fetching chat.', error)
     }
   }
 
