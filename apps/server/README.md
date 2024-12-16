@@ -80,29 +80,30 @@ When using a Docker container, I had to switch to port 5433 for it to work.
 
 #### Working on the database
 
-There isn't a script that sets up the database skeleton with the necessary tables if they don't exist.
-Therefore, there is a bit of extra work at the moment to set everything up.
 You'll have to create two tables in you newly created database; `chat` and `chat_message`.
 The columns should be as found for the corresponding classes in the file `apps/server/repository/chat-repository.ts`.
+
+It is possible to set up the tables using an endpoint. If the connection to the database is up, you can use the endpoint
+`/api/v2/database/setup`
 
 Example tables for PostgresSQL
 
 **chat** with columns:
 
-- id: uuid
-- user_id: uuid
-- created: timestamp with timezone (use function now() as default in Postgres)
-- last_updated: timestamp with timezone (use function now() as default in Postgres)
-- title: character varying (255)
+- id: uuid [PKey]
+- user_id: varchar (255)
+- created: timestamp
+- last_updated: timestamp
+- title: varchar (255)
 
 **chat_message** with columns:
 
-- id: uuid
-- chat_id: uuid
-- user_id: character varying (255)
+- id: uuid [PKey]
+- chat_id: uuid [FKey]
+- user_id: varchar (255)
 - message: text
-- role: character varying (255)
-- created: timestamp with timezone (use function now() as default in Postgres)
+- role: varchar (255)
+- created: timestamp
 
 ### Testing
 
