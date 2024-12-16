@@ -69,6 +69,14 @@ export type EmployeeMotivationAndCompetence = {
   categoryCompetenceAvg: number
 }
 
+export type EmployeeCompetenceScoreReport = EmployeeCompetenceScore[]
+export type EmployeeCompetenceScore = {
+  email: string
+  category: string
+  score: number
+  sorting: number
+}
+
 export type EmployeeSkillsReport = EmployeeSkills[]
 export type EmployeeSkills = {
   user_id: string

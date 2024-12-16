@@ -51,6 +51,7 @@ interface ChartCardProps {
   extraHeaderContent?: React.ReactNode
   noDataText?: string
   legendWidth?: number
+  maxValue?: number
 }
 
 const ChartCard = ({

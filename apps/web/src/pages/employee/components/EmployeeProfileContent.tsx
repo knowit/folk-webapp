@@ -11,6 +11,7 @@ import { EmployeeNotFound } from './EmployeeNotFound'
 import { FallbackMessage } from './FallbackMessage'
 import { ProjectExperienceList } from './ProjectExperienceList'
 import { WorkExperienceList } from './WorkExperienceList'
+import EmployeeCompetenceScoreCard from '../cards/EmployeeCompetenceScoreCard'
 
 const ComponentRoot = styled('article')(() => ({
   display: 'flex',
@@ -103,6 +104,7 @@ export function EmployeeProfileContent({ employeeEmail }: Props) {
         </ComponentColumn>
         <ComponentColumn>
           <EmployeeCompetenceCard employeeEmail={employeeEmail} />
+          <EmployeeCompetenceScoreCard employeeEmail={employeeEmail} />
         </ComponentColumn>
       </ComponentBody>
     </ComponentRoot>
