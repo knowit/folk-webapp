@@ -18,7 +18,6 @@ const ChatWindow: React.FC = () => {
 
   // Call useGenerateLLMReply at the top level
   const { chunks, error } = useGenerateLLMStream(pendingMessages)
-  console.log(chunks)
 
   React.useEffect(() => {
     if (chunks.length > 0) {

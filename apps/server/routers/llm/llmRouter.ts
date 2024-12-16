@@ -47,10 +47,17 @@ router.get<unknown, unknown, unknown, generateParams>(
       res.setHeader('Content-Type', 'application/json; charset=utf-8')
       res.setHeader('Transfer-Encoding', 'chunked')
 
+      let lastrole = 'undefined'
+
       // Stream the data using an async generator
       for await (const chunk of response) {
-        res.write(JSON.stringify(chunk) + '\n')
-        console.log(chunk) // Write each chunk as a JSON string with a newline
+        const jsonString = JSON.stringify(chunk, (key, value) =>
+          value === undefined && key == 'role' ? lastrole : value
+        )
+        if (chunk.role != undefined) {
+          lastrole = chunk.role
+        }
+        res.write(jsonString + '\n') // Write each chunk as a JSON string with a newline
       }
 
       res.end() // End the response

@@ -21,6 +21,7 @@ export type LLMMessage = {
 
 export type LLMChunk = {
   content?: string
+  role: string
 }
 
 export type LLMResponse = {

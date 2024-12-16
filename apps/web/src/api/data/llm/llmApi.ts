@@ -14,9 +14,25 @@ export const generateStream = async (
   const response = await getAtApiV2<LLMStreamResponse>('/llm/generateStream', {
     params: { messages },
   })
-  console.log(response)
 
-  for (const chunk of response) {
-    onChunk(chunk)
+  let buffer = ''
+
+  for await (const chunk of response) {
+    buffer += chunk // Add received chunk to the buffer
+
+    let boundary = buffer.indexOf('\n') // Find newline delimiter
+    while (boundary !== -1) {
+      const jsonString = buffer.slice(0, boundary) // Extract JSON string
+      buffer = buffer.slice(boundary + 1) // Remove processed chunk from the buffer
+
+      try {
+        const parsedChunk = JSON.parse(jsonString) // Parse the JSON string
+        onChunk(parsedChunk) // Call onChunk with the parsed object
+      } catch (error) {
+        console.error('Failed to parse chunk:', jsonString, error)
+      }
+
+      boundary = buffer.indexOf('\n') // Look for the next newline
+    }
   }
 }
