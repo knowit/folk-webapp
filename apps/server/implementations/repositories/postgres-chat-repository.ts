@@ -86,4 +86,40 @@ export class PostgresChatRepository implements IChatRepository {
       console.error('Error occurred when fetching chats:', error.message)
     }
   }
+
+  /**
+   * This method is only used to set up database locally. Should be removed when database is created in the cloud.
+   */
+  async setupPostgres(): Promise<void> {
+    await this.client.connect()
+    try {
+      await this.client.query('BEGIN')
+      await this.client.query(
+        `CREATE TABLE IF NOT EXISTS chat (
+          id UUID PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+          user_id VARCHAR(255) NOT NULL,
+          created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+          last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+          title VARCHAR(255) NOT NULL
+        );`
+      )
+
+      await this.client.query(
+        `CREATE TABLE IF NOT EXISTS chat_message (
+            id UUID PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+            chat_id UUID NOT NULL,
+            user_id VARCHAR(255) NOT NULL,
+            message TEXT,
+            role VARCHAR(255) NOT NULL,
+            created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            CONSTRAINT fk_chat_message_chat FOREIGN KEY (chat_id) REFERENCES chat (id) ON DELETE CASCADE
+        );`
+      )
+
+      await this.client.query('COMMIT')
+      console.log('Successfully created tables in database.')
+    } catch (error) {
+      console.error('Error creating tables in database.', error)
+    }
+  }
 }

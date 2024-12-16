@@ -33,4 +33,9 @@ router.post('/chatMessages', async (req, res) => {
   res.send(result)
 })
 
+router.post('/setup', async (_, res) => {
+  const result = await db.setupPostgres()
+  res.send(result)
+})
+
 export { router as databaseRouter }
