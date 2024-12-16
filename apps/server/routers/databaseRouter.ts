@@ -23,6 +23,11 @@ router.get('/chatMessages', async (req, res) => {
   res.send(result)
 })
 
+router.post('/chat', async (req, res) => {
+  const result = await db.addChat(req.body.userId)
+  res.send(result)
+})
+
 router.post('/chatMessages', async (req, res) => {
   const result = await db.addChatMessage(
     req.body.chatId,

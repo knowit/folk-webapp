@@ -5,6 +5,14 @@
  */
 export interface IChatRepository {
   /**
+   * Creates a chat for a user.
+   *
+   * @param userId - The identifier of the user that the chat is created for.
+   * @returns The created chat
+   */
+  addChat(userId: string): Promise<Chat>
+
+  /**
    * Add a chat message for a chat.
    *
    * @param chatId - The identifier of the chat that the message is a part of.
