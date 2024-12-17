@@ -20375,7 +20375,6 @@ __metadata:
     dotenv: ^16.4.7
     eslint-config-folk: ^0.0.0
     express: ^4.21.2
-    globals: ^15.13.0
     jest: ^29.7.0
     nodemon: ^3.1.9
     openai: 4.76.3
