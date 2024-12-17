@@ -1,13 +1,11 @@
+import eslintConfigFolk from 'eslint-config-folk'
 import globals from 'globals'
-import eslint from '@eslint/js'
-import tseslint from 'typescript-eslint'
 import pluginReact from 'eslint-plugin-react'
 import pluginHooks from 'eslint-plugin-react-hooks'
 
 /** @type {import('eslint').Linter.Config[]} */
-export default tseslint.config(
-  eslint.configs.recommended,
-  tseslint.configs.recommended,
+export default [
+  ...eslintConfigFolk,
   pluginReact.configs.flat.recommended,
   pluginReact.configs.flat['jsx-runtime'],
   {
@@ -20,6 +18,9 @@ export default tseslint.config(
     },
   },
   {
+    ignores: ['build/'],
+  },
+  {
     files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
     settings: {
       react: {
@@ -28,14 +29,9 @@ export default tseslint.config(
     },
     languageOptions: { globals: globals.browser },
   },
+
   {
     rules: {
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/explicit-module-boundary-types': 'warn',
-      '@typescript-eslint/explicit-function-return-type': 'warn',
-      '@typescript-eslint/no-var-requires': 'warn',
-      '@typescript-eslint/no-unused-vars': 'warn',
-      '@typescript-eslint/no-unused-expressions': 'warn',
       '@typescript-eslint/no-empty-object-type': 'warn',
       'no-constant-binary-expression': 'warn',
       'react-hooks/rules-of-hooks': 'warn',
@@ -44,5 +40,5 @@ export default tseslint.config(
       '@typescript-eslint/no-require-imports': 'warn',
       'no-undef': 'warn',
     },
-  }
-)
+  },
+]
