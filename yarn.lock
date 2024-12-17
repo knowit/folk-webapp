@@ -4841,7 +4841,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/lab@npm:^6.0.0-dev.240424162023-9968b4889d":
+"@mui/lab@npm:^6.0.0-beta.19":
   version: 6.0.0-dev.240424162023-9968b4889d
   resolution: "@mui/lab@npm:6.0.0-dev.240424162023-9968b4889d"
   dependencies:
@@ -22152,7 +22152,7 @@ __metadata:
     "@jonkoops/matomo-tracker": ^0.7.0
     "@jonkoops/matomo-tracker-react": ^0.7.0
     "@mui/icons-material": ^6.2.0
-    "@mui/lab": ^6.0.0-dev.240424162023-9968b4889d
+    "@mui/lab": ^6.0.0-beta.19
     "@mui/material": ^6.2.0
     "@mui/styles": ^6.2.0
     "@mui/x-date-pickers": ^7.23.2
