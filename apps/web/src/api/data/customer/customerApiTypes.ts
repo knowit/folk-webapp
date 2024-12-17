@@ -34,5 +34,5 @@ export type CustomerListTableRowData = [
   info: ConsultantInfo,
   jobTitle: string | null,
   customerAndProject: string,
-  cvLinks: CvLinks
+  cvLinks: CvLinks,
 ]

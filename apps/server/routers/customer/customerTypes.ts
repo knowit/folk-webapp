@@ -32,7 +32,7 @@ export type EmployeeForCustomerListRowData = [
   employeeInfo: EmployeeInfo,
   jobTitle: string | null,
   customerAndProject: string,
-  cvLinks: CvLinks
+  cvLinks: CvLinks,
 ]
 
 export type CustomerCardsData = {
