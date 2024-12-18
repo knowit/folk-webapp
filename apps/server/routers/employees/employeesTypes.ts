@@ -124,7 +124,7 @@ export type EmployeeTableRowData = [
   primaryCustomer: Customer | null,
   cvLinks: CvLinks,
   motivationScores: Record<string, number>,
-  competenceScores: Record<string, number>
+  competenceScores: Record<string, number>,
 ]
 
 export type EmployeeInfo = {
@@ -157,12 +157,12 @@ export type CvLinks = {
 
 export type JobRotationStatus = [
   WantNewProject: number,
-  OpenForNewProject: number
+  OpenForNewProject: number,
 ]
 
 export type CategoryScores = [
   Motivation: Record<string, number>,
-  Competence: Record<string, number>
+  Competence: Record<string, number>,
 ]
 
 /**

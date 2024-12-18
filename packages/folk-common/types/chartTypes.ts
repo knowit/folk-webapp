@@ -3,7 +3,7 @@ export type ChartData =
   | SingularChartData;
 
 export type MultipleChartData<
-  T extends SingularChartData[] = SingularChartData[]
+  T extends SingularChartData[] = SingularChartData[],
 > = {
   type: "MultipleChart";
   groups: ChartGroup<T>[];
