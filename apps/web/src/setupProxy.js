@@ -11,10 +11,15 @@ const config = require('../package.json')
 
 module.exports = function (app) {
   const proxy_url = process.env.PROXY_URL || config.proxy
-  const proxy = createProxyMiddleware({
-    target: proxy_url,
+  const authProxy = createProxyMiddleware({
+    target: proxy_url + '/auth',
     changeOrigin: true,
   })
-  app.use('/auth', proxy)
-  app.use('/api', proxy)
+  app.use('/auth', authProxy)
+
+  const apiProxy = createProxyMiddleware({
+    target: proxy_url + '/api',
+    changeOrigin: true,
+  })
+  app.use('/api', apiProxy)
 }

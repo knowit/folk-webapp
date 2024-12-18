@@ -11,9 +11,9 @@
     "lint:fix": "run -T eslint --fix ."
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.713.0",
-    "@aws-sdk/credential-providers": "^3.713.0",
-    "@aws-sdk/s3-request-presigner": "^3.713.0",
+    "@aws-sdk/client-s3": "^3.714.0",
+    "@aws-sdk/credential-providers": "^3.714.0",
+    "@aws-sdk/s3-request-presigner": "^3.714.0",
     "@azure/identity": "4.5.0",
     "@azure/openai": "2.0.0",
     "@folk/common": "workspace:^",
@@ -22,7 +22,7 @@
     "chromadb": "^1.9.4",
     "cookie-parser": "^1.4.7",
     "express": "^4.21.2",
-    "openai": "4.76.3",
+    "openai": "4.77.0",
     "openid-client": "^4.9.1",
     "pg": "^8.13.1"
   },
