@@ -1,8 +1,8 @@
 import { FunctionComponent } from 'react'
 import { styled } from '@mui/material/styles'
 import { Switch, SwitchProps } from '@mui/material'
-import LightModeIcon from '../../assets/iconLightMode.svg'
-import DarkModeIcon from '../../assets/iconDarkMode.svg'
+import LightModeIcon from '../../assets/iconLightMode.svg?react'
+import DarkModeIcon from '../../assets/iconDarkMode.svg?react'
 
 const SwitchStyled = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />

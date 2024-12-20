@@ -6,7 +6,7 @@ import {
   ExpandMoreIcon,
   OpenInNewIcon,
 } from '../../../assets/Icons'
-import { ReactComponent as FallbackUserIcon } from '../../../assets/fallback_user.svg'
+import FallbackUserIcon from '../../../assets/fallback_user.svg?react'
 import { Link } from 'react-router-dom'
 import { ConsultantInfo } from '../../../api/data/employee/employeeApiTypes'
 import CharacterLimitBox from '../components/CharacterLimitBox'

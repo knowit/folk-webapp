@@ -40,3 +40,6 @@ yarn-error.log*
 .serverless
 
 .idea
+
+# tmp filer brukt i enkelte saker
+tmp

@@ -2,7 +2,7 @@ import React from 'react'
 import { Avatar } from '@mui/material'
 import { ResponsiveNetwork } from '@nivo/network'
 import { animated, to } from '@react-spring/web'
-import { ReactComponent as FallbackUserIcon } from '../../../assets/fallback_user.svg'
+import FallbackUserIcon from '../../../assets/fallback_user.svg?react'
 import TooltipContainer from './TooltipContainer'
 // responsive component, otherwise height will be 0 and
 // no chart will be rendered.
