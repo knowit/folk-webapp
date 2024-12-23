@@ -9,7 +9,11 @@
   "files.autoSave": "onFocusChange",
 
   // ESLint
-  "eslint.alwaysShowStatus": true,
+  "eslint.experimental.useFlatConfig": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.validate": ["javascript"],
 
   // Prettier
   "prettier.semi": false,
