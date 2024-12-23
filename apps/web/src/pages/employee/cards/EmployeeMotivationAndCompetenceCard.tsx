@@ -19,7 +19,7 @@ const EmployeeCompetenceCard: FC<Props> = ({ employeeEmail }) => {
   const { data: scoreData, error: scoreError } =
     useEmployeeCompetenceScoreCharts(employeeEmail)
 
-  // Append the score chart to the first group of motication & competence charts
+  // Append t-profile chart to the first chart group ("Hovedkategorier")
   if (motAndCompData && scoreData) {
     ;(
       motAndCompData as MultipleChartData<SingularChartData[]>
