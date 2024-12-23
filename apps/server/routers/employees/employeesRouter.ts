@@ -13,7 +13,6 @@ import {
 
 import { getFileFromS3 } from '../../dataplattform/databricksS3Call'
 import { EmployeeCompetenceScore } from './employeesTypes'
-import { MultipleChartData, BarChartData, RadarChartData } from '../chartTypes'
 
 const router: Router = express.Router()
 
@@ -140,8 +139,7 @@ router.get<unknown, unknown, unknown, EmailParam>(
       const filtered = data
         .filter((i) => i.email == req.query.email)
         .sort((e1, e2) => e1.sorting - e2.sorting)
-      const aggregatedData: MultipleChartData<[BarChartData, RadarChartData]> =
-        employeeCompetenceScore(filtered)
+      const aggregatedData = employeeCompetenceScore(filtered)
       res.send(aggregatedData)
     } catch (error) {
       next(error)

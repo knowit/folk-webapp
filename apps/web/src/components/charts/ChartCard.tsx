@@ -26,9 +26,11 @@ export const SingularChart = ({
   isBig,
   chartData,
   ...props
-}: SingularChartProps & IsBigProps) => {
+}: SingularChartProps & IsBigProps): React.ReactNode => {
   switch (chartData.type) {
     case 'BarChart':
+      return <BarChart isBig={isBig} {...chartData} />
+    case 'TProfileChart':
       return <BarChart isBig={isBig} {...chartData} />
     case 'RadarChart':
       return <RadarChart isBig={isBig} {...chartData} />
@@ -61,7 +63,7 @@ const ChartCard = ({
   title,
   legendWidth,
   ...props
-}: ChartCardProps) => {
+}: ChartCardProps): React.ReactNode => {
   if (error)
     return (
       <GridItem>

@@ -1,4 +1,9 @@
-import { MultipleChartData, BarChartData, RadarChartData } from '../chartTypes'
+import {
+  MultipleChartData,
+  BarChartData,
+  RadarChartData,
+  TProfileChartData,
+} from '../chartTypes'
 
 import { aggregateEmployeeCompetenceAndMotivation } from './employeesAggregation'
 import {
@@ -48,37 +53,19 @@ export const employeeMotivationAndCompetence = (
 
 export const employeeCompetenceScore = (
   data: EmployeeCompetenceScore[]
-): MultipleChartData<[BarChartData, RadarChartData]> => {
+): TProfileChartData => {
   const indexBy = 'category'
   const keys = ['score']
-  const name = 'T-formet'
 
   const maxScore = Math.max(...data.map((s) => s.score))
   const dataSubset = data.map((e) => mapCompetenceScore(e))
 
   return {
-    type: 'MultipleChart',
-    groups: [
-      {
-        name,
-        charts: [
-          {
-            type: 'BarChart',
-            indexBy,
-            keys,
-            data: dataSubset,
-            maxValue: maxScore,
-          },
-          {
-            type: 'RadarChart',
-            indexBy,
-            keys,
-            data: dataSubset,
-            maxValue: maxScore,
-          },
-        ],
-      },
-    ],
+    type: 'TProfileChart',
+    indexBy,
+    keys,
+    data: dataSubset,
+    maxValue: maxScore,
   }
 }
 

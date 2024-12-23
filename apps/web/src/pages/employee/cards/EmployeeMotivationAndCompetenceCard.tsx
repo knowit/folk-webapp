@@ -7,6 +7,7 @@ import ChartCard from '../../../components/charts/ChartCard'
 import {
   MultipleChartData,
   SingularChartData,
+  TProfileChartData,
 } from '@folk/common/types/chartTypes'
 
 interface Props {
@@ -23,9 +24,7 @@ const EmployeeCompetenceCard: FC<Props> = ({ employeeEmail }) => {
   if (motAndCompData && scoreData) {
     ;(
       motAndCompData as MultipleChartData<SingularChartData[]>
-    ).groups[0].charts.push(
-      (scoreData as MultipleChartData<SingularChartData[]>).groups[0].charts[0]
-    )
+    ).groups[0].charts.push(scoreData as TProfileChartData)
   }
 
   return (
