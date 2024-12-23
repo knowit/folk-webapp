@@ -33,7 +33,7 @@ const EmployeeCompetenceCard: FC<Props> = ({ employeeEmail }) => {
       fullSize={true}
       title="Kompetansekartlegging"
       data={motAndCompData}
-      error={motAndCompError || scoreError}
+      error={motAndCompError !== undefined ? motAndCompError : scoreError}
     />
   )
 }
