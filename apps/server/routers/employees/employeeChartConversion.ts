@@ -2,6 +2,7 @@ import { MultipleChartData, BarChartData, RadarChartData } from '../chartTypes'
 
 import { aggregateEmployeeCompetenceAndMotivation } from './employeesAggregation'
 import {
+  CompetenceScore,
   EmployeeCompetenceScore,
   EmployeeMotivationAndCompetence,
 } from './employeesTypes'
@@ -53,6 +54,7 @@ export const employeeCompetenceScore = (
   const name = 'T-formet'
 
   const maxScore = Math.max(...data.map((s) => s.score))
+  const dataSubset = data.map((e) => mapCompetenceScore(e))
 
   return {
     type: 'MultipleChart',
@@ -64,18 +66,27 @@ export const employeeCompetenceScore = (
             type: 'BarChart',
             indexBy,
             keys,
-            data,
+            data: dataSubset,
             maxValue: maxScore,
           },
           {
             type: 'RadarChart',
             indexBy,
             keys,
-            data,
+            data: dataSubset,
             maxValue: maxScore,
           },
         ],
       },
     ],
+  }
+}
+
+function mapCompetenceScore(
+  employeeCompetenceScore: EmployeeCompetenceScore
+): CompetenceScore {
+  return {
+    category: employeeCompetenceScore.category,
+    score: employeeCompetenceScore.score,
   }
 }

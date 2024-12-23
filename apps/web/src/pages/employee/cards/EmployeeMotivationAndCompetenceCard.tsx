@@ -1,20 +1,39 @@
-import React, { FC } from 'react'
-import { useEmployeeMotivationAndCompetenceCharts } from '../../../api/data/employee/employeeQueries'
+import { FC } from 'react'
+import {
+  useEmployeeCompetenceScoreCharts,
+  useEmployeeMotivationAndCompetenceCharts,
+} from '../../../api/data/employee/employeeQueries'
 import ChartCard from '../../../components/charts/ChartCard'
+import {
+  MultipleChartData,
+  SingularChartData,
+} from '@folk/common/types/chartTypes'
 
 interface Props {
   employeeEmail: string
 }
 
 const EmployeeCompetenceCard: FC<Props> = ({ employeeEmail }) => {
-  const { data, error } =
+  const { data: motAndCompData, error: motAndCompError } =
     useEmployeeMotivationAndCompetenceCharts(employeeEmail)
+  const { data: scoreData, error: scoreError } =
+    useEmployeeCompetenceScoreCharts(employeeEmail)
+
+  // Append the score chart to the first group of motication & competence charts
+  if (motAndCompData && scoreData) {
+    ;(
+      motAndCompData as MultipleChartData<SingularChartData[]>
+    ).groups[0].charts.push(
+      (scoreData as MultipleChartData<SingularChartData[]>).groups[0].charts[0]
+    )
+  }
+
   return (
     <ChartCard
       fullSize={true}
       title="Kompetansekartlegging"
-      data={data}
-      error={error}
+      data={motAndCompData}
+      error={motAndCompError || scoreError}
     />
   )
 }

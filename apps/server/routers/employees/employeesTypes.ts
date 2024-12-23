@@ -76,6 +76,10 @@ export type EmployeeCompetenceScore = {
   score: number
   sorting: number
 }
+export type CompetenceScore = {
+  category: string
+  score: number
+}
 
 export type EmployeeSkillsReport = EmployeeSkills[]
 export type EmployeeSkills = {
