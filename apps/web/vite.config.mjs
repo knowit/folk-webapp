@@ -7,10 +7,19 @@ import svgrPlugin from 'vite-plugin-svgr'
 import sslPlugin from '@vitejs/plugin-basic-ssl'
 
 export default ({ mode }) => {
-  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
+  const envPrefix = 'REACT_APP_'
+  const env = { ...process.env, ...loadEnv(mode, process.cwd(), envPrefix) }
+  const processEnvValues = {
+    'process.env': Object.entries(env).reduce((prev, [key, val]) => {
+      return {
+        ...prev,
+        [key]: val,
+      }
+    }, {}),
+  }
   const proxyUrl = process.env.PROXY_URL || process.env.npm_package_proxy // "proxy" variable imported from top-level package.json
   const config = {
-    envPrefix: 'REACT_APP_',
+    envPrefix: envPrefix,
     cacheDir: '.vite',
     build: {
       outDir: 'build',
@@ -32,11 +41,7 @@ export default ({ mode }) => {
         },
       },
     },
-    define: {
-      'process.env': {
-        REACT_APP_ENV: process.env.REACT_APP_ENV,
-      },
-    },
+    define: processEnvValues,
     resolve: {
       alias: {
         // Add your code aliases here, like you would in jsconfig or tsconfig files if not already done
