@@ -13,7 +13,8 @@ const instance = createInstance({
   siteId: 1,
   trackerUrl: 'https://objectnet-dataplattform.matomo.cloud/matomo.php',
   srcUrl: 'https://objectnet-dataplattform.matomo.cloud/matomo.js',
-  disabled: !process.env.NODE_ENV || process.env.NODE_ENV === 'development',
+  disabled:
+    !process.env.REACT_APP_ENV || process.env.REACT_APP_ENV === 'development',
   heartBeat: {
     active: true, // optional, default value: true
     seconds: 10, // optional, default value: `15

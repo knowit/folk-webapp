@@ -3,7 +3,7 @@ import { ToggleButton, ToggleButtonGroup } from '@mui/material'
 import { BarChart, PieChart, ShowChart, DonutLarge } from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
 import { SvgIcon } from '@mui/material'
-import { ReactComponent as RadarLogo } from '../../assets/RadarChart.svg'
+import RadarLogo from '../../assets/RadarChart.svg'
 
 import { useMatomo } from '@jonkoops/matomo-tracker-react'
 import { ChartType, ChartVariant } from '../sortableTable/tableTypes'

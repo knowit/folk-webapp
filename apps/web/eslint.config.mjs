@@ -18,7 +18,7 @@ export default [
     },
   },
   {
-    ignores: ['build/'],
+    ignores: ['build/', '.vite/'],
   },
   {
     files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
