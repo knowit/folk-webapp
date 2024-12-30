@@ -12,6 +12,7 @@ import {
 } from './employeesAggregation'
 
 import { getFileFromS3 } from '../../dataplattform/databricksS3Call'
+import { EmployeeCompetenceScore } from './employeesTypes'
 
 const router: Router = express.Router()
 
@@ -134,11 +135,11 @@ router.get<unknown, unknown, unknown, EmailParam>(
       const employeeCompetenceSc = await getFileFromS3(
         'employeeCompetenceScore'
       )
-      let data = JSON.parse(employeeCompetenceSc)
-      data = data
+      const data: EmployeeCompetenceScore[] = JSON.parse(employeeCompetenceSc)
+      const filtered = data
         .filter((i) => i.email == req.query.email)
         .sort((e1, e2) => e1.sorting - e2.sorting)
-      const aggregatedData = employeeCompetenceScore(data)
+      const aggregatedData = employeeCompetenceScore(filtered)
       res.send(aggregatedData)
     } catch (error) {
       next(error)

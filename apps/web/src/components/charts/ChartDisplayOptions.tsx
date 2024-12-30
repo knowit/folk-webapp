@@ -1,6 +1,12 @@
 import React from 'react'
 import { ToggleButton, ToggleButtonGroup } from '@mui/material'
-import { BarChart, PieChart, ShowChart, DonutLarge } from '@mui/icons-material'
+import {
+  BarChart,
+  PieChart,
+  ShowChart,
+  DonutLarge,
+  TextFields,
+} from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
 import { SvgIcon } from '@mui/material'
 import RadarLogo from '../../assets/RadarChart.svg'
@@ -16,6 +22,7 @@ const chartVariantInfo: {
 } = {
   LineChart: { label: 'linjediagram', icon: <ShowChart /> },
   BarChart: { label: 'stolpediagram', icon: <BarChart /> },
+  TProfileChart: { label: 'tprofildiagram', icon: <TextFields /> },
   PieChart: { label: 'kakediagram', icon: <PieChart /> },
   RadarChart: {
     label: 'radardiagram',
@@ -43,13 +50,13 @@ export function ChartVariantToggle({
   onChange,
   big = false,
   title,
-}: ChartVariantToggleProps) {
+}: ChartVariantToggleProps): React.ReactNode {
   const { trackEvent } = useMatomo()
 
   const handleChartVariantChange = (
     event: React.MouseEvent,
     newChartIndex: number | null
-  ) => {
+  ): void => {
     if (typeof newChartIndex === 'number') {
       onChange(newChartIndex)
     }
@@ -66,7 +73,7 @@ export function ChartVariantToggle({
         const { label, icon: ChartIcon } = chartVariantInfo[chartVariant.type]
         const buttonLabel = `Vis som ${label}`
 
-        const chartOptionChange = (label: string) => {
+        const chartOptionChange = (label: string): void => {
           trackEvent({
             category: 'Graph type',
             action: 'Changed graph type',
@@ -102,6 +109,8 @@ interface ChartDisplayOptionsProps {
   children: React.ReactNode | React.ReactNode[]
 }
 
-export function ChartDisplayOptions({ children }: ChartDisplayOptionsProps) {
+export function ChartDisplayOptions({
+  children,
+}: ChartDisplayOptionsProps): React.ReactNode {
   return <ChartDisplayOptionsStyled>{children}</ChartDisplayOptionsStyled>
 }

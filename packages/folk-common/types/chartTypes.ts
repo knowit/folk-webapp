@@ -16,6 +16,7 @@ export type ChartGroup<T extends SingularChartData[] = SingularChartData[]> = {
 
 export type SingularChartData =
   | BarChartData
+  | TProfileChartData
   | RadarChartData
   | LineChartData
   | PieChartData
@@ -23,6 +24,15 @@ export type SingularChartData =
 
 export interface BarChartData {
   type: "BarChart";
+  indexBy: string;
+  keys: string[];
+  data: any[];
+  weeklyData?: LineChartData;
+}
+
+// A variant of BarChart, but needs a separate type name so that we can set a different icon on the toggle button
+export interface TProfileChartData {
+  type: "TProfileChart";
   indexBy: string;
   keys: string[];
   data: any[];

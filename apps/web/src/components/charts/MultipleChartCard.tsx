@@ -36,12 +36,20 @@ const MultipleChartCard = ({
   fullSize,
   data: { groups },
   noDataText,
-}: MultipleChartCardProps) => {
+}: MultipleChartCardProps): React.ReactNode => {
   const [selectedGroupName, setSelectedGroupName] = useState(groups[0].name)
   const [selectedChartIndex, setSelectedChartIndex] = useState(0)
   const [isBig, setIsBig] = useState(false)
 
   const selectedGroup = groups.find((group) => group.name === selectedGroupName)
+
+  const onChangeSelectedGroup = (value: string): void => {
+    const group = groups.find((g) => g.name == value)
+    if (group.charts.length >= selectedChartIndex) {
+      setSelectedChartIndex(0)
+    }
+    setSelectedGroupName(value)
+  }
 
   return (
     <GridItem fullSize={fullSize}>
@@ -50,7 +58,7 @@ const MultipleChartCard = ({
         <DropdownPicker
           values={groups.map((group) => group.name)}
           selected={selectedGroupName}
-          onChange={setSelectedGroupName}
+          onChange={onChangeSelectedGroup}
           title={title}
         />
       </GridItemHeader>
