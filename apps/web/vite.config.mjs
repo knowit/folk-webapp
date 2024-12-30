@@ -35,6 +35,8 @@ export default ({ mode }) => {
     define: {
       'process.env': {
         NODE_ENV: process.env.NODE_ENV,
+        MODE: process.env.MODE,
+        REACT_APP_ENV: process.env.REACT_APP_ENV,
       },
     },
     resolve: {
