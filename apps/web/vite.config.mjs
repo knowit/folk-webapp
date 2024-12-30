@@ -42,7 +42,21 @@ export default ({ mode }) => {
         // Add your code aliases here, like you would in jsconfig or tsconfig files if not already done
       },
     },
-    plugins: [react(), viteTsconfigPaths(), svgrPlugin(), sslPlugin()],
+    plugins: [
+      react(),
+      viteTsconfigPaths(),
+      svgrPlugin({
+        // svgr options: https://react-svgr.com/docs/options/
+        svgrOptions: {
+          exportType: 'default',
+          ref: true,
+          svgo: false,
+          titleProp: true,
+        },
+        include: '**/*.svg',
+      }),
+      sslPlugin(),
+    ],
   }
   return defineConfig(config)
 }

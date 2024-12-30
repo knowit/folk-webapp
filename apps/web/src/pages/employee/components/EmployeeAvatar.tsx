@@ -1,7 +1,7 @@
 import React from 'react'
 import { Avatar } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import FallbackUserIcon from '../../../assets/fallback_user.svg?react'
+import FallbackUserIcon from '../../../assets/fallback_user.svg'
 import { CircleSkeleton } from '../../../components/skeletons/CircleSkeleton'
 
 const ComponentRoot = styled('div')(() => ({
