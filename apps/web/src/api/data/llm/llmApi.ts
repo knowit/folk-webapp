@@ -1,4 +1,4 @@
-import { getAtApiV2 } from '../../client'
+import { getAtApiV2, getToken } from '../../client'
 import { LLMMessage } from 'server/routers/llm/llmTypes'
 import { io } from 'socket.io-client'
 import { LLMReplyResponse } from './llmApiTypes'
@@ -8,7 +8,15 @@ export const generateReply = (messages: LLMMessage[]) =>
     params: { messages },
   })
 
-const socket = io('http://localhost:3000') // Adjust URL for production
+const socket = io('http://localhost:3010', {
+  auth: {
+    token: ``, // Include any token required for authentication
+  },
+  transports: ['websocket'],
+  withCredentials: true, // Ensure cookies are included
+})
+
+let isSocketInitialized = false
 
 export const generateStream = (
   messages: LLMMessage[],
@@ -16,30 +24,37 @@ export const generateStream = (
   onDone: () => void,
   onError: (error: any) => void
 ) => {
-  socket.on('connect', () => {
-    console.log('Connected to server:', socket.id)
+  if (!isSocketInitialized) {
+    socket.on('connect', () => {
+      console.log('Connected to server:', socket.id)
+    })
 
-    // Emit a generateStream event to start streaming
-    socket.emit('generateStream', { messages })
-
-    // Listen for data chunks
     socket.on('chunk', (chunk) => {
+      console.log('Received chunk')
       onChunk(chunk)
     })
 
-    // Listen for stream completion
     socket.on('done', () => {
+      console.log('Stream completed')
       onDone()
     })
 
-    // Handle errors
     socket.on('error', (error) => {
       console.error('Stream error:', error)
       onError(error)
     })
-  })
 
-  socket.on('disconnect', () => {
-    console.log('Disconnected from server')
-  })
+    socket.on('disconnect', (reason) => {
+      console.log('Disconnected from server:', reason)
+    })
+
+    isSocketInitialized = true
+  }
+
+  if (socket.connected) {
+    socket.emit('generateStream', { messages })
+  } else {
+    console.error('Socket is not connected. Cannot emit events.')
+    onError(new Error('Socket not connected'))
+  }
 }

@@ -47,6 +47,11 @@ const getAt = async <T>(endpoint: string, options?: GetOptions) => {
   }
 }
 
+export const getToken = async () => {
+  const session = await fetchAuthSession({ forceRefresh: true })
+  return `Bearer ${session?.tokens?.accessToken.toString()}`
+}
+
 export const getAtApiV2 = <T>(endpoint: string, options?: GetOptions) =>
   getAt<T>(`/api/v2${endpoint}`, options)
 

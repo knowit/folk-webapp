@@ -12,30 +12,23 @@ export const useGenerateLLMReply = (messages: LLMMessage[]) =>
   )
 
 export const useGenerateLLMStream = (messages: LLMMessage[]) => {
-  const { data, error, isLoading } = useSWR(
-    messages.length > 0 ? '/generateStream' : null,
+  const { data, error } = useSWR(
+    messages.length > 0 ? JSON.stringify(messages) : null, // Use a unique key
     async () => {
-      const chunks: LLMChunk[] = []
-      return new Promise<LLMChunk[]>((resolve, reject) => {
+      const chunks: LLMMessage[] = []
+      return new Promise<LLMMessage[]>((resolve, reject) => {
         generateStream(
           messages,
-          (chunk) => {
-            chunks.push(chunk) // Push each chunk to the array
-          },
-          () => {
-            resolve(chunks) // Resolve the promise when streaming is complete
-          },
-          (err) => {
-            reject(err) // Reject the promise on error
-          }
+          (chunk) => chunks.push(chunk), // Collect chunks
+          () => resolve(chunks), // Resolve on done
+          (err) => reject(err) // Reject on error
         )
       })
     },
     {
       revalidateOnFocus: false,
-      refreshInterval: 10000, // Optional: Refresh every 10 seconds
     }
   )
 
-  return { chunks: data || [], error, isLoading }
+  return { chunks: data || [], error }
 }

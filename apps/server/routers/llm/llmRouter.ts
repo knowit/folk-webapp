@@ -52,7 +52,7 @@ router.get<unknown, unknown, unknown, GenerateParams>(
 
       for await (const chunk of response) {
         const jsonString = JSON.stringify(chunk, (key, value) =>
-          value === undefined && key === 'role' ? lastRole : value
+          value === undefined && key == 'role' ? lastRole : value
         )
         if (chunk.role !== undefined) {
           lastRole = chunk.role
