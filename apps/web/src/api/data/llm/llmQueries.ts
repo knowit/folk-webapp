@@ -15,8 +15,8 @@ export const useGenerateLLMStream = (messages: LLMMessage[]) => {
   const { data, error } = useSWR(
     messages.length > 0 ? JSON.stringify(messages) : null, // Use a unique key
     async () => {
-      const chunks: LLMMessage[] = []
-      return new Promise<LLMMessage[]>((resolve, reject) => {
+      const chunks: LLMChunk[] = []
+      return new Promise<LLMChunk[]>((resolve, reject) => {
         generateStream(
           messages,
           (chunk) => chunks.push(chunk), // Collect chunks

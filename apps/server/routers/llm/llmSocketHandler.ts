@@ -17,13 +17,14 @@ export const llmSocketHandler = (io: Server) => {
     // Handle generateStream event
     socket.on('generateStream', async (data: { messages: LLMMessage[] }) => {
       const { messages } = data
-      console.log(data)
+      // console.log(data)
 
       try {
         const response = client.generateStream(model, messages, null, null)
 
         // Emit data chunks over WebSocket
         for await (const chunk of response) {
+          console.log(chunk)
           socket.emit('chunk', chunk)
         }
 
