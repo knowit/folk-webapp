@@ -19,8 +19,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(
   cors({
     origin: 'http://localhost:3000', // Frontend URL
-    methods: ['GET', 'POST'],
-    credentials: true,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true, // Allow cookies and headers
   })
 )
 
@@ -40,7 +40,8 @@ const httpServer = http.createServer(app)
 const io = new Server(httpServer, {
   cors: {
     origin: 'http://localhost:3000', // Frontend URL
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST'], // WebSocket methods
+    credentials: true, // Allow cookies and headers
   },
 })
 
@@ -57,10 +58,4 @@ app.use((req, res, next) => {
 })
 app.use(errorHandler)
 
-// Start the server
-const PORT = process.env.PORT || 3000
-httpServer.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`)
-})
-
-export default app
+export { httpServer } // Export the HTTP server instead of app
