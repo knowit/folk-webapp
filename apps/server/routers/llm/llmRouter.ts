@@ -11,11 +11,12 @@ const client = new AzureOpenAILLMRepositoryImpl(
 
 const model = 'gpt-4o'
 
-interface generateParams {
+interface GenerateParams {
   messages: LLMMessage[]
 }
 
-router.get<unknown, unknown, unknown, generateParams>(
+// Traditional HTTP route for synchronous generation
+router.get<unknown, unknown, unknown, GenerateParams>(
   '/generateReply',
   async (req, res, next) => {
     try {
@@ -32,37 +33,36 @@ router.get<unknown, unknown, unknown, generateParams>(
   }
 )
 
-router.get<unknown, unknown, unknown, generateParams>(
+// Keep generateStream available as a fallback
+router.get<unknown, unknown, unknown, GenerateParams>(
   '/generateStream',
   async (req, res, next) => {
     try {
       const response = client.generateStream(
-        'gpt-4o',
+        model,
         req.query.messages,
         null,
         null
       )
 
-      // Set headers for streaming
       res.setHeader('Content-Type', 'application/json; charset=utf-8')
       res.setHeader('Transfer-Encoding', 'chunked')
 
-      let lastrole = 'undefined'
+      let lastRole = 'undefined'
 
-      // Stream the data using an async generator
       for await (const chunk of response) {
         const jsonString = JSON.stringify(chunk, (key, value) =>
-          value === undefined && key == 'role' ? lastrole : value
+          value === undefined && key === 'role' ? lastRole : value
         )
-        if (chunk.role != undefined) {
-          lastrole = chunk.role
+        if (chunk.role !== undefined) {
+          lastRole = chunk.role
         }
-        res.write(jsonString + '\n') // Write each chunk as a JSON string with a newline
+        res.write(jsonString + '\n')
       }
 
-      res.end() // End the response
+      res.end()
     } catch (error) {
-      next(error) // Pass errors to the error handler middleware
+      next(error)
     }
   }
 )

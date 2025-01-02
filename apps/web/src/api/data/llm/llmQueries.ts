@@ -16,10 +16,20 @@ export const useGenerateLLMStream = (messages: LLMMessage[]) => {
     messages.length > 0 ? '/generateStream' : null,
     async () => {
       const chunks: LLMChunk[] = []
-      await generateStream(messages, (chunk) => {
-        chunks.push(chunk)
+      return new Promise<LLMChunk[]>((resolve, reject) => {
+        generateStream(
+          messages,
+          (chunk) => {
+            chunks.push(chunk) // Push each chunk to the array
+          },
+          () => {
+            resolve(chunks) // Resolve the promise when streaming is complete
+          },
+          (err) => {
+            reject(err) // Reject the promise on error
+          }
+        )
       })
-      return chunks
     },
     {
       revalidateOnFocus: false,

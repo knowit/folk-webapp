@@ -22,9 +22,18 @@ const ChatWindow: React.FC = () => {
   React.useEffect(() => {
     if (chunks.length > 0) {
       console.log(chunks)
+      let message = { text: '', isUser: false }
       chunks.forEach((chunk) => {
-        const message = { text: chunk.content, isUser: false }
-        setMessages((prevMessages) => [...prevMessages, message])
+        message = {
+          text: chunk.content ? message.text + chunk.content : message.text,
+          isUser: false,
+        }
+        message.text.length == 0
+          ? setMessages((prevMessages) => [...prevMessages, message])
+          : setMessages((prevMessages) => [
+              ...prevMessages.slice(0, -1),
+              message,
+            ])
       })
 
       // Clear pending messages after processing
