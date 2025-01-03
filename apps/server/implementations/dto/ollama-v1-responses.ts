@@ -301,7 +301,7 @@ export class OllamaV1Chunk extends LLMChunk {
                     toolCall.functionCall.functionArguments &&
                     toolCall.functionCall.functionArguments.trim() !== '{}'
                       ? toolCall.functionCall.functionArguments
-                      : newToolCall?.functionCall.functionArguments ?? ''
+                      : (newToolCall?.functionCall.functionArguments ?? '')
                   )
                 )
               })
@@ -397,7 +397,10 @@ class OllamaV1ChunkToolCall {
 }
 
 class OllamaV1ChunkToolCallFunction {
-  constructor(public name: string | null, public functionArguments: string) {}
+  constructor(
+    public name: string | null,
+    public functionArguments: string
+  ) {}
 
   static fromJson(json: Record<string, any>): OllamaV1ChunkToolCallFunction {
     return new OllamaV1ChunkToolCallFunction(json.name ?? null, json.arguments)

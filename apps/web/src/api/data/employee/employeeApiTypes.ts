@@ -16,7 +16,7 @@ export type EmployeeTableRowData = [
   cvLinks: CvLinks,
   motivationScores: Record<string, number>,
   competenceScores: Record<string, number>,
-  employeeExperience: EmployeeExperience
+  employeeExperience: EmployeeExperience,
 ]
 
 export interface ConsultantInfo {

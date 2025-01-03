@@ -1,6 +1,16 @@
-import { MultipleChartData, BarChartData, RadarChartData } from '../chartTypes'
+import {
+  MultipleChartData,
+  BarChartData,
+  RadarChartData,
+  TProfileChartData,
+} from '../chartTypes'
+
 import { aggregateEmployeeCompetenceAndMotivation } from './employeesAggregation'
-import { EmployeeMotivationAndCompetence } from './employeesTypes'
+import {
+  CompetenceScore,
+  EmployeeCompetenceScore,
+  EmployeeMotivationAndCompetence,
+} from './employeesTypes'
 
 /**
  * Aggregation function that formats data from AWS to fit a Nivo Bar and Pie chart.
@@ -38,5 +48,32 @@ export const employeeMotivationAndCompetence = (
         },
       ],
     })),
+  }
+}
+
+export const employeeCompetenceScore = (
+  data: EmployeeCompetenceScore[]
+): TProfileChartData => {
+  const indexBy = 'category'
+  const keys = ['score']
+
+  const maxScore = Math.max(...data.map((s) => s.score))
+  const dataSubset = data.map((e) => mapCompetenceScore(e))
+
+  return {
+    type: 'TProfileChart',
+    indexBy,
+    keys,
+    data: dataSubset,
+    maxValue: maxScore,
+  }
+}
+
+function mapCompetenceScore(
+  employeeCompetenceScore: EmployeeCompetenceScore
+): CompetenceScore {
+  return {
+    category: employeeCompetenceScore.category,
+    score: employeeCompetenceScore.score,
   }
 }

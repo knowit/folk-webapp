@@ -2,8 +2,8 @@ import { NavLink, Link, useLocation } from 'react-router-dom'
 import { AppBar, Avatar, Tabs, Tab, Toolbar } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import NavMenu from './NavMenu'
-import { ReactComponent as KnowitLogo } from '../../assets/logo.svg'
-import { ReactComponent as FallbackUserIcon } from '../../assets/fallback_user.svg'
+import KnowitLogo from '../../assets/logo.svg'
+import FallbackUserIcon from '../../assets/fallback_user.svg'
 import { useUserInfo } from '../../hooks/useUserInfo'
 import LoginLogoutButton from '../LoginLogoutButton'
 import ModeSwitch from './ModeSwitch'
@@ -46,7 +46,7 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
     '/kunder',
     '/kompetanse',
     '/organisasjon',
-    '/knowitGPT',
+    // '/knowitGPT',
   ]
   const activePage = useLocation().pathname
   const { isAuthenticated, userEmployeeProfile } = useUserInfo()
@@ -88,12 +88,12 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
           to={'/organisasjon'}
           component={NavLink}
         />
-        <Tab
+        {/* <Tab
           label={'KnowitGPT'}
           value={'/knowitGPT'}
           to={'/knowitGPT'}
           component={NavLink}
-        />
+        /> */}
       </Tabs>
     )
   }

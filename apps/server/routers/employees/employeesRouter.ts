@@ -1,6 +1,9 @@
 import express, { Router } from 'express'
 import { ParamError } from '../../middlewares/errorHandling'
-import { employeeMotivationAndCompetence } from './employeeChartConversion'
+import {
+  employeeMotivationAndCompetence,
+  employeeCompetenceScore,
+} from './employeeChartConversion'
 import {
   aggregateEmployeeCompetence,
   aggregateEmployeeProfile,
@@ -9,6 +12,7 @@ import {
 } from './employeesAggregation'
 
 import { getFileFromS3 } from '../../dataplattform/databricksS3Call'
+import { EmployeeCompetenceScore } from './employeesTypes'
 
 const router: Router = express.Router()
 
@@ -110,6 +114,32 @@ router.get<unknown, unknown, unknown, EmailParam>(
       let data = JSON.parse(employeeMotivationAndComp)
       data = data.filter((i) => i.email == req.query.email)
       const aggregatedData = employeeMotivationAndCompetence(data)
+      res.send(aggregatedData)
+    } catch (error) {
+      next(error)
+    }
+  }
+)
+
+router.get<unknown, unknown, unknown, EmailParam>(
+  '/employeeCompetenceScore',
+  async (req, res, next) => {
+    try {
+      if (!req.query.email) {
+        throw {
+          status: 400,
+          message: "Param 'email' is missing.",
+        } as ParamError
+      }
+
+      const employeeCompetenceSc = await getFileFromS3(
+        'employeeCompetenceScore'
+      )
+      const data: EmployeeCompetenceScore[] = JSON.parse(employeeCompetenceSc)
+      const filtered = data
+        .filter((i) => i.email == req.query.email)
+        .sort((e1, e2) => e1.sorting - e2.sorting)
+      const aggregatedData = employeeCompetenceScore(filtered)
       res.send(aggregatedData)
     } catch (error) {
       next(error)

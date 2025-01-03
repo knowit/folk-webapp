@@ -28,6 +28,11 @@ export const getEmployeeMotivationAndCompetenceCharts = (email: string) =>
     params: { email },
   })
 
+export const getEmployeeCompetenceScoreCharts = (email: string) =>
+  getAtApiV2<ChartData>('/employees/employeeCompetenceScore', {
+    params: { email },
+  })
+
 export const getEmployeeExperience = (email: string) =>
   getAtApiV2<EmployeeExperience>('/employees/employeeExperience', {
     params: { email },

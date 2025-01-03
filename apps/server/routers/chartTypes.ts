@@ -3,7 +3,7 @@ export type ChartData =
   | SingularChartData
 
 export type MultipleChartData<
-  T extends SingularChartData[] = SingularChartData[]
+  T extends SingularChartData[] = SingularChartData[],
 > = {
   type: 'MultipleChart'
   groups: ChartGroup<T>[]
@@ -16,6 +16,7 @@ export type ChartGroup<T extends SingularChartData[] = SingularChartData[]> = {
 
 export type SingularChartData =
   | BarChartData
+  | TProfileChartData
   | RadarChartData
   | LineChartData
   | PieChartData
@@ -26,6 +27,15 @@ export interface BarChartData {
   indexBy: string
   keys: string[]
   data: any[]
+  maxValue?: number | string
+}
+
+export interface TProfileChartData {
+  type: 'TProfileChart'
+  indexBy: string
+  keys: string[]
+  data: any[]
+  maxValue?: number | string
 }
 
 export interface RadarChartData {
@@ -33,6 +43,7 @@ export interface RadarChartData {
   indexBy: string
   keys: string[]
   data: any[]
+  maxValue?: number | string
 }
 
 export type LineChartData = {

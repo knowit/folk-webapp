@@ -103,8 +103,8 @@ export const getProjectStatusForEmployee = (
     return !inProject
       ? ProjectStatus.NoProject
       : isInternal
-      ? ProjectStatus.InternalProject
-      : ProjectStatus.ExternalProject
+        ? ProjectStatus.InternalProject
+        : ProjectStatus.ExternalProject
   } else {
     return ProjectStatus.NotBillable
   }

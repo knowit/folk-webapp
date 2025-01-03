@@ -1,12 +1,18 @@
-// eslint-disable-next-line no-undef
-module.exports = {
-  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
-  parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint"],
-  rules: {
-    "@typescript-eslint/no-explicit-any": 0,
-    "@typescript-eslint/explicit-module-boundary-types": 0,
-    "@typescript-eslint/explicit-function-return-type": 0,
-    "@typescript-eslint/no-var-requires": 0,
+import eslint from "@eslint/js";
+import tseslint from "typescript-eslint";
+
+/** @type {import('eslint').Linter.Config[]} */
+export default tseslint.config(
+  eslint.configs.recommended,
+  tseslint.configs.recommended,
+  {
+    rules: {
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/explicit-module-boundary-types": "warn",
+      "@typescript-eslint/explicit-function-return-type": "warn",
+      "@typescript-eslint/no-var-requires": "warn",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-unused-expressions": "warn",
+    },
   },
-};
+);

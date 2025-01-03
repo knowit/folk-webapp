@@ -14,7 +14,6 @@ import Content from './components/Content'
 import Footer from './components/Footer'
 
 declare module '@mui/styles/defaultTheme' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface DefaultTheme extends Theme {}
 }
 

@@ -69,6 +69,18 @@ export type EmployeeMotivationAndCompetence = {
   categoryCompetenceAvg: number
 }
 
+export type EmployeeCompetenceScoreReport = EmployeeCompetenceScore[]
+export type EmployeeCompetenceScore = {
+  email: string
+  category: string
+  score: number
+  sorting: number
+}
+export type CompetenceScore = {
+  category: string
+  score: number
+}
+
 export type EmployeeSkillsReport = EmployeeSkills[]
 export type EmployeeSkills = {
   user_id: string
@@ -116,7 +128,7 @@ export type EmployeeTableRowData = [
   primaryCustomer: Customer | null,
   cvLinks: CvLinks,
   motivationScores: Record<string, number>,
-  competenceScores: Record<string, number>
+  competenceScores: Record<string, number>,
 ]
 
 export type EmployeeInfo = {
@@ -149,12 +161,12 @@ export type CvLinks = {
 
 export type JobRotationStatus = [
   WantNewProject: number,
-  OpenForNewProject: number
+  OpenForNewProject: number,
 ]
 
 export type CategoryScores = [
   Motivation: Record<string, number>,
-  Competence: Record<string, number>
+  Competence: Record<string, number>,
 ]
 
 /**

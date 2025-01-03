@@ -105,8 +105,8 @@ const NameText = ({ children, employee, searchTerm, ...rest }: Props) => {
           searchTerm.length < 0
             ? 1
             : employee.name.toLowerCase().includes(searchTerm)
-            ? 1
-            : 0.3
+              ? 1
+              : 0.3
         }
         {...rest}
       >

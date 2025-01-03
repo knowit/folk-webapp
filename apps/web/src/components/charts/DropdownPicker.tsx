@@ -69,7 +69,7 @@ export default function DropdownPicker({
   selected = '',
   title,
   big,
-}: DropdownPickerProps) {
+}: DropdownPickerProps): React.ReactNode {
   const width =
     measureTextWidth(
       values
