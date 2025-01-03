@@ -1,4 +1,4 @@
-import { getAtApiV2, getToken } from '../../client'
+import { getAtApiV2 } from '../../client'
 import { LLMMessage } from 'server/routers/llm/llmTypes'
 import { io } from 'socket.io-client'
 import { LLMChunk, LLMReplyResponse } from './llmApiTypes'
@@ -9,9 +9,6 @@ export const generateReply = (messages: LLMMessage[]) =>
   })
 
 const socket = io('http://localhost:3010', {
-  auth: {
-    token: ``, // Include any token required for authentication
-  },
   transports: ['websocket'],
   withCredentials: true, // Ensure cookies are included
 })

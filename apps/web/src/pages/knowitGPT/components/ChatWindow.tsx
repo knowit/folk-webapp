@@ -11,7 +11,7 @@ const ChatWindow: React.FC = () => {
   const [pendingMessages, setPendingMessages] = useState<
     { role: LLMRole; content: string }[]
   >([])
-  const lastChunkRef = useRef('') // Track the last processed chunk
+  const lastChunkRef = useRef('')
 
   const { chunks, error, isLoading } = useGenerateLLMStream(pendingMessages)
 
@@ -20,27 +20,26 @@ const ChatWindow: React.FC = () => {
       (chunk) => chunk.id == lastChunkRef.current
     )
     if (chunks.length > 0) {
-      console.log('chunks')
       setMessages((prevMessages) => {
-        const lastMessageIndex = prevMessages.findIndex((msg) => !msg.isUser)
-        const lastMessage = prevMessages[lastMessageIndex]
-
-        const updatedMessage = {
-          text: lastMessage?.isUser ? '' : lastMessage?.text || '',
-          isUser: false,
-        }
+        const isUser = prevMessages.at(-1).isUser
+        const lastMessageIndex = isUser
+          ? prevMessages.length
+          : prevMessages.findLastIndex((msg) => !msg.isUser)
+        const message = isUser
+          ? { text: '', isUser: false }
+          : prevMessages[lastMessageIndex]
 
         chunks.slice(lastChunkIndex + 1).forEach((chunk) => {
-          updatedMessage.text += chunk.content || ''
+          message.text += chunk.content || ''
           lastChunkRef.current = chunk.id
         })
 
-        if (lastMessageIndex >= 0 && !lastMessage?.isUser) {
-          return prevMessages.map((msg, index) =>
-            index === lastMessageIndex ? updatedMessage : msg
-          )
+        if (isUser) {
+          return [...prevMessages, message]
         } else {
-          return [...prevMessages, updatedMessage]
+          return prevMessages.map((msg, index) =>
+            index === lastMessageIndex ? message : msg
+          )
         }
       })
     }
@@ -53,7 +52,7 @@ const ChatWindow: React.FC = () => {
       ])
       setPendingMessages([])
     }
-  }, [chunks, error, lastChunkRef]) // Depend only on `chunks` and `error`
+  }, [chunks, error, lastChunkRef])
 
   const handleSend = () => {
     if (input.trim()) {
@@ -69,9 +68,7 @@ const ChatWindow: React.FC = () => {
         { role: LLMRole.user, content: input },
       ]
 
-      setPendingMessages(llmMessages) // Trigger streaming response
-      console.log('update')
-      console.log(llmMessages)
+      setPendingMessages(llmMessages)
     }
   }
 

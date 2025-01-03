@@ -22,7 +22,7 @@
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true,
-    "target": "ES5"
+    "target": "es2023"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
