@@ -1,57 +1,61 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import ChatBubble from './ChatBubble'
-import {
-  // useGenerateLLMReply,
-  useGenerateLLMStream,
-} from '../../../api/data/llm/llmQueries'
+import { useGenerateLLMStream } from '../../../api/data/llm/llmQueries'
 import { LLMRole } from '../../../api/data/llm/llmApiTypes'
 
 const ChatWindow: React.FC = () => {
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>(
     []
   )
-
   const [input, setInput] = useState('')
   const [pendingMessages, setPendingMessages] = useState<
     { role: LLMRole; content: string }[]
   >([])
+  const lastChunkRef = useRef('') // Track the last processed chunk
 
-  // Call useGenerateLLMReply at the top level
-  const { chunks, error } = useGenerateLLMStream(pendingMessages)
+  const { chunks, error, isLoading } = useGenerateLLMStream(pendingMessages)
 
-  React.useEffect(() => {
+  useEffect(() => {
+    const lastChunkIndex = chunks.findIndex(
+      (chunk) => chunk.id == lastChunkRef.current
+    )
     if (chunks.length > 0) {
-      console.log(chunks)
-      let message = { text: '', isUser: false }
-      chunks.forEach((chunk) => {
-        message = {
-          text: chunk.content ? message.text + chunk.content : message.text,
+      console.log('chunks')
+      setMessages((prevMessages) => {
+        const lastMessageIndex = prevMessages.findIndex((msg) => !msg.isUser)
+        const lastMessage = prevMessages[lastMessageIndex]
+
+        const updatedMessage = {
+          text: lastMessage?.isUser ? '' : lastMessage?.text || '',
           isUser: false,
         }
-        message.text.length == 0
-          ? setMessages((prevMessages) => [...prevMessages, message])
-          : setMessages((prevMessages) => [
-              ...prevMessages.slice(0, -1),
-              message,
-            ])
-      })
 
-      // Clear pending messages after processing
-      setPendingMessages([])
+        chunks.slice(lastChunkIndex + 1).forEach((chunk) => {
+          updatedMessage.text += chunk.content || ''
+          lastChunkRef.current = chunk.id
+        })
+
+        if (lastMessageIndex >= 0 && !lastMessage?.isUser) {
+          return prevMessages.map((msg, index) =>
+            index === lastMessageIndex ? updatedMessage : msg
+          )
+        } else {
+          return [...prevMessages, updatedMessage]
+        }
+      })
     }
 
     if (error) {
       console.error('Error generating reply:', error)
-      const errorMessage = {
-        text: 'Something went wrong. Please try again.',
-        isUser: false,
-      }
-      setMessages((prevMessages) => [...prevMessages, errorMessage])
-      setPendingMessages([]) // Clear pending messages after error
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: 'Something went wrong. Please try again.', isUser: false },
+      ])
+      setPendingMessages([])
     }
-  }, [chunks, error]) // Run effect when data or error changes
+  }, [chunks, error, lastChunkRef]) // Depend only on `chunks` and `error`
 
-  const HandleSend = async () => {
+  const handleSend = () => {
     if (input.trim()) {
       const userMessage = { text: input, isUser: true }
       setMessages((prev) => [...prev, userMessage])
@@ -64,16 +68,17 @@ const ChatWindow: React.FC = () => {
         })),
         { role: LLMRole.user, content: input },
       ]
-      console.log(llmMessages)
 
-      setPendingMessages(llmMessages) // Trigger the SWR hook to fetch the reply
+      setPendingMessages(llmMessages) // Trigger streaming response
+      console.log('update')
+      console.log(llmMessages)
     }
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault()
-      HandleSend()
+      handleSend()
     }
   }
 
@@ -117,18 +122,19 @@ const ChatWindow: React.FC = () => {
           }}
         />
         <button
-          onClick={HandleSend}
+          onClick={handleSend}
           style={{
             marginLeft: '1%',
             padding: '10px',
             borderRadius: '5px',
             border: 'none',
-            backgroundColor: '#0d6efd',
+            backgroundColor: isLoading ? '#ccc' : '#0d6efd',
             color: 'white',
             width: '20%',
           }}
+          disabled={isLoading}
         >
-          Send
+          {isLoading ? 'Sending...' : 'Send'}
         </button>
       </div>
     </div>

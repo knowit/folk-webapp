@@ -24,14 +24,20 @@ export const generateStream = (
   onDone: () => void,
   onError: (error: any) => void
 ) => {
+  // Ensure listeners are not duplicated
+  socket.off('chunk') // Remove any existing 'chunk' listeners
+  socket.off('done') // Remove any existing 'done' listeners
+  socket.off('error') // Remove any existing 'error' listeners
+
   if (!isSocketInitialized) {
     socket.on('connect', () => {
       console.log('Connected to server:', socket.id)
       isSocketInitialized = true
     })
   }
+
+  // Register event listeners
   socket.on('chunk', (chunk) => {
-    console.log('Received chunk')
     onChunk(chunk)
   })
 
@@ -52,7 +58,7 @@ export const generateStream = (
   if (socket.connected) {
     socket.emit('generateStream', { messages })
   } else {
-    console.error('Socket is not conneced. Cannot emit events.')
+    console.error('Socket is not connected. Cannot emit events.')
     onError(new Error('Socket not connected'))
   }
 }
