@@ -1,6 +1,7 @@
-import app from './app'
+import { httpServer } from './app'
 
 const port = 3010
 
-app.listen(port)
-console.log(`listening on http://localhost:${port}`)
+httpServer.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`)
+})

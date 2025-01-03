@@ -1,6 +1,6 @@
 export type LLMReplyResponse = LLMResponse
 
-export type LLMStreamResponse = LLMChunk
+export type LLMStreamResponse = LLMChunk[]
 
 export enum LLMRole {
   // Response from LLM
@@ -21,6 +21,8 @@ export type LLMMessage = {
 
 export type LLMChunk = {
   content?: string
+  role: string
+  id: string
 }
 
 export type LLMResponse = {

@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto'
 import {
   ChunkEmbedding,
   LLMChunk,
@@ -136,6 +137,7 @@ export class AzureOpenAILLMRepositoryImpl extends LLMClient {
           yield {
             role: chunk.choices[0].delta.role,
             content: chunk.choices[0].delta.content,
+            id: randomUUID().toString(),
           }
         } else {
           if (toolCallingChunk == null) {
