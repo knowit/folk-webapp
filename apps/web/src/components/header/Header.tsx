@@ -88,14 +88,14 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
           to={'/organisasjon'}
           component={NavLink}
         />
-        {
+        {process.env.KNOWIT_GPT == 'True' ? (
           <Tab
             label={'KnowitGPT'}
             value={'/knowitGPT'}
             to={'/knowitGPT'}
             component={NavLink}
           />
-        }
+        ) : null}
       </Tabs>
     )
   }

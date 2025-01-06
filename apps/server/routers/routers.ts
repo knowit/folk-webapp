@@ -21,6 +21,6 @@ apiRouterV2.use('/competence', competenceRouter)
 apiRouterV2.use('/employees', employeesRouter)
 apiRouterV2.use('/customer', customerRouter)
 apiRouterV2.use('/database', databaseRouter)
-// apiRouterV2.use('/llm', llmRouter)
+// apiRouterV2.use('/llm', llmRouter) (uncomment if generateReply will be used instead of generateStream)
 
 export { apiRouterV2 }

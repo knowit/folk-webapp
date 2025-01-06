@@ -3,9 +3,9 @@ import { AzureOpenAILLMRepositoryImpl } from '../../implementations/azure-openai
 import { LLMMessage } from './llmTypes'
 
 const client = new AzureOpenAILLMRepositoryImpl(
-  process.env.AZURE_OPENAI_ENDPOINT,
-  process.env.AZURE_OPENAI_API_KEY,
-  process.env.AZURE_OPENAI_API_VERSION
+  process.env.AZURE_OPENAI_ENDPOINT ?? 'http://localhost:3000',
+  process.env.AZURE_OPENAI_API_KEY ?? 'test-api-key',
+  process.env.AZURE_OPENAI_API_VERSION ?? '2023-01-01'
 )
 
 const model = 'gpt-4o'
