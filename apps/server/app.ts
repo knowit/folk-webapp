@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }))
 // CORS Configuration
 app.use(
   cors({
-    origin: 'http://localhost:3000', // Frontend URL
+    origin: process.env.FRONTEND_URL, // Frontend URL
     methods: ['GET', 'POST', 'OPTIONS'],
     credentials: true, // Allow cookies and headers
   })
@@ -39,7 +39,7 @@ const httpServer = http.createServer(app)
 // Attach Socket.io
 const io = new Server(httpServer, {
   cors: {
-    origin: 'http://localhost:3000', // Frontend URL
+    origin: process.env.FRONTEND_URL, // Frontend URL
     methods: ['GET', 'POST'], // WebSocket methods
     credentials: true, // Allow cookies and headers
   },
