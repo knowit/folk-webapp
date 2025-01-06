@@ -61,9 +61,7 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
   }
 
   const renderKnowitGPTTab = () => {
-    console.log(process.env.REACT_APP_ENV)
-    console.log(process.env.KNOWIT_GPT)
-    if (process.env.KNOWIT_GPT == 'True') {
+    if (process.env.REACT_APP_KNOWIT_GPT == 'true') {
       return (
         <Tab
           label={'KnowitGPT'}
@@ -73,7 +71,6 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
         />
       )
     }
-    return null
   }
 
   function HeaderTabs() {
