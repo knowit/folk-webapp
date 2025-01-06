@@ -60,6 +60,22 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
     onChangeMode()
   }
 
+  const renderKnowitGPTTab = () => {
+    console.log(process.env.REACT_APP_ENV)
+    console.log(process.env.KNOWIT_GPT)
+    if (process.env.KNOWIT_GPT == 'True') {
+      return (
+        <Tab
+          label={'KnowitGPT'}
+          value={'/knowitGPT'}
+          to={'/knowitGPT'}
+          component={NavLink}
+        />
+      )
+    }
+    return null
+  }
+
   function HeaderTabs() {
     return (
       <Tabs value={tabsVisiblePage} textColor="secondary">
@@ -88,14 +104,7 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
           to={'/organisasjon'}
           component={NavLink}
         />
-        {process.env.KNOWIT_GPT == 'True' ? (
-          <Tab
-            label={'KnowitGPT'}
-            value={'/knowitGPT'}
-            to={'/knowitGPT'}
-            component={NavLink}
-          />
-        ) : null}
+        {renderKnowitGPTTab()}
       </Tabs>
     )
   }

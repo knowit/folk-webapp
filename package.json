@@ -38,6 +38,7 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "pg": "^8.13.1",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1"
