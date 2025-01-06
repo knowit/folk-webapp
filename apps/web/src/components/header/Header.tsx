@@ -75,7 +75,19 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
 
   function HeaderTabs() {
     return (
-      <Tabs value={tabsVisiblePage} textColor="secondary">
+      <Tabs
+        value={tabsVisiblePage}
+        textColor="secondary"
+        sx={
+          process.env.REACT_APP_KNOWIT_GPT == 'true'
+            ? {
+                '.MuiTab-root': {
+                  fontSize: '1.14rem', // Adjust font size
+                },
+              }
+            : null
+        }
+      >
         <Tab label={'Hjem'} value={'/hjem'} to={'/hjem'} component={NavLink} />
         <Tab
           label={'Ansatte'}

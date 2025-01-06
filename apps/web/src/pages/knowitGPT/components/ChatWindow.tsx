@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import ChatBubble from './ChatBubble'
 import { useGenerateLLMStream } from '../../../api/data/llm/llmQueries'
 import { LLMRole } from '../../../api/data/llm/llmApiTypes'
+import { useTheme } from '@mui/material'
 
 const ChatWindow: React.FC = () => {
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>(
@@ -12,6 +13,7 @@ const ChatWindow: React.FC = () => {
     { role: LLMRole; content: string }[]
   >([])
   const lastChunkRef = useRef('')
+  const scrollRef = useRef<HTMLDivElement>(null) // Ref for the scrollable container
 
   const { chunks, error, isLoading } = useGenerateLLMStream(pendingMessages)
 
@@ -21,7 +23,7 @@ const ChatWindow: React.FC = () => {
     )
     if (chunks.length > 0) {
       setMessages((prevMessages) => {
-        const isUser = prevMessages.at(-1).isUser
+        const isUser = prevMessages.at(-1)?.isUser
         const lastMessageIndex = isUser
           ? prevMessages.length
           : prevMessages.findLastIndex((msg) => !msg.isUser)
@@ -54,6 +56,13 @@ const ChatWindow: React.FC = () => {
     }
   }, [chunks, error, lastChunkRef])
 
+  // Auto-scroll to the bottom when messages change
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    }
+  }, [messages])
+
   const handleSend = () => {
     if (input.trim()) {
       const userMessage = { text: input, isUser: true }
@@ -79,6 +88,8 @@ const ChatWindow: React.FC = () => {
     }
   }
 
+  const theme = useTheme()
+
   return (
     <div
       style={{
@@ -90,10 +101,11 @@ const ChatWindow: React.FC = () => {
         padding: '1%',
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: '#f9f9f9',
+        backgroundColor: theme.palette.background.default,
       }}
     >
       <div
+        ref={scrollRef} // Attach the ref to the scrollable container
         style={{
           flex: 1,
           overflowY: 'auto',
