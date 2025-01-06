@@ -81,12 +81,14 @@ export class LLMResponse {
 
 // A given chunk with a single token based on a LLM generation. Ensure that added fields are supported by all implementations
 export class LLMChunk {
-  constructor(role: string, content?: string) {
+  constructor(role: string, id: string, content?: string) {
     this.content = content
     this.role = role
+    this.id = id
   }
   content?: string
   role: string
+  id: string
 }
 
 /// A message in a chat history with LLM's. Format is standardized to content, role and image

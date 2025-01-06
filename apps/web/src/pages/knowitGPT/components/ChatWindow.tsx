@@ -1,42 +1,60 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import ChatBubble from './ChatBubble'
-import { useGenerateLLMReply } from '../../../api/data/llm/llmQueries'
+import { useGenerateLLMStream } from '../../../api/data/llm/llmQueries'
 import { LLMRole } from '../../../api/data/llm/llmApiTypes'
 
 const ChatWindow: React.FC = () => {
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>(
     []
   )
-
   const [input, setInput] = useState('')
   const [pendingMessages, setPendingMessages] = useState<
     { role: LLMRole; content: string }[]
   >([])
+  const lastChunkRef = useRef('')
 
-  // Call useGenerateLLMReply at the top level
-  const { data, error } = useGenerateLLMReply(pendingMessages)
+  const { chunks, error, isLoading } = useGenerateLLMStream(pendingMessages)
 
-  React.useEffect(() => {
-    if (data) {
-      // Add bot reply when data is received
-      const botMessage = { text: data.content, isUser: false }
-      setMessages((prev) => [...prev, botMessage])
-      setPendingMessages([])
-      console.log(data)
-      // Clear pending messages after processing
+  useEffect(() => {
+    const lastChunkIndex = chunks.findIndex(
+      (chunk) => chunk.id == lastChunkRef.current
+    )
+    if (chunks.length > 0) {
+      setMessages((prevMessages) => {
+        const isUser = prevMessages.at(-1).isUser
+        const lastMessageIndex = isUser
+          ? prevMessages.length
+          : prevMessages.findLastIndex((msg) => !msg.isUser)
+        const message = isUser
+          ? { text: '', isUser: false }
+          : prevMessages[lastMessageIndex]
+
+        chunks.slice(lastChunkIndex + 1).forEach((chunk) => {
+          message.text += chunk.content || ''
+          lastChunkRef.current = chunk.id
+        })
+
+        if (isUser) {
+          return [...prevMessages, message]
+        } else {
+          return prevMessages.map((msg, index) =>
+            index === lastMessageIndex ? message : msg
+          )
+        }
+      })
     }
+
     if (error) {
       console.error('Error generating reply:', error)
-      const errorMessage = {
-        text: 'Something went wrong. Please try again.',
-        isUser: false,
-      }
-      setMessages((prev) => [...prev, errorMessage])
-      setPendingMessages([]) // Clear pending messages after error
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: 'Something went wrong. Please try again.', isUser: false },
+      ])
+      setPendingMessages([])
     }
-  }, [data, error]) // Run effect when data or error changes
+  }, [chunks, error, lastChunkRef])
 
-  const HandleSend = async () => {
+  const handleSend = () => {
     if (input.trim()) {
       const userMessage = { text: input, isUser: true }
       setMessages((prev) => [...prev, userMessage])
@@ -49,16 +67,15 @@ const ChatWindow: React.FC = () => {
         })),
         { role: LLMRole.user, content: input },
       ]
-      console.log(llmMessages)
 
-      setPendingMessages(llmMessages) // Trigger the SWR hook to fetch the reply
+      setPendingMessages(llmMessages)
     }
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault()
-      HandleSend()
+      handleSend()
     }
   }
 
@@ -102,18 +119,19 @@ const ChatWindow: React.FC = () => {
           }}
         />
         <button
-          onClick={HandleSend}
+          onClick={handleSend}
           style={{
             marginLeft: '1%',
             padding: '10px',
             borderRadius: '5px',
             border: 'none',
-            backgroundColor: '#0d6efd',
+            backgroundColor: isLoading ? '#ccc' : '#0d6efd',
             color: 'white',
             width: '20%',
           }}
+          disabled={isLoading}
         >
-          Send
+          {isLoading ? 'Sending...' : 'Send'}
         </button>
       </div>
     </div>

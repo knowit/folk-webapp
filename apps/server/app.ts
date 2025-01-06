@@ -3,6 +3,9 @@ import express, { Express } from 'express'
 import authRouter from './routers/authRouter'
 import { errorHandler, NotFoundError } from './middlewares/errorHandling'
 import { apiRouterV2 } from './routers/routers'
+import { llmSocketHandler } from './routers/llm/llmSocketHandler'
+import http from 'http'
+import { Server } from 'socket.io'
 
 const app: Express = express()
 
@@ -16,6 +19,12 @@ app.use('/auth', authRouter)
 app.use('/api/v2', apiRouterV2)
 // app.use('/api', apiRouter)
 
+// Create HTTP server
+const httpServer = http.createServer(app)
+
+const io = new Server(httpServer)
+llmSocketHandler(io)
+
 // Error handling
 app.use((req, res, next) => {
   const err: NotFoundError = {
@@ -27,4 +36,4 @@ app.use((req, res, next) => {
 
 app.use(errorHandler)
 
-export default app
+export { httpServer }

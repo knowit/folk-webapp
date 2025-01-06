@@ -46,7 +46,7 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
     '/kunder',
     '/kompetanse',
     '/organisasjon',
-    // '/knowitGPT',
+    '/knowitGPT',
   ]
   const activePage = useLocation().pathname
   const { isAuthenticated, userEmployeeProfile } = useUserInfo()
@@ -58,6 +58,19 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
 
   const handleModeSwitch = () => {
     onChangeMode()
+  }
+
+  const renderKnowitGPTTab = () => {
+    if (process.env.REACT_APP_KNOWIT_GPT == 'true') {
+      return (
+        <Tab
+          label={'KnowitGPT'}
+          value={'/knowitGPT'}
+          to={'/knowitGPT'}
+          component={NavLink}
+        />
+      )
+    }
   }
 
   function HeaderTabs() {
@@ -88,12 +101,7 @@ export default function Header({ darkMode, onChangeMode }: HeaderProps) {
           to={'/organisasjon'}
           component={NavLink}
         />
-        {/* <Tab
-          label={'KnowitGPT'}
-          value={'/knowitGPT'}
-          to={'/knowitGPT'}
-          component={NavLink}
-        /> */}
+        {renderKnowitGPTTab()}
       </Tabs>
     )
   }
