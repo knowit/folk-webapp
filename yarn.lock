@@ -9366,15 +9366,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "folk-webapp@workspace:."
   dependencies:
-    cors: ^2.8.5
     eslint: ^9.17.0
     husky: ^9.1.7
-    pg: ^8.13.1
     prettier: ^3.4.2
     pretty-quick: ^4.0.0
     serverless: ^4.4.18
-    socket.io: ^4.8.1
-    socket.io-client: ^4.8.1
     ts-jest: ^29.2.5
     typescript: ^5.7.2
   languageName: unknown
@@ -13347,6 +13343,7 @@ __metadata:
     axios: ^1.7.9
     chromadb: ^1.9.4
     cookie-parser: ^1.4.7
+    cors: ^2.8.5
     cross-env: ^7.0.3
     dotenv: ^16.4.7
     eslint-config-folk: ^0.0.0
@@ -13358,6 +13355,7 @@ __metadata:
     pg: ^8.13.1
     serverless-plugin-monorepo: ^0.11.0
     serverless-plugin-typescript: ^2.1.5
+    socket.io: ^4.8.1
     ts-jest: ^29.2.5
     ts-node: ^10.9.2
     typescript: ^5.7.2
@@ -14678,6 +14676,7 @@ __metadata:
     react-image: ^4.1.0
     react-router-dom: ^7.0.2
     react-virtualized: ^9.22.5
+    socket.io-client: ^4.8.1
     swr: ^2.2.5
     typescript: ^5.7.2
     vite: ^6.0.4
