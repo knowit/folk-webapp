@@ -24,7 +24,7 @@ export class ChromaDBRepository extends RAGRepository<string, string> {
         embeddingFunction: null,
       })
       return collection
-    } catch (error) {
+    } catch {
       return null
     }
   }

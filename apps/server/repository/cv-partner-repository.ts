@@ -1,20 +1,12 @@
-export interface CVPartnerRepository {
-  fetchCVPartnerDataForUser(user_id: string): CVPartnerData
-}
+import {
+  BasicEmployeeInformation,
+  EmployeeExperience,
+  EmployeeWorkStatus,
+} from '../routers/employees/employeesTypes'
 
-export interface EducationItem {
-  institution: string
-  degree: string
-  year: number
-}
-
-export interface Project {
-  name: string
-  description: string
-  year: number
-}
-
-export interface CVPartnerData {
-  Education: EducationItem[]
-  Projects: Project[]
+export abstract class CVPartnerRepository {
+  // Fetches ALL data for basic employee information
+  abstract getEmployeeInformation(): Promise<BasicEmployeeInformation[]>
+  abstract getEmployeeWorkStatus(): Promise<EmployeeWorkStatus[]>
+  abstract getEmployeeWorkInformation(): Promise<EmployeeExperience[]>
 }

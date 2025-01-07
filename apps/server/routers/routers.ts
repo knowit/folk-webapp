@@ -5,6 +5,7 @@ import { customerRouter } from './customer/customerRouter'
 import { databaseRouter } from './databaseRouter'
 import { employeesRouter } from './employees/employeesRouter'
 // import { llmRouter } from './llm/llmRouter'
+import { cvPartnerRouter } from './cvpartner/cvpartnerRouter'
 
 // v2 of API
 const apiRouterV2: Router = express.Router()
@@ -22,5 +23,6 @@ apiRouterV2.use('/employees', employeesRouter)
 apiRouterV2.use('/customer', customerRouter)
 apiRouterV2.use('/database', databaseRouter)
 // apiRouterV2.use('/llm', llmRouter) (uncomment if generateReply will be used instead of generateStream)
+apiRouterV2.use('/cvpartner', cvPartnerRouter)
 
 export { apiRouterV2 }
