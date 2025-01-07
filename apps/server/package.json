@@ -21,10 +21,12 @@
     "axios": "^1.7.9",
     "chromadb": "^1.9.4",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "express": "^4.21.2",
     "openai": "4.77.0",
     "openid-client": "^5.7.1",
-    "pg": "^8.13.1"
+    "pg": "^8.13.1",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@folk/prettier-config": "workspace:^",
