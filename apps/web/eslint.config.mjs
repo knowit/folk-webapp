@@ -39,6 +39,8 @@ export default [
       'react/jsx-key': 'warn',
       '@typescript-eslint/no-require-imports': 'warn',
       'no-undef': 'warn',
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
     },
   },
 ]
