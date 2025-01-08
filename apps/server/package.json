@@ -16,15 +16,18 @@
     "@aws-sdk/s3-request-presigner": "^3.714.0",
     "@azure/identity": "4.5.0",
     "@azure/openai": "2.0.0",
+    "@codegenie/serverless-express": "^4.16.0",
     "@folk/common": "workspace:^",
-    "@vendia/serverless-express": "^4.12.6",
     "axios": "^1.7.9",
     "chromadb": "^1.9.4",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "express": "^4.21.2",
     "openai": "4.77.0",
     "openid-client": "^5.7.1",
-    "pg": "^8.13.1"
+    "pg": "^8.13.1",
+    "serverless": "^3.40.0",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@folk/prettier-config": "workspace:^",
@@ -43,8 +46,5 @@
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
-  },
-  "resolutions": {
-    "cross-spawn": "7.0.6"
   }
 }
