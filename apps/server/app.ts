@@ -36,4 +36,4 @@ app.use((req, res, next) => {
 
 app.use(errorHandler)
 
-export { app, httpServer }
+export { httpServer }
