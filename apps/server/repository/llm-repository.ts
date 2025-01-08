@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // Interface for a generic LLM so we can quickly adapt to changes with differing implementations
 export abstract class LLMClient {
   /*
@@ -43,11 +44,13 @@ export abstract class LLMClient {
   Returns:
     A list of embedded chunks
   */
-  abstract generateEmbedding(
+  async generateEmbedding(
     embeddingModel: string,
     chunks: string[],
     options?: Record<string, any>
-  ): Promise<ChunkEmbedding[]>
+  ): Promise<ChunkEmbedding[]> {
+    throw new Error('Method not implemented.')
+  }
 }
 export interface ChunkEmbedding {
   chunk: string
