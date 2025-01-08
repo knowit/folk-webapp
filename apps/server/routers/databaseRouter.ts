@@ -1,9 +1,10 @@
 import express, { Router } from 'express'
 import { PostgresChatRepository } from '../implementations/repositories/postgres-chat-repository'
+import { DynamoDBChatRepository } from '../implementations/repositories/dynamodb-chat-repository'
 
 const router: Router = express.Router()
 
-const db = new PostgresChatRepository()
+const db = new DynamoDBChatRepository()
 
 router.delete('/chats', async (req, res) => {
   const result = await db.deleteChat(req.body.chatId)
@@ -40,9 +41,11 @@ router.post('/chatMessages', async (req, res) => {
   res.send(result)
 })
 
+/*
 router.post('/setup', async (_, res) => {
   const result = await db.setupPostgres()
   res.send(result)
 })
+ */
 
 export { router as databaseRouter }

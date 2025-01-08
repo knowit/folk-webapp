@@ -11,8 +11,10 @@
     "lint:fix": "run -T eslint --fix ."
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.724.0",
     "@aws-sdk/client-s3": "^3.714.0",
     "@aws-sdk/credential-providers": "^3.714.0",
+    "@aws-sdk/lib-dynamodb": "^3.724.0",
     "@aws-sdk/s3-request-presigner": "^3.714.0",
     "@azure/identity": "4.5.0",
     "@azure/openai": "2.0.0",

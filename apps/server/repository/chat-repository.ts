@@ -37,6 +37,14 @@ export interface IChatRepository {
   deleteChat(chatId: string): Promise<boolean>
 
   /**
+   * Retrieves the chat for given chat id.
+   *
+   * @param chatId - The identifier for the chat to retrieve
+   * @returns Chat with the given identifier.
+   */
+  getChat(chatId: string): Promise<Chat>
+
+  /**
    * Retrieve all chats for a user.
    *
    * @param userId - The identifier for the user to retrieve chats for.
