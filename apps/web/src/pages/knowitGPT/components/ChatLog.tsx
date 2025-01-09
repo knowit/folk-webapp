@@ -1,7 +1,8 @@
 import React from 'react'
+import { Chats } from '../../../api/data/database/databaseTypes'
 
 interface ChatLogProps {
-  chatHistory: { id: string; messages: { text: string; isUser: boolean }[] }[]
+  chatHistory: Chats
   activeChatId: string | null
   onLoadChat: (chatId: string) => void
 }
@@ -22,7 +23,7 @@ const ChatLog: React.FC<ChatLogProps> = ({
     >
       <h3>Old chats</h3>
       <ul>
-        {chatHistory.map((chat) => (
+        {chatHistory?.map((chat) => (
           <li
             key={chat.id}
             style={{

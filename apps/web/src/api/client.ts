@@ -57,13 +57,20 @@ const postAt = async <T>(endpoint: string, options?: GetOptions) => {
   const session = await fetchAuthSession({ forceRefresh: true })
 
   try {
-    const res = await instance.post<T>(endpoint, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session?.tokens?.accessToken.toString()}`,
-      },
-      params: { ...options?.params },
-    })
+    console.log(session?.tokens?.accessToken.toString())
+    console.log(options?.params)
+    const res = await instance.post<T>(
+      endpoint,
+      options?.params || {}, // Pass `data` (request payload) here
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session?.tokens?.accessToken.toString()}`,
+        },
+        params: { ...options?.params },
+      }
+    )
+    console.log(res)
 
     return res.data
   } catch (e) {

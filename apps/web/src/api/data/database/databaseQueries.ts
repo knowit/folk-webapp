@@ -1,13 +1,8 @@
-import useSWR from 'swr'
-import {
-  deleteChat,
-  getChat,
-  getChatMessages,
-  getChats,
-  postChat,
-  postChatMessages,
-} from './databaseApi'
+import useSWR, { mutate } from 'swr'
+import { deleteChat, getChat, getChatMessages, getChats } from './databaseApi'
 import { LLMRole } from '../llm/llmApiTypes'
+import { postAtApiV2 } from '../../client'
+import { Chat, ChatMessage } from './databaseTypes'
 
 export const useDeletChat = (chatId: string) =>
   useSWR(
@@ -45,33 +40,31 @@ export const useGetChatMessages = (chatId: string) =>
     }
   )
 
-export const usePostChat = (userId: string) =>
-  useSWR(
-    userId != '' ? { url: '/chatMessages', userId } : null, // Only call if messages exist
-    (params) => postChat(params?.userId),
-    {
-      revalidateOnFocus: false,
-    }
-  )
+export const postChat = async (userId: string) => {
+  console.log('hei')
+  const response = await postAtApiV2<Chat>('/database/chat', {
+    params: { userId },
+  })
+  console.log('mø')
+  console.log(response)
+  return response
+}
 
-export const usePostChatMessage = (
+export const postChatMessages = async (
   chatId: string,
   userId: string,
   message: string,
   role: LLMRole
-) =>
-  useSWR(
-    chatId != '' && userId != '' && message != ''
-      ? { url: '/chatMessages', chatId, userId, message, role }
-      : null, // Only call if messages exist
-    (params) =>
-      postChatMessages(
-        params?.chatId,
-        params?.userId,
-        params?.message,
-        params?.role
-      ),
-    {
-      revalidateOnFocus: false,
-    }
-  )
+) => {
+  if (chatId != null && message != null) {
+    return await postAtApiV2<ChatMessage>('/database/chatMessages', {
+      params: { chatId, userId, message, role },
+    })
+  }
+}
+
+export const useDeleteChat = async (chatId: string) => {
+  await deleteChat(chatId)
+  // Revalidate the chat list cache
+  await mutate({ url: '/chats' })
+}

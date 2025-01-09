@@ -23,8 +23,8 @@ export class PostgresChatRepository implements IChatRepository {
     await this.client.connect()
     try {
       const addChatQuery = {
-        text: 'INSERT INTO chat (user_id) VALUES ($1) RETURNING *',
-        values: [userId],
+        text: 'INSERT INTO chat (user_id, title) VALUES ($1, $2) RETURNING *',
+        values: [userId, 'test'], // Include title as "test"
       }
       const result = await this.client.query(addChatQuery)
       return result.rows[0]
