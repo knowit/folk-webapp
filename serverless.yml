@@ -39,10 +39,11 @@ provider:
 
 package:
   excludeDevDependencies: false
-  patterns:
+  include:
     - apps/server/**
     - packages/**/*
-  #  - "!*/**"
+  # exclude:
+  #   - "*/**"
   individually: true
 
 functions:
