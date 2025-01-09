@@ -25,6 +25,7 @@ const ChatWindow: React.FC = () => {
   const activeChatId = useRef<string>(null)
 
   const lastChunkRef = useRef('')
+  const refresh = useRef('false')
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const { chunks, error, isLoading } = useGenerateLLMStream(pendingMessages)
@@ -40,11 +41,13 @@ const ChatWindow: React.FC = () => {
 
   // Load selected chat messages
   useEffect(() => {
-    const loadedMessages = []
-    chatMessages?.forEach((msg) => {
-      loadedMessages.push([msg.message, (msg.role = ChatRole.user)])
-    })
-    setMessages(loadedMessages)
+    if (refresh.current == 'true') {
+      const loadedMessages = []
+      chatMessages?.forEach((msg) => {
+        loadedMessages.push([msg.message, (msg.role = ChatRole.user)])
+      })
+      setMessages(loadedMessages)
+    }
   }, [chatMessages])
 
   // Handle streaming response
@@ -52,6 +55,16 @@ const ChatWindow: React.FC = () => {
     const lastChunkIndex = chunks.findIndex(
       (chunk) => chunk.id == lastChunkRef.current
     )
+
+    const handlePostMessages = async (message: string) => {
+      await postChatMessages(
+        activeChatId.current,
+        userId,
+        message,
+        LLMRole.assistant
+      )
+    }
+
     if (chunks.length > 0) {
       setMessages((prevMessages) => {
         const isUser = prevMessages.at(-1)?.isUser
@@ -67,14 +80,11 @@ const ChatWindow: React.FC = () => {
           lastChunkRef.current = chunk.id
         })
 
+        //problem start
         if (isLoading == false) {
-          await postChatMessages(
-            activeChatId.current,
-            userId,
-            message.text,
-            LLMRole.assistant
-          )
+          handlePostMessages(message?.text)
         }
+        //problem end
 
         if (isUser) {
           return [...prevMessages, message]
@@ -94,7 +104,7 @@ const ChatWindow: React.FC = () => {
       ])
       setPendingMessages([])
     }
-  }, [chunks, isLoading, error, lastChunkRef])
+  }, [chunks, userId, isLoading, error, lastChunkRef])
 
   // Send a new message
   const handleSend = async () => {
@@ -138,6 +148,7 @@ const ChatWindow: React.FC = () => {
 
   const loadChatFromHistory = (chatId: string) => {
     activeChatId.current = chatId
+    refresh.current = 'true'
   }
 
   const theme = useTheme()

@@ -28,9 +28,7 @@ router.get('/chatMessages', async (req, res) => {
 router.post('/chat', async (req, res) => {
   const result = await db.addChat(req.body.userId)
   console.log('chatresult')
-  console.log(result)
   res.send(result)
-  console.log('sendt')
 })
 
 router.post('/chatMessages', async (req, res) => {
@@ -41,7 +39,6 @@ router.post('/chatMessages', async (req, res) => {
     req.body.role
   )
   console.log('chatmessage')
-  console.log(result)
   res.send(result)
 })
 
