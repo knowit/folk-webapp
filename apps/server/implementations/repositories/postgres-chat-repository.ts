@@ -19,12 +19,12 @@ export class PostgresChatRepository implements IChatRepository {
     })
   }
 
-  async addChat(userId: string): Promise<Chat> {
+  async addChat(userId: string, title: string): Promise<Chat> {
     await this.client.connect()
     try {
       const addChatQuery = {
-        text: 'INSERT INTO chat (user_id) VALUES ($1) RETURNING *',
-        values: [userId],
+        text: 'INSERT INTO chat (user_id, title) VALUES ($1, $2) RETURNING *',
+        values: [userId, title],
       }
       const result = await this.client.query(addChatQuery)
       return result.rows[0]
@@ -52,7 +52,7 @@ export class PostgresChatRepository implements IChatRepository {
     }
   }
 
-  async deleteChat(chatId: string): Promise<boolean> {
+  async deleteChat(userId: string, chatId: string): Promise<boolean> {
     await this.client.connect()
     try {
       const deleteChatQuery = {
@@ -66,7 +66,7 @@ export class PostgresChatRepository implements IChatRepository {
     }
   }
 
-  async getChat(chatId: string): Promise<Chat> {
+  async getChat(userId: string, chatId: string): Promise<Chat> {
     await this.client.connect()
     try {
       const getChatQuery = {
@@ -80,7 +80,10 @@ export class PostgresChatRepository implements IChatRepository {
     }
   }
 
-  async getChatMessagesForChat(chatId: string): Promise<ChatMessage[]> {
+  async getChatMessagesForChat(
+    userId: string,
+    chatId: string
+  ): Promise<ChatMessage[]> {
     await this.client.connect()
     try {
       const getChatMessagesForChatQuery = {
