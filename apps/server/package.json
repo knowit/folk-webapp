@@ -11,9 +11,6 @@
     "lint:fix": "run -T eslint --fix ."
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.714.0",
-    "@aws-sdk/credential-providers": "^3.714.0",
-    "@aws-sdk/s3-request-presigner": "^3.714.0",
     "@azure/identity": "4.5.0",
     "@azure/openai": "2.0.0",
     "@codegenie/serverless-express": "^4.16.0",
@@ -26,7 +23,6 @@
     "openai": "4.77.0",
     "openid-client": "^5.7.1",
     "pg": "^8.13.1",
-    "serverless": "^3.40.0",
     "socket.io": "^4.8.1",
     "source-map-support": "^0.5.19"
   },

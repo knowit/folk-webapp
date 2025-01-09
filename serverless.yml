@@ -38,12 +38,10 @@ provider:
     payload: "2.0"
 
 package:
-  excludeDevDependencies: false
-  include:
-    - apps/server/**
-    - packages/**/*
-  # exclude:
-  #   - "*/**"
+  excludeDevDependencies: true
+  patterns:
+    - 'apps/server/**'
+    - 'packages/**/*'
   individually: true
 
 functions:
