@@ -6,8 +6,11 @@ import {
 } from '../../repository/chat-repository'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import {
+  DeleteCommand,
   DynamoDBDocumentClient,
   GetCommand,
+  PutCommand,
+  QueryCommand,
   UpdateCommand,
 } from '@aws-sdk/lib-dynamodb'
 import { randomUUID } from 'crypto'
@@ -20,68 +23,65 @@ export class DynamoDBChatRepository implements IChatRepository {
     this.client = DynamoDBDocumentClient.from(dynamoDbClient)
   }
 
-  async addChat(userId: string): Promise<Chat> {
+  async addChat(userId: string, title: string): Promise<Chat> {
     try {
-      const chat: Chat = {
-        id: randomUUID().toString(),
-        userId: userId,
-        created: new Date(),
-        lastUpdated: new Date(),
-        title: '',
-      }
+      const chatId = randomUUID().toString()
+      const created = new Date()
+      const lastUpdated = new Date()
 
-      const command = new UpdateCommand({
-        TableName: 'dev_knowitgpt_chathistory',
-        Key: { userId },
-        UpdateExpression:
-          'SET chats = list_append(if_not_exists(chats, :emptyList), :newChat)',
-        ExpressionAttributeValues: {
-          ':emptyList': [],
-          ':newChat': [chat],
+      const command = new PutCommand({
+        TableName: process.env.DYNAMODB_TABLE_NAME,
+        Item: {
+          userId: userId,
+          chatId: chatId,
+          messages: [],
+          created: created.toISOString(),
+          lastUpdated: lastUpdated.toISOString(),
+          title: title,
         },
-        ReturnValues: 'UPDATED_NEW',
       })
-
       await this.client.send(command)
-      return chat
+
+      return {
+        id: chatId,
+        userId: userId,
+        created: created,
+        lastUpdated: lastUpdated,
+        title: title,
+      }
     } catch (error) {
       console.error('Failed to add chat for user.', error)
     }
   }
   async addChatMessage(
-    chatId: string,
     userId: string,
+    chatId: string,
     message: string,
     role: ChatRole
   ): Promise<ChatMessage> {
     try {
+      const created = new Date()
       const messageObject: ChatMessage = {
         id: randomUUID().toString(),
         chatId,
         userId,
         message,
         role,
-        created: new Date(),
+        created: created,
       }
 
-      const getChatsCommand = new GetCommand({
-        TableName: 'dev_knowitgpt_chathistory',
-        Key: { userId },
-        ProjectionExpression: 'chats',
-      })
-
-      const { Item } = await this.client.send(getChatsCommand)
-      const chatIndex = Item?.chats.findIndex(
-        (chat: Chat) => chat.id === chatId
-      )
-      if (chatIndex === -1) throw new Error('Chat not found')
-
       const updateCommand = new UpdateCommand({
-        TableName: 'dev_knowitgpt_chathistory',
-        Key: { userId },
-        UpdateExpression: `SET chats[${chatIndex}].messages = list_append(chats[${chatIndex}].messages, :newMessage)`,
+        TableName: process.env.DYNAMODB_TABLE_NAME,
+        Key: { userId, chatId },
+        UpdateExpression:
+          'set #messages = list_append(#messages, :newMessage), #lastUpdated = :created',
+        ExpressionAttributeNames: {
+          '#messages': 'messages',
+          '#lastUpdated': 'lastUpdated',
+        },
         ExpressionAttributeValues: {
           ':newMessage': [messageObject],
+          ':created': created.toISOString(),
         },
         ReturnValues: 'UPDATED_NEW',
       })
@@ -92,12 +92,36 @@ export class DynamoDBChatRepository implements IChatRepository {
       console.error('Failed to add chat message to chat.', error)
     }
   }
-  async deleteChat(chatId: string): Promise<boolean> {
-    throw new Error('Method not implemented.')
+  async deleteChat(userId: string, chatId: string): Promise<boolean> {
+    try {
+      const deleteCommand = new DeleteCommand({
+        TableName: process.env.DYNAMODB_TABLE_NAME,
+        Key: { userId, chatId },
+      })
+
+      const result = await this.client.send(deleteCommand)
+      return result.$metadata.httpStatusCode === 200
+    } catch (error) {
+      console.log('Failed to delete chat.', error)
+    }
   }
 
-  async getChat(chatId: string): Promise<Chat> {
-    throw new Error('Method not implemented.')
+  async getChat(userId: string, chatId: string): Promise<Chat> {
+    try {
+      const getCommand = new GetCommand({
+        TableName: process.env.DYNAMODB_TABLE_NAME,
+        Key: { userId, chatId },
+      })
+
+      const result = await this.client.send(getCommand)
+      if (!result.Item) {
+        throw new Error('Chat not found')
+      }
+
+      return result.Item as Chat
+    } catch (error) {
+      console.error('Failed to get chat.', error)
+    }
   }
 
   async getChatsForUser(
@@ -105,9 +129,29 @@ export class DynamoDBChatRepository implements IChatRepository {
     limit?: number,
     offset?: number
   ): Promise<Array<Chat>> {
-    throw new Error('Method not implemented.')
+    const queryCommand = new QueryCommand({
+      TableName: process.env.DYNAMODB_TABLE_NAME,
+      KeyConditionExpression: 'userId = :userId',
+      ExpressionAttributeValues: {
+        ':userId': userId,
+      },
+      Limit: limit,
+    })
+
+    const result = await this.client.send(queryCommand)
+    const items = result.Items || []
+    return items.slice(offset) as Array<Chat>
   }
-  async getChatMessagesForChat(chatId: string): Promise<Array<ChatMessage>> {
-    throw new Error('Method not implemented.')
+  async getChatMessagesForChat(
+    userId: string,
+    chatId: string
+  ): Promise<Array<ChatMessage>> {
+    const getCommand = new GetCommand({
+      TableName: process.env.DYNAMODB_TABLE_NAME,
+      Key: { userId, chatId },
+    })
+
+    const result = await this.client.send(getCommand)
+    return result.Item.messages as Array<ChatMessage>
   }
 }
