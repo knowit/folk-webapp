@@ -44,7 +44,10 @@ const ChatWindow: React.FC = () => {
     if (refresh.current == 'true') {
       const loadedMessages = []
       chatMessages?.forEach((msg) => {
-        loadedMessages.push([msg.message, (msg.role = ChatRole.user)])
+        loadedMessages.push({
+          text: msg.message,
+          isUser: msg.role == 'user',
+        })
       })
       setMessages(loadedMessages)
     }

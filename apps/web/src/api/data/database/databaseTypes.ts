@@ -13,11 +13,6 @@ export type ChatMessage = {
   chatId: string
   userId: string
   message: string
-  role: ChatRole
+  role: string
   created: Date
-}
-
-export enum ChatRole {
-  assistant, // Message from KnowitGPT
-  user, // Message from user
 }

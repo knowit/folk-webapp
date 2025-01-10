@@ -15,7 +15,7 @@ export const useDeletChat = (chatId: string) =>
 
 export const useGetChat = (chatId: string) =>
   useSWR(
-    chatId != null ? { url: '/chats', chatId } : null,
+    chatId ? { url: '/chat', chatId } : null,
     (params) => getChat(params?.chatId),
     {
       revalidateOnFocus: false,
@@ -24,7 +24,7 @@ export const useGetChat = (chatId: string) =>
 
 export const useGetChats = (userId: string) =>
   useSWR(
-    userId != null ? { url: '/chats', userId } : null,
+    userId ? { url: '/chats', userId } : null,
     (params) => getChats(params?.userId),
     {
       revalidateOnFocus: false,
@@ -33,7 +33,7 @@ export const useGetChats = (userId: string) =>
 
 export const useGetChatMessages = (chatId: string) =>
   useSWR(
-    chatId != null ? { url: '/chatMessages', chatId } : null,
+    chatId ? { url: '/chatMessages', chatId } : null,
     (params) => getChatMessages(params?.chatId),
     {
       revalidateOnFocus: false,
