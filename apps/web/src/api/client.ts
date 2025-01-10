@@ -57,8 +57,6 @@ const postAt = async <T>(endpoint: string, options?: GetOptions) => {
   const session = await fetchAuthSession({ forceRefresh: true })
 
   try {
-    console.log(session?.tokens?.accessToken.toString())
-    console.log(options?.params)
     const res = await instance.post<T>(
       endpoint,
       options?.params || {}, // Pass `data` (request payload) here
@@ -70,7 +68,6 @@ const postAt = async <T>(endpoint: string, options?: GetOptions) => {
         params: { ...options?.params },
       }
     )
-    console.log(res)
 
     return res.data
   } catch (e) {
