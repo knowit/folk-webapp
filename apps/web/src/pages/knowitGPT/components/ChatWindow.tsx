@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, act } from 'react'
 import ChatBubble from './ChatBubble'
 import ChatLog from './ChatLog'
 import { useGenerateLLMStream } from '../../../api/data/llm/llmQueries'
@@ -11,7 +11,6 @@ import {
 import { useUserInfo } from '../../../hooks/useUserInfo'
 import { LLMRole } from '../../../api/data/llm/llmApiTypes'
 import { useTheme } from '@mui/material'
-import { ChatRole } from '../../../api/data/database/databaseTypes'
 
 const ChatWindow: React.FC = () => {
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>(
@@ -22,7 +21,7 @@ const ChatWindow: React.FC = () => {
     { role: LLMRole; content: string }[]
   >([])
   const userId = useUserInfo().userEmployeeProfile?.user_id
-  const activeChatId = useRef<string>(null)
+  const [activeChatId, setActiveChatId] = useState<string>(null)
 
   const lastChunkRef = useRef('')
   const refresh = useRef('false')
@@ -30,25 +29,20 @@ const ChatWindow: React.FC = () => {
 
   const { chunks, error, isLoading } = useGenerateLLMStream(pendingMessages)
   const { data: chats, mutate: refreshChats } = useGetChats(userId)
-  const { data: chatMessages } = useGetChatMessages(activeChatId.current || '')
+  const { data: chatMessages } = useGetChatMessages(activeChatId)
 
-  // Auto-scroll to the bottom when messages change
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
   }, [messages])
 
-  // Load selected chat messages
   useEffect(() => {
-    if (refresh.current == 'true') {
-      const loadedMessages = []
-      chatMessages?.forEach((msg) => {
-        loadedMessages.push({
-          text: msg.message,
-          isUser: msg.role == 'user',
-        })
-      })
+    if (chatMessages && refresh.current == 'true') {
+      const loadedMessages = chatMessages.map((msg) => ({
+        text: msg.message,
+        isUser: msg.role == 'user',
+      }))
       setMessages(loadedMessages)
     }
   }, [chatMessages])
@@ -60,12 +54,7 @@ const ChatWindow: React.FC = () => {
     )
 
     const handlePostMessages = async (message: string) => {
-      await postChatMessages(
-        activeChatId.current,
-        userId,
-        message,
-        LLMRole.assistant
-      )
+      await postChatMessages(activeChatId, userId, message, LLMRole.assistant)
     }
 
     if (chunks.length > 0) {
@@ -107,11 +96,11 @@ const ChatWindow: React.FC = () => {
       ])
       setPendingMessages([])
     }
-  }, [chunks, userId, isLoading, error, lastChunkRef])
+  }, [chunks, isLoading, error, lastChunkRef])
 
-  // Send a new message
   const handleSend = async () => {
     if (input.trim()) {
+      let currentChatId = activeChatId
       const userMessage = { text: input, isUser: true }
       setMessages((prev) => [...prev, userMessage])
       setInput('')
@@ -125,16 +114,17 @@ const ChatWindow: React.FC = () => {
       ]
       setPendingMessages(llmMessages)
 
-      if (activeChatId.current == null) {
+      if (activeChatId == null) {
         // Create a new chat if none is active
         const newChat = await postChat(userId)
-        activeChatId.current = newChat.id
+        currentChatId = newChat.id
+        setActiveChatId(currentChatId)
         refreshChats() // Refresh chat list
       }
 
       // Post the message to the database
       await postChatMessages(
-        activeChatId.current,
+        currentChatId,
         userId,
         userMessage.text,
         LLMRole.user
@@ -150,7 +140,7 @@ const ChatWindow: React.FC = () => {
   }
 
   const loadChatFromHistory = (chatId: string) => {
-    activeChatId.current = chatId
+    setActiveChatId(chatId)
     refresh.current = 'true'
   }
 
@@ -171,11 +161,10 @@ const ChatWindow: React.FC = () => {
     >
       <ChatLog
         chatHistory={chats}
-        activeChatId={activeChatId.current}
+        activeChatId={activeChatId}
         onLoadChat={loadChatFromHistory}
       />
 
-      {/* Chat Window */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div
           ref={scrollRef}
