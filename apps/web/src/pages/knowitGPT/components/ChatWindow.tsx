@@ -1,6 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, act } from 'react'
 import ChatBubble from './ChatBubble'
+import ChatLog from './ChatLog'
 import { useGenerateLLMStream } from '../../../api/data/llm/llmQueries'
+import {
+  useGetChatMessages,
+  useGetChats,
+  postChat,
+  postChatMessages,
+} from '../../../api/data/database/databaseQueries'
+import { useUserInfo } from '../../../hooks/useUserInfo'
 import { LLMRole } from '../../../api/data/llm/llmApiTypes'
 import { useTheme } from '@mui/material'
 
@@ -12,15 +20,43 @@ const ChatWindow: React.FC = () => {
   const [pendingMessages, setPendingMessages] = useState<
     { role: LLMRole; content: string }[]
   >([])
+  const userId = useUserInfo().userEmployeeProfile?.user_id
+  const [activeChatId, setActiveChatId] = useState<string>(null)
+
   const lastChunkRef = useRef('')
-  const scrollRef = useRef<HTMLDivElement>(null) // Ref for the scrollable container
+  const refresh = useRef('false')
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   const { chunks, error, isLoading } = useGenerateLLMStream(pendingMessages)
+  const { data: chats, mutate: refreshChats } = useGetChats(userId)
+  const { data: chatMessages } = useGetChatMessages(activeChatId)
 
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    }
+  }, [messages])
+
+  useEffect(() => {
+    if (chatMessages && refresh.current == 'true') {
+      const loadedMessages = chatMessages.map((msg) => ({
+        text: msg.message,
+        isUser: msg.role == 'user',
+      }))
+      setMessages(loadedMessages)
+    }
+  }, [chatMessages])
+
+  // Handle streaming response
   useEffect(() => {
     const lastChunkIndex = chunks.findIndex(
       (chunk) => chunk.id == lastChunkRef.current
     )
+
+    const handlePostMessages = async (message: string) => {
+      await postChatMessages(activeChatId, userId, message, LLMRole.assistant)
+    }
+
     if (chunks.length > 0) {
       setMessages((prevMessages) => {
         const isUser = prevMessages.at(-1)?.isUser
@@ -35,6 +71,12 @@ const ChatWindow: React.FC = () => {
           message.text += chunk.content || ''
           lastChunkRef.current = chunk.id
         })
+
+        //problem start
+        if (isLoading == false) {
+          handlePostMessages(message?.text)
+        }
+        //problem end
 
         if (isUser) {
           return [...prevMessages, message]
@@ -54,17 +96,11 @@ const ChatWindow: React.FC = () => {
       ])
       setPendingMessages([])
     }
-  }, [chunks, error, lastChunkRef])
+  }, [chunks, isLoading, error, lastChunkRef])
 
-  // Auto-scroll to the bottom when messages change
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    }
-  }, [messages])
-
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim()) {
+      let currentChatId = activeChatId
       const userMessage = { text: input, isUser: true }
       setMessages((prev) => [...prev, userMessage])
       setInput('')
@@ -76,8 +112,23 @@ const ChatWindow: React.FC = () => {
         })),
         { role: LLMRole.user, content: input },
       ]
-
       setPendingMessages(llmMessages)
+
+      if (activeChatId == null) {
+        // Create a new chat if none is active
+        const newChat = await postChat(userId)
+        currentChatId = newChat.id
+        setActiveChatId(currentChatId)
+        refreshChats() // Refresh chat list
+      }
+
+      // Post the message to the database
+      await postChatMessages(
+        currentChatId,
+        userId,
+        userMessage.text,
+        LLMRole.user
+      )
     }
   }
 
@@ -88,63 +139,75 @@ const ChatWindow: React.FC = () => {
     }
   }
 
+  const loadChatFromHistory = (chatId: string) => {
+    setActiveChatId(chatId)
+    refresh.current = 'true'
+  }
+
   const theme = useTheme()
 
   return (
     <div
       style={{
+        display: 'flex',
         minHeight: '60vh',
         maxHeight: '70vh',
         margin: '2% auto',
         border: '1px solid #ccc',
         borderRadius: '10px',
         padding: '1%',
-        display: 'flex',
-        flexDirection: 'column',
         backgroundColor: theme.palette.background.default,
       }}
     >
-      <div
-        ref={scrollRef} // Attach the ref to the scrollable container
-        style={{
-          flex: 1,
-          overflowY: 'auto',
-          marginBottom: '1%',
-          padding: '1%',
-        }}
-      >
-        {messages.map((msg, index) => (
-          <ChatBubble key={index} message={msg.text} isUser={msg.isUser} />
-        ))}
-      </div>
-      <div style={{ display: 'flex' }}>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
+      <ChatLog
+        chatHistory={chats}
+        activeChatId={activeChatId}
+        onLoadChat={loadChatFromHistory}
+      />
+
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div
+          ref={scrollRef}
           style={{
             flex: 1,
-            padding: '10px',
-            borderRadius: '5px',
-            border: '1px solid #ccc',
+            overflowY: 'auto',
+            marginBottom: '1%',
+            padding: '1%',
           }}
-        />
-        <button
-          onClick={handleSend}
-          style={{
-            marginLeft: '1%',
-            padding: '10px',
-            borderRadius: '5px',
-            border: 'none',
-            backgroundColor: isLoading ? '#ccc' : '#0d6efd',
-            color: 'white',
-            width: '20%',
-          }}
-          disabled={isLoading}
         >
-          {isLoading ? 'Sending...' : 'Send'}
-        </button>
+          {messages.map((msg, index) => (
+            <ChatBubble key={index} message={msg.text} isUser={msg.isUser} />
+          ))}
+        </div>
+        <div style={{ display: 'flex' }}>
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            style={{
+              flex: 1,
+              padding: '10px',
+              borderRadius: '5px',
+              border: '1px solid #ccc',
+            }}
+          />
+          <button
+            onClick={handleSend}
+            style={{
+              marginLeft: '1%',
+              padding: '10px',
+              borderRadius: '5px',
+              border: 'none',
+              backgroundColor: isLoading ? '#ccc' : '#0d6efd',
+              color: 'white',
+              width: '20%',
+            }}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Sending...' : 'Send'}
+          </button>
+        </div>
       </div>
     </div>
   )

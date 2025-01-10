@@ -7,7 +7,7 @@ import {
 import { Pool } from 'pg'
 
 export class PostgresChatRepository implements IChatRepository {
-  client: Pool
+  private readonly client: Pool
 
   constructor() {
     this.client = new Pool({
@@ -20,11 +20,10 @@ export class PostgresChatRepository implements IChatRepository {
   }
 
   async addChat(userId: string): Promise<Chat> {
-    await this.client.connect()
     try {
       const addChatQuery = {
-        text: 'INSERT INTO chat (user_id) VALUES ($1) RETURNING *',
-        values: [userId],
+        text: 'INSERT INTO chat (user_id, title) VALUES ($1, $2) RETURNING *',
+        values: [userId, 'test'], // Include title as "test"
       }
       const result = await this.client.query(addChatQuery)
       return result.rows[0]
@@ -39,7 +38,6 @@ export class PostgresChatRepository implements IChatRepository {
     message: string,
     role: ChatRole
   ): Promise<ChatMessage> {
-    await this.client.connect()
     try {
       const addChatMessageQuery = {
         text: 'INSERT INTO chat_message (chat_id, user_id, message, role) VALUES ($1, $2, $3, $4) RETURNING *',
@@ -53,7 +51,6 @@ export class PostgresChatRepository implements IChatRepository {
   }
 
   async deleteChat(chatId: string): Promise<boolean> {
-    await this.client.connect()
     try {
       const deleteChatQuery = {
         text: 'DELETE FROM chat WHERE chat_id = $1',
@@ -67,7 +64,6 @@ export class PostgresChatRepository implements IChatRepository {
   }
 
   async getChat(chatId: string): Promise<Chat> {
-    await this.client.connect()
     try {
       const getChatQuery = {
         text: 'SELECT * FROM chat WHERE chat_id = $1',
@@ -81,7 +77,6 @@ export class PostgresChatRepository implements IChatRepository {
   }
 
   async getChatMessagesForChat(chatId: string): Promise<ChatMessage[]> {
-    await this.client.connect()
     try {
       const getChatMessagesForChatQuery = {
         text: 'SELECT * FROM chat_message WHERE chat_id = $1',
@@ -102,7 +97,6 @@ export class PostgresChatRepository implements IChatRepository {
     limit?: number,
     offset?: number
   ): Promise<Chat[]> {
-    await this.client.connect()
     try {
       const getChatsForUserQuery = {
         text: 'SELECT * FROM chat WHERE user_id = $1',
@@ -119,7 +113,6 @@ export class PostgresChatRepository implements IChatRepository {
    * This method is only used to set up database locally. Should be removed when database is created in the cloud.
    */
   async setupPostgres(): Promise<void> {
-    await this.client.connect()
     try {
       await this.client.query('BEGIN')
       await this.client.query(
