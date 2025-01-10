@@ -34,7 +34,7 @@ export class AzureOpenAILLMRepositoryImpl extends LLMClient {
     model: string,
     messages: LLMMessage[],
     tools?: Tool[],
-    options?: Record<string, any>
+    options?: Record<string, never>
   ): Promise<LLMResponse> {
     try {
       const response: ChatCompletion =
@@ -81,7 +81,7 @@ export class AzureOpenAILLMRepositoryImpl extends LLMClient {
     model: string,
     messages: LLMMessage[],
     tools?: Tool[],
-    options?: Record<string, any>
+    options?: Record<string, never>
   ): AsyncGenerator<LLMChunk> {
     try {
       // Make the API call
@@ -105,7 +105,7 @@ export class AzureOpenAILLMRepositoryImpl extends LLMClient {
     model: string,
     messages: LLMMessage[],
     tools?: Tool[],
-    options?: Record<string, any>
+    options?: Record<string, never>
   ): AsyncGenerator<LLMChunk> {
     let toolCallingChunk: ChatCompletionChunk
     for await (const output of stream) {

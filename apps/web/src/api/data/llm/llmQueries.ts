@@ -24,15 +24,15 @@ export const useGenerateLLMStream = (messages: LLMMessage[]) => {
     setError(null)
     setIsLoading(true)
 
-    const handleChunk = (chunk: LLMChunk) => {
+    function handleChunk(chunk: LLMChunk): void {
       setChunks((prevChunks) => [...prevChunks, chunk]) // Add chunk to state
     }
 
-    const handleDone = () => {
+    function handleDone(): void {
       setIsLoading(false) // Mark as not loading when done
     }
 
-    const handleError = (err: any) => {
+    function handleError(err: any): void {
       setError(err)
       setIsLoading(false)
     }
@@ -40,7 +40,7 @@ export const useGenerateLLMStream = (messages: LLMMessage[]) => {
     generateStream(messages, handleChunk, handleDone, handleError)
 
     // Clean-up logic in case the component unmounts
-    return () => {
+    return function (): void {
       // If needed, you can disconnect the socket or cancel the operation here
     }
   }, [messages])
