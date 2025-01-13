@@ -13,7 +13,7 @@ const ChatLog: React.FC<ChatLogProps> = ({
   onLoadChat,
 }) => {
   console.log(chatHistory)
-  return chatHistory ? (
+  return (
     <div
       style={{
         width: '30%',
@@ -26,28 +26,18 @@ const ChatLog: React.FC<ChatLogProps> = ({
       <ul>
         {chatHistory?.map((chat) => (
           <li
-            key={chat.id}
+            key={chat.chatId}
             style={{
               cursor: 'pointer',
-              textDecoration: chat.id === activeChatId ? 'underline' : 'none',
+              textDecoration:
+                chat.chatId === activeChatId ? 'underline' : 'none',
             }}
-            onClick={() => onLoadChat(chat.id)}
+            onClick={() => onLoadChat(chat.chatId)}
           >
-            {chat.id}
+            {chat.chatId}
           </li>
         ))}
       </ul>
-    </div>
-  ) : (
-    <div
-      style={{
-        width: '30%',
-        borderRight: '1px solid #ccc',
-        padding: '1%',
-        overflowY: 'auto',
-      }}
-    >
-      <h3>Old chats</h3>
     </div>
   )
 }

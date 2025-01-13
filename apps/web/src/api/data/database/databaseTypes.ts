@@ -1,7 +1,7 @@
 export type Chats = Chat[]
 
 export type Chat = {
-  id: string
+  chatId: string
   userId: string
   created: Date
   lastUpdated: Date

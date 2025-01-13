@@ -22,17 +22,12 @@ router.get<unknown, unknown, unknown, GetParams>('/chat', async (req, res) => {
 
 router.get<unknown, unknown, unknown, string>('/chats', async (req, res) => {
   const result = await db.getChatsForUser(req.query['userId'])
-  console.log('getChatsQuery')
-  console.log(req.query)
-  console.log('res')
-  console.log(result)
   res.send(result)
 })
 
 router.get<unknown, unknown, unknown, GetParams>(
   '/chatMessages',
   async (req, res) => {
-    console.log(req.body)
     const result = await db.getChatMessagesForChat(
       req.query.userId,
       req.query.chatId
@@ -42,11 +37,7 @@ router.get<unknown, unknown, unknown, GetParams>(
 )
 
 router.post('/chat', async (req, res) => {
-  console.log(req.body)
-
   const result = await db.addChat(req.body.userId, req.body.title)
-  console.log('postres')
-  console.log(result)
   res.send(result)
 })
 

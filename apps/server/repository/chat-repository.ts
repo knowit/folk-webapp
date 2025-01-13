@@ -76,20 +76,20 @@ export interface IChatRepository {
 
 // A chat user has had with the KnowitGPT
 export class Chat {
-  id: string
+  chatId: string
   userId: string
   created: Date
   lastUpdated: Date
   title: string
 
   constructor(
-    id: string,
+    chatId: string,
     userId: string,
     created: Date,
     lastUpdated: Date,
     title: string
   ) {
-    this.id = id
+    this.chatId = chatId
     this.userId = userId
     this.created = created
     this.lastUpdated = lastUpdated

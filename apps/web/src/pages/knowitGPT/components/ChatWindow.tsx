@@ -30,7 +30,6 @@ const ChatWindow: React.FC = () => {
   const { chunks, error, isLoading } = useGenerateLLMStream(pendingMessages)
   const { data: chats, mutate: refreshChats } = useGetChats(userId)
   const { data: chatMessages } = useGetChatMessages(userId, activeChatId)
-  console.log(userId)
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -119,7 +118,9 @@ const ChatWindow: React.FC = () => {
       if (activeChatId == null) {
         // Create a new chat if none is active
         const newChat = await postChat(userId, 'Test')
-        currentChatId = newChat.id
+        currentChatId = newChat.chatId
+        console.log(newChat)
+        console.log(currentChatId)
         setActiveChatId(currentChatId)
         refreshChats() // Refresh chat list
       }
