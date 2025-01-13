@@ -27,7 +27,7 @@ jobs:
           aws-region: eu-central-1
 
       - name: Install serverless
-        run: npm install -g serverless@3.25.1
+        run: npm install -g serverless@3.40.0
 
       - name: Install server dependencies
         run: yarn workspaces focus server

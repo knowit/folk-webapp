@@ -7,7 +7,7 @@ import {
 import { Pool } from 'pg'
 
 export class PostgresChatRepository implements IChatRepository {
-  client: Pool
+  private readonly client: Pool
 
   constructor() {
     this.client = new Pool({
@@ -39,7 +39,6 @@ export class PostgresChatRepository implements IChatRepository {
     message: string,
     role: ChatRole
   ): Promise<ChatMessage> {
-    await this.client.connect()
     try {
       const addChatMessageQuery = {
         text: 'INSERT INTO chat_message (chat_id, user_id, message, role) VALUES ($1, $2, $3, $4) RETURNING *',
@@ -105,7 +104,6 @@ export class PostgresChatRepository implements IChatRepository {
     limit?: number,
     offset?: number
   ): Promise<Chat[]> {
-    await this.client.connect()
     try {
       const getChatsForUserQuery = {
         text: 'SELECT * FROM chat WHERE user_id = $1',
@@ -122,7 +120,6 @@ export class PostgresChatRepository implements IChatRepository {
    * This method is only used to set up database locally. Should be removed when database is created in the cloud.
    */
   async setupPostgres(): Promise<void> {
-    await this.client.connect()
     try {
       await this.client.query('BEGIN')
       await this.client.query(
