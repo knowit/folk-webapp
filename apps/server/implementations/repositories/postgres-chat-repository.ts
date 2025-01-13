@@ -19,11 +19,12 @@ export class PostgresChatRepository implements IChatRepository {
     })
   }
 
-  async addChat(userId: string): Promise<Chat> {
+  async addChat(userId: string, title: string): Promise<Chat> {
+    await this.client.connect()
     try {
       const addChatQuery = {
         text: 'INSERT INTO chat (user_id, title) VALUES ($1, $2) RETURNING *',
-        values: [userId, 'test'], // Include title as "test"
+        values: [userId, title],
       }
       const result = await this.client.query(addChatQuery)
       return result.rows[0]
@@ -50,7 +51,8 @@ export class PostgresChatRepository implements IChatRepository {
     }
   }
 
-  async deleteChat(chatId: string): Promise<boolean> {
+  async deleteChat(userId: string, chatId: string): Promise<boolean> {
+    await this.client.connect()
     try {
       const deleteChatQuery = {
         text: 'DELETE FROM chat WHERE chat_id = $1',
@@ -63,7 +65,8 @@ export class PostgresChatRepository implements IChatRepository {
     }
   }
 
-  async getChat(chatId: string): Promise<Chat> {
+  async getChat(userId: string, chatId: string): Promise<Chat> {
+    await this.client.connect()
     try {
       const getChatQuery = {
         text: 'SELECT * FROM chat WHERE chat_id = $1',
@@ -76,7 +79,11 @@ export class PostgresChatRepository implements IChatRepository {
     }
   }
 
-  async getChatMessagesForChat(chatId: string): Promise<ChatMessage[]> {
+  async getChatMessagesForChat(
+    userId: string,
+    chatId: string
+  ): Promise<ChatMessage[]> {
+    await this.client.connect()
     try {
       const getChatMessagesForChatQuery = {
         text: 'SELECT * FROM chat_message WHERE chat_id = $1',
