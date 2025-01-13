@@ -19,7 +19,14 @@ export class DynamoDBChatRepository implements IChatRepository {
   client: DynamoDBDocumentClient
 
   constructor() {
-    const dynamoDbClient = new DynamoDBClient({})
+    const dynamoDbClient = new DynamoDBClient({
+      region: 'eu-central-1',
+      credentials: {
+        accessKeyId: process.env.DYNAMODB_AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.DYNAMODB_AWS_SECRET_ACCESS_KEY,
+        sessionToken: process.env.DYNAMODB_AWS_SESSION_TOKEN,
+      },
+    })
     this.client = DynamoDBDocumentClient.from(dynamoDbClient)
   }
 
@@ -129,29 +136,37 @@ export class DynamoDBChatRepository implements IChatRepository {
     limit?: number,
     offset?: number
   ): Promise<Array<Chat>> {
-    const queryCommand = new QueryCommand({
-      TableName: process.env.DYNAMODB_TABLE_NAME,
-      KeyConditionExpression: 'userId = :userId',
-      ExpressionAttributeValues: {
-        ':userId': userId,
-      },
-      Limit: limit,
-    })
+    try {
+      const queryCommand = new QueryCommand({
+        TableName: process.env.DYNAMODB_TABLE_NAME,
+        KeyConditionExpression: 'userId = :userId',
+        ExpressionAttributeValues: {
+          ':userId': userId,
+        },
+        Limit: limit,
+      })
 
-    const result = await this.client.send(queryCommand)
-    const items = result.Items || []
-    return items.slice(offset) as Array<Chat>
+      const result = await this.client.send(queryCommand)
+      const items = result.Items || []
+      return items.slice(offset) as Array<Chat>
+    } catch (error) {
+      console.error('Failed to get chats for user.', error)
+    }
   }
   async getChatMessagesForChat(
     userId: string,
     chatId: string
   ): Promise<Array<ChatMessage>> {
-    const getCommand = new GetCommand({
-      TableName: process.env.DYNAMODB_TABLE_NAME,
-      Key: { userId, chatId },
-    })
+    try {
+      const getCommand = new GetCommand({
+        TableName: process.env.DYNAMODB_TABLE_NAME,
+        Key: { userId, chatId },
+      })
 
-    const result = await this.client.send(getCommand)
-    return result.Item.messages as Array<ChatMessage>
+      const result = await this.client.send(getCommand)
+      return result.Item.messages as Array<ChatMessage>
+    } catch (error) {
+      console.error('Failed to get chat messages for chat.', error)
+    }
   }
 }
