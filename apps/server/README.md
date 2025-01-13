@@ -47,9 +47,10 @@
 
 ### Database
 
-A dynamoatabase are used to handle the chat history in regard to KnowitGPT.
+A DynamoDb is used to handle the chat history in regard to KnowitGPT.
 At this moment (13.01.2025) there is only an instance of the database in the development environment.
-The development database is created in the AWS account `knowit-dataplattform-dev`.
+The development database is created in the AWS account `knowit-dataplattform-dev`. When it's time, a production database
+should be created in `knowit-dataplattform-produksjon`.
 
 #### Setup
 
