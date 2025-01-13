@@ -2,7 +2,7 @@ import React from 'react'
 import { Chats } from '../../../api/data/database/databaseTypes'
 
 interface ChatLogProps {
-  chatHistory: Chats
+  chatHistory: Chats | null
   activeChatId: string | null
   onLoadChat: (chatId: string) => void
 }
@@ -12,7 +12,8 @@ const ChatLog: React.FC<ChatLogProps> = ({
   activeChatId,
   onLoadChat,
 }) => {
-  return (
+  console.log(chatHistory)
+  return chatHistory ? (
     <div
       style={{
         width: '30%',
@@ -36,6 +37,17 @@ const ChatLog: React.FC<ChatLogProps> = ({
           </li>
         ))}
       </ul>
+    </div>
+  ) : (
+    <div
+      style={{
+        width: '30%',
+        borderRight: '1px solid #ccc',
+        padding: '1%',
+        overflowY: 'auto',
+      }}
+    >
+      <h3>Old chats</h3>
     </div>
   )
 }
