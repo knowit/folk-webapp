@@ -13,10 +13,10 @@ export const useDeletChat = (chatId: string) =>
     }
   )
 
-export const useGetChat = (chatId: string) =>
+export const useGetChat = (userId: string, chatId: string) =>
   useSWR(
-    chatId ? { url: '/chat', chatId } : null,
-    (params) => getChat(params?.chatId),
+    chatId ? { url: '/chat', userId, chatId } : null,
+    (params) => getChat(params?.userId, params?.chatId),
     {
       revalidateOnFocus: false,
     }
@@ -31,19 +31,20 @@ export const useGetChats = (userId: string) =>
     }
   )
 
-export const useGetChatMessages = (chatId: string) =>
+export const useGetChatMessages = (userId: string, chatId: string) =>
   useSWR(
-    chatId ? { url: '/chatMessages', chatId } : null,
-    (params) => getChatMessages(params?.chatId),
+    chatId ? { url: '/chatMessages', userId, chatId } : null,
+    (params) => getChatMessages(params?.userId, params?.chatId),
     {
       revalidateOnFocus: false,
     }
   )
 
-export const postChat = async (userId: string) => {
+export const postChat = async (userId: string, title: string) => {
   const response = await postAtApiV2<Chat>('/database/chat', {
-    params: { userId },
+    params: { userId, title },
   })
+  console.log(response)
   return response
 }
 

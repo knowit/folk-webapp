@@ -7,9 +7,9 @@ export const deleteChat = (chatId: string) =>
     params: { chatId },
   })
 
-export const getChat = (chatId: string) =>
+export const getChat = (userId: string, chatId: string) =>
   getAtApiV2<Chat>('/database/chat', {
-    params: { chatId },
+    params: { userId, chatId },
   })
 
 export const getChats = (userId: string) =>
@@ -17,14 +17,14 @@ export const getChats = (userId: string) =>
     params: { userId },
   })
 
-export const getChatMessages = (chatId: string) =>
+export const getChatMessages = (userId: string, chatId: string) =>
   getAtApiV2<ChatMessage[]>('/database/chatMessages', {
-    params: { chatId },
+    params: { userId, chatId },
   })
 
-export const postChat = (userId: string) =>
+export const postChat = (userId: string, title: string) =>
   postAtApiV2<Chat>('/database/chat', {
-    params: { userId },
+    params: { userId, title },
   })
 
 export const postChatMessages = (

@@ -5,28 +5,36 @@ const router: Router = express.Router()
 
 const db = new DynamoDBChatRepository()
 
+interface GetParams {
+  userId: string
+  chatId: string
+}
+
 router.delete('/chats', async (req, res) => {
   const result = await db.deleteChat(req.body.userId, req.body.chatId)
   res.send(result)
 })
 
-router.get('/chat', async (req, res) => {
-  const result = await db.getChat(req.body.userId, req.body.chatId)
+router.get<unknown, unknown, unknown, GetParams>('/chat', async (req, res) => {
+  const result = await db.getChat(req.query.userId, req.query.chatId)
   res.send(result)
 })
 
-router.get('/chats', async (req, res) => {
-  const result = await db.getChatsForUser(req.body.userId)
+router.get<unknown, unknown, unknown, string>('/chats', async (req, res) => {
+  const result = await db.getChatsForUser(req.query['userId'])
   res.send(result)
 })
 
-router.get('/chatMessages', async (req, res) => {
-  const result = await db.getChatMessagesForChat(
-    req.body.userId,
-    req.body.chatId
-  )
-  res.send(result)
-})
+router.get<unknown, unknown, unknown, GetParams>(
+  '/chatMessages',
+  async (req, res) => {
+    const result = await db.getChatMessagesForChat(
+      req.query.userId,
+      req.query.chatId
+    )
+    res.send(result)
+  }
+)
 
 router.post('/chat', async (req, res) => {
   const result = await db.addChat(req.body.userId, req.body.title)

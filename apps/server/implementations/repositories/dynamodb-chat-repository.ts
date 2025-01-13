@@ -50,7 +50,7 @@ export class DynamoDBChatRepository implements IChatRepository {
       await this.client.send(command)
 
       return {
-        id: chatId,
+        chatId: chatId,
         userId: userId,
         created: created,
         lastUpdated: lastUpdated,
@@ -61,27 +61,27 @@ export class DynamoDBChatRepository implements IChatRepository {
     }
   }
   async addChatMessage(
-    userId: string,
     chatId: string,
+    userId: string,
     message: string,
     role: ChatRole
   ): Promise<ChatMessage> {
     try {
       const created = new Date()
-      const messageObject: ChatMessage = {
+      const messageObject = {
         id: randomUUID().toString(),
         chatId,
         userId,
         message,
         role,
-        created: created,
+        created: created.toISOString(),
       }
 
       const updateCommand = new UpdateCommand({
         TableName: process.env.DYNAMODB_TABLE_NAME,
         Key: { userId, chatId },
         UpdateExpression:
-          'set #messages = list_append(#messages, :newMessage), #lastUpdated = :created',
+          'SET #messages = list_append(#messages, :newMessage), #lastUpdated = :created',
         ExpressionAttributeNames: {
           '#messages': 'messages',
           '#lastUpdated': 'lastUpdated',
@@ -94,7 +94,14 @@ export class DynamoDBChatRepository implements IChatRepository {
       })
 
       await this.client.send(updateCommand)
-      return messageObject
+      return new ChatMessage(
+        messageObject.id,
+        messageObject.chatId,
+        messageObject.userId,
+        messageObject.message,
+        messageObject.role,
+        new Date(messageObject.created)
+      )
     } catch (error) {
       console.error('Failed to add chat message to chat.', error)
     }
