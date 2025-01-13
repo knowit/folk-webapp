@@ -35,7 +35,9 @@
 ### Build
 
 [![TypeScript][typescript]][typescript-url]
+[![Serverless][serverless]][serverless-url]
 [![ExpressJS][expressjs]][expressjs-url]
+[![DynamoDb][dynamodb]][dynamodb-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -45,65 +47,23 @@
 
 ### Database
 
-A database and tables are used to handle the chat history in regard to KnowitGPT.
-At the moment (13.12.2024) there isn't a setup/connection to a database in the cloud, so to properly work with the
-functionality for KnowitGPT, you have to set it up locally.
-There is only the possibility to connect to a PostgresSQL database, since it is the only one with a client implemented.
+A dynamoatabase are used to handle the chat history in regard to KnowitGPT.
+At this moment (13.01.2025) there is only an instance of the database in the development environment.
+The development database is created in the AWS account `knowit-dataplattform-dev`.
 
 #### Setup
-
-There are multiple ways to create a PostgresSQL locally, but personally I used a [Docker](https://www.docker.com/) to
-pull and run a Postgres database and [PgAdmin](https://www.pgadmin.org/) to work with the database with a UI.
-
-I used the following command to run the postgres container names dev-folk-postgres with my own defined password:
-
-```bash
-docker run --name dev-folk-postgres -e POSTGRES_PASSWORD=***** -p 5433:5432 -d postgres
-```
-
-Then I created a database using PgAdmin, but can also be done in the terminal.
-You're now able to connect to the database locally.
-
-#### Connection
 
 In `apps/sever/.env`you'll have to add these variables:
 
 ```
-# PostgresSQL Credentials
-POSTGRES_HOST="localhost"
-POSTGRES_PORT="5432"
-POSTGRES_DATABASE_NAME="_____"
-POSTGRES_PASSWORD="_____"
+# DynamoDb Credentials
+DYNAMODB_TABLE_NAME="dev_knowitgpt_chathistory"
+DYNAMODB_AWS_ACCESS_KEY_ID="_____"
+DYNAMODB_AWS_SECRET_ACCESS_KEY="_____"
+DYNAMODB_AWS_SESSION_TOKEN="_____"
 ```
 
-When using a Docker container, I had to switch to port 5433 for it to work.
-
-#### Working on the database
-
-You'll have to create two tables in you newly created database; `chat` and `chat_message`.
-The columns should be as found for the corresponding classes in the file `apps/server/repository/chat-repository.ts`.
-
-It is possible to set up the tables using an endpoint. If the connection to the database is up, you can use the endpoint
-`/api/v2/database/setup`
-
-Example tables for PostgresSQL
-
-**chat** with columns:
-
-- id: uuid [PKey]
-- user_id: varchar (255)
-- created: timestamp
-- last_updated: timestamp
-- title: varchar (255)
-
-**chat_message** with columns:
-
-- id: uuid [PKey]
-- chat_id: uuid [FKey]
-- user_id: varchar (255)
-- message: text
-- role: varchar (255)
-- created: timestamp
+Use the access keys for `knowit-dataplattform-dev` to work with the database locally.
 
 ### Testing
 
@@ -141,7 +101,11 @@ AZURE_OPENAI_API_KEY=<Azure OpenAI API KEY>
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
+[dynamodb]: https://img.shields.io/badge/DynamoDb-4053D6?style=for-the-badge&logo=amazondynamodb
+[dynamodb-url]: https://aws.amazon.com/dynamodb/
 [expressjs]: https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express
 [expressjs-url]: https://expressjs.com/
+[serverless]: https://img.shields.io/badge/Serverless-FD5750?style=for-the-badge&logo=serverless&logoColor=white
+[serverless-url]: https://www.serverless.com/
 [typescript]: https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white
 [typescript-url]: https://www.typescriptlang.org/
